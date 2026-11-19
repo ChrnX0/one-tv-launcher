@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -83,55 +88,112 @@
 <main id="top">
 
   <section class="hero hero--plans" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="section-head"><h1 id="hero-h">الخطط</h1><p class="hero__lead">ابدأ بـ Basic، فهي الشاشة الرئيسية كاملة بالفعل. لم يبدأ البيع بعد: كل شيء مجاني حاليًا.</p></div>
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">الخطط</h1>
+        <p class="hero__lead">ابدأ بـ Basic، فهي الشاشة الرئيسية كاملة بالفعل. لم يبدأ البيع بعد: كل شيء مجاني حاليًا.</p>
+        <div class="btn-row"><a class="btn btn--primary" href="features.html">شاهد كل الميزات الـ 98<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+      </div>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="الخطط"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · غائم جزئيًا</span>
+      <span class="clock"><b>08:57</b><small>الأربعاء<br>18 نوفمبر</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">متابعة</span><div class="w-big"><b>متابعة</b><span>توقف عند الحلقة 4 · بقي 21 دقيقة</span></div><ul class="w-col"><li>الحلقة 4</li><li>إذاعة</li><li>بودكاست</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">مشاهدة</span><div class="w-big"><b>على الشبكة</b><span>أفلام من حاسوبك · 214 عنوانًا</span></div><ul class="w-col"><li>أفلام</li><li>مسلسلات</li><li>على الشبكة</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">استماع</span><div class="w-big"><b>إذاعة</b><span>محطات من كل العالم، بالاسم أو البلد</span></div><ul class="w-col"><li>إذاعة</li><li>بودكاست</li><li>قيد التشغيل</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">لعب</span><div class="w-big"><b>ألعاب</b><span>3 ألعاب سحابية · وحدة التحكم متصلة</span></div><ul class="w-col"><li>السحابة</li><li>من الحاسوب</li><li>كلاسيكي</li><li>الفريق</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">التطبيقات</span><div class="w-big"><b>التطبيقات</b><span>الثمانية الأكثر استخدامًا</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>كل التطبيقات</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div>
+    </div></div>
+  </section>
+
+  <section class="section" id="plans" aria-labelledby="plans-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="plans-h">الخطط</h2><p class="muted">Basic مجاني وهو الشاشة الرئيسية كاملة. تصدر أسعار Pro وUltra مع الإطلاق على Google Play.</p></div>
       <div class="grid plans-grid"><article class="card card--plan span-4" id="plan-basic">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span>Basic</h3>
           <p class="muted">لمن يجلس على الأريكة</p>
           <p class="price">مجاني</p>
           <p class="t-small muted">71 ميزة</p>
-          <a class="btn btn--secondary" href="plans.html#plan-basic">ما الذي تتضمنه Basic</a>
+          <a class="btn btn--secondary" href="plans.html#plan-basic-list">ما الذي تتضمنه Basic</a>
           <ul class="plan__list"><li>الصليب</li><li>متابعة</li><li>الشريط العلوي</li><li>Google يواصل العمل</li><li>اللوحة السريعة</li></ul>
         </article><article class="card card--plan span-4 is-featured" id="plan-pro">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg></span>Pro</h3>
           <p class="muted">لمن يعتني بالتلفاز</p>
           <p class="price">السعر عند الإطلاق</p>
           <p class="t-small muted">22 ميزة</p>
-          <a class="btn btn--primary" href="plans.html#plan-pro">ما الذي تتضمنه Pro</a>
+          <a class="btn btn--primary" href="plans.html#plan-pro-list">ما الذي تتضمنه Pro</a>
           <ul class="plan__list"><li><b>كل ما في Basic</b></li><li>الأيقونات التي تحبها</li><li>طور القمر</li><li>عدّ تنازلي</li><li>تذكير منزلي</li><li>حالة خدمتك</li></ul>
         </article><article class="card card--plan span-4" id="plan-ultra">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2a5 5 0 0 1 5.5 5.3"/></svg></span>Ultra</h3>
           <p class="muted">للمنزل والعائلة</p>
           <p class="price">السعر عند الإطلاق</p>
           <p class="t-small muted">5 ميزة</p>
-          <a class="btn btn--secondary" href="plans.html#plan-ultra">ما الذي تتضمنه Ultra</a>
+          <a class="btn btn--secondary" href="plans.html#plan-ultra-list">ما الذي تتضمنه Ultra</a>
           <ul class="plan__list"><li><b>كل ما في Pro</b></li><li>ترجمة تلقائية</li><li>صفحات أفلام كاملة</li><li>المطر من ثلاثة نماذج</li><li>المشاهدة معًا</li><li>عدة منازل</li></ul>
         </article></div>
-    </div></div>
-  </section>
-
-  <section class="section" id="plan-basic-list" aria-labelledby="plan-basic-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="plan-basic-h">Basic</h2><p>الشاشة الرئيسية على شكل صليب، والمشغّل، والاستماع، واللعب، والمنبّه، وشاشة التوقف، وكل ميزات تسهيل الاستخدام.</p></div>
-      <ul class="plan-all plan-all--wide"><li>الصليب</li><li>متابعة</li><li>الشريط العلوي</li><li>Google يواصل العمل</li><li>اللوحة السريعة</li><li>جهاز تحكمك، قواعدك</li><li>قيد التشغيل</li><li>السمات والخلفيات</li><li>حركة على مقاس تلفازك</li><li>على الشبكة</li><li>مشغّل يشغّل كل شيء</li><li>يكمل من حيث توقفت</li><li>تخطّي المقدّمة</li><li>الصوت والترجمة المفضّلان</li><li>أفلام بلا تقطّع</li><li>رؤية وسماع أفضل</li><li>بحث واحد لكل شيء</li><li>إذاعات من كل العالم</li><li>بودكاست</li><li>مشغّل بملء الشاشة</li><li>كل ألعابك في مكان واحد</li><li>العب على حاسوب الطابق العلوي</li><li>اختبار الشبكة</li><li>وحدات التحكم</li><li>وضع اللعب</li><li>فريقك على Discord</li><li>المفضّلة في المقدّمة</li><li>على طريقتك</li><li>أزرار Netflix وYouTube حرّة</li><li>منبّه يشغّل التلفاز</li><li>مؤقّتات وساعة رملية</li><li>إطفاء لطيف</li><li>ينطفئ إن لم يشاهد أحد</li><li>وصفات جاهزة</li><li>ينام عندما يغادر الجميع</li><li>اختصارات صوتية</li><li>طقس اليوم، مقيس</li><li>توقعات بملء الشاشة</li><li>تنبيه المطر</li><li>شاشة توقف تستحق أن تبقى</li><li>صورك على شاشة التوقف</li><li>صباح الخير</li><li>تقويم Google</li><li>الفلتر الليلي</li><li>ملخّص الأسبوع</li><li>ملف لكل فرد</li><li>ملف الطفل</li><li>وقت النوم</li><li>وقت الشاشة اليومي</li><li>وضع الضيف</li><li>Wi-Fi للضيوف</li><li>لوحة العائلة</li><li>لوحة على الهاتف والحاسوب</li><li>نسخة مقفلة كل ليلة</li><li>صيانة ليلية</li><li>تشخيص التلفاز</li><li>اختبار السرعة</li><li>كيف حال هذا التلفاز</li><li>الوضع الآمن</li><li>ما الجديد</li><li>الإبلاغ عن مشكلة</li><li>15 لغة</li><li>حجم الخط</li><li>الوضع البسيط</li><li>القراءة بصوت عالٍ</li><li>تباين عالٍ</li><li>بلا إعلانات إطلاقًا</li><li>بلا تتبّع</li><li>رمز PIN حيث يلزم</li><li>DNS خاص</li><li>الإنترنت لكل تطبيق</li></ul>
     </div>
   </section>
-  <section class="section" id="plan-more" aria-labelledby="plan-more-h">
+
+  <section class="section plan-sec ground-surface" id="plan-basic-list" aria-labelledby="plan-basic-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="plan-more-h">Pro · Ultra</h2></div>
       <div class="grid">
-        <div class="plan-block span-7" id="plan-pro-all">
-          <h3 class="plan-block__h">Pro <span class="muted">22 ميزة</span></h3>
-          <p class="muted">كل ما في Basic، إضافة إلى الهاتف، والأتمتة، والمنزل الذكي، والرسائل من بعيد، وبطاقات الشاشة الرئيسية الجاهزة، والتخصيص الكامل.</p>
-          <p class="t-small"><b>كل ما في Basic</b></p>
-          <ul class="plan-all"><li>الأيقونات التي تحبها</li><li>طور القمر</li><li>عدّ تنازلي</li><li>تذكير منزلي</li><li>حالة خدمتك</li><li>أسعار اليوم</li><li>المباراة القادمة لفريقك</li><li>بطاقات من تطبيقات أخرى</li><li>قوائمك في Trakt وSimkl</li><li>اكتشف البودكاست</li><li>الصوت في سماعتك</li><li>الأتمتة</li><li>Home Assistant على التلفاز</li><li>من على الباب</li><li>رسائل من بعيد</li><li>رسائل فيديو</li><li>اطلب من التلفاز</li><li>شارك من هاتفك</li><li>التلفاز كمحرّك شبكة</li><li>اختصار في Windows</li><li>تابع على تلفاز آخر</li><li>نسخة في السحابة</li></ul>
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-basic-h">Sofaly Basic</h2>
+          <p class="t-lead">الشاشة الرئيسية على شكل صليب، والمشغّل، والاستماع، واللعب، والمنبّه، وشاشة التوقف، وكل ميزات تسهيل الاستخدام.</p>
+          <ul class="plan-all plan-all--basic"><li>الصليب</li><li>متابعة</li><li>الشريط العلوي</li><li>Google يواصل العمل</li><li>اللوحة السريعة</li><li>جهاز تحكمك، قواعدك</li><li>قيد التشغيل</li><li>السمات والخلفيات</li><li>حركة على مقاس تلفازك</li><li>على الشبكة</li><li>مشغّل يشغّل كل شيء</li><li>يكمل من حيث توقفت</li><li>تخطّي المقدّمة</li><li>الصوت والترجمة المفضّلان</li><li>أفلام بلا تقطّع</li><li>رؤية وسماع أفضل</li><li>بحث واحد لكل شيء</li><li>إذاعات من كل العالم</li></ul>
+          <a class="link" href="features.html">71 ميزة<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
         </div>
-        <div class="plan-block span-4 start-9" id="plan-ultra-all">
-          <h3 class="plan-block__h">Ultra <span class="muted">5 ميزة</span></h3>
-          <p class="muted">كل ما في Pro، إضافة إلى الطقس من ثلاثة نماذج، وصفحات الأفلام الكاملة، والترجمة التلقائية، وعدة منازل، والمشاهدة معًا.</p>
-          <p class="t-small"><b>كل ما في Pro</b></p>
-          <ul class="plan-all"><li>ترجمة تلقائية</li><li>صفحات أفلام كاملة</li><li>المطر من ثلاثة نماذج</li><li>المشاهدة معًا</li><li>عدة منازل</li></ul>
-        </div></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Basic"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · غائم جزئيًا</span>
+      <span class="clock"><b>08:57</b><small>الأربعاء<br>18 نوفمبر</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">متابعة</span><div class="w-big"><b>متابعة</b><span>توقف عند الحلقة 4 · بقي 21 دقيقة</span></div><ul class="w-col"><li>الحلقة 4</li><li>إذاعة</li><li>بودكاست</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">مشاهدة</span><div class="w-big"><b>على الشبكة</b><span>أفلام من حاسوبك · 214 عنوانًا</span></div><ul class="w-col"><li>أفلام</li><li>مسلسلات</li><li>على الشبكة</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">استماع</span><div class="w-big"><b>إذاعة</b><span>محطات من كل العالم، بالاسم أو البلد</span></div><ul class="w-col"><li>إذاعة</li><li>بودكاست</li><li>قيد التشغيل</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">لعب</span><div class="w-big"><b>ألعاب</b><span>3 ألعاب سحابية · وحدة التحكم متصلة</span></div><ul class="w-col"><li>السحابة</li><li>من الحاسوب</li><li>كلاسيكي</li><li>الفريق</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">التطبيقات</span><div class="w-big"><b>التطبيقات</b><span>الثمانية الأكثر استخدامًا</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>كل التطبيقات</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec ground-inverse" id="plan-pro-list" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="plan-pro-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-pro-h">Sofaly Pro</h2>
+          <p class="t-lead">كل ما في Basic، إضافة إلى الهاتف، والأتمتة، والمنزل الذكي، والرسائل من بعيد، وبطاقات الشاشة الرئيسية الجاهزة، والتخصيص الكامل.</p>
+          <ul class="plan-all plan-all--pro"><li class="plan-all__first"><b>كل ما في Basic</b></li><li>الأيقونات التي تحبها</li><li>طور القمر</li><li>عدّ تنازلي</li><li>تذكير منزلي</li><li>حالة خدمتك</li><li>أسعار اليوم</li><li>المباراة القادمة لفريقك</li><li>بطاقات من تطبيقات أخرى</li><li>قوائمك في Trakt وSimkl</li><li>اكتشف البودكاست</li><li>الصوت في سماعتك</li><li>الأتمتة</li><li>Home Assistant على التلفاز</li><li>من على الباب</li><li>رسائل من بعيد</li><li>رسائل فيديو</li><li>اطلب من التلفاز</li><li>شارك من هاتفك</li></ul>
+          <a class="link" href="features.html">22 ميزة<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        </div>
+        <div class="panel panel--tv plan-vis span-6 start-7" role="img" aria-label="Sofaly Pro"><div class="stage stage--fade-b"><div class="tv-fit"><div class="tv tv--still " data-t="5000"><div class="screen" style="--c:#8FD07A;--k:#8FD07A"><div class="scr scr-phone" style="--k:#8FD07A"><div class="ph-tv"><div class="ph-toast"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/></svg><div><small>رسالة من الهاتف</small><b>العشاء جاهز!</b></div></div></div>
+    <div class="ph-phone"><div class="ph-scr"><b class="ph-brand">sofa<em>ly</em></b><div class="ph-grid"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2.5" width="8" height="19" rx="4"/><circle cx="12" cy="8" r="1.8"/><path d="M12 13v.01M12 16.5v.01"/></svg>التحكم</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5h11v2M9.5 5v14M7.5 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/></svg>الكتابة</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M9 20h6M12 16v4"/></svg>الشاشة</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>الصور</span></div>
+      <div class="ph-field"><span>العشاء جاهز!</span></div><div class="ph-send">أرسل إلى التلفاز</div><i class="ph-tap"></i></div></div></div></div></div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec " id="plan-ultra-list" aria-labelledby="plan-ultra-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-ultra-h">Sofaly Ultra</h2>
+          <p class="t-lead">كل ما في Pro، إضافة إلى الطقس من ثلاثة نماذج، وصفحات الأفلام الكاملة، والترجمة التلقائية، وعدة منازل، والمشاهدة معًا.</p>
+          <ul class="plan-all plan-all--ultra"><li class="plan-all__first"><b>كل ما في Pro</b></li><li>ترجمة تلقائية</li><li>صفحات أفلام كاملة</li><li>المطر من ثلاثة نماذج</li><li>المشاهدة معًا</li><li>عدة منازل</li></ul>
+          
+        </div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Ultra"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still " data-t="4000"><div class="screen" style="--c:#6FB7FF;--k:#6FB7FF"><div class="scr scr-forecast" style="--k:#6FB7FF"><div class="fc-now"><span class="wx" style="--x:#6FB7FF"><svg class="ico fc-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><div><b class="fc-temp">24°</b><span>رذاذ خفيف</span>
+      <small>العظمى 27° · الصغرى 19° · المحسوسة 26°</small></div></div>
+    <div class="fc-box"><small>الـ24 ساعة القادمة</small><ol class="fc-hours"><li class="now" style="--i:0"><small>الآن</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>24°</b><em>76%</em></li><li style="--i:1"><small>18h</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>23°</b><em>71%</em></li><li style="--i:2"><small>19h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>22°</b><em>61%</em></li><li style="--i:3"><small>20h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>21°</b><em>49%</em></li><li style="--i:4"><small>21h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>21°</b><em>36%</em></li><li style="--i:5"><small>22h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>21%</em></li><li style="--i:6"><small>23h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>10%</em></li><li style="--i:7"><small>0h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>5%</em></li><li style="--i:8"><small>1h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>3%</em></li><li style="--i:9"><small>2h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>2%</em></li><li style="--i:10"><small>3h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>19°</b><em>8%</em></li><li style="--i:11"><small>4h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>18°</b><em>12%</em></li></ol></div>
+    <div class="fc-box fc-rain"><small>احتمال المطر</small>
+      <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path class="fc-area" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26 V40 H0Z"/>
+      <path class="fc-line" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26"/></svg></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 </main>

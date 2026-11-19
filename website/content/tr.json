@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Takip yok",
-      "Hesap yok, kullanım analizi yok ve siz göndermeden giden hata raporu yok.",
+      "Sofaly hesap istemez ve kullanım verisi toplamaz. Hata raporu yalnızca siz gönderirseniz gider.",
       "Her zaman."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Geliştiriciler · Sofaly",
-    "description": "Android TV uygulamanızın kartını Sofaly ana ekranına koyun. SDK yok, ücret yok.",
+    "description": "Android TV uygulamanızın kartını Sofaly ana ekranına koyun; ücretsiz ve sıradan Android koduyla.",
     "eyebrow": "Geliştirici kiti",
     "h1": "Uygulamanız, insanların gerçekten baktığı ana ekranda.",
     "lead": "Bir Sofaly eklentisi kendi Android TV uygulamanızdır. Kısa bir kart gönderir ve Sofaly onu ana ekrana, büyük yazıyla ve evin tarzında çizer.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "SDK yok, ücret yok",
-        "Bir ContentProvider ve bir satır veri. Kurulacak kütüphanemiz yok, ödenecek ücret yok."
+        "Sıradan Android kodu",
+        "Bir ContentProvider ve bir satır veri, zaten bildiğiniz Android ile. Kartı oluşturmak ve göstermek ücretsiz."
       ],
       [
         "heart",

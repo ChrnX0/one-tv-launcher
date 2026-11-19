@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Nada de rastreo",
-      "Sin cuenta, sin analítica de uso y sin informes de error que salgan sin que los mandes.",
+      "Sofaly no pide cuenta ni recoge datos de uso. Un informe de error solo sale si tú lo envías.",
       "Siempre."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Desarrolladores · Sofaly",
-    "description": "Pon la tarjeta de tu app de Android TV en la pantalla de inicio de Sofaly. Sin SDK, sin coste.",
+    "description": "Pon la tarjeta de tu app de Android TV en la pantalla de inicio de Sofaly, gratis y con código Android de siempre.",
     "eyebrow": "Kit de desarrollador",
     "h1": "Tu app en la pantalla que la gente sí mira.",
     "lead": "Un plugin de Sofaly es tu propia app de Android TV. Envía una tarjeta corta y Sofaly la dibuja en el inicio, con letra grande y con el estilo de la casa.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Sin SDK, sin coste",
-        "Un ContentProvider y una fila de datos. Ninguna biblioteca nuestra que instalar, ninguna cuota."
+        "Android de siempre",
+        "Un ContentProvider y una fila de datos, con el Android que ya conoces. Crear y mostrar la tarjeta es gratis."
       ],
       [
         "heart",

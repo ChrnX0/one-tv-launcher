@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -83,55 +88,112 @@
 <main id="top">
 
   <section class="hero hero--plans" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="section-head"><h1 id="hero-h">Тарифы</h1><p class="hero__lead">Начните с Basic — это уже весь главный экран. Продажи ещё не открыты: пока всё бесплатно.</p></div>
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">Тарифы</h1>
+        <p class="hero__lead">Начните с Basic — это уже весь главный экран. Продажи ещё не открыты: пока всё бесплатно.</p>
+        <div class="btn-row"><a class="btn btn--primary" href="features.html">Все 98 функций<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+      </div>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Тарифы"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · Переменная облачность</span>
+      <span class="clock"><b>08:57</b><small>Среда<br>18 ноября</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">Продолжить</span><div class="w-big"><b>Продолжить</b><span>Остановились на 4 серии · осталось 21 мин</span></div><ul class="w-col"><li>Серия 4</li><li>Радио</li><li>Подкаст</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">Смотреть</span><div class="w-big"><b>В сети</b><span>Фильмы с вашего компьютера · 214 названий</span></div><ul class="w-col"><li>Фильмы</li><li>Сериалы</li><li>В сети</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">Слушать</span><div class="w-big"><b>Радио</b><span>Станции со всего мира, по названию или стране</span></div><ul class="w-col"><li>Радио</li><li>Подкасты</li><li>Сейчас играет</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">Играть</span><div class="w-big"><b>Игры</b><span>3 облачные игры · геймпад подключён</span></div><ul class="w-col"><li>Облако</li><li>С ПК</li><li>Ретро</li><li>Команда</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">Приложения</span><div class="w-big"><b>Приложения</b><span>8 самых используемых</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>Все приложения</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div>
+    </div></div>
+  </section>
+
+  <section class="section" id="plans" aria-labelledby="plans-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="plans-h">Тарифы</h2><p class="muted">Basic бесплатен и уже даёт весь главный экран. Цены Pro и Ultra появятся с выходом в Google Play.</p></div>
       <div class="grid plans-grid"><article class="card card--plan span-4" id="plan-basic">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span>Basic</h3>
           <p class="muted">Для тех, кто на диване</p>
           <p class="price">Бесплатно</p>
           <p class="t-small muted">71 функций</p>
-          <a class="btn btn--secondary" href="plans.html#plan-basic">Что входит в Basic</a>
+          <a class="btn btn--secondary" href="plans.html#plan-basic-list">Что входит в Basic</a>
           <ul class="plan__list"><li>Крест</li><li>Продолжить</li><li>Верхняя панель</li><li>Google продолжает работать</li><li>Быстрая панель</li></ul>
         </article><article class="card card--plan span-4 is-featured" id="plan-pro">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg></span>Pro</h3>
           <p class="muted">Для того, кто следит за телевизором</p>
           <p class="price">Цена при запуске</p>
           <p class="t-small muted">22 функций</p>
-          <a class="btn btn--primary" href="plans.html#plan-pro">Что входит в Pro</a>
+          <a class="btn btn--primary" href="plans.html#plan-pro-list">Что входит в Pro</a>
           <ul class="plan__list"><li><b>Всё из Basic</b></li><li>Значки на ваш вкус</li><li>Фаза луны</li><li>Обратный отсчёт</li><li>Домашнее напоминание</li><li>Статус вашего сервиса</li></ul>
         </article><article class="card card--plan span-4" id="plan-ultra">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2a5 5 0 0 1 5.5 5.3"/></svg></span>Ultra</h3>
           <p class="muted">Для дома и семьи</p>
           <p class="price">Цена при запуске</p>
           <p class="t-small muted">5 функций</p>
-          <a class="btn btn--secondary" href="plans.html#plan-ultra">Что входит в Ultra</a>
+          <a class="btn btn--secondary" href="plans.html#plan-ultra-list">Что входит в Ultra</a>
           <ul class="plan__list"><li><b>Всё из Pro</b></li><li>Автоматические субтитры</li><li>Полные страницы фильмов</li><li>Дождь по трём моделям</li><li>Смотреть вместе</li><li>Несколько домов</li></ul>
         </article></div>
-    </div></div>
-  </section>
-
-  <section class="section" id="plan-basic-list" aria-labelledby="plan-basic-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="plan-basic-h">Basic</h2><p>Главный экран-крест, плеер, Слушать, Играть, будильник, заставка и все специальные возможности.</p></div>
-      <ul class="plan-all plan-all--wide"><li>Крест</li><li>Продолжить</li><li>Верхняя панель</li><li>Google продолжает работать</li><li>Быстрая панель</li><li>Ваш пульт — ваши правила</li><li>Сейчас играет</li><li>Темы и фоны</li><li>Анимация по силам телевизора</li><li>В сети</li><li>Плеер, который играет всё</li><li>Продолжает с того же места</li><li>Пропустить заставку</li><li>Любимые звук и субтитры</li><li>Фильмы без рывков</li><li>Лучше видно и слышно</li><li>Один поиск для всего</li><li>Радио со всего мира</li><li>Подкасты</li><li>Полноэкранный плеер</li><li>Все игры в одном месте</li><li>Играйте на ПК наверху</li><li>Проверка сети</li><li>Геймпады</li><li>Игровой режим</li><li>Ваша команда в Discord</li><li>Любимые впереди</li><li>По-вашему</li><li>Свободные кнопки Netflix и YouTube</li><li>Будильник, который включает телевизор</li><li>Таймеры и песочные часы</li><li>Мягкое выключение</li><li>Выключается, если никто не смотрит</li><li>Готовые рецепты</li><li>Засыпает, когда все ушли</li><li>Голосовые команды</li><li>Сегодняшняя погода, измеренная</li><li>Прогноз на весь экран</li><li>Предупреждение о дожде</li><li>Заставка, которую хочется оставить</li><li>Ваши фото на заставке</li><li>Доброе утро</li><li>Google Календарь</li><li>Ночной фильтр</li><li>Итоги недели</li><li>Профиль для каждого</li><li>Детский профиль</li><li>Время сна</li><li>Время у экрана</li><li>Гостевой режим</li><li>Wi-Fi для гостей</li><li>Семейная доска</li><li>Панель на телефоне и компьютере</li><li>Защищённая копия каждую ночь</li><li>Ночное обслуживание</li><li>Диагностика телевизора</li><li>Тест скорости</li><li>Как дела у этого телевизора</li><li>Безопасный режим</li><li>Что нового</li><li>Сообщить о проблеме</li><li>15 языков</li><li>Размер шрифта</li><li>Простой режим</li><li>Чтение вслух</li><li>Высокий контраст</li><li>Совсем без рекламы</li><li>Без слежки</li><li>PIN там, где нужно</li><li>Частный DNS</li><li>Интернет по приложениям</li></ul>
     </div>
   </section>
-  <section class="section" id="plan-more" aria-labelledby="plan-more-h">
+
+  <section class="section plan-sec ground-surface" id="plan-basic-list" aria-labelledby="plan-basic-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="plan-more-h">Pro · Ultra</h2></div>
       <div class="grid">
-        <div class="plan-block span-7" id="plan-pro-all">
-          <h3 class="plan-block__h">Pro <span class="muted">22 функций</span></h3>
-          <p class="muted">Всё из Basic, плюс телефон, автоматизации, умный дом, сообщения издалека, готовые карточки главного экрана и полная настройка.</p>
-          <p class="t-small"><b>Всё из Basic</b></p>
-          <ul class="plan-all"><li>Значки на ваш вкус</li><li>Фаза луны</li><li>Обратный отсчёт</li><li>Домашнее напоминание</li><li>Статус вашего сервиса</li><li>Курсы дня</li><li>Следующий матч вашей команды</li><li>Карточки других приложений</li><li>Ваши списки Trakt и Simkl</li><li>Находите подкасты</li><li>Звук в наушниках</li><li>Автоматизации</li><li>Home Assistant на телевизоре</li><li>Кто за дверью</li><li>Сообщения издалека</li><li>Видеосообщения</li><li>Попросите телевизор</li><li>Поделиться с телефона</li><li>Телевизор как сетевой диск</li><li>Ярлык в Windows</li><li>Продолжить на другом телевизоре</li><li>Копия в облаке</li></ul>
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-basic-h">Sofaly Basic</h2>
+          <p class="t-lead">Главный экран-крест, плеер, Слушать, Играть, будильник, заставка и все специальные возможности.</p>
+          <ul class="plan-all plan-all--basic"><li>Крест</li><li>Продолжить</li><li>Верхняя панель</li><li>Google продолжает работать</li><li>Быстрая панель</li><li>Ваш пульт — ваши правила</li><li>Сейчас играет</li><li>Темы и фоны</li><li>Анимация по силам телевизора</li><li>В сети</li><li>Плеер, который играет всё</li><li>Продолжает с того же места</li><li>Пропустить заставку</li><li>Любимые звук и субтитры</li><li>Фильмы без рывков</li><li>Лучше видно и слышно</li><li>Один поиск для всего</li><li>Радио со всего мира</li></ul>
+          <a class="link" href="features.html">71 функций<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
         </div>
-        <div class="plan-block span-4 start-9" id="plan-ultra-all">
-          <h3 class="plan-block__h">Ultra <span class="muted">5 функций</span></h3>
-          <p class="muted">Всё из Pro, плюс погода по трём моделям, полные страницы фильмов, автоматические субтитры, несколько домов и совместный просмотр.</p>
-          <p class="t-small"><b>Всё из Pro</b></p>
-          <ul class="plan-all"><li>Автоматические субтитры</li><li>Полные страницы фильмов</li><li>Дождь по трём моделям</li><li>Смотреть вместе</li><li>Несколько домов</li></ul>
-        </div></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Basic"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · Переменная облачность</span>
+      <span class="clock"><b>08:57</b><small>Среда<br>18 ноября</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">Продолжить</span><div class="w-big"><b>Продолжить</b><span>Остановились на 4 серии · осталось 21 мин</span></div><ul class="w-col"><li>Серия 4</li><li>Радио</li><li>Подкаст</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">Смотреть</span><div class="w-big"><b>В сети</b><span>Фильмы с вашего компьютера · 214 названий</span></div><ul class="w-col"><li>Фильмы</li><li>Сериалы</li><li>В сети</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">Слушать</span><div class="w-big"><b>Радио</b><span>Станции со всего мира, по названию или стране</span></div><ul class="w-col"><li>Радио</li><li>Подкасты</li><li>Сейчас играет</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">Играть</span><div class="w-big"><b>Игры</b><span>3 облачные игры · геймпад подключён</span></div><ul class="w-col"><li>Облако</li><li>С ПК</li><li>Ретро</li><li>Команда</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">Приложения</span><div class="w-big"><b>Приложения</b><span>8 самых используемых</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>Все приложения</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec ground-inverse" id="plan-pro-list" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="plan-pro-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-pro-h">Sofaly Pro</h2>
+          <p class="t-lead">Всё из Basic, плюс телефон, автоматизации, умный дом, сообщения издалека, готовые карточки главного экрана и полная настройка.</p>
+          <ul class="plan-all plan-all--pro"><li class="plan-all__first"><b>Всё из Basic</b></li><li>Значки на ваш вкус</li><li>Фаза луны</li><li>Обратный отсчёт</li><li>Домашнее напоминание</li><li>Статус вашего сервиса</li><li>Курсы дня</li><li>Следующий матч вашей команды</li><li>Карточки других приложений</li><li>Ваши списки Trakt и Simkl</li><li>Находите подкасты</li><li>Звук в наушниках</li><li>Автоматизации</li><li>Home Assistant на телевизоре</li><li>Кто за дверью</li><li>Сообщения издалека</li><li>Видеосообщения</li><li>Попросите телевизор</li><li>Поделиться с телефона</li></ul>
+          <a class="link" href="features.html">22 функций<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        </div>
+        <div class="panel panel--tv plan-vis span-6 start-7" role="img" aria-label="Sofaly Pro"><div class="stage stage--fade-b"><div class="tv-fit"><div class="tv tv--still " data-t="5000"><div class="screen" style="--c:#8FD07A;--k:#8FD07A"><div class="scr scr-phone" style="--k:#8FD07A"><div class="ph-tv"><div class="ph-toast"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/></svg><div><small>Сообщение с телефона</small><b>Ужин готов!</b></div></div></div>
+    <div class="ph-phone"><div class="ph-scr"><b class="ph-brand">sofa<em>ly</em></b><div class="ph-grid"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2.5" width="8" height="19" rx="4"/><circle cx="12" cy="8" r="1.8"/><path d="M12 13v.01M12 16.5v.01"/></svg>Пульт</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5h11v2M9.5 5v14M7.5 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/></svg>Ввод</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M9 20h6M12 16v4"/></svg>Экран</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>Фото</span></div>
+      <div class="ph-field"><span>Ужин готов!</span></div><div class="ph-send">Отправить на ТВ</div><i class="ph-tap"></i></div></div></div></div></div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec " id="plan-ultra-list" aria-labelledby="plan-ultra-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-ultra-h">Sofaly Ultra</h2>
+          <p class="t-lead">Всё из Pro, плюс погода по трём моделям, полные страницы фильмов, автоматические субтитры, несколько домов и совместный просмотр.</p>
+          <ul class="plan-all plan-all--ultra"><li class="plan-all__first"><b>Всё из Pro</b></li><li>Автоматические субтитры</li><li>Полные страницы фильмов</li><li>Дождь по трём моделям</li><li>Смотреть вместе</li><li>Несколько домов</li></ul>
+          
+        </div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Ultra"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still " data-t="4000"><div class="screen" style="--c:#6FB7FF;--k:#6FB7FF"><div class="scr scr-forecast" style="--k:#6FB7FF"><div class="fc-now"><span class="wx" style="--x:#6FB7FF"><svg class="ico fc-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><div><b class="fc-temp">24°</b><span>Слабая морось</span>
+      <small>Макс. 27° · мин. 19° · ощущается 26°</small></div></div>
+    <div class="fc-box"><small>Ближайшие 24 часа</small><ol class="fc-hours"><li class="now" style="--i:0"><small>Сейчас</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>24°</b><em>76%</em></li><li style="--i:1"><small>18h</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>23°</b><em>71%</em></li><li style="--i:2"><small>19h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>22°</b><em>61%</em></li><li style="--i:3"><small>20h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>21°</b><em>49%</em></li><li style="--i:4"><small>21h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>21°</b><em>36%</em></li><li style="--i:5"><small>22h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>21%</em></li><li style="--i:6"><small>23h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>10%</em></li><li style="--i:7"><small>0h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>5%</em></li><li style="--i:8"><small>1h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>3%</em></li><li style="--i:9"><small>2h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>2%</em></li><li style="--i:10"><small>3h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>19°</b><em>8%</em></li><li style="--i:11"><small>4h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>18°</b><em>12%</em></li></ol></div>
+    <div class="fc-box fc-rain"><small>Вероятность дождя</small>
+      <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path class="fc-area" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26 V40 H0Z"/>
+      <path class="fc-line" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26"/></svg></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 </main>

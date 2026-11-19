@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Tanpa pelacakan",
-      "Tanpa akun, tanpa analitik penggunaan, dan tidak ada laporan error yang terkirim tanpa Anda kirim.",
+      "Sofaly tidak meminta akun dan tidak mengumpulkan data penggunaan. Laporan error hanya terkirim jika Anda mengirimnya.",
       "Selalu."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Developer · Sofaly",
-    "description": "Taruh kartu aplikasi Android TV Anda di layar utama Sofaly. Tanpa SDK, tanpa biaya.",
+    "description": "Taruh kartu aplikasi Android TV Anda di layar utama Sofaly, gratis dan dengan kode Android biasa.",
     "eyebrow": "Kit developer",
     "h1": "Aplikasi Anda di layar utama yang benar-benar dilihat orang.",
     "lead": "Plugin Sofaly adalah aplikasi Android TV Anda sendiri. Ia mengirim kartu singkat dan Sofaly menggambarnya di layar utama, dengan huruf besar dan gaya rumah.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Tanpa SDK, tanpa biaya",
-        "Satu ContentProvider dan satu baris data. Tidak ada pustaka kami yang perlu dipasang, tidak ada biaya."
+        "Kode Android biasa",
+        "Satu ContentProvider dan satu baris data, dengan Android yang sudah Anda kenal. Membuat dan menampilkan kartu itu gratis."
       ],
       [
         "heart",

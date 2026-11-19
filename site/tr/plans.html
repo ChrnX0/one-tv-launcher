@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -83,55 +88,112 @@
 <main id="top">
 
   <section class="hero hero--plans" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="section-head"><h1 id="hero-h">Planlar</h1><p class="hero__lead">Zaten tam ana ekran olan Basic ile başlayın. Satışlar henüz açılmadı: şimdilik her şey ücretsiz.</p></div>
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">Planlar</h1>
+        <p class="hero__lead">Zaten tam ana ekran olan Basic ile başlayın. Satışlar henüz açılmadı: şimdilik her şey ücretsiz.</p>
+        <div class="btn-row"><a class="btn btn--primary" href="features.html">98 özelliğin hepsini gör<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+      </div>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Planlar"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · Parçalı bulutlu</span>
+      <span class="clock"><b>08:57</b><small>Çarşamba<br>18 Kasım</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">Devam et</span><div class="w-big"><b>Devam et</b><span>4. bölümde kaldı · 21 dk kaldı</span></div><ul class="w-col"><li>4. bölüm</li><li>Radyo</li><li>Podcast</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">İzle</span><div class="w-big"><b>Ağda</b><span>Bilgisayarınızdaki filmler · 214 başlık</span></div><ul class="w-col"><li>Filmler</li><li>Diziler</li><li>Ağda</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">Dinle</span><div class="w-big"><b>Radyo</b><span>Dünyanın her yerinden istasyonlar, ada veya ülkeye göre</span></div><ul class="w-col"><li>Radyo</li><li>Podcast&#x27;ler</li><li>Şimdi çalıyor</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">Oyna</span><div class="w-big"><b>Oyunlar</b><span>3 bulut oyunu · kumanda bağlı</span></div><ul class="w-col"><li>Bulut</li><li>PC&#x27;den</li><li>Retro</li><li>Ekip</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">Uygulamalar</span><div class="w-big"><b>Uygulamalar</b><span>En çok kullandığınız 8 tanesi</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>Tüm uygulamalar</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div>
+    </div></div>
+  </section>
+
+  <section class="section" id="plans" aria-labelledby="plans-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="plans-h">Planlar</h2><p class="muted">Basic ücretsizdir ve zaten ana ekranın tamamıdır. Pro ve Ultra fiyatları Google Play çıkışıyla gelir.</p></div>
       <div class="grid plans-grid"><article class="card card--plan span-4" id="plan-basic">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span>Basic</h3>
           <p class="muted">Kanepedekiler için</p>
           <p class="price">Ücretsiz</p>
           <p class="t-small muted">71 özellik</p>
-          <a class="btn btn--secondary" href="plans.html#plan-basic">Basic neleri içeriyor</a>
+          <a class="btn btn--secondary" href="plans.html#plan-basic-list">Basic neleri içeriyor</a>
           <ul class="plan__list"><li>Haç</li><li>Devam et</li><li>Üst çubuk</li><li>Google çalışmaya devam eder</li><li>Hızlı panel</li></ul>
         </article><article class="card card--plan span-4 is-featured" id="plan-pro">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg></span>Pro</h3>
           <p class="muted">Televizyonla ilgilenen için</p>
           <p class="price">Çıkışta fiyat</p>
           <p class="t-small muted">22 özellik</p>
-          <a class="btn btn--primary" href="plans.html#plan-pro">Pro neleri içeriyor</a>
+          <a class="btn btn--primary" href="plans.html#plan-pro-list">Pro neleri içeriyor</a>
           <ul class="plan__list"><li><b>Basic&#x27;teki her şey</b></li><li>Sevdiğiniz simgeler</li><li>Ay evresi</li><li>Geri sayım</li><li>Ev hatırlatıcısı</li><li>Hizmetinizin durumu</li></ul>
         </article><article class="card card--plan span-4" id="plan-ultra">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2a5 5 0 0 1 5.5 5.3"/></svg></span>Ultra</h3>
           <p class="muted">Ev ve aile için</p>
           <p class="price">Çıkışta fiyat</p>
           <p class="t-small muted">5 özellik</p>
-          <a class="btn btn--secondary" href="plans.html#plan-ultra">Ultra neleri içeriyor</a>
+          <a class="btn btn--secondary" href="plans.html#plan-ultra-list">Ultra neleri içeriyor</a>
           <ul class="plan__list"><li><b>Pro&#x27;daki her şey</b></li><li>Otomatik altyazı</li><li>Tam film sayfaları</li><li>Üç modelden yağmur</li><li>Birlikte izleyin</li><li>Birden fazla ev</li></ul>
         </article></div>
-    </div></div>
-  </section>
-
-  <section class="section" id="plan-basic-list" aria-labelledby="plan-basic-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="plan-basic-h">Basic</h2><p>Haç ana ekran, oynatıcı, Dinle, Oyna, alarm, ekran koruyucu ve tüm erişilebilirlik.</p></div>
-      <ul class="plan-all plan-all--wide"><li>Haç</li><li>Devam et</li><li>Üst çubuk</li><li>Google çalışmaya devam eder</li><li>Hızlı panel</li><li>Kumandanız, kurallarınız</li><li>Şimdi çalıyor</li><li>Temalar ve arka planlar</li><li>TV&#x27;nize göre animasyon</li><li>Ağda</li><li>Her şeyi oynatan bir oynatıcı</li><li>Kaldığınız yerden devam eder</li><li>Jeneriği atla</li><li>Tercih ettiğiniz ses ve altyazı</li><li>Takılmayan filmler</li><li>Daha iyi gör ve duy</li><li>Her şey için tek arama</li><li>Dünyanın her yerinden radyo</li><li>Podcast&#x27;ler</li><li>Tam ekran oynatıcı</li><li>Tüm oyunlarınız tek yerde</li><li>Üst kattaki PC&#x27;de oynayın</li><li>Ağı test et</li><li>Oyun kumandaları</li><li>Oyun modu</li><li>Discord ekibiniz</li><li>Favorileriniz önde</li><li>Sizin tarzınız</li><li>Serbest Netflix ve YouTube tuşları</li><li>Televizyonu açan alarm</li><li>Zamanlayıcılar ve kum saati</li><li>Yumuşak kapanış</li><li>İzleyen yoksa kapanır</li><li>Hazır tarifler</li><li>Herkes çıkınca uyur</li><li>Sesli kısayollar</li><li>Bugünün havası, ölçülmüş</li><li>Tam ekran tahmin</li><li>Yağmur uyarısı</li><li>Açık bırakmaya değer ekran koruyucu</li><li>Ekran koruyucuda fotoğraflarınız</li><li>Günaydın</li><li>Google Takvim</li><li>Gece filtresi</li><li>Haftalık özet</li><li>Herkese bir profil</li><li>Çocuk profili</li><li>Yatma saati</li><li>Günlük ekran süresi</li><li>Misafir modu</li><li>Misafir Wi-Fi</li><li>Aile panosu</li><li>Telefonda ve bilgisayarda panel</li><li>Her gece kilitli yedek</li><li>Gece bakımı</li><li>TV teşhisi</li><li>Hız testi</li><li>Bu televizyon nasıl</li><li>Güvenli mod</li><li>Neler değişti</li><li>Sorun bildir</li><li>15 dil</li><li>Yazı boyutu</li><li>Basit mod</li><li>Sesli okuma</li><li>Yüksek kontrast</li><li>Hiç reklam yok</li><li>Takip yok</li><li>Gereken yerde PIN</li><li>Özel DNS</li><li>Uygulama başına internet</li></ul>
     </div>
   </section>
-  <section class="section" id="plan-more" aria-labelledby="plan-more-h">
+
+  <section class="section plan-sec ground-surface" id="plan-basic-list" aria-labelledby="plan-basic-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="plan-more-h">Pro · Ultra</h2></div>
       <div class="grid">
-        <div class="plan-block span-7" id="plan-pro-all">
-          <h3 class="plan-block__h">Pro <span class="muted">22 özellik</span></h3>
-          <p class="muted">Basic&#x27;teki her şey, artı telefon, otomasyonlar, akıllı ev, uzaktan mesajlar, hazır ana ekran kartları ve tam kişiselleştirme.</p>
-          <p class="t-small"><b>Basic&#x27;teki her şey</b></p>
-          <ul class="plan-all"><li>Sevdiğiniz simgeler</li><li>Ay evresi</li><li>Geri sayım</li><li>Ev hatırlatıcısı</li><li>Hizmetinizin durumu</li><li>Günün kurları</li><li>Takımınızın sıradaki maçı</li><li>Diğer uygulamalardan kartlar</li><li>Trakt ve Simkl listeleriniz</li><li>Podcast keşfet</li><li>Ses kulaklığınızda</li><li>Otomasyonlar</li><li>Televizyonda Home Assistant</li><li>Kapıda kim var</li><li>Uzaktan mesajlar</li><li>Video mesajları</li><li>Televizyona sorun</li><li>Telefondan paylaşın</li><li>Ağ sürücüsü olarak televizyon</li><li>Windows&#x27;ta kısayol</li><li>Başka televizyonda devam et</li><li>Bulutta bir kopya</li></ul>
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-basic-h">Sofaly Basic</h2>
+          <p class="t-lead">Haç ana ekran, oynatıcı, Dinle, Oyna, alarm, ekran koruyucu ve tüm erişilebilirlik.</p>
+          <ul class="plan-all plan-all--basic"><li>Haç</li><li>Devam et</li><li>Üst çubuk</li><li>Google çalışmaya devam eder</li><li>Hızlı panel</li><li>Kumandanız, kurallarınız</li><li>Şimdi çalıyor</li><li>Temalar ve arka planlar</li><li>TV&#x27;nize göre animasyon</li><li>Ağda</li><li>Her şeyi oynatan bir oynatıcı</li><li>Kaldığınız yerden devam eder</li><li>Jeneriği atla</li><li>Tercih ettiğiniz ses ve altyazı</li><li>Takılmayan filmler</li><li>Daha iyi gör ve duy</li><li>Her şey için tek arama</li><li>Dünyanın her yerinden radyo</li></ul>
+          <a class="link" href="features.html">71 özellik<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
         </div>
-        <div class="plan-block span-4 start-9" id="plan-ultra-all">
-          <h3 class="plan-block__h">Ultra <span class="muted">5 özellik</span></h3>
-          <p class="muted">Pro&#x27;daki her şey, artı üç modelden hava, tam film sayfaları, otomatik altyazı, birden fazla ev ve birlikte izleme.</p>
-          <p class="t-small"><b>Pro&#x27;daki her şey</b></p>
-          <ul class="plan-all"><li>Otomatik altyazı</li><li>Tam film sayfaları</li><li>Üç modelden yağmur</li><li>Birlikte izleyin</li><li>Birden fazla ev</li></ul>
-        </div></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Basic"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · Parçalı bulutlu</span>
+      <span class="clock"><b>08:57</b><small>Çarşamba<br>18 Kasım</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">Devam et</span><div class="w-big"><b>Devam et</b><span>4. bölümde kaldı · 21 dk kaldı</span></div><ul class="w-col"><li>4. bölüm</li><li>Radyo</li><li>Podcast</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">İzle</span><div class="w-big"><b>Ağda</b><span>Bilgisayarınızdaki filmler · 214 başlık</span></div><ul class="w-col"><li>Filmler</li><li>Diziler</li><li>Ağda</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">Dinle</span><div class="w-big"><b>Radyo</b><span>Dünyanın her yerinden istasyonlar, ada veya ülkeye göre</span></div><ul class="w-col"><li>Radyo</li><li>Podcast&#x27;ler</li><li>Şimdi çalıyor</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">Oyna</span><div class="w-big"><b>Oyunlar</b><span>3 bulut oyunu · kumanda bağlı</span></div><ul class="w-col"><li>Bulut</li><li>PC&#x27;den</li><li>Retro</li><li>Ekip</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">Uygulamalar</span><div class="w-big"><b>Uygulamalar</b><span>En çok kullandığınız 8 tanesi</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>Tüm uygulamalar</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec ground-inverse" id="plan-pro-list" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="plan-pro-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-pro-h">Sofaly Pro</h2>
+          <p class="t-lead">Basic&#x27;teki her şey, artı telefon, otomasyonlar, akıllı ev, uzaktan mesajlar, hazır ana ekran kartları ve tam kişiselleştirme.</p>
+          <ul class="plan-all plan-all--pro"><li class="plan-all__first"><b>Basic&#x27;teki her şey</b></li><li>Sevdiğiniz simgeler</li><li>Ay evresi</li><li>Geri sayım</li><li>Ev hatırlatıcısı</li><li>Hizmetinizin durumu</li><li>Günün kurları</li><li>Takımınızın sıradaki maçı</li><li>Diğer uygulamalardan kartlar</li><li>Trakt ve Simkl listeleriniz</li><li>Podcast keşfet</li><li>Ses kulaklığınızda</li><li>Otomasyonlar</li><li>Televizyonda Home Assistant</li><li>Kapıda kim var</li><li>Uzaktan mesajlar</li><li>Video mesajları</li><li>Televizyona sorun</li><li>Telefondan paylaşın</li></ul>
+          <a class="link" href="features.html">22 özellik<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        </div>
+        <div class="panel panel--tv plan-vis span-6 start-7" role="img" aria-label="Sofaly Pro"><div class="stage stage--fade-b"><div class="tv-fit"><div class="tv tv--still " data-t="5000"><div class="screen" style="--c:#8FD07A;--k:#8FD07A"><div class="scr scr-phone" style="--k:#8FD07A"><div class="ph-tv"><div class="ph-toast"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/></svg><div><small>Telefondan mesaj</small><b>Yemek hazır!</b></div></div></div>
+    <div class="ph-phone"><div class="ph-scr"><b class="ph-brand">sofa<em>ly</em></b><div class="ph-grid"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2.5" width="8" height="19" rx="4"/><circle cx="12" cy="8" r="1.8"/><path d="M12 13v.01M12 16.5v.01"/></svg>Kumanda</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5h11v2M9.5 5v14M7.5 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/></svg>Yaz</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M9 20h6M12 16v4"/></svg>Ekran</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>Fotoğraflar</span></div>
+      <div class="ph-field"><span>Yemek hazır!</span></div><div class="ph-send">TV&#x27;ye gönder</div><i class="ph-tap"></i></div></div></div></div></div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec " id="plan-ultra-list" aria-labelledby="plan-ultra-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-ultra-h">Sofaly Ultra</h2>
+          <p class="t-lead">Pro&#x27;daki her şey, artı üç modelden hava, tam film sayfaları, otomatik altyazı, birden fazla ev ve birlikte izleme.</p>
+          <ul class="plan-all plan-all--ultra"><li class="plan-all__first"><b>Pro&#x27;daki her şey</b></li><li>Otomatik altyazı</li><li>Tam film sayfaları</li><li>Üç modelden yağmur</li><li>Birlikte izleyin</li><li>Birden fazla ev</li></ul>
+          
+        </div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Ultra"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still " data-t="4000"><div class="screen" style="--c:#6FB7FF;--k:#6FB7FF"><div class="scr scr-forecast" style="--k:#6FB7FF"><div class="fc-now"><span class="wx" style="--x:#6FB7FF"><svg class="ico fc-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><div><b class="fc-temp">24°</b><span>Hafif çisenti</span>
+      <small>En yüksek 27° · en düşük 19° · hissedilen 26°</small></div></div>
+    <div class="fc-box"><small>Sonraki 24 saat</small><ol class="fc-hours"><li class="now" style="--i:0"><small>Şimdi</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>24°</b><em>76%</em></li><li style="--i:1"><small>18h</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>23°</b><em>71%</em></li><li style="--i:2"><small>19h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>22°</b><em>61%</em></li><li style="--i:3"><small>20h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>21°</b><em>49%</em></li><li style="--i:4"><small>21h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>21°</b><em>36%</em></li><li style="--i:5"><small>22h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>21%</em></li><li style="--i:6"><small>23h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>10%</em></li><li style="--i:7"><small>0h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>5%</em></li><li style="--i:8"><small>1h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>3%</em></li><li style="--i:9"><small>2h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>2%</em></li><li style="--i:10"><small>3h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>19°</b><em>8%</em></li><li style="--i:11"><small>4h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>18°</b><em>12%</em></li></ol></div>
+    <div class="fc-box fc-rain"><small>Yağmur ihtimali</small>
+      <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path class="fc-area" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26 V40 H0Z"/>
+      <path class="fc-line" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26"/></svg></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 </main>
