@@ -37,6 +37,13 @@ class TraktDetailsTest {
         assertEquals(listOf("X - Y"), TraktDetails.nomesDeBusca("X - Y"))   // parte curta demais: só o inteiro
     }
 
+    @Test fun tituloComEComercial() {
+        assertTrue(TraktDetails.mesmoTitulo("Lei & Ordem: Unidade de Vítimas Especiais", "Lei e Ordem: Unidade de Vítimas Especiais"))
+        assertTrue(TraktDetails.mesmoTitulo("Law & Order", "Law and Order"))
+        assertFalse(TraktDetails.mesmoTitulo("Lei & Ordem", "Lei e Ordem: Unidade de Vítimas Especiais"))
+        assertFalse(TraktDetails.mesmoTitulo("&", "e"))
+    }
+
     @Test fun enderecos() {
         val u = TraktDetails.urlBusca("O Poderoso Chefão", 1972, false)
         assertTrue(u, u.startsWith(ServicosFilmes.TRAKT_API + "/search/movie?query=O%20Poderoso%20Chef%C3%A3o"))

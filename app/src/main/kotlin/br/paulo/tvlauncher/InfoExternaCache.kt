@@ -191,12 +191,13 @@ object InfoExternaCache {
                 val limpo = LegendaExterna.nomeDeBusca(titulo).ifBlank { titulo }
                 val achados = trakt(TraktDetails.urlBusca(limpo, anoBusca, serie))?.let { TraktDetails.lerBusca(it, serie) }.orEmpty()
                     .filter { it.tmdb !in recusados }
+                Log.i(TAG, "busca Trakt '$limpo' ano=${anoBusca ?: "-"}: ${achados.size} (${achados.take(3).joinToString { "${it.titulo} ${it.ano ?: ""}".trim() }})")
                 InfoExterna.escolher(TraktDetails.candidatos(achados), titulo, anoBusca, recusados)?.id?.let { return it }
                 if (lingua == "en") return null
-                val alvo = Idioma.chaveTitulo(titulo)
                 return achados.filter { anoBusca == null || it.ano == null || kotlin.math.abs(it.ano - anoBusca) <= 1 }.take(3).firstOrNull { a ->
                     val t = trakt(TraktDetails.urlTraducao(a.trakt, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
-                    t != null && Idioma.chaveTitulo(t.first) == alvo
+                    if (t != null && !TraktDetails.mesmoTitulo(t.first, titulo)) Log.i(TAG, "busca Trakt: tradução '${t.first}' não casa")
+                    t != null && TraktDetails.mesmoTitulo(t.first, titulo)
                 }?.tmdb
             }
             // Ano errado na lista do IPTV (relançamento, ano da cópia) é comum: sem nada com o ano, tenta sem ele, como o TMDB.
@@ -263,7 +264,7 @@ object InfoExternaCache {
         }
     }
     private const val PREFS = "fichas"
-    private const val PREF_BUSCA_TRAKT = "busca_trakt_v1"
+    private const val PREF_BUSCA_TRAKT = "busca_trakt_v2"   // v2: tradução com "&" (19/11/2026)
 
     /** Id do Trakt de cada título já visto ("F123"/"S45" -> trakt), só na memória. */
     private val traktIds = HashMap<String, Int>()
