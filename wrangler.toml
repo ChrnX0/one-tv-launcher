@@ -1,0 +1,26 @@
+# Cópia do server/api/wrangler.toml para o Workers Builds da Cloudflare (19/11/2026).
+# O Worker sofaly-api está ligado a este repositório e, a cada merge na main, a Cloudflare roda `npx wrangler deploy`
+# AQUI NA RAIZ. Sem este arquivo o wrangler subia a raiz como site estático vazio e a API inteira caía (404).
+# Mudou algo em server/api/wrangler.toml? Mude igual aqui (só `main` muda de caminho); server/api/test/config.test.js confere.
+name = "sofaly-api"
+main = "server/api/src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false   # só pelo domínio próprio (rota abaixo)
+
+routes = [{ pattern = "api.sofaly.tv", custom_domain = true }]
+
+[vars]
+DISABLED = "0"   # "1" desliga tudo (as TVs seguem funcionando em casa e avisam o que ficou indisponível)
+
+[[durable_objects.bindings]]
+name = "MAILBOX"
+class_name = "Mailbox"
+
+[[durable_objects.bindings]]
+name = "PAIRING"
+class_name = "Pairing"
+
+# SQLite nos Durable Objects: único tipo aceito no plano grátis.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Mailbox", "Pairing"]
