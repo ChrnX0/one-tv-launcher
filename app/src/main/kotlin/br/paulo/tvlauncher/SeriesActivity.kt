@@ -985,7 +985,7 @@ class SeriesActivity : Activity() {
             }
             // Atribuição da nota do Simkl na ficha (17/11/2026): "Dados de Simkl (simkl.com)", discreta.
             if (ext?.let { InfoExterna.notasDe(it).simkl } != null)
-                texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPadding(0, dp(2), 0, 0) })
+                texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
             // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
             tmdbDe(s, f)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
                 val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
