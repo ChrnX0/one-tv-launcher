@@ -2786,6 +2786,7 @@ class MainActivity : Activity() {
             topo.background = android.graphics.drawable.InsetDrawable(vidro, dp(Grade.MARGEM - 20), 0, dp(Grade.MARGEM - 20), 0)
             return
         }
+        BarraIlha.agora = null   // outro estilo de barra (ou a tela refeita): o MCP não fica com a fila velha
         if (barraCruz == LayoutHome.BarraCruz.ILHA) montarIlha(raiz, topo)
         // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
         if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
@@ -3115,7 +3116,11 @@ class MainActivity : Activity() {
             contagem = txtContagem.se(pilulaContagem),
         ))
         pintarTrilho(BarraIlha.trilho(ilhaIndicadores))
-        if (fila != ilhaFila) {
+        if (fila != ilhaFila && BarraIlha.mesmaEstrutura(ilhaFila, fila)) {
+            // Só o texto mudou (o timer conta a cada segundo): não reinicia o rodízio nem repete o anúncio do TalkBack.
+            ilhaFila = fila
+            BarraIlha.agora = BarraIlha.paraMcp(fila)
+        } else if (fila != ilhaFila) {
             val novo = BarraIlha.chegou(ilhaFila, fila)
             ilhaPasso = BarraIlha.passoDepois(novo ?: ilhaEvento, fila)   // o que chegou vai para a tela na hora
             if (novo != null) crescerIlha(novo)

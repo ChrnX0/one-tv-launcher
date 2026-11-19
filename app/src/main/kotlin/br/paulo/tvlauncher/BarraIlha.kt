@@ -162,6 +162,12 @@ object BarraIlha {
         e.tipo.name.lowercase() + ": \"" + (if (t.length > MCP_MAX) t.take(MCP_MAX - 1) + "…" else t).replace("\"", "'") + "\""
     }.ifEmpty { null }
 
+    /**
+     * Mesmos eventos, na mesma ordem (só o texto pode ter mudado, como o timer contando). Nesse caso a tela só troca o texto:
+     * o rodízio segue e o leitor de tela não anuncia a fila de novo a cada segundo (revisão do #277).
+     */
+    fun mesmaEstrutura(a: List<Evento>, b: List<Evento>): Boolean = a.map { it.tipo } == b.map { it.tipo }
+
     /** "2/3" quando há mais de um na fila; vazio com um só. */
     fun contador(fila: List<Evento>, passo: Int): String =
         if (fila.size < 2) "" else "${Math.floorMod(passo, fila.size) + 1}/${fila.size}"

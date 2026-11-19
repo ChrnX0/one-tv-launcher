@@ -160,5 +160,13 @@ class BarraIlhaTest {
         assertTrue(s.length < 4 + 80 + 40)
     }
 
+    @Test fun timerContandoNaoMudaAEstrutura() {
+        val a = BarraIlha.fila(BarraIlha.Estado(timer = "4:32", tocandoTitulo = "Rádio"))
+        val b = BarraIlha.fila(BarraIlha.Estado(timer = "4:31", tocandoTitulo = "Rádio"))
+        assertTrue(a != b && BarraIlha.mesmaEstrutura(a, b))
+        assertFalse(BarraIlha.mesmaEstrutura(a, BarraIlha.fila(BarraIlha.Estado(timer = "4:31"))))
+        assertTrue(BarraIlha.mesmaEstrutura(emptyList(), emptyList()))
+    }
+
     private fun and(o: String?, f: Float?, falta: String?) = CruzLogica.andamento(o, f, falta).replace('\u00A0', ' ')
 }
