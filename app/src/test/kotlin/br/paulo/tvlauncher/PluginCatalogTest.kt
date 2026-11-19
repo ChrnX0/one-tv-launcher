@@ -37,4 +37,9 @@ class PluginCatalogTest {
         assertTrue(LojaCurada.CATALOGO.map { it.id }.containsAll(ids))
         assertEquals(LojaCurada.CATALOGO.size, LojaCurada.CATALOGO.map { it.id }.toSet().size)
     }
+
+    @Test fun nenhumNomeDeConcorrenteNaVitrine() {
+        PluginCatalog.LISTA.forEach { assertTrue(it.id, !it.nome.contains("projectivy", ignoreCase = true)) }
+        assertEquals("TV Icon Pack", PluginCatalog.nomeDoPacote("dev.projectivy.blueprint.app"))
+    }
 }
