@@ -270,29 +270,34 @@ object Idioma {
      * tem algo guardado ([comecado]: posição, visto, Interesses); com algo nos dois, nenhum some; sem nada, o primeiro da lista.
      */
     fun <T> semPares(lista: List<T>, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String,
-                     ano: (T) -> Int?, comecado: (T) -> Boolean): List<T> {
-        if (indice.isEmpty()) return lista
+                     ano: (T) -> Int?, comecado: (T) -> Boolean, motivo: ((String) -> Unit)? = null): List<T> {
+        if (indice.isEmpty()) { motivo?.invoke("indice vazio"); return lista }
         val posicao = java.util.IdentityHashMap<T, Int>(lista.size)
         lista.forEachIndexed { i, x -> posicao[x] = i }
         // O índice vem do catálogo inteiro (categorias ocultas e cópias em outros grupos incluídas): aqui só vale o que
         // está na grade. Visto na Sala (19/11/2026): a cópia oculta virava "3 versões" e nenhum par juntava.
         val naGrade = HashMap<String, List<T>>()
         for ((k, v) in indice) { val f = v.filter { posicao.containsKey(it) }; if (f.size >= 2) naGrade[k] = f }
+        motivo?.invoke("indice=${indice.size} lista=${lista.size} titulos com 2+ na grade=${naGrade.size}")
         if (naGrade.isEmpty()) return lista
+        var avisos = 0
+        fun pula(x: T, por: String) { if (motivo != null && avisos++ < 8) motivo("nao juntou '${nome(x)}' (${grupo(x)}, ${ano(x)}): $por") }
         val sai = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<T, Boolean>())
         for (x in lista) {
             if (x in sai) continue
-            val o = outraVersao(x, naGrade, nome, grupo, ano) ?: continue
+            val k0 = chaveTitulo(nome(x))
+            val o = outraVersao(x, naGrade, nome, grupo, ano) ?: run { if (naGrade.containsKey(k0)) pula(x, "sem par"); null } ?: continue
             if (o === x || !posicao.containsKey(o) || o in sai) continue
-            if (outraVersao(o, naGrade, nome, grupo, ano) !== x) continue
+            if (outraVersao(o, naGrade, nome, grupo, ano) !== x) { pula(x, "par nao reciproco: '${nome(o)}'"); continue }
             // 3 ou mais itens na grade com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
             val k = chaveTitulo(nome(x)); val anoX = ano(x) ?: ano(o)
-            if ((naGrade[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) continue
+            if ((naGrade[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) { pula(x, "3+ versoes"); continue }
             val cx = comecado(x); val co = comecado(o)
-            if (cx && co) continue   // os dois têm algo guardado: juntar esconderia um deles
+            if (cx && co) { pula(x, "os dois com algo guardado"); continue }   // os dois têm algo guardado: juntar esconderia um deles
             val ficaX = if (cx != co) cx else posicao.getValue(x) < posicao.getValue(o)
             sai += if (ficaX) o else x
         }
+        motivo?.invoke("juntou ${sai.size}")
         return if (sai.isEmpty()) lista else lista.filter { it !in sai }
     }
 

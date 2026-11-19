@@ -410,7 +410,8 @@ class FilmesActivity : Activity() {
                     // Fica o que tem algo guardado (posição, visto ou Interesses); com algo nos dois, os dois ficam.
                     // A conta refaz quando posições ou Interesses mudam (voltar do vídeo troca o mapa).
                     .let { v -> cacheSemPares?.takeIf { it.v === v && it.idx === idxS && it.pos === posS && it.ints === intS }?.res
-                        ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }) { posS.containsKey(it.chave) || it.chave in intS }
+                        ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }, { posS.containsKey(it.chave) || it.chave in intS })
+                            { android.util.Log.i("TvLauncher.Filmes", "versoes: $it") }
                             .also { cacheSemPares = SemPares(v, idxS, posS, intS, it) } }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
