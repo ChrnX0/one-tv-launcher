@@ -14,19 +14,20 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Filmes: o dublado e o legendado do mesmo filme agora são um item só na grade; a ficha abre na versão que você prefere e tem o botão da outra</item>
-        <item>Jogos › Sua turma: bots do Discord (nome terminado em “bot”) não aparecem mais</item>
+        <item>As fichas de filmes e séries agora vêm do Trakt: sinopse em português, direção, elenco, trailer e o próximo episódio</item>
+        <item>Tempo: previsão do MET Norway; a cidade ou o CEP são achados na própria TV, sem serviço de fora</item>
+        <item>Simkl: conecte a sua conta para ver a nota da comunidade; a ficha convida a conectar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Um item por filme</item>
-        <item>Turma sem bots</item>
-        <item>Plugin de fundo</item>
-        <item>Trocar um ícone</item>
+        <item>Ficha do filme</item>
+        <item>Ficha da série</item>
+        <item>Previsão</item>
+        <item>Cidade</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Em Filmes › Todos, um filme que tem cópia “LEG” aparece uma vez só, e a ficha oferece a outra versão?</item>
-        <item>Em Jogos › Sua turma, os bots do Discord sumiram e as pessoas continuam lá?</item>
-        <item>Com um plugin de papel de parede instalado, escolher o tema “Plugin de fundo” mostra o fundo dele na tela inicial?</item>
-        <item>Segure OK num app › “Trocar ícone”: escolher um ícone de um pacote troca o ícone na tela inicial?</item>
+        <item>Abra um filme em Filmes: a ficha mostra a sinopse em português, a direção e o elenco?</item>
+        <item>Abra uma série que ainda está no ar: a ficha mostra a sinopse, as temporadas e o próximo episódio?</item>
+        <item>A tela de Previsão abre com hoje, as horas e os próximos dias?</item>
+        <item>Nos Ajustes, digitar a sua cidade (ou o CEP) acha o lugar e o tempo continua funcionando?</item>
     </string-array>
 </resources>
