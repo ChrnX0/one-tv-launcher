@@ -20,6 +20,7 @@
         <item>Simkl: conecte a sua conta para ver a nota da comunidade; a ficha convida a conectar</item>
         <item>Barra de cima (Ilha): até 3 coisas se revezam, ícones de estado ao lado da hora, e o ponto fica âmbar ou vermelho quando algo pede atenção</item>
         <item>O que acabou de chegar (campainha, lembrete, compromisso, despertador) aparece embaixo da pílula por alguns segundos; segure ▲ para abrir o painel rápido</item>
+        <item>TV no Continuar: o “No ar” não some mais quando a TV passa o dia sem abrir o player (a tela inicial busca o guia sozinha)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Um cartão por filme</item>

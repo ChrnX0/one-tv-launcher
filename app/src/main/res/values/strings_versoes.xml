@@ -23,6 +23,7 @@
         <item>Simkl: connect your own account to see the community rating; the details page invites you to connect</item>
         <item>Top bar (Ilha): up to 3 things take turns, small status icons next to the clock, and the dot turns amber or red when something needs attention</item>
         <item>What just arrived (doorbell, reminder, appointment, alarm) grows under the pill for a few seconds; hold ▲ to open the quick panel</item>
+        <item>TV in Continue: “On air” no longer disappears when the TV goes all day without opening the player (the home screen fetches the guide by itself)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>filmes_um_por_filme</item>

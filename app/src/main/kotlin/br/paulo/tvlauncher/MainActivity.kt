@@ -1891,8 +1891,27 @@ class MainActivity : Activity() {
         }
         if (guiaId.isEmpty()) return u
         val novos = runCatching { PlayerCarga.guiaDoCache(this, setOf(guiaId)).proximos(guiaId, agora, 4) }.getOrNull()
+        if (novos.isNullOrEmpty()) atualizarGuiaNoFundo()
         return if (novos.isNullOrEmpty()) u else u.copy(programas = novos)
     }
+
+    /**
+     * O guia acabou (visto na Sala, 19/11/2026: a TV ficou o dia sem abrir o player e o item TV perdeu o "No ar"; o guia
+     * cobre só ~14 h e só o player o baixava). A HOME pede o guia de novo, fora da tela: [PlayerCarga.guia] só baixa se
+     * estiver velho ou sem nada passando agora, e no máximo 1 vez por hora; daqui também 1 pedido por hora. Pronto, o
+     * Continuar é lido de novo.
+     */
+    private fun atualizarGuiaNoFundo() {
+        val agora = System.currentTimeMillis()
+        if (agora - guiaPedidoEm < 3_600_000L) return
+        guiaPedidoEm = agora
+        Fundo.rodar("guia-home") {
+            val canais = runCatching { PlayerCarga.canaisDoCache(this) }.getOrDefault(emptyList())
+            if (canais.isEmpty()) return@rodar
+            if (runCatching { PlayerCarga.guia(this, canais) }.isSuccess) ui.post { if (!isDestroyed) preencherContinuar() }
+        }
+    }
+    @Volatile private var guiaPedidoEm = 0L
     @Volatile private var guiaIdAchado: Pair<String, String>? = null   // canal -> guiaId (só para ultimo.json antigo)
 
     /**
