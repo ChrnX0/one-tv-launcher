@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Séries: as mesmas duas fileiras inteiras de pôsteres de Filmes, com selo LEG; a caixa de cima tem uma linha só (sem sinopse) e fica na altura da caixa da esquerda</item>
+        <item>Séries: as mesmas duas fileiras inteiras de pôsteres de Filmes, com selo LEG; a caixa de cima tem uma linha só (sem sinopse) e fica na altura da caixa da esquerda; título longo é encurtado para a nota e o ano sempre aparecerem</item>
         <item>Filmes e Séries: as listas do Trakt e do MDBList agora rolam junto com as categorias, em ordem alfabética; em Filmes dá para escolher a lista também no Filtro</item>
         <item>Filmes: cabem duas fileiras inteiras de pôsteres (6 por fileira na TV comum); o título aparece grande no topo e a cópia só legendada ganha o selo LEG</item>
         <item>Filmes: a cópia dublada e a legendada do mesmo filme agora aparecem num cartão só (a ficha tem as duas versões)</item>

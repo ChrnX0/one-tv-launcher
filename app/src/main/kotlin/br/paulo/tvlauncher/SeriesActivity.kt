@@ -587,7 +587,7 @@ class SeriesActivity : Activity() {
         tela.removeCallbacks(lerFichaRapida)
         if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else ""); return }
         val info = fichasRapidas[s.chave]
-        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(Idioma.semMarca(s.nome), s.ano), notaRapida[s.chave] ?: s.nota, listOfNotNull(
+        painelInfo.mostrarFoco(Estilo.infoFoco(Idioma.tituloCurto(Vod.nomeTela(Idioma.semMarca(s.nome), s.ano)), notaRapida[s.chave] ?: s.nota, listOfNotNull(
             s.ano?.toString(),
             if (soLegendado(s)) getString(R.string.idioma_legendado) else null,
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },

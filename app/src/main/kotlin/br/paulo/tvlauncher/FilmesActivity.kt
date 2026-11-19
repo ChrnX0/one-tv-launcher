@@ -745,7 +745,7 @@ class FilmesActivity : Activity() {
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
-        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(Idioma.semMarca(f.nome), f.ano), notaRapida[f.chave] ?: f.nota, listOfNotNull(
+        painel.mostrarFoco(Estilo.infoFoco(Idioma.tituloCurto(Vod.nomeTela(Idioma.semMarca(f.nome), f.ano)), notaRapida[f.chave] ?: f.nota, listOfNotNull(
             f.ano?.toString(),
             if (soLegendado(f)) getString(R.string.idioma_legendado) else null,
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
