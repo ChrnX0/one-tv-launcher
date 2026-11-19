@@ -27,7 +27,11 @@ import android.widget.TextView
  * Também é a tela do fim do timer (EXTRA_TIMER, ver Timer.kt): aí só tem "Parar" e o Voltar também para.
  */
 class AlarmeTocandoActivity : Activity() {
-    companion object { const val EXTRA_TIMER = "timer" }
+    companion object {
+        const val EXTRA_TIMER = "timer"
+        /** Menor subida do som do despertador, em segundos (o timer continua direto). */
+        const val RAMPA_MIN_SEG = 90
+    }
     private var timer = false
     private var nomeTimer = ""
     private val ui = Handler(Looper.getMainLooper())
@@ -36,11 +40,19 @@ class AlarmeTocandoActivity : Activity() {
     private var canal: androidx.media3.exoplayer.ExoPlayer? = null   // ideia 30: o áudio do último canal no lugar do som
     private val canalNaoAbriu = Runnable { Log.i("TvLauncher.Alarme", "canal não abriu em 20 s: som suave"); trocarParaSom() }
     private var bip: ToneGenerator? = null
+    private var bipNivel = -1   // volume (0-100) com que o [bip] foi criado
     private var volume: AlarmeGarantia.Volume? = null   // o que o alarme mudou no volume da TV, para devolver ao parar
 
-    // Plano B do som: se o arquivo não abrir, um bipe a cada 1,2 s.
+    // Plano B do som: se o arquivo não abrir, um bipe a cada 1,2 s. Também segue a rampa: o ToneGenerator só aceita
+    // volume na criação, então é recriado quando o nível sobe 10 pontos (o primeiro bipe sai baixo, não no máximo).
     private val bipar = object : Runnable {
         override fun run() {
+            val nivel = (volumeRampa() * 10).toInt().coerceIn(1, 10) * 10
+            if (nivel != bipNivel) {
+                bip?.release()
+                bip = runCatching { ToneGenerator(AudioManager.STREAM_MUSIC, nivel) }.getOrNull()
+                bipNivel = nivel
+            }
             bip?.startTone(ToneGenerator.TONE_PROP_BEEP2, 700)
             ui.postDelayed(this, 1200)
         }
@@ -171,7 +183,10 @@ class AlarmeTocandoActivity : Activity() {
 
     private fun tocarSom() {
         val alarme = if (timer) null else Despertador.listar(this).firstOrNull { it.id == id }
-        segRampa = alarme?.rampa ?: 0
+        // Nunca começa no volume cheio (Paulo, 19/11/2026: "sobe gradualmente, evita som máximo para não assustar"): mesmo
+        // com "Toque: direto", o som do alarme sobe em pelo menos RAMPA_MIN_SEG. Não depende da LG aceitar as teclas de
+        // volume pela rede (no toque de 19/11 ela não aceitou o "baixar" e ficou no 17).
+        segRampa = if (alarme == null) 0 else maxOf(alarme.rampa, RAMPA_MIN_SEG)
         inicioRampa = System.currentTimeMillis()
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
         if (!timer) volume = AlarmeGarantia.subirVolume(this, segRampa)
@@ -247,8 +262,7 @@ class AlarmeTocandoActivity : Activity() {
         }
         // Último recurso (arquivo não abriu): bipe pelo stream de música, que sai pelo HDMI.
         Log.i("TvLauncher.Alarme", "som do app falhou: usando bipe")
-        bip = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
-        ui.post(bipar)
+        ui.post(bipar)   // o bipar cria o ToneGenerator já no volume da rampa
     }
 
     private fun pararSom() {
@@ -261,7 +275,7 @@ class AlarmeTocandoActivity : Activity() {
         rampa = null
         ui.removeCallbacks(bipar)
         bip?.release()
-        bip = null
+        bip = null; bipNivel = -1
         AlarmeGarantia.devolverVolume(this, volume)   // devolve como estava (se ninguém mexeu no volume durante o alarme)
         volume = null
     }
