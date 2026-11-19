@@ -782,8 +782,13 @@ class FilmesActivity : Activity() {
     // ---------------------------------------------------------------- ficha do filme
 
     /** O par na outra versão (dublado x legendado), só entre os filmes que a tela pode mostrar (parental). */
-    private fun outraVersao(f: Filme): Filme? = Idioma.outraVersao(f, indiceVersoes, { it.nome }, { it.grupo }, { it.ano })
-        ?.takeIf { mostrarOcultas || it.grupo.trim() !in ocultas }
+    private fun outraVersao(f: Filme): Filme? {
+        // Filtra ANTES de procurar: uma cópia oculta que vinha primeiro no catálogo escondia o par visível (e a grade,
+        // que já junta só pelo que está nela, sumia com o cartão sem a ficha oferecer a outra versão).
+        val k = Idioma.chaveTitulo(f.nome)
+        val podem = indiceVersoes[k]?.filter { mostrarOcultas || it.grupo.trim() !in ocultas } ?: return null
+        return Idioma.outraVersao(f, mapOf(k to podem), { it.nome }, { it.grupo }, { it.ano })
+    }
 
     /**
      * [trocar]: veio da grade. Se a pessoa prefere a outra versão e ela existe, a ficha já abre nela (com um botão para

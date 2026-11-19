@@ -274,15 +274,20 @@ object Idioma {
         if (indice.isEmpty()) return lista
         val posicao = java.util.IdentityHashMap<T, Int>(lista.size)
         lista.forEachIndexed { i, x -> posicao[x] = i }
+        // O índice vem do catálogo inteiro (categorias ocultas e cópias em outros grupos incluídas): aqui só vale o que
+        // está na grade. Visto na Sala (19/11/2026): a cópia oculta virava "3 versões" e nenhum par juntava.
+        val naGrade = HashMap<String, List<T>>()
+        for ((k, v) in indice) { val f = v.filter { posicao.containsKey(it) }; if (f.size >= 2) naGrade[k] = f }
+        if (naGrade.isEmpty()) return lista
         val sai = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<T, Boolean>())
         for (x in lista) {
             if (x in sai) continue
-            val o = outraVersao(x, indice, nome, grupo, ano) ?: continue
+            val o = outraVersao(x, naGrade, nome, grupo, ano) ?: continue
             if (o === x || !posicao.containsKey(o) || o in sai) continue
-            if (outraVersao(o, indice, nome, grupo, ano) !== x) continue
-            // 3 ou mais itens com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
+            if (outraVersao(o, naGrade, nome, grupo, ano) !== x) continue
+            // 3 ou mais itens na grade com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
             val k = chaveTitulo(nome(x)); val anoX = ano(x) ?: ano(o)
-            if ((indice[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) continue
+            if ((naGrade[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) continue
             val cx = comecado(x); val co = comecado(o)
             if (cx && co) continue   // os dois têm algo guardado: juntar esconderia um deles
             val ficaX = if (cx != co) cx else posicao.getValue(x) < posicao.getValue(o)
