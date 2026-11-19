@@ -49,3 +49,10 @@ nativo/obra/
 *.jks
 *.keystore
 __pycache__/
+
+# Third-party design skills installed by scripts/install-design-skills.sh (not versioned)
+.claude/skills/design-taste-frontend/
+.claude/skills/transitions-dev/
+.claude/skills/transitions-polish/
+# Taste Skill work folders (screenshots, Chrome profiles)
+.taste-skill/
