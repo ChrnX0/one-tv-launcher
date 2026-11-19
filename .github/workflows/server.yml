@@ -3,7 +3,7 @@ name: Servidor
 
 on:
   pull_request:
-    paths: ['server/**', '.github/workflows/server.yml']
+    paths: ['server/**', 'wrangler.toml', '.github/workflows/server.yml']
 
 jobs:
   testes:
