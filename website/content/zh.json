@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "不追踪",
-      "无需账号，没有使用分析，未经你发送不会上传任何错误报告。",
+      "Sofaly 不要求账号，也不收集使用数据。错误报告只有在你发送时才会上传。",
       "始终如此。"
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "开发者 · Sofaly",
-    "description": "把你的 Android TV 应用卡片放上 Sofaly 主屏幕。无需 SDK，没有费用。",
+    "description": "把你的 Android TV 应用卡片放上 Sofaly 主屏幕，免费，用普通的 Android 代码就行。",
     "eyebrow": "开发者套件",
     "h1": "让你的应用出现在人们真正会看的主屏幕上。",
     "lead": "Sofaly 插件就是你自己的 Android TV 应用。它发送一张简短的卡片，Sofaly 以大字体和统一风格把它画在主屏幕上。",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "无需 SDK，没有费用",
-        "一个 ContentProvider 和一行数据。不用安装我们的库，也不用付费。"
+        "普通的 Android 代码",
+        "一个 ContentProvider 和一行数据，用你熟悉的 Android 来写。制作和显示卡片都免费。"
       ],
       [
         "heart",

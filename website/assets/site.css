@@ -236,3 +236,130 @@ html:not(.m-enter) .tv--still .scr, html:not(.m-enter) .tv--still .scr *, html:n
   #compare .cmp__src { margin-top: 4px; }
   #compare .section-head, #plans .section-head { margin-bottom: var(--s-6); }
 }
+/* plans page: each plan is its name, one line, its first features and the screen it opens */
+.plan-sec .plan-all { columns: 2; font-size: var(--t-small); }
+.plan-sec .plan-all__first { font-weight: 600; }
+.plan-vis { --p-h: 520px; }
+.hero--plans .hero__grid { align-items: start; }
+@media (max-width: 1023px) { .plan-vis { --p-h: 300px; } .plan-sec .frame, .plan-sec .panel { margin-top: var(--s-6); } }
+@media (max-width: 639px) { .plan-sec .plan-all { column-gap: 16px; } .plan-sec .plan-all--ultra { columns: 1; } .plan-vis { --p-h: 220px; } }
+@media (min-width: 1024px) {
+  .plan-sec .wrap > .grid { flex: 1 1 0; min-height: 0; align-items: stretch; grid-template-rows: minmax(0, 1fr); }
+  .plan-sec .frame.frame--tv { --ratio: 0px; height: 100%; }
+  .plan-sec .plan-vis { --p-h: 100%; height: 100%; }
+}
+@media (max-width: 639px) { .frame .scr-forecast .fc-hours em { display: none; } }
+/* developers: each screen is the words on the left and what the TV shows on the right */
+.hero--dev .hero__grid { align-items: start; }
+.dev-whys, .dev-rules { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-5); }
+.dev-why { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--s-4); align-items: start; }
+.dev-why .world-ico .ico { width: 28px; height: 28px; color: var(--accent); }
+.dev-why h3 { margin: 0 0 4px; }
+.dev-rules li { padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.dev-row--six { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 1fr 1fr; }
+.dev-row--six .dev-tile b { font-size: 3cqw; }
+.dev-row--six .dev-tile small { font-size: 2.4cqw; font-weight: 700; opacity: 1; }
+.dev-row--one { grid-template-columns: minmax(0, .5fr); justify-content: center; }
+.dev-tile--one span { font-size: 2.4cqw; opacity: .85; }
+.dev-vis { --p-h: 520px; }
+#steps .code { font-size: 13px; }
+@media (min-width: 1024px) {
+  .dev-split { flex: 1 1 0; min-height: 0; align-items: stretch; grid-template-rows: minmax(0, 1fr); }
+  .dev-vis { --p-h: 100%; height: 100%; }
+}
+@media (max-width: 1023px) { .dev-vis { --p-h: 300px; margin-top: var(--s-6); } }
+@media (max-width: 639px) { .dev-vis { --p-h: 220px; } #steps .code { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; } }
+@media (min-width: 1024px) { .dev-vis .stage > .tv-fit, .plan-vis .stage > .tv-fit { top: 50%; transform: translateY(-50%); } }
+.dev-why { display: block; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+#steps .code { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (min-width: 1024px) { .dev-split .frame.frame--tv { --ratio: 0px; height: 100%; } }
+@media (max-width: 639px) { #steps .frame.frame--tv { --ratio: 62%; } }
+/* features page: each world is its name, its features and the TV screen it opens, side by side */
+.hero--map .hero__grid { align-items: start; }
+.world__grid { align-items: start; }
+.world__text { display: flex; flex-direction: column; gap: var(--s-4); }
+.world__lead { margin: 0; }
+.world__feats { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); margin: var(--s-3) 0 0; font-size: 15px; }
+.world__feats .feat { display: block; }
+.world__feats .feat h3 { font-size: 17px; margin: 0; }
+.world__feats .feat h3 .badge { margin: 0; vertical-align: 1px; }
+.world__feats .feat__ico { display: inline-block; vertical-align: -3px; margin-inline-end: 8px; }
+.world__feats .feat__ico .ico { width: 18px; height: 18px; color: var(--c, var(--accent)); }
+.world__feats .feat p { margin: 4px 0 0; color: inherit; line-height: 1.45; }
+.world-art { position: relative; border-radius: var(--r-lg); overflow: hidden; display: grid; place-items: center; padding: var(--s-6);
+  background: radial-gradient(120% 90% at 30% 0%, color-mix(in oklab, var(--c, var(--accent)) 38%, transparent), transparent 60%), var(--surface); }
+.world-art__tv { width: 100%; }
+.world-art__tv .tv { width: 100%; }
+/* the cards screen in a still: its first notice shown, not cycled */
+.world-art .cd-pill b.c1 { opacity: 1; animation: none; transform: translateY(-50%); }
+.world-art .cd-pill b:not(.c1) { display: none; }
+@media (min-width: 1024px) {
+  .world .wrap > .group { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
+  .world--two .wrap { display: grid; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); row-gap: calc(var(--padt) + var(--padb)); }
+  .world .world__grid { flex: 1 1 0; min-height: 0; height: 100%; grid-template-rows: minmax(0, 1fr); align-items: stretch; }
+  .world .world__text { align-self: start; }
+  .world__feats { gap: 12px; }
+}
+@media (max-width: 1023px) { .world-art--second { display: none; } }
+@media (max-width: 639px) {
+  .world .wrap { display: flex; flex-direction: column; }
+  .world .group, .world .world__grid { display: contents; }
+  .world .world-art { flex: 1 1 auto; }
+  .world .world__text + .world-art { order: 0; }
+}
+/* the TV drawings' small words keep their contrast on the cards and games screens */
+.world-art .cd-count small, .world-art .cd-count span { color: #121528; }
+@media (max-width: 1023px) { .world-art { margin-top: var(--s-6); min-height: 300px; } }
+@media (max-width: 639px) {
+  .world__feats { font-size: 13px; gap: 8px; }
+  .world__feats .feat h3 { font-size: 15px; }
+  .world__feats .feat p { line-height: 1.35; margin-top: 2px; }
+  .world-art { min-height: 300px; padding: var(--s-4); margin-inline: calc(-1 * max(24px, env(safe-area-inset-left, 0px))); border-radius: 0; }
+  .world--tall .world-art { min-height: 430px; }
+  .world--tall { --hm: 2; }
+  .world-art .scr-cards .cd-pill, .world-art .scr-cards .cd-moon b { display: none; }
+}
+.world__feats .feat p .badge { height: 18px; padding: 0 7px; font-size: 11px; vertical-align: 1px; margin-inline-end: 2px; }
+.world__feats .feat p .badge { margin: 0 4px 0 0; }
+[dir="rtl"] .world__feats .feat p .badge { margin: 0 0 0 4px; }
+.world__text > .world__feats:first-child { margin-top: 0; }
+@media (min-width: 1024px) { .world__feats { gap: 10px; font-size: 14px; } .world__feats .feat p { line-height: 1.4; } }
+.world-art .gm-tiles span { color: #fff; text-shadow: 0 1px 3px #000c; }
+@media (max-width: 639px) { .world .world-art { place-items: end center; } }
+/* every feature's words start on one line after its plan tag */
+.world__feats .feat p .badge { min-width: 50px; justify-content: center; }
+@media (min-width: 1024px) { .world__feats { gap: 8px; } .world__feats .feat p { margin-top: 2px; } }
+.world-art .gm-tiles span { background: #0d0f1ee6; padding: .2cqw .8cqw; border-radius: .8cqw; text-shadow: none; }
+@media (max-width: 639px) {
+  .world .world-art { container-type: size; padding: 0; place-items: start; height: 300px; min-height: 0; }
+  .world--tall .world-art { height: auto; min-height: 430px; }
+  .world .world-art__tv { width: calc(100cqh * 1.78); }
+  [dir="rtl"] .world .world-art { place-items: start end; }
+}
+/* features page, round 7: the TV keeps a fixed height beside the list (wide) and sits between the list's halves (phone) */
+.world__more > .world__feats { margin-top: 8px; }
+@media (min-width: 1024px) {
+  .world .world__grid { grid-template-rows: auto minmax(0, 1fr); align-items: start; height: auto; }
+  .world .world__text { grid-row: 1; }
+  .world .world__more { grid-row: 2; grid-column: 1 / span 6; }
+  .world .world-art { grid-row: 1 / span 2; height: 560px; }
+}
+@media (max-width: 639px) {
+  .world .world-art { container-type: normal; padding: var(--s-4); place-items: center; height: auto; min-height: 300px; flex: none; }
+  .world--tall .world-art { min-height: 440px; }
+  .world .world-art__tv { width: 100%; }
+  [dir="rtl"] .world .world-art { place-items: center; }
+  .world .world__more { order: 2; }
+}
+@media (min-width: 1024px) { .world .world__grid { row-gap: 0; } }
+@media (max-width: 639px) {
+  .world--tall .world-art { min-height: 436px; flex: 1 1 auto; }
+  .world--tall .world-art--second { flex: none; }
+}
+/* a short list sits level with the middle of its TV */
+@media (min-width: 1024px) {
+  .world--short .world__grid { grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr); }
+  .world--short .world__text { grid-row: 2; }
+  .world--short .world__more { grid-row: 3; }
+  .world--short .world-art { grid-row: 1 / -1; }
+}

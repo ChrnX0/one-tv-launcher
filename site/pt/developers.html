@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Desenvolvedores · Sofaly</title>
-<meta name="description" content="Ponha o cartão do seu app de Android TV na tela inicial da Sofaly. Sem SDK, sem custo.">
+<meta name="description" content="Ponha o cartão do seu app de Android TV na tela inicial da Sofaly, de graça e com código Android comum.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Desenvolvedores · Sofaly">
-<meta property="og:description" content="Ponha o cartão do seu app de Android TV na tela inicial da Sofaly. Sem SDK, sem custo.">
+<meta property="og:description" content="Ponha o cartão do seu app de Android TV na tela inicial da Sofaly, de graça e com código Android comum.">
 <meta property="og:image" content="https://sofaly.tv/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -90,43 +95,46 @@
         <div class="btn-row"><a class="btn btn--primary" href="../plugins.html">Ler o contrato completo<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
       </div>
       <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Seu app na tela inicial de quem assiste.">
-        <div class="tv tv--still"><div class="screen"><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Ônibus 42</small><b>6 min</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Academia</small><b>19h</b></div></div></div></div>
+        <div class="tv tv--still"><div class="screen "><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Ônibus 42</small><b>6 min</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Academia</small><b>19h</b></div></div></div></div>
       </div>
     </div></div>
   </section>
 
-  <section class="section" id="why" aria-labelledby="why-h">
+  <section class="section ground-surface" id="why" aria-labelledby="why-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="why-h">Por que fazer um plugin</h2></div>
-      <div class="grid"><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg></span><h3>Na frente, não na gaveta</h3><p>O seu cartão fica na tela inicial, onde a família olha toda vez que liga a TV, e não perdido numa lista de apps.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><h3>Sem SDK, sem custo</h3><p>Um ContentProvider e uma linha de dados. Nenhuma biblioteca nossa para instalar, nenhuma taxa.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/></svg></span><h3>Seu app, seu negócio</h3><p>Publique na Play como quiser, grátis ou pago. A Sofaly só desenha o cartão; o app e os clientes são seus.</p></article></div>
-      <h3 class="ideas-h" id="ideas">O que você pode criar além dos nossos</h3>
-      <ul class="minis"><li class="mini"><b>Seu delivery</b><span>Pedido saiu, chega em 12 min.</span></li><li class="mini"><b>Seu ônibus</b><span>Linha 42 passa em 6 min.</span></li><li class="mini"><b>Sua academia</b><span>Aula de hoje às 19h.</span></li><li class="mini"><b>Seu condomínio</b><span>Água desligada amanhã, das 9h às 12h.</span></li><li class="mini"><b>Sua loja</b><span>Oferta do dia: 20% no café.</span></li><li class="mini"><b>Seu clube</b><span>Treino remarcado para sábado.</span></li></ul>
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="why-h">Por que fazer um plugin</h2><ul class="dev-whys"><li class="dev-why"><h3>Na frente, não na gaveta</h3><p class="muted">O seu cartão fica na tela inicial, onde a família olha toda vez que liga a TV, e não perdido numa lista de apps.</p></li><li class="dev-why"><h3>Código Android comum</h3><p class="muted">Um ContentProvider e uma linha de dados, com o Android que você já conhece. Criar e mostrar o cartão é de graça.</p></li><li class="dev-why"><h3>Seu app, seu negócio</h3><p class="muted">Publique na Play como quiser, grátis ou pago. A Sofaly só desenha o cartão; o app e os clientes são seus.</p></li></ul></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="O que você pode criar além dos nossos"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--six"><div class="dev-tile" style="--tile:#1E7A46"><small>Seu delivery</small><b>Pedido saiu, chega em 12 min.</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Seu ônibus</small><b>Linha 42 passa em 6 min.</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Sua academia</small><b>Aula de hoje às 19h.</b></div><div class="dev-tile" style="--tile:#1F6F8B"><small>Seu condomínio</small><b>Água desligada amanhã, das 9h às 12h.</b></div><div class="dev-tile" style="--tile:#8A5A12"><small>Sua loja</small><b>Oferta do dia: 20% no café.</b></div><div class="dev-tile" style="--tile:#3F5F2A"><small>Seu clube</small><b>Treino remarcado para sábado.</b></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 
-  <section class="section" id="steps" aria-labelledby="steps-h">
+  <section class="section ground-inverse" id="steps" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="steps-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="steps-h">Dois passos</h2></div>
-      <div class="grid">
-        <div class="span-6 stack-4"><h3>1. Declare um provider com a ação da Sofaly</h3><pre class="code"><code>&lt;provider
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="steps-h">Dois passos</h2><h3>1. Declare um provider com a ação da Sofaly</h3><pre class="code"><code>&lt;provider
     android:name=".CardProvider"
     android:authorities="com.example.score.card"
     android:exported="true"&gt;
     &lt;intent-filter&gt;
         &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
     &lt;/intent-filter&gt;
-&lt;/provider&gt;</code></pre></div>
-        <div class="span-6 stack-4"><h3>2. Responda com uma linha: título, valor, detalhe e cor</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
+&lt;/provider&gt;</code></pre><h3>2. Responda com uma linha: título, valor, detalhe e cor</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
                    a: Array&lt;String&gt;?, o: String?): Cursor =
     MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor")).apply {
         addRow(arrayOf("Match score", "2 x 1",
                        "38' second half", "#1E7A46"))
-    }</code></pre></div>
+    }</code></pre><a class="link" href="../plugins.html">Ler o contrato completo<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Responda com uma linha: título, valor, detalhe e cor"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--one"><div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b><span>38' second half</span></div></div></div></div></div></div></div>
       </div>
-      <p><a class="link" href="../plugins.html">Ler o contrato completo</a></p>
-      <div class="grid rules-row" id="rules">
-        <div class="span-6 stack-4"><h3>Regras que protegem quem assiste</h3><ul class="rules"><li>Você nunca desenha na tela inicial: manda texto e cor, a Sofaly desenha.</li><li>A Sofaly nunca manda a você nada sobre os apps, as contas ou o que a pessoa assiste.</li><li>Plugins são do plano Pro, e a pessoa escolhe quais aparecem.</li></ul></div>
-        <div class="span-5 start-8 stack-4"><h3>Em breve</h3><p class="muted">Plugins de fundo de tela e vitrine de plugins na própria TV.</p></div>
+    </div>
+  </section>
+
+  <section class="section ground-surface" id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="rules-h">Regras que protegem quem assiste</h2><ul class="dev-rules"><li>Você nunca desenha na tela inicial: manda texto e cor, a Sofaly desenha.</li><li>A Sofaly nunca manda a você nada sobre os apps, as contas ou o que a pessoa assiste.</li><li>Plugins são do plano Pro, e a pessoa escolhe quais aparecem.</li></ul><h3>Em breve</h3><p class="muted">Plugins de fundo de tela e vitrine de plugins na própria TV.</p></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="Regras que protegem quem assiste"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen scr-list"><div class="ls-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><b>Cartões de outros apps</b></div><ul class="ls-rows"><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Seu delivery</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Seu ônibus</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Sua academia</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Seu condomínio</span><i class="ls-on"></i></li></ul></div></div></div></div></div>
       </div>
     </div>
   </section>

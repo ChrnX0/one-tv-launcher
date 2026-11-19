@@ -698,7 +698,7 @@ def plans_three(L, s, full=False):
           <p class="muted">{esc(pp[plan + '_who'])}</p>
           <p class="price">{esc(price)}</p>
           <p class="t-small muted">{esc(fmt(pl['features_n'], n=len(by[plan])))}</p>
-          <a class="btn {btn}" href="{L.url('plans')}#plan-{plan}">{esc(fmt(pl['cta'], plan=L.plan_name(plan)))}</a>
+          <a class="btn {btn}" href="{L.url('plans')}#plan-{plan}-list">{esc(fmt(pl['cta'], plan=L.plan_name(plan)))}</a>
           <ul class="plan__list">{lines}</ul>
         </article>""")
     return f'<div class="grid plans-grid">{"".join(out)}</div>'
@@ -709,7 +709,7 @@ def plan_badge(L, plan):
 
 
 # the picture beside each world's list: the app's own screen where the site draws one, else that world's settings list
-WORLD_SCREEN = {"watch": "player", "listen": "radio", "play": "games", "apps": "cards", "house": "alarm",
+WORLD_SCREEN = {"watch": "player", "listen": "radio", "play": "games", "house": "alarm",
                 "sky": "forecast", "family": "kids", "phone": "phone"}
 
 
@@ -725,32 +725,55 @@ def world_visual(L, c, title):
 
 
 def page_features(L):
-    s, fp, ui = S(L), L.d["features_page"], L.ui
+    s, fp = S(L), L.d["features_page"]
     cta = fmt(s["cta_main"], n=N_FEATURES)
-    toc = "".join(f'<a class="world-link" href="#{c["id"]}" style="--c:{c["color"]}">{icon(c["icon"])}'
-                  f'<span>{esc(L.d["chapters"][c["id"]][0])}</span><em>{len(c["features"])}</em></a>' for c in FEATURES)
-    secs = []
-    for n, c in enumerate(FEATURES):
+    def feat(fid, plan, ic):
+        return (f'<li class="feat" id="{fid}"><h3><span class="feat__ico" aria-hidden="true">{icon(ic)}</span>{esc(L.d["features"][fid][0])}</h3>'
+                f'<p>{plan_badge(L, plan)} {esc(L.d["features"][fid][1])}</p></li>')
+    def list_screen(c, title, fs):
+        rows = "".join(f'<li><span class="ls-ico">{icon(ic)}</span><span>{esc(L.d["features"][fid][0])}</span><i class="ls-on"></i></li>'
+                       for fid, _, ic in fs[:5])
+        return (f'<div class="tv tv--still"><div class="screen scr-list" style="--k:{c["color"]}">'
+                f'<div class="ls-head">{icon(c["icon"])}<b>{esc(title)}</b></div><ul class="ls-rows">{rows}</ul></div></div>')
+    # The cross is two screens: the home screen itself, then its cards (its own TV screen and heading)
+    worlds = []
+    for c in FEATURES:
         t, lead = L.d["chapters"][c["id"]]
-        def feat(fid, plan, ic):
-            return (f'<li class="feat" id="{fid}"><span class="feat__ico" aria-hidden="true">{icon(ic)}</span><div>'
-                    f'<h3>{esc(L.d["features"][fid][0])}</h3>{plan_badge(L, plan)}'
-                    f'<p>{esc(L.d["features"][fid][1])}</p></div></li>')
-        fs = c["features"]
-        big = len(fs) > 12
-        first, rest = (fs[:9], fs[9:]) if big else (fs, [])
-        alt = " ground-surface" if n % 2 else ""
-        vis = f'<div class="panel panel--tv feat-vis span-4" role="img" aria-label="{esc(t)}"><div class="stage stage--fade-b"><div class="tv-fit">{world_visual(L, c, t)}</div></div></div>'
-        g1 = f"""<div class="group">
-        <div class="grid chapter-row"><div class="section-head chapter-head span-8"><h2 id="{c['id']}-h"><span class="world-ico" aria-hidden="true">{icon(c['icon'])}</span>{esc(t)}</h2>
-          <p>{esc(lead)} <span class="muted">{esc(fmt(s['plans']['features_n'], n=len(fs)))}</span></p></div>{vis}</div>
-        <ul class="feats feats--wide">{"".join(feat(*f) for f in first)}</ul>
-      </div>"""
-        g2 = f"""<div class="group"><ul class="feats feats--wide">{"".join(feat(*f) for f in rest)}</ul></div>""" if rest else ""
+        if c["id"] == "home":
+            cut = next(i for i, f in enumerate(c["features"]) if f[0].startswith("card-"))
+            worlds.append((c["id"], c, t, lead, c["features"][:cut], world_visual(L, c, t)))
+            ct, clead = L.d["show"]["screens"]["cards"][:2]
+            worlds.append(("home-cards", c, ct, clead, c["features"][cut:], screen(L, "cards")))
+        else:
+            worlds.append((c["id"], c, t, lead, c["features"], world_visual(L, c, t)))
+    secs = []
+    for n, (sid, c, t, lead, fs, art) in enumerate(worlds):
+        ground = "ground-inverse" if sid == "sky" else ("ground-surface" if n % 2 else "")
+        moment = ' data-moment="iris-opens" data-moment-opts=\'{"from": "base"}\'' if sid == "sky" else ""
+        # on a phone these worlds take two whole screens (their lists run past one and a half)
+        # the longest lists take two screens: on a wide screen two halves, each beside a TV; on a phone one list
+        two = sid in ("home", "watch", "house", "sky")
+        tall = " world--tall" if two or sid in ("phone", "care") else ""  # two screens on a phone
+        head_html = (f'<h2 id="{sid}-h">{esc(t)}</h2>'
+                     f'<p class="world__lead">{esc(lead)} <span class="muted">{esc(fmt(s["plans"]["features_n"], n=len(fs)))}</span></p>')
+        def ul(part):
+            return f'<ul class="feats world__feats">{"".join(feat(*f) for f in part)}</ul>'
+        def group(text, art, more="", cls=""):
+            # a phone shows the TV between the two halves of the list; a wide screen keeps the list in one column
+            more = f'<div class="span-6 world__more">{more}</div>' if more else ""
+            return (f'<div class="group"><div class="grid world__grid"><div class="span-6 world__text">{text}</div>'
+                    f'<div class="world-art span-6 start-7{cls}" role="img" aria-label="{esc(t)}"><div class="world-art__tv">{art}</div></div>{more}</div></div>')
+        if two:
+            k = len(fs) // 2
+            groups = (group(head_html + ul(fs[:k]), art)
+                      + group(ul(fs[k:]), list_screen(c, t, fs[k:]), cls=" world-art--second"))
+        else:
+            k = (len(fs) + 1) // 2
+            groups = group(head_html + ul(fs[:k]), art, ul(fs[k:]))
         secs.append(f"""
-  <section class="section{' g2' if big else ''}{alt}" id="{c['id']}" aria-labelledby="{c['id']}-h" style="--c:{c['color']}">
+  <section class="section world{' world--two' if two else ''}{' world--short' if len(fs) <= 3 else ''} {ground}{tall}" id="{sid}"{moment} aria-labelledby="{sid}-h" style="--c:{c['color']}{';--h:2' if two else ''}">
     <div class="wrap">
-      {g1}{g2}
+      {groups}
     </div>
   </section>""")
     body = f"""
@@ -758,55 +781,75 @@ def page_features(L):
     <div class="wrap"><div class="hero-text grid hero__grid">
       <div class="hero__text span-5">
         <h1 id="hero-h">{esc(fp['h1'])}</h1>
-        <p class="hero__lead">{esc(fp['lead'])}</p>
-        <div class="btn-row"><a class="btn btn--primary" href="#{FEATURES[0]['id']}">{esc(L.d['chapters'][FEATURES[0]['id']][0])}{ARROW}</a><a class="btn btn--secondary" href="{L.url('plans')}">{esc(s['cta_plans'])}</a></div>
+        <p class="hero__lead">{esc(fp['lead'])} <span class="muted">{esc(fmt(s['plans']['features_n'], n=N_FEATURES))}</span></p>
+        <div class="btn-row"><a class="btn btn--primary" href="#{FEATURES[0]['id']}">{esc(L.d['chapters'][FEATURES[0]['id']][0])}{ARROW}</a></div>
       </div>
-      <nav class="world-map span-6 start-7" aria-label="{esc(fp['index'])}">{toc}</nav>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="{esc(fp['h1'])}">{tv_screen(L, "tv--still")}</div>
     </div></div>
   </section>
 {''.join(secs)}
 """
-    return (head(L, "features", fp["title"] + " · Sofaly", fp["description"]) + nav(L, "features") + body
-            + closing(L, "features", close_word(L, s["close"]["h2"].replace("See every feature before launch", "Pick the plan that fits") if False else L.d["plans_page"]["h1"], L.d["plans_page"]["lead"], s["cta_plans"], L.url("plans"))))
+    return (head(L, "features", fp["title"] + " · Sofaly", fp["description"], moments=("iris-opens",)) + nav(L, "features") + body
+            + closing(L, "features", close_word(L, L.d["plans_page"]["h1"], L.d["plans_page"]["lead"], s["cta_plans"], L.url("plans"))))
+
+
+SHOWN = 18  # a plan's list shows this many on the plans page; the features page has every one
 
 
 def page_plans(L):
-    s, pp = S(L), L.d["plans_page"]
+    s, pp, pl = S(L), L.d["plans_page"], S(L)["plans"]
     by = plan_lists(L)
-    def block(plan, cls):
-        lis = "".join(f"<li>{esc(x)}</li>" for x in by[plan])
+    cta = fmt(s["cta_main"], n=N_FEATURES)
+    # each plan's whole list beside a screen that plan opens: the cross for Basic, the phone for Pro, the forecast for Ultra
+    vis = {"basic": tv_screen(L, "tv--still"), "pro": screen(L, "phone"), "ultra": screen(L, "forecast")}
+    def plan_sec(plan, ground, frame):
         first = {"pro": pp["everything_basic"], "ultra": pp["everything_pro"]}.get(plan)
+        lis = (f'<li class="plan-all__first"><b>{esc(first)}</b></li>' if first else "") + "".join(f"<li>{esc(x)}</li>" for x in by[plan][:SHOWN])
+        name = L.plan_name(plan)
+        more = (f'<a class="link" href="{L.url("features")}">{esc(fmt(pl["features_n"], n=len(by[plan])))}{ARROW}</a>'
+                if len(by[plan]) > SHOWN else "")
+        if frame:
+            art = (f'<div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly {esc(name)}">'
+                   f'<div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut">{vis[plan]}</div></div></div>')
+        else:
+            art = (f'<div class="panel panel--tv plan-vis span-6 start-7" role="img" aria-label="Sofaly {esc(name)}">'
+                   f'<div class="stage stage--fade-b"><div class="tv-fit">{vis[plan]}</div></div></div>')
+        moment = ' data-moment="iris-opens" data-moment-opts=\'{"from": "base"}\'' if ground == "ground-inverse" else ""
         return f"""
-        <div class="plan-block {cls}" id="plan-{plan}-all">
-          <h3 class="plan-block__h">{esc(L.plan_name(plan))} <span class="muted">{esc(fmt(s['plans']['features_n'], n=len(by[plan])))}</span></h3>
-          <p class="muted">{esc(pp[plan + '_text'])}</p>
-          {f'<p class="t-small"><b>{esc(first)}</b></p>' if first else ''}
-          <ul class="plan-all">{lis}</ul>
-        </div>"""
-    secs = [f"""
-  <section class="section" id="plan-basic-list" aria-labelledby="plan-basic-h">
+  <section class="section plan-sec {ground}" id="plan-{plan}-list"{moment} aria-labelledby="plan-{plan}-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="plan-basic-h">{esc(L.plan_name('basic'))}</h2><p>{esc(pp['basic_text'])}</p></div>
-      <ul class="plan-all plan-all--wide">{"".join(f"<li>{esc(x)}</li>" for x in by['basic'])}</ul>
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-{plan}-h">Sofaly {esc(name)}</h2>
+          <p class="t-lead">{esc(pp[plan + '_text'])}</p>
+          <ul class="plan-all plan-all--{plan}">{lis}</ul>
+          {more}
+        </div>
+        {art}
+      </div>
     </div>
-  </section>
-  <section class="section" id="plan-more" aria-labelledby="plan-more-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="plan-more-h">{esc(L.plan_name('pro'))} · {esc(L.plan_name('ultra'))}</h2></div>
-      <div class="grid">{block('pro', 'span-7')}{block('ultra', 'span-4 start-9')}</div>
-    </div>
-  </section>"""]
+  </section>"""
     body = f"""
   <section class="hero hero--plans" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="section-head"><h1 id="hero-h">{esc(pp['h1'])}</h1><p class="hero__lead">{esc(pp['lead'])}</p></div>
-      {plans_three(L, s)}
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">{esc(pp['h1'])}</h1>
+        <p class="hero__lead">{esc(pp['lead'])}</p>
+        <div class="btn-row"><a class="btn btn--primary" href="{L.url('features')}">{esc(cta)}{ARROW}</a></div>
+      </div>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="{esc(pp['h1'])}">{tv_screen(L, "tv--still")}</div>
     </div></div>
   </section>
-{''.join(secs)}
+
+  <section class="section" id="plans" aria-labelledby="plans-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="plans-h">{esc(pl['h2'])}</h2><p class="muted">{esc(pl['text'])}</p></div>
+      {plans_three(L, s)}
+    </div>
+  </section>
+{plan_sec("basic", "ground-surface", True)}{plan_sec("pro", "ground-inverse", False)}{plan_sec("ultra", "", True)}
 """
-    cta = fmt(s["cta_main"], n=N_FEATURES)
-    return (head(L, "plans", pp["title"], pp["description"]) + nav(L, "plans") + body
+    return (head(L, "plans", pp["title"], pp["description"], moments=("iris-opens",)) + nav(L, "plans") + body
             + closing(L, "plans", close_word(L, s["close"]["h2"], s["close"]["text"], cta, L.url("features"))))
 
 
@@ -831,10 +874,32 @@ def page_developers(L):
     s, d = S(L), L.d["dev_page"]
     demo = "".join(f'<div class="dev-tile" style="--tile:{c}"><small>{esc(a)}</small><b>{esc(b)}</b></div>'
                    for (a, b), c in zip(d["demo"], ["#1E7A46", "#2B4C9B", "#B4531C"]))
-    why = "".join(f'<article class="card card--row span-4"><span class="world-ico" aria-hidden="true">{icon(i)}</span>'
-                  f'<h3>{esc(t)}</h3><p>{esc(x)}</p></article>' for i, t, x in d["why"])
-    can = "".join(f'<li class="mini"><b>{esc(t)}</b><span>{esc(x)}</span></li>' for t, x in d["can"])
+    why = "".join(f'<li class="dev-why"><h3>{esc(t)}</h3><p class="muted">{esc(x)}</p></li>' for i, t, x in d["why"])
+    ideas = "".join(f'<div class="dev-tile" style="--tile:{c}"><small>{esc(t)}</small><b>{esc(x)}</b></div>'
+                    for (t, x), c in zip(d["can"], ["#1E7A46", "#2B4C9B", "#B4531C", "#1F6F8B", "#8A5A12", "#3F5F2A"]))
     rules = "".join(f"<li>{esc(r)}</li>" for r in d["rules"])
+    # the card the two steps' code answers with, drawn as the TV shows it
+    result = ('<div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b>'
+              "<span>38' second half</span></div>")
+    # the person's switch for each plugin: the rules' "the person chooses which ones show"
+    toggles = "".join(f'<li><span class="ls-ico">{icon("puzzle")}</span><span>{esc(t)}</span><i class="ls-on"></i></li>'
+                      for t, _ in d["can"][:4])
+    def tv(inner, cls=""):
+        return f'<div class="tv tv--still"><div class="screen {cls}">{inner}</div></div>'
+    def split(sid, ground, left, art_label, art):
+        moment = ' data-moment="iris-opens" data-moment-opts=\'{"from": "base"}\'' if ground == "ground-inverse" else ""
+        vis = (f'<div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="{esc(art_label)}"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut">{art}</div></div></div>'
+               if sid == "steps" else
+               f'<div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="{esc(art_label)}"><div class="stage"><div class="tv-fit">{art}</div></div></div>')
+        return f"""
+  <section class="section {ground}" id="{sid}"{moment} aria-labelledby="{sid}-h">
+    <div class="wrap">
+      <div class="grid dev-split">
+        <div class="span-5 stack-5">{left}</div>
+        {vis}
+      </div>
+    </div>
+  </section>"""
     body = f"""
   <section class="hero hero--dev" data-enter aria-labelledby="hero-h">
     <div class="wrap"><div class="hero-text grid hero__grid">
@@ -844,36 +909,22 @@ def page_developers(L):
         <div class="btn-row"><a class="btn btn--primary" href="{L.prefix}plugins.html">{esc(d['cta_spec'])}{ARROW}</a></div>
       </div>
       <div class="hero__art dev-art span-6 start-7" role="img" aria-label="{esc(d['h1'])}">
-        <div class="tv tv--still"><div class="screen"><div class="dev-row">{demo}</div></div></div>
+        {tv(f'<div class="dev-row">{demo}</div>')}
       </div>
     </div></div>
   </section>
-
-  <section class="section" id="why" aria-labelledby="why-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="why-h">{esc(d['why_title'])}</h2></div>
-      <div class="grid">{why}</div>
-      <h3 class="ideas-h" id="ideas">{esc(d['can_title'])}</h3>
-      <ul class="minis">{can}</ul>
-    </div>
-  </section>
-
-  <section class="section" id="steps" aria-labelledby="steps-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="steps-h">{esc(d['steps_title'])}</h2></div>
-      <div class="grid">
-        <div class="span-6 stack-4"><h3>1. {esc(d['step1'])}</h3><pre class="code"><code>{PROVIDER}</code></pre></div>
-        <div class="span-6 stack-4"><h3>2. {esc(d['step2'])}</h3><pre class="code"><code>{ROW}</code></pre></div>
-      </div>
-      <p><a class="link" href="{L.prefix}plugins.html">{esc(d['cta_spec'])}</a></p>
-      <div class="grid rules-row" id="rules">
-        <div class="span-6 stack-4"><h3>{esc(d['rules_title'])}</h3><ul class="rules">{rules}</ul></div>
-        <div class="span-5 start-8 stack-4"><h3>{esc(d['soon_title'])}</h3><p class="muted">{esc(d['soon_text'])}</p></div>
-      </div>
-    </div>
-  </section>
+{split("why", "ground-surface", f'<h2 id="why-h">{esc(d["why_title"])}</h2><ul class="dev-whys">{why}</ul>', d["can_title"],
+       tv(f'<div class="dev-row dev-row--six">{ideas}</div>'))}
+{split("steps", "ground-inverse", f'<h2 id="steps-h">{esc(d["steps_title"])}</h2>'
+       f'<h3>1. {esc(d["step1"])}</h3><pre class="code"><code>{PROVIDER}</code></pre>'
+       f'<h3>2. {esc(d["step2"])}</h3><pre class="code"><code>{ROW}</code></pre>'
+       f'<a class="link" href="{L.prefix}plugins.html">{esc(d["cta_spec"])}{ARROW}</a>', d["step2"],
+       tv(f'<div class="dev-row dev-row--one">{result}</div>'))}
+{split("rules", "ground-surface", f'<h2 id="rules-h">{esc(d["rules_title"])}</h2><ul class="dev-rules">{rules}</ul>'
+       f'<h3>{esc(d["soon_title"])}</h3><p class="muted">{esc(d["soon_text"])}</p>', d["rules_title"],
+       tv(f'<div class="ls-head">{icon("puzzle")}<b>{esc(L.d["features"]["plugin-cards"][0])}</b></div><ul class="ls-rows">{toggles}</ul>', "scr-list"))}
 """
-    return (head(L, "developers", d["title"], d["description"]) + nav(L, "developers") + body
+    return (head(L, "developers", d["title"], d["description"], moments=("iris-opens",)) + nav(L, "developers") + body
             + closing(L, "developers", close_word(L, d["template_title"], d["template_text"].split(".")[0] + ".", d["cta_spec"], f"{L.prefix}plugins.html")))
 
 

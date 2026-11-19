@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Разработчикам · Sofaly</title>
-<meta name="description" content="Поставьте карточку вашего приложения Android TV на главный экран Sofaly. Без SDK, без платы.">
+<meta name="description" content="Поставьте карточку вашего приложения Android TV на главный экран Sofaly бесплатно и обычным кодом Android.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Разработчикам · Sofaly">
-<meta property="og:description" content="Поставьте карточку вашего приложения Android TV на главный экран Sofaly. Без SDK, без платы.">
+<meta property="og:description" content="Поставьте карточку вашего приложения Android TV на главный экран Sofaly бесплатно и обычным кодом Android.">
 <meta property="og:image" content="https://sofaly.tv/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -90,43 +95,46 @@
         <div class="btn-row"><a class="btn btn--primary" href="../plugins.html">Читать полный контракт<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
       </div>
       <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Ваше приложение на экране, который действительно смотрят.">
-        <div class="tv tv--still"><div class="screen"><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Доставка</small><b>12 мин</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Автобус 42</small><b>6 мин</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Спортзал</small><b>19:00</b></div></div></div></div>
+        <div class="tv tv--still"><div class="screen "><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Доставка</small><b>12 мин</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Автобус 42</small><b>6 мин</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Спортзал</small><b>19:00</b></div></div></div></div>
       </div>
     </div></div>
   </section>
 
-  <section class="section" id="why" aria-labelledby="why-h">
+  <section class="section ground-surface" id="why" aria-labelledby="why-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="why-h">Зачем делать плагин</h2></div>
-      <div class="grid"><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg></span><h3>На виду, а не в ящике</h3><p>Ваша карточка на главном экране, куда семья смотрит каждый раз, включая телевизор, а не теряется в списке приложений.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><h3>Без SDK и без платы</h3><p>Один ContentProvider и одна строка данных. Никаких наших библиотек и никаких сборов.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/></svg></span><h3>Ваше приложение, ваш бизнес</h3><p>Публикуйте в Play как хотите, бесплатно или платно. Sofaly только рисует карточку; приложение и клиенты — ваши.</p></article></div>
-      <h3 class="ideas-h" id="ideas">Что можно сделать помимо наших</h3>
-      <ul class="minis"><li class="mini"><b>Ваша доставка</b><span>Заказ в пути, будет через 12 мин.</span></li><li class="mini"><b>Ваш автобус</b><span>Маршрут 42 через 6 мин.</span></li><li class="mini"><b>Ваш спортзал</b><span>Занятие сегодня в 19:00.</span></li><li class="mini"><b>Ваш дом</b><span>Завтра нет воды с 9 до 12.</span></li><li class="mini"><b>Ваш магазин</b><span>Предложение дня: −20% на кофе.</span></li><li class="mini"><b>Ваш клуб</b><span>Тренировка перенесена на субботу.</span></li></ul>
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="why-h">Зачем делать плагин</h2><ul class="dev-whys"><li class="dev-why"><h3>На виду, а не в ящике</h3><p class="muted">Ваша карточка на главном экране, куда семья смотрит каждый раз, включая телевизор, а не теряется в списке приложений.</p></li><li class="dev-why"><h3>Обычный код Android</h3><p class="muted">Один ContentProvider и одна строка данных на привычном Android. Создать и показать карточку можно бесплатно.</p></li><li class="dev-why"><h3>Ваше приложение, ваш бизнес</h3><p class="muted">Публикуйте в Play как хотите, бесплатно или платно. Sofaly только рисует карточку; приложение и клиенты — ваши.</p></li></ul></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="Что можно сделать помимо наших"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--six"><div class="dev-tile" style="--tile:#1E7A46"><small>Ваша доставка</small><b>Заказ в пути, будет через 12 мин.</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Ваш автобус</small><b>Маршрут 42 через 6 мин.</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Ваш спортзал</small><b>Занятие сегодня в 19:00.</b></div><div class="dev-tile" style="--tile:#1F6F8B"><small>Ваш дом</small><b>Завтра нет воды с 9 до 12.</b></div><div class="dev-tile" style="--tile:#8A5A12"><small>Ваш магазин</small><b>Предложение дня: −20% на кофе.</b></div><div class="dev-tile" style="--tile:#3F5F2A"><small>Ваш клуб</small><b>Тренировка перенесена на субботу.</b></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 
-  <section class="section" id="steps" aria-labelledby="steps-h">
+  <section class="section ground-inverse" id="steps" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="steps-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="steps-h">Два шага</h2></div>
-      <div class="grid">
-        <div class="span-6 stack-4"><h3>1. Объявите provider с действием Sofaly</h3><pre class="code"><code>&lt;provider
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="steps-h">Два шага</h2><h3>1. Объявите provider с действием Sofaly</h3><pre class="code"><code>&lt;provider
     android:name=".CardProvider"
     android:authorities="com.example.score.card"
     android:exported="true"&gt;
     &lt;intent-filter&gt;
         &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
     &lt;/intent-filter&gt;
-&lt;/provider&gt;</code></pre></div>
-        <div class="span-6 stack-4"><h3>2. Ответьте одной строкой: заголовок, значение, деталь и цвет</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
+&lt;/provider&gt;</code></pre><h3>2. Ответьте одной строкой: заголовок, значение, деталь и цвет</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
                    a: Array&lt;String&gt;?, o: String?): Cursor =
     MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor")).apply {
         addRow(arrayOf("Match score", "2 x 1",
                        "38' second half", "#1E7A46"))
-    }</code></pre></div>
+    }</code></pre><a class="link" href="../plugins.html">Читать полный контракт<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Ответьте одной строкой: заголовок, значение, деталь и цвет"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--one"><div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b><span>38' second half</span></div></div></div></div></div></div></div>
       </div>
-      <p><a class="link" href="../plugins.html">Читать полный контракт</a></p>
-      <div class="grid rules-row" id="rules">
-        <div class="span-6 stack-4"><h3>Правила, которые защищают зрителя</h3><ul class="rules"><li>Вы никогда не рисуете на главном экране: вы отправляете текст и цвет, рисует Sofaly.</li><li>Sofaly никогда не отправляет вам ничего о приложениях, аккаунтах или о том, что смотрит человек.</li><li>Плагины входят в тариф Pro, и человек сам выбирает, какие показывать.</li></ul></div>
-        <div class="span-5 start-8 stack-4"><h3>Скоро</h3><p class="muted">Плагины фона и витрина плагинов прямо на телевизоре.</p></div>
+    </div>
+  </section>
+
+  <section class="section ground-surface" id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="rules-h">Правила, которые защищают зрителя</h2><ul class="dev-rules"><li>Вы никогда не рисуете на главном экране: вы отправляете текст и цвет, рисует Sofaly.</li><li>Sofaly никогда не отправляет вам ничего о приложениях, аккаунтах или о том, что смотрит человек.</li><li>Плагины входят в тариф Pro, и человек сам выбирает, какие показывать.</li></ul><h3>Скоро</h3><p class="muted">Плагины фона и витрина плагинов прямо на телевизоре.</p></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="Правила, которые защищают зрителя"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen scr-list"><div class="ls-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><b>Карточки других приложений</b></div><ul class="ls-rows"><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Ваша доставка</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Ваш автобус</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Ваш спортзал</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Ваш дом</span><i class="ls-on"></i></li></ul></div></div></div></div></div>
       </div>
     </div>
   </section>

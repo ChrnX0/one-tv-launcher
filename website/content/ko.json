@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "추적 없음",
-      "계정 없음, 사용 분석 없음, 직접 보내지 않으면 오류 보고도 나가지 않습니다.",
+      "Sofaly는 계정을 요구하지 않고 사용 데이터도 모으지 않습니다. 오류 보고는 직접 보낼 때만 나갑니다.",
       "언제나."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "개발자 · Sofaly",
-    "description": "Android TV 앱의 카드를 Sofaly 홈 화면에 올리세요. SDK 없이, 비용 없이.",
+    "description": "Android TV 앱의 카드를 Sofaly 홈 화면에 올리세요. 무료이고, 평소 쓰던 Android 코드면 됩니다.",
     "eyebrow": "개발자 키트",
     "h1": "사람들이 정말로 보는 홈 화면에 당신의 앱을.",
     "lead": "Sofaly 플러그인은 여러분의 Android TV 앱입니다. 짧은 카드를 보내면 Sofaly가 홈 화면에 큰 글씨로, 집의 스타일대로 그립니다.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "SDK 없이, 비용 없이",
-        "ContentProvider 하나와 데이터 한 줄. 설치할 라이브러리도, 낼 수수료도 없습니다."
+        "평소 쓰던 Android 코드",
+        "ContentProvider 하나와 데이터 한 줄을 이미 아는 Android로 작성하면 됩니다. 카드를 만들고 보여 주는 데 비용이 들지 않습니다."
       ],
       [
         "heart",

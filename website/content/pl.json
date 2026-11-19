@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Bez śledzenia",
-      "Bez konta, bez analityki i bez raportów o błędach wysyłanych bez Twojej zgody.",
+      "Sofaly nie wymaga konta i nie zbiera danych o używaniu. Raport o błędzie wychodzi tylko wtedy, gdy go wyślesz.",
       "Zawsze."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Dla twórców · Sofaly",
-    "description": "Umieść kartę swojej aplikacji Android TV na ekranie głównym Sofaly. Bez SDK, bez opłat.",
+    "description": "Umieść kartę swojej aplikacji Android TV na ekranie głównym Sofaly, za darmo i zwykłym kodem Androida.",
     "eyebrow": "Zestaw dla twórców",
     "h1": "Twoja aplikacja na ekranie, na który ludzie naprawdę patrzą.",
     "lead": "Wtyczka Sofaly to Twoja własna aplikacja na Android TV. Wysyła krótką kartę, a Sofaly rysuje ją na ekranie głównym, dużymi literami i w stylu domu.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Bez SDK, bez opłat",
-        "Jeden ContentProvider i jeden wiersz danych. Żadnej naszej biblioteki do instalowania, żadnych opłat."
+        "Zwykły kod Androida",
+        "Jeden ContentProvider i jeden wiersz danych, w Androidzie, który już znasz. Tworzenie i wyświetlanie karty jest darmowe."
       ],
       [
         "heart",

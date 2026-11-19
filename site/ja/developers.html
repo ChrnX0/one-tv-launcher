@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>開発者 · Sofaly</title>
-<meta name="description" content="あなたの Android TV アプリのカードを Sofaly のホーム画面に。SDK 不要、費用なし。">
+<meta name="description" content="あなたの Android TV アプリのカードを Sofaly のホーム画面に。無料で、いつもの Android のコードだけで。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="開発者 · Sofaly">
-<meta property="og:description" content="あなたの Android TV アプリのカードを Sofaly のホーム画面に。SDK 不要、費用なし。">
+<meta property="og:description" content="あなたの Android TV アプリのカードを Sofaly のホーム画面に。無料で、いつもの Android のコードだけで。">
 <meta property="og:image" content="https://sofaly.tv/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -90,43 +95,46 @@
         <div class="btn-row"><a class="btn btn--primary" href="../plugins.html">仕様をすべて読む<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
       </div>
       <div class="hero__art dev-art span-6 start-7" role="img" aria-label="みんなが本当に見るホーム画面に、あなたのアプリを。">
-        <div class="tv tv--still"><div class="screen"><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>デリバリー</small><b>12分</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>42番バス</small><b>6分</b></div><div class="dev-tile" style="--tile:#B4531C"><small>ジム</small><b>19時</b></div></div></div></div>
+        <div class="tv tv--still"><div class="screen "><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>デリバリー</small><b>12分</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>42番バス</small><b>6分</b></div><div class="dev-tile" style="--tile:#B4531C"><small>ジム</small><b>19時</b></div></div></div></div>
       </div>
     </div></div>
   </section>
 
-  <section class="section" id="why" aria-labelledby="why-h">
+  <section class="section ground-surface" id="why" aria-labelledby="why-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="why-h">プラグインを作る理由</h2></div>
-      <div class="grid"><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg></span><h3>引き出しではなく、正面に</h3><p>カードはホーム画面に置かれ、家族がテレビをつけるたびに目にします。アプリ一覧に埋もれません。</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><h3>SDK 不要、費用なし</h3><p>ContentProvider ひとつとデータ1行だけ。私たちのライブラリも手数料も不要です。</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/></svg></span><h3>あなたのアプリ、あなたのビジネス</h3><p>Play で自由に公開、無料でも有料でも。Sofaly はカードを描くだけで、アプリと顧客はあなたのものです。</p></article></div>
-      <h3 class="ideas-h" id="ideas">私たちのカード以外に作れるもの</h3>
-      <ul class="minis"><li class="mini"><b>デリバリー</b><span>注文は配達中、あと12分。</span></li><li class="mini"><b>バス</b><span>42番はあと6分。</span></li><li class="mini"><b>ジム</b><span>今日のクラスは19時。</span></li><li class="mini"><b>マンション</b><span>明日9時から12時まで断水。</span></li><li class="mini"><b>お店</b><span>本日のおすすめ：コーヒー20%オフ。</span></li><li class="mini"><b>クラブ</b><span>練習は土曜日に変更。</span></li></ul>
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="why-h">プラグインを作る理由</h2><ul class="dev-whys"><li class="dev-why"><h3>引き出しではなく、正面に</h3><p class="muted">カードはホーム画面に置かれ、家族がテレビをつけるたびに目にします。アプリ一覧に埋もれません。</p></li><li class="dev-why"><h3>いつもの Android のコード</h3><p class="muted">ContentProvider ひとつとデータ1行を、使い慣れた Android で書くだけ。カードの作成も表示も無料です。</p></li><li class="dev-why"><h3>あなたのアプリ、あなたのビジネス</h3><p class="muted">Play で自由に公開、無料でも有料でも。Sofaly はカードを描くだけで、アプリと顧客はあなたのものです。</p></li></ul></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="私たちのカード以外に作れるもの"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--six"><div class="dev-tile" style="--tile:#1E7A46"><small>デリバリー</small><b>注文は配達中、あと12分。</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>バス</small><b>42番はあと6分。</b></div><div class="dev-tile" style="--tile:#B4531C"><small>ジム</small><b>今日のクラスは19時。</b></div><div class="dev-tile" style="--tile:#1F6F8B"><small>マンション</small><b>明日9時から12時まで断水。</b></div><div class="dev-tile" style="--tile:#8A5A12"><small>お店</small><b>本日のおすすめ：コーヒー20%オフ。</b></div><div class="dev-tile" style="--tile:#3F5F2A"><small>クラブ</small><b>練習は土曜日に変更。</b></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 
-  <section class="section" id="steps" aria-labelledby="steps-h">
+  <section class="section ground-inverse" id="steps" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="steps-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="steps-h">2つのステップ</h2></div>
-      <div class="grid">
-        <div class="span-6 stack-4"><h3>1. Sofaly のアクションを持つ provider を宣言</h3><pre class="code"><code>&lt;provider
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="steps-h">2つのステップ</h2><h3>1. Sofaly のアクションを持つ provider を宣言</h3><pre class="code"><code>&lt;provider
     android:name=".CardProvider"
     android:authorities="com.example.score.card"
     android:exported="true"&gt;
     &lt;intent-filter&gt;
         &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
     &lt;/intent-filter&gt;
-&lt;/provider&gt;</code></pre></div>
-        <div class="span-6 stack-4"><h3>2. タイトル、値、詳細、色の1行で応答</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
+&lt;/provider&gt;</code></pre><h3>2. タイトル、値、詳細、色の1行で応答</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
                    a: Array&lt;String&gt;?, o: String?): Cursor =
     MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor")).apply {
         addRow(arrayOf("Match score", "2 x 1",
                        "38' second half", "#1E7A46"))
-    }</code></pre></div>
+    }</code></pre><a class="link" href="../plugins.html">仕様をすべて読む<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="タイトル、値、詳細、色の1行で応答"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--one"><div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b><span>38' second half</span></div></div></div></div></div></div></div>
       </div>
-      <p><a class="link" href="../plugins.html">仕様をすべて読む</a></p>
-      <div class="grid rules-row" id="rules">
-        <div class="span-6 stack-4"><h3>視聴者を守るルール</h3><ul class="rules"><li>ホーム画面に直接描くことはありません。テキストと色を送れば、Sofaly が描きます。</li><li>Sofaly がその人のアプリ、アカウント、視聴内容をあなたに送ることはありません。</li><li>プラグインは Pro プランの機能で、どれを表示するかは本人が選びます。</li></ul></div>
-        <div class="span-5 start-8 stack-4"><h3>近日公開</h3><p class="muted">背景プラグインと、テレビ上のプラグインストア。</p></div>
+    </div>
+  </section>
+
+  <section class="section ground-surface" id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="rules-h">視聴者を守るルール</h2><ul class="dev-rules"><li>ホーム画面に直接描くことはありません。テキストと色を送れば、Sofaly が描きます。</li><li>Sofaly がその人のアプリ、アカウント、視聴内容をあなたに送ることはありません。</li><li>プラグインは Pro プランの機能で、どれを表示するかは本人が選びます。</li></ul><h3>近日公開</h3><p class="muted">背景プラグインと、テレビ上のプラグインストア。</p></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="視聴者を守るルール"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen scr-list"><div class="ls-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><b>ほかのアプリのカード</b></div><ul class="ls-rows"><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>デリバリー</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>バス</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>ジム</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>マンション</span><i class="ls-on"></i></li></ul></div></div></div></div></div>
       </div>
     </div>
   </section>

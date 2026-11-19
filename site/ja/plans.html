@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="../assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="../assets/moments/moments.js">
+<link rel="modulepreload" href="../assets/moments/lib.js">
+<link rel="modulepreload" href="../assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="../assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -83,55 +88,112 @@
 <main id="top">
 
   <section class="hero hero--plans" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="section-head"><h1 id="hero-h">プラン</h1><p class="hero__lead">まずはホーム画面のすべてが使える Basic から。販売はまだ始まっていないので、今はすべて無料です。</p></div>
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">プラン</h1>
+        <p class="hero__lead">まずはホーム画面のすべてが使える Basic から。販売はまだ始まっていないので、今はすべて無料です。</p>
+        <div class="btn-row"><a class="btn btn--primary" href="features.html">98 の機能をすべて見る<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+      </div>
+      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="プラン"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · 晴れ時々くもり</span>
+      <span class="clock"><b>08:57</b><small>水曜日<br>11月18日</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">続きから</span><div class="w-big"><b>続きから</b><span>第4話で停止中 · 残り21分</span></div><ul class="w-col"><li>第4話</li><li>ラジオ</li><li>ポッドキャスト</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">見る</span><div class="w-big"><b>ネットワーク</b><span>パソコンの映画 · 214 作品</span></div><ul class="w-col"><li>映画</li><li>シリーズ</li><li>ネットワーク</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">聴く</span><div class="w-big"><b>ラジオ</b><span>世界中の局を名前や国で</span></div><ul class="w-col"><li>ラジオ</li><li>ポッドキャスト</li><li>再生中</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">遊ぶ</span><div class="w-big"><b>ゲーム</b><span>クラウドゲーム 3 本 · コントローラー接続中</span></div><ul class="w-col"><li>クラウド</li><li>PC から</li><li>レトロ</li><li>仲間</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">アプリ</span><div class="w-big"><b>アプリ</b><span>よく使う 8 つ</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>すべてのアプリ</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div>
+    </div></div>
+  </section>
+
+  <section class="section" id="plans" aria-labelledby="plans-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="plans-h">プラン</h2><p class="muted">Basic は無料で、それだけでホーム画面のすべてです。Pro と Ultra の価格は Google Play での公開時に決まります。</p></div>
       <div class="grid plans-grid"><article class="card card--plan span-4" id="plan-basic">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span>Basic</h3>
           <p class="muted">ソファで楽しむ人に</p>
           <p class="price">無料</p>
           <p class="t-small muted">71 の機能</p>
-          <a class="btn btn--secondary" href="plans.html#plan-basic">Basic に含まれるもの</a>
+          <a class="btn btn--secondary" href="plans.html#plan-basic-list">Basic に含まれるもの</a>
           <ul class="plan__list"><li>十字</li><li>続きから</li><li>上部バー</li><li>Googleはそのまま使えます</li><li>クイックパネル</li></ul>
         </article><article class="card card--plan span-4 is-featured" id="plan-pro">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg></span>Pro</h3>
           <p class="muted">テレビを管理する人に</p>
           <p class="price">価格は公開時に</p>
           <p class="t-small muted">22 の機能</p>
-          <a class="btn btn--primary" href="plans.html#plan-pro">Pro に含まれるもの</a>
+          <a class="btn btn--primary" href="plans.html#plan-pro-list">Pro に含まれるもの</a>
           <ul class="plan__list"><li><b>Basic のすべて</b></li><li>好きなアイコンに</li><li>月の満ち欠け</li><li>カウントダウン</li><li>家のリマインダー</li><li>サービスの状態</li></ul>
         </article><article class="card card--plan span-4" id="plan-ultra">
           <h3><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2a5 5 0 0 1 5.5 5.3"/></svg></span>Ultra</h3>
           <p class="muted">家と家族のために</p>
           <p class="price">価格は公開時に</p>
           <p class="t-small muted">5 の機能</p>
-          <a class="btn btn--secondary" href="plans.html#plan-ultra">Ultra に含まれるもの</a>
+          <a class="btn btn--secondary" href="plans.html#plan-ultra-list">Ultra に含まれるもの</a>
           <ul class="plan__list"><li><b>Pro のすべて</b></li><li>自動字幕</li><li>充実した作品ページ</li><li>3つのモデルで雨予報</li><li>一緒に見る</li><li>複数の家</li></ul>
         </article></div>
-    </div></div>
-  </section>
-
-  <section class="section" id="plan-basic-list" aria-labelledby="plan-basic-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="plan-basic-h">Basic</h2><p>十字のホーム画面、プレーヤー、聴く、遊ぶ、目覚まし、スクリーンセーバー、すべてのアクセシビリティ機能。</p></div>
-      <ul class="plan-all plan-all--wide"><li>十字</li><li>続きから</li><li>上部バー</li><li>Googleはそのまま使えます</li><li>クイックパネル</li><li>リモコンを、あなた流に</li><li>再生中</li><li>テーマと背景</li><li>テレビに合わせたアニメーション</li><li>ネットワーク</li><li>何でも再生するプレーヤー</li><li>止めたところから</li><li>オープニングをスキップ</li><li>好みの音声と字幕</li><li>カクつかない映画</li><li>見やすく、聞きやすく</li><li>ひとつの検索ですべて</li><li>世界中のラジオ</li><li>ポッドキャスト</li><li>全画面プレーヤー</li><li>ゲームをひとつの場所に</li><li>2階の PC で遊ぶ</li><li>ネットワークをテスト</li><li>ゲームコントローラー</li><li>ゲームモード</li><li>Discord の仲間</li><li>お気に入りを前に</li><li>あなた好みに</li><li>Netflix・YouTube ボタンを自由に</li><li>テレビをつける目覚まし</li><li>タイマーと砂時計</li><li>やさしく電源オフ</li><li>誰も見ていなければオフ</li><li>すぐ使えるレシピ</li><li>みんな出かけたら眠る</li><li>音声ショートカット</li><li>今日の天気を実測で</li><li>全画面の予報</li><li>雨のお知らせ</li><li>つけておきたいスクリーンセーバー</li><li>スクリーンセーバーに自分の写真</li><li>おはよう</li><li>Google カレンダー</li><li>夜間フィルター</li><li>週のまとめ</li><li>一人ひとりのプロフィール</li><li>子どもプロフィール</li><li>就寝時間</li><li>1日の視聴時間</li><li>ゲストモード</li><li>ゲスト用 Wi-Fi</li><li>家族のボード</li><li>スマホとパソコンのパネル</li><li>毎晩、保護されたバックアップ</li><li>夜間メンテナンス</li><li>テレビの診断</li><li>速度テスト</li><li>このテレビの調子</li><li>セーフモード</li><li>変更点</li><li>問題を報告</li><li>15 言語</li><li>文字サイズ</li><li>シンプルモード</li><li>読み上げ</li><li>高コントラスト</li><li>広告ゼロ</li><li>追跡なし</li><li>必要なところに PIN</li><li>プライベート DNS</li><li>アプリ別のインターネット</li></ul>
     </div>
   </section>
-  <section class="section" id="plan-more" aria-labelledby="plan-more-h">
+
+  <section class="section plan-sec ground-surface" id="plan-basic-list" aria-labelledby="plan-basic-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="plan-more-h">Pro · Ultra</h2></div>
       <div class="grid">
-        <div class="plan-block span-7" id="plan-pro-all">
-          <h3 class="plan-block__h">Pro <span class="muted">22 の機能</span></h3>
-          <p class="muted">Basic のすべてに加え、スマホ、自動化、スマートホーム、遠くからのメッセージ、ホーム画面の既製カード、完全なカスタマイズ。</p>
-          <p class="t-small"><b>Basic のすべて</b></p>
-          <ul class="plan-all"><li>好きなアイコンに</li><li>月の満ち欠け</li><li>カウントダウン</li><li>家のリマインダー</li><li>サービスの状態</li><li>今日のレート</li><li>応援チームの次の試合</li><li>ほかのアプリのカード</li><li>Trakt と Simkl のリスト</li><li>ポッドキャストを探す</li><li>音はイヤホンで</li><li>自動化</li><li>テレビで Home Assistant</li><li>玄関に誰が来た？</li><li>遠くからのメッセージ</li><li>ビデオメッセージ</li><li>テレビにお願い</li><li>スマホから共有</li><li>テレビをネットワークドライブに</li><li>Windows のショートカット</li><li>別のテレビで続きを</li><li>クラウドにもコピー</li></ul>
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-basic-h">Sofaly Basic</h2>
+          <p class="t-lead">十字のホーム画面、プレーヤー、聴く、遊ぶ、目覚まし、スクリーンセーバー、すべてのアクセシビリティ機能。</p>
+          <ul class="plan-all plan-all--basic"><li>十字</li><li>続きから</li><li>上部バー</li><li>Googleはそのまま使えます</li><li>クイックパネル</li><li>リモコンを、あなた流に</li><li>再生中</li><li>テーマと背景</li><li>テレビに合わせたアニメーション</li><li>ネットワーク</li><li>何でも再生するプレーヤー</li><li>止めたところから</li><li>オープニングをスキップ</li><li>好みの音声と字幕</li><li>カクつかない映画</li><li>見やすく、聞きやすく</li><li>ひとつの検索ですべて</li><li>世界中のラジオ</li></ul>
+          <a class="link" href="features.html">71 の機能<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
         </div>
-        <div class="plan-block span-4 start-9" id="plan-ultra-all">
-          <h3 class="plan-block__h">Ultra <span class="muted">5 の機能</span></h3>
-          <p class="muted">Pro のすべてに加え、3モデルの天気予報、充実した作品ページ、自動字幕、複数の家、一緒に見る機能。</p>
-          <p class="t-small"><b>Pro のすべて</b></p>
-          <ul class="plan-all"><li>自動字幕</li><li>充実した作品ページ</li><li>3つのモデルで雨予報</li><li>一緒に見る</li><li>複数の家</li></ul>
-        </div></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Basic"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still" aria-hidden="true">
+  <div class="screen">
+    <i class="art"></i>
+    <div class="bar">
+      <span class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+      <span class="pill"><span class="wx" style="--x:#FFC94A"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>25° · 晴れ時々くもり</span>
+      <span class="clock"><b>08:57</b><small>水曜日<br>11月18日</small></span>
+    </div>
+    <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
+    <div class="row"><div class="w" data-w="continue" style="--c:#F5C04A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="w-name">続きから</span><div class="w-big"><b>続きから</b><span>第4話で停止中 · 残り21分</span></div><ul class="w-col"><li>第4話</li><li>ラジオ</li><li>ポッドキャスト</li></ul></div><div class="w" data-w="watch" style="--c:#FF6A2B"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="3"/><path d="M12 17v3M8 20.5h8"/></svg></span><span class="w-name">見る</span><div class="w-big"><b>ネットワーク</b><span>パソコンの映画 · 214 作品</span></div><ul class="w-col"><li>映画</li><li>シリーズ</li><li>ネットワーク</li><li>YouTube</li></ul></div><div class="w" data-w="listen" style="--c:#3CC6B4"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="2"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="2"/></svg></span><span class="w-name">聴く</span><div class="w-big"><b>ラジオ</b><span>世界中の局を名前や国で</span></div><ul class="w-col"><li>ラジオ</li><li>ポッドキャスト</li><li>再生中</li></ul></div><div class="w" data-w="play" style="--c:#6FA8FF"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10a5 5 0 0 1 4.8 6.4l-1 3.4a2.5 2.5 0 0 1-4.2 1L14.5 16h-5l-2.1 1.8a2.5 2.5 0 0 1-4.2-1l-1-3.4A5 5 0 0 1 7 7z"/><path d="M7.5 10v4M5.5 12h4"/><path d="M16 11h.01M18 13h.01"/></svg></span><span class="w-name">遊ぶ</span><div class="w-big"><b>ゲーム</b><span>クラウドゲーム 3 本 · コントローラー接続中</span></div><ul class="w-col"><li>クラウド</li><li>PC から</li><li>レトロ</li><li>仲間</li></ul></div><div class="w" data-w="apps" style="--c:#8FD07A"><span class="w-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><span class="w-name">アプリ</span><div class="w-big"><b>アプリ</b><span>よく使う 8 つ</span></div><ul class="w-col"><li>YouTube</li><li>Netflix</li><li>Prime Video</li><li>すべてのアプリ</li></ul></div></div>
+    <span class="key"></span>
+  </div>
+  </div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec ground-inverse" id="plan-pro-list" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="plan-pro-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-pro-h">Sofaly Pro</h2>
+          <p class="t-lead">Basic のすべてに加え、スマホ、自動化、スマートホーム、遠くからのメッセージ、ホーム画面の既製カード、完全なカスタマイズ。</p>
+          <ul class="plan-all plan-all--pro"><li class="plan-all__first"><b>Basic のすべて</b></li><li>好きなアイコンに</li><li>月の満ち欠け</li><li>カウントダウン</li><li>家のリマインダー</li><li>サービスの状態</li><li>今日のレート</li><li>応援チームの次の試合</li><li>ほかのアプリのカード</li><li>Trakt と Simkl のリスト</li><li>ポッドキャストを探す</li><li>音はイヤホンで</li><li>自動化</li><li>テレビで Home Assistant</li><li>玄関に誰が来た？</li><li>遠くからのメッセージ</li><li>ビデオメッセージ</li><li>テレビにお願い</li><li>スマホから共有</li></ul>
+          <a class="link" href="features.html">22 の機能<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        </div>
+        <div class="panel panel--tv plan-vis span-6 start-7" role="img" aria-label="Sofaly Pro"><div class="stage stage--fade-b"><div class="tv-fit"><div class="tv tv--still " data-t="5000"><div class="screen" style="--c:#8FD07A;--k:#8FD07A"><div class="scr scr-phone" style="--k:#8FD07A"><div class="ph-tv"><div class="ph-toast"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/></svg><div><small>スマホからのメッセージ</small><b>ごはんできたよ！</b></div></div></div>
+    <div class="ph-phone"><div class="ph-scr"><b class="ph-brand">sofa<em>ly</em></b><div class="ph-grid"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2.5" width="8" height="19" rx="4"/><circle cx="12" cy="8" r="1.8"/><path d="M12 13v.01M12 16.5v.01"/></svg>リモコン</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5h11v2M9.5 5v14M7.5 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/></svg>入力</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M9 20h6M12 16v4"/></svg>画面</span><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>写真</span></div>
+      <div class="ph-field"><span>ごはんできたよ！</span></div><div class="ph-send">テレビに送る</div><i class="ph-tap"></i></div></div></div></div></div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section plan-sec " id="plan-ultra-list" aria-labelledby="plan-ultra-h">
+    <div class="wrap">
+      <div class="grid">
+        <div class="span-5 stack-5 plan-sec__text">
+          <h2 id="plan-ultra-h">Sofaly Ultra</h2>
+          <p class="t-lead">Pro のすべてに加え、3モデルの天気予報、充実した作品ページ、自動字幕、複数の家、一緒に見る機能。</p>
+          <ul class="plan-all plan-all--ultra"><li class="plan-all__first"><b>Pro のすべて</b></li><li>自動字幕</li><li>充実した作品ページ</li><li>3つのモデルで雨予報</li><li>一緒に見る</li><li>複数の家</li></ul>
+          
+        </div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Sofaly Ultra"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still " data-t="4000"><div class="screen" style="--c:#6FB7FF;--k:#6FB7FF"><div class="scr scr-forecast" style="--k:#6FB7FF"><div class="fc-now"><span class="wx" style="--x:#6FB7FF"><svg class="ico fc-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><div><b class="fc-temp">24°</b><span>弱い霧雨</span>
+      <small>最高27° · 最低19° · 体感26°</small></div></div>
+    <div class="fc-box"><small>これから24時間</small><ol class="fc-hours"><li class="now" style="--i:0"><small>今</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>24°</b><em>76%</em></li><li style="--i:1"><small>18h</small><span class="wx" style="--x:#6FB7FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg></span><b>23°</b><em>71%</em></li><li style="--i:2"><small>19h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>22°</b><em>61%</em></li><li style="--i:3"><small>20h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>21°</b><em>49%</em></li><li style="--i:4"><small>21h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>21°</b><em>36%</em></li><li style="--i:5"><small>22h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>21%</em></li><li style="--i:6"><small>23h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>20°</b><em>10%</em></li><li style="--i:7"><small>0h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>5%</em></li><li style="--i:8"><small>1h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>3%</em></li><li style="--i:9"><small>2h</small><span class="wx" style="--x:#CFD6FF"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg></span><b>19°</b><em>2%</em></li><li style="--i:10"><small>3h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>19°</b><em>8%</em></li><li style="--i:11"><small>4h</small><span class="wx" style="--x:#DCE3F5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/></svg></span><b>18°</b><em>12%</em></li></ol></div>
+    <div class="fc-box fc-rain"><small>降水確率</small>
+      <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path class="fc-area" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26 V40 H0Z"/>
+      <path class="fc-line" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26"/></svg></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 </main>

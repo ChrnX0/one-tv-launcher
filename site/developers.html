@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Developers · Sofaly</title>
-<meta name="description" content="Put your Android TV app&#x27;s card on the Sofaly home screen. No SDK, no fee.">
+<meta name="description" content="Put your Android TV app&#x27;s card on the Sofaly home screen, free of charge and with plain Android code.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Developers · Sofaly">
-<meta property="og:description" content="Put your Android TV app&#x27;s card on the Sofaly home screen. No SDK, no fee.">
+<meta property="og:description" content="Put your Android TV app&#x27;s card on the Sofaly home screen, free of charge and with plain Android code.">
 <meta property="og:image" content="https://sofaly.tv/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -57,6 +57,11 @@
 </style>
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
 <script src="assets/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="assets/moments/moments.js">
+<link rel="modulepreload" href="assets/moments/lib.js">
+<link rel="modulepreload" href="assets/moments/iris-opens/moment.js">
+<link rel="stylesheet" href="assets/moments/iris-opens/moment.css">
 </head>
 <body>
 <header class="nav nav--centre">
@@ -90,43 +95,46 @@
         <div class="btn-row"><a class="btn btn--primary" href="plugins.html">Read the full contract<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
       </div>
       <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Your app on the home screen people actually look at.">
-        <div class="tv tv--still"><div class="screen"><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Bus 42</small><b>6 min</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Gym</small><b>7 pm</b></div></div></div></div>
+        <div class="tv tv--still"><div class="screen "><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Bus 42</small><b>6 min</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Gym</small><b>7 pm</b></div></div></div></div>
       </div>
     </div></div>
   </section>
 
-  <section class="section" id="why" aria-labelledby="why-h">
+  <section class="section ground-surface" id="why" aria-labelledby="why-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="why-h">Why build a plugin</h2></div>
-      <div class="grid"><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg></span><h3>Up front, not in a drawer</h3><p>Your card sits on the home screen, where the family looks every time the TV turns on, not lost in a list of apps.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><h3>No SDK, no fee</h3><p>One ContentProvider and one row of data. No library of ours to install, no fee to pay.</p></article><article class="card card--row span-4"><span class="world-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/></svg></span><h3>Your app, your business</h3><p>Publish on Play however you like, free or paid. Sofaly only draws the card; the app and the customers are yours.</p></article></div>
-      <h3 class="ideas-h" id="ideas">What you can build beyond ours</h3>
-      <ul class="minis"><li class="mini"><b>Your delivery</b><span>Order is out, 12 min away.</span></li><li class="mini"><b>Your bus</b><span>Line 42 arrives in 6 min.</span></li><li class="mini"><b>Your gym</b><span>Today&#x27;s class at 7 pm.</span></li><li class="mini"><b>Your building</b><span>Water off tomorrow, 9 am to noon.</span></li><li class="mini"><b>Your shop</b><span>Deal of the day: 20% off coffee.</span></li><li class="mini"><b>Your club</b><span>Practice moved to Saturday.</span></li></ul>
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="why-h">Why build a plugin</h2><ul class="dev-whys"><li class="dev-why"><h3>Up front, not in a drawer</h3><p class="muted">Your card sits on the home screen, where the family looks every time the TV turns on, not lost in a list of apps.</p></li><li class="dev-why"><h3>Plain Android code</h3><p class="muted">One ContentProvider and one row of data, written with the Android you already know. Building and showing a card costs nothing.</p></li><li class="dev-why"><h3>Your app, your business</h3><p class="muted">Publish on Play however you like, free or paid. Sofaly only draws the card; the app and the customers are yours.</p></li></ul></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="What you can build beyond ours"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--six"><div class="dev-tile" style="--tile:#1E7A46"><small>Your delivery</small><b>Order is out, 12 min away.</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Your bus</small><b>Line 42 arrives in 6 min.</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Your gym</small><b>Today&#x27;s class at 7 pm.</b></div><div class="dev-tile" style="--tile:#1F6F8B"><small>Your building</small><b>Water off tomorrow, 9 am to noon.</b></div><div class="dev-tile" style="--tile:#8A5A12"><small>Your shop</small><b>Deal of the day: 20% off coffee.</b></div><div class="dev-tile" style="--tile:#3F5F2A"><small>Your club</small><b>Practice moved to Saturday.</b></div></div></div></div></div></div></div>
+      </div>
     </div>
   </section>
 
-  <section class="section" id="steps" aria-labelledby="steps-h">
+  <section class="section ground-inverse" id="steps" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="steps-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="steps-h">Two steps</h2></div>
-      <div class="grid">
-        <div class="span-6 stack-4"><h3>1. Declare a provider with Sofaly&#x27;s action</h3><pre class="code"><code>&lt;provider
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="steps-h">Two steps</h2><h3>1. Declare a provider with Sofaly&#x27;s action</h3><pre class="code"><code>&lt;provider
     android:name=".CardProvider"
     android:authorities="com.example.score.card"
     android:exported="true"&gt;
     &lt;intent-filter&gt;
         &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
     &lt;/intent-filter&gt;
-&lt;/provider&gt;</code></pre></div>
-        <div class="span-6 stack-4"><h3>2. Answer with one row: title, value, detail and color</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
+&lt;/provider&gt;</code></pre><h3>2. Answer with one row: title, value, detail and color</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
                    a: Array&lt;String&gt;?, o: String?): Cursor =
     MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor")).apply {
         addRow(arrayOf("Match score", "2 x 1",
                        "38' second half", "#1E7A46"))
-    }</code></pre></div>
+    }</code></pre><a class="link" href="plugins.html">Read the full contract<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Answer with one row: title, value, detail and color"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--one"><div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b><span>38' second half</span></div></div></div></div></div></div></div>
       </div>
-      <p><a class="link" href="plugins.html">Read the full contract</a></p>
-      <div class="grid rules-row" id="rules">
-        <div class="span-6 stack-4"><h3>Rules that protect the viewer</h3><ul class="rules"><li>You never draw on the home screen: you send text and a color, Sofaly draws.</li><li>Sofaly never sends you anything about the person&#x27;s apps, accounts or what they watch.</li><li>Plugins are part of the Pro plan, and the person chooses which ones show.</li></ul></div>
-        <div class="span-5 start-8 stack-4"><h3>Coming soon</h3><p class="muted">Background plugins and a plugin showcase right on the TV.</p></div>
+    </div>
+  </section>
+
+  <section class="section ground-surface" id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="grid dev-split">
+        <div class="span-5 stack-5"><h2 id="rules-h">Rules that protect the viewer</h2><ul class="dev-rules"><li>You never draw on the home screen: you send text and a color, Sofaly draws.</li><li>Sofaly never sends you anything about the person&#x27;s apps, accounts or what they watch.</li><li>Plugins are part of the Pro plan, and the person chooses which ones show.</li></ul><h3>Coming soon</h3><p class="muted">Background plugins and a plugin showcase right on the TV.</p></div>
+        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="Rules that protect the viewer"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen scr-list"><div class="ls-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><b>Cards from other apps</b></div><ul class="ls-rows"><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your delivery</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your bus</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your gym</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your building</span><i class="ls-on"></i></li></ul></div></div></div></div></div>
       </div>
     </div>
   </section>
