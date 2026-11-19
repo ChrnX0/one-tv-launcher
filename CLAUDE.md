@@ -110,6 +110,21 @@ It is off by default and needs the resident's consent on the TV: never turn it o
   `libtsnet.so` by the `compilarTunel` Gradle task when Go is installed. Machine name: `onetv-<device name>`.
 - Encrypted full backup: `BackupCompleto.kt` + `CofreBackup.kt` (PBKDF2 150k + AES-GCM).
 
+## Design tools (AI skills)
+
+Taste Skill (`design-taste-frontend`), `transitions-dev` and `transitions-polish` are fetched into
+`.claude/skills/` by `scripts/install-design-skills.sh` on session start (git-ignored; if a skill is
+missing, run the script and read its `SKILL.md`). React Bits is reference only (no React here):
+`.claude/skills/react-bits-reference/`. Use them for the website and the web panel; for the Kotlin
+app only as reference. Project rules beat skill defaults (brand colours, never pink, large type,
+the cross look). Details and licenses: `docs/design-tools.md`.
+
+**Rule (Paulo, 19/11/2026): before ANY design, UI, UX or motion work** (TV screen, website, panel,
+artifact, mockup), first consult these tools and any other design reference available (the design
+skills, earlier studies in project files, real products of the same kind), and only then create.
+Reason: what we make from defaults alone always comes out with "the same face". Say in the reply
+which references shaped the result.
+
 ## Build, test, measure
 
 - JDK 21, Android SDK 36, Gradle wrapper 8.14, AGP 8.11, Kotlin 2.2. `./gradlew assembleRelease`;

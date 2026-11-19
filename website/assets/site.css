@@ -141,13 +141,15 @@ a { color: var(--accent); }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 1.6rem; }
 .card .ico { color: var(--accent); width: 2.2rem; height: 2.2rem; }
 .card h3 { margin: .9rem 0 .4rem; }
-.chapters { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: .8rem; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); }
+.chapters { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: .8rem; grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr)); }  /* min(): no sideways scroll at 320px */
 .chap { display: flex; gap: 1rem; align-items: center; padding: 1.1rem 1.2rem; border-radius: 18px; background: var(--card); border: 1px solid var(--line); text-decoration: none; color: var(--text); transition: transform .15s, border-color .15s; }
 .chap:hover { transform: translateY(-2px); border-color: var(--c); }
 .chap > .ico { color: var(--c); width: 2.2rem; height: 2.2rem; }
 .chap span { display: flex; flex-direction: column; flex: 1; }
 .chap small { color: var(--soft); font-size: .92rem; line-height: 1.4; margin-top: .15rem; }
 .chap em { font-style: normal; font-weight: 800; color: var(--c); font-family: Nunito, sans-serif; font-size: 1.3rem; }
+/* Light theme: the world colours are tuned for the dark ground; darken the counts to 3:1+ on white. */
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .chap em { color: color-mix(in srgb, var(--c) 60%, #000); } }
 .split { display: grid; gap: 1.2rem; }
 @media (min-width: 860px) { .split { grid-template-columns: 1fr 1fr; } }
 .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 2rem; }
