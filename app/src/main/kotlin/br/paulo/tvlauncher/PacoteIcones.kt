@@ -60,16 +60,16 @@ object PacoteIcones {
             val l = runCatching { pm.queryIntentActivities(Intent(acao), PackageManager.GET_META_DATA) }.getOrDefault(emptyList())
             for (ri in l) {
                 val p = ri.activityInfo.packageName
-                if (p !in vistos) vistos[p] = runCatching { ri.activityInfo.applicationInfo.loadLabel(pm).toString() }.getOrDefault(p)
+                if (p !in vistos) vistos[p] = PluginCatalog.nomeDoPacote(p) ?: runCatching { ri.activityInfo.applicationInfo.loadLabel(pm).toString() }.getOrDefault(p)
             }
         }
         // Os que nós congelamos (IconPackFreezer) não respondem mais à busca: entram pela lista guardada.
-        for ((p, n) in IconPackFreezer.congelados(ctx)) if (p !in vistos) vistos[p] = n
+        for ((p, n) in IconPackFreezer.congelados(ctx)) if (p !in vistos) vistos[p] = PluginCatalog.nomeDoPacote(p) ?: n
         return vistos.entries.map { it.key to it.value }.sortedBy { it.second.lowercase() }
     }
 
     fun nome(ctx: Context, pacote: String): String =
-        Embutido.entries.firstOrNull { it.id == pacote }?.let { ctx.getString(it.nome) } ?: runCatching { ctx.packageManager.getApplicationInfo(pacote, PackageManager.MATCH_DISABLED_COMPONENTS).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
+        Embutido.entries.firstOrNull { it.id == pacote }?.let { ctx.getString(it.nome) } ?: PluginCatalog.nomeDoPacote(pacote) ?: runCatching { ctx.packageManager.getApplicationInfo(pacote, PackageManager.MATCH_DISABLED_COMPONENTS).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
 
     @SuppressLint("DiscouragedApi")   // getIdentifier é o único jeito: o nome do recurso vem do appfilter de outro app
     private fun carregar(ctx: Context, pacote: String): PacoteIconesRegras.Mapa? = runCatching {
