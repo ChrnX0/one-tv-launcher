@@ -704,9 +704,10 @@ class MainActivity : Activity() {
                 val alvo = livre.coerceIn(dp(80), dp(320))
                 if (txtChuva.maxWidth != alvo) txtChuva.post { txtChuva.maxWidth = alvo }
                 // Cartões da tela inicial (19/11/2026, visto na Sala: "Feriado em 1 dia" passava por baixo da hora). Se nem
-                // com o clima no mínimo cabe, a barra deixa de mostrar um cartão por vez, do menos urgente para o mais:
-                // cotação, contagem, lembrete. Cortado só daqui: a pílula de cima (Ilha) continua vendo o texto.
-                if (livre < dp(80)) listOf(pilulaCotacao, pilulaContagem, pilulaLembreteCasa)
+                // com o clima no mínimo cabe, a barra deixa de mostrar um cartão por vez: primeiro os que a Ilha também
+                // mostra (contagem, lembrete), por último a cotação, que só existe aqui (visto na Sala 19/11: com
+                // despertador + feriado a cotação sumia). Cortado só daqui: a Ilha continua vendo o texto.
+                if (livre < dp(80)) listOf(pilulaContagem, pilulaLembreteCasa, pilulaCotacao)
                     .firstOrNull { it.visibility == View.VISIBLE }
                     ?.let { p -> p.post { if (p.hasFocus()) linhaApps.requestFocus(); cortadas += p; p.visibility = View.GONE } }
             }
