@@ -29,6 +29,8 @@ object PinNaTela {
             inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
             filters = arrayOf(android.text.InputFilter.LengthFilter(PinSeguro.MAX_DIGITOS))
             setSingleLine()
+            // O título é o que vai ser liberado (ex.: o nome do add-on); a dica diz o que digitar (visto na Sala em 19/11/2026).
+            hint = tela.getString(R.string.player_pin_titulo)
         }
         fun conferir(pin: String) = Fundo.rodar("pin-na-tela") {
             val certo = PainelArmazem.conferirPin(tela, pin)
