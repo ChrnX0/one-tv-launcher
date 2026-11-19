@@ -7,7 +7,8 @@
    `sofaly_ultra` com preços (docs/play/cobranca.md), Play App Signing com chave de upload nova.
 3. **E-mail de suporte** do produto (a Play exige; vai na política de privacidade e na loja).
 4. **Teste fechado**: conta pessoal nova exige 12 testadores por 14 dias antes de produção.
-5. Licenças: TMDB comercial e Simkl (no build da Play os dois ficam vazios até lá); domínios sofaly.tv / getsofaly.com.
+5. Licenças (só para o plano Pro; o Básico já sai com fontes grátis desde 19/11/2026): TMDB comercial (DataSources.TMDB_LICENSED),
+   Simkl para a nota sem conta (SIMKL_LICENSED, US$ 100/mês), WeatherAPI paga (secret WEATHERAPI_KEY no Worker); domínios sofaly.tv / getsofaly.com.
 6. Aprovar textos da loja (docs/play/loja.md) para eu traduzir a descrição completa nos outros 14 idiomas.
 
 ## Técnico, ainda não feito (eu faço depois)

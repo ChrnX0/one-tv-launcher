@@ -806,7 +806,7 @@ class FilmesActivity : Activity() {
                 tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1 && !desenhoMarcado) pedirDesenho() } }
             }
         }
-        val externoVem = InfoExternaCache.temTmdb()
+        val externoVem = InfoExternaCache.temFicha()
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
             // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
@@ -820,7 +820,7 @@ class FilmesActivity : Activity() {
      * do Trakt (já guardada de madrugada). Roda fora da tela, depois da ficha do servidor; sem chave nenhuma, não faz nada.
      */
     private fun buscarExterno(f: Filme, info: FichaFilme?) {
-        if (!InfoExternaCache.temTmdb()) return
+        if (!InfoExternaCache.temFicha()) return
         val g = InfoExternaCache.resolver(this, f.chave, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), false, info?.tmdb ?: f.tmdb)
         val saga = g.detalhe?.colecao?.let { c ->
             val partes = InfoExternaCache.colecao(c.id).takeIf { it.size > 1 } ?: return@let null
@@ -972,7 +972,7 @@ class FilmesActivity : Activity() {
         }
         // Direção: a do TMDB. A do servidor só quando o TMDB já respondeu sem ela (ou não há TMDB): antes ela aparecia
         // primeiro e trocava ao chegar o TMDB, às vezes errada (Sala, 17/11/2026: Duna mostrou "Cliff Lanning").
-        val tmdbPendente = ext == null && InfoExternaCache.temTmdb()
+        val tmdbPendente = ext == null && InfoExternaCache.temFicha()
         (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() && !tmdbPendente })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
         (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
             ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END }) }

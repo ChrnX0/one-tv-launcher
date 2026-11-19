@@ -383,7 +383,7 @@ class SeriesActivity : Activity() {
      */
     /** Fora da tela (a primeira leitura do arquivo de fichas de fora vai ao disco). */
     private fun proximosGuardados(series: List<Serie>): Map<String, InfoExterna.ProximoEp> {
-        if (!InfoExternaCache.temTmdb()) return emptyMap()
+        if (!InfoExternaCache.temFicha()) return emptyMap()
         val r = HashMap<String, InfoExterna.ProximoEp>()
         for (s in series) InfoExternaCache.guardado(this, s.chave)?.detalhe?.proximo?.let { r[s.chave] = it }
         return r
@@ -792,7 +792,7 @@ class SeriesActivity : Activity() {
         painel.removeAllViews(); painel.visibility = View.VISIBLE; painel.requestFocus()
         telaDeTras.visibility = View.INVISIBLE
         pedirDesenho(250)
-        val externoVem = InfoExternaCache.temTmdb()
+        val externoVem = InfoExternaCache.temFicha()
         Fundo.rodar {
             val f = PlayerCarga.fichaSerie(this, s)
             tela.post {

@@ -35,7 +35,10 @@ object InfoExternaCache {
     private var conferidoEm = 0L      // System.nanoTime da última conferência
 
     private fun chaves() = ServicosContas.chavesApp()
-    fun temTmdb(): Boolean = chaves().tmdb.isNotBlank()
+    /** TMDB (pago): só com contrato, a chave no build e o plano Pro ([DataSources.tmdb], 19/11/2026). */
+    fun temTmdb(): Boolean = runCatching { DataSources.tmdb(LauncherApp.instancia) }.getOrDefault(false)
+    /** Ficha de fora de algum jeito: TMDB (Pro) ou Trakt (Básico, grátis). */
+    fun temFicha(): Boolean = temTmdb() || chaves().traktId.isNotBlank()
     private fun agente() = ServicosFilmes.agente(BuildConfig.VERSION_CODE)
 
     // ================================================================ disco
@@ -120,7 +123,8 @@ object InfoExternaCache {
     // ================================================================ ficha (ao abrir)
 
     /**
-     * Garante id e ficha do TMDB de um título, se vencidos. [tmdbConhecido] = o que o Xtream mandou.
+     * Garante id e ficha de um título, se vencidos. [tmdbConhecido] = o que o Xtream mandou. A ficha vem do TMDB no
+     * plano Pro com contrato ([temTmdb]) e do Trakt no resto ([resolverTrakt]); o id guardado é sempre o do TMDB.
      * Devolve o que ficou guardado (pode ser vazio: sem chave, sem rede ou sem casar o nome).
      */
     fun resolver(ctx: Context, chave: String, nome: String, ano: Int?, serie: Boolean, tmdbConhecido: Int?): Guardado {
@@ -128,6 +132,7 @@ object InfoExternaCache {
         val agora = System.currentTimeMillis()
         var g = guardado(app, chave) ?: Guardado()
         val k = chaves()
+        if (!temTmdb()) return resolverTrakt(app, chave, nome, ano, serie, tmdbConhecido)
         val idioma = InfoExterna.idiomaTmdb()
         // 1. O id: o do Xtream vale mais (a não ser que a pessoa tenha recusado); depois o já achado; depois a busca.
         val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
@@ -156,6 +161,67 @@ object InfoExternaCache {
         return guardado(app, chave) ?: g
     }
 
+    /** Pergunta ao Trakt com a chave do app; null sem chave, sem rede ou fora de 2xx (204 = corpo vazio). */
+    private fun trakt(url: String): String? {
+        val id = chaves().traktId.takeIf { it.isNotBlank() } ?: return null
+        return runCatching { ServicosContas.pedir(url, ServicosFilmes.traktCabecalhos(id, BuildConfig.VERSION_CODE)) }
+            .onFailure { Log.w(TAG, "Trakt: ${it.javaClass.simpleName}") }.getOrNull()
+            ?.takeIf { it.codigo in 200..299 }?.corpo
+    }
+
+    /**
+     * Plano Básico (19/11/2026): id e ficha pelo Trakt. A busca casa o nome como a do TMDB ([InfoExterna.escolher]);
+     * o Trakt devolve o título em inglês, então, sem casar, confere a tradução no idioma da TV dos até 3 candidatos de
+     * ano certo (nome dublado da lista: "O Poderoso Chefão"). Ficha: item + tradução + pessoas (+ próximo episódio e
+     * temporadas na série), até 5 perguntas por título a cada 30 dias.
+     */
+    private fun resolverTrakt(app: Context, chave: String, nome: String, ano: Int?, serie: Boolean, tmdbConhecido: Int?): Guardado {
+        if (chaves().traktId.isBlank()) return guardado(app, chave) ?: Guardado()
+        val agora = System.currentTimeMillis()
+        var g = guardado(app, chave) ?: Guardado()
+        val (lingua, pais) = TraktFicha.idioma()
+        val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
+        if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0, simkl = null, simklNota = null, simklEm = 0) }
+        if (g.tmdb == null && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
+            val limpo = LegendaExterna.nomeDeBusca(Vod.nomeLimpo(nome)).ifBlank { Vod.nomeLimpo(nome) }
+            val achados = trakt(TraktFicha.urlBusca(limpo, ano, serie))?.let { TraktFicha.lerBusca(it, serie) }.orEmpty()
+                .filter { it.tmdb !in g.recusados }
+            var achado = InfoExterna.escolher(TraktFicha.candidatos(achados), Vod.nomeLimpo(nome), ano, g.recusados)?.id
+            if (achado == null && lingua != "en") {
+                val alvo = Idioma.chaveTitulo(Vod.nomeLimpo(nome))
+                achado = achados.filter { ano == null || it.ano == null || kotlin.math.abs(it.ano - ano) <= 1 }.take(3).firstOrNull { a ->
+                    val t = trakt(TraktFicha.urlTraducao(a.trakt, serie, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
+                    t != null && Idioma.chaveTitulo(t.first) == alvo
+                }?.tmdb
+            }
+            g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
+        }
+        val id = g.tmdb ?: return g
+        if (InfoExterna.vencido(g.detalheEm, agora, g.detalhe?.noAr == true)) runCatching {
+            val item = trakt(TraktFicha.urlPorTmdb(id, serie))?.let { TraktFicha.lerPorTmdb(it, serie) } ?: return@runCatching
+            val t = TraktFicha.traktDe(item) ?: return@runCatching
+            synchronized(traktIds) { traktIds[InfoExterna.chaveTmdb(id, serie)] = t }
+            val traducao = if (lingua == "en") null else trakt(TraktFicha.urlTraducao(t, serie, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
+            val pessoas = trakt(TraktFicha.urlPessoas(t, serie))?.let { TraktFicha.lerPessoas(it) } ?: (emptyList<String>() to "")
+            val proximo = if (serie) trakt(TraktFicha.urlProximo(t))?.let { TraktFicha.lerProximo(it) } else null
+            val temporadas = if (serie) trakt(TraktFicha.urlTemporadas(t))?.let { TraktFicha.lerTemporadas(it) } ?: 0 else 0
+            val d = TraktFicha.detalhe(id, item, serie, traducao, pessoas, proximo, temporadas)
+            g = mudar(app, chave) { it.copy(detalhe = d, detalheEm = agora, imdb = d.imdb.ifBlank { it.imdb }) }
+        }.onFailure { Log.w(TAG, "ficha Trakt: ${it.javaClass.simpleName}") }
+        return guardado(app, chave) ?: g
+    }
+
+    /** Id do Trakt de cada título já visto ("F123"/"S45" -> trakt), só na memória. */
+    private val traktIds = HashMap<String, Int>()
+
+    private fun traktDaSerie(tmdb: Int): Int? {
+        val k = InfoExterna.chaveTmdb(tmdb, true)
+        synchronized(traktIds) { traktIds[k]?.let { return it } }
+        val t = trakt(TraktFicha.urlPorTmdb(tmdb, true))?.let { TraktFicha.traktDe(TraktFicha.lerPorTmdb(it, true)) } ?: return null
+        synchronized(traktIds) { traktIds[k] = t }
+        return t
+    }
+
     /**
      * O id do TMDB de um título sem ir à rede, com a MESMA prioridade de [resolver]: o da lista (Xtream) se a pessoa
      * não o recusou ("Não é este"), senão o já achado. Antes, `doXtream ?: guardado.tmdb` voltava ao id recusado e a
@@ -174,7 +240,7 @@ object InfoExternaCache {
     /** As partes da coleção (saga). Guardadas só na memória: é uma consulta por saga, ao abrir a ficha. */
     fun colecao(colecaoId: Int): List<InfoExterna.Candidato> {
         synchronized(colecoes) { colecoes[colecaoId]?.let { return it } }
-        val k = chaves(); if (k.tmdb.isBlank()) return emptyList()
+        val k = chaves(); if (!temTmdb()) return emptyList()
         val partes = runCatching {
             val r = ServicosContas.pedir(InfoExterna.urlColecao(k.tmdb, colecaoId, InfoExterna.idiomaTmdb()), InfoExterna.tmdbCabecalhos(k.tmdb, agente()))
             if (r.codigo in 200..299) InfoExterna.lerColecao(r.corpo) else emptyList()
@@ -192,7 +258,7 @@ object InfoExternaCache {
     /** Pergunta ao TMDB (memória por [chave]); null sem chave do app, sem rede ou com resposta que não serve. */
     private fun <T : Any> tmdb(chave: String, url: (String) -> String, ler: (String) -> T?): T? {
         synchronized(pedidos) { @Suppress("UNCHECKED_CAST") (pedidos[chave] as? T)?.let { return it } }
-        val k = chaves(); if (k.tmdb.isBlank()) return null
+        val k = chaves(); if (!temTmdb()) return null
         val v = runCatching {
             val r = ServicosContas.pedir(url(k.tmdb), InfoExterna.tmdbCabecalhos(k.tmdb, agente()))
             if (r.codigo in 200..299) ler(r.corpo) else null
@@ -203,7 +269,20 @@ object InfoExternaCache {
 
     /** Ideia 83: (título, resumo) de um episódio no idioma da TV. Bloqueia (rede). */
     fun episodio(serie: Int, temporada: Int, numero: Int): Pair<String, String>? =
-        tmdb("ep:$serie:$temporada:$numero", { ElencoTmdb.urlEpisodio(it, serie, temporada, numero, InfoExterna.idiomaTmdb()) }, ElencoTmdb::lerEpisodio)
+        if (!temTmdb()) episodioTrakt(serie, temporada, numero) else tmdb("ep:$serie:$temporada:$numero", { ElencoTmdb.urlEpisodio(it, serie, temporada, numero, InfoExterna.idiomaTmdb()) }, ElencoTmdb::lerEpisodio)
+
+    /** Ideia 83 no plano Básico: o episódio pelo Trakt (com a tradução no idioma da TV quando houver). */
+    private fun episodioTrakt(serie: Int, temporada: Int, numero: Int): Pair<String, String>? {
+        val chave = "ep-trakt:$serie:$temporada:$numero"
+        synchronized(pedidos) { @Suppress("UNCHECKED_CAST") (pedidos[chave] as? Pair<String, String>)?.let { return it } }
+        val t = traktDaSerie(serie) ?: return null
+        val (lingua, pais) = TraktFicha.idioma()
+        val corpo = trakt(TraktFicha.urlEpisodio(t, temporada, numero)) ?: return null
+        val traducao = if (lingua == "en") null else trakt(TraktFicha.urlTraducaoEpisodio(t, temporada, numero, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
+        val v = TraktFicha.lerEpisodio(corpo, traducao) ?: return null
+        synchronized(pedidos) { pedidos[chave] = v }
+        return v
+    }
 
     /** Ideia 84: o elenco com foto. Bloqueia (rede). */
     fun elenco(id: Int, serie: Boolean): List<ElencoTmdb.Pessoa> {

@@ -69,9 +69,10 @@ android {
         // não aceita (atualizador do GitHub, instalar APK). A fonte do clima não depende mais do build (19/11/2026): é o
         // plano e a licença que escolhem, em DataSources.kt (MET Norway no Básico).
         buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
-        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) e sem Simkl (licença não cobre app vendido)
-        // até haver licença. O Trakt (conta Standard) e o OpenSubtitles (login do próprio usuário) ficam. Ver venda/licencas-custos.md.
-        val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
+        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) até haver contrato. O Simkl entra (19/11/2026)
+        // só no caminho grátis que eles aceitaram: a conta da própria pessoa e o convite "Conecte sua conta"; a nota sem
+        // login fica para o Pro com licença (DataSources.kt). Trakt (Standard) e OpenSubtitles (login da pessoa) ficam.
+        val semLicencaNaPlay = setOf("TMDB_CHAVE")
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
             buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
         // Degrau 2a (17/11/2026): e-mail que recebe o "Relatar um problema" (quem não tem conta no GitHub). Fora do git:
