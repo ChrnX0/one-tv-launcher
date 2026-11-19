@@ -63,7 +63,7 @@ object TurmaDiscord {
         for (i in 0 until ma.length()) {
             val m = ma.optJSONObject(i) ?: continue
             val nome = limpar(m.optString("username"), 32)
-            if (nome.isEmpty()) continue
+            if (nome.isEmpty() || pareceBot(nome)) continue
             val jogo = (m.optJSONObject("activity") ?: m.optJSONObject("game"))?.optString("name")?.let { limpar(it, 40) }?.takeIf { it.isNotEmpty() }
             val status = when (m.optString("status")) { "idle" -> Status.AUSENTE; "dnd" -> Status.OCUPADO; else -> Status.ONLINE }
             val canal = m.optString("channel_id").takeIf { it.isNotEmpty() && it != "null" }
@@ -76,6 +76,12 @@ object TurmaDiscord {
         val online = o.optInt("presence_count", membros.size).coerceAtLeast(membros.size)
         return Turma(limpar(o.optString("name"), 40), online, salas, outros)
     }
+
+    /**
+     * O widget não diz quem é bot (pedido do Paulo, 19/11/2026: "Midjourney Bot" aparecia como da turma). Pelo nome,
+     * só a palavra "bot" inteira no fim ("Midjourney Bot", "MEE6 bot", "Music-Bot"): "Botafogo" e "Robot" ficam.
+     */
+    fun pareceBot(nome: String): Boolean = Regex("(^|[\\s._-])bot$", RegexOption.IGNORE_CASE).containsMatchIn(nome.trim())
 
     /** Quem joga primeiro; depois online, ausente, ocupado; dentro de cada um, por nome. */
     private fun ordenar(ms: List<Membro>) = ms.sortedWith(compareBy<Membro> { if (it.jogo != null) 0 else 1 }

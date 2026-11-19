@@ -198,4 +198,30 @@ class IdiomaTest {
         assertEquals(Versao.LEGENDADA, Idioma.versaoDesejada(Pref.ORIGINAL))
         assertEquals(Versao.DUBLADA, Idioma.versaoDesejada(Pref.DUBLADO))
     }
+
+    private fun semPares(lista: List<F>, comecado: Set<F> = emptySet()) = Idioma.semPares(lista,
+        Idioma.indice(lista, { it.nome }, { it.grupo }), { it.nome }, { it.grupo }, { it.ano }) { it in comecado }
+
+    @Test fun gradeJuntaDubladoELegendado() {
+        // Visto na Sala (19/11/2026): "Else" e "Else LEG" lado a lado na grade.
+        val dub = F("Else", "Lançamentos", 2025); val leg = F("Else LEG", "Lançamentos", 2025)
+        val outro = F("A Odisseia", "Lançamentos", 2026)
+        assertEquals(listOf(dub, outro), semPares(listOf(dub, leg, outro)))
+        // Fica o que já foi começado.
+        assertEquals(listOf(leg, outro), semPares(listOf(dub, leg, outro), setOf(leg)))
+        // Os dois com algo guardado (um começado, outro nos Interesses): nenhum some.
+        assertEquals(listOf(dub, leg, outro), semPares(listOf(dub, leg, outro), setOf(dub, leg)))
+    }
+
+    @Test fun gradeNaoJuntaOQueNaoTemCerteza() {
+        // Anos diferentes: filmes diferentes.
+        val a = F("Duna (1984) [L]", "", 1984); val b = F("Duna (2021)", "", 2021)
+        assertEquals(listOf(a, b), semPares(listOf(a, b)))
+        // Dois sem marca nunca são par.
+        val c = F("Looping", "", 2024); val d = F("Looping", "Outra", 2024)
+        assertEquals(listOf(c, d), semPares(listOf(c, d)))
+        // Três versões do mesmo título e ano: fica tudo.
+        val e1 = F("Else", "", 2025); val e2 = F("Else LEG", "", 2025); val e3 = F("Else [D]", "", 2025)
+        assertEquals(listOf(e1, e2, e3), semPares(listOf(e1, e2, e3)))
+    }
 }
