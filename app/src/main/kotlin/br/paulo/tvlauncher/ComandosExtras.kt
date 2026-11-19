@@ -85,6 +85,7 @@ object ComandosExtras {
         "cena_apagar" -> if (Cenas.apagar(ctx, i.getStringExtra("nome") ?: "")) "apagada" else "não existe"
         "cenas" -> Cenas.lista(ctx).joinToString("\n") { it.nome }.ifEmpty { "nenhuma" }
         "caches" -> Caches.limpar(ctx)
+        "fichas" -> InfoExternaCache.resumoAdb(ctx, i.getIntExtra("n", 15))   // fichas de filme/série guardadas (Trakt/TMDB), só leitura
         "saude" -> SaudeAcesso.json(ctx).toString()   // estado do shell próprio e do túnel + última manutenção
         // Roda a manutenção noturna agora. Numa thread própria: pode passar de 90 s (shell + limpeza de cache), mais que o
         // limite de um broadcast; o relatório sai depois por "saude" (campo "manutencao").

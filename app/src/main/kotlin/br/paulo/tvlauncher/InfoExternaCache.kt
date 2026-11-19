@@ -202,7 +202,7 @@ object InfoExternaCache {
             val achado = procurar(ano) ?: if (ano != null) procurar(null) else null
             g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
         }
-        val id = g.tmdb ?: return g
+        val id = g.tmdb ?: run { Log.i(TAG, "ficha Trakt: $chave sem id do TMDB (busca de novo em ${((g.buscaEm + BUSCA_DE_NOVO_MS - agora) / 3_600_000).coerceAtLeast(0)} h)"); return g }
         // Ficha que veio do TMDB (só ele traz pôster) numa TV que agora usa o Trakt: troca já, sem esperar vencer, para
         // nada do TMDB aparecer sem a licença.
         val doTmdb = g.detalhe?.poster?.isNotEmpty() == true
@@ -219,7 +219,24 @@ object InfoExternaCache {
             g = mudar(app, chave) { it.copy(detalhe = d, detalheEm = agora, imdb = d.imdb.ifBlank { it.imdb }) }
             Log.i(TAG, "ficha Trakt: tmdb $id ok (sinopse ${d.sinopse.isNotBlank()}, elenco ${d.elenco.size}, próximo ${d.proximo != null})")
         }.onFailure { Log.w(TAG, "ficha Trakt: ${it.javaClass.simpleName}") }
+        else Log.i(TAG, "ficha Trakt: tmdb $id guardada de ${(agora - g.detalheEm) / 3_600_000} h atrás")
         return guardado(app, chave) ?: g
+    }
+
+    /**
+     * Resumo das últimas [n] fichas guardadas, só leitura (`EXTRAS --es o fichas`): sem isto não dava para saber, na
+     * Sala, se a ficha vazia era do Trakt, do TMDB antigo ou de nenhum dos dois (19/11/2026).
+     */
+    fun resumoAdb(ctx: Context, n: Int): String = synchronized(trava) {
+        val agora = System.currentTimeMillis()
+        val m = mapa(ctx.applicationContext)
+        val linhas = m.entries.toList().takeLast(n.coerceIn(1, 100)).reversed().map { (k, g) ->
+            val d = g.detalhe
+            "$k tmdb=${g.tmdb ?: "-"} " + if (d == null) "sem ficha (busca ${if (g.buscaEm > 0) "${(agora - g.buscaEm) / 3_600_000} h atrás" else "-"})"
+            else "ficha ${(agora - g.detalheEm) / 3_600_000} h atrás: sinopse=${d.sinopse.length} elenco=${d.elenco.size} " +
+                "próximo=${d.proximo != null} noAr=${d.noAr} temporadas=${d.temporadas} pôster=${d.poster.isNotEmpty()}"
+        }
+        "títulos=${m.size} trakt=${chaves().traktId.isNotBlank()} tmdb=${temTmdb()}\n" + linhas.joinToString("\n")
     }
 
     /** Id do Trakt de cada título já visto ("F123"/"S45" -> trakt), só na memória. */
