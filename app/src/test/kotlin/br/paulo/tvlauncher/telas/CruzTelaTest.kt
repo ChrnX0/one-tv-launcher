@@ -133,11 +133,11 @@ class CruzTelaTest {
             HomeCruz.Item(id, n, sub, ic(t), { abertos += id }, progresso = visto)
         cruz.definir(listOf(
             HomeCruz.Categoria(CruzLogica.Categoria.CONTINUAR, "Continuar", ic(IconeCruz.Tipo.CONTINUAR), listOf(
-                it("c:serie", "O Último Farol", "T1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES, visto = 0.6f),
-                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f),
-                it("c:midia:netflix", "Cidade Submersa", "Netflix · T2 E3", IconeCruz.Tipo.CONTINUAR, visto = 0.3f),
-                it("c:podcast", "Os vulcões do Pacífico", "Café com Ciência · faltam 21 min", IconeCruz.Tipo.PODCASTS, visto = 0.5f),
-                it("c:radio", "Rádio Mar Azul FM", "Rádio", IconeCruz.Tipo.RADIO),
+                it("c:serie", "Série", "O Último Farol\nT1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES, visto = 0.6f),
+                it("c:filme", "Filme", "Maré Alta\nfaltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f),
+                it("c:midia:netflix", "Netflix", "Cidade Submersa\nT2 E3", IconeCruz.Tipo.CONTINUAR, visto = 0.3f),
+                it("c:podcast", "Podcast", "Os vulcões do Pacífico\nCafé com Ciência\nfaltam 21 min", IconeCruz.Tipo.PODCASTS, visto = 0.5f),
+                it("c:radio", "Rádio", "Rádio Mar Azul FM", IconeCruz.Tipo.RADIO),
                 it("c:dormir", "Dormir em 30 min", "A tela escurece devagar e a TV desliga", IconeCruz.Tipo.DORMIR))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
                 it("tv", "TV", "Canal 156 · Discovery Channel\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 21:30: Aventura Selvagem", IconeCruz.Tipo.TV, visto = 0.7f),

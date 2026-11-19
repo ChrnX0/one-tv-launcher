@@ -24,6 +24,7 @@
         <item>Top bar (Ilha): up to 3 things take turns, small status icons next to the clock, and the dot turns amber or red when something needs attention</item>
         <item>What just arrived (doorbell, reminder, appointment, alarm) grows under the pill for a few seconds; hold ▲ to open the quick panel</item>
         <item>TV in Continue: “On air” no longer disappears when the TV goes all day without opening the player (the home screen fetches the guide by itself)</item>
+        <item>Continue: each item says what it is (TV, Series, Movie, Radio, Podcast, Game or the app), like the other categories; the title is below and the rest in the corner</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>filmes_um_por_filme</item>

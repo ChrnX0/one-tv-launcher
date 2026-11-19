@@ -11,6 +11,8 @@
     <string name="cruz_radio">电台</string>
     <string name="cruz_radio_sub">全球电台</string>
     <string name="cruz_filme">电影</string>
+    <string name="continue_series">剧集</string>
+    <string name="continue_podcast">播客</string>
     <string name="cruz_jogo">游戏</string>
     <string name="cruz_icones">主屏幕图标</string>
     <string name="cruz_icones_det">\"观看\"\"收听\"\"游戏\"的图标样式</string>

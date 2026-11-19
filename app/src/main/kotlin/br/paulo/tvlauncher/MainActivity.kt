@@ -3403,38 +3403,41 @@ class MainActivity : Activity() {
         // Continuar (18/11/2026, pedido do dono): o canal de TV primeiro (a TV da casa); depois, do mais recente para o mais
         // antigo, a série, o filme, a última rádio, o podcast pela metade, até 3 jogos e o último de cada app de mídia
         // (YouTube, Spotify, Netflix…; MidiaRecente). "Dormir em 30 min" no fim, à noite.
+        // O nome de cada item é O QUE ele é (TV, Série, Filme, Rádio, Podcast, Jogo, ou o app), como nas outras categorias;
+        // o título vem embaixo e o resto no canto (Paulo, 19/11/2026 12:30 local: "tem q mostrar o nome do que é… eu gosto
+        // de coerência"). Antes o nome era o título, cortado ("Lei e Ordem: Unid…") e sem dizer o que era.
         val continuar = ArrayList<HomeCruz.Item>()
         ultimoTv?.let { u ->
-            continuar += HomeCruz.Item("c:tv", programa?.titulo ?: u.nome.ifBlank { getString(R.string.home_card_tv) },
-                linhasTvCruz(u, programa, agora, comPrograma = false), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
+            continuar += HomeCruz.Item("c:tv", getString(R.string.home_card_tv),
+                CruzLogica.linhas(programa?.titulo, linhasTvCruz(u, programa, agora, comPrograma = false)), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
                 situacao = situacaoTv(null, linhaAgoraTv(programa, agora, comPrograma = false)))
         }
         val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
         if (cruzTemVod) {
-            fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", CruzLogica.semMarca(f.titulo),
-                CruzLogica.linhas(CruzLogica.juntar(f.episodio.ifEmpty { getString(R.string.home_card_series) }, faltaSerie(f)), metaFicha(f, serie = true)),
+            fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", getString(R.string.continue_series),
+                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), CruzLogica.juntar(f.episodio, faltaSerie(f)), metaFicha(f, serie = true)),
                 icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }, progresso = visto(f, serie = true),
                 situacao = situacaoParou(f.episodio, visto(f, serie = true), faltaSerie(f),
-                    CruzLogica.juntar(f.episodio.ifEmpty { getString(R.string.home_card_series) }, faltaSerie(f)), "c:serie")) }
-            fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", CruzLogica.semMarca(f.titulo),
-                CruzLogica.linhas(CruzLogica.juntar(getString(R.string.cruz_filme), faltaFilme(f)), metaFicha(f, serie = false)),
+                    CruzLogica.juntar(f.episodio, faltaSerie(f)), "c:serie")) }
+            fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", getString(R.string.cruz_filme),
+                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), faltaFilme(f), metaFicha(f, serie = false)),
                 icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }, progresso = visto(f, serie = false),
-                situacao = situacaoParou(null, visto(f, serie = false), faltaFilme(f), CruzLogica.juntar(getString(R.string.cruz_filme), faltaFilme(f)), "c:filme")) }
+                situacao = situacaoParou(null, visto(f, serie = false), faltaFilme(f), faltaFilme(f), "c:filme")) }
         }
-        radioCruz?.let { (r, ouvidaEm) -> recentes += ouvidaEm to HomeCruz.Item("c:radio", r.nome,
-            CruzLogica.linhas(getString(R.string.cruz_radio), quando(ouvidaEm)?.let { getString(R.string.cruz_tocou, it) }),
+        radioCruz?.let { (r, ouvidaEm) -> recentes += ouvidaEm to HomeCruz.Item("c:radio", getString(R.string.cruz_radio),
+            CruzLogica.linhas(r.nome, quando(ouvidaEm)?.let { getString(R.string.cruz_tocou, it) }),
             icCruz("c:radio", IconeCruz.Tipo.RADIO), { tocarRadioCruz(r) }, situacao = situacaoTocando("radio")?.takeIf { it.texto.contains(r.nome, true) }) }
-        podcastCruz?.let { p -> recentes += p.em to HomeCruz.Item("c:podcast", p.titulo.ifBlank { getString(R.string.pod_titulo) },
-            CruzLogica.linhas(p.podcast, faltaPodcast(p), quando(p.em)?.let { getString(R.string.cruz_tocou, it) }),
+        podcastCruz?.let { p -> recentes += p.em to HomeCruz.Item("c:podcast", getString(R.string.continue_podcast),
+            CruzLogica.linhas(p.titulo, p.podcast, faltaPodcast(p), quando(p.em)?.let { getString(R.string.cruz_tocou, it) }),
             icCruz("c:podcast", IconeCruz.Tipo.PODCASTS), { retomarPodcastCruz(p) },
             progresso = fracaoPodcast(p),
             situacao = situacaoTocando("podcast") ?: situacaoParou(null, fracaoPodcast(p), faltaPodcast(p), faltaPodcast(p), "c:podcast")) }
-        for ((pacote, item) in jogosRecentes()) recentes += (ultimoUso[pacote] ?: 0L) to HomeCruz.Item("c:jogo:$pacote", item.nome,
-            CruzLogica.linhas(getString(R.string.cruz_jogo), quando(ultimoUso[pacote])?.let { getString(R.string.cruz_jogado, it) }), icApp(item), { abrir(pacote) }, opcoes = { menuAppCruz(pacote) })
+        for ((pacote, item) in jogosRecentes()) recentes += (ultimoUso[pacote] ?: 0L) to HomeCruz.Item("c:jogo:$pacote", getString(R.string.cruz_jogo),
+            CruzLogica.linhas(item.nome, quando(ultimoUso[pacote])?.let { getString(R.string.cruz_jogado, it) }), icApp(item), { abrir(pacote) }, opcoes = { menuAppCruz(pacote) })
         for (m in midiaCruz) {
             val nomeApp = nomeDe(m.registro.pacote)
-            recentes += m.registro.quando to HomeCruz.Item("c:midia:${m.registro.pacote}", m.registro.titulo,
-                CruzLogica.linhas(nomeApp, m.registro.sub, faltaMidia(m.registro), quando(m.registro.quando)?.let { getString(R.string.cruz_aberto, it) }),
+            recentes += m.registro.quando to HomeCruz.Item("c:midia:${m.registro.pacote}", nomeApp,
+                CruzLogica.linhas(m.registro.titulo, m.registro.sub, faltaMidia(m.registro), quando(m.registro.quando)?.let { getString(R.string.cruz_aberto, it) }),
                 m.capa ?: instalados.firstOrNull { it.pacote == m.registro.pacote }?.let { icApp(it) } ?: icCruz("c:midia", IconeCruz.Tipo.CONTINUAR),
                 { abrirMidiaCruz(m.registro.pacote) }, progresso = MidiaRecente.progresso(m.registro),
                 opcoes = { menuMidiaCruz(m.registro.pacote, nomeApp) },
