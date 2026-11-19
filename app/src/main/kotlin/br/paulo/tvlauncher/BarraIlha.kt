@@ -20,16 +20,19 @@ object BarraIlha {
     @Volatile var agora: String? = null
 
     /** Em ordem de importância: o primeiro presente abre a fila. */
-    enum class Tipo { SEM_INTERNET, TIMER, ALARME, LEMBRETE, TOCANDO, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO }
+    enum class Tipo { SEM_INTERNET, CAMPAINHA, TIMER, ALARME, LEMBRETE, TOCANDO, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO }
 
     data class Evento(val tipo: Tipo, val texto: String, val tocando: Boolean = false) {
         /** Pede atenção (texto em âmbar e ponto âmbar/vermelho). */
-        val atencao: Boolean get() = tipo == Tipo.SEM_INTERNET || tipo == Tipo.VENCIMENTO
+        val atencao: Boolean get() = tipo == Tipo.SEM_INTERNET || tipo == Tipo.CAMPAINHA || tipo == Tipo.VENCIMENTO
     }
 
     /** O que as pílulas da barra mostram agora (null = escondida). */
     data class Estado(
         val semInternet: String? = null,
+        /** Campainha da Casa (Home Assistant): "Campainha · 10:12"; entra nos [CAMPAINHA_JANELA_MS] depois de tocar. */
+        val campainha: String? = null,
+        val campainhaHaMs: Long? = null,
         val timer: String? = null,
         val alarme: String? = null,
         /** Quanto falta para o despertador (ms); só entra na pílula dentro de [ALARME_JANELA_MS]. */
@@ -55,6 +58,8 @@ object BarraIlha {
     /** Compromisso da agenda: nas 3 h antes (e enquanto acontece, até 15 min depois do início). */
     const val AGENDA_JANELA_MS = 3 * 3_600_000L
     const val AGENDA_ATRASO_MS = 15 * 60_000L
+    /** A campainha fica na pílula por 3 min (quem estava na cozinha ainda vê que tocou). */
+    const val CAMPAINHA_JANELA_MS = 3 * 60_000L
     /** Ao acordar a TV, a barra fica aberta por este tempo e então recolhe. */
     const val ACORDAR_ABERTA_MS = 4_000L
     /** Quantos eventos revezam na pílula, e de quanto em quanto tempo (calmo o bastante para ler em voz baixa). */
@@ -71,6 +76,7 @@ object BarraIlha {
         ok(e.semInternet)?.let { return listOf(Evento(Tipo.SEM_INTERNET, it)) }
         val l = ArrayList<Evento>(MAX_FILA)
         fun add(t: Tipo, s: String?, tocando: Boolean = false) { if (l.size < MAX_FILA) ok(s)?.let { l += Evento(t, it, tocando) } }
+        if (dentro(e.campainhaHaMs?.let { -it }, 0L, CAMPAINHA_JANELA_MS)) add(Tipo.CAMPAINHA, e.campainha)
         add(Tipo.TIMER, e.timer)
         if (dentro(e.alarmeFaltaMs, ALARME_JANELA_MS)) add(Tipo.ALARME, e.alarme)
         if (dentro(e.lembreteFaltaMs, LEMBRETE_JANELA_MS, LEMBRETE_ATRASO_MS)) add(Tipo.LEMBRETE, e.lembrete)
@@ -120,7 +126,7 @@ object BarraIlha {
     // ------------------------------------------------------------------ Ilha que cresce
 
     /** Tipos que, ao CHEGAR, fazem a Ilha crescer por [CRESCER_MS] com a dica da ação (como a Dynamic Island). */
-    private val CRESCEM = setOf(Tipo.SEM_INTERNET, Tipo.LEMBRETE, Tipo.AGENDA, Tipo.ALARME)
+    private val CRESCEM = setOf(Tipo.SEM_INTERNET, Tipo.CAMPAINHA, Tipo.LEMBRETE, Tipo.AGENDA, Tipo.ALARME)
     const val CRESCER_MS = 5_000L
 
     /**
@@ -129,6 +135,12 @@ object BarraIlha {
      */
     fun chegou(antes: List<Evento>, depois: List<Evento>): Evento? =
         depois.firstOrNull { d -> d.tipo in CRESCEM && antes.none { it.tipo == d.tipo } }
+
+    /**
+     * Resumo de chegada (como o "enquanto você esteve fora" dos concorrentes): ao acordar a TV, se há 2 ou mais coisas na
+     * fila, a Ilha cresce com todas numa linha só, para quem chega não esperar o rodízio. Com 0 ou 1, nada (a pílula basta).
+     */
+    fun resumoChegada(fila: List<Evento>): String? = if (fila.size < 2) null else fila.joinToString("  ·  ") { it.texto }
 
     /** "2/3" quando há mais de um na fila; vazio com um só. */
     fun contador(fila: List<Evento>, passo: Int): String =

@@ -346,6 +346,7 @@ class MainActivity : Activity() {
         SonsCruz.naFrente = true
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)
+            CasaHA.aoTocarCampainha = { ui.post { atualizarIlha() } }   // a campainha entra na Ilha na hora
             ui.removeCallbacks(tarefaIlhaGira); if (ilhaFila.size > 1) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
         }
         // A tela acendeu com a HOME ainda pausada (o Android retoma a HOME logo depois do SCREEN_ON): a logo entra agora.
@@ -429,6 +430,7 @@ class MainActivity : Activity() {
         homeNaFrente = false
         SonsCruz.naFrente = false
         ui.removeCallbacks(tarefaIlhaTique); ui.removeCallbacks(tarefaIlhaGira)
+        CasaHA.aoTocarCampainha = null
         ModoSeguro.aoPausarHome()
         ui.removeCallbacks(tarefaAmbiente); ui.removeCallbacks(tarefaQuemVe)
         sairAmbiente(animar = false)
@@ -2833,7 +2835,11 @@ class MainActivity : Activity() {
     }
     /** Quando toca o próximo despertador (ms), para a pílula só mostrá-lo nas últimas 12 h. */
     private var alarmeEm: Long? = null
-    private val tarefaIlhaAcordou = Runnable { if (cruz?.hasFocus() == true) recolherBarra(true) }
+    private val tarefaIlhaAcordou = Runnable {
+        if (cruz?.hasFocus() != true) return@Runnable
+        recolherBarra(true)
+        BarraIlha.resumoChegada(ilhaFila)?.let { crescerIlhaTexto(it, ilhaFila.any { e -> e.atencao }) }   // resumo de chegada
+    }
 
     /**
      * Monta as duas peças da Ilha: o véu (atrás da barra aberta) e a pílula do centro (ponto laranja, hora, e o que está
@@ -2998,6 +3004,9 @@ class MainActivity : Activity() {
         val agora = System.currentTimeMillis()
         val fila = BarraIlha.fila(BarraIlha.Estado(
             semInternet = txtSemInternet.se(pilulaSemInternet),
+            campainha = CasaHA.campainhaEm.takeIf { it > 0 }?.let {
+                "${getString(R.string.casa_campainha)} · ${android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(it))}" },
+            campainhaHaMs = CasaHA.campainhaEm.takeIf { it > 0 }?.let { agora - it },
             timer = txtTimer.se(pilulaTimer),
             alarme = txtAlarme.se(pilulaAlarme),
             alarmeFaltaMs = alarmeEm?.let { it - agora },
@@ -3032,11 +3041,14 @@ class MainActivity : Activity() {
     }
 
     /** Ilha que cresce (como a Dynamic Island): por 5 s, embaixo da pílula, o que chegou e "▲ para abrir". */
-    private fun crescerIlha(e: BarraIlha.Evento) {
+    private fun crescerIlha(e: BarraIlha.Evento) =
+        crescerIlhaTexto(if (botaoDoEvento(e) != null) "${e.texto}  ·  ${getString(R.string.ilha_dica_abrir)}" else e.texto, e.atencao)
+
+    private fun crescerIlhaTexto(texto: String, atencao: Boolean) {
         val d = ilhaDica ?: return
         if (!homeNaFrente || !barraRecolhida) return
-        d.text = if (botaoDoEvento(e) != null) "${e.texto}  ·  ${getString(R.string.ilha_dica_abrir)}" else e.texto
-        d.setTextColor(if (e.atencao) Estilo.ATENCAO else Estilo.TEXTO)
+        d.text = texto
+        d.setTextColor(if (atencao) Estilo.ATENCAO else Estilo.TEXTO)
         d.animate().cancel()
         if (semAnimacoes()) { d.alpha = 1f; d.translationY = 0f }
         else { d.translationY = -dp(6).toFloat(); d.animate().alpha(1f).translationY(0f).setDuration(260).start() }

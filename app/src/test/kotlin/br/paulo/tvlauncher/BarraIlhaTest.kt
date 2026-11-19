@@ -128,5 +128,19 @@ class BarraIlhaTest {
         assertEquals(BarraIlha.Tipo.SEM_INTERNET, BarraIlha.chegou(antes, BarraIlha.fila(BarraIlha.Estado(semInternet = "Sem internet")))?.tipo)
     }
 
+    @Test fun campainhaSoNosTresMinutosEPedeAtencao() {
+        fun f(ha: Long) = BarraIlha.fila(BarraIlha.Estado(campainha = "Campainha · 10:12", campainhaHaMs = ha, timer = "4:32"))
+        assertEquals(BarraIlha.Tipo.CAMPAINHA, f(10_000L).first().tipo)                    // na frente do timer
+        assertEquals(BarraIlha.Tipo.TIMER, f(BarraIlha.CAMPAINHA_JANELA_MS + 1).first().tipo)  // passou
+        assertEquals(BarraIlha.Ponto.ATENCAO, BarraIlha.ponto(f(0L)))
+        assertEquals(BarraIlha.Tipo.CAMPAINHA, BarraIlha.chegou(f(BarraIlha.CAMPAINHA_JANELA_MS + 1), f(0L))?.tipo)
+    }
+
+    @Test fun resumoDeChegadaSoComDuasOuMais() {
+        assertNull(BarraIlha.resumoChegada(emptyList()))
+        assertNull(BarraIlha.resumoChegada(BarraIlha.fila(BarraIlha.Estado(timer = "4:32"))))
+        assertEquals("4:32  ·  Rádio Mar Azul", BarraIlha.resumoChegada(BarraIlha.fila(BarraIlha.Estado(timer = "4:32", tocandoTitulo = "Rádio Mar Azul"))))
+    }
+
     private fun and(o: String?, f: Float?, falta: String?) = CruzLogica.andamento(o, f, falta).replace('\u00A0', ' ')
 }
