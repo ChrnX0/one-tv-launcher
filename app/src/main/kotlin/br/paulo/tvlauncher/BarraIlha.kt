@@ -16,8 +16,8 @@ package br.paulo.tvlauncher
  */
 object BarraIlha {
 
-    /** A fila que a pílula mostra agora, em texto, para o MCP (estado_tv); null = pílula só com a hora. */
-    @Volatile var agora: String? = null
+    /** A fila que a pílula mostra agora, para o MCP (estado_tv), já como [paraMcp]; null = pílula só com a hora. */
+    @Volatile var agora: org.json.JSONArray? = null
 
     /** Em ordem de importância: o primeiro presente abre a fila. */
     enum class Tipo { SEM_INTERNET, CAMPAINHA, SERVICO_FORA, TIMER, ALARME, LEMBRETE, TOCANDO, LEMBRETE_CASA, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO, CONTAGEM }
@@ -153,14 +153,19 @@ object BarraIlha {
     const val MCP_MAX = 80
 
     /**
-     * A fila para o MCP (estado_tv.barra), como DADO: tipo + texto, sem quebras/controles e cortado em [MCP_MAX], para um
-     * título de agenda ou do guia não virar um bloco de "instruções" na saída da ferramenta (alerta do code scanning, #277).
-     * Visita já tira a agenda da fila; o resto é o que a própria tela mostra a quem está na sala.
+     * A fila para o MCP (estado_tv.barra), como DADO estruturado: [{"tipo": "agenda", "texto": "…"}], com o texto sem
+     * quebras/controles e cortado em [MCP_MAX], para um título de agenda ou do guia não virar um bloco de "instruções" na
+     * saída da ferramenta (alertas do code scanning, #277). Visita já tira a agenda da fila; o resto é o que a tela mostra.
      */
-    fun paraMcp(fila: List<Evento>): String? = fila.joinToString(" | ") { e ->
-        val t = e.texto.replace(Regex("[\\p{Cntrl}\\u2028\\u2029]+"), " ").replace(Regex("\\s+"), " ").trim()
-        e.tipo.name.lowercase() + ": \"" + (if (t.length > MCP_MAX) t.take(MCP_MAX - 1) + "…" else t).replace("\"", "'") + "\""
-    }.ifEmpty { null }
+    fun paraMcp(fila: List<Evento>): org.json.JSONArray? {
+        if (fila.isEmpty()) return null
+        val a = org.json.JSONArray()
+        for (e in fila) {
+            val t = e.texto.replace(Regex("[\\p{Cntrl}\\u2028\\u2029]+"), " ").replace(Regex("\\s+"), " ").trim()
+            a.put(org.json.JSONObject().put("tipo", e.tipo.name.lowercase()).put("texto", if (t.length > MCP_MAX) t.take(MCP_MAX - 1) + "…" else t))
+        }
+        return a
+    }
 
     /**
      * Mesmos eventos, na mesma ordem (só o texto pode ter mudado, como o timer contando). Nesse caso a tela só troca o texto:
