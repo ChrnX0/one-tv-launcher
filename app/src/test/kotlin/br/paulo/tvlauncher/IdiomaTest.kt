@@ -200,7 +200,7 @@ class IdiomaTest {
     }
 
     private fun semPares(lista: List<F>, comecado: Set<F> = emptySet(), catalogo: List<F> = lista) = Idioma.semPares(lista,
-        Idioma.indice(catalogo, { it.nome }, { it.grupo }), { it.nome }, { it.grupo }, { it.ano }) { it in comecado }
+        Idioma.indice(catalogo, { it.nome }, { it.grupo }), { it.nome }, { it.grupo }, { it.ano }, { it in comecado })
 
     @Test fun gradeJuntaDubladoELegendado() {
         // Visto na Sala (19/11/2026): "Else" e "Else LEG" lado a lado na grade.
