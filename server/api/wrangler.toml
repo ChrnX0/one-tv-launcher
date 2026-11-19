@@ -10,6 +10,11 @@ routes = [{ pattern = "api.sofaly.tv", custom_domain = true }]
 [vars]
 DISABLED = "0"   # "1" desliga tudo (as TVs seguem funcionando em casa e avisam o que ficou indisponível)
 
+# Previews (cada PR fora da main, Workers Builds roda `npx wrangler preview`): sem este bloco o build do PR falhava.
+# DISABLED = "1": a versão de preview responde 503 em tudo e nunca toca nos Durable Objects nem nos limites de produção.
+[previews.vars]
+DISABLED = "1"
+
 [[durable_objects.bindings]]
 name = "MAILBOX"
 class_name = "Mailbox"
