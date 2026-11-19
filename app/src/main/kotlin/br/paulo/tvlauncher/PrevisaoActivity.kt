@@ -182,12 +182,15 @@ class PrevisaoActivity : Activity() {
         val dData: List<String>, val dCodigo: List<Int>, val dMax: List<Double>, val dMin: List<Double>, val dChuva: List<Int>,
         val dNascer: List<String>, val dPoente: List<String>, val dChuvaMm: Double,
         val aqi: Int?,
+        /** "weatherapi.com", "met.no" ou "" (Open-Meteo): a WeatherAPI pede o crédito na tela. */
+        val fonte: String = "",
     )
 
     private fun carregar(): Dados? {
         val ponto = Localizacao.atual(this) { httpGet(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
-        val j = if (BuildConfig.CLIMA_MET) ClimaMet.previsao(ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(httpGet(
+        val openMeteo = DataSources.weather(this) == DataSources.Weather.OPEN_METEO
+        val j = if (!openMeteo) DataSources.forecast(this, ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(httpGet(
             "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
                 "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,is_day" +
                 "&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,visibility,dew_point_2m,uv_index" +
@@ -196,8 +199,8 @@ class PrevisaoActivity : Activity() {
         ) ?: return null)
         val c = j.getJSONObject("current"); val h = j.getJSONObject("hourly"); val d = j.getJSONObject("daily")
         fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
-        // Qualidade do ar só existe na Open-Meteo; no MET (build da Play) o cartão some.
-        val aqi = if (BuildConfig.CLIMA_MET) null else try {
+        // Qualidade do ar: Open-Meteo (Ultra) ou WeatherAPI (Pro, já no JSON convertido); no MET (Básico) o cartão some.
+        val aqi = if (!openMeteo) j.optJSONObject("air_quality")?.optInt("us_aqi", -1)?.takeIf { it >= 0 } else try {
             JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: "{}").optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { null }
@@ -217,6 +220,7 @@ class PrevisaoActivity : Activity() {
             lista(d, "sunrise") { a, i -> a.getString(i) }, lista(d, "sunset") { a, i -> a.getString(i) },
             d.getJSONArray("precipitation_sum").optDouble(0, 0.0),
             aqi,
+            j.optString("fonte"),
         )
     }
 
@@ -399,6 +403,10 @@ class PrevisaoActivity : Activity() {
         if (Extras.ligado(this, Extras.Chave.CARTAO_LUA))   // chave CARTAO_LUA (HomeCards, 18/11/2026)
             trio.addView(lua, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2) })
         coluna.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
+        // Crédito exigido pelo plano Free da WeatherAPI (Pro, 19/11/2026).
+        if (d.fonte == WeatherApiSource.FONTE)
+            coluna.addView(texto(13f, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
+                LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
 
         if (voz != null) {
             val previsao = boletim(d, tempAgora, maxHoje, minHoje, chovendo)

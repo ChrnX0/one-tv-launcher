@@ -58,4 +58,7 @@
     <string name="sv_f_longo">ユーザー名またはパスワードが長すぎます</string>
     <string name="sv_f_senha">ユーザー名またはパスワードが違います</string>
     <string name="sv_f_gravar">TV に保存できませんでした。もう一度お試しください。</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl の評価</string>
+    <string name="sv_simkl_convite_det">アカウントを接続</string>
 </resources>

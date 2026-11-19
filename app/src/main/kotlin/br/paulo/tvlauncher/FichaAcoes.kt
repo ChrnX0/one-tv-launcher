@@ -45,6 +45,21 @@ object FichaAcoes {
         adicionar(acoes, acao(ctx, ctx.getString(R.string.onde_assistir_botao), marca = "onde") { BuscaActivity.procurarEm(ctx, p) })
     }
 
+    /**
+     * Convite para conectar a conta Simkl (17/11/2026), no lugar da nota do Simkl para quem não conectou: a Simkl só
+     * libera a nota sem login com licença comercial e pediu que o app leve as pessoas a criar conta. Some com a conta
+     * conectada, sem a chave do Simkl no build, com a licença no Pro ([DataSources.simklSemLogin]), em Modo visita e no perfil infantil.
+     * OK abre Serviços de filmes e séries já no código do Simkl.
+     */
+    fun conviteSimkl(ctx: Context, acoes: LinearLayout) {
+        val s = ServicosFilmes.Servico.SIMKL
+        if (DataSources.simklSemLogin(ctx) || !ServicosContas.disponivel(s) || ServicosSync.bloqueado(ctx)) return
+        if (ServicosContas.conta(ctx, s) != null) return
+        adicionar(acoes, acao(ctx, ctx.getString(R.string.sv_simkl_convite), ctx.getString(R.string.sv_simkl_convite_det), marca = "simkl") {
+            ServicosFilmesActivity.abrirEntrar(ctx, s)
+        })
+    }
+
     /** O ícone de cada ação, pela marca (a mesma usada para devolver o foco depois de redesenhar). */
     fun iconeDe(marca: String): IconeFicha.Tipo? = when (marca) {
         "continuar", "assistir" -> IconeFicha.Tipo.PLAY

@@ -58,4 +58,7 @@
     <string name="sv_f_longo">यूज़रनेम या पासवर्ड बहुत लंबा</string>
     <string name="sv_f_senha">ग़लत यूज़रनेम या पासवर्ड</string>
     <string name="sv_f_gravar">TV पर सेव नहीं हो सका। फिर कोशिश करें।</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl रेटिंग</string>
+    <string name="sv_simkl_convite_det">अपना खाता जोड़ें</string>
 </resources>

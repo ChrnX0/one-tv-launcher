@@ -8,10 +8,10 @@ import org.junit.Test
 import java.io.File
 import java.util.Locale
 
-/** A lista de cidades do build da Play (src/play/assets/cidades.tsv.gz, GeoNames): lê, acha por nome, por CEP e por fuso. */
+/** A lista de cidades de todo build (src/main/assets/cidades.tsv.gz, GeoNames): lê, acha por nome, por CEP e por fuso. */
 class CidadesOfflineTest {
     private val lista by lazy {
-        val f = listOf(File("src/play/assets/cidades.tsv.gz"), File("app/src/play/assets/cidades.tsv.gz")).first { it.exists() }
+        val f = listOf(File("src/main/assets/cidades.tsv.gz"), File("app/src/main/assets/cidades.tsv.gz")).first { it.exists() }
         f.inputStream().use { CidadesOffline.ler(it) }
     }
 

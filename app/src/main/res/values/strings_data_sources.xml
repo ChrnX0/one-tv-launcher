@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Crédito da WeatherAPI na Previsão (plano Pro). Texto pedido pelos termos dela: igual em todos os idiomas. -->
+    <string name="pv_powered_weatherapi" translatable="false">Powered by WeatherAPI.com</string>
+</resources>

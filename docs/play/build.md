@@ -17,9 +17,9 @@ workflows da Sala quebrariam. O `-Pplay` muda (ver `app/build.gradle.kts`):
 | `USE_EXACT_ALARM` | sim | **não**: `SCHEDULE_EXACT_ALARM` (o shell libera; sem ela o alarme toca com folga) |
 | Atualização | GitHub (Atualizador.kt) | a própria Play |
 | Cobrança | tudo liberado (Ultra) | Play Billing 8.3 (CobrancaPlay.kt) |
-| Clima | Open-Meteo + mediana de 3 modelos | Open-Meteo hoje; MET Norway pronto mas DESLIGADO (`-Pclima_met`) até decidir a fonte |
-| Cidade / lugar | Nominatim, busca da Open-Meteo, IP (ipwho.is) | lista GeoNames dentro do APK (CidadesOffline.kt), fuso horário |
-| Fichas | TMDB + Trakt + Simkl | só Trakt (TMDB e Simkl sem licença comercial: chave vazia) |
+| Clima | igual à Play (19/11/2026, DataSources.kt) | MET Norway no Básico; WeatherAPI pelo api.sofaly.tv no Pro; Open-Meteo paga no Ultra só com contrato |
+| Cidade / lugar | lista GeoNames do APK (desde 19/11/2026), IP (ipwho.is) | lista GeoNames dentro do APK (CidadesOffline.kt), fuso horário |
+| Fichas | igual à Play (19/11/2026, DataSources.kt) | Trakt no Básico; TMDB no Pro só com contrato (chave vazia na Play); Simkl com a conta da pessoa, nota sem conta só com licença (Pro) |
 | Família (78/79 automáticos) | sim | não; "Estou bem" (a pessoa aperta) e o plugin Extras |
 | Licenças | `assets/licencas.txt` | seção "Dados" trocada por `src/play/assets/licencas-dados-play.txt` |
 

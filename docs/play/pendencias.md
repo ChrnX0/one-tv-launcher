@@ -1,14 +1,14 @@
 # O que falta para publicar a Sofaly na Play (16/11/2026)
 
 ## Depende do Paulo
-1. **Fonte do clima** (aberta): Open-Meteo comercial (US$29/mês) ou MET Norway (pronto no código, `-Pclima_met`,
-   sem chance de chuva por hora fora da Escandinávia, sem qualidade do ar) ou outra. Até decidir, a tela de Licenças
-   da Play diz "[FONTE EM ESTUDO]".
+1. **Fonte do clima**: DECIDIDA em 19/11/2026 (Paulo: grátis no Básico, pago a partir do Pro). MET Norway no Básico,
+   WeatherAPI no Pro (falta o secret WEATHERAPI_KEY no Worker e a conta paga), Open-Meteo paga no Ultra (sem contrato).
 2. **Conta de desenvolvedor da Play** (US$25) e, nela: app `tv.sofaly.launcher`, assinaturas `sofaly_pro` e
    `sofaly_ultra` com preços (docs/play/cobranca.md), Play App Signing com chave de upload nova.
 3. **E-mail de suporte** do produto (a Play exige; vai na política de privacidade e na loja).
 4. **Teste fechado**: conta pessoal nova exige 12 testadores por 14 dias antes de produção.
-5. Licenças: TMDB comercial e Simkl (no build da Play os dois ficam vazios até lá); domínios sofaly.tv / getsofaly.com.
+5. Licenças (só para o plano Pro; o Básico já sai com fontes grátis desde 19/11/2026): TMDB comercial (DataSources.TMDB_LICENSED),
+   Simkl para a nota sem conta (SIMKL_LICENSED, US$ 100/mês), WeatherAPI paga (secret WEATHERAPI_KEY no Worker); domínios sofaly.tv / getsofaly.com.
 6. Aprovar textos da loja (docs/play/loja.md) para eu traduzir a descrição completa nos outros 14 idiomas.
 
 ## Técnico, ainda não feito (eu faço depois)

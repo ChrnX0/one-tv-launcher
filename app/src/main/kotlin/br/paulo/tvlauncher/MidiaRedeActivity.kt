@@ -325,7 +325,7 @@ class MidiaRedeActivity : Activity() {
                 pilha.last().foco = lista.selectedItemPosition
                 val buscar = if (id == "" && (origem is Origem.Jelly || origem is Origem.PlexO))
                     listOf(Linha(IconeMidia.Tipo.LUPA, getString(R.string.rede_buscar), null, null, Buscar(origem))) else emptyList()
-                val catalogo = if (lidos.isNotEmpty() && InfoExternaCache.temTmdb()) listOf(linhaCatalogo()) else emptyList()
+                val catalogo = if (lidos.isNotEmpty() && InfoExternaCache.temFicha()) listOf(linhaCatalogo()) else emptyList()
                 pilha += Nivel(nome, origem, buscar + catalogo + linhaFotos(origem, id, nome, entradas) + ordem.map { linhaEntrada(it, lidos[it]) }, lidos = lidos)
                 anotarNaBiblioteca(origem, entradas, lidos)
                 desenhar(if (entradas.isEmpty()) getString(R.string.rede_vazia) else resources.getQuantityString(R.plurals.rede_itens, entradas.size, entradas.size))

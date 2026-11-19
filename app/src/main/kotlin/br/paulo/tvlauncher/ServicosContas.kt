@@ -89,7 +89,9 @@ object ServicosContas {
         if (sessao(s)?.estado == EstadoLogin.ESPERANDO) return Estado(s, Situacao.ENTRANDO)
         val c = conta(ctx, s)
         return when {
-            s == Servico.TMDB -> Estado(s, Situacao.CONECTADO)   // o TMDB não tem conta da pessoa: basta a chave do app
+            // O TMDB não tem conta da pessoa: basta a chave do app, o contrato e o plano (DataSources). Sem isso as fichas
+            // vêm do Trakt e a linha some (não diz "ativo" nem mostra a atribuição de uma fonte que não está em uso).
+            s == Servico.TMDB -> Estado(s, if (DataSources.tmdb(ctx)) Situacao.CONECTADO else Situacao.INDISPONIVEL)
             s == Servico.OPENSUBTITLES -> Estado(s, if (c != null && c.usuario.isNotBlank()) Situacao.CONECTADO else Situacao.DESLIGADO, c?.usuario.orEmpty())
             c != null -> Estado(s, Situacao.CONECTADO, c.usuario)
             else -> Estado(s, Situacao.DESLIGADO)
@@ -203,6 +205,8 @@ object ServicosContas {
         }
         if (s == Servico.OPENSUBTITLES) LegendaBaixar.esquecerToken()
         definir(ctx, s, null)
+        // A nota do Simkl só aparece com a conta conectada (licença; InfoExternaCache.noturnoSimkl).
+        if (s == Servico.SIMKL && !DataSources.simklSemLogin(ctx)) runCatching { InfoExternaCache.esquecerSimkl(ctx) }
     }
 
     /** A chave do MDBList da pessoa (opcional). Null = não conectou. */
@@ -275,7 +279,7 @@ object ServicosContas {
     class Resposta(val codigo: Int, val corpo: String, val local: String? = null)
 
     /** GET (sem corpo) ou POST (com corpo JSON). Só https; sem seguir redirecionamento. */
-    fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null): Resposta {
+    fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null, maxBytes: Int = 2_000_000): Resposta {
         require(url.startsWith("https://"))
         if (url.startsWith(ServicosFilmes.SIMKL_API)) espacarSimkl()
         val c = URL(url).openConnection() as HttpURLConnection
@@ -289,7 +293,7 @@ object ServicosContas {
             }
             val codigo = c.responseCode
             val fluxo = if (codigo in 200..299) c.inputStream else c.errorStream
-            val texto = fluxo?.use { String(lerAte(it, 2_000_000)) }.orEmpty()
+            val texto = fluxo?.use { String(lerAte(it, maxBytes)) }.orEmpty()
             return Resposta(codigo, texto, c.getHeaderField("Location"))
         } finally { c.disconnect() }
     }
