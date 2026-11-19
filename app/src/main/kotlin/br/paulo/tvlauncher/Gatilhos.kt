@@ -161,6 +161,8 @@ object Gatilhos {
             val agora = System.currentTimeMillis()
             val antes = conferidoEm.takeIf { it > 0 } ?: (agora - 60_000)
             conferidoEm = agora
+            // Lembrete da casa com hora (HomeCards, 18/11/2026): o aviso sai na hora mesmo sem ninguém voltar à HOME.
+            if (Extras.ligado(app, Extras.Chave.CARTAO_LEMBRETE_CASA)) Fundo.rodar("lembretes-casa") { runCatching { HomeCardsTv.avisarLembretes(app) } }
             val ligados = todos(app).keys.intersect(DE_HORA)
             if (ligados.isEmpty()) return
             Fundo.rodar("gatilhos-hora") {

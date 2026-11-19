@@ -20,11 +20,11 @@ object BarraIlha {
     @Volatile var agora: String? = null
 
     /** Em ordem de importância: o primeiro presente abre a fila. */
-    enum class Tipo { SEM_INTERNET, CAMPAINHA, TIMER, ALARME, LEMBRETE, TOCANDO, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO }
+    enum class Tipo { SEM_INTERNET, CAMPAINHA, SERVICO_FORA, TIMER, ALARME, LEMBRETE, TOCANDO, LEMBRETE_CASA, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO, CONTAGEM }
 
     data class Evento(val tipo: Tipo, val texto: String, val tocando: Boolean = false) {
         /** Pede atenção (texto em âmbar e ponto âmbar/vermelho). */
-        val atencao: Boolean get() = tipo == Tipo.SEM_INTERNET || tipo == Tipo.CAMPAINHA || tipo == Tipo.VENCIMENTO
+        val atencao: Boolean get() = tipo == Tipo.SEM_INTERNET || tipo == Tipo.CAMPAINHA || tipo == Tipo.SERVICO_FORA || tipo == Tipo.VENCIMENTO
     }
 
     /** O que as pílulas da barra mostram agora (null = escondida). */
@@ -48,6 +48,10 @@ object BarraIlha {
         val aniversario: String? = null,
         val jogo: String? = null,
         val vencimento: String? = null,
+        // Cartões próprios (HomeCards, 18/11/2026)
+        val servicoFora: String? = null,
+        val lembreteCasa: String? = null,
+        val contagem: String? = null,
     )
 
     /** O despertador vai para a pílula nas últimas 12 h (antes disso, só na barra aberta). */
@@ -77,14 +81,17 @@ object BarraIlha {
         val l = ArrayList<Evento>(MAX_FILA)
         fun add(t: Tipo, s: String?, tocando: Boolean = false) { if (l.size < MAX_FILA) ok(s)?.let { l += Evento(t, it, tocando) } }
         if (dentro(e.campainhaHaMs?.let { -it }, 0L, CAMPAINHA_JANELA_MS)) add(Tipo.CAMPAINHA, e.campainha)
+        add(Tipo.SERVICO_FORA, e.servicoFora)
         add(Tipo.TIMER, e.timer)
         if (dentro(e.alarmeFaltaMs, ALARME_JANELA_MS)) add(Tipo.ALARME, e.alarme)
         if (dentro(e.lembreteFaltaMs, LEMBRETE_JANELA_MS, LEMBRETE_ATRASO_MS)) add(Tipo.LEMBRETE, e.lembrete)
         add(Tipo.TOCANDO, e.tocandoTitulo, e.tocando)
+        add(Tipo.LEMBRETE_CASA, e.lembreteCasa)
         if (dentro(e.agendaFaltaMs, AGENDA_JANELA_MS, AGENDA_ATRASO_MS)) add(Tipo.AGENDA, e.agenda)
         add(Tipo.ANIVERSARIO, e.aniversario)
         add(Tipo.JOGO, e.jogo)
         add(Tipo.VENCIMENTO, e.vencimento)
+        add(Tipo.CONTAGEM, e.contagem)
         return l
     }
 

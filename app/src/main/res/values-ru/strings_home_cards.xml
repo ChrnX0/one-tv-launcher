@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Ближайший матч вашей команды в пункте ТВ на главном экране</string>
+    <string name="extras_CARTAO_COTACAO">Курсы валют на сегодня рядом с погодой (доллар, евро, биткоин; запрос к бесплатному сервису Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Обратный отсчёт вверху главного экрана в последние 7 дней (ваши даты или ближайший праздник)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Домашние напоминания вверху главного экрана в нужный день (например, вывоз вторсырья), с уведомлением в заданное время</string>
+    <string name="extras_CARTAO_SERVICO">Предупреждать вверху главного экрана, когда добавленный сервис перестаёт отвечать</string>
+    <string name="extras_CARTAO_LUA">Фаза луны в прогнозе, на заставке и в значке погоды ночью</string>
+    <string name="hc_feriado_hoje">Сегодня праздник</string>
+    <string name="hc_hoje">Сегодня: %1$s</string>
+    <string name="hc_lembrete_rotulo">Домашнее напоминание</string>
+    <string name="hc_servico_fora">%1$s не отвечает</string>
+    <string name="hc_servico_rotulo">Ваши сервисы</string>
+    <string name="hc_cotacao_rotulo">Курсы валют</string>
+    <string name="hc_cotacao_fonte">Курсы дня, источник: Frankfurter (центральные банки)</string>
+    <string name="hc_mil">тыс.</string>
+    <string name="hc_milhao">млн</string>
+    <string name="hc_seu_time">Ваша команда: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Праздник через %1$d день</item>
+        <item quantity="few">Праздник через %1$d дня</item>
+        <item quantity="many">Праздник через %1$d дней</item>
+        <item quantity="other">Праздник через %1$d дня</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%2$s через %1$d день</item>
+        <item quantity="few">%2$s через %1$d дня</item>
+        <item quantity="many">%2$s через %1$d дней</item>
+        <item quantity="other">%2$s через %1$d дня</item>
+    </plurals>
+</resources>

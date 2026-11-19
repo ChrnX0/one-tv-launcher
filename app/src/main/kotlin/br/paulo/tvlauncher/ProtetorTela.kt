@@ -302,7 +302,7 @@ class ProtetorTela : DreamService() {
             "💧" to (umidadeTexto to getString(R.string.pt_umidade)),
             "🌧" to (chuvaTexto to getString(R.string.pt_chuva)),
             Lua.emoji(agoraMs, lat) to (luaIluminada to luaFase),
-        )
+        ).let { l -> if (Extras.ligado(this, Extras.Chave.CARTAO_LUA)) l else l.dropLast(1) }   // chave CARTAO_LUA (HomeCards)
         val ladoTile = dp(132)
         val tiles = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         itens.forEachIndexed { i, (emoji, dados) ->

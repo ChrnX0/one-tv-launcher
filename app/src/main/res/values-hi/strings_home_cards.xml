@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">होम स्क्रीन के TV आइटम पर आपकी टीम का अगला मैच</string>
+    <string name="extras_CARTAO_COTACAO">मौसम के पास आज की विनिमय दरें (डॉलर, यूरो, बिटकॉइन; मुफ़्त Frankfurter सेवा से पूछता है)</string>
+    <string name="extras_CARTAO_CONTAGEM">आख़िरी 7 दिनों में होम स्क्रीन के ऊपर उलटी गिनती (आपकी तारीखें या अगली छुट्टी)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">उसी दिन होम स्क्रीन के ऊपर घर के रिमाइंडर (जैसे रीसाइक्लिंग का दिन), तय समय पर सूचना के साथ</string>
+    <string name="extras_CARTAO_SERVICO">जोड़ी गई कोई सेवा जवाब देना बंद करे तो होम स्क्रीन के ऊपर बताएँ</string>
+    <string name="extras_CARTAO_LUA">पूर्वानुमान, स्क्रीनसेवर और रात में मौसम आइकन में चंद्रमा की कला</string>
+    <string name="hc_feriado_hoje">आज छुट्टी है</string>
+    <string name="hc_hoje">आज: %1$s</string>
+    <string name="hc_lembrete_rotulo">घर का रिमाइंडर</string>
+    <string name="hc_servico_fora">%1$s बंद है</string>
+    <string name="hc_servico_rotulo">आपकी सेवाएँ</string>
+    <string name="hc_cotacao_rotulo">विनिमय दरें</string>
+    <string name="hc_cotacao_fonte">आज की दरें, स्रोत: Frankfurter (केंद्रीय बैंक)</string>
+    <string name="hc_mil">हज़ार</string>
+    <string name="hc_milhao">मि.</string>
+    <string name="hc_seu_time">आपकी टीम: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">%1$d दिन में छुट्टी</item>
+        <item quantity="other">%1$d दिन में छुट्टी</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%2$s में %1$d दिन</item>
+        <item quantity="other">%2$s में %1$d दिन</item>
+    </plurals>
+</resources>

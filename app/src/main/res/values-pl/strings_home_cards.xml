@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Najbliższy mecz Twojej drużyny przy pozycji TV na ekranie głównym</string>
+    <string name="extras_CARTAO_COTACAO">Kursy walut dnia obok pogody (dolar, euro, bitcoin; pyta bezpłatną usługę Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Odliczanie u góry ekranu głównego w ostatnich 7 dniach (Twoje daty lub najbliższe święto)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Przypomnienia domowe u góry ekranu głównego w danym dniu (np. odbiór segregacji), z powiadomieniem o ustalonej godzinie</string>
+    <string name="extras_CARTAO_SERVICO">Ostrzegaj u góry ekranu głównego, gdy dodana usługa przestanie odpowiadać</string>
+    <string name="extras_CARTAO_LUA">Faza księżyca w prognozie, na wygaszaczu ekranu i w ikonie pogody w nocy</string>
+    <string name="hc_feriado_hoje">Dziś święto</string>
+    <string name="hc_hoje">Dziś: %1$s</string>
+    <string name="hc_lembrete_rotulo">Przypomnienie domowe</string>
+    <string name="hc_servico_fora">%1$s nie działa</string>
+    <string name="hc_servico_rotulo">Twoje usługi</string>
+    <string name="hc_cotacao_rotulo">Kursy walut</string>
+    <string name="hc_cotacao_fonte">Kursy dnia, źródło: Frankfurter (banki centralne)</string>
+    <string name="hc_mil">tys.</string>
+    <string name="hc_milhao">mln</string>
+    <string name="hc_seu_time">Twoja drużyna: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Święto za %1$d dzień</item>
+        <item quantity="few">Święto za %1$d dni</item>
+        <item quantity="many">Święto za %1$d dni</item>
+        <item quantity="other">Święto za %1$d dnia</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%2$s za %1$d dzień</item>
+        <item quantity="few">%2$s za %1$d dni</item>
+        <item quantity="many">%2$s za %1$d dni</item>
+        <item quantity="other">%2$s za %1$d dnia</item>
+    </plurals>
+</resources>

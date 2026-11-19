@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Próximo jogo da sua equipa no item TV do ecrã inicial</string>
+    <string name="extras_CARTAO_COTACAO">Câmbio do dia ao lado do tempo (dólar, euro, bitcoin; pergunta ao serviço gratuito Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Contagem decrescente no topo do ecrã inicial nos últimos 7 dias (as suas datas ou o próximo feriado)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Lembretes da casa no topo do ecrã inicial no dia (ex.: dia do lixo reciclável), com aviso à hora marcada</string>
+    <string name="extras_CARTAO_SERVICO">Avisar no topo do ecrã inicial quando um serviço registado deixar de responder</string>
+    <string name="extras_CARTAO_LUA">Fase da lua na previsão, na proteção de ecrã e no ícone do tempo à noite</string>
+    <string name="hc_feriado_hoje">Feriado hoje</string>
+    <string name="hc_hoje">Hoje: %1$s</string>
+    <string name="hc_lembrete_rotulo">Lembrete da casa</string>
+    <string name="hc_servico_fora">%1$s em baixo</string>
+    <string name="hc_servico_rotulo">Os seus serviços</string>
+    <string name="hc_cotacao_rotulo">Câmbio do dia</string>
+    <string name="hc_cotacao_fonte">Valores do dia, fonte: Frankfurter (bancos centrais)</string>
+    <string name="hc_mil">mil</string>
+    <string name="hc_milhao">M</string>
+    <string name="hc_seu_time">A sua equipa: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Feriado daqui a %1$d dia</item>
+        <item quantity="other">Feriado daqui a %1$d dias</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">Falta %1$d dia para %2$s</item>
+        <item quantity="other">Faltam %1$d dias para %2$s</item>
+    </plurals>
+</resources>
