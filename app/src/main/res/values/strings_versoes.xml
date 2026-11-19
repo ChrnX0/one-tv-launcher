@@ -17,43 +17,29 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Addons: new “Add an addon” row (in Addons and in Settings › Addons) with a code for your phone, which opens the panel ready to paste the address, or to type it on the TV</item>
-        <item>Addons: “Recommended” list with checked catalogs (movies and shows from the services, TMDB, MUBI and anime); pick one and confirm with the PIN, no typing</item>
-        <item>Addons split by type (Movies and shows, Anime, Subtitles...): sections on the TV and a filter in the panel</item>
-        <item>Addons: a catalog title with no video to play here shows “Where to watch”, which opens the Google TV search</item>
-        <item>Alarm clock: on the time wheel the bigger number is on top, and the lists no longer show the options underneath</item>
-        <item>Alarm clock: holding the arrow turns the wheel slowly (4 steps per second), so you can stop at the right time</item>
-        <item>Games redone like the home screen: recently played with the app icon, On the couch (controllers and pairing), Your Discord crew (voice room with QR, who is online, call the crew) and More options</item>
-        <item>Games: the This week card shows the network and how much was played in the last 7 days</item>
-        <item>Bigger letters in Settings, Extras, Diagnostics and the other inner screens</item>
-        <item>Each world has its color: the background of movie and TV screens leans orange, radio and podcasts teal, games indigo</item>
-        <item>TV, movie and series players use only the Sofaly orange (no more yellow, green and red)</item>
-        <item>Time left always shows the same way across the system: “1 h 5 min”</item>
-        <item>Movies and Series no longer open empty on “All 0”</item>
-        <item>Radios opens on recent stations when there are no favorites yet</item>
+        <item>Podcasts: new “Suggestions” shelf with hand-picked shows in the TV’s language; OK follows. The first time, 4 are followed for you</item>
+        <item>Podcasts: “Search” and “Popular in your country” are on (Podcast Index)</item>
+        <item>Wallpaper plugins: the new “Plugin background” theme shows backgrounds from installed wallpaper plugins, with a credit line</item>
+        <item>Icons: each app can get its own icon from any installed icon pack (“Change icon” in the app menu); packs also work in banner mode</item>
+        <item>Icon packs stay frozen when not in use, so they use no memory</item>
+        <item>Settings › Plugins: a showcase of plugins with a QR code or Play Store button</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>addon_adicionar</item>
-        <item>addon_recomendados</item>
-        <item>despertador_rolete</item>
-        <item>jogos_cruz</item>
-        <item>letras_maiores</item>
-        <item>filmes_cheio</item>
+        <item>podcast_sugestoes</item>
+        <item>podcast_busca</item>
+        <item>plugin_fundo</item>
+        <item>icone_trocar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Add an addon</item>
-        <item>Recommended</item>
-        <item>Alarm wheel</item>
-        <item>Games on the cross</item>
-        <item>Bigger letters</item>
-        <item>Movies opens full</item>
+        <item>Podcast suggestions</item>
+        <item>Podcast search</item>
+        <item>Wallpaper plugin</item>
+        <item>Change an icon</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In Addons, does the “Add an addon” row show the code, and when scanned on the phone does the panel open at the Addons card?</item>
-        <item>In Addons › Recommended, does picking “The Movie Database” and confirming with the PIN install it, and do its catalogs show and open?</item>
-        <item>In the alarm clock, does holding ▲ raise the hour slowly and stop where you let go?</item>
-        <item>Open Games: do ◀ ▶ switch between Recently played, On the couch, Your crew and More options, does each game show the app icon, and does OK open the game?</item>
-        <item>In Settings, are the letters bigger with no explanation cut off with “…”?</item>
-        <item>Open Movies: does the grid show the movies with focus on one (not “All 0”)?</item>
+        <item>Open Podcasts: is the “Suggestions” shelf there with covers, and does OK on one follow and open it?</item>
+        <item>In Podcasts › Find › Search podcasts, does typing “nerdcast” find NerdCast, and does “Popular in your country” show a list?</item>
+        <item>With a wallpaper plugin installed, does choosing the “Plugin background” theme show its background on the home screen?</item>
+        <item>Hold OK on an app › “Change icon”: does picking an icon from a pack change it on the home screen?</item>
     </string-array>
 </resources>
