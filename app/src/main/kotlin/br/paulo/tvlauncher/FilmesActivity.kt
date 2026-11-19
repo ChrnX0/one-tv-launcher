@@ -400,12 +400,14 @@ class FilmesActivity : Activity() {
         val antesSel = grade.selectedItemPosition
         calculo.pedir(
             calcular = {
-                val vis = cacheVisiveis?.takeIf { it.first === todosS && it.second == ocultasS && cacheIdade === idadeS }?.third
+                // Entre parênteses de propósito: sem eles o ".let" de baixo só valia quando o cache errava (o "?:" pega
+                // tudo à direita), e a grade com o índice pronto voltava sem juntar nada (visto na Sala pelo log, 19/11/2026).
+                val vis = (cacheVisiveis?.takeIf { it.first === todosS && it.second == ocultasS && cacheIdade === idadeS }?.third
                     ?: (when {
                         mostrar -> todosS
                         idadeS != null -> todosS.filter { Classificacao.visivel(it.grupo, tmdbDe(it)?.let(idadeS.idades::get), idadeS.max, idadeS.infantis, idadeS.duras) }
                         else -> VodFiltro.visiveis(todosS, ocultasS) { it.grupo }
-                    }).also { cacheVisiveis = Triple(todosS, ocultasS, it); cacheIdade = idadeS }
+                    }).also { cacheVisiveis = Triple(todosS, ocultasS, it); cacheIdade = idadeS })
                     // Um item por filme: dublado e legendado do mesmo título viram um (a ficha tem as duas versões).
                     // Fica o que tem algo guardado (posição, visto ou Interesses); com algo nos dois, os dois ficam.
                     // A conta refaz quando posições ou Interesses mudam (voltar do vídeo troca o mapa).
