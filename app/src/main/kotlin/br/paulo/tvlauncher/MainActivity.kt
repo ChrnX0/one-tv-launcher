@@ -703,6 +703,12 @@ class MainActivity : Activity() {
                 val livre = direita.left - dp(24) - v.left - resto
                 val alvo = livre.coerceIn(dp(80), dp(320))
                 if (txtChuva.maxWidth != alvo) txtChuva.post { txtChuva.maxWidth = alvo }
+                // Cartões da tela inicial (19/11/2026, visto na Sala: "Feriado em 1 dia" passava por baixo da hora). Se nem
+                // com o clima no mínimo cabe, a barra deixa de mostrar um cartão por vez, do menos urgente para o mais:
+                // cotação, contagem, lembrete. Cortado só daqui: a pílula de cima (Ilha) continua vendo o texto.
+                if (livre < dp(80)) listOf(pilulaCotacao, pilulaContagem, pilulaLembreteCasa)
+                    .firstOrNull { it.visibility == View.VISIBLE }
+                    ?.let { p -> p.post { if (p.hasFocus()) linhaApps.requestFocus(); cortadas += p; p.visibility = View.GONE } }
             }
         }
 
@@ -1514,6 +1520,8 @@ class MainActivity : Activity() {
     private lateinit var pilulaLembreteCasa: LinearLayout
     private lateinit var txtLembreteCasa: TextView
     private lateinit var pilulaContagem: LinearLayout
+    /** Cartões tirados da barra aberta por falta de espaço (ver o ajuste da esquerda); a Ilha ainda os mostra. */
+    private val cortadas = mutableSetOf<View>()
     private lateinit var txtContagem: TextView
     private lateinit var pilulaServico: LinearLayout
     private lateinit var txtServico: TextView
@@ -1539,6 +1547,7 @@ class MainActivity : Activity() {
             val jogo = runCatching { if (Extras.ligado(this, Extras.Chave.CARTAO_PLACAR)) LembretesTv.proximoJogo(this) else null }.getOrNull()
             ui.post {
                 if (isDestroyed) return@post
+                cortadas.clear()   // de novo com todos; o ajuste da barra (esquerda) corta o que não couber
                 fun mostrar(p: LinearLayout, t: TextView, texto: String?) {
                     if (texto == null) { if (p.hasFocus()) linhaApps.requestFocus(); p.visibility = View.GONE }
                     else { t.text = texto; p.visibility = View.VISIBLE }
@@ -3114,7 +3123,7 @@ class MainActivity : Activity() {
 
     private fun atualizarIlha() {
         val pilula = ilhaPilula ?: return
-        fun TextView.se(p: View) = text?.toString()?.takeIf { p.visibility == View.VISIBLE }
+        fun TextView.se(p: View) = text?.toString()?.takeIf { p.visibility == View.VISIBLE || p in cortadas }
         val agora = System.currentTimeMillis()
         val fila = BarraIlha.fila(BarraIlha.Estado(
             semInternet = txtSemInternet.se(pilulaSemInternet),
