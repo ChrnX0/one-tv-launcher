@@ -2772,7 +2772,12 @@ class MainActivity : Activity() {
         c.detalheEmCima = barraCruz == LayoutHome.BarraCruz.RELOGIO
         c.aoMudar = { _, item -> arteDoItem(item) }
         c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
-        c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
+        c.aoSubirTopo = {
+            // Só o ▲ que SAI da cruz para a barra arma a Central (▲ entre itens da cruz continua repetindo normalmente).
+            // Visto na Sala (v464530): o foco só sai da cruz DEPOIS do dispatchKeyEvent, então o aviso vem daqui.
+            if (barraCruz == LayoutHome.BarraCruz.ILHA) ilhaCimaDaCruz = true
+            ui.post { bolinhaPerfil?.requestFocus() }   // ▲ no 1º item: o perfil, 1º da barra
+        }
         c.aoPasso = { t -> deslizarArte(t) }
         raizCruz = raiz
         vigiarTela()
@@ -3156,7 +3161,9 @@ class MainActivity : Activity() {
             ilhaPasso = BarraIlha.passoDepois(novo ?: ilhaEvento, fila)   // o que chegou vai para a tela na hora
             if (novo != null) crescerIlha(novo)
             ilhaFila = fila
-            val desc = BarraIlha.descricao(ilhaHora?.text?.toString().orEmpty(), fila)
+            // Sem a hora quando há fila: a descrição só muda quando a fila muda, e a hora nela ficava velha (visto na Sala,
+            // v464530: "11 : 17" às 11:20). O leitor de tela anuncia a fila; a hora ele lê quando a fila está vazia.
+            val desc = if (fila.isEmpty()) ilhaHora?.text?.toString().orEmpty() else BarraIlha.descricao("", fila).removePrefix(". ")
             pilula.contentDescription = desc
             BarraIlha.agora = BarraIlha.paraMcp(fila)
             (ilhaPontoView?.background as? GradientDrawable)?.setColor(when (BarraIlha.ponto(fila)) {
@@ -3906,12 +3913,7 @@ class MainActivity : Activity() {
             if (centralAoSegurarCima(event)) return true
             if (tratarSegurar(event, currentFocus)) return true
             if (trocarDaFrente(event)) return true
-            val cimaNaCruz = event.keyCode == KeyEvent.KEYCODE_DPAD_UP && event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 &&
-                barraCruz == LayoutHome.BarraCruz.ILHA && cruz?.hasFocus() == true
-            val r = super.dispatchKeyEvent(event)
-            // Só conta o ▲ que SAIU da cruz para a barra (▲ entre itens da cruz continua repetindo normalmente).
-            if (cimaNaCruz) ilhaCimaDaCruz = cruz?.hasFocus() != true
-            return r
+            return super.dispatchKeyEvent(event)
         }
         val pressionou = event.action == KeyEvent.ACTION_DOWN
         val soltou = event.action == KeyEvent.ACTION_UP
