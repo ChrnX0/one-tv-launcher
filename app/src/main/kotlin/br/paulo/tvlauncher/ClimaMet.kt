@@ -36,6 +36,9 @@ object ClimaMet {
     private class Guardado(val chave: String, val corpo: String, val expiraMs: Long, val modificado: String?)
     @Volatile private var guardado: Guardado? = null
 
+    /** Só para o teste de telas: a Previsão medida sem a resposta que a HOME deixou na memória. */
+    internal fun esquecerCache() { guardado = null }
+
     /** 4 casas (~11 m), o máximo que os termos aceitam; mais que isso eles recusam ou contam como pedidos diferentes. */
     fun coord(v: Double): String = String.format(Locale.US, "%.4f", v).trimEnd('0').trimEnd('.')
 

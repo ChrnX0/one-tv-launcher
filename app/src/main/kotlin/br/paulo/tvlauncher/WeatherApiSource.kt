@@ -42,6 +42,9 @@ object WeatherApiSource {
 
     fun emPausa(agora: Long = System.currentTimeMillis()) = agora < pausaAte
 
+    /** Só para o teste de telas (ver [ClimaMet.esquecerCache]). */
+    internal fun esquecerCache() { guardado = null }
+
     /** Previsão do ponto no formato da Open-Meteo, ou null (sem servidor, sem chave, resposta estranha). Fora da thread da tela. */
     fun previsao(lat: Double, lon: Double, desdeAgora: Boolean, dias: Int = FaixaDias.DIAS): JSONObject? {
         if (emPausa()) return null
