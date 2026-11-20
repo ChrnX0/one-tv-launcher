@@ -788,6 +788,8 @@ object PainelWeb {
 
         when (req.caminho) {
             "/api/confirmar" -> if (req.metodo == "POST") return confirmar(req, token, ip)
+            // Estudo do painel (PR 5): "Escondidos" dos Apps só abre com o PIN conferido há pouco, igual à TV.
+            "/api/elevada" -> if (req.metodo == "GET") return if (sessoes.elevada(token)) json(200, JSONObject().put("ok", true)) else precisaPin()
             "/api/apps" -> if (req.metodo == "GET") return json(200, JSONObject().put("apps", PainelApps.listar(app)))
             "/api/backup" -> if (req.metodo == "GET") {
                 PainelArmazem.registrar(app, ip, "baixar backup", "ok")
@@ -1079,6 +1081,11 @@ object PainelWeb {
                     ?.apply { put("espaco", PainelControle.espaco(app, pacote) ?: JSONObject.NULL) }
                     ?.let { json(200, it) } ?: erro(404, "app não encontrado")
                 "abrir" -> if (req.metodo == "POST") return acaoApp(ip, "abrir", pacote) { PainelControle.abrir(app, pacote) }
+                // Estudo do painel (PR 5): a prateleira Congelados dos Apps e a aba Sofy desfazem um congelamento.
+                // Descongelar só devolve o app como estava (Congelar.kt: pm enable, dados guardados), então não pede PIN.
+                "descongelar" -> if (req.metodo == "POST") return acaoApp(ip, "descongelar", pacote) {
+                    if (Congelar.definir(app, pacote, false)) null else "a TV não conseguiu descongelar (o shell próprio está ligado?)"
+                }
                 "parar" -> if (req.metodo == "POST") {
                     confirmarNaTv(Confirmacoes.Acao.REMOVER, txt(R.string.cf_parar_app, pacote), ip)?.let { return it }
                     return acaoApp(ip, "parar", pacote) { PainelControle.parar(app, pacote) }
@@ -1122,6 +1129,7 @@ object PainelWeb {
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
         "/navigation.js" to ("navigation.js" to "text/javascript; charset=utf-8"),   // índice da página e aba Tudo
         "/shortcuts.js" to ("shortcuts.js" to "text/javascript; charset=utf-8"),   // Seus atalhos, "Conversa com" e Desfazer
+        "/sofy-page.js" to ("sofy-page.js" to "text/javascript; charset=utf-8"),   // aba Sofy: recados, porquê e Desfazer
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
