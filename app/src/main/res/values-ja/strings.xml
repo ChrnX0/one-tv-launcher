@@ -441,7 +441,7 @@
     <string name="player_acao_series">シリーズ</string>
     <string name="filmes_titulo">映画</string>
     <string name="filmes_carregando">映画を読み込み中…</string>
-    <string name="filmes_vazio">保存したアカウントに映画がありません（映画は Xtream アカウントからのみ取得されます）。</string>
+    <string name="filmes_vazio">映画はまだありません</string>
     <string name="filmes_cabecalho">%1$s · 映画 %2$d 本</string>
     <string name="filmes_continuar">続きを見る</string>
     <string name="filmes_ordem">並べ替え: %1$s</string>
@@ -477,7 +477,7 @@
     <string name="vod_teclas">OK 一時停止 · ◀ 10 秒 · ▶ 30 秒（長押しで高速）· ▼ 音声、字幕、映像 · ⏮ ⏭ チャプター · 戻る 終了</string>
     <string name="series_titulo">シリーズ</string>
     <string name="series_carregando">シリーズを読み込み中…</string>
-    <string name="series_vazio">保存したアカウントにシリーズがありません（シリーズは Xtream アカウントからのみ取得されます）。</string>
+    <string name="series_vazio">シリーズはまだありません</string>
     <string name="series_cabecalho">%1$s · シリーズ %2$d 作品</string>
     <string name="series_ordem_recentes">新しいエピソードあり</string>
     <string name="series_busca_dica">シリーズの名前</string>

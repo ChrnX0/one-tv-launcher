@@ -88,7 +88,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         const val CARTAO_TEXTO = 296     // largura do texto à esquerda da capa
         const val FONTE_CARTAO_TITULO = 21f
         const val FONTE_CARTAO = 16f
-        const val FONTE_TITULO = 26f     // nome da tela ("Rádio")
+        const val FONTE_TITULO = 32f     // nome da tela ("Rádio"); era 26 e perdia para o rótulo laranja (crítica 19/11/2026)
         const val ONDA_MS = HomeCruz.ONDA_MS
         const val ONDA_MAX_MS = HomeCruz.ONDA_MAX_MS
         const val APERTO = HomeCruz.APERTO
@@ -237,8 +237,10 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         cartao.translationX = dp(CARTAO_X); cartao.translationY = dp(CARTAO_Y)
 
         dicas = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END or Gravity.CENTER_VERTICAL }
+        // Fica à direita: a coluna da cruz desce pelo canto de baixo à esquerda e as dicas passariam por cima dela
+        // (tentado na crítica de 19/11/2026; o teste de telas acusou a sobreposição). Margem = a das outras telas.
         addView(dicas, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.BOTTOM or Gravity.END).apply {
-            marginEnd = dpi(28); bottomMargin = dpi(20)
+            marginEnd = dpi(Estilo.MARGEM_LATERAL); bottomMargin = dpi(20)
         })
 
         setOnFocusChangeListener { _, _ -> posicionar(animar = false); anunciar() }
@@ -249,18 +251,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
     /** A barra de dicas do canto (tecla -> o que faz). Sempre visível: o OK segurado não fica escondido. */
     fun definirDicas(vararg pares: Pair<String, String>) {
         dicas.removeAllViews()
-        for ((tecla, acao) in pares) {
-            dicas.addView(TextView(context).apply {
-                text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f); typeface = fonteForte; setTextColor(Estilo.TEXTO)
-                includeFontPadding = false
-                background = GradientDrawable().apply { cornerRadius = dp(7f); setColor(0x40FFFFFF) }
-                setPaddingRelative(dpi(8), dpi(3), dpi(8), dpi(3))
-            })
-            dicas.addView(TextView(context).apply {
-                text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); typeface = fonte; setTextColor(HomeCruz.COR_SUB)
-                includeFontPadding = false; setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
-            }, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { marginStart = dpi(8); marginEnd = dpi(18) })
-        }
+        dicas.addView(Estilo.barraDicas(context, *pares))   // a mesma barra de todo o sistema (crítica de design 19/11/2026)
     }
 
     // ------------------------------------------------------------------ conteúdo

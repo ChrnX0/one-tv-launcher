@@ -300,4 +300,6 @@
         <item quantity="many">%d przerw</item>
         <item quantity="other">%d przerwy</item>
     </plurals>
+    <string name="vod_vazio_texto">Filmy i seriale pochodzą z Twojej listy TV. Dodaj ją w Ustawieniach, Konto.</string>
+    <string name="vod_adicionar_lista">Dodaj listę</string>
 </resources>

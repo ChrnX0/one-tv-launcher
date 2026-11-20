@@ -155,7 +155,7 @@ class SeriesActivity : Activity() {
             v.post { if (!isDestroyed) { grade.numColumns = m.colunas; adaptadorGrade.notifyDataSetChanged() } }
         }
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPaddingRelative(dp(8), dp(6), 0, 0) })
+        direita.addView(Estilo.dicasDeTexto(this, getString(R.string.vod_grade_teclas)).apply { setPaddingRelative(dp(4), dp(8), 0, 0) })   // a barra de dicas de todo o sistema (crítica de design 19/11/2026)
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
@@ -311,7 +311,13 @@ class SeriesActivity : Activity() {
                 todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi; proximos = px
                 marcoNovos = marco; ultimaSalva = ultima
                 conferirNovidades()
-                if (s.isEmpty()) { aviso.text = getString(R.string.series_vazio); return@post }
+                if (s.isEmpty()) {
+                    aviso.visibility = View.GONE
+                    val vazio = vazioDoCatalogo(this, getString(R.string.series_vazio))
+                    (aviso.parent as FrameLayout).addView(vazio, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
+                    vazio.getFocusables(View.FOCUS_DOWN).firstOrNull()?.requestFocus()   // o botão "Adicionar lista" já vem focado
+                    return@post
+                }
                 // Aberta pela busca única da HOME (12/11/2026): já entra com o termo buscado.
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.

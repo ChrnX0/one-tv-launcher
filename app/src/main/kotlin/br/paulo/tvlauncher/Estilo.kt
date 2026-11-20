@@ -369,20 +369,40 @@ object Estilo {
      * Barra de dicas do controle, embaixo, em toda tela que não é a HOME: pares tecla → ação.
      * Ex.: `barraDicas(ctx, "▲▼" to "escolher", "OK" to "mudar", "VOLTAR" to "sair")`.
      */
-    fun barraDicas(ctx: Context, vararg dicas: Pair<String, String>): LinearLayout = LinearLayout(ctx).apply {
-        orientation = LinearLayout.HORIZONTAL
-        gravity = Gravity.CENTER_VERTICAL
-        for ((tecla, acao) in dicas) {
-            addView(texto(ctx, Papel.LEGENDA, tecla).apply {
-                typeface = fonte(600); setTextColor(TEXTO_2)   // tecla no tamanho da legenda (era 11 sp: ilegível a 3 m)
-                background = fundo(ctx, 0, 6, 0x40FFFFFF)
-                setPaddingRelative(dp(ctx, 6), dp(ctx, 2), dp(ctx, 6), dp(ctx, 2))
+    /**
+     * A barra de dicas do controle (tecla numa pílula + o que ela faz). ÚNICA no sistema (crítica de design 19/11/2026):
+     * as telas de ajustes, a cruz (Rádio, Jogos, Despertador), as listas e o menu usam esta mesma peça, com o mesmo
+     * tamanho, cor e espaço. Antes havia 4 desenhos diferentes.
+     */
+    fun barraDicas(ctx: Context, vararg dicas: Pair<String, String>): ViewGroup = LinhaQuebravel(ctx, dp(ctx, 20), dp(ctx, 8)).apply {
+        for ((tecla, acao) in dicas) addView(LinearLayout(ctx).apply {
+            // tecla + ação juntas: numa linha que não cabe, a dupla quebra inteira (nunca a tecla de um lado e a ação do outro)
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            addView(TextView(ctx).apply {
+                text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = fonte(800); setTextColor(TEXTO)
+                includeFontPadding = false
+                background = GradientDrawable().apply { cornerRadius = dp(ctx, 7).toFloat(); setColor(0x40FFFFFF) }
+                setPaddingRelative(dp(ctx, 8), dp(ctx, 3), dp(ctx, 8), dp(ctx, 3))
             })
-            addView(texto(ctx, Papel.LEGENDA, acao).apply { setTextColor(TEXTO_3) },
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    marginStart = dp(ctx, 6); marginEnd = dp(ctx, E3)
-                })
-        }
+            addView(TextView(ctx).apply {
+                text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = fonte(500); setTextColor(TEXTO_2)
+                includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, 0x99000000.toInt())
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(ctx, 8) })
+        }, ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+    }
+
+    /**
+     * Dicas escritas numa frase só ("OK abrir · segure OK: mais opções · VOLTAR categorias") viram a [barraDicas] padrão:
+     * cada trecho separado por " · " vira tecla + ação (antes do ":" é a tecla; sem ":", a primeira palavra).
+     */
+    fun dicasDeTexto(ctx: Context, frase: String): ViewGroup = barraDicas(ctx, *paresDeDicas(frase).toTypedArray())
+
+    /** A parte pura de [dicasDeTexto] (testável sem Android). */
+    fun paresDeDicas(frase: String): List<Pair<String, String>> = frase.split(" · ").map { it.trim() }.filter { it.isNotEmpty() }.map { t ->
+        val dois = t.indexOfFirst { it == ':' || it == '：' }
+        if (dois > 0) t.substring(0, dois).trim() to t.substring(dois + 1).trim()
+        else t.indexOf(' ').let { e -> if (e > 0) t.substring(0, e) to t.substring(e + 1).trim() else t to "" }
     }
 
     /**
@@ -486,6 +506,9 @@ object Estilo {
         }
         raiz.addView(android.widget.ScrollView(ctx).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+            // Esmaecer nas pontas (crítica de design 19/11/2026): quando há mais linhas acima/abaixo, a borda some em
+            // degradê em vez de cortar a linha seca; o Android só desenha o degradê do lado que ainda tem o que rolar.
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, 48))
             // Folga E2 dos lados (padding aqui, margem negativa abaixo): as linhas ficam no mesmo lugar, e a focada,
             // 2% maior, ainda cabe no recorte da raiz.
             setPaddingRelative(dp(ctx, E2), 0, dp(ctx, E2), 0)
@@ -610,23 +633,12 @@ object Estilo {
         val anima = android.provider.Settings.Global.getFloat(ctx.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
         val suave = DecelerateInterpolator(1.6f)
         val nomeLista = titulo.toString().uppercase()
-        // Cabeçalho num texto só: "ÁUDIO E LEGENDA   3 de 14" (a posição quebra junto se o nome for comprido).
+        // Cabeçalho só com o nome da lista (crítica de design 19/11/2026: o "3 de 14" ao lado era ruído; o foco já diz onde se está).
         val cabecalho = TextView(ctx).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, HomeCruz.FONTE_ROTULO); typeface = forte; setTextColor(ACENTO)
             letterSpacing = 0.08f; includeFontPadding = false; maxLines = 3; setLineSpacing(dp(ctx, 4).toFloat(), 1f)
             setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
             text = nomeLista
-        }
-        fun posicao(i: Int) {
-            if (itens.size < 2) return
-            // espaço que não quebra: "1 de\n5" ficava partido quando o nome era comprido
-            val pos = ctx.getString(R.string.cruz_posicao, i + 1, itens.size).replace(' ', '\u00A0')
-            cabecalho.text = android.text.SpannableStringBuilder(nomeLista).append("   ").apply {
-                val ini = length; append(pos)
-                setSpan(android.text.style.ForegroundColorSpan(HomeCruz.COR_SUB), ini, length, 0)
-                setSpan(android.text.style.AbsoluteSizeSpan(HomeCruz.FONTE_POSICAO.toInt(), true), ini, length, 0)
-                setSpan(android.text.style.TypefaceSpan(media), ini, length, 0)
-            }
         }
         val linhas = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -664,7 +676,6 @@ object Estilo {
                     l.nome.alpha = alfa; l.nome.scaleX = escala; l.nome.scaleY = escala; l.ponto.alpha = ponto
                 }
             }
-            posicao(focada)
         }
         itens.forEachIndexed { i, rotulo ->
             val ponto = View(ctx).apply {
@@ -710,23 +721,9 @@ object Estilo {
             linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(ctx, 2) })
         }
         // Dicas logo embaixo da lista, no mesmo desenho das do Rádio/Podcasts (tecla numa pílula + o que ela faz).
-        val dicas = LinearLayout(ctx).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            for ((tecla, acao) in listOf(ctx.getString(R.string.grv_dica_ok) to ctx.getString(R.string.lista_dica_escolher),
-                ctx.getString(R.string.rede_tecla_voltar) to ctx.getString(R.string.fp_fechar).lowercase())) {
-                addView(TextView(ctx).apply {
-                    text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = forte; setTextColor(TEXTO)
-                    includeFontPadding = false
-                    background = GradientDrawable().apply { cornerRadius = dp(ctx, 7).toFloat(); setColor(0x40FFFFFF) }
-                    setPaddingRelative(dp(ctx, 8), dp(ctx, 3), dp(ctx, 8), dp(ctx, 3))
-                })
-                addView(TextView(ctx).apply {
-                    text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = media; setTextColor(HomeCruz.COR_SUB)
-                    includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
-                }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 8); marginEnd = dp(ctx, 18) })
-            }
-        }
+        // Dicas logo embaixo da lista: a mesma barra de todo o sistema.
+        val dicas = barraDicas(ctx, ctx.getString(R.string.grv_dica_ok) to ctx.getString(R.string.lista_dica_escolher),
+            ctx.getString(R.string.rede_tecla_voltar) to ctx.getString(R.string.fp_fechar).lowercase())
         val recuo = dp(ctx, HomeCruz.PONTO + 14)   // textos do cabeçalho alinhados com o texto das linhas, não com o ponto
         val painel = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL

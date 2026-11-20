@@ -286,4 +286,6 @@
         <item quantity="one">%d Ausfall</item>
         <item quantity="other">%d Ausfälle</item>
     </plurals>
+    <string name="vod_vazio_texto">Filme und Serien kommen aus deiner TV-Liste. Füge eine unter Einstellungen, Konto hinzu.</string>
+    <string name="vod_adicionar_lista">Liste hinzufügen</string>
 </resources>

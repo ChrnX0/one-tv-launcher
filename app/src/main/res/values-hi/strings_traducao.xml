@@ -286,4 +286,6 @@
         <item quantity="one">%d रुकावट</item>
         <item quantity="other">%d रुकावटें</item>
     </plurals>
+    <string name="vod_vazio_texto">फ़िल्में और सीरीज़ आपकी टीवी सूची से आती हैं। सेटिंग्स, खाता में एक सूची जोड़ें।</string>
+    <string name="vod_adicionar_lista">सूची जोड़ें</string>
 </resources>

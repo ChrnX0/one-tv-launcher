@@ -286,4 +286,6 @@
     <string name="pg_aviso_as">Reminder at %1$s: %2$s</string>
     <string name="at_timer">TIMER</string>
     <string name="at_despertador">ALARM</string>
+    <string name="vod_vazio_texto">Movies and series come from your TV list. Add one in Settings, Account.</string>
+    <string name="vod_adicionar_lista">Add a list</string>
 </resources>

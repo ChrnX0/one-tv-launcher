@@ -441,7 +441,7 @@
     <string name="player_acao_series">시리즈</string>
     <string name="filmes_titulo">영화</string>
     <string name="filmes_carregando">영화 로드 중…</string>
-    <string name="filmes_vazio">저장된 계정에 영화가 없습니다(영화는 Xtream 계정에서만 제공됨).</string>
+    <string name="filmes_vazio">아직 영화가 없습니다</string>
     <string name="filmes_cabecalho">%1$s · 영화 %2$d편</string>
     <string name="filmes_continuar">이어서 보기</string>
     <string name="filmes_ordem">정렬: %1$s</string>
@@ -477,7 +477,7 @@
     <string name="vod_teclas">OK 일시정지 · ◀ 10초 · ▶ 30초(길게 누르면 더 빠르게) · ▼ 오디오, 자막, 화면 · ⏮ ⏭ 챕터 · 뒤로 나가기</string>
     <string name="series_titulo">시리즈</string>
     <string name="series_carregando">시리즈 로드 중…</string>
-    <string name="series_vazio">저장된 계정에 시리즈가 없습니다(시리즈는 Xtream 계정에서만 제공됨).</string>
+    <string name="series_vazio">아직 시리즈가 없습니다</string>
     <string name="series_cabecalho">%1$s · 시리즈 %2$d편</string>
     <string name="series_ordem_recentes">새 에피소드 있음</string>
     <string name="series_busca_dica">시리즈 제목</string>

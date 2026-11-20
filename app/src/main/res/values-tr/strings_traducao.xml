@@ -286,4 +286,6 @@
         <item quantity="one">%d kesinti</item>
         <item quantity="other">%d kesinti</item>
     </plurals>
+    <string name="vod_vazio_texto">Filmler ve diziler TV listenizden gelir. Ayarlar, Hesap bölümünden bir liste ekleyin.</string>
+    <string name="vod_adicionar_lista">Liste ekle</string>
 </resources>

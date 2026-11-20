@@ -194,20 +194,14 @@ class AlarmesActivity : Activity() {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, sp); setTextColor(cor); typeface = Fontes.nunito(peso); includeFontPadding = false
     }
 
-    /** Cabeçalho da cruz: nome em caixa alta no laranja + "2 de 4" creme na mesma linha. */
-    private fun cabecalho(nome: String, pos: Int, total: Int): CharSequence {
-        val sb = SpannableStringBuilder(nome.uppercase())
-        if (total >= 2) {
-            sb.append("   ")
-            val ini = sb.length
-            sb.append(getString(R.string.cruz_posicao, pos + 1, total).replace(' ', ' '))
-            sb.setSpan(ForegroundColorSpan(HomeCruz.COR_SUB), ini, sb.length, 0)
-            sb.setSpan(RelativeSizeSpan(HomeCruz.FONTE_POSICAO / HomeCruz.FONTE_ROTULO), ini, sb.length, 0)
-        }
-        return sb
-    }
+    /**
+     * Título da tela no padrão de todas as outras (branco, caixa normal, tamanho de título). Antes era "DESPERTADOR 1 de 2"
+     * em laranja, no mesmo estilo do rótulo "PRÓXIMO ALARME": dois rótulos e nenhum título (crítica de design 19/11/2026).
+     */
+    @Suppress("UNUSED_PARAMETER")
+    private fun cabecalho(nome: String, pos: Int, total: Int): CharSequence = nome
 
-    private fun novoCabecalho() = texto(HomeCruz.FONTE_ROTULO, Estilo.ACENTO, 800).apply { letterSpacing = 0.08f }
+    private fun novoCabecalho() = texto(Estilo.Papel.TITULO.sp, Estilo.TEXTO, 700)
 
     /** "Repetir   Seg a sex": o nome da opção em branco e o valor no laranja (o acento = "o que está escolhido"). */
     private fun opcao(nome: String, valor: String): CharSequence {
@@ -216,7 +210,8 @@ class AlarmesActivity : Activity() {
         sb.append("   ")
         val ini = sb.length
         sb.append(valor)
-        sb.setSpan(ForegroundColorSpan(Estilo.ACENTO), ini, sb.length, 0)
+        // Valor em creme: o laranja fica só para marca, foco e progresso (crítica de design 19/11/2026).
+        sb.setSpan(ForegroundColorSpan(Estilo.TEXTO_2), ini, sb.length, 0)
         return sb
     }
 
@@ -253,7 +248,7 @@ class AlarmesActivity : Activity() {
         val alarmes = Despertador.listar(this@AlarmesActivity).sortedWith(compareBy({ it.hora }, { it.minuto }))
         val cab = novoCabecalho()
         val coluna = CrossColumn(this@AlarmesActivity)
-        val proxRotulo = texto(16f, Estilo.ACENTO, 800).apply { letterSpacing = 0.1f }
+        val proxRotulo = texto(16f, Estilo.TEXTO_3, 800).apply { letterSpacing = 0.14f }   // rótulo de seção: cinza, como nas outras telas
         val proxHora = texto(72f, Estilo.TEXTO, 700)
         val proxDia = texto(22f, HomeCruz.COR_SUB, 600).apply { setLineSpacing(dp(4).toFloat(), 1f) }
         val lg = VolumeLg.configurado(this@AlarmesActivity) && VolumeLg.alarmeLigado(this@AlarmesActivity)
@@ -267,7 +262,7 @@ class AlarmesActivity : Activity() {
         val iVolume = alarmes.size + 1
 
         init {
-            conteudo.addView(cab, lp(-2, -2, 48 + HomeCruz.PONTO + 14, 40))
+            conteudo.addView(cab, lp(-2, -2, 48, 36))
             conteudo.addView(coluna, lp(dp(520), dp(384), 48, 92))
             coluna.topo = dp(72).toFloat()
             // O próximo alarme, em pilha (rótulo, hora grande, dia): um embaixo do outro, nunca por cima.
@@ -275,7 +270,7 @@ class AlarmesActivity : Activity() {
             conteudo.addView(CrossColumn.dicas(this@AlarmesActivity,
                 getString(R.string.grv_dica_ok) to getString(R.string.al_dica_editar),
                 getString(R.string.grv_dica_segurar) to getString(R.string.al_dica_ligar),
-                getString(R.string.rede_tecla_voltar) to getString(R.string.al_dica_sair)), lp(-2, -2, 48 + HomeCruz.PONTO + 14, 490))
+                getString(R.string.rede_tecla_voltar) to getString(R.string.al_dica_sair)), lp(-2, -2, 48, 490))
             val i = alarmes.indexOfFirst { it.id == focarId }.takeIf { it >= 0 } ?: if (alarmes.isEmpty()) iNovo else 0
             preencher(i)
             if (!MolaViews.semAnimacao(conteudo)) Estilo.entrar(conteudo)
@@ -401,9 +396,9 @@ class AlarmesActivity : Activity() {
         val coluna = CrossColumn(this@AlarmesActivity)
 
         init {
-            cab.text = getString(if (orig == null) R.string.al_novo else R.string.al_editar).uppercase()
-            conteudo.addView(cab, lp(-2, -2, 48 + HomeCruz.PONTO + 14, 40))
-            conteudo.addView(resumo, lp(dp(820), -2, 48 + HomeCruz.PONTO + 14, 74))
+            cab.text = getString(if (orig == null) R.string.al_novo else R.string.al_editar)
+            conteudo.addView(cab, lp(-2, -2, 48, 36))
+            conteudo.addView(resumo, lp(dp(820), -2, 48, 84))
             conteudo.addView(hora, lp(dp(150), dp(370), 56, 116))
             // ":" entre os roletes, na altura do número do meio
             conteudo.addView(texto(TimeWheel.FONTE, Estilo.TEXTO, 600).apply { text = ":"; gravity = Gravity.CENTER; translationY = -dp(6).toFloat() },
@@ -414,7 +409,7 @@ class AlarmesActivity : Activity() {
             conteudo.addView(CrossColumn.dicas(this@AlarmesActivity,
                 "▲▼" to getString(R.string.al_dica_mudar), "◀▶" to getString(R.string.al_dica_andar),
                 getString(R.string.grv_dica_ok) to getString(R.string.lista_dica_escolher),
-                getString(R.string.rede_tecla_voltar) to getString(R.string.al_dica_salvar)), lp(-2, -2, 48 + HomeCruz.PONTO + 14, 490))
+                getString(R.string.rede_tecla_voltar) to getString(R.string.al_dica_salvar)), lp(-2, -2, 48, 490))
             hora.definir(v.hora); minuto.definir(v.minuto)
             preencher(0)
             zona(0)

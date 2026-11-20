@@ -122,7 +122,7 @@ class ColunaCategorias(
         addView(LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, 0, 0, dp(10))
             addView(TextView(act).apply {
-                text = titulo; textSize = 24f; typeface = Fontes.nunito(700); setTextColor(papel); maxLines = 1
+                text = titulo; textSize = Estilo.Papel.TITULO.sp; typeface = Fontes.nunito(700); setTextColor(papel); maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(dp(6), 0, dp(6), 0)
             }, LinearLayout.LayoutParams(0, -2, 1f))
             addView(caixaBotoes, LinearLayout.LayoutParams(-2, -2))
@@ -446,4 +446,20 @@ object JanelaIcones {
             setSpan(android.text.style.ImageSpan(d, android.text.style.DynamicDrawableSpan.ALIGN_BOTTOM), 0, 1, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
+}
+
+/**
+ * Tela vazia de Filmes/Séries (crítica de design 19/11/2026): no lugar do aviso "só vêm de conta Xtream" (jargão, sem
+ * saída), o estado vazio padrão do sistema com o que fazer e um botão que leva direto à aba Conta das Configurações,
+ * onde a lista de TV é adicionada. [titulo] = "Nenhum filme ainda" / "Nenhuma série ainda".
+ */
+fun vazioDoCatalogo(act: Activity, titulo: String): View {
+    val botao = Estilo.botao(act, act.getString(R.string.vod_adicionar_lista)).apply {
+        isFocusable = true
+        setOnClickListener {
+            act.startActivity(android.content.Intent(act, ConfigLauncherActivity::class.java)
+                .putExtra(ConfigLauncherActivity.EXTRA_ABA, ConfigLauncherActivity.ABA_CONTA))
+        }
+    }
+    return Estilo.estadoVazio(act, null, titulo, act.getString(R.string.vod_vazio_texto), botao)
 }

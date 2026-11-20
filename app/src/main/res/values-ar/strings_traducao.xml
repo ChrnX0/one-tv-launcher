@@ -314,4 +314,6 @@
         <item quantity="many">%d انقطاعًا</item>
         <item quantity="other">%d انقطاع</item>
     </plurals>
+    <string name="vod_vazio_texto">تأتي الأفلام والمسلسلات من قائمة التلفاز. أضف قائمة من الإعدادات، الحساب.</string>
+    <string name="vod_adicionar_lista">إضافة قائمة</string>
 </resources>

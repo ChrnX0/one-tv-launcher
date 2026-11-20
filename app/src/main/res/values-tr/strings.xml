@@ -439,9 +439,9 @@
     <string name="player_acao_filtros">Filtreler</string>
     <string name="player_acao_filmes">Filmler</string>
     <string name="player_acao_series">Diziler</string>
-    <string name="filmes_titulo">FİLMLER</string>
+    <string name="filmes_titulo">Filmler</string>
     <string name="filmes_carregando">Filmler yükleniyor…</string>
-    <string name="filmes_vazio">Kayıtlı hesaplarda film yok (filmler yalnızca Xtream hesaplarından gelir).</string>
+    <string name="filmes_vazio">Henüz film yok</string>
     <string name="filmes_cabecalho">%1$s · %2$d FİLM</string>
     <string name="filmes_continuar">Devam et</string>
     <string name="filmes_ordem">Sıralama: %1$s</string>
@@ -475,9 +475,9 @@
     <string name="vod_legenda">Altyazı</string>
     <string name="vod_faixas">Ses ve altyazı</string>
     <string name="vod_teclas">OK duraklat · ◀ 10 sn · ▶ 30 sn (hızlı için basılı tutun) · ▼ ses, altyazı ve görüntü · ⏮ ⏭ bölümler · GERİ çık</string>
-    <string name="series_titulo">DİZİLER</string>
+    <string name="series_titulo">Diziler</string>
     <string name="series_carregando">Diziler yükleniyor…</string>
-    <string name="series_vazio">Kayıtlı hesaplarda dizi yok (diziler yalnızca Xtream hesaplarından gelir).</string>
+    <string name="series_vazio">Henüz dizi yok</string>
     <string name="series_cabecalho">%1$s · %2$d DİZİ</string>
     <string name="series_ordem_recentes">yeni bölümü olanlar</string>
     <string name="series_busca_dica">Dizi adı</string>

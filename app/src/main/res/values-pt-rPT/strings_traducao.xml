@@ -286,4 +286,6 @@
         <item quantity="one">%d queda</item>
         <item quantity="other">%d quedas</item>
     </plurals>
+    <string name="vod_vazio_texto">Os filmes e as séries vêm da sua lista de TV. Adicione uma em Definições, Conta.</string>
+    <string name="vod_adicionar_lista">Adicionar lista</string>
 </resources>

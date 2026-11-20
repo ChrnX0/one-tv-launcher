@@ -44,23 +44,7 @@ class CrossColumn(ctx: Context) : FrameLayout(ctx) {
         const val COR_APAGADO = 0xFFA39C95.toInt()
 
         /** A fileira de dicas do pé (tecla numa pílula + o que ela faz), a mesma do Rádio e das listas. */
-        fun dicas(ctx: Context, vararg pares: Pair<String, String>): LinearLayout = LinearLayout(ctx).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            val d = ctx.resources.displayMetrics.density
-            for ((tecla, acao) in pares) {
-                addView(TextView(ctx).apply {
-                    text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, Estilo.LISTA_FONTE_DICA); typeface = Fontes.nunito(800)
-                    setTextColor(Estilo.TEXTO); includeFontPadding = false
-                    background = GradientDrawable().apply { cornerRadius = 7 * d; setColor(0x40FFFFFF) }
-                    setPaddingRelative((8 * d).toInt(), (3 * d).toInt(), (8 * d).toInt(), (3 * d).toInt())
-                })
-                addView(TextView(ctx).apply {
-                    text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, Estilo.LISTA_FONTE_DICA); typeface = Fontes.nunito(500)
-                    setTextColor(HomeCruz.COR_SUB); includeFontPadding = false
-                }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = (8 * d).toInt(); marginEnd = (20 * d).toInt() })
-            }
-        }
+        fun dicas(ctx: Context, vararg pares: Pair<String, String>): android.view.ViewGroup = Estilo.barraDicas(ctx, *pares)
     }
 
     private class Linha(val raiz: LinearLayout, val ponto: View, val nome: TextView)

@@ -300,4 +300,6 @@
         <item quantity="many">%d перебоев</item>
         <item quantity="other">%d перебоя</item>
     </plurals>
+    <string name="vod_vazio_texto">Фильмы и сериалы берутся из вашего ТВ-списка. Добавьте его в Настройках, Аккаунт.</string>
+    <string name="vod_adicionar_lista">Добавить список</string>
 </resources>

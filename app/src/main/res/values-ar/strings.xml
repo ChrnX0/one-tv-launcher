@@ -441,7 +441,7 @@
     <string name="player_acao_series">مسلسلات</string>
     <string name="filmes_titulo">أفلام</string>
     <string name="filmes_carregando">جارٍ تحميل الأفلام…</string>
-    <string name="filmes_vazio">لا أفلام في الحسابات المحفوظة (الأفلام تأتي فقط من حسابات Xtream).</string>
+    <string name="filmes_vazio">لا توجد أفلام بعد</string>
     <string name="filmes_cabecalho">%1$s · %2$d فيلم</string>
     <string name="filmes_continuar">متابعة</string>
     <string name="filmes_ordem">الترتيب: %1$s</string>
@@ -477,7 +477,7 @@
     <string name="vod_teclas">OK إيقاف مؤقت · ◀ 10 ث · ▶ 30 ث (اضغط مطولًا للإسراع) · ▼ الصوت والترجمة والصورة · ⏮ ⏭ الفصول · BACK خروج</string>
     <string name="series_titulo">مسلسلات</string>
     <string name="series_carregando">جارٍ تحميل المسلسلات…</string>
-    <string name="series_vazio">لا مسلسلات في الحسابات المحفوظة (المسلسلات تأتي فقط من حسابات Xtream).</string>
+    <string name="series_vazio">لا توجد مسلسلات بعد</string>
     <string name="series_cabecalho">%1$s · %2$d مسلسل</string>
     <string name="series_ordem_recentes">بحلقة جديدة</string>
     <string name="series_busca_dica">اسم المسلسل</string>

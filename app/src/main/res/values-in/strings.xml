@@ -439,9 +439,9 @@
     <string name="player_acao_filtros">Filter</string>
     <string name="player_acao_filmes">Film</string>
     <string name="player_acao_series">Serial</string>
-    <string name="filmes_titulo">FILM</string>
+    <string name="filmes_titulo">Film</string>
     <string name="filmes_carregando">Memuat film…</string>
-    <string name="filmes_vazio">Tidak ada film di akun tersimpan (film hanya dari akun Xtream).</string>
+    <string name="filmes_vazio">Belum ada film</string>
     <string name="filmes_cabecalho">%1$s · %2$d FILM</string>
     <string name="filmes_continuar">Lanjutkan</string>
     <string name="filmes_ordem">Urutkan: %1$s</string>
@@ -475,9 +475,9 @@
     <string name="vod_legenda">Subtitle</string>
     <string name="vod_faixas">Audio dan subtitle</string>
     <string name="vod_teclas">OK jeda · ◀ 10 dtk · ▶ 30 dtk (tahan agar lebih cepat) · ▼ audio, subtitle, dan gambar · ⏮ ⏭ bab · BACK keluar</string>
-    <string name="series_titulo">SERIAL</string>
+    <string name="series_titulo">Serial</string>
     <string name="series_carregando">Memuat serial…</string>
-    <string name="series_vazio">Tidak ada serial di akun tersimpan (serial hanya dari akun Xtream).</string>
+    <string name="series_vazio">Belum ada serial</string>
     <string name="series_cabecalho">%1$s · %2$d SERIAL</string>
     <string name="series_ordem_recentes">dengan episode baru</string>
     <string name="series_busca_dica">Nama serial</string>

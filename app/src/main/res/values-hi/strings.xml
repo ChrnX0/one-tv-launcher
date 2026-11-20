@@ -441,7 +441,7 @@
     <string name="player_acao_series">सीरीज़</string>
     <string name="filmes_titulo">फ़िल्में</string>
     <string name="filmes_carregando">फ़िल्में लोड हो रही हैं…</string>
-    <string name="filmes_vazio">सेव किए खातों में कोई फ़िल्म नहीं (फ़िल्में सिर्फ़ Xtream खातों से आती हैं)।</string>
+    <string name="filmes_vazio">अभी कोई फ़िल्म नहीं</string>
     <string name="filmes_cabecalho">%1$s · %2$d फ़िल्में</string>
     <string name="filmes_continuar">जारी रखें</string>
     <string name="filmes_ordem">क्रम: %1$s</string>
@@ -477,7 +477,7 @@
     <string name="vod_teclas">OK रोकें · ◀ 10 s · ▶ 30 s (तेज़ी के लिए दबाए रखें) · ▼ ऑडियो, सबटाइटल और तस्वीर · ⏮ ⏭ अध्याय · BACK बाहर</string>
     <string name="series_titulo">सीरीज़</string>
     <string name="series_carregando">सीरीज़ लोड हो रही हैं…</string>
-    <string name="series_vazio">सेव किए खातों में कोई सीरीज़ नहीं (सीरीज़ सिर्फ़ Xtream खातों से आती हैं)।</string>
+    <string name="series_vazio">अभी कोई सीरीज़ नहीं</string>
     <string name="series_cabecalho">%1$s · %2$d सीरीज़</string>
     <string name="series_ordem_recentes">नए एपिसोड वाली</string>
     <string name="series_busca_dica">सीरीज़ का नाम</string>

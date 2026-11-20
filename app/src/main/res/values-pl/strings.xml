@@ -439,9 +439,9 @@
     <string name="player_acao_filtros">Filtry</string>
     <string name="player_acao_filmes">Filmy</string>
     <string name="player_acao_series">Seriale</string>
-    <string name="filmes_titulo">FILMY</string>
+    <string name="filmes_titulo">Filmy</string>
     <string name="filmes_carregando">Ładowanie filmów…</string>
-    <string name="filmes_vazio">Brak filmów na zapisanych kontach (filmy pochodzą tylko z kont Xtream).</string>
+    <string name="filmes_vazio">Brak filmów</string>
     <string name="filmes_cabecalho">%1$s · FILMY: %2$d</string>
     <string name="filmes_continuar">Kontynuuj</string>
     <string name="filmes_ordem">Sortuj: %1$s</string>
@@ -475,9 +475,9 @@
     <string name="vod_legenda">Napisy</string>
     <string name="vod_faixas">Dźwięk i napisy</string>
     <string name="vod_teclas">OK pauza · ◀ 10 s · ▶ 30 s (przytrzymaj, by szybciej) · ▼ dźwięk, napisy i obraz · ⏮ ⏭ rozdziały · WSTECZ wyjście</string>
-    <string name="series_titulo">SERIALE</string>
+    <string name="series_titulo">Seriale</string>
     <string name="series_carregando">Ładowanie seriali…</string>
-    <string name="series_vazio">Brak seriali na zapisanych kontach (seriale pochodzą tylko z kont Xtream).</string>
+    <string name="series_vazio">Brak seriali</string>
     <string name="series_cabecalho">%1$s · SERIALE: %2$d</string>
     <string name="series_ordem_recentes">z nowym odcinkiem</string>
     <string name="series_busca_dica">Tytuł serialu</string>

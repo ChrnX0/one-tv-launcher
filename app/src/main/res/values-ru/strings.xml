@@ -439,9 +439,9 @@
     <string name="player_acao_filtros">Фильтры</string>
     <string name="player_acao_filmes">Фильмы</string>
     <string name="player_acao_series">Сериалы</string>
-    <string name="filmes_titulo">ФИЛЬМЫ</string>
+    <string name="filmes_titulo">Фильмы</string>
     <string name="filmes_carregando">Загрузка фильмов…</string>
-    <string name="filmes_vazio">В сохранённых аккаунтах нет фильмов (фильмы приходят только из аккаунтов Xtream).</string>
+    <string name="filmes_vazio">Фильмов пока нет</string>
     <string name="filmes_cabecalho">%1$s · ФИЛЬМОВ: %2$d</string>
     <string name="filmes_continuar">Продолжить</string>
     <string name="filmes_ordem">Порядок: %1$s</string>
@@ -475,9 +475,9 @@
     <string name="vod_legenda">Субтитры</string>
     <string name="vod_faixas">Звук и субтитры</string>
     <string name="vod_teclas">OK пауза · ◀ 10 с · ▶ 30 с (удерживайте для ускорения) · ▼ звук, субтитры и изображение · ⏮ ⏭ главы · НАЗАД выход</string>
-    <string name="series_titulo">СЕРИАЛЫ</string>
+    <string name="series_titulo">Сериалы</string>
     <string name="series_carregando">Загрузка сериалов…</string>
-    <string name="series_vazio">В сохранённых аккаунтах нет сериалов (сериалы приходят только из аккаунтов Xtream).</string>
+    <string name="series_vazio">Сериалов пока нет</string>
     <string name="series_cabecalho">%1$s · СЕРИАЛОВ: %2$d</string>
     <string name="series_ordem_recentes">с новой серией</string>
     <string name="series_busca_dica">Название сериала</string>
