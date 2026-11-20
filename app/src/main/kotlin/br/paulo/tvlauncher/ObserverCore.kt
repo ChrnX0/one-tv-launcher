@@ -239,21 +239,31 @@ object ObserverCore {
     }
 
     /** O número que a frase do recado mostra (ex.: "só 90 MB livres"): o valor do sinal que gerou o achado. */
+    /** O sinal que cada achado lê (null = não tem um número só: sem internet). */
+    fun signalOf(kind: Kind): Signal? = when (kind) {
+        Kind.NO_INTERNET -> null
+        Kind.SLOW_INTERNET, Kind.UNUSUAL_LATENCY -> Signal.LATENCY_MS
+        Kind.WEAK_WIFI, Kind.UNUSUAL_WIFI -> Signal.WIFI_DBM
+        Kind.LOW_MEMORY, Kind.UNUSUAL_MEMORY -> Signal.MEMORY_AVAILABLE_MB
+        Kind.MEMORY_PRESSURE -> Signal.MEMORY_PRESSURE
+        Kind.SLOW_HOME, Kind.UNUSUAL_FRAMES -> Signal.SLOW_FRAMES_PCT
+        Kind.LOW_DISK -> Signal.DISK_FREE_MB
+    }
+
     fun argsFor(kind: Kind, snapshot: Map<Signal, Reading>): List<String> {
-        val s = when (kind) {
-            Kind.NO_INTERNET -> null
-            Kind.SLOW_INTERNET -> Signal.LATENCY_MS
-            Kind.WEAK_WIFI -> Signal.WIFI_DBM
-            Kind.LOW_MEMORY -> Signal.MEMORY_AVAILABLE_MB
-            Kind.MEMORY_PRESSURE -> Signal.MEMORY_PRESSURE
-            Kind.SLOW_HOME -> Signal.SLOW_FRAMES_PCT
-            Kind.LOW_DISK -> Signal.DISK_FREE_MB
-            Kind.UNUSUAL_LATENCY -> Signal.LATENCY_MS
-            Kind.UNUSUAL_MEMORY -> Signal.MEMORY_AVAILABLE_MB
-            Kind.UNUSUAL_WIFI -> Signal.WIFI_DBM
-            Kind.UNUSUAL_FRAMES -> Signal.SLOW_FRAMES_PCT
-        } ?: return emptyList()
+        val s = signalOf(kind) ?: return emptyList()
         return listOfNotNull(snapshot[s]?.value?.toString())
+    }
+
+    /**
+     * Medidas da pergunta [ObserverPico.Task.WORTH_TELLING] para um achado que acabou de aparecer (fase 2: só sombra).
+     * [habitUse] = fração de uso da TV nesta hora; [toldLast24h] = recados do mesmo tipo nas últimas 24 h.
+     */
+    fun tellingFeatures(f: Finding, snapshot: Map<Signal, Reading>, base: ObserverBaseline?, hourOfWeek: Int, hourOfDay: Int,
+                        habitUse: Double, openHours: Double, toldLast24h: Int): DoubleArray {
+        val z = signalOf(f.kind)?.let { s -> snapshot[s]?.let { r -> base?.badness(s, r.value, hourOfWeek, hourOfDay) } } ?: 0.0
+        return doubleArrayOf(f.severity.ordinal.toDouble(), z.coerceIn(0.0, 8.0), habitUse.coerceIn(0.0, 1.0),
+            openHours.coerceIn(0.0, 6.0), toldLast24h.coerceIn(0, 5).toDouble())
     }
 
     /** Recado de um tipo que já está na fila e não foi visto não entra de novo (sem repetir a mesma coisa). */

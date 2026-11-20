@@ -85,8 +85,17 @@ object ObserverTv {
         if (change.appeared.isEmpty() && change.cleared.isEmpty()) return
         var log = p.getString("log", null)
         var notes = p.getString("notes", null)
+        val pico = pico(p)
+        val use = habit(ctx).hour(hd)?.use ?: 0.0
         for (f in change.appeared) {
-            log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "appeared", f.kind, f.severity, f.why, snap), agora)
+            // Pico em sombra (fase 2): a nota de "vale avisar?" vai ao registro; quem decide ainda é a regra (severidade ≥ WARNING).
+            val vezes = ObserverCore.readLog(log, agora).let { a ->
+                (0 until a.length()).count { i -> a.getJSONObject(i).let { it.optString("event") == "appeared" && it.optString("kind") == f.kind.name && agora - it.optLong("at") < 86_400_000L } }
+            }
+            val x = ObserverCore.tellingFeatures(f, snap, base, hw, hd, use, 0.0, vezes)
+            val nota = pico.score(ObserverPico.Task.WORTH_TELLING, x)
+            log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "appeared", f.kind, f.severity, f.why, snap)
+                .put("pico_tell", Math.round(nota * 100) / 100.0), agora)
             if (f.severity >= ObserverCore.Severity.WARNING) notes = ObserverCore.enqueue(notes, ObserverCore.noteFor(f, agora, ObserverCore.argsFor(f.kind, snap)), agora)
             runCatching { Diario.anotar(ctx, "tv", "Observer: ${f.kind.name}", f.why) }
             active.add(f.kind)
@@ -135,6 +144,13 @@ object ObserverTv {
             p.edit().putString("baseline", b.toJson().toString()).apply()
         }
     }
+
+    // ---------------------------------------------------------------- pico (fase 2c, sombra)
+
+    @Volatile private var pico: ObserverPico? = null
+
+    private fun pico(p: android.content.SharedPreferences): ObserverPico = pico ?: ObserverPico.fromJson(
+        p.getString("pico", null)?.let { runCatching { org.json.JSONObject(it) }.getOrNull() }).also { pico = it }
 
     // ---------------------------------------------------------------- hábito e sonda noturna (fase 2b)
 
