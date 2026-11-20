@@ -155,7 +155,8 @@ class SeriesActivity : Activity() {
             v.post { if (!isDestroyed) { grade.numColumns = m.colunas; adaptadorGrade.notifyDataSetChanged() } }
         }
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(Estilo.dicasDeTexto(this, getString(R.string.vod_grade_teclas)).apply { setPaddingRelative(dp(4), dp(8), 0, 0) })   // a barra de dicas de todo o sistema (crítica de design 19/11/2026)
+        // Sem faixa de dicas embaixo (Paulo, 20/11/2026: tirava espaço dos pôsteres). Como no Netflix, Google TV e Apple TV,
+        // a grade de pôsteres é só conteúdo; o "segurar OK" continua na Ajuda.
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
@@ -751,8 +752,8 @@ class SeriesActivity : Activity() {
                 EtiquetaSerie.NovaTemporada -> getString(R.string.coluna_etiqueta_nova_temporada)
                 is EtiquetaSerie.Novos -> if (etq.quantos > 0) resources.getQuantityString(R.plurals.coluna_etiqueta_n_novos, etq.quantos, etq.quantos) else getString(R.string.coluna_etiqueta_novos)
                 // Série dos Interesses com episódio novo marcado (TMDB) ganha do "20 de 62": a barra já mostra o progresso.
+                // 20/11/2026: o "20 de 62" saiu do pôster (a barra já mostra o andamento; o selo cobria a arte).
                 null -> proximoCurto(s)?.let { getString(R.string.ext_proximo_curto, it) }
-                    ?: progresso[s.chave]?.takeIf { it.vistos > 0 && it.total > 0 }?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) }
             }
             if (texto == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
@@ -792,6 +793,7 @@ class SeriesActivity : Activity() {
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+            maxLines = 1; ellipsize = TextUtils.TruncateAt.END   // selo de uma linha: nunca cobre metade do pôster
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         // 19/11/2026, o mesmo de Filmes: nada de nome em cima do pôster (repetia a arte e gastava espaço). O nome fica
