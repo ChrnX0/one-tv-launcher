@@ -144,7 +144,7 @@
         <item>Open Radio four times: on the fourth, is the hints strip at the bottom gone?</item>
         <item>In the Sofaly phone app, tap the TV: does the remote open, does swiping move the focus on the TV and does volume work from the notification?</item>
         <item>In the panel on a computer, drag a video onto the Control tab: does it start playing on the TV?</item>
-        <item>With a podcast playing, hold OK for 2 seconds: does it keep playing (no pausing and resuming), and does the remote\'s volume change the sound?</item>
+        <item>With a podcast playing, hold OK for 2 seconds: does it pause just once (no pausing and resuming over and over), and does the remote\'s volume change the sound?</item>
         <item>In a movie with both versions, watch a bit and switch to the other through ▼: does the other version start from the same point?</item>
         <item>When editing an alarm, do the sound rise options say “Rises over 1½ min” and “Rises over 2 min” (none says “1 min”)?</item>
         <item>Open Movies, then Series: do the posters show in a few seconds, and does moving through them stay smooth in the first minute (no long pauses)?</item>
