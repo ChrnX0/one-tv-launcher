@@ -102,3 +102,8 @@ test('limite por IP e global devolvem 429 sem chamar o Podcast Index', async () 
   const quebrado = { limit: async () => { throw new Error('x'); } };
   assert.equal((await handlePodcasts('search', url, { ...env, PODCASTS_UPSTREAM_LIMITER: quebrado }, { fetchFn, cache: null })).status, 429);
 });
+
+test('feed sem o campo explicit volta explicit null (desconhecido)', () => {
+  const r = shapeFeeds({ feeds: [{ url: 'https://a/x', title: 'X' }] });
+  assert.equal(r.feeds[0].explicit, null);
+});

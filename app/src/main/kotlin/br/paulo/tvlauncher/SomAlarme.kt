@@ -21,9 +21,14 @@ object SomAlarme {
     val NOMES: List<String> get() = listOf(txt(R.string.som_suave), txt(R.string.som_classico), txt(R.string.som_sino), txt(R.string.som_canal))
     private val ARQUIVOS = listOf("alarmes/suave.wav", "alarmes/classico.wav", "alarmes/sino.wav")
 
-    /** Rampa de volume: segundos para ir do mínimo ao máximo (0 = já toca no máximo). */
-    val RAMPAS = listOf(0, 60, 120)
-    fun rampaTexto(seg: Int) = when (seg) { 0 -> txt(R.string.som_direto); 60 -> txt(R.string.som_rampa1); else -> txt(R.string.som_rampa2) }
+    /**
+     * Rampa de volume: segundos para ir do mínimo ao máximo. Desde o #304 o som SEMPRE sobe em pelo menos
+     * [AlarmeTocandoActivity.RAMPA_MIN_SEG] (Paulo: acordar devagar), então "Direto" e "1 min" eram opções que mentiam
+     * (debug 20/11/2026): ficam só as que acontecem de verdade. Alarmes antigos com 0 ou 60 contam como a primeira.
+     */
+    val RAMPAS = listOf(AlarmeTocandoActivity.RAMPA_MIN_SEG, 120)
+    fun rampaReal(seg: Int) = RAMPAS.lastOrNull { it <= seg } ?: RAMPAS.first()
+    fun rampaTexto(seg: Int) = if (rampaReal(seg) <= AlarmeTocandoActivity.RAMPA_MIN_SEG) txt(R.string.som_rampa1) else txt(R.string.som_rampa2)
 
     /** Cria o player em loop, ainda não iniciado (chame start()). null se o arquivo falhar. [CANAL] = o suave (prévia e plano B). */
     fun criar(ctx: Context, som: Int): MediaPlayer? = try {

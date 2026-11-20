@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">オン</string>
     <string name="elv_cat_desligado">オフ</string>
     <string name="elv_cat_ep">%1$s · S%2$d E%3$d</string>
+    <string name="pod_temp_ep">S%1$d E%2$d</string>
     <string name="elv_cat_so_ep">%1$s · 第%2$d話</string>
     <string name="elv_cat_temporada">%1$s · シーズン %2$d</string>
     <string name="elv_cat_filme_ano">%1$s（%2$d）</string>

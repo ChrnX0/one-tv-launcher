@@ -77,7 +77,8 @@ export function shapeFeeds(data, lang = '', max = MAX) {
     const image = [f.artwork, f.image].map((x) => String(x ?? '').trim()).find(httpUrl) ?? '';
     out.push({
       url, title, author: String(f.author ?? f.ownerName ?? '').trim(), image,
-      explicit: f.explicit === true || f.explicit === 1, language: String(f.language ?? '').trim().toLowerCase(),
+      // O trending do Podcast Index não manda "explicit": null = não sei (a TV com modo protegido esconde; 20/11/2026).
+      explicit: f?.explicit == null ? null : (f.explicit === true || f.explicit === 1), language: String(f.language ?? '').trim().toLowerCase(),
     });
   }
   const base = cleanLang(lang).split('-')[0];

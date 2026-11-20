@@ -286,7 +286,7 @@
     <string name="som_classico">Klasik</string>
     <string name="som_sino">Lonceng</string>
     <string name="som_direto">Volume penuh</string>
-    <string name="som_rampa1">Naik dalam 1 mnt</string>
+    <string name="som_rampa1">Naik dalam 1½ mnt</string>
     <string name="som_rampa2">Naik dalam 2 mnt</string>
     <string name="vel_resultado">Internet: %1$.0f Mbps (mengunduh %2$.0f MB dalam %3$.1f dtk)</string>
     <string name="vel_falhou">Uji gagal (tanpa internet atau server mati)</string>

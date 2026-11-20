@@ -119,7 +119,9 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
         val lista = (if (forcar) null else WallpaperPlugins.doCache(app, p))
             ?: WallpaperPlugins.buscar(app, p, WallpaperPluginContract.Event(WallpaperPluginContract.EV_TIME_ELAPSED), WallpaperPlugins.PRAZO_TEMPO_MS)
                 ?.also { if (it.isNotEmpty()) WallpaperPlugins.guardarCache(app, p, it) }
-            ?: return
+            // Falhou (plugin lento para ligar logo depois do boot, sem rede): agenda mesmo assim. Sem isto o fundo ficava
+            // liso até a HOME ser refeita (debug 20/11/2026); com a lista vazia o agendar pede de novo em ~1 min.
+            ?: run { post { agendar() }; return }
         post {
             itens = lista
             listaEm = SystemClock.elapsedRealtime()

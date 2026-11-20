@@ -23,7 +23,8 @@ object Feriados {
     /** [mes] de 1 a 12. null = não sei (país ou ano fora da tabela): quem chama trata como dia comum. */
     fun eFeriado(linha: String?, ano: Int, mes: Int, dia: Int): Boolean? {
         val datas = linha?.let { doAno(it, ano) } ?: return null
-        return "%02d%02d".format(mes, dia) in datas
+        // Locale.ROOT: em árabe/persa o format escrevia dígitos locais e nenhum feriado batia (debug 20/11/2026).
+        return String.format(java.util.Locale.ROOT, "%02d%02d", mes, dia) in datas
     }
 
     /** A linha do [pais] (ISO 3166 de 2 letras) no JSON da tabela, ou null. */

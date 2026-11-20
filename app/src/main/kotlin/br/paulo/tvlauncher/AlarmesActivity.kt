@@ -484,7 +484,7 @@ class AlarmesActivity : Activity() {
                 Op.REPETIR -> escolherDias(null)
                 Op.SOM -> escolher(getString(R.string.al_op_som), SomAlarme.NOMES, v.som) { v = v.copy(som = it); ouvir(it) }
                 Op.RAMPA -> escolher(getString(R.string.al_op_rampa), SomAlarme.RAMPAS.map { SomAlarme.rampaTexto(it) },
-                    SomAlarme.RAMPAS.indexOf(v.rampa)) { v = v.copy(rampa = SomAlarme.RAMPAS[it]) }
+                    SomAlarme.RAMPAS.indexOf(SomAlarme.rampaReal(v.rampa))) { v = v.copy(rampa = SomAlarme.RAMPAS[it]) }
                 Op.BOM_DIA -> { v = v.copy(bomDia = !v.bomDia); preencher() }
                 Op.CENA -> {
                     val nomes = listOf(getString(R.string.rot_nenhum)) + cenas

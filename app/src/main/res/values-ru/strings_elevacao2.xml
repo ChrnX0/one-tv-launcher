@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">Вкл.</string>
     <string name="elv_cat_desligado">Выкл.</string>
     <string name="elv_cat_ep">%1$s · С%2$d Э%3$d</string>
+    <string name="pod_temp_ep">С%1$d Э%2$d</string>
     <string name="elv_cat_so_ep">%1$s · Серия %2$d</string>
     <string name="elv_cat_temporada">%1$s · Сезон %2$d</string>
     <string name="elv_cat_filme_ano">%1$s (%2$d)</string>

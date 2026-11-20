@@ -96,7 +96,8 @@ object PacoteIcones {
      * (o pacote pode estar congelado); senão lê do pacote e guarda a cópia para a próxima vez.
      */
     @SuppressLint("DiscouragedApi", "UseCompatLoadingForDrawables")
-    fun desenho(ctx: Context, pacote: String, nome: String): Drawable? {
+    /** [guardar] = falso no seletor "Trocar ícone": ver a grade não grava um PNG por ícone exibido (debug 20/11/2026). */
+    fun desenho(ctx: Context, pacote: String, nome: String, guardar: Boolean = true): Drawable? {
         if (pacote.startsWith(EMBUTIDO) || !PacoteIconesRegras.drawableValido(nome)) return null
         IconPackFreezer.copia(ctx, pacote, nome)?.let { return it }
         return runCatching {
@@ -104,7 +105,7 @@ object PacoteIcones {
             val id = res.getIdentifier(nome, "drawable", pacote).takeIf { it != 0 }
                 ?: res.getIdentifier(nome, "mipmap", pacote).takeIf { it != 0 } ?: return null
             res.getDrawable(id, null)?.also { d ->
-                IconPackFreezer.guardar(ctx, pacote, nome, d.constantState?.newDrawable(ctx.resources) ?: d)
+                if (guardar) IconPackFreezer.guardar(ctx, pacote, nome, d.constantState?.newDrawable(ctx.resources) ?: d)
             }
         }.getOrNull()
     }

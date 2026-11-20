@@ -99,7 +99,9 @@ class PodcastsActivity : Activity() {
             when (e.keyCode) {
                 KeyEvent.KEYCODE_MEDIA_REWIND -> { s.pular(-OuvirServico.VOLTAR_MS); atualizarTempo(); return true }
                 KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { s.pular(OuvirServico.AVANCAR_MS); atualizarTempo(); return true }
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> { s.alternar(); return true }
+                KeyEvent.KEYCODE_MEDIA_PLAY -> { if (e.repeatCount == 0) s.continuar(); return true }
+                KeyEvent.KEYCODE_MEDIA_PAUSE -> { if (e.repeatCount == 0) s.pausar(); return true }
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> { if (e.repeatCount == 0) s.alternar(); return true }
             }
         }
         return super.dispatchKeyEvent(e)

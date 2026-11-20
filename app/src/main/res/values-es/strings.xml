@@ -286,7 +286,7 @@
     <string name="som_classico">Clásico</string>
     <string name="som_sino">Campana</string>
     <string name="som_direto">Volumen completo</string>
-    <string name="som_rampa1">Sube en 1 min</string>
+    <string name="som_rampa1">Sube en 1½ min</string>
     <string name="som_rampa2">Sube en 2 min</string>
     <string name="vel_resultado">Internet: %1$.0f Mbps (descargó %2$.0f MB en %3$.1f s)</string>
     <string name="vel_falhou">La prueba falló (sin internet o servidor caído)</string>
