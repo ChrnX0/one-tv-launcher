@@ -65,7 +65,7 @@ JMuxer (vídeo ao vivo no painel do celular), de Samir Das
 
 As bibliotecas abaixo vão no app como arquivos .so separados (ligação dinâmica). Pela LGPL, você pode trocá-las por
 uma versão sua: o script que as compila, com as versões e opções exatas, está em nativo/compilar.sh no repositório
-https://github.com/ChrnX0/one-tv-launcher, e o código-fonte de cada uma no endereço indicado.
+https://github.com/ChrnX0/sofaly, e o código-fonte de cada uma no endereço indicado.
 
 FFmpeg 9.0.2 (libavcodec, libavformat, libavutil, libswresample, libswscale)
   https://ffmpeg.org — código: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz

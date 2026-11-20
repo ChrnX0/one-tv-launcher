@@ -16,7 +16,7 @@ import java.net.URLEncoder
  * As funções de texto/JSON são puras (testadas no computador); [buscar] faz a rede e roda fora da thread da tela.
  */
 object Endereco {
-    const val AGENTE = "tv-launcher/0.1 (github.com/ChrnX0/one-tv-launcher)"
+    const val AGENTE = "tv-launcher/0.1 (github.com/ChrnX0/sofaly)"
 
     data class Cep(val cep: String, val rua: String, val bairro: String, val cidade: String, val uf: String)
     data class Achado(val nome: String, val lat: Double, val lon: Double, val precisao: String)

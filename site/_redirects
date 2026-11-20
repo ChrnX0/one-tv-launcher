@@ -1,5 +1,5 @@
 # Short download links (sofaly.tv/download). They always point to the newest Release, so the Downloader code never changes.
 # If the GitHub repo is renamed or moves, change only these lines.
-/download        https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher.apk 302
-/download/       https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher.apk 302
-/download-arm64  https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher-arm64.apk 302
+/download        https://github.com/ChrnX0/sofaly/releases/latest/download/sofaly-launcher.apk 302
+/download/       https://github.com/ChrnX0/sofaly/releases/latest/download/sofaly-launcher.apk 302
+/download-arm64  https://github.com/ChrnX0/sofaly/releases/latest/download/sofaly-launcher-arm64.apk 302

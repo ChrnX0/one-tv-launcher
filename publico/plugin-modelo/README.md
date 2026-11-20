@@ -28,7 +28,7 @@ the home screen. The card appears at the end of the **Watch** row.
    the screen thread. Fetch from the internet in the background and keep the result (WorkManager, a cache file).
 
 The launcher draws the card in its own style, with large letters. It never sends anything to your app.
-Full page: https://chrnx0.github.io/one-tv-launcher/plugins.html
+Full page: https://chrnx0.github.io/sofaly/plugins.html
 
 ---
 

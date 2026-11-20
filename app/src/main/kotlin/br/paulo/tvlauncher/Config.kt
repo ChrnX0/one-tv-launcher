@@ -75,7 +75,7 @@ object Config {
     // com a MESMA chave do launcher instalado; numa TV atualizada pelo PC (chave própria) o Release é sempre recusado.
     // Num fork: troque o repositório para o seu.
     const val ATUALIZACAO_AUTOMATICA = true
-    const val ATUALIZACAO_REPO = "ChrnX0/one-tv-launcher"
+    const val ATUALIZACAO_REPO = "ChrnX0/sofaly"
     // OTIMIZAR_MEMORIA: ocultar os apps de APPS_OCULTAR pelo Device Owner, liberando a memoria que seguravam (reversivel).
     const val OTIMIZAR_MEMORIA = true
     // Apps que o launcher substitui e por isso oculta. Comecar so pelo dreamx (protetor de fabrica, trocado pelo nosso).
