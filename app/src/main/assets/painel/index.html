@@ -36,6 +36,7 @@
     <symbol id="i-backup" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 15.5v2.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/></symbol>
     <symbol id="i-acessos" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol>
     <symbol id="i-estrela" viewBox="0 0 24 24"><path d="M12 3.8l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.4l-5.1 2.8 1.1-5.6-4.2-3.9 5.7-.7z"/></symbol>
+    <symbol id="i-sofy" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12" rx="3.5"/><path d="M9 4.5l3 3 3-3"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 15.5c1.4 1.1 3.6 1.1 5 0"/></symbol>
     <symbol id="i-tudo" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" stroke-width="2.4"/></symbol>
     <symbol id="i-mais" viewBox="0 0 24 24"><path d="M5.5 12h.01M12 12h.01M18.5 12h.01" stroke-width="3"/></symbol>
     <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M9 7 4.5 11.5 9 16"/><path d="M4.5 11.5h10a5 5 0 0 1 0 10H12"/></symbol>
@@ -159,6 +160,8 @@
     <nav class="abas" aria-label="Seções do painel">
       <button class="aba ativa" data-aba="inicio"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-inicio"/></svg></span><span>Início</span></button>
       <button class="aba" data-aba="controle"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-controle"/></svg></span><span>Controle</span></button>
+      <!-- Aba Sofy (estudo do painel, PR 5): os recados dela, o porquê e o Desfazer. O número = recados de agora. -->
+      <button class="aba aba-sofy" data-aba="sofy"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-sofy"/></svg><span class="conta-sofy" hidden></span></span><span>Sofy</span></button>
       <!-- Celular (20/11/2026, estudo do painel): a barra de baixo é Início · Controle · Apps · Tudo; "Na TV" e
            "Configurações" moram dentro de Tudo. No computador estes dois botões somem e a coluna mostra tudo. -->
       <button class="aba so-celular" data-aba="apps"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-apps"/></svg></span><span>Apps</span></button>
@@ -356,6 +359,31 @@
         <button type="button" class="linha-hub" data-aba="loja"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-loja"/></svg></span><span class="txt"><span class="t">Instalar apps</span><span class="s">APK do computador, loja curada e projetos do GitHub</span></span><svg class="i seta" aria-hidden="true"><use href="#i-seguinte"/></svg></button>
         <button type="button" class="linha-hub" data-aba="arquivos"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-arquivos"/></svg></span><span class="txt"><span class="t">Arquivos</span><span class="s">Pastas da TV, pendrive, enviar e baixar</span></span><svg class="i seta" aria-hidden="true"><use href="#i-seguinte"/></svg></button>
       </div>
+    </section>
+
+    <section id="abaSofy" class="painel-aba" hidden>
+      <!-- Regra 9: o único rosto da Sofy nesta página é o do alto. Regra 3: as portas levam às páginas, não copiam. -->
+      <div class="cabeca-pagina cabeca-sofy">
+        <span id="sofyAbaRosto" class="sofy-rosto" aria-hidden="true"></span>
+        <div>
+          <h1 class="titulo-pagina">Sofy</h1>
+          <p class="explica-pagina">O que a TV fez sozinha, por quê, e onde mudar</p>
+        </div>
+      </div>
+      <div id="cartaoRecadosDeHoje" class="cartao">
+        <h2>Recados de hoje</h2>
+        <div id="listaRecados" class="lista-recados"><p class="aviso">Lendo…</p></div>
+      </div>
+      <div id="cartaoEmProva" class="cartao" hidden>
+        <h2>Congelados em prova</h2>
+        <p class="aviso">A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.</p>
+        <div id="listaProvas"></div>
+      </div>
+      <nav class="portas portas-sofy" aria-label="Ver mais">
+        <button type="button" class="porta neutra" data-ir="sistema.cartaoDiarioDaTV"><span class="ponto" aria-hidden="true"></span><span class="t">Diário da TV</span><span class="s">O que aconteceu, hora a hora</span></button>
+        <button type="button" class="porta neutra" data-ir="sistema.cartaoObservador"><span class="ponto" aria-hidden="true"></span><span class="t">Observador</span><span class="s">O que ela vigia e o normal da casa</span></button>
+        <button type="button" class="porta neutra" data-ir="avancado.cartaoConfirmacoes"><span class="ponto" aria-hidden="true"></span><span class="t">Confirmações</span><span class="s">O que ela faz sem perguntar</span></button>
+      </nav>
     </section>
 
     <section id="abaApps" class="painel-aba" hidden>
@@ -1465,6 +1493,7 @@
   <script src="ui.js"></script>
   <script src="busca.js"></script>
   <script src="shortcuts.js"></script>   <!-- Seus atalhos, "Conversa com" e Desfazer (20/11/2026) -->
+  <script src="sofy-page.js"></script>   <!-- aba Sofy (20/11/2026) -->
   <script src="navigation.js"></script>   <!-- índice da página, rótulo da cruz e aba Tudo (20/11/2026) -->
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>

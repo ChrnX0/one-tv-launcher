@@ -60,8 +60,8 @@ function botaoDoIndice(cartao, classe) {
 /** Monta (ou tira) o índice da página aberta. Não refaz se os blocos são os mesmos (o observador chama muito). */
 function montarIndice() {
   const secao = $(idDaAba(paginaAtual));
-  // A Início não tem índice: é a página calma, com poucos blocos e as portas no lugar do índice.
-  const blocos = secao && !secao.classList.contains('hub') && paginaAtual !== 'inicio' ? blocosDe(secao) : [];
+  // A Início e a Sofy não têm índice: páginas calmas, com poucos blocos e as portas no lugar do índice.
+  const blocos = secao && !secao.classList.contains('hub') && paginaAtual !== 'inicio' && paginaAtual !== 'sofy' ? blocosDe(secao) : [];
   garantirIdsDosBlocos();
   const assinatura = paginaAtual + '|' + blocos.map((c) => c.id + ':' + c.querySelector(':scope > h2').textContent).join('|');
   if (assinatura === assinaturaIndice) return;

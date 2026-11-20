@@ -221,6 +221,7 @@ const AO_ABRIR = {
 const PAGINAS = {
   inicio: { acorda: ['inicio'] },
   controle: { acorda: ['controle'] },
+  sofy: { acorda: [] },   // recados da Sofy (sofy-page.js, estudo do painel PR 5)
   natv: { acorda: [] },
   tudo: { acorda: [] },   // celular: Na TV + Configurações numa tela (navigation.js)
   apps: { grupo: 'natv', acorda: ['apps'] },
@@ -448,17 +449,49 @@ function desenharApps() {
   mostrar($('statusApps'), filtrados.length ? '' : 'Nenhum app.');
   const sistema = apps.filter((a) => a.sistema).length;
   $('contagemApps').textContent = `${filtrados.length} de ${apps.length} apps na TV (${apps.length - sistema} instalados por você, ${sistema} do sistema)`;
-  // Sem busca: em prateleiras, na mesma ordem e com os mesmos nomes da tela Todos os apps da TV (AppShelf, 20/11/2026).
-  if (termo) { for (const a of filtrados) lista.appendChild(linhaApp(a)); return; }
-  for (const [id, nome] of PRATELEIRAS) {
-    const doGrupo = filtrados.filter((a) => (PRATELEIRAS.has(a.categoria) ? a.categoria : 'other') === id);
-    if (!doGrupo.length) continue;
-    const t = document.createElement('h3');
-    t.className = 'titulo-prateleira';
-    t.textContent = nome;
-    lista.appendChild(t);
-    for (const a of doGrupo) lista.appendChild(linhaApp(a));
+  // Estudo do painel (PR 5): como na TV, os escondidos ficam numa prateleira à parte que só abre com o PIN, e os
+  // congelados (desativados, fora os escondidos) numa prateleira com Descongelar. Nos outros lugares eles não aparecem.
+  const escondidos = filtrados.filter((a) => a.oculto);
+  const congelados = filtrados.filter((a) => !a.oculto && a.desativado);
+  const resto = filtrados.filter((a) => !a.oculto && !a.desativado);
+  // Com busca: lista corrida (os escondidos só com a prateleira aberta pelo PIN).
+  if (termo) {
+    for (const a of [...resto, ...congelados, ...(escondidosAbertos ? escondidos : [])]) lista.appendChild(linhaApp(a));
+  } else {
+    // Sem busca: em prateleiras, na mesma ordem e com os mesmos nomes da tela Todos os apps da TV (AppShelf, 20/11/2026).
+    for (const [id, nome] of PRATELEIRAS) {
+      const doGrupo = resto.filter((a) => (PRATELEIRAS.has(a.categoria) ? a.categoria : 'other') === id);
+      if (!doGrupo.length) continue;
+      lista.appendChild(tituloPrateleira(nome));
+      for (const a of doGrupo) lista.appendChild(linhaApp(a));
+    }
+    if (congelados.length) {
+      lista.appendChild(tituloPrateleira('Congelados'));
+      for (const a of congelados) lista.appendChild(linhaApp(a));
+    }
   }
+  if (escondidos.length) {
+    lista.appendChild(tituloPrateleira('Escondidos'));
+    if (escondidosAbertos) { for (const a of escondidos) lista.appendChild(linhaApp(a)); return; }
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'botao-secundario abrir-escondidos';
+    b.textContent = 'Mostrar os escondidos (pede o PIN)';
+    b.addEventListener('click', async () => {
+      const ok = await confirmar('Mostrar os escondidos', 'Os apps escondidos aparecem aqui até você fechar o painel.', 'Mostrar',
+        () => chamar('GET', '/api/elevada'), false);
+      if (ok) { escondidosAbertos = true; desenharApps(); }
+    });
+    lista.appendChild(b);
+  }
+}
+
+let escondidosAbertos = false;
+function tituloPrateleira(nome) {
+  const t = document.createElement('h3');
+  t.className = 'titulo-prateleira';
+  t.textContent = nome;
+  return t;
 }
 
 
@@ -522,6 +555,22 @@ function linhaApp(a) {
       b.className = 'botao-secundario';
       b.textContent = a.oculto ? 'Mostrar' : 'Ocultar';
       b.addEventListener('click', () => alternarOculto(a, b));
+      acoes.appendChild(b);
+    }
+    if (a.desativado && !a.oculto) {
+      // Congelado (pm disable-user): descongelar devolve o app com os dados, como estava (Congelar.kt).
+      const b = document.createElement('button');
+      b.className = 'botao-secundario';
+      b.textContent = 'Descongelar';
+      b.addEventListener('click', async () => {
+        b.disabled = true;
+        try {
+          await chamar('POST', '/api/apps/' + encodeURIComponent(a.pacote) + '/descongelar', {});
+          a.desativado = false;
+          aviso('Descongelado.', 'ok');
+          desenharApps();
+        } catch (e) { aviso(textoErro(e), 'erro'); b.disabled = false; }
+      });
       acoes.appendChild(b);
     }
     if (a.podeDesinstalar) {

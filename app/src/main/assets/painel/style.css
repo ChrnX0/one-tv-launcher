@@ -1277,3 +1277,33 @@ label[data-atalho] > .estrela { margin: -8px -8px -8px auto; }
 .porta.mundo-listen { --cor: var(--t-world-listen); }
 .porta.mundo-play { --cor: var(--t-world-play); }
 .porta.mundo-apps { --cor: var(--t-world-apps); }
+
+/* ---------------------------------------------------------------- Aba Sofy e prateleiras dos Apps (PR 5; sofy-page.js) */
+/* Na barra: o número de recados no canto do ícone, no laranja de "ligado e marca" (regra 1 do style.css). */
+.aba-sofy .ic { position: relative; }
+.conta-sofy { position: absolute; top: -6px; right: -10px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px;
+  background: var(--acento); color: var(--fundo); font-size: 12px; font-weight: 900; line-height: 20px; text-align: center; }
+.conta-sofy[hidden] { display: none; }
+/* Celular: Início · Controle · Apps · Sofy · Tudo (o estudo pede a Sofy entre Apps e Tudo). */
+@media (max-width: 899px) { .aba.so-celular[data-aba="tudo"] { order: 2; } .aba-sofy { order: 1; } }
+
+.cabeca-sofy { display: flex; align-items: center; gap: 16px; }
+.cabeca-sofy .titulo-pagina { margin: 0; }
+.lista-recados { display: flex; flex-direction: column; }
+.recado { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 4px 16px; padding: 16px 0;
+  border-top: 1px solid var(--borda); }
+.recado:first-child { border-top: none; padding-top: 0; }
+.recado .quando { font-variant-numeric: tabular-nums; color: var(--texto-fraco); font-size: 15px; padding-top: 2px; }
+.recado strong { font-size: 17px; font-weight: 800; }
+.recado-texto p { margin: 4px 0 0; }
+.recado .link { align-self: center; }
+.recado.sev-warning .quando, .recado.sev-critical .quando { color: var(--atencao); font-weight: 800; }
+@media (max-width: 599px) { .recado { grid-template-columns: auto minmax(0, 1fr); } .recado .link { grid-column: 2; justify-self: start; } }
+.linha-registro.prova { display: flex; flex-direction: row; align-items: center; gap: 16px; text-align: left; }
+.linha-registro.prova .nome { flex: 1; min-width: 0; font-weight: 700; }
+.portas-sofy { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 699px) { .portas-sofy { grid-template-columns: minmax(0, 1fr); } }
+.porta.neutra { --cor: var(--texto-fraco); }
+
+/* Apps: o botão que abre os escondidos fica onde a prateleira estaria. */
+.abrir-escondidos { margin: 8px 0 16px; }

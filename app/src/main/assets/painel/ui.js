@@ -121,6 +121,7 @@ async function carregarFaixaSofy() {
   catch (_) { faixa.hidden = true; return; }   // versão sem o Observador: a Início fica calma
   const agora = Date.now();
   const recado = (o.notes || []).find((n) => n.title && (!n.expiresAt || n.expiresAt > agora));
+  if (typeof contarRecados === 'function') contarRecados((o.notes || []).filter((n) => n.title && (!n.expiresAt || n.expiresAt > agora)).length);
   faixa.hidden = !recado;
   if (!recado) return;
   $('faixaSofyTitulo').textContent = recado.title;

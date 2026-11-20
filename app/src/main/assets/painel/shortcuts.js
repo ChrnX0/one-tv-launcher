@@ -110,7 +110,7 @@ function botaoEstrela(atalho) {
 
 /** Põe a estrela em todo bloco com id (menos os da Início) e em toda linha marcada com data-atalho (chaves, opções). */
 function porEstrelas() {
-  for (const h of document.querySelectorAll('.painel-aba:not(#abaInicio):not(#abaTudo) .cartao[id] > h2')) {
+  for (const h of document.querySelectorAll('.painel-aba:not(#abaInicio):not(#abaTudo):not(#abaSofy) .cartao[id] > h2')) {
     // Só id escrito no index.html: o "bloco-..." que o navigation.js gera muda se a página ganhar um bloco.
     if (h.parentElement.id.startsWith('bloco-') || h.parentElement.parentElement.closest('.cartao') || h.querySelector('.estrela')) continue;
     h.appendChild(botaoEstrela('bloco:' + h.parentElement.id));
