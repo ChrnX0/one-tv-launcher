@@ -163,7 +163,9 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
         when (e.action) {
             KeyEvent.ACTION_DOWN -> {
                 if (e.repeatCount == 0) { okDesde = e.eventTime; segurou = false }
-                else if (!segurou && e.eventTime - okDesde >= SEGURAR_MS) { segurou = true; host.hold(c) }
+                // isLongPress: o aviso de "segurou" do próprio Android (controles e `input keyevent --longpress` mandam a
+                // repetição já marcada, às vezes antes dos 500 ms; sem ele o OK segurado abria o app, visto na Sala 20/11).
+                else if (!segurou && (e.isLongPress || e.eventTime - okDesde >= SEGURAR_MS)) { segurou = true; host.hold(c) }
             }
             KeyEvent.ACTION_UP -> if (!segurou && !e.isCanceled) host.open(c)
         }
