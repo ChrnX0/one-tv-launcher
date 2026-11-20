@@ -38,7 +38,7 @@ async function chamar(metodo, caminho, corpo, corpoCru) {
     throw new Error('Sessão expirada: entre de novo.');
   }
   if (resp.status === 403 && dados.precisaPin) throw new PrecisaPin(dados.erro);
-  if (!resp.ok) { const e = new Error(erroAmigavel(resp.status, dados.erro)); e.dados = dados; e.tecnico = dados.erro; throw e; }
+  if (!resp.ok) { const e = new Error(erroAmigavel(resp.status, dados.erro)); e.dados = dados; e.tecnico = dados.erro; e.status = resp.status; throw e; }
   return dados;
 }
 
@@ -1553,8 +1553,56 @@ async function carregarErros() {
   } catch (e) { resumo.textContent = textoErro(e); link.hidden = true; }
 }
 
+// ---------- Observador (ObserverTv.kt, fase 1: só observa e anota) ----------
+
+/** Nome de cada achado do juiz (ObserverCore.Kind), em português simples. */
+const ACHADOS_OBSERVADOR = { NO_INTERNET: 'sem internet', SLOW_INTERNET: 'internet lenta', WEAK_WIFI: 'Wi-Fi fraco',
+  LOW_MEMORY: 'pouca memória', MEMORY_PRESSURE: 'memória apertada', SLOW_HOME: 'tela inicial lenta', LOW_DISK: 'pouco espaço' };
+
+/** Cartão "Observador": as últimas leituras, o que está fora do normal agora e o registro (mais novo primeiro). */
+async function carregarObservador() {
+  const caixa = $('numerosObservador'), agora = $('agoraObservador'), lista = $('listaObservador');
+  let o;
+  try { o = await chamar('GET', '/api/observer'); } catch (e) {
+    caixa.replaceChildren(); lista.replaceChildren();
+    agora.textContent = e && e.status === 404 ? 'Esta versão do launcher ainda não tem o Observador.' : textoErro(e);
+    return;
+  }
+  const atuais = new Set((o.now || []).map((f) => f.kind));
+  caixa.replaceChildren();
+  const item = (rotulo, valor, ruim) => {
+    const d = document.createElement('div');
+    d.className = 'numero' + (ruim ? ' ruim' : '');
+    const v = document.createElement('strong'); v.textContent = valor;
+    const r = document.createElement('span'); r.textContent = rotulo;
+    d.append(v, r); caixa.appendChild(d);
+  };
+  const s = o.signals || {};
+  const num = (x) => x.value.toLocaleString('pt-BR');
+  if (s.MEMORY_AVAILABLE_MB) item('memória livre', `${num(s.MEMORY_AVAILABLE_MB)} MB`, atuais.has('LOW_MEMORY'));
+  if (s.LATENCY_MS) item('latência', `${num(s.LATENCY_MS)} ms`, atuais.has('SLOW_INTERNET'));
+  if (s.WIFI_DBM && s.WIFI_DBM.value > -127 && s.WIFI_DBM.value < 0) item('sinal do Wi-Fi', `${s.WIFI_DBM.value} dBm`, atuais.has('WEAK_WIFI'));
+  if (s.SLOW_FRAMES_PCT) item('quadros lentos', `${num(s.SLOW_FRAMES_PCT)}%`, atuais.has('SLOW_HOME'));
+  if (s.DISK_FREE_MB) item('espaço livre', s.DISK_FREE_MB.value >= 1024 ? gb(s.DISK_FREE_MB.value * 1048576) : `${num(s.DISK_FREE_MB)} MB`, atuais.has('LOW_DISK'));
+  if (!caixa.children.length) item('ainda medindo', '…', false);
+  agora.textContent = (o.now || []).length ? (o.now || []).map((f) => `${ACHADOS_OBSERVADOR[f.kind] || f.kind}: ${f.why}`).join(' · ') : 'Tudo normal agora.';
+  lista.replaceChildren();
+  for (const l of o.log || []) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-registro';
+    const q = document.createElement('span'); q.className = 'quando';
+    q.textContent = new Date(l.at).toLocaleString(document.documentElement.lang || 'pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const nome = document.createElement('strong'); nome.textContent = ACHADOS_OBSERVADOR[l.kind] || l.kind;
+    const porque = document.createElement('span'); porque.textContent = l.why;
+    linha.append(q, ' ', nome, ' ', porque);
+    lista.appendChild(linha);
+  }
+  if (!lista.children.length) lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: 'Nada fora do normal nos últimos 7 dias.' }));
+}
+
 async function carregarSaude() {
   carregarErros();   // em paralelo: não espera a lista de memória
+  carregarObservador();   // em paralelo também: lê só memória e prefs da TV
   const status = $('statusSaude');
   const lista = $('listaMemoria');
   mostrar(status, '');
