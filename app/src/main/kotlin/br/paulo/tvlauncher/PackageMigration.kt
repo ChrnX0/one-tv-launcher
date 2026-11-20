@@ -298,8 +298,6 @@ object PackageMigration {
         val de = extras?.getString("from")
         Log.i(TAG, "device owner received from $de")
         val outro = otherPackage(app) ?: return
-        // O outro lado sai de cena sem perder nada: oculto (não desinstalado). O Android mata os processos dele.
-        PrivilegioDO.ocultar(app, outro, true)
         swapAccessibility(app, de = outro)
         when (role(app)) {
             Role.TARGET -> mark(app, Step.DONE, "device owner received from $de; $outro hidden")
@@ -314,7 +312,27 @@ object PackageMigration {
             app.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
                 .setComponent(ComponentName(app, MainActivity::class.java)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }.onFailure { Log.w(TAG, "home: $it") }
-        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ killOwnProcesses(app, includeSelf = true) }, 5_000)
+        // Fora da thread da tela (o shell espera até 20 s): o papel de HOME e o outro app fora de cena.
+        Thread({ leaveStage(app, outro) }, "migration-hide").start()
+        // Recomeço DEPOIS que o outro lado saiu (ele sai sozinho em 20 s). Na Sala (20/11/2026) o recomeço em 5 s achou as
+        // portas 8080/8091 e o túnel ainda com o antigo: painel e MCP não subiram até um REINICIAR.
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ killOwnProcesses(app, includeSelf = true) }, RESTART_AFTER_MS)
+    }
+
+    /** O recomeço do app que recebeu o dono: depois dos 20 s em que o outro lado ainda pode estar de pé. */
+    private const val RESTART_AFTER_MS = 25_000L
+
+    /**
+     * O outro app sai de cena sem perder nada. Antes, o papel de HOME passa para nós: com ele, o Android NÃO deixa o
+     * dono ocultar o outro (visto na Sala, 20/11/2026: setApplicationHidden voltou false e o "One TV" ficou na lista).
+     * Se mesmo assim não ocultar, congela pelo shell (pm disable-user; a volta descongela em [PrivilegioDO.ocultar]).
+     */
+    private fun leaveStage(app: Context, outro: String) {
+        try {
+            GuardiaoShizuku.comando(app, "cmd role add-role-holder android.app.role.HOME ${app.packageName} 0")
+            if (!PrivilegioDO.ocultar(app, outro, true) && !Congelar.definir(app, outro, true))
+                Log.w(TAG, "$outro is still visible (hide and freeze failed)")
+        } catch (e: Exception) { Log.w(TAG, "leave stage: $e") }
     }
 
     /** Nosso serviço de acessibilidade no lugar do de [de] (precisa de WRITE_SECURE_SETTINGS, dada pelo shell). */

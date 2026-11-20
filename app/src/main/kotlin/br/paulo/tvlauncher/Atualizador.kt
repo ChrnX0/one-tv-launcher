@@ -149,6 +149,17 @@ object Atualizador {
         // A tag é "v<versionCode>" (o workflow cria assim).
         val codigo = CanalAtualizacao.codigo(json.optString("tag_name")) ?: return "Release sem versão na tag"
         val meu = instalado(app).longVersionCode
+        // Troca de pacote (19/11/2026, PackageMigration.kt): no app ANTIGO, um Release com o APK do app novo
+        // (sofaly-launcher*.apk) não é atualização, é a mudança para tv.sofaly.launcher. Vem ANTES do "em dia" (na Sala, 20/11/2026, vinha depois e a troca nunca começava pelo MCP): a ponte
+        // tem o mesmo versionCode do app novo do mesmo Release.
+        if (PackageMigration.allowed(app, sozinho = soComTelaApagada)) {
+            val nomesRelease = HashSet<String>()
+            val lista = json.optJSONArray("assets")
+            for (i in 0 until (lista?.length() ?: 0)) nomesRelease += lista!!.getJSONObject(i).optString("name")
+            PackageMigrationRules.pickAsset(nomesRelease, android.os.Process.is64Bit())?.let { nome ->
+                return migrar(app, json, codigo, nome, instalar, soComTelaApagada)
+            }
+        }
         if (codigo <= meu) { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_em_dia, meu, codigo) }
         // Este mesmo Release já foi recusado pela chave: o APK não muda, então não baixa 12 MB de novo a cada 6 h.
         if (prefs(app).getLong(RECUSADA, 0L) == codigo) return prefs(app).getString(RECUSADA_TEXTO, null) ?: txt(R.string.atu_chave, codigo)
@@ -161,17 +172,6 @@ object Atualizador {
         VigiaAtualizacao.aoVerRelease(app, codigo)
         if (!VigiaAtualizacao.podeInstalar(app, codigo)) { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_ruim, codigo) }
 
-        // Troca de pacote (19/11/2026, PackageMigration.kt): no app ANTIGO, um Release com o APK do app novo
-        // (sofaly-launcher*.apk) não é atualização, é a mudança para tv.sofaly.launcher. Vem antes do "em dia": a ponte
-        // tem o mesmo versionCode do app novo do mesmo Release.
-        if (PackageMigration.allowed(app, sozinho = soComTelaApagada)) {
-            val nomesRelease = HashSet<String>()
-            val lista = json.optJSONArray("assets")
-            for (i in 0 until (lista?.length() ?: 0)) nomesRelease += lista!!.getJSONObject(i).optString("name")
-            PackageMigrationRules.pickAsset(nomesRelease, android.os.Process.is64Bit())?.let { nome ->
-                return migrar(app, json, codigo, nome, instalar, soComTelaApagada)
-            }
-        }
         // Baixa o APK da MESMA arquitetura em que este launcher está rodando: o processo de um app de 32 bits é de 32 bits
         // mesmo num aparelho de 64 (o Android escolhe pela lib nativa do APK instalado). Assim a Sala (32) segue no de 32,
         // uma TV que instalou o de 64 segue no de 64, e ninguém troca de arquitetura numa atualização automática.
