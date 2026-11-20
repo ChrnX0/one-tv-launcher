@@ -35,6 +35,7 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import java.util.Locale
 
@@ -255,6 +256,7 @@ class VodActivity : Activity() {
     private var miniaturaPedida = Long.MIN_VALUE
     private lateinit var infoTec: TextView
     private var decodVideo: String? = null
+    private var tunelLigado = false
     private var decodAudio: String? = null
     private var perdidos = 0
     // Medidas do player (proposta C, item 14): primeiro quadro, travadas e quadros perdidos (Cronometros.SessaoVod).
@@ -529,6 +531,14 @@ class VodActivity : Activity() {
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
             .setPreferredAudioLanguages(*(if (prefIdioma == Idioma.Pref.DUBLADO) listOfNotNull(idiomaTv, segundoIdioma) else emptyList()).toTypedArray())
             .build()
+        // Modo túnel (proposta C, item 12, 20/11/2026): o vídeo vai do decodificador direto para a tela, sincronizado com o
+        // áudio pelo hardware (os decodificadores da Sala anunciam "tunneled-playback"). Menos trabalho para o processador
+        // e quadros no tempo certo. O Media3 só liga se áudio e vídeo aceitarem; não vale com a TextureView (efeitos de
+        // imagem) e, se este aparelho já falhou com ele, fica desligado (Tunel.permitido).
+        tunelLigado = textura == null && Tunel.permitido(this)
+        (p.trackSelectionParameters as? DefaultTrackSelector.Parameters)?.let { tp ->
+            p.trackSelectionParameters = tp.buildUpon().setTunnelingEnabled(tunelLigado).build()
+        }
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         SpeechTap.proximaPosicao(retomarEm)
@@ -701,8 +711,33 @@ class VodActivity : Activity() {
     }
 
     /** Ver [textura]: põe uma TextureView no lugar da SurfaceView e passa o player para ela. */
+    /**
+     * Na Sala (20/11/2026) o túnel ficou uma vez preso em "carregando" depois de pular, com 30 s já baixados e sem
+     * erro nenhum: o decodificador parou de aceitar dados. Se continua carregando com bastante coisa baixada, é o túnel:
+     * volta ao modo comum no mesmo ponto (e não usa mais o túnel neste aparelho até a próxima versão).
+     */
+    private val vigiaTunel = Runnable {
+        val p = player ?: return@Runnable
+        if (!tunelLigado || p.playbackState != Player.STATE_BUFFERING) return@Runnable
+        if (!FimDoVideo.tunelPreso(p.bufferedPosition - p.currentPosition)) return@Runnable
+        android.util.Log.w("TvLauncher.Vod", "túnel preso carregando com ${(p.bufferedPosition - p.currentPosition) / 1000} s baixados: volta ao modo comum")
+        Tunel.desistir(this)
+        val pos = p.currentPosition
+        desligarTunel(p)
+        SpeechTap.proximaPosicao(pos); p.setMediaItem(item(url ?: return@Runnable), pos); p.prepare()
+    }
+
+    private fun desligarTunel(p: ExoPlayer) {
+        tunelLigado = false
+        val tp = p.trackSelectionParameters as? DefaultTrackSelector.Parameters ?: return
+        val pos = p.currentPosition
+        p.trackSelectionParameters = tp.buildUpon().setTunnelingEnabled(false).build()
+        if (p.playerError != null) { SpeechTap.proximaPosicao(pos); p.setMediaItem(item(url ?: return), pos); p.prepare() }
+    }
+
     private fun usarTextura() {
         if (textura != null) return
+        player?.let { if (tunelLigado) desligarTunel(it) }   // túnel só desenha numa SurfaceView
         val raiz = video.parent as? FrameLayout ?: return
         val t = android.view.TextureView(this)
         raiz.addView(t, raiz.indexOfChild(video), FrameLayout.LayoutParams(video.layoutParams as FrameLayout.LayoutParams))
@@ -829,11 +864,15 @@ class VodActivity : Activity() {
                     medida.pronto()
                     tentativas = 0
                     if (!avisouInicio) {
+                        android.util.Log.i("TvLauncher.Vod", "túnel=${player?.isTunnelingEnabled} (pedido=$tunelLigado)")
                         avisouInicio = true; avisar(FontesMidia.Momento.COMECOU, player?.currentPosition ?: 0)
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> { medida.carregando(player?.playWhenReady == true); if (cortina == null) mostrarAviso(getString(R.string.vod_carregando)) }
+                Player.STATE_BUFFERING -> {
+                    medida.carregando(player?.playWhenReady == true); if (cortina == null) mostrarAviso(getString(R.string.vod_carregando))
+                    if (tunelLigado) { tela.removeCallbacks(vigiaTunel); tela.postDelayed(vigiaTunel, FimDoVideo.TUNEL_PRESO_MS) }
+                }
                 Player.STATE_ENDED -> terminar(proximoJa = false)
                 else -> {}
             }
@@ -850,6 +889,13 @@ class VodActivity : Activity() {
         override fun onPlayerError(erro: PlaybackException) {
             // Ideia 20: erro de rede tenta de novo no mesmo ponto (2, 4 e 8 s), como a TV ao vivo; o resto mostra a mensagem.
             val p = player ?: return
+            if (tunelLigado && FimDoVideo.erroDoTunel(erro.errorCode)) {
+                // Volta automática: desliga o túnel neste aparelho e segue no mesmo ponto, sem a pessoa ver mensagem.
+                android.util.Log.w("TvLauncher.Vod", "túnel falhou (${erro.errorCodeName}): volta ao modo comum")
+                Tunel.desistir(this@VodActivity)
+                desligarTunel(p)
+                return
+            }
             val espera = FimDoVideo.esperaAntes(tentativas + 1, FimDoVideo.erroDeRede(erro.errorCode))
             if (espera == null) { tirarCortina(); mostrarAviso(getString(R.string.vod_erro)); return }
             tentativas++
