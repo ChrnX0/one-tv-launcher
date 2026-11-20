@@ -1039,10 +1039,10 @@ class FilmesActivity : Activity() {
             TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END }
                 .also { t -> corpo.addView(t) }
         }
-        // Direção: a do TMDB. A do servidor só quando o TMDB já respondeu sem ela (ou não há TMDB): antes ela aparecia
-        // primeiro e trocava ao chegar o TMDB, às vezes errada (Sala, 17/11/2026: Duna mostrou "Cliff Lanning").
-        val tmdbPendente = ext == null && InfoExternaCache.temFicha()
-        (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() && !tmdbPendente })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
+        // Direção: só a da ficha (Trakt ou TMDB). A do servidor do IPTV errou três vezes na Sala (17/11 Duna: "Cliff
+        // Lanning"; Getúlio: "Gigi Soares"; 20/11 Duna: Parte Dois 4K: "Tarik Afifi", com a ficha desligada). Sem ficha,
+        // a linha não aparece: melhor faltar do que mostrar o nome de outra pessoa.
+        ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
         (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
             ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END }) }
         direita.addView(corpo, LinearLayout.LayoutParams(-1, 0, 1f))
