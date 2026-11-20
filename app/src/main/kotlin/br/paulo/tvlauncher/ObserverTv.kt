@@ -77,8 +77,9 @@ object ObserverTv {
         val snap = blackBox.snapshot()
         val (hw, hd) = hours(agora)
         val base = baseline(p)
-        learn(p, base, snap, hw, hd, agora)
+        // Julga ANTES de aprender: a leitura de agora não pode puxar a base na própria direção e se esconder (Codex, #329).
         val findings = ObserverCore.judge(snap, agora, base, hw, hd)
+        learn(p, base, snap, hw, hd, agora)
         val change = ObserverCore.diff(active.toList(), findings)
         if (change.appeared.isEmpty() && change.cleared.isEmpty()) return
         var log = p.getString("log", null)
