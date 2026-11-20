@@ -33,7 +33,36 @@ object ObserverTv {
     private val active = LinkedHashSet<ObserverCore.Kind>()
 
     /** LauncherApp, só no processo principal. Idempotente. */
-    fun start(ctx: Context) { if (app == null) app = ctx.applicationContext }
+    fun start(ctx: Context) {
+        if (app != null) return
+        val a = ctx.applicationContext
+        app = a
+        Fundo.rodar("observer-boot") { runCatching { checkBoot(a) }.onFailure { Log.w(TAG, "boot: $it") } }
+    }
+
+    /**
+     * Uma vez por processo: se o contador de boots do Android mudou desde a última vez, a TV ligou de novo. Vai ao
+     * registro como "boot", com o motivo e quanto tempo ficou sem sinal ([ObserverCore.bootWhy]).
+     */
+    private fun checkBoot(ctx: Context) {
+        val count = android.provider.Settings.Global.getInt(ctx.contentResolver, android.provider.Settings.Global.BOOT_COUNT, -1)
+        if (count < 0) return
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        if (p.getInt("boot_count", -1) == count) return
+        val agora = System.currentTimeMillis()
+        val bootAt = agora - SystemClock.elapsedRealtime()
+        // Motivo guardado pelo Android ("reboot,deviceowner", "kernel_panic", ...). O SELinux pode negar a leitura: fica vazio.
+        val motivo = runCatching {
+            Class.forName("android.os.SystemProperties").getMethod("get", String::class.java).invoke(null, "sys.boot.reason") as? String
+        }.getOrNull()
+        val why = ObserverCore.bootWhy(motivo, p.getLong("alive_at", 0L), bootAt)
+        synchronized(this) {
+            val log = ObserverCore.appendLog(p.getString("log", null), ObserverCore.logEntry(bootAt, "boot", null, null, why, emptyMap()), agora)
+            p.edit().putString("log", log).putInt("boot_count", count).apply()
+        }
+        runCatching { Diario.anotar(ctx, "tv", "Observer: boot", why) }
+        Log.i(TAG, why)
+    }
 
     /** Um sensor manda um valor. Barato (vale chamar da thread de quadros): só guarda e, se der, agenda o juiz. */
     fun publish(signal: ObserverCore.Signal, value: Long) {
@@ -61,6 +90,8 @@ object ObserverTv {
         }
         runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, ctx.filesDir.usableSpace / 1_048_576, agora) }
         runCatching { learnHabit(ctx, agora) }
+        // A última batida antes de cair: o "boot" seguinte diz quanto tempo a TV ficou fora ([checkBoot]).
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putLong("alive_at", agora).apply()
         runCatching { OnDemandTv.tick(ctx) }   // sob demanda: congela de novo o que ficou aberto (cinto do onWindow)
         if (trialsPending) Fundo.rodar("observer-trials") { runCatching { checkTrials(ctx) }.onFailure { Log.w(TAG, "provas: $it") } }
         // O último put passa pelo publish para acordar o juiz uma vez só por amostra.

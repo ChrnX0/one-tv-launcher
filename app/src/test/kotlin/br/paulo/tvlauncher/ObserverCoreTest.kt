@@ -153,4 +153,12 @@ class ObserverCoreTest {
         assertEquals(listOf("Fila de impressão", "o Cast"), n.args)
         assertEquals(n, ObserverCore.readNotes(ObserverCore.enqueue(null, n, 1000L), 1000L).first())
     }
+
+    @Test fun ligouDeNovoNoRegistro() {
+        val boot = 1_000_000_000L
+        assertEquals("ligou de novo (motivo: reboot,deviceowner); sem sinal desde 8 min antes de ligar",
+            ObserverCore.bootWhy("reboot,deviceowner", boot - 8 * 60_000L - 5_000L, boot))
+        assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy("", 0L, boot))
+        assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy(null, boot + 1, boot))   // relógio torto: sem tempo fora
+    }
 }
