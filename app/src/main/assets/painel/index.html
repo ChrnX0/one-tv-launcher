@@ -35,6 +35,7 @@
     <symbol id="i-saude" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
     <symbol id="i-backup" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 15.5v2.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/></symbol>
     <symbol id="i-acessos" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-estrela" viewBox="0 0 24 24"><path d="M12 3.8l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.4l-5.1 2.8 1.1-5.6-4.2-3.9 5.7-.7z"/></symbol>
     <symbol id="i-tudo" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" stroke-width="2.4"/></symbol>
     <symbol id="i-mais" viewBox="0 0 24 24"><path d="M5.5 12h.01M12 12h.01M18.5 12h.01" stroke-width="3"/></symbol>
     <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M9 7 4.5 11.5 9 16"/><path d="M4.5 11.5h10a5 5 0 0 1 0 10H12"/></symbol>
@@ -218,11 +219,18 @@
       </div>
       <!-- Os mundos da cruz como PORTAS (regra 3): levam à página que já existe, não copiam ajuste. Cor = a do mundo. -->
       <nav class="portas" aria-label="Mundos da cruz">
-        <button type="button" class="porta" data-aba="tvfilmes" style="--cor: var(--t-world-watch)"><span class="ponto" aria-hidden="true"></span><span class="t">Assistir</span><span class="s">TV e filmes</span></button>
-        <button type="button" class="porta" data-ir="tvfilmes.cartaoRadios" style="--cor: var(--t-world-listen)"><span class="ponto" aria-hidden="true"></span><span class="t">Ouvir</span><span class="s">Rádios e podcasts</span></button>
-        <button type="button" class="porta" data-aba="apps" style="--cor: var(--t-world-play)"><span class="ponto" aria-hidden="true"></span><span class="t">Jogar</span><span class="s">Jogos</span></button>
-        <button type="button" class="porta" data-aba="apps" style="--cor: var(--t-world-apps)"><span class="ponto" aria-hidden="true"></span><span class="t">Apps</span><span class="s">Todos os apps</span></button>
+        <button type="button" class="porta mundo-watch" data-aba="tvfilmes"><span class="ponto" aria-hidden="true"></span><span class="t">Assistir</span><span class="s">TV e filmes</span></button>
+        <button type="button" class="porta mundo-listen" data-ir="tvfilmes.cartaoRadios"><span class="ponto" aria-hidden="true"></span><span class="t">Ouvir</span><span class="s">Rádios e podcasts</span></button>
+        <button type="button" class="porta mundo-play" data-aba="apps"><span class="ponto" aria-hidden="true"></span><span class="t">Jogar</span><span class="s">Jogos</span></button>
+        <button type="button" class="porta mundo-apps" data-aba="apps"><span class="ponto" aria-hidden="true"></span><span class="t">Apps</span><span class="s">Todos os apps</span></button>
       </nav>
+      <!-- Seus atalhos (estudo do painel, regra 6): a estrela de qualquer bloco ou chave fixa aqui, com o interruptor. -->
+      <div id="cartaoSeusAtalhos" class="cartao atalhos">
+        <h2>Seus atalhos</h2>
+        <div id="listaAtalhos" class="lista-chaves"></div>
+        <p id="vazioAtalhos" class="aviso-curto" hidden>Nenhum atalho fixado.</p>
+        <p class="aviso-curto">Toque na estrela de qualquer ajuste para fixar aqui.</p>
+      </div>
       <div class="cartao">
         <h2>Pedir à TV</h2>
         <form id="formComando" class="form-pasta" autocomplete="off">
@@ -448,10 +456,10 @@
         <p class="aviso">Tema: <select id="cfgTema" aria-label="Tema"></select></p>
         <p class="aviso">Tamanho do texto: <select id="cfgTamanho" aria-label="Tamanho do texto">
           <option value="100">Normal</option><option value="110">Grande</option><option value="120">Maior</option></select></p>
-        <label><input id="cfgAltoContraste" type="checkbox"> Alto contraste (letras e bordas mais fortes, na TV e aqui)</label>
-        <label><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
-        <label><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
-        <label><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>
+        <label data-atalho="config:altoContraste"><input id="cfgAltoContraste" type="checkbox"> Alto contraste (letras e bordas mais fortes, na TV e aqui)</label>
+        <label data-atalho="config:pilhas"><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
+        <label data-atalho="config:avisoChuva"><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
+        <label data-atalho="config:avisoTemperatura"><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>
       </div>
       <div id="cartaoClima" class="cartao">
         <h2>Previsão do tempo</h2>
@@ -530,7 +538,7 @@
         <h2>TV e filmes</h2>
         <p class="aviso">Áudio preferido em filmes e séries: <select id="cfgAudio" aria-label="Áudio preferido">
           <option value="dublado">Dublado</option><option value="original">Original</option></select></p>
-        <label><input id="cfgQuadros" type="checkbox"> Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)</label>
+        <label data-atalho="config:taxaQuadros"><input id="cfgQuadros" type="checkbox"> Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)</label>
       </div>
       <div class="cartao" id="cartaoServicos">
         <h2>Serviços de filmes e séries</h2>
@@ -609,7 +617,7 @@
         <p class="aviso">No modo infantil, filmes e séries até: <select id="cfgIdadeInfantil" aria-label="Idade máxima no modo infantil">
           <option value="-1">só as categorias infantis</option><option value="0">Livre</option><option value="10">10 anos</option>
           <option value="12">12 anos</option><option value="14">14 anos</option><option value="16">16 anos</option></select></p>
-        <label><input id="cfgVisita" type="checkbox"> Modo visita (esconde perfil, agenda e os apps marcados)</label>
+        <label data-atalho="config:visita"><input id="cfgVisita" type="checkbox"> Modo visita (esconde perfil, agenda e os apps marcados)</label>
         <p class="aviso">PIN das crianças: <strong id="cfgPinFamiliaEstado"></strong>
           <button type="button" class="link" id="btnApagarPinFamilia" hidden>apagar</button></p>
         <input id="cfgPinFamilia" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off"
@@ -1456,6 +1464,7 @@
   <script src="ia.js"></script>
   <script src="ui.js"></script>
   <script src="busca.js"></script>
+  <script src="shortcuts.js"></script>   <!-- Seus atalhos, "Conversa com" e Desfazer (20/11/2026) -->
   <script src="navigation.js"></script>   <!-- índice da página, rótulo da cruz e aba Tudo (20/11/2026) -->
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>

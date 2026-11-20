@@ -77,11 +77,12 @@ async function carregarInicio() {
   // Estudo do painel (20/11/2026, PR 3): a Sofy fala só se tem recado; "Como a TV está" virou a linha "Controle total".
   carregarFaixaSofy();
   carregarPoderes();
+  if (typeof desenharAtalhos === 'function') desenharAtalhos();   // PR 4: Seus atalhos (shortcuts.js)
 
   // Uso de hoje: os 5 apps com mais minutos, com uma barra proporcional ao primeiro.
   try {
     const u = (await chamar('GET', '/api/uso')).minutos || {};
-    const top = Object.entries(u).filter(([p]) => p !== 'br.paulo.tvlauncher').sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const top = Object.entries(u).filter(([p]) => p !== 'tv.sofaly.launcher' && p !== 'br.paulo.tvlauncher').sort((a, b) => b[1] - a[1]).slice(0, 5);
     const caixa = $('inicioUso');
     caixa.replaceChildren();
     if (!top.length) { listaVazia(caixa, 'Nenhum app usado hoje.'); return; }

@@ -1,5 +1,16 @@
 // Painel em en (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Your shortcuts",
+"Nenhum atalho fixado.":"No shortcuts pinned.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Tap the star on any setting to pin it here.",
+"Conversa com":"Works with",
+"Fixar na Início":"Pin to Home",
+"Tirar da Início":"Remove from Home",
+"Fixado na Início.":"Pinned to Home.",
+"Saiu da Início.":"Removed from Home.",
+"Desfeito.":"Undone.",
+"Ligado na TV.":"On at the TV.",
+"Desligado na TV.":"Off at the TV.",
 "Ver o porquê →":"See why →",
 "Religar na TV":"Turn back on at the TV",
 "Controle total: ativo":"Full control: on",

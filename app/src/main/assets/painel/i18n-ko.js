@@ -1,5 +1,16 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"내 바로가기",
+"Nenhum atalho fixado.":"고정된 바로가기가 없습니다.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"설정의 별을 눌러 여기에 고정하세요.",
+"Conversa com":"함께 작동",
+"Fixar na Início":"홈에 고정",
+"Tirar da Início":"홈에서 제거",
+"Fixado na Início.":"홈에 고정했습니다.",
+"Saiu da Início.":"홈에서 제거했습니다.",
+"Desfeito.":"실행 취소했습니다.",
+"Ligado na TV.":"TV에서 켰습니다.",
+"Desligado na TV.":"TV에서 껐습니다.",
 "Ver o porquê →":"이유 보기 →",
 "Religar na TV":"TV에서 다시 켜기",
 "Controle total: ativo":"전체 제어: 켜짐",

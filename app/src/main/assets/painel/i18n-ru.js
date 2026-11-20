@@ -1,5 +1,16 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Ваши ярлыки",
+"Nenhum atalho fixado.":"Нет закреплённых ярлыков.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Нажмите звёздочку у любой настройки, чтобы закрепить её здесь.",
+"Conversa com":"Связано с",
+"Fixar na Início":"Закрепить на главной",
+"Tirar da Início":"Убрать с главной",
+"Fixado na Início.":"Закреплено на главной.",
+"Saiu da Início.":"Убрано с главной.",
+"Desfeito.":"Отменено.",
+"Ligado na TV.":"Включено на телевизоре.",
+"Desligado na TV.":"Выключено на телевизоре.",
 "Ver o porquê →":"Почему →",
 "Religar na TV":"Включить снова на ТВ",
 "Controle total: ativo":"Полный контроль: включён",
