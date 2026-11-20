@@ -157,3 +157,10 @@ html{scroll-behavior:smooth}
 @media (max-width:900px){.lang select{max-width:9.5em}}
 /* Clock digits keep their order on right-to-left pages. */
 .clock{direction:ltr;unicode-bidi:isolate}
+
+/* Install line under the final CTA: the Downloader code, big enough to read from the sofa. */
+.dl{margin:28px auto 0;max-width:640px;text-align:center}
+.dl p{margin:0;font-size:19px;color:var(--mut)}
+.dl .code{display:block;width:fit-content;margin:12px auto 0;padding:8px 18px;border-radius:14px;background:#2A1D14;border:1px solid #4A3424;color:#FF8A55;font-size:clamp(30px,4vw,40px);letter-spacing:4px;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.dl .ou{margin-top:14px;font-size:17px}
+.dl a{color:#FF8A55;font-weight:700;direction:ltr;unicode-bidi:isolate}
