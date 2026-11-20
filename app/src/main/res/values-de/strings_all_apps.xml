@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Filme &amp; Serien</string>
+    <string name="aa_shelf_video">Videos</string>
+    <string name="aa_shelf_sports">Sport</string>
+    <string name="aa_shelf_kids">Kinder</string>
+    <string name="aa_shelf_music_audio">Musik &amp; Audio</string>
+    <string name="aa_shelf_news">Nachrichten</string>
+    <string name="aa_shelf_games">Spiele</string>
+    <string name="aa_shelf_education">Bildung</string>
+    <string name="aa_shelf_health_fitness">Gesundheit &amp; Fitness</string>
+    <string name="aa_shelf_lifestyle">Lifestyle</string>
+    <string name="aa_shelf_tools">Tools</string>
+    <string name="aa_shelf_system">System</string>
+    <string name="aa_shelf_other">Sonstige</string>
+    <string name="aa_frozen">Eingefroren</string>
+    <string name="aa_hidden">Ausgeblendet</string>
+    <string name="aa_badge_frozen">eingefroren</string>
+    <string name="aa_badge_hidden">ausgeblendet</string>
+    <string name="aa_lock">Ausgeblendet (%1$d)</string>
+    <string name="aa_count_hidden">ausgeblendet: %1$d</string>
+    <string name="aa_count_frozen">eingefroren: %1$d</string>
+    <string name="aa_pin_title">PIN, um ausgeblendete Apps zu sehen</string>
+    <string name="aa_used_today">Heute geöffnet</string>
+    <string name="aa_used_days">Zuletzt vor %1$d Tagen geöffnet</string>
+    <string name="aa_used_never">Von hier noch nie geöffnet</string>
+    <string name="aa_size">Belegt %1$s</string>
+    <string name="aa_risk_safe">Laut Steckbrief sicher</string>
+    <string name="aa_risk_care">Laut Steckbrief mit Vorsicht ändern</string>
+    <string name="aa_risk_essential">Wichtig für den Fernseher: nicht einfrieren</string>
+    <string name="aa_tip_idle">Seit %1$d Tagen nicht geöffnet. Einfrieren gibt Speicher frei und lässt sich rückgängig machen.</string>
+    <string name="aa_hint_app">OK öffnet · OK halten zum Verschieben, Ausblenden, Einfrieren oder Deinstallieren</string>
+    <string name="aa_hint_frozen">OK taut auf und öffnet</string>
+    <string name="aa_hint_lock">OK fragt nach der PIN und zeigt hier die ausgeblendeten Apps</string>
+    <string name="aa_open">Öffnen</string>
+    <string name="aa_freeze">Einfrieren</string>
+    <string name="aa_freezing">%1$s wird eingefroren…</string>
+    <string name="aa_frozen_done">%1$s eingefroren. In 10 Minuten prüft der Fernseher, ob alles noch geht, und macht es rückgängig, falls etwas ausfiel.</string>
+    <string name="aa_freeze_failed">%1$s konnte nicht eingefroren werden: %2$s</string>
+    <string name="aa_unfreeze_open">Auftauen und öffnen</string>
+    <string name="aa_unfreeze_refreeze">Öffnen und beim Zurückkommen wieder einfrieren</string>
+    <string name="aa_unfreezing">%1$s wird aufgetaut…</string>
+    <string name="aa_unfreeze_failed">%1$s konnte nicht aufgetaut werden: %2$s</string>
+    <string name="aa_move_auto">Automatisch</string>
+</resources>

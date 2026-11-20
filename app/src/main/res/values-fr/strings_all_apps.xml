@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Films et séries</string>
+    <string name="aa_shelf_video">Vidéos</string>
+    <string name="aa_shelf_sports">Sports</string>
+    <string name="aa_shelf_kids">Enfants</string>
+    <string name="aa_shelf_music_audio">Musique et audio</string>
+    <string name="aa_shelf_news">Actualités</string>
+    <string name="aa_shelf_games">Jeux</string>
+    <string name="aa_shelf_education">Éducation</string>
+    <string name="aa_shelf_health_fitness">Santé et forme</string>
+    <string name="aa_shelf_lifestyle">Style de vie</string>
+    <string name="aa_shelf_tools">Outils</string>
+    <string name="aa_shelf_system">Système</string>
+    <string name="aa_shelf_other">Autres</string>
+    <string name="aa_frozen">Gelées</string>
+    <string name="aa_hidden">Masquées</string>
+    <string name="aa_badge_frozen">gelée</string>
+    <string name="aa_badge_hidden">masquée</string>
+    <string name="aa_lock">Masquées (%1$d)</string>
+    <string name="aa_count_hidden">masquées : %1$d</string>
+    <string name="aa_count_frozen">gelées : %1$d</string>
+    <string name="aa_pin_title">Code PIN pour voir les apps masquées</string>
+    <string name="aa_used_today">Ouverte aujourd’hui</string>
+    <string name="aa_used_days">Ouverte il y a %1$d jours</string>
+    <string name="aa_used_never">Pas encore ouverte d’ici</string>
+    <string name="aa_size">Occupe %1$s</string>
+    <string name="aa_risk_safe">Sans risque, d’après sa fiche</string>
+    <string name="aa_risk_care">À manier avec soin, d’après sa fiche</string>
+    <string name="aa_risk_essential">Essentielle à la TV : ne pas geler</string>
+    <string name="aa_tip_idle">Pas ouverte depuis %1$d jours. La geler libère de la mémoire et peut s’annuler.</string>
+    <string name="aa_hint_app">OK ouvre · maintenez OK pour déplacer, masquer, geler ou désinstaller</string>
+    <string name="aa_hint_frozen">OK la dégèle et l’ouvre</string>
+    <string name="aa_hint_lock">OK demande le code PIN et affiche ici les apps masquées</string>
+    <string name="aa_open">Ouvrir</string>
+    <string name="aa_freeze">Geler</string>
+    <string name="aa_freezing">Gel de %1$s…</string>
+    <string name="aa_frozen_done">%1$s gelée. Dans 10 minutes, la TV vérifie que tout fonctionne encore et annule si quelque chose s’est arrêté.</string>
+    <string name="aa_freeze_failed">Impossible de geler %1$s : %2$s</string>
+    <string name="aa_unfreeze_open">Dégeler et ouvrir</string>
+    <string name="aa_unfreeze_refreeze">Ouvrir et geler à nouveau au retour</string>
+    <string name="aa_unfreezing">Dégel de %1$s…</string>
+    <string name="aa_unfreeze_failed">Impossible de dégeler %1$s : %2$s</string>
+    <string name="aa_move_auto">Automatique</string>
+</resources>

@@ -37,6 +37,8 @@ object FichasComunidade {
             val q = texto(x, "q", 300) ?: continue
             val f = JSONObject().put("r", r).put("d", d).put("q", q)
             texto(x, "en", 120)?.let { f.put("en", it) }
+            // Categoria no padrão da Play (AppShelf, 20/11/2026): só um id conhecido passa.
+            x.optString("cat").takeIf { AppShelf.Shelf.of(it) != null }?.let { f.put("cat", it) }
             x.optJSONArray("dep")?.let { a ->
                 val deps = (0 until a.length()).map { a.optString(it) }.filter(::pacoteValido).take(20)
                 if (deps.isNotEmpty()) f.put("dep", JSONArray(deps))
@@ -56,6 +58,7 @@ object FichasComunidade {
             val grave = maxOf(RISCOS.indexOf(local.optString("r")), RISCOS.indexOf(fora.optString("r")))
             if (grave >= 0) local.put("r", RISCOS[grave])
             if (!local.has("en") && fora.has("en")) local.put("en", fora.getString("en"))
+            if (!local.has("cat") && fora.has("cat")) local.put("cat", fora.getString("cat"))
         }
         return r
     }

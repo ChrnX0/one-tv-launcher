@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">影视</string>
+    <string name="aa_shelf_video">视频</string>
+    <string name="aa_shelf_sports">体育</string>
+    <string name="aa_shelf_kids">儿童</string>
+    <string name="aa_shelf_music_audio">音乐和音频</string>
+    <string name="aa_shelf_news">新闻</string>
+    <string name="aa_shelf_games">游戏</string>
+    <string name="aa_shelf_education">教育</string>
+    <string name="aa_shelf_health_fitness">健康与健身</string>
+    <string name="aa_shelf_lifestyle">生活方式</string>
+    <string name="aa_shelf_tools">工具</string>
+    <string name="aa_shelf_system">系统</string>
+    <string name="aa_shelf_other">其他</string>
+    <string name="aa_frozen">已冻结</string>
+    <string name="aa_hidden">已隐藏</string>
+    <string name="aa_badge_frozen">已冻结</string>
+    <string name="aa_badge_hidden">已隐藏</string>
+    <string name="aa_lock">已隐藏 (%1$d)</string>
+    <string name="aa_count_hidden">已隐藏：%1$d</string>
+    <string name="aa_count_frozen">已冻结：%1$d</string>
+    <string name="aa_pin_title">输入 PIN 查看隐藏的应用</string>
+    <string name="aa_used_today">今天打开过</string>
+    <string name="aa_used_days">上次打开是 %1$d 天前</string>
+    <string name="aa_used_never">还没从这里打开过</string>
+    <string name="aa_size">占用 %1$s</string>
+    <string name="aa_risk_safe">按资料卡：可以放心改</string>
+    <string name="aa_risk_care">按资料卡：改动要小心</string>
+    <string name="aa_risk_essential">电视必需：请勿冻结</string>
+    <string name="aa_tip_idle">已 %1$d 天没打开。冻结可释放内存，也可撤销。</string>
+    <string name="aa_hint_app">OK 打开 · 长按 OK 可移动、隐藏、冻结或卸载</string>
+    <string name="aa_hint_frozen">OK 解冻并打开</string>
+    <string name="aa_hint_lock">OK 输入 PIN 后在这里显示隐藏的应用</string>
+    <string name="aa_open">打开</string>
+    <string name="aa_freeze">冻结</string>
+    <string name="aa_freezing">正在冻结 %1$s…</string>
+    <string name="aa_frozen_done">%1$s 已冻结。10 分钟后电视会检查一切是否正常，若有功能停止则自动撤销。</string>
+    <string name="aa_freeze_failed">无法冻结 %1$s：%2$s</string>
+    <string name="aa_unfreeze_open">解冻并打开</string>
+    <string name="aa_unfreeze_refreeze">打开，回来后再次冻结</string>
+    <string name="aa_unfreezing">正在解冻 %1$s…</string>
+    <string name="aa_unfreeze_failed">无法解冻 %1$s：%2$s</string>
+    <string name="aa_move_auto">自动</string>
+</resources>

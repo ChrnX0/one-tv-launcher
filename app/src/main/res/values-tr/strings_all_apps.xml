@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Filmler ve diziler</string>
+    <string name="aa_shelf_video">Videolar</string>
+    <string name="aa_shelf_sports">Spor</string>
+    <string name="aa_shelf_kids">Çocuk</string>
+    <string name="aa_shelf_music_audio">Müzik ve ses</string>
+    <string name="aa_shelf_news">Haberler</string>
+    <string name="aa_shelf_games">Oyunlar</string>
+    <string name="aa_shelf_education">Eğitim</string>
+    <string name="aa_shelf_health_fitness">Sağlık ve fitness</string>
+    <string name="aa_shelf_lifestyle">Yaşam tarzı</string>
+    <string name="aa_shelf_tools">Araçlar</string>
+    <string name="aa_shelf_system">Sistem</string>
+    <string name="aa_shelf_other">Diğer</string>
+    <string name="aa_frozen">Dondurulanlar</string>
+    <string name="aa_hidden">Gizlenenler</string>
+    <string name="aa_badge_frozen">donduruldu</string>
+    <string name="aa_badge_hidden">gizli</string>
+    <string name="aa_lock">Gizlenenler (%1$d)</string>
+    <string name="aa_count_hidden">gizli: %1$d</string>
+    <string name="aa_count_frozen">dondurulmuş: %1$d</string>
+    <string name="aa_pin_title">Gizli uygulamaları görmek için PIN</string>
+    <string name="aa_used_today">Bugün açıldı</string>
+    <string name="aa_used_days">En son %1$d gün önce açıldı</string>
+    <string name="aa_used_never">Buradan henüz açılmadı</string>
+    <string name="aa_size">%1$s yer kaplıyor</string>
+    <string name="aa_risk_safe">Kartına göre güvenli</string>
+    <string name="aa_risk_care">Kartına göre dikkatli olun</string>
+    <string name="aa_risk_essential">TV için gerekli: dondurmayın</string>
+    <string name="aa_tip_idle">%1$d gündür açılmadı. Dondurmak bellek boşaltır ve geri alınabilir.</string>
+    <string name="aa_hint_app">OK açar · taşımak, gizlemek, dondurmak veya kaldırmak için OK’yi basılı tutun</string>
+    <string name="aa_hint_frozen">OK çözer ve açar</string>
+    <string name="aa_hint_lock">OK PIN ister ve gizli uygulamaları burada gösterir</string>
+    <string name="aa_open">Aç</string>
+    <string name="aa_freeze">Dondur</string>
+    <string name="aa_freezing">%1$s donduruluyor…</string>
+    <string name="aa_frozen_done">%1$s donduruldu. TV 10 dakika sonra her şeyin çalıştığını kontrol eder, bir şey durduysa geri alır.</string>
+    <string name="aa_freeze_failed">%1$s dondurulamadı: %2$s</string>
+    <string name="aa_unfreeze_open">Çöz ve aç</string>
+    <string name="aa_unfreeze_refreeze">Aç ve dönünce yeniden dondur</string>
+    <string name="aa_unfreezing">%1$s çözülüyor…</string>
+    <string name="aa_unfreeze_failed">%1$s çözülemedi: %2$s</string>
+    <string name="aa_move_auto">Otomatik</string>
+</resources>

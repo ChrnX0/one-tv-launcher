@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Filmy i seriale</string>
+    <string name="aa_shelf_video">Wideo</string>
+    <string name="aa_shelf_sports">Sport</string>
+    <string name="aa_shelf_kids">Dla dzieci</string>
+    <string name="aa_shelf_music_audio">Muzyka i audio</string>
+    <string name="aa_shelf_news">Wiadomości</string>
+    <string name="aa_shelf_games">Gry</string>
+    <string name="aa_shelf_education">Edukacja</string>
+    <string name="aa_shelf_health_fitness">Zdrowie i fitness</string>
+    <string name="aa_shelf_lifestyle">Styl życia</string>
+    <string name="aa_shelf_tools">Narzędzia</string>
+    <string name="aa_shelf_system">System</string>
+    <string name="aa_shelf_other">Inne</string>
+    <string name="aa_frozen">Zamrożone</string>
+    <string name="aa_hidden">Ukryte</string>
+    <string name="aa_badge_frozen">zamrożona</string>
+    <string name="aa_badge_hidden">ukryta</string>
+    <string name="aa_lock">Ukryte (%1$d)</string>
+    <string name="aa_count_hidden">ukryte: %1$d</string>
+    <string name="aa_count_frozen">zamrożone: %1$d</string>
+    <string name="aa_pin_title">PIN, aby zobaczyć ukryte aplikacje</string>
+    <string name="aa_used_today">Otwarta dziś</string>
+    <string name="aa_used_days">Ostatnio otwarta %1$d dni temu</string>
+    <string name="aa_used_never">Jeszcze nie otwierana stąd</string>
+    <string name="aa_size">Zajmuje %1$s</string>
+    <string name="aa_risk_safe">Bezpieczna według karty</string>
+    <string name="aa_risk_care">Ostrożnie według karty</string>
+    <string name="aa_risk_essential">Niezbędna dla telewizora: nie zamrażaj</string>
+    <string name="aa_tip_idle">Nieotwierana od %1$d dni. Zamrożenie zwalnia pamięć i można je cofnąć.</string>
+    <string name="aa_hint_app">OK otwiera · przytrzymaj OK, aby przenieść, ukryć, zamrozić lub odinstalować</string>
+    <string name="aa_hint_frozen">OK odmraża i otwiera</string>
+    <string name="aa_hint_lock">OK prosi o PIN i pokazuje tu ukryte aplikacje</string>
+    <string name="aa_open">Otwórz</string>
+    <string name="aa_freeze">Zamroź</string>
+    <string name="aa_freezing">Zamrażanie: %1$s…</string>
+    <string name="aa_frozen_done">Zamrożono %1$s. Za 10 minut telewizor sprawdzi, czy wszystko działa, i cofnie zmianę, jeśli coś przestało.</string>
+    <string name="aa_freeze_failed">Nie udało się zamrozić %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">Odmroź i otwórz</string>
+    <string name="aa_unfreeze_refreeze">Otwórz i zamroź ponownie po powrocie</string>
+    <string name="aa_unfreezing">Odmrażanie: %1$s…</string>
+    <string name="aa_unfreeze_failed">Nie udało się odmrozić %1$s: %2$s</string>
+    <string name="aa_move_auto">Automatycznie</string>
+</resources>

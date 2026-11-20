@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">영화 및 시리즈</string>
+    <string name="aa_shelf_video">동영상</string>
+    <string name="aa_shelf_sports">스포츠</string>
+    <string name="aa_shelf_kids">어린이</string>
+    <string name="aa_shelf_music_audio">음악 및 오디오</string>
+    <string name="aa_shelf_news">뉴스</string>
+    <string name="aa_shelf_games">게임</string>
+    <string name="aa_shelf_education">교육</string>
+    <string name="aa_shelf_health_fitness">건강 및 피트니스</string>
+    <string name="aa_shelf_lifestyle">라이프스타일</string>
+    <string name="aa_shelf_tools">도구</string>
+    <string name="aa_shelf_system">시스템</string>
+    <string name="aa_shelf_other">기타</string>
+    <string name="aa_frozen">동결됨</string>
+    <string name="aa_hidden">숨김</string>
+    <string name="aa_badge_frozen">동결</string>
+    <string name="aa_badge_hidden">숨김</string>
+    <string name="aa_lock">숨김 (%1$d)</string>
+    <string name="aa_count_hidden">숨김: %1$d</string>
+    <string name="aa_count_frozen">동결: %1$d</string>
+    <string name="aa_pin_title">숨긴 앱을 보려면 PIN</string>
+    <string name="aa_used_today">오늘 열었음</string>
+    <string name="aa_used_days">마지막으로 %1$d일 전에 열었음</string>
+    <string name="aa_used_never">아직 여기서 열지 않았음</string>
+    <string name="aa_size">%1$s 사용</string>
+    <string name="aa_risk_safe">카드 기준 안전</string>
+    <string name="aa_risk_care">카드 기준 주의</string>
+    <string name="aa_risk_essential">TV에 꼭 필요: 동결하지 마세요</string>
+    <string name="aa_tip_idle">%1$d일 동안 열지 않았습니다. 동결하면 메모리가 확보되고 되돌릴 수 있습니다.</string>
+    <string name="aa_hint_app">OK로 열기 · OK를 길게 눌러 이동, 숨기기, 동결, 제거</string>
+    <string name="aa_hint_frozen">OK로 동결 해제 후 열기</string>
+    <string name="aa_hint_lock">OK로 PIN을 입력하면 숨긴 앱이 여기에 표시됨</string>
+    <string name="aa_open">열기</string>
+    <string name="aa_freeze">동결</string>
+    <string name="aa_freezing">%1$s 동결 중…</string>
+    <string name="aa_frozen_done">%1$s 동결됨. 10분 뒤 TV가 모두 잘 작동하는지 확인하고 멈춘 것이 있으면 되돌립니다.</string>
+    <string name="aa_freeze_failed">%1$s을(를) 동결할 수 없음: %2$s</string>
+    <string name="aa_unfreeze_open">동결 해제 후 열기</string>
+    <string name="aa_unfreeze_refreeze">열고 돌아오면 다시 동결</string>
+    <string name="aa_unfreezing">%1$s 동결 해제 중…</string>
+    <string name="aa_unfreeze_failed">%1$s 동결을 해제할 수 없음: %2$s</string>
+    <string name="aa_move_auto">자동</string>
+</resources>

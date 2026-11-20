@@ -2,158 +2,187 @@
 "android": {
 "d": "O próprio Android: o sistema inteiro.",
 "q": "A TV não funciona sem ele.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "android.autoinstalls.config.google.sabrina": {
 "d": "A lista de apps que o Google instala na configuração inicial.",
 "q": "Nada no uso normal.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "android.chromecast": {
 "d": "Peças do Android feitas para o Chromecast (ajustes de fábrica do sistema).",
 "q": "A TV pode não ligar direito.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "br.paulo.clienteshizuku": {
 "d": "App de teste nosso, do empréstimo de shell e de dono (15/11).",
 "q": "Nada: só serve para testar o empréstimo.",
 "r": "seguro",
-"src": "nosso"
+"src": "nosso",
+"cat": "tools"
 },
 "br.paulo.tvlauncher": {
 "d": "Este launcher: a tela inicial, o despertador, o protetor de tela e este painel. É o dono do aparelho (Device Owner).",
 "q": "Sem ele a TV perde a tela inicial, o Device Owner e este painel. Desinstalar é irreversível sem reset de fábrica.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.adguard.vpn": {
 "d": "AdGuard VPN: a VPN sempre ativa da TV.",
 "en": "The TV's always-on VPN",
 "q": "A VPN e o bloqueio dela caem.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "tools"
 },
 "com.amazon.amazonvideo.livingroom": {
 "d": "Prime Video.",
 "en": "Movies, shows and sports",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "entertainment"
 },
 "com.android.backupconfirm": {
 "d": "A tela de confirmar backup ou restauração pelo adb.",
 "q": "Só faz falta para backup pelo adb.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.bluetooth.chromecast": {
 "d": "Ajustes do Bluetooth do Chromecast: controle remoto, fones e caixas.",
 "q": "O controle remoto e os fones Bluetooth podem parar.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.android.bluetoothmidiservice": {
 "d": "Liga instrumentos musicais (MIDI) pelo Bluetooth.",
 "q": "Nada para quem não liga teclado musical na TV.",
 "r": "seguro",
-"src": "https://xdaforums.com/t/guide-list-of-bloatware-on-emui-safe-to-remove.3700814/"
+"src": "https://xdaforums.com/t/guide-list-of-bloatware-on-emui-safe-to-remove.3700814/",
+"cat": "system"
 },
 "com.android.cameraextensions": {
 "d": "Extensões de câmera. A TV não tem câmera.",
 "q": "Nada, a não ser que você ligue uma câmera USB.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.certinstaller": {
 "d": "Instala certificados (Wi-Fi corporativo, VPN).",
 "q": "Não dá mais para instalar certificado novo. Os que já estão continuam.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.companiondevicemanager": {
 "d": "Pareamento de aparelhos complementares (ex.: relógios, alguns controles).",
 "q": "Parear acessórios novos pode falhar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.cts.ctsshim": {
 "d": "Pacote vazio usado pelo sistema para conferir atualizações e testes de compatibilidade.",
 "q": "Não economiza nada ocultar, e pode atrapalhar atualizações.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.cts.priv.ctsshim": {
 "d": "Pacote vazio usado pelo sistema para conferir atualizações e testes de compatibilidade.",
 "q": "Não economiza nada ocultar, e pode atrapalhar atualizações.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.dreams.basic": {
 "d": "Protetores de tela básicos do Android (cores). Este launcher usa o protetor próprio.",
 "q": "Nada: o protetor de tela é o do launcher.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.dynsystem": {
 "d": "Instala outra versão do Android para testes (Dynamic System Updates), só para desenvolvedores.",
 "q": "Nada no uso normal.",
 "r": "seguro",
-"src": "https://developer.android.com/topic/dsu"
+"src": "https://developer.android.com/topic/dsu",
+"cat": "system"
 },
 "com.android.externalstorage": {
 "d": "Dá acesso aos arquivos da memória interna e de pen drive para os outros apps.",
 "q": "Apps de arquivos e de mídia deixam de ver pastas e pen drives.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.htmlviewer": {
 "d": "Mostra páginas HTML simples, como as licenças nas Configurações.",
 "q": "A tela de licenças das Configurações pode não abrir.",
 "r": "seguro",
-"src": "https://xdaforums.com/t/guide-list-of-bloatware-on-emui-safe-to-remove.3700814/"
+"src": "https://xdaforums.com/t/guide-list-of-bloatware-on-emui-safe-to-remove.3700814/",
+"cat": "system"
 },
 "com.android.inputdevices": {
 "d": "Os layouts de teclado físico (USB ou Bluetooth).",
 "q": "Um teclado físico pode digitar as letras erradas.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.intentresolver": {
 "d": "A tela \"Abrir com\", que aparece quando mais de um app pode abrir a mesma coisa.",
 "q": "Apps que perguntam com qual app abrir algo travam ou fecham.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.keychain": {
 "d": "Guarda certificados e chaves do sistema (Wi-Fi, VPN, apps).",
 "q": "Wi-Fi com certificado, VPN e alguns apps param de se conectar.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.localtransport": {
 "d": "Transporte de backup local, usado em testes.",
 "q": "Nada no uso normal.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.location.fused": {
 "d": "Junta Wi-Fi e rede para saber a localização.",
 "q": "O clima deste launcher pode perder a cidade.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.managedprovisioning": {
 "d": "A configuração de aparelho gerenciado: foi por ela que o launcher virou Device Owner.",
 "q": "No dia a dia nada muda. Ele seria necessário para refazer o Device Owner depois de um reset.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.networkstack.chromecast": {
 "d": "Pilha de rede do Chromecast: Wi-Fi, IP e checagem de internet.",
 "q": "A TV fica sem internet.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.android.networkstack.tethering.chromecast": {
 "d": "Compartilhar a internet da TV (ancoragem) no Chromecast.",
 "q": "Some o compartilhamento de internet, que a TV não usa.",
 "r": "cuidado",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.android.pacprocessor": {
 "d": "Lê a configuração automática de proxy (PAC). Em casa, normalmente não se usa.",
 "q": "Só faz falta numa rede com proxy automático.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.printspooler": {
 "d": "Fila de impressão do Android.",
 "q": "Nada: a TV não imprime.",
 "r": "seguro",
-"src": "https://burakberk.dev/posts/how-routine-android-tv-debloating-saved-my-homelab-from-a-global-botnet/"
+"src": "https://burakberk.dev/posts/how-routine-android-tv-debloating-saved-my-homelab-from-a-global-botnet/",
+"cat": "system"
 },
 "com.android.providers.calendar": {
 "d": "Guarda os calendários e os eventos.",
@@ -161,172 +190,204 @@
 "Calendário do launcher"
 ],
 "q": "O calendário deste launcher fica vazio.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.providers.contacts": {
 "d": "Guarda os contatos das contas.",
 "q": "Apps que mostram contatos ou perfis podem falhar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.providers.downloads": {
 "d": "O gerenciador de downloads do sistema. A Play Store baixa os apps por ele.",
 "q": "A Play Store para de baixar e atualizar apps.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.providers.media": {
 "d": "A versão antiga do provedor de mídia, mantida para compatibilidade.",
 "q": "Apps antigos podem não achar fotos e vídeos.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.providers.settings": {
 "d": "Guarda todas as configurações do sistema.",
 "q": "O sistema não sobe sem ele.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.providers.tv": {
 "d": "Guarda os canais e o \"continuar assistindo\" dos apps de vídeo.",
 "q": "Somem as fileiras de canais e de \"continuar assistindo\" do Google TV.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.providers.userdictionary": {
 "d": "As palavras que você ensinou ao teclado.",
 "q": "O teclado esquece as palavras aprendidas.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.proxyhandler": {
 "d": "Cuida das configurações de proxy.",
 "q": "Só faz falta numa rede com proxy.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.se": {
 "d": "Elemento seguro (NFC e pagamento por aproximação). A TV não tem NFC.",
 "q": "Nada.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.server.telecom": {
 "d": "O serviço de chamadas. A TV não tem telefone, mas faz parte do sistema.",
 "q": "Videochamadas (ex.: Meet) podem falhar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.settings.intelligence": {
 "d": "A busca e as sugestões dentro das Configurações.",
 "q": "A busca das Configurações para.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.sharedstoragebackup": {
 "d": "Backup da memória interna pelo adb.",
 "q": "Só faz falta para backup pelo adb.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.shell": {
 "d": "O shell do Android (adb). O shell próprio do launcher roda com a identidade dele.",
 "q": "O launcher perde o shell próprio, e o adb do PC para de funcionar.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.systemui": {
 "d": "A interface do sistema: volume na tela, avisos, a barra de notificações.",
 "q": "A TV fica sem as telas básicas do sistema.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.tv.feedbackconsent": {
 "d": "Pede consentimento para mandar relatório de erro ao Google (lê os registros do sistema).",
 "q": "Some o pedido de envio de relatório de erro.",
 "r": "seguro",
-"src": "https://android.googlesource.com/platform/packages/apps/TvFeedbackConsent/"
+"src": "https://android.googlesource.com/platform/packages/apps/TvFeedbackConsent/",
+"cat": "system"
 },
 "com.android.tv.frameworkpackagestubs": {
 "d": "Responde aos pedidos que a TV não sabe atender (ex.: abrir um link sem navegador) com um aviso. Hoje é o \"navegador padrão\".",
 "q": "Apps que tentam abrir link podem fechar sozinhos.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.tv.overlay.framework": {
 "d": "Camada de recursos (overlay) que ajusta o Android para TV. Não roda sozinha.",
 "q": "Textos e ajustes de tela do sistema podem voltar ao padrão de celular.",
 "r": "essencial",
-"src": "https://source.android.com/docs/core/runtime/rros"
+"src": "https://source.android.com/docs/core/runtime/rros",
+"cat": "system"
 },
 "com.android.tv.overlay.lps.disabled": {
 "d": "Camada de recursos (overlay) que desliga um recurso do sistema nesta TV. Não roda sozinha.",
 "q": "O recurso desligado pode voltar.",
 "r": "cuidado",
-"src": "https://source.android.com/docs/core/runtime/rros"
+"src": "https://source.android.com/docs/core/runtime/rros",
+"cat": "system"
 },
 "com.android.tv.overlay.settingsprovider": {
 "d": "Valores de fábrica das configurações do Android TV (overlay). Não roda sozinha.",
 "q": "Configurações de fábrica podem mudar após um reset.",
 "r": "essencial",
-"src": "https://source.android.com/docs/core/runtime/rros"
+"src": "https://source.android.com/docs/core/runtime/rros",
+"cat": "system"
 },
 "com.android.tv.settings": {
 "d": "As Configurações da TV.",
 "en": "TV settings",
 "q": "Sem ela não dá para mexer em Wi-Fi, controle, contas nem nas opções do desenvolvedor.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.android.tv.settings.gms.resoverlay": {
 "d": "Recursos do Google para as Configurações da TV (overlay).",
 "q": "Itens do Google nas Configurações podem sumir.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.android.tv.settings.google.resoverlay": {
 "d": "Aparência do Google nas Configurações da TV (overlay).",
 "q": "As Configurações podem perder itens e o visual do Google.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.android.vending": {
 "d": "A Google Play Store.",
 "en": "Install and update apps",
 "q": "Não dá mais para instalar nem atualizar apps pela loja. Apps que conferem a compra pela Play podem reclamar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "tools"
 },
 "com.android.virtualmachine.res": {
 "d": "Recursos de máquina virtual. Esta TV não usa.",
 "q": "Nada.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.android.vpndialogs": {
 "d": "As telas de confirmação de VPN.",
 "q": "A VPN sempre ativa continua. Ligar outra VPN pela primeira vez pode falhar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.android.wallpaperbackup": {
 "d": "Backup do papel de parede do sistema.",
 "q": "Nada (o launcher usa os fundos próprios).",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.droidlogic": {
 "d": "Serviços do processador da TV (Amlogic): HDMI, vídeo e áudio.",
 "q": "Imagem, som ou HDMI podem parar.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.esaba.downloader": {
 "d": "Downloader (AFTVnews): navegador simples para baixar e instalar APKs por um código numérico.",
 "q": "Só ele some; a instalação por código para.",
 "r": "seguro",
-"src": "https://www.aftvnews.com/downloader/"
+"src": "https://www.aftvnews.com/downloader/",
+"cat": "tools"
 },
 "com.google.android.adservices.api": {
 "d": "Privacy Sandbox: anúncios personalizados feitos no próprio aparelho.",
 "q": "Nenhum app conhecido desta TV depende dele (não testado). É parte de um módulo do sistema.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.apps.education.cast2class": {
 "d": "Cast moderator: transmissão em sala de aula (Google para educação).",
 "q": "Nada em casa.",
-"r": "seguro"
+"r": "seguro",
+"cat": "education"
 },
 "com.google.android.apps.mediashell": {
 "d": "O Google Cast: recebe o que você transmite do celular ou do computador.",
 "en": "Receives what you cast from your phone or computer",
 "q": "Não dá mais para transmitir do celular para a TV.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.apps.tv.dreamx": {
 "d": "O Modo ambiente do Google (o protetor de tela dele). Fica oculto pelo launcher, que usa o protetor próprio.",
 "q": "Nada: o launcher o mantém oculto.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.apps.tv.launcherx": {
 "d": "O launcher do Google TV. Não é a tela inicial (a tela inicial é este launcher), mas o Gemini, a página de filmes da busca e o painel do Google moram nele.",
@@ -336,85 +397,101 @@
 "Painel do Google"
 ],
 "q": "O Gemini, a página de filmes, o painel de notificações e o seletor de contas quebram (medido em 04/11/2026).",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.apps.tv.netoscope": {
 "d": "O diagnóstico de conectividade das Configurações.",
 "q": "Só a tela de diagnóstico de rede some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.backdrop": {
 "d": "As fotos e a arte do Modo ambiente do Google.",
 "q": "Nada, com o protetor do launcher.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.bluetooth": {
 "d": "O Bluetooth. O controle remoto se conecta por ele.",
 "q": "O controle remoto Bluetooth para de funcionar.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.captiveportallogin": {
 "d": "A tela de login de Wi-Fi de hotel ou de aeroporto.",
 "q": "Só faz falta em Wi-Fi com página de login.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.chromecast.chromecastservice": {
 "d": "O serviço do Chromecast: HDMI-CEC (ligar a TV e mexer no volume pelo controle), modo de espera e atualização do sistema.",
 "q": "O controle deixa de ligar a TV e de mexer no volume, e as atualizações param.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.chromecast.chromecastserviceoverlay": {
 "d": "Ajustes de fábrica do serviço do Chromecast (overlay).",
 "q": "O serviço do Chromecast pode voltar ao padrão.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.chromecast.setupcustomization": {
 "d": "Personalização da configuração inicial do Chromecast.",
 "q": "Nada depois de configurado.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.configupdater": {
 "d": "Atualiza listas de segurança do sistema (certificados, fusos horários).",
 "q": "A TV deixa de receber essas atualizações de segurança.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.connectivity.resources": {
 "d": "Textos e ajustes do módulo de rede.",
 "q": "A rede pode se comportar mal.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.devicelockcontroller": {
 "d": "Bloqueio de aparelho comprado a prazo (financiado).",
 "q": "Nada.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.ext.adservices.api": {
 "d": "Versão antiga do Privacy Sandbox de anúncios.",
 "q": "Igual ao de cima: provavelmente nada visível (não testado).",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.ext.services": {
 "d": "Serviços internos do Android (organização das notificações e outros).",
 "q": "O sistema pode ficar instável.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.ext.shared": {
 "d": "Uma biblioteca de código que o sistema e alguns apps carregam.",
 "q": "Apps que usam a biblioteca deixam de abrir.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.federatedcompute": {
 "d": "Aprendizado de máquina federado do Google (módulo do sistema, APEX). Treina modelos no aparelho.",
 "q": "Nada visível; módulos APEX costumam ignorar o congelamento.",
 "r": "cuidado",
-"src": "https://asmat.ca/blog/new-phone-who-this/"
+"src": "https://asmat.ca/blog/new-phone-who-this/",
+"cat": "system"
 },
 "com.google.android.feedback": {
 "d": "Envia relatórios de erro e de travamento de apps ao Google.",
 "q": "Some o botão \"Enviar relatório\" quando um app trava.",
 "r": "seguro",
-"src": "https://xdaforums.com/t/guides-2023-walmart-onn-google-tv-4k-yoc.4610749/page-28"
+"src": "https://xdaforums.com/t/guides-2023-walmart-onn-google-tv-4k-yoc.4610749/page-28",
+"cat": "system"
 },
 "com.google.android.gms": {
 "d": "Google Play Services: contas Google, localização, notificações e segurança. Quase todo app do Google e muitos outros dependem dele.",
@@ -422,34 +499,40 @@
 "Quase todos os apps do Google"
 ],
 "q": "Contas, YouTube, Play Store, Google Cast e a busca param.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.gsf": {
 "d": "A estrutura dos Serviços do Google (contas e sincronização). Anda junto com o Google Play Services.",
 "q": "As contas Google e a sincronização param.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.health.connect.backuprestore": {
 "d": "Backup do Health Connect (dados de saúde), vindo do Android de celular.",
 "q": "Nada: a TV não guarda dados de saúde.",
 "r": "seguro",
-"src": "https://developer.android.com/health-and-fitness/guides/health-connect"
+"src": "https://developer.android.com/health-and-fitness/guides/health-connect",
+"cat": "system"
 },
 "com.google.android.healthconnect.controller": {
 "d": "Tela do Health Connect (dados de saúde), vindo do Android de celular.",
 "q": "Nada: a TV não usa.",
 "r": "cuidado",
-"src": "https://developer.android.com/health-and-fitness/guides/health-connect"
+"src": "https://developer.android.com/health-and-fitness/guides/health-connect",
+"cat": "system"
 },
 "com.google.android.hotspot2.osulogin": {
 "d": "Login de redes Wi-Fi Passpoint (de operadora).",
 "q": "Nada em casa.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.inputmethod.latin": {
 "d": "Gboard, o teclado da tela.",
 "q": "A TV fica sem teclado para digitar senhas e buscas.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.katniss": {
 "d": "O app Google: a busca por voz e o Assistente.",
@@ -459,102 +542,121 @@
 ],
 "en": "Voice search and the Assistant",
 "q": "A busca por voz e o Gemini param.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "tools"
 },
 "com.google.android.marvin.talkback": {
 "d": "TalkBack e as demais ferramentas de acessibilidade do Google (leitor de tela). O serviço de teclas deste launcher é outro.",
 "q": "Só faz falta para quem usa leitor de tela.",
-"r": "seguro"
+"r": "seguro",
+"cat": "tools"
 },
 "com.google.android.modulemetadata": {
 "d": "Informa ao sistema quais partes dele se atualizam pela Play Store.",
 "q": "As atualizações de módulos do sistema podem parar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.nearby.halfsheet": {
 "d": "As janelinhas do Compartilhamento por proximidade e do pareamento rápido.",
 "q": "Pareamento rápido de fones pode deixar de oferecer a janela.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.networkstack": {
 "d": "O gerenciador de rede: conexão Wi-Fi, IP e checagem de internet.",
 "q": "A TV perde a rede.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.networkstack.tethering": {
 "d": "Módulo de rede do sistema (compartilhamento de conexão e partes da pilha de rede).",
 "q": "Partes da rede podem parar.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.ondevicepersonalization.services": {
 "d": "Personalização de anúncios no aparelho (módulo do sistema, APEX).",
 "q": "Nada visível; módulos APEX costumam ignorar o congelamento.",
 "r": "cuidado",
-"src": "https://asmat.ca/blog/new-phone-who-this/"
+"src": "https://asmat.ca/blog/new-phone-who-this/",
+"cat": "system"
 },
 "com.google.android.onetimeinitializer": {
 "d": "Ajustes que rodam uma vez só, na primeira inicialização.",
 "q": "Nada.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.overlay.googlewebview": {
 "d": "Diz ao sistema qual WebView do Google usar (overlay).",
 "q": "Apps que mostram páginas da web por dentro podem falhar.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.overlay.gtvssettingsprovider": {
 "d": "Valores de fábrica das configurações do Google TV (overlay).",
 "q": "Configurações de fábrica do Google TV podem mudar após um reset.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.overlay.tvconfigx": {
 "d": "Ajustes do Google TV para esta TV (overlay).",
 "q": "Partes do Google TV podem se comportar diferente.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.packageinstaller": {
 "d": "O instalador de apps.",
 "q": "Não dá mais para instalar, atualizar nem desinstalar apps.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.partnersetup": {
 "d": "Ajustes do fabricante ou parceiro (ex.: busca padrão).",
 "q": "Nada visível.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.permissioncontroller": {
 "d": "O controle de permissões: as telas de \"permitir ou negar\" e as regras por trás delas.",
 "q": "As permissões dos apps param de funcionar direito.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.play.games": {
 "d": "Google Play Games: perfil de jogador, conquistas e salvamento na nuvem.",
 "q": "Jogos da Play que usam conquistas ou salvamento na nuvem podem pedir o app.",
 "r": "seguro",
-"src": "https://gist.github.com/ppcamp/fee4c63d18bbb1957674d72c006f36b3"
+"src": "https://gist.github.com/ppcamp/fee4c63d18bbb1957674d72c006f36b3",
+"cat": "games"
 },
 "com.google.android.providers.media.module": {
 "d": "Mídia: o índice de fotos, vídeos e músicas da memória interna.",
 "q": "Apps de mídia e a aba Arquivos deste painel ficam sem acesso aos arquivos.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.rkpdapp": {
 "d": "Gera as chaves de segurança do aparelho, usadas pela proteção de vídeo (DRM) e pela verificação de integridade.",
 "q": "Netflix, Prime Video e outros podem cair para qualidade baixa ou deixar de abrir.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.safetycenter.resources": {
 "d": "Textos da Central de segurança.",
 "q": "Telas de segurança das Configurações podem ficar sem texto.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.sdksandbox": {
 "d": "A \"caixa de areia\" onde rodam os códigos de anúncio dos apps.",
 "q": "Provavelmente nada visível (não testado).",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.syncadapters.calendar": {
 "d": "Sincroniza o Google Agenda com a TV.",
@@ -562,13 +664,15 @@
 "Calendário do launcher"
 ],
 "q": "O calendário deste launcher para de receber eventos novos.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.systemui.gtvoverlayx": {
 "d": "Aparência do Google TV na barra e nos painéis do sistema (overlay).",
 "q": "O painel do sistema pode ficar com o visual padrão ou falhar.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tts": {
 "d": "O reconhecimento e a síntese de voz do Google.",
@@ -576,207 +680,243 @@
 "Busca por voz"
 ],
 "q": "A busca por voz e a leitura em voz alta param.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.tungsten.setupwraith": {
 "d": "O assistente de configuração inicial. Já vem desativado.",
 "q": "Nada: só roda na primeira configuração.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.tv.axel": {
 "d": "O serviço de infravermelho: o controle liga e desliga a TV e muda o volume e a entrada por infravermelho.",
 "q": "Os botões de TV do controle (ligar, volume, entrada) param.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.tv.axel.overlay.chromecast": {
 "d": "Ajustes de fábrica do pareamento de controles do Chromecast (overlay do Axel).",
 "q": "Parear o controle remoto pode falhar.",
 "r": "essencial",
-"src": "https://www.apkmirror.com/apk/google-inc/com-google-android-tv-axel-overlay-chromecast/"
+"src": "https://www.apkmirror.com/apk/google-inc/com-google-android-tv-axel-overlay-chromecast/",
+"cat": "system"
 },
 "com.google.android.tv.dfuservice": {
 "d": "Atualiza o firmware do controle remoto.",
 "q": "O controle deixa de receber atualizações. O uso continua normal.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.tv.overlay.dfuservice": {
 "d": "Ajustes da atualização de firmware do controle remoto (overlay).",
 "q": "O controle pode não receber atualização.",
 "r": "cuidado",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tv.overlay.networkstack": {
 "d": "Ajustes de fábrica da rede do Google TV (overlay).",
 "q": "A rede pode se comportar diferente.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tv.overlay.sabrinawifi.resources": {
 "d": "Ajustes do Wi-Fi do Chromecast (\"sabrina\" é o nome interno dele).",
 "q": "O Wi-Fi pode ficar instável ou não ligar.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tv.overlay.settingsprovider": {
 "d": "Valores de fábrica das configurações do Google TV (overlay).",
 "q": "Configurações de fábrica podem mudar após um reset.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tv.overlay.wifi.resources": {
 "d": "Ajustes do Wi-Fi do Google TV (overlay).",
 "q": "O Wi-Fi pode ficar instável.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tv.remote.service": {
 "d": "Deixa o app Google TV do celular funcionar como controle remoto.",
 "q": "O celular deixa de controlar a TV.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.tv.remotecontrol.logging": {
 "d": "Registra o uso do controle remoto para o Google (telemetria).",
 "q": "Nada visível.",
 "r": "seguro",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.google.android.tvlauncher": {
 "d": "Restos do launcher antigo do Android TV, mantidos para compatibilidade.",
 "q": "Apps antigos que chamam o launcher antigo podem falhar.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.tvrecommendations": {
 "d": "Recomendações e propagandas do launcher antigo do Android TV.",
 "q": "Nada: o Sofaly não usa; somem sugestões do launcher do Google.",
 "r": "seguro",
-"src": "https://xdaforums.com/t/wip-de-bloating-the-chromecast-with-google-tv-lets-get-rid-of-those-ads.4178723/"
+"src": "https://xdaforums.com/t/wip-de-bloating-the-chromecast-with-google-tv-lets-get-rid-of-those-ads.4178723/",
+"cat": "system"
 },
 "com.google.android.uwb.resources": {
 "d": "Recursos de banda ultralarga (UWB). A TV não tem UWB.",
 "q": "Nada.",
-"r": "seguro"
+"r": "seguro",
+"cat": "system"
 },
 "com.google.android.videos": {
 "d": "Google Play Filmes (a loja de filmes do Google TV).",
 "en": "Purchased and rented movies",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "entertainment"
 },
 "com.google.android.webview": {
 "d": "O WebView: o motor de páginas da web que aparece dentro dos apps, como telas de login e de ajuda.",
 "q": "Telas de login e páginas dentro de vários apps ficam em branco ou fecham o app.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.wifi.dialog": {
 "d": "As janelas de aviso do Wi-Fi.",
 "q": "Avisos de Wi-Fi deixam de aparecer.",
-"r": "cuidado"
+"r": "cuidado",
+"cat": "system"
 },
 "com.google.android.wifi.resources": {
 "d": "Textos e ajustes do Wi-Fi.",
 "q": "O Wi-Fi pode se comportar mal.",
-"r": "essencial"
+"r": "essencial",
+"cat": "system"
 },
 "com.google.android.youtube.tv": {
 "d": "YouTube. O botão YouTube do controle abre ele.",
 "en": "Videos and channels",
 "q": "Só ele some, e o botão YouTube fica sem app.",
-"r": "seguro"
+"r": "seguro",
+"cat": "video"
 },
 "com.google.android.youtube.tvmusic": {
 "d": "YouTube Music.",
 "en": "Music, playlists and music videos",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "music_audio"
 },
 "com.google.tv.settings.chromecast": {
 "d": "Configurações próprias do Chromecast (imagem, som, controle).",
 "q": "Partes das Configurações do Chromecast somem.",
 "r": "essencial",
-"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100"
+"src": "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/issues/100",
+"cat": "system"
 },
 "com.limelight": {
 "d": "Moonlight: joga na TV os jogos do PC pela rede (GameStream/Sunshine).",
 "q": "Só ele some.",
 "r": "seguro",
-"src": "https://moonlight-stream.org/"
+"src": "https://moonlight-stream.org/",
+"cat": "games"
 },
 "com.netflix.ninja": {
 "d": "Netflix. O botão Netflix do controle abre ele.",
 "en": "Movies and shows",
 "q": "Só ele some, e o botão Netflix fica sem app.",
-"r": "seguro"
+"r": "seguro",
+"cat": "entertainment"
 },
 "com.netflix.tokenmanager": {
 "d": "Peça de fábrica da Netflix que guarda o acesso pré-ativado do aparelho.",
 "q": "A Netflix pode pedir login de novo.",
 "r": "cuidado",
-"src": "https://xdaforums.com/t/guides-2023-walmart-onn-google-tv-4k-yoc.4610749/page-20"
+"src": "https://xdaforums.com/t/guides-2023-walmart-onn-google-tv-4k-yoc.4610749/page-20",
+"cat": "system"
 },
 "com.nvidia.geforcenow": {
 "d": "GeForce NOW: jogos na nuvem da NVIDIA.",
 "q": "Só ele some.",
 "r": "seguro",
-"src": "https://www.nvidia.com/geforce-now/"
+"src": "https://www.nvidia.com/geforce-now/",
+"cat": "games"
 },
 "com.onestream.player": {
 "d": "1-Stream: player de listas de canais (IPTV).",
 "en": "Player for channel lists (IPTV)",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "video"
 },
 "com.playstation.remoteplay.tv": {
 "d": "PS Remote Play: joga na TV os jogos do PlayStation de casa.",
 "q": "Só ele some.",
 "r": "seguro",
-"src": "https://remoteplay.dl.playstation.net/remoteplay/"
+"src": "https://remoteplay.dl.playstation.net/remoteplay/",
+"cat": "games"
 },
 "com.retroarch": {
 "d": "RetroArch: emulador de videogames antigos.",
 "q": "Só ele some (os jogos salvos ficam).",
 "r": "seguro",
-"src": "https://www.retroarch.com/"
+"src": "https://www.retroarch.com/",
+"cat": "games"
 },
 "com.sugarapple.workout": {
 "d": "Home Workout: treinos em casa.",
 "en": "Workouts at home",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "health_fitness"
 },
 "com.valvesoftware.steamlink": {
 "d": "Steam Link: joga na TV os jogos do Steam do PC.",
 "q": "Só ele some.",
 "r": "seguro",
-"src": "https://store.steampowered.com/remoteplay"
+"src": "https://store.steampowered.com/remoteplay",
+"cat": "games"
 },
 "com.wbd.stream": {
 "d": "Max (HBO): filmes e séries.",
 "q": "Só ele some.",
 "r": "seguro",
-"src": "https://play.google.com/store/apps/details?id=com.wbd.stream"
+"src": "https://play.google.com/store/apps/details?id=com.wbd.stream",
+"cat": "entertainment"
 },
 "dev.projectivy.blueprint.app": {
 "d": "Pacote de ícones (Blueprint) do Projectivy; o Sofaly lê os ícones e o deixa congelado.",
 "q": "Os ícones guardados continuam; trocar de ícone pede descongelar.",
 "r": "seguro",
-"src": "nosso"
+"src": "nosso",
+"cat": "system"
 },
 "pl.solidexplorer2": {
 "d": "Solid Explorer: gerenciador de arquivos.",
 "en": "File manager",
 "q": "Só ele some.",
-"r": "seguro"
+"r": "seguro",
+"cat": "tools"
 },
 "tv.projectivy.plugin.wallpaperprovider.overflight": {
 "d": "Fundo animado Overflight (vídeos aéreos), plugin do Projectivy.",
 "q": "Some o fundo Overflight.",
 "r": "seguro",
-"src": "nosso"
+"src": "nosso",
+"cat": "system"
 },
 "tv.sofaly.launcher": {
 "d": "O Sofaly: esta tela inicial, o painel e o Observador.",
 "q": "A TV volta à tela do Google e perde o dono do aparelho.",
 "r": "essencial",
-"src": "nosso"
+"src": "nosso",
+"cat": "system"
 }
 }

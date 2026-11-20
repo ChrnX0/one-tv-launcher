@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">أفلام ومسلسلات</string>
+    <string name="aa_shelf_video">فيديو</string>
+    <string name="aa_shelf_sports">رياضة</string>
+    <string name="aa_shelf_kids">أطفال</string>
+    <string name="aa_shelf_music_audio">موسيقى وصوت</string>
+    <string name="aa_shelf_news">أخبار</string>
+    <string name="aa_shelf_games">ألعاب</string>
+    <string name="aa_shelf_education">تعليم</string>
+    <string name="aa_shelf_health_fitness">صحة ولياقة</string>
+    <string name="aa_shelf_lifestyle">أسلوب حياة</string>
+    <string name="aa_shelf_tools">أدوات</string>
+    <string name="aa_shelf_system">النظام</string>
+    <string name="aa_shelf_other">أخرى</string>
+    <string name="aa_frozen">مجمّدة</string>
+    <string name="aa_hidden">مخفية</string>
+    <string name="aa_badge_frozen">مجمّد</string>
+    <string name="aa_badge_hidden">مخفي</string>
+    <string name="aa_lock">مخفية (%1$d)</string>
+    <string name="aa_count_hidden">مخفية: %1$d</string>
+    <string name="aa_count_frozen">مجمّدة: %1$d</string>
+    <string name="aa_pin_title">رمز PIN لرؤية التطبيقات المخفية</string>
+    <string name="aa_used_today">فُتح اليوم</string>
+    <string name="aa_used_days">فُتح آخر مرة قبل %1$d يوم</string>
+    <string name="aa_used_never">لم يُفتح من هنا بعد</string>
+    <string name="aa_size">يشغل %1$s</string>
+    <string name="aa_risk_safe">آمن حسب بطاقته</string>
+    <string name="aa_risk_care">بحذر حسب بطاقته</string>
+    <string name="aa_risk_essential">أساسي للتلفاز: لا تجمّده</string>
+    <string name="aa_tip_idle">لم يُفتح منذ %1$d يوم. التجميد يحرّر الذاكرة ويمكن التراجع عنه.</string>
+    <string name="aa_hint_app">OK يفتح · اضغط مطولًا على OK للنقل أو الإخفاء أو التجميد أو الإزالة</string>
+    <string name="aa_hint_frozen">OK يلغي التجميد ويفتح</string>
+    <string name="aa_hint_lock">OK يطلب رمز PIN ويعرض التطبيقات المخفية هنا</string>
+    <string name="aa_open">فتح</string>
+    <string name="aa_freeze">تجميد</string>
+    <string name="aa_freezing">جارٍ تجميد %1$s…</string>
+    <string name="aa_frozen_done">تم تجميد %1$s. بعد 10 دقائق يتحقق التلفاز من أن كل شيء يعمل ويتراجع إن توقف شيء.</string>
+    <string name="aa_freeze_failed">تعذّر تجميد %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">إلغاء التجميد والفتح</string>
+    <string name="aa_unfreeze_refreeze">افتح وجمّده مجددًا عند العودة</string>
+    <string name="aa_unfreezing">جارٍ إلغاء تجميد %1$s…</string>
+    <string name="aa_unfreeze_failed">تعذّر إلغاء تجميد %1$s: %2$s</string>
+    <string name="aa_move_auto">تلقائي</string>
+</resources>
