@@ -236,12 +236,12 @@ You need a **Google TV / Android TV** device. It's tested daily on a Chromecast 
 ### Install with Downloader (no computer needed)
 
 1. Install **Downloader** by AFTVnews from the Play Store on your TV.
-2. Open it and enter the code **`8887571`** (or the short link [`aftv.news/8887571`](https://aftv.news/8887571)). It downloads
+2. Open it and enter the code **`6566820`** (or the short link [`aftv.news/6566820`](https://aftv.news/6566820)). It downloads
    `sofaly-launcher.apk` (32-bit, Chromecast with Google TV).
 3. Tap **Install**.
 
 On a 64-bit TV, type this address in Downloader instead:
-`https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher-arm64.apk`
+`sofaly.tv/download-arm64`
 
 ### Then
 
