@@ -81,8 +81,12 @@ object PainelApps {
      * sem tela costuma ser serviço ou provedor de que outros dependem (ocultar um desses pode quebrar a TV), então fica
      * de fora. Reexibir é sempre permitido, para desfazer.
      */
-    private fun podeOcultar(ctx: Context, ai: ApplicationInfo, abrivel: Boolean) =
-        !protegido(ctx, ai.packageName) && (!sistema(ai) || abrivel)
+    /** Qualquer pacote menos os protegidos (20/11/2026; antes, app de sistema só se tivesse tela). O PIN é o freio: [MenuApp.ocultarPedePin]. */
+    @Suppress("UNUSED_PARAMETER")
+    private fun podeOcultar(ctx: Context, ai: ApplicationInfo, abrivel: Boolean) = !protegido(ctx, ai.packageName)
+
+    /** O risco do pacote pela ficha (o mesmo da lista). Null se não existe. */
+    fun risco(ctx: Context, pacote: String): String? = infoApp(ctx, pacote)?.let { PainelFicha.risco(ctx, it, PainelFicha.papeis(ctx)) }
 
     /** Desinstalar: só app instalado pelo usuário (sem FLAG_SYSTEM). App de sistema só se oculta. */
     private fun podeDesinstalar(ctx: Context, ai: ApplicationInfo) =

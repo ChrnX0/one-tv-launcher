@@ -1542,6 +1542,8 @@ object PainelWeb {
         // Reexibir pede o PIN de novo (10/11/2026): uma sessão comum (ex.: entrou pelo QR da TV, talvez uma criança) não
         // desfaz o que o dono escondeu. Ocultar continua livre: só deixa a TV mais fechada.
         if (!oculto && !sessoes.elevada(token)) return precisaPin()
+        // Ocultar o que a ficha não diz "seguro" (app de sistema, essencial, sem informação) também pede o PIN (20/11/2026).
+        if (oculto && !sessoes.elevada(token) && MenuApp.ocultarPedePin(PainelApps.risco(app, pacote) ?: "sem informação")) return precisaPin()
         val motivo = PainelApps.ocultar(app, pacote, oculto)
         PainelArmazem.registrar(app, ip, (if (oculto) "ocultar " else "reexibir ") + pacote, motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
