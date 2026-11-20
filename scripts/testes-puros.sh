@@ -62,6 +62,7 @@ declare -A FONTES=(
   [PerfilDadosTest]="PerfilDados EnsaioRestauracao CofreBackup"
   [PerfilCriancaTest]="PerfilCrianca"
   [AutoDesligarRegraTest]="AutoDesligarRegra"
+  [SofyCoreTest]="SofyCore"
 )
 
 falhou=0
