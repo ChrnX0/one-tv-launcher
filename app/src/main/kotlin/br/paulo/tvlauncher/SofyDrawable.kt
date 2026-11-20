@@ -82,8 +82,11 @@ class SofyDrawable(
     override fun draw(c: Canvas) {
         val b = bounds
         if (b.isEmpty) return
-        // Quadro com folga para o pulo, os braços para cima e o balão: x -30..150, y -30..120 (o símbolo é 0..120 x 0..112).
-        val qx = -30f; val qy = -30f; val qw = 180f; val qh = 150f
+        // Quadro com folga para o pulo e os braços (o símbolo é 0..120 x 0..112). Sem balão o quadro é justo, para ela sair
+        // maior na pílula (conferido na Sala 20/11: com a folga do balão sempre, o rosto ficava pequeno a 3 m).
+        val qx: Float; val qy: Float; val qw: Float; val qh: Float
+        // Sem balão: o braço erguido chega a ~-20 e ~142 em x, o pulo a ~-12 em y.
+        if (bubble == null) { qx = -22f; qy = -16f; qw = 164f; qh = 132f } else { qx = -30f; qy = -30f; qw = 180f; qh = 150f }
         val esc = minOf(b.width() / qw, b.height() / qh)
         c.save()
         c.translate(b.left + (b.width() - qw * esc) / 2f - qx * esc, b.top + (b.height() - qh * esc) / 2f - qy * esc)
