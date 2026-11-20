@@ -32,6 +32,9 @@ object Placar {
         const val INSTALACAO_INICIO = "instalacao_inicio"   // processo principal
         const val INSTALACAO = "instalacao"     // primeira abertura até o primeiro canal (processo :player)
         const val LIMPEZA = "limpeza"           // memória ganha na limpeza, MB (processo principal)
+        const val VOD = "vod"                   // filme/episódio: tela aberta até o primeiro quadro (processo :player)
+        const val VOD_TRAVADAS = "vod_travadas" // travadas por hora de vídeo tocando, por sessão de 5 min ou mais (:player)
+        const val VOD_PERDIDOS = "vod_perdidos" // quadros perdidos por minuto de vídeo tocando, idem (:player)
     }
 
     data class Ponto(val valor: Long, val em: Long)

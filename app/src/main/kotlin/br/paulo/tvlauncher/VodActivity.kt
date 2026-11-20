@@ -239,6 +239,9 @@ class VodActivity : Activity() {
     private var decodVideo: String? = null
     private var decodAudio: String? = null
     private var perdidos = 0
+    // Medidas do player (proposta C, item 14): primeiro quadro, travadas e quadros perdidos (Cronometros.SessaoVod).
+    private val medida = Cronometros.SessaoVod()
+    private var perdidosMedidos = 0
     // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
     private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
     /** Elevação 6.4: o que a pessoa escolheu para esta série (legenda, velocidade, atraso da legenda). */
@@ -282,6 +285,7 @@ class VodActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        medida.abriu(android.os.SystemClock.elapsedRealtime())
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val tipo = intent.getStringExtra(EXTRA_TIPO) ?: TIPO_FILME
         val fonte = intent.getStringExtra(EXTRA_FONTE).orEmpty()
@@ -451,6 +455,7 @@ class VodActivity : Activity() {
         super.onStop()
         visivel = false
         salvar()
+        medirTrecho()
         player?.let { avisar(FontesMidia.Momento.PAROU, it.currentPosition) }
         avisouInicio = false
         efeitos.soltar()
@@ -773,7 +778,10 @@ class VodActivity : Activity() {
 
     private val ouvinte = object : Player.Listener {
         override fun onPositionDiscontinuity(velha: Player.PositionInfo, nova: Player.PositionInfo, motivo: Int) {
-            if (motivo == Player.DISCONTINUITY_REASON_SEEK) player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) }
+            if (motivo == Player.DISCONTINUITY_REASON_SEEK) { medida.pulou(); player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) } }
+        }
+        override fun onRenderedFirstFrame() {
+            medida.primeiroQuadro(android.os.SystemClock.elapsedRealtime())?.let { MedidasTv.anotar(this@VodActivity, Placar.Chave.VOD, it) }
         }
         override fun onCues(cues: CueGroup) {
             legendaImg.mostrar(cues.cues)
@@ -785,19 +793,21 @@ class VodActivity : Activity() {
             when (estado) {
                 Player.STATE_READY -> {
                     esconderAviso()
+                    medida.pronto()
                     tentativas = 0
                     if (!avisouInicio) {
                         avisouInicio = true; avisar(FontesMidia.Momento.COMECOU, player?.currentPosition ?: 0)
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.vod_carregando))
+                Player.STATE_BUFFERING -> { medida.carregando(player?.playWhenReady == true); mostrarAviso(getString(R.string.vod_carregando)) }
                 Player.STATE_ENDED -> terminar(proximoJa = false)
                 else -> {}
             }
             atualizarBarra()
         }
         override fun onIsPlayingChanged(tocando: Boolean) {
+            medida.tocando(tocando, android.os.SystemClock.elapsedRealtime())
             Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra()
             player?.let { junto?.mudou(tocando, it.currentPosition) }
             // Trakt/Simkl: começou ou voltou a tocar = "vendo agora"; pausou no meio = pausa (o fim é tratado no avisar).
@@ -1698,6 +1708,15 @@ class VodActivity : Activity() {
         tempo.text = pausa + (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos)) + termina
         progresso.progress = dur?.let { (pos * 1000 / it).toInt() } ?: 0
         progresso.secondaryProgress = dur?.let { (p.bufferedPosition * 1000 / it).toInt() } ?: 0
+    }
+
+    /** Fecha o trecho medido (a tela saiu da frente ou o vídeo acabou) e grava as taxas, se tocou o bastante. */
+    private fun medirTrecho() {
+        val r = medida.fechar(android.os.SystemClock.elapsedRealtime(), perdidos - perdidosMedidos)
+        perdidosMedidos = perdidos
+        r ?: return
+        MedidasTv.anotar(this, Placar.Chave.VOD_TRAVADAS, r.travadasPorHora)
+        MedidasTv.anotar(this, Placar.Chave.VOD_PERDIDOS, r.perdidosPorMin)
     }
 
     private fun relogio(ms: Long): String {
