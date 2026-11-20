@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"نقل إلى ذاكرة USB؟",
 "Mover":"نقل",
 "no pen drive":"على ذاكرة USB",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"سيُمسح كل ما عليها. كذاكرة للتلفاز تعمل على هذا التلفاز فقط ويجب أن تبقى موصولة: إذا تعطلت أو نُزعت فقد لا يعمل التلفاز حتى تفصلها. إذا كانت عليها تطبيقات فستعود إلى التلفاز أولًا.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"تطبيق كبير: على ذاكرة بطيئة قد يتجاوز النقل 10 دقائق وقد أوقف تلفازًا في منتصفه. يُغلق التطبيق أثناء نقله. تابع فقط إذا لم يكن أحد يشاهد.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"لم يتم: هذه الذاكرة تكتب ببطء شديد (أقل من 10 ميجابايت/ث) لتصبح ذاكرة للتلفاز. استخدمها كذاكرة عادية.",
+"Medindo a velocidade…":"جارٍ قياس السرعة…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","تخزين التلفزيون: $1 متاحة من $2"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","لم ينجح: $1"],

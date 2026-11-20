@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.format.Formatter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -2621,11 +2622,12 @@ class MainActivity : Activity() {
             titulo = nomeDe(token) + if (PainelApps.eSistema(this, token)) getString(R.string.home_app_sistema) else ""
             val sobDemanda = when { OnDemandTv.marked(this, token) -> true; OnDemandTv.eligible(this, token) -> false; else -> null }
             val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda,
-                AppStorage.opcaoMenu(this, token))
+                AppStorage.opcaoMenu(this, token), PainelPermissoes.arquivosBloqueados(this, token))
             AppStorage.atualizarEmFundo(this)   // pen drive entrou/saiu: o próximo menu já sabe
             for (a in acoes) opcoes += when (a) {
                 MenuApp.Acao.INSTALAR_EXTERNO -> Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(token, true) }
                 MenuApp.Acao.INSTALAR_DISPOSITIVO -> Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(token, false) }
+                MenuApp.Acao.LIBERAR_ARQUIVOS -> Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(token) }
                 MenuApp.Acao.SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda)) { mudarSobDemanda(token, true) }
                 MenuApp.Acao.TIRAR_SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda_tirar)) { mudarSobDemanda(token, false) }
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
@@ -2688,8 +2690,34 @@ class MainActivity : Activity() {
      * Leva o app para o pen drive adotado ou de volta para a TV (AppStorage.kt). O Android fecha o app enquanto copia;
      * 1 GB leva ~1,5 min num pen drive comum. Dá para desfazer pelo mesmo menu, então não pede confirmação.
      */
-    private fun mudarArmazenamento(pacote: String, paraExterno: Boolean) {
+    /** RetroArch e afins: libera ler pen drives e arquivos (PainelPermissoes.liberarArquivos), pelo shell, fora da tela. */
+    private fun liberarArquivos(pacote: String) {
         val nome = nomeDe(pacote)
+        Fundo.rodar("Arquivos") {
+            val motivo = PainelPermissoes.liberarArquivos(this, pacote)
+            runOnUiThread {
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                mostrarAviso(if (motivo == null) getString(R.string.home_arquivos_liberado, nome)
+                    else getString(R.string.home_arquivos_falhou, nome, motivo))
+            }
+        }
+    }
+
+    private fun mudarArmazenamento(pacote: String, paraExterno: Boolean, confirmado: Boolean = false) {
+        val nome = nomeDe(pacote)
+        if (!confirmado) {
+            // App grande: aviso antes (o que derrubou a Sala em 20/11/2026). Pesar o app lê o disco: fora da tela.
+            Fundo.rodar("AppStorage") {
+                val a = StorageMode.appMovel(this, pacote)
+                runOnUiThread {
+                    if (isFinishing || isDestroyed) return@runOnUiThread
+                    if (a?.arriscado == true) StorageActivity.avisoGrande(this, nome, Formatter.formatShortFileSize(this, a.bytes)) {
+                        mudarArmazenamento(pacote, paraExterno, confirmado = true)
+                    } else mudarArmazenamento(pacote, paraExterno, confirmado = true)
+                }
+            }
+            return
+        }
         mostrarAviso(getString(R.string.home_instalando_lugar, nome))
         Fundo.rodar("AppStorage") {
             val motivo = AppStorage.mover(this, pacote, paraExterno)
@@ -4371,6 +4399,8 @@ class MainActivity : Activity() {
             false -> opcoes += Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(pacote, false) }
             null -> {}
         }
+        if (PainelPermissoes.arquivosBloqueados(this, pacote))
+            opcoes += Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(pacote) }
         AppStorage.atualizarEmFundo(this)
         val desinstala = PainelApps.podeDesinstalar(this, pacote)
         if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }

@@ -33,8 +33,10 @@ async function carregarStorage() {
   if (!r.shell) { mostrar(status, 'Precisa do shell próprio da TV (Configurações > Avançado).'); return; }
   $('storageTv').textContent = `Memória da TV: ${tamanhoLegivel(r.livreTv)} livres de ${tamanhoLegivel(r.totalTv)}`;
   if (r.tarefa) mostrar(status, 'A TV está trabalhando nisso. Pode levar alguns minutos.');
+  else if (r.ultimo && r.ultimo.motivo === 'PEN_LENTO') mostrar(status, 'Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.');
   else if (r.ultimo) mostrar(status, r.ultimo.ok ? 'Pronto.' : `Não deu certo: ${r.ultimo.motivo}`);
   else mostrar(status, '');
+  let medindoStorage = false;
   const pens = $('storagePens');
   pens.replaceChildren();
   if (!r.pens.length) {
@@ -47,6 +49,9 @@ async function carregarStorage() {
     const span = (texto, classe) => Object.assign(document.createElement('span'), { textContent: texto, className: classe || '' });
     const t = document.createElement('p');
     t.append(span(`Pen drive · ${tamanhoLegivel(p.tamanho)}`), ' · ', span(MODO_STORAGE[p.modo] || p.modo));
+    // Velocidade medida pela TV (a recomendação sai dela); sem medida ainda, a TV mede agora e o cartão relê.
+    if (p.velocidade != null) t.append(' · ', `${p.velocidade.toFixed(1)} MB/s`);
+    else if (p.medindo) { t.append(' · ', span('Medindo a velocidade…')); medindoStorage = true; }
     const rec = document.createElement('p');
     rec.className = 'aviso-curto';
     rec.append(span('Recomendado:'), ' ', span(MODO_STORAGE[p.recomendado]), ' · ', span(MOTIVO_STORAGE[p.motivo] || ''));
@@ -54,8 +59,10 @@ async function carregarStorage() {
     botoes.className = 'botoes-linha';
     const formatar = (modo, comum) => async () => {
       try {
-        const ok = await confirmar('Apagar o pen drive?',
-          'Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV. Se ele já tem apps, eles voltam para a TV antes.',
+        // Misto e memória da TV: a TV mede a velocidade antes e recusa pen drive lento (PEN_LENTO no resultado).
+        const ok = await confirmar('Apagar o pen drive?', modo === 'COMUM'
+          ? 'Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV. Se ele já tem apps, eles voltam para a TV antes.'
+          : 'Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.',
           'Apagar e formatar', () => chamar('POST', '/api/storage/formatar', { disco: p.disco, modo, comum }));
         if (ok) carregarStorage();
       } catch (e) { mostrar(status, textoErro(e)); }
@@ -79,9 +86,11 @@ async function carregarStorage() {
       if (a.noPen) nome.append(' · ', Object.assign(document.createElement('span'), { textContent: 'no pen drive' }));
       const b = botaoStorage(a.noPen ? 'Trazer para a TV' : 'Levar para o pen drive', false, async () => {
         try {
+          // App grande (a.grande): aviso forte; a TV só aceita com confirmar=true.
           const ok = await confirmar(a.noPen ? 'Trazer para a TV?' : 'Levar para o pen drive?',
-            `${a.nome} fecha enquanto é movido. Dá para desfazer depois.`, 'Mover',
-            () => chamar('POST', '/api/storage/app', { pacote: a.pacote, externo: !a.noPen }), false);
+            a.grande ? 'App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.'
+              : `${a.nome} fecha enquanto é movido. Dá para desfazer depois.`, 'Mover',
+            () => chamar('POST', '/api/storage/app', { pacote: a.pacote, externo: !a.noPen, confirmar: true }), a.grande);
           if (ok) carregarStorage();
         } catch (e) { mostrar(status, textoErro(e)); }
       });
@@ -90,5 +99,5 @@ async function carregarStorage() {
     }
   }
   // Enquanto a TV trabalha, confere de novo a cada 5 s (só com a aba aberta).
-  if (r.tarefa) timerStorage = setTimeout(carregarStorage, 5000);
+  if (r.tarefa || medindoStorage) timerStorage = setTimeout(carregarStorage, 5000);
 }

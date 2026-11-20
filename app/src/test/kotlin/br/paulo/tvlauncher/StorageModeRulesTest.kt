@@ -66,4 +66,16 @@ class StorageModeRulesTest {
         org.junit.Assert.assertTrue(StorageModeRules.caminhoSeguro("/storage/8991-1F25"))
         org.junit.Assert.assertFalse(StorageModeRules.caminhoSeguro("/storage/x'; reboot"))
     }
+
+    @Test fun penLentoNaoViraMemoriaDaTv() {
+        val M = StorageModeRules.Modo
+        assertTrue(StorageModeRules.podeFormatar(M.COMUM, 1.0, medivel = true))
+        assertFalse(StorageModeRules.podeFormatar(M.MEMORIA_TV, null, medivel = true))   // sem medida: mede antes
+        assertFalse(StorageModeRules.podeFormatar(M.MISTO, 9.9, medivel = true))
+        assertTrue(StorageModeRules.podeFormatar(M.MISTO, 10.0, medivel = true))
+        assertTrue(StorageModeRules.podeFormatar(M.MEMORIA_TV, null, medivel = false))   // já adotado inteiro
+        assertFalse(StorageModeRules.podeFormatar(M.DESCONHECIDO, 50.0, medivel = true))
+        val gb = 1024L * 1024 * 1024
+        assertEquals(StorageModeRules.Motivo.PEN_LENTO, StorageModeRules.recomendar(1 * gb, 64 * gb, 8.0).motivo)
+    }
 }

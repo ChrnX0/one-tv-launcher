@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"Перенести на флешку?",
 "Mover":"Перенести",
 "no pen drive":"на флешке",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"Всё на ней будет стёрто. Как память ТВ она работает только на этом ТВ и должна оставаться подключённой: если она сломается или её вынут, ТВ может не включиться, пока её не отсоединить. Если на ней уже есть приложения, они сначала вернутся на ТВ.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"Большое приложение: на медленной флешке перенос может занять больше 10 минут и уже однажды повесил ТВ на середине. Приложение закрывается во время переноса. Продолжайте, только когда никто не смотрит.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"Не выполнено: эта флешка пишет слишком медленно (меньше 10 МБ/с), чтобы стать памятью ТВ. Используйте её как обычную флешку.",
+"Medindo a velocidade…":"Измеряю скорость…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","Память ТВ: свободно $1 из $2"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","Не получилось: $1"],

@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"USB 드라이브로 옮길까요?",
 "Mover":"이동",
 "no pen drive":"USB 드라이브에 있음",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"안의 모든 내용이 지워집니다. TV 저장소로는 이 TV에서만 작동하며 항상 꽂아 두어야 합니다. 고장 나거나 빠지면 뽑을 때까지 TV가 켜지지 않을 수 있습니다. 이미 앱이 있으면 먼저 TV로 돌아옵니다.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"큰 앱: 느린 USB 메모리에서는 이동에 10분 넘게 걸릴 수 있고, 중간에 TV가 멈춘 적이 있습니다. 이동하는 동안 앱이 닫힙니다. 아무도 보고 있지 않을 때만 계속하세요.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"실행 안 함: 이 USB 메모리는 쓰기가 너무 느려서(10 MB/s 미만) TV 저장소가 될 수 없습니다. 일반 USB 메모리로 사용하세요.",
+"Medindo a velocidade…":"속도 측정 중…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","TV 저장공간: $2 중 $1 남음"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","실패: $1"],

@@ -937,4 +937,13 @@ AS\\Фильмы).</string>
     <string name="st_trazendo">Возвращаем %1$s на ТВ…</string>
     <string name="st_sumiram">Флешка отключена: %1$s скрыты, пока она не вернётся.</string>
     <string name="st_sugestao">Память ТВ почти заполнена. Перенесите %1$s (%2$s) на флешку: удерживайте OK на приложении.</string>
+    <string name="st_medindo">Измеряю скорость флешки…</string>
+    <string name="st_lento_titulo">Флешка слишком медленная</string>
+    <string name="st_lento_bloqueado">Эта флешка пишет со скоростью %1$s МБ/с. Чтобы стать памятью ТВ, нужно не меньше %2$d МБ/с: иначе приложения зависают, а ТВ может не включиться. Используйте её как обычную флешку.</string>
+    <string name="st_aviso_boot">Не отключайте её: если она сломается или её вынут, ТВ может не включиться, пока её не отсоединить.</string>
+    <string name="home_grande_titulo">Переместить %1$s?</string>
+    <string name="home_grande_aviso">%1$s занимает %2$s. На медленной флешке перенос может занять больше 10 минут и уже однажды повесил ТВ на середине. Продолжайте, только когда никто не смотрит.</string>
+    <string name="home_liberar_arquivos">Разрешить открывать флешки и файлы</string>
+    <string name="home_arquivos_liberado">%1$s теперь открывает флешки и все файлы</string>
+    <string name="home_arquivos_falhou">Не удалось разрешить %1$s: %2$s</string>
 </resources>

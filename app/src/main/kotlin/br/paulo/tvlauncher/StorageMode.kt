@@ -27,6 +27,10 @@ object StorageMode {
         val tamanho: Long,
         val comum: String?,
         val adotadoUuid: String?,
+        /** Gravação medida (MB/s) da parte comum, guardada por volume; null = ainda não medida. */
+        val velocidade: Double? = null,
+        /** fsUuid da parte comum (chave da medida guardada). */
+        val comumUuid: String? = null,
     )
 
     data class Estado(val pens: List<Pen>, val livreTv: Long, val totalTv: Long, val primarioNoPen: Boolean)
@@ -58,7 +62,8 @@ object StorageMode {
             val caminhoPub = pub?.fsUuid?.let { u -> montados.firstOrNull { it.uuid.equals(u, true) }?.directory?.absolutePath }
             val tamPub = caminhoPub?.let { statfs(it)?.first } ?: 0L
             val tamPri = pri?.fsUuid?.let { tamanhosExpand["/mnt/expand/$it"]?.first } ?: 0L
-            Pen(d, StorageModeRules.modo(dv), dv, tamPub + tamPri, caminhoPub, pri?.fsUuid)
+            Pen(d, StorageModeRules.modo(dv), dv, tamPub + tamPri, caminhoPub, pri?.fsUuid,
+                pub?.fsUuid?.let { velocidadeGuardada(ctx, it) }, pub?.fsUuid)
         }
         // Parte comum de um misto: guardada para gravaveis() (que roda sem shell) dizer MIXED_PUBLIC.
         val mistos = pens.filter { it.modo == StorageModeRules.Modo.MISTO }.flatMap { p ->
@@ -77,7 +82,23 @@ object StorageMode {
         if (!StorageModeRules.caminhoSeguro(comum)) return null
         val f = "$comum/.sofaly-speed-test"
         val saida = GuardiaoShizuku.comando(ctx, "dd if=/dev/zero of='$f' bs=1048576 count=32 conv=fsync 2>&1; rm -f '$f'", 60_000)
-        return saida?.let { StorageModeRules.velocidadeDd(it) }
+        val v = saida?.let { StorageModeRules.velocidadeDd(it) } ?: return null
+        // Guarda pelo nome do volume (o fim do caminho): a tela e o painel recomendam sozinhos da próxima vez.
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putFloat("speed:" + comum.substringAfterLast('/').lowercase(), v.toFloat()).apply()
+        return v
+    }
+
+    fun velocidadeGuardada(ctx: Context, fsUuid: String): Double? {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val k = "speed:" + fsUuid.lowercase()
+        return if (p.contains(k)) p.getFloat(k, 0f).toDouble() else null
+    }
+
+    @Volatile private var medindo = false
+    /** Mede em segundo plano, uma vez por vez (painel: o cartão mostra a recomendação certa na próxima leitura). */
+    fun medirEmFundo(ctx: Context, comum: String) {
+        synchronized(this) { if (medindo) return; medindo = true }
+        Fundo.rodar("StorageSpeed") { try { medir(ctx.applicationContext, comum) } finally { medindo = false } }
     }
 
     /** Formata. APAGA o pen drive. null = deu certo; senão o motivo. Até 20 min (o Android mede o disco ao adotar). */
@@ -102,7 +123,10 @@ object StorageMode {
     }
 
     /** Apps que podem ir para o pen drive (ou voltar), do maior para o menor. Tamanho = app + dados + cache. */
-    data class AppMovel(val pacote: String, val nome: String, val bytes: Long, val noExterno: Boolean)
+    data class AppMovel(val pacote: String, val nome: String, val bytes: Long, val noExterno: Boolean, val partes: Int = 1) {
+        /** Grande demais para mover sem aviso (AppStorageRules.arriscado). */
+        val arriscado get() = AppStorageRules.arriscado(bytes, partes)
+    }
 
     fun appsMoveis(ctx: Context): List<AppMovel> {
         val pm = ctx.packageManager
@@ -115,9 +139,21 @@ object StorageMode {
                 val s = ssm.queryStatsForPackage(ai.storageUuid, ai.packageName, Process.myUserHandle())
                 s.appBytes + s.dataBytes + s.cacheBytes
             } catch (_: Exception) { 0L }
-            AppMovel(ai.packageName, ai.loadLabel(pm).toString(), bytes, ai.storageUuid != StorageManager.UUID_DEFAULT)
+            AppMovel(ai.packageName, ai.loadLabel(pm).toString(), bytes, ai.storageUuid != StorageManager.UUID_DEFAULT,
+                1 + (ai.splitSourceDirs?.size ?: 0))
         }.sortedByDescending { it.bytes }
     }
+
+    /** Um app só, para o menu do OK segurado. null = não achou. Fora da thread da tela. */
+    fun appMovel(ctx: Context, pacote: String): AppMovel? = try {
+        val ai = ctx.packageManager.getApplicationInfo(pacote, 0)
+        val bytes = try {
+            val st = ctx.getSystemService(StorageStatsManager::class.java).queryStatsForPackage(ai.storageUuid, pacote, Process.myUserHandle())
+            st.appBytes + st.dataBytes + st.cacheBytes
+        } catch (_: Exception) { 0L }
+        AppMovel(pacote, ai.loadLabel(ctx.packageManager).toString(), bytes, ai.storageUuid != StorageManager.UUID_DEFAULT,
+            1 + (ai.splitSourceDirs?.size ?: 0))
+    } catch (_: Exception) { null }
 
     /** Volumes onde dá para gravar (para GravacaoDestino dos players), sem shell. */
     fun gravaveis(ctx: Context): List<Gravavel> {

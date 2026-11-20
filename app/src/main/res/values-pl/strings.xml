@@ -937,4 +937,13 @@ AS\\Filmy).</string>
     <string name="st_trazendo">Przywracanie %1$s do telewizora…</string>
     <string name="st_sumiram">Pendrive odłączony: %1$s są ukryte, dopóki nie wróci.</string>
     <string name="st_sugestao">Pamięć telewizora prawie pełna. Przenieś %1$s (%2$s) na pendrive: przytrzymaj OK na aplikacji.</string>
+    <string name="st_medindo">Mierzę szybkość pendrive\'a…</string>
+    <string name="st_lento_titulo">Pendrive za wolny</string>
+    <string name="st_lento_bloqueado">Ten pendrive zapisuje %1$s MB/s. Aby stać się pamięcią TV, potrzebuje co najmniej %2$d MB/s: poniżej aplikacje się zacinają, a TV może się nie uruchomić. Używaj go jako zwykłego pendrive\'a.</string>
+    <string name="st_aviso_boot">Zostaw go zawsze podłączonego: jeśli się zepsuje lub zostanie wyjęty, TV może się nie uruchomić, dopóki go nie odłączysz.</string>
+    <string name="home_grande_titulo">Przenieść %1$s?</string>
+    <string name="home_grande_aviso">%1$s zajmuje %2$s. Na wolnym pendrivie przenoszenie może trwać ponad 10 minut i już raz zawiesiło TV w połowie. Kontynuuj tylko, gdy nikt nie ogląda.</string>
+    <string name="home_liberar_arquivos">Pozwól otwierać pendrive\'y i pliki</string>
+    <string name="home_arquivos_liberado">%1$s może teraz otwierać pendrive\'y i wszystkie pliki</string>
+    <string name="home_arquivos_falhou">Nie udało się zezwolić %1$s: %2$s</string>
 </resources>

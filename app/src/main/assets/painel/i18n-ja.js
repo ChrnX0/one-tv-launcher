@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"USB メモリに移しますか？",
 "Mover":"移動",
 "no pen drive":"USB メモリ上",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"中身はすべて消去されます。テレビのストレージとしてはこのテレビでのみ使え、常に挿しておく必要があります。故障したり抜かれたりすると、外すまでテレビが起動しないことがあります。アプリが入っている場合は先にテレビへ戻します。",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"大きなアプリ：遅いUSBメモリでは移動に10分以上かかり、途中でテレビが固まったことがあります。移動中はアプリが閉じます。誰も見ていないときだけ続けてください。",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"実行しませんでした：このUSBメモリは書き込みが遅すぎて（10 MB/秒未満）テレビのストレージにできません。通常のUSBメモリとして使ってください。",
+"Medindo a velocidade…":"速度を測定中…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","TV のストレージ: $2 中 $1 空き"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","できませんでした: $1"],

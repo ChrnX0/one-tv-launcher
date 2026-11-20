@@ -943,4 +943,13 @@ AS\\Movies).</string>
     <string name="st_trazendo">جارٍ إعادة %1$s إلى التلفزيون…</string>
     <string name="st_sumiram">أُزيلت ذاكرة USB: %1$s مخفية حتى تعود.</string>
     <string name="st_sugestao">تخزين التلفزيون ممتلئ تقريبًا. انقل %1$s (%2$s) إلى ذاكرة USB: اضغط مطولًا على OK فوق التطبيق.</string>
+    <string name="st_medindo">جارٍ قياس سرعة الذاكرة…</string>
+    <string name="st_lento_titulo">الذاكرة بطيئة جدًا</string>
+    <string name="st_lento_bloqueado">تكتب هذه الذاكرة بسرعة %1$s ميجابايت/ث. لتصبح ذاكرة للتلفاز تحتاج إلى %2$d ميجابايت/ث على الأقل: دون ذلك تتجمد التطبيقات وقد لا يعمل التلفاز. استخدمها كذاكرة عادية.</string>
+    <string name="st_aviso_boot">اتركها موصولة دائمًا: إذا تعطلت أو نُزعت فقد لا يعمل التلفاز حتى تفصلها.</string>
+    <string name="home_grande_titulo">نقل %1$s؟</string>
+    <string name="home_grande_aviso">يشغل %1$s مساحة %2$s. على ذاكرة بطيئة قد يتجاوز النقل 10 دقائق وقد أوقف تلفازًا في منتصفه. تابع فقط إذا لم يكن أحد يشاهد.</string>
+    <string name="home_liberar_arquivos">السماح بفتح ذاكرات USB والملفات</string>
+    <string name="home_arquivos_liberado">يمكن لـ %1$s الآن فتح ذاكرات USB وكل الملفات</string>
+    <string name="home_arquivos_falhou">تعذر السماح لـ %1$s: %2$s</string>
 </resources>

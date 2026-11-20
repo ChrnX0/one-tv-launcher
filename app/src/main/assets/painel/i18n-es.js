@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"¿Llevar a la memoria USB?",
 "Mover":"Mover",
 "no pen drive":"en la memoria USB",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"Se borrará todo lo que contiene. Como memoria de la TV solo funciona en esta TV y debe quedar siempre conectada: si falla o se retira, la TV puede no encender hasta que la desconectes. Si ya tiene apps, vuelven antes a la TV.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"App grande: en una memoria lenta el traslado puede pasar de 10 minutos y ya colgó una TV a mitad. La app se cierra mientras se mueve. Continúa solo si nadie está mirando.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"No se hizo: esta memoria USB escribe demasiado lento (menos de 10 MB/s) para ser memoria de la TV. Úsala como memoria USB normal.",
+"Medindo a velocidade…":"Midiendo la velocidad…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","Memoria de la TV: $1 libres de $2"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","No funcionó: $1"],

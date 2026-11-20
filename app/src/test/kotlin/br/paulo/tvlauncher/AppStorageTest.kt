@@ -50,4 +50,12 @@ class AppStorageTest {
         assertFalse(MenuApp.Acao.INSTALAR_EXTERNO in nada || MenuApp.Acao.INSTALAR_DISPOSITIVO in nada)
         assertEquals(MenuApp.Acao.DESINSTALAR, MenuApp.acoes(false, true, null, true).last())
     }
+
+    @Test fun appGrandePedeAviso() {
+        val mb = 1024L * 1024
+        assertTrue(AppStorageRules.arriscado(904 * mb, 100))   // o RetroArch da Sala
+        assertTrue(AppStorageRules.arriscado(300 * mb, 1))
+        assertTrue(AppStorageRules.arriscado(50 * mb, 20))
+        assertFalse(AppStorageRules.arriscado(299 * mb, 19))
+    }
 }

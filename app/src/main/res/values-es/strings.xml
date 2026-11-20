@@ -934,4 +934,13 @@ AS\\Peliculas).</string>
     <string name="st_trazendo">Devolviendo %1$s a la TV…</string>
     <string name="st_sumiram">La memoria USB salió: %1$s quedan ocultas hasta que vuelva.</string>
     <string name="st_sugestao">Memoria de la TV casi llena. Lleva %1$s (%2$s) a la memoria USB: mantén OK en la app.</string>
+    <string name="st_medindo">Midiendo la velocidad de la memoria USB…</string>
+    <string name="st_lento_titulo">Memoria USB demasiado lenta</string>
+    <string name="st_lento_bloqueado">Esta memoria USB escribe a %1$s MB/s. Para ser memoria de la TV necesita al menos %2$d MB/s: por debajo las apps se traban y la TV puede no encender. Úsala como memoria USB normal.</string>
+    <string name="st_aviso_boot">Déjala siempre conectada: si falla o se retira, la TV puede no encender hasta que la desconectes.</string>
+    <string name="home_grande_titulo">¿Mover %1$s?</string>
+    <string name="home_grande_aviso">%1$s ocupa %2$s. En una memoria lenta el traslado puede pasar de 10 minutos y ya colgó una TV a mitad. Continúa solo si nadie está mirando.</string>
+    <string name="home_liberar_arquivos">Permitir abrir memorias USB y archivos</string>
+    <string name="home_arquivos_liberado">%1$s ya abre memorias USB y todos los archivos</string>
+    <string name="home_arquivos_falhou">No se pudo permitir %1$s: %2$s</string>
 </resources>

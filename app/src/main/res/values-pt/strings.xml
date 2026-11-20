@@ -971,4 +971,13 @@
     <string name="st_trazendo">Trazendo %1$s de volta para a TV…</string>
     <string name="st_sumiram">O pen drive saiu: %1$s ficam escondidos até ele voltar.</string>
     <string name="st_sugestao">Memória da TV quase cheia. Leve %1$s (%2$s) para o pen drive: segure OK no app.</string>
+    <string name="st_medindo">Medindo a velocidade do pen drive…</string>
+    <string name="st_lento_titulo">Pen drive lento demais</string>
+    <string name="st_lento_bloqueado">Este pen drive grava a %1$s MB/s. Para virar memória da TV ele precisa de pelo menos %2$d MB/s: abaixo disso os apps travam e a TV pode não ligar. Use como pen drive comum.</string>
+    <string name="st_aviso_boot">Deixe-o sempre ligado: se ele falhar ou for tirado, a TV pode não ligar até você desconectá-lo.</string>
+    <string name="home_grande_titulo">Mover %1$s?</string>
+    <string name="home_grande_aviso">%1$s ocupa %2$s. Em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. Só continue com ninguém assistindo.</string>
+    <string name="home_liberar_arquivos">Deixar abrir pen drives e arquivos</string>
+    <string name="home_arquivos_liberado">%1$s agora abre pen drives e todos os arquivos</string>
+    <string name="home_arquivos_falhou">Não deu para liberar %1$s: %2$s</string>
 </resources>

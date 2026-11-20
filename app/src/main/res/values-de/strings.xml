@@ -931,4 +931,13 @@ AS\\Filme).</string>
     <string name="st_trazendo">%1$s kommt zurück auf den Fernseher…</string>
     <string name="st_sumiram">USB-Stick entfernt: %1$s sind ausgeblendet, bis er zurück ist.</string>
     <string name="st_sugestao">TV-Speicher fast voll. Verschiebe %1$s (%2$s) auf den USB-Stick: OK auf der App gedrückt halten.</string>
+    <string name="st_medindo">Geschwindigkeit des USB-Sticks wird gemessen…</string>
+    <string name="st_lento_titulo">USB-Stick zu langsam</string>
+    <string name="st_lento_bloqueado">Dieser Stick schreibt mit %1$s MB/s. Als TV-Speicher braucht er mindestens %2$d MB/s: darunter hängen Apps und der Fernseher startet eventuell nicht. Nutze ihn als normalen Stick.</string>
+    <string name="st_aviso_boot">Lass ihn immer eingesteckt: fällt er aus oder wird er entfernt, startet der Fernseher eventuell erst, wenn du ihn abziehst.</string>
+    <string name="home_grande_titulo">%1$s verschieben?</string>
+    <string name="home_grande_aviso">%1$s belegt %2$s. Auf einem langsamen Stick kann das über 10 Minuten dauern und hat schon einen Fernseher mittendrin abstürzen lassen. Nur weitermachen, wenn niemand schaut.</string>
+    <string name="home_liberar_arquivos">USB-Sticks und Dateien öffnen lassen</string>
+    <string name="home_arquivos_liberado">%1$s kann jetzt USB-Sticks und alle Dateien öffnen</string>
+    <string name="home_arquivos_falhou">%1$s konnte nicht freigegeben werden: %2$s</string>
 </resources>

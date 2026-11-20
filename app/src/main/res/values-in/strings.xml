@@ -928,4 +928,13 @@ AS\\Film).</string>
     <string name="st_trazendo">Mengembalikan %1$s ke TV…</string>
     <string name="st_sumiram">Flashdisk dicabut: %1$s tersembunyi sampai dicolok lagi.</string>
     <string name="st_sugestao">Penyimpanan TV hampir penuh. Pindahkan %1$s (%2$s) ke flashdisk: tahan OK pada aplikasi.</string>
+    <string name="st_medindo">Mengukur kecepatan flashdisk…</string>
+    <string name="st_lento_titulo">Flashdisk terlalu lambat</string>
+    <string name="st_lento_bloqueado">Flashdisk ini menulis %1$s MB/dtk. Untuk menjadi memori TV perlu minimal %2$d MB/dtk: di bawah itu aplikasi macet dan TV mungkin tidak menyala. Gunakan sebagai flashdisk biasa.</string>
+    <string name="st_aviso_boot">Biarkan selalu terpasang: jika rusak atau dicabut, TV mungkin tidak menyala sampai Anda mencabutnya.</string>
+    <string name="home_grande_titulo">Pindahkan %1$s?</string>
+    <string name="home_grande_aviso">%1$s memakai %2$s. Di flashdisk lambat pemindahan bisa lebih dari 10 menit dan pernah membuat TV macet di tengah jalan. Lanjutkan hanya saat tidak ada yang menonton.</string>
+    <string name="home_liberar_arquivos">Izinkan membuka flashdisk dan file</string>
+    <string name="home_arquivos_liberado">%1$s kini bisa membuka flashdisk dan semua file</string>
+    <string name="home_arquivos_falhou">Tidak dapat mengizinkan %1$s: %2$s</string>
 </resources>

@@ -56,4 +56,10 @@ class MenuAppTest {
         org.junit.Assert.assertFalse(MenuApp.ocultarPedePin("seguro"))
         for (r in listOf("cuidado", "essencial", "sem informação", "")) org.junit.Assert.assertTrue(r, MenuApp.ocultarPedePin(r))
     }
+
+    @Test fun liberarArquivosAntesDeDesinstalar() {
+        assertEquals(listOf(Acao.MOVER, Acao.OCULTAR, Acao.LIBERAR_ARQUIVOS, Acao.DESINSTALAR),
+            MenuApp.acoes(naPastaOcultos = false, desinstalavel = true, arquivosBloqueados = true))
+        assertEquals(listOf(Acao.MOSTRAR), MenuApp.acoes(naPastaOcultos = true, desinstalavel = false, arquivosBloqueados = true))
+    }
 }

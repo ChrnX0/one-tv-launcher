@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"USB ड्राइव पर ले जाएं?",
 "Mover":"ले जाएं",
 "no pen drive":"USB ड्राइव पर",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"इस पर मौजूद सब कुछ मिटा दिया जाएगा। TV मेमोरी के रूप में यह सिर्फ़ इसी TV पर चलती है और हमेशा लगी रहनी चाहिए: अगर यह खराब हो या निकाली जाए, तो इसे हटाने तक TV चालू नहीं भी हो सकता। अगर इसमें पहले से ऐप हैं, तो वे पहले TV पर लौटेंगे।",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"बड़ा ऐप: धीमी पेन ड्राइव पर यह 10 मिनट से ज़्यादा ले सकता है और एक TV को बीच में अटका चुका है। ले जाते समय ऐप बंद रहता है। तभी जारी रखें जब कोई देख न रहा हो।",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"नहीं हुआ: यह पेन ड्राइव TV मेमोरी बनने के लिए बहुत धीरे लिखती है (10 MB/s से कम)। इसे सामान्य पेन ड्राइव की तरह इस्तेमाल करें।",
+"Medindo a velocidade…":"गति मापी जा रही है…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","टीवी स्टोरेज: $2 में से $1 खाली"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","नहीं हुआ: $1"],

@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"Auf den USB-Stick verschieben?",
 "Mover":"Verschieben",
 "no pen drive":"auf dem USB-Stick",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"Alles darauf wird gelöscht. Als TV-Speicher funktioniert er nur an diesem Fernseher und muss eingesteckt bleiben: fällt er aus oder wird er entfernt, startet der Fernseher eventuell erst, wenn du ihn abziehst. Hat er schon Apps, kommen sie vorher auf den Fernseher zurück.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"Große App: auf einem langsamen Stick kann das Verschieben über 10 Minuten dauern und hat schon einen Fernseher mittendrin abstürzen lassen. Die App schließt sich währenddessen. Nur weitermachen, wenn niemand schaut.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"Nicht erledigt: dieser Stick schreibt zu langsam (unter 10 MB/s), um TV-Speicher zu werden. Nutze ihn als normalen Stick.",
+"Medindo a velocidade…":"Geschwindigkeit wird gemessen…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","TV-Speicher: $1 frei von $2"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","Hat nicht geklappt: $1"],

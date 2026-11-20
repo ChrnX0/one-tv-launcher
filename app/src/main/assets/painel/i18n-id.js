@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"Pindah ke flashdisk?",
 "Mover":"Pindahkan",
 "no pen drive":"di flashdisk",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"Semua isinya akan dihapus. Sebagai memori TV, flashdisk hanya berfungsi di TV ini dan harus selalu terpasang: jika rusak atau dicabut, TV mungkin tidak menyala sampai Anda mencabutnya. Jika sudah ada aplikasi, aplikasi itu kembali ke TV terlebih dahulu.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"Aplikasi besar: di flashdisk lambat pemindahan bisa lebih dari 10 menit dan pernah membuat TV macet di tengah jalan. Aplikasi ditutup selama dipindahkan. Lanjutkan hanya saat tidak ada yang menonton.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"Tidak dilakukan: flashdisk ini menulis terlalu lambat (di bawah 10 MB/dtk) untuk menjadi memori TV. Gunakan sebagai flashdisk biasa.",
+"Medindo a velocidade…":"Mengukur kecepatan…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","Penyimpanan TV: $1 kosong dari $2"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","Gagal: $1"],

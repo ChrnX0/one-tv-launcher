@@ -50,4 +50,12 @@ object AppStorageRules {
         if (linhas.any { it == "Success" }) return null
         return linhas.lastOrNull()?.take(120) ?: "?"
     }
+
+    /**
+     * App grande para mudar de lugar: pede confirmação com aviso. Porquê (Sala, 20/11/2026): mover o RetroArch (904 MB,
+     * ~100 partes) para um pen drive lento derrubou o system_server no meio da cópia. Tamanho = app + dados + cache.
+     */
+    const val GRANDE_BYTES = 300L * 1024 * 1024
+    const val MUITAS_PARTES = 20
+    fun arriscado(bytes: Long, partes: Int): Boolean = bytes >= GRANDE_BYTES || partes >= MUITAS_PARTES
 }
