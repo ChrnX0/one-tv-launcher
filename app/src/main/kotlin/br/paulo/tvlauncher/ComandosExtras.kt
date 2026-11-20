@@ -49,6 +49,9 @@ import java.io.File
  *  - visual                link com o código do visual desta TV (tema por QR, VisualCodigo)
  *  - visual_aplicar --es codigo <código ou link>   aplica um visual recebido
  *  - watchnext             o Watch Next dos outros apps é legível neste aparelho? (WatchNextTv)
+ * Sofy (20/11/2026, SofyDrawable):
+ *  - sofy [--es expr HAPPY|QUESTION|…] [--es balao aspas|musica]   prévia: a Sofy aparece na pílula com a expressão
+ *    e o movimento dela (sem histórico; só para conferir o desenho na TV). Sem expr: lista as expressões.
  * Volume da LG pela rede (14/11/2026, ideia 49; ver VolumeLg). Demoram (rede): o adb espera a resposta.
  *  - lg_procurar --es ip <qualquer IP da casa>   lista as LG da mesma rede /24
  *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
@@ -62,6 +65,7 @@ import java.io.File
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
+        "sofy" -> previaSofy(ctx, i)
         "teclas_armar" -> { TesteTeclas.armar(); "armado por ${TesteTeclas.JANELA_MS / 1000} s" }
         "teclas" -> TesteTeclas.json().toString()
         "teclas_tela" -> abrir(ctx, TesteTeclasActivity::class.java)
@@ -243,5 +247,14 @@ object ComandosExtras {
     private fun abrir(ctx: Context, c: Class<*>): String {
         ctx.startActivity(Intent(ctx, c).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         return "aberto"
+    }
+
+    private fun previaSofy(ctx: Context, i: Intent): String {
+        val nome = i.getStringExtra("expr") ?: return SofyPolicy.Expression.entries.joinToString(" ") { it.name }
+        val e = SofyPolicy.Expression.entries.firstOrNull { it.name.equals(nome, true) } ?: return "expressão desconhecida: $nome"
+        val balao = when (i.getStringExtra("balao")) { "aspas" -> SofyDrawable.QUOTE; "musica" -> SofyDrawable.MUSIC; else -> null }
+        val r = AvisoTv.mostrar(ctx, "Sofy", "${e.name.lowercase()}  ${e.eyes} ${e.mouth}".trim(), 6, false, false,
+            icone = SofyDrawable(ctx.applicationContext, e, balao), historico = false)
+        return "${e.name}: $r"
     }
 }

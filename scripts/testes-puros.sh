@@ -70,6 +70,7 @@ declare -A FONTES=(
   [ObserverPackagesTest]="ObserverPackages FichasComunidade"
   [ObserverTrialTest]="ObserverTrial"
   [SofyPolicyTest]="SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
+  [SofyMotionTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
 )
 
 falhou=0
