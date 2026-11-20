@@ -64,6 +64,11 @@ class PlayerActivity : Activity() {
     }
 
     private val tela = Handler(Looper.getMainLooper())
+    /** Túnel com volta automática (PlayerEngine): se prender ou falhar, retoma o canal (ou o programa do passado) no modo comum. */
+    private val tunel = TunnelGuard(this, tela, "TvLauncher.Player") { p ->
+        val a = arquivo
+        if (a != null) tocarArquivo(a, p.currentPosition) else (tocando ?: atual)?.let { tocar(it) }
+    }
     private var player: ExoPlayer? = null
     private var canais: List<Canal> = emptyList()
     private var guia = Guia(emptyList())
@@ -241,7 +246,7 @@ class PlayerActivity : Activity() {
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
         contarCanal(null)   // ideia 92: fecha os minutos do canal que estava tocando
         efeitos.soltar()
-        sessao.soltar()
+        sessao.soltar(); tunel.release()
         player?.release(); player = null
         pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
     }
@@ -366,20 +371,17 @@ class PlayerActivity : Activity() {
         val g = Gravacoes.atual
         if (g != null && !(url == c.url && g.canalId == c.id)) { cronCanal.cancelar(); player?.stop(); mostrarAviso(getString(R.string.grv_ocupado, g.canalNome)); return }
         deGravacao = g != null
-        val p = player ?: ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setLoadControl(pausa.novaCarga()).build().also { novo ->
+        // Motor único (PlayerEngine, 20/11/2026): o mesmo dos filmes e séries, com a carga da pausa ao vivo.
+        val p = player ?: PlayerEngine.build(this, EfeitosSom.fabrica(this)) { setLoadControl(pausa.novaCarga()) }.also { novo ->
             novo.setVideoSurfaceView(video)
-            novo.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
+            tunel.request(novo, allowed = true)   // túnel com volta automática, como nos filmes
             efeitos.aplicar(novo.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
             novo.addListener(ouvinte)
             player = novo
             sessao.ligar(novo)   // o sistema, o Gemini e o MCP passam a ver o canal (só leitura: SessaoMidia)
         }
         // Algumas listas exigem um User-Agent próprio por canal: por isso a fábrica é montada a cada troca.
-        val http = DefaultHttpDataSource.Factory()
-            .setUserAgent(c.agenteUsuario.ifEmpty { "TvLauncher-Player/1.0" })
-            .setAllowCrossProtocolRedirects(true)
-            .setConnectTimeoutMs(10_000)
-            .setReadTimeoutMs(15_000)
+        val dados = PlayerEngine.data(this, userAgent = c.agenteUsuario, readTimeoutMs = 15_000)
         val item = MediaItem.Builder().setUri(if (deGravacao) FonteGravacao.URI else url).apply {
             // A gravação é sempre MPEG-TS (o gravador emenda os pedaços do HLS).
             if (deGravacao) setMimeType(MimeTypes.VIDEO_MP2T)
@@ -390,14 +392,15 @@ class PlayerActivity : Activity() {
             val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 1) }?.firstOrNull()?.takeIf { agora >= it.inicio }
             setMediaMetadata(MediaMetadata.Builder().setTitle(c.nome).setArtist(prog?.titulo).setStation(c.nome).build())
         }.build()
-        val fonte = if (deGravacao) FontePastas.Fabrica(this, http) else http
-        p.setMediaSource(DefaultMediaSourceFactory(fonte).createMediaSource(item))
+        // FontesPlayer: o mesmo dos filmes (formato que o Media3 não reconhece vai para o libavformat).
+        p.setMediaSource(FontesPlayer.fabrica(dados).createMediaSource(item))
         p.prepare()
         p.playWhenReady = true
     }
 
     private val ouvinte = object : Player.Listener {
         override fun onPlaybackStateChanged(estado: Int) {
+            player?.let { tunel.onState(it, estado) }
             when (estado) {
                 Player.STATE_READY -> {
                     tentativas = 0; if (android.os.SystemClock.elapsedRealtime() >= avisoReservaAte) esconderAviso()
@@ -441,6 +444,7 @@ class PlayerActivity : Activity() {
 
         override fun onPlayerError(erro: PlaybackException) {
             val p = player ?: return
+            if (tunel.onError(p, erro.errorCode, erro.errorCodeName)) return   // era o túnel: já seguiu no modo comum
             // Ficou para trás na janela ao vivo (rede engasgou): pula para o "agora" sem incomodar ninguém.
             if (erro.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
                 if (!pausa.ativa && arquivo == null && travou(QualidadeAuto.TRAVADA_LONGA_MS)) return   // a rede não acompanha: desceu
@@ -967,7 +971,7 @@ class PlayerActivity : Activity() {
         }))
         val p = player ?: return
         if (antes != depois && arquivo == null) {
-            efeitos.soltar(); pausa.descartar(); sessao.soltar(); p.release(); player = null
+            efeitos.soltar(); pausa.descartar(); sessao.soltar(); tunel.release(); p.release(); player = null
             tocar(emCurso(c))
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
