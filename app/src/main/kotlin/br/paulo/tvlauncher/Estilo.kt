@@ -448,7 +448,7 @@ object Estilo {
             }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(ctx, E2) })
             addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 26f; gravity = Gravity.CENTER })
             addView(texto(ctx, Papel.LEGENDA, texto).apply {
-                gravity = Gravity.CENTER; maxWidth = dp(ctx, 520)
+                gravity = Gravity.CENTER; maxWidth = dp(ctx, 520); textSize = Papel.CORPO.sp   // 18 sp: recado do sofá
                 setLineSpacing(0f, 1.25f); setPaddingRelative(0, dp(ctx, E1 + 2), 0, dp(ctx, E3))
             })
             if (botoes.isNotEmpty()) addView(LinearLayout(ctx).apply {
