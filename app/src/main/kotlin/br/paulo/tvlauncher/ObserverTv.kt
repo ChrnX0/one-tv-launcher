@@ -165,7 +165,7 @@ object ObserverTv {
         val agoraJson = org.json.JSONArray()
         for (f in ObserverCore.judge(snap, agora, b, hw, hd))
             agoraJson.put(org.json.JSONObject().put("kind", f.kind.name).put("severity", f.severity.name).put("why", f.why))
-        val log = try { org.json.JSONArray(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", "[]")) } catch (_: Exception) { org.json.JSONArray() }
+        val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
         val logNovo = org.json.JSONArray()
         for (i in 0 until minOf(logMax, log.length())) logNovo.put(log.get(i))
         return org.json.JSONObject()
@@ -188,7 +188,7 @@ object ObserverTv {
         appendLine("agora: " + if (f.isEmpty()) "tudo normal" else f.joinToString("; ") { "${it.kind} [${it.severity}] ${it.why}" })
         val n = notes(ctx)
         appendLine("recados na fila: ${n.size}" + n.joinToString("") { "\n  ${it.kind} ${it.severity}${if (it.seen) " (visto)" else ""}" })
-        val log = try { org.json.JSONArray(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", "[]")) } catch (_: Exception) { org.json.JSONArray() }
+        val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
         appendLine("registro (${log.length()} linhas, as 10 mais novas):")
         for (i in 0 until minOf(10, log.length())) {
             val o = log.getJSONObject(i)

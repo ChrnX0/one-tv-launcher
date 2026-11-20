@@ -90,4 +90,16 @@ class ObserverBaselineTest {
         // Sem base: só os limites fixos (igual à fase 1).
         assertTrue(ObserverCore.judge(snap, now, null, terca21, 21).isEmpty())
     }
+
+    @Test fun registroVelhoNaoApareceMesmoSemLinhaNova() {
+        val dia = 86_400_000L
+        val now = 100 * dia
+        var log: String? = null
+        log = ObserverCore.appendLog(log, JSONObject().put("at", now - 10 * dia).put("event", "appeared"), now - 10 * dia)
+        log = ObserverCore.appendLog(log, JSONObject().put("at", now - dia).put("event", "cleared"), now - dia)
+        val lido = ObserverCore.readLog(log, now)
+        assertEquals(1, lido.length())
+        assertEquals("cleared", lido.getJSONObject(0).getString("event"))
+        assertEquals(0, ObserverCore.readLog("lixo", now).length())
+    }
 }

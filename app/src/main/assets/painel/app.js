@@ -1588,7 +1588,15 @@ async function carregarObservador() {
   if (s.SLOW_FRAMES_PCT) item('quadros lentos', `${num(s.SLOW_FRAMES_PCT)}%`, atuais.has('SLOW_HOME'));
   if (s.DISK_FREE_MB) item('espaço livre', s.DISK_FREE_MB.value >= 1024 ? gb(s.DISK_FREE_MB.value * 1048576) : `${num(s.DISK_FREE_MB)} MB`, atuais.has('LOW_DISK'));
   if (!caixa.children.length) item('ainda medindo', '…', false);
-  agora.textContent = (o.now || []).length ? (o.now || []).map((f) => `${ACHADOS_OBSERVADOR[f.kind] || f.kind}: ${f.why}`).join(' · ') : 'Tudo normal agora.';
+  // Cada parte num nó próprio: o rótulo e o porquê ("latência de 450 ms (limite 400)") são traduzidos um a um (i18n P).
+  agora.replaceChildren();
+  if (!(o.now || []).length) agora.textContent = 'Tudo normal agora.';
+  (o.now || []).forEach((f, i) => {
+    if (i) agora.append(' · ');
+    const nome = document.createElement('strong'); nome.textContent = ACHADOS_OBSERVADOR[f.kind] || f.kind;
+    const porque = document.createElement('span'); porque.textContent = f.why;
+    agora.append(nome, ' ', porque);
+  });
   lista.replaceChildren();
   for (const l of o.log || []) {
     const linha = document.createElement('div');

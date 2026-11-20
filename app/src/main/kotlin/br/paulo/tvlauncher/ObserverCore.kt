@@ -192,6 +192,14 @@ object ObserverCore {
     }
 
     /** Põe [entry] na frente; corta acima de [LOG_MAX] linhas ou de [LOG_DAYS] dias. Texto estragado = começa vazio. */
+    /** O registro como está guardado, sem o que passou de [LOG_DAYS] (o corte do [appendLog] só roda quando entra linha nova). */
+    fun readLog(stored: String?, now: Long): JSONArray {
+        val a = try { JSONArray(stored ?: "[]") } catch (_: Exception) { JSONArray() }
+        return JSONArray().apply {
+            for (i in 0 until a.length()) a.optJSONObject(i)?.takeIf { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }?.let { put(it) }
+        }
+    }
+
     fun appendLog(stored: String?, entry: JSONObject, now: Long): String = prepend(stored, entry, LOG_MAX) { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }
 
     // ---------------------------------------------------------------- recados (a saída que o rosto do Observador vai usar)
