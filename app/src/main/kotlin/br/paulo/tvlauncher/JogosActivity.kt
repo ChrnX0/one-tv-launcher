@@ -380,7 +380,9 @@ class JogosActivity : Activity() {
 
     private fun abrir(pacote: String): Boolean {
         // Congelado sob demanda (OnDemandTv): descongela e abre fora da tela; volta a congelar 2 min depois de sair.
-        if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) {}; return true }
+        if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) {
+            if (!isDestroyed) AvisoTv.rapido(this, getString(R.string.jogos_titulo), getString(R.string.jogos_nao_abriu))
+        }; return true }
         val i = packageManager.getLeanbackLaunchIntentForPackage(pacote) ?: packageManager.getLaunchIntentForPackage(pacote) ?: return false
         return try { startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); true } catch (_: Exception) { false }
     }
