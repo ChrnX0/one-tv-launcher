@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Фильмы и сериалы</string>
+    <string name="aa_shelf_video">Видео</string>
+    <string name="aa_shelf_sports">Спорт</string>
+    <string name="aa_shelf_kids">Детям</string>
+    <string name="aa_shelf_music_audio">Музыка и аудио</string>
+    <string name="aa_shelf_news">Новости</string>
+    <string name="aa_shelf_games">Игры</string>
+    <string name="aa_shelf_education">Образование</string>
+    <string name="aa_shelf_health_fitness">Здоровье и фитнес</string>
+    <string name="aa_shelf_lifestyle">Стиль жизни</string>
+    <string name="aa_shelf_tools">Инструменты</string>
+    <string name="aa_shelf_system">Система</string>
+    <string name="aa_shelf_other">Другое</string>
+    <string name="aa_frozen">Замороженные</string>
+    <string name="aa_hidden">Скрытые</string>
+    <string name="aa_badge_frozen">заморожено</string>
+    <string name="aa_badge_hidden">скрыто</string>
+    <string name="aa_lock">Скрытые (%1$d)</string>
+    <string name="aa_count_hidden">скрыто: %1$d</string>
+    <string name="aa_count_frozen">заморожено: %1$d</string>
+    <string name="aa_pin_title">PIN-код, чтобы увидеть скрытые приложения</string>
+    <string name="aa_used_today">Открыто сегодня</string>
+    <string name="aa_used_days">Последний раз открыто %1$d дн. назад</string>
+    <string name="aa_used_never">Отсюда ещё не открывалось</string>
+    <string name="aa_size">Занимает %1$s</string>
+    <string name="aa_risk_safe">По карточке: безопасно</string>
+    <string name="aa_risk_care">По карточке: осторожно</string>
+    <string name="aa_risk_essential">Важно для телевизора: не замораживайте</string>
+    <string name="aa_tip_idle">Не открывалось %1$d дн. Заморозка освобождает память, её можно отменить.</string>
+    <string name="aa_hint_app">OK открывает · удерживайте OK, чтобы переместить, скрыть, заморозить или удалить</string>
+    <string name="aa_hint_frozen">OK размораживает и открывает</string>
+    <string name="aa_hint_lock">OK запрашивает PIN-код и показывает здесь скрытые приложения</string>
+    <string name="aa_open">Открыть</string>
+    <string name="aa_freeze">Заморозить</string>
+    <string name="aa_freezing">Заморозка: %1$s…</string>
+    <string name="aa_frozen_done">%1$s заморожено. Через 10 минут телевизор проверит, что всё работает, и отменит, если что-то перестало.</string>
+    <string name="aa_freeze_failed">Не удалось заморозить %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">Разморозить и открыть</string>
+    <string name="aa_unfreeze_refreeze">Открыть и снова заморозить по возвращении</string>
+    <string name="aa_unfreezing">Разморозка: %1$s…</string>
+    <string name="aa_unfreeze_failed">Не удалось разморозить %1$s: %2$s</string>
+    <string name="aa_move_auto">Автоматически</string>
+</resources>

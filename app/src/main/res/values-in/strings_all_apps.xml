@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Film &amp; serial</string>
+    <string name="aa_shelf_video">Video</string>
+    <string name="aa_shelf_sports">Olahraga</string>
+    <string name="aa_shelf_kids">Anak</string>
+    <string name="aa_shelf_music_audio">Musik &amp; audio</string>
+    <string name="aa_shelf_news">Berita</string>
+    <string name="aa_shelf_games">Game</string>
+    <string name="aa_shelf_education">Pendidikan</string>
+    <string name="aa_shelf_health_fitness">Kesehatan &amp; kebugaran</string>
+    <string name="aa_shelf_lifestyle">Gaya hidup</string>
+    <string name="aa_shelf_tools">Alat</string>
+    <string name="aa_shelf_system">Sistem</string>
+    <string name="aa_shelf_other">Lainnya</string>
+    <string name="aa_frozen">Dibekukan</string>
+    <string name="aa_hidden">Disembunyikan</string>
+    <string name="aa_badge_frozen">dibekukan</string>
+    <string name="aa_badge_hidden">tersembunyi</string>
+    <string name="aa_lock">Disembunyikan (%1$d)</string>
+    <string name="aa_count_hidden">tersembunyi: %1$d</string>
+    <string name="aa_count_frozen">dibekukan: %1$d</string>
+    <string name="aa_pin_title">PIN untuk melihat aplikasi tersembunyi</string>
+    <string name="aa_used_today">Dibuka hari ini</string>
+    <string name="aa_used_days">Terakhir dibuka %1$d hari lalu</string>
+    <string name="aa_used_never">Belum pernah dibuka dari sini</string>
+    <string name="aa_size">Memakai %1$s</string>
+    <string name="aa_risk_safe">Aman diubah, menurut kartunya</string>
+    <string name="aa_risk_care">Ubah dengan hati-hati, menurut kartunya</string>
+    <string name="aa_risk_essential">Penting bagi TV: jangan dibekukan</string>
+    <string name="aa_tip_idle">Tidak dibuka selama %1$d hari. Membekukan mengosongkan memori dan bisa dibatalkan.</string>
+    <string name="aa_hint_app">OK membuka · tahan OK untuk memindah, menyembunyikan, membekukan, atau mencopot</string>
+    <string name="aa_hint_frozen">OK mencairkan dan membuka</string>
+    <string name="aa_hint_lock">OK meminta PIN dan menampilkan aplikasi tersembunyi di sini</string>
+    <string name="aa_open">Buka</string>
+    <string name="aa_freeze">Bekukan</string>
+    <string name="aa_freezing">Membekukan %1$s…</string>
+    <string name="aa_frozen_done">%1$s dibekukan. Dalam 10 menit TV memeriksa semuanya masih berjalan dan membatalkan jika ada yang berhenti.</string>
+    <string name="aa_freeze_failed">Tidak bisa membekukan %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">Cairkan dan buka</string>
+    <string name="aa_unfreeze_refreeze">Buka dan bekukan lagi saat kembali</string>
+    <string name="aa_unfreezing">Mencairkan %1$s…</string>
+    <string name="aa_unfreeze_failed">Tidak bisa mencairkan %1$s: %2$s</string>
+    <string name="aa_move_auto">Otomatis</string>
+</resources>

@@ -415,6 +415,8 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .barra-acoes { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .barra-acoes input[type=search] { flex: 1 1 260px; }
 #contagemApps, #espacoArquivos { margin: 0 4px 12px; }
+.titulo-prateleira { margin: 20px 4px 8px; font-size: 1.05rem; }
+.lista-apps > .titulo-prateleira:first-child { margin-top: 4px; }
 
 /* Uma lista = um cartão com linhas separadas por um fio (e não um cartão por linha) */
 .lista-apps, .lista-registro { display: flex; flex-direction: column; background: var(--superficie); border: 1px solid var(--borda);

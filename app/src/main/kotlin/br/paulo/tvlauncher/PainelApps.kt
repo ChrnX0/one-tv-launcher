@@ -103,6 +103,11 @@ object PainelApps {
         val abriveis = abriveis(pm)
         val pacotes: List<PackageInfo> = pm.getInstalledPackages(flagsTodos())
         val papeis = PainelFicha.papeis(ctx)   // uma vez para a lista inteira (teclado, HOME, VPN...)
+        // Prateleira de cada app (AppShelf, 20/11/2026): a mesma da tela Todos os apps da TV, para o painel agrupar igual.
+        val fichas = AppShelf.sheetCats ?: runCatching { AppShelf.sheetCategories(ComunidadeApps.fichasJuntas(ctx)) }.getOrDefault(emptyMap())
+        val prefsCruz = ctx.getSharedPreferences("cruz_apps", Context.MODE_PRIVATE)   // MainActivity.PREFS_CRUZ_APPS
+        val manuais = AppShelf.fromJson(prefsCruz.getString("shelves", null))
+        val mundos = CategoriaApps.escolhas(ctx)
         val saida = JSONArray()
         for (pi in pacotes) {
             val ai = pi.applicationInfo ?: continue
@@ -124,7 +129,10 @@ object PainelApps {
                 .put("podeOcultar", oculto || podeOcultar(ctx, ai, abrivel))
                 .put("podeDesinstalar", podeDesinstalar(ctx, ai))
                 .put("protegido", protegido(ctx, pi.packageName))
-                .put("risco", PainelFicha.risco(ctx, ai, papeis)))
+                .put("risco", PainelFicha.risco(ctx, ai, papeis))
+                .put("categoria", AppShelf.decide(pi.packageName, manuais[pi.packageName], JogosTv.ehJogo(ctx, pi.packageName),
+                    fichas[pi.packageName], ai.category, sistema(ai),
+                    mundos[pi.packageName]?.let { id -> CategoriaApps.DESTINOS.firstOrNull { it.id == id } }).id))
         }
         return saida
     }

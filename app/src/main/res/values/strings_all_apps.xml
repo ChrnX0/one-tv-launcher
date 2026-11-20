@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Movies &amp; TV</string>
+    <string name="aa_shelf_video">Videos</string>
+    <string name="aa_shelf_sports">Sports</string>
+    <string name="aa_shelf_kids">Kids</string>
+    <string name="aa_shelf_music_audio">Music &amp; audio</string>
+    <string name="aa_shelf_news">News</string>
+    <string name="aa_shelf_games">Games</string>
+    <string name="aa_shelf_education">Education</string>
+    <string name="aa_shelf_health_fitness">Health &amp; fitness</string>
+    <string name="aa_shelf_lifestyle">Lifestyle</string>
+    <string name="aa_shelf_tools">Tools</string>
+    <string name="aa_shelf_system">System</string>
+    <string name="aa_shelf_other">Other</string>
+    <string name="aa_frozen">Frozen</string>
+    <string name="aa_hidden">Hidden</string>
+    <string name="aa_badge_frozen">frozen</string>
+    <string name="aa_badge_hidden">hidden</string>
+    <string name="aa_lock">Hidden (%1$d)</string>
+    <string name="aa_count_hidden">hidden: %1$d</string>
+    <string name="aa_count_frozen">frozen: %1$d</string>
+    <string name="aa_pin_title">PIN to see the hidden apps</string>
+    <string name="aa_used_today">Opened today</string>
+    <string name="aa_used_days">Last opened %1$d days ago</string>
+    <string name="aa_used_never">Not opened from here yet</string>
+    <string name="aa_size">Uses %1$s</string>
+    <string name="aa_risk_safe">Safe to change, says its sheet</string>
+    <string name="aa_risk_care">Change with care, says its sheet</string>
+    <string name="aa_risk_essential">Essential to the TV: do not freeze</string>
+    <string name="aa_tip_idle">Not opened in %1$d days. Freezing frees memory and can be undone.</string>
+    <string name="aa_hint_app">OK opens · hold OK to move, hide, freeze or uninstall</string>
+    <string name="aa_hint_frozen">OK unfreezes and opens</string>
+    <string name="aa_hint_lock">OK asks for the PIN and shows the hidden apps here</string>
+    <string name="aa_open">Open</string>
+    <string name="aa_freeze">Freeze</string>
+    <string name="aa_freezing">Freezing %1$s…</string>
+    <string name="aa_frozen_done">%1$s frozen. In 10 minutes the TV checks that everything still works and undoes it if something stopped.</string>
+    <string name="aa_freeze_failed">Could not freeze %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">Unfreeze and open</string>
+    <string name="aa_unfreeze_refreeze">Open and freeze again when I come back</string>
+    <string name="aa_unfreezing">Unfreezing %1$s…</string>
+    <string name="aa_unfreeze_failed">Could not unfreeze %1$s: %2$s</string>
+    <string name="aa_move_auto">Automatic</string>
+</resources>

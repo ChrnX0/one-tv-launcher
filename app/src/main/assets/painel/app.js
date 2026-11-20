@@ -396,6 +396,14 @@ async function tvEmUso() {
 
 // ---------- aplicativos ----------
 
+/** As prateleiras (ids de AppShelf.Shelf, na ordem da TV) e o nome de cada uma. */
+const PRATELEIRAS = new Map([
+  ['entertainment', 'Filmes e séries'], ['video', 'Vídeos'], ['sports', 'Esportes'], ['kids', 'Infantil'],
+  ['music_audio', 'Música e áudio'], ['news', 'Notícias'], ['games', 'Jogos'], ['education', 'Educação'],
+  ['health_fitness', 'Saúde e exercício'], ['lifestyle', 'Estilo de vida'], ['tools', 'Ferramentas'],
+  ['system', 'Sistema'], ['other', 'Outros'],
+]);
+
 let usoHoje = {};
 async function carregarApps() {
   mostrar($('statusApps'), 'Carregando…');
@@ -439,8 +447,19 @@ function desenharApps() {
   mostrar($('statusApps'), filtrados.length ? '' : 'Nenhum app.');
   const sistema = apps.filter((a) => a.sistema).length;
   $('contagemApps').textContent = `${filtrados.length} de ${apps.length} apps na TV (${apps.length - sistema} instalados por você, ${sistema} do sistema)`;
-  for (const a of filtrados) lista.appendChild(linhaApp(a));
+  // Sem busca: em prateleiras, na mesma ordem e com os mesmos nomes da tela Todos os apps da TV (AppShelf, 20/11/2026).
+  if (termo) { for (const a of filtrados) lista.appendChild(linhaApp(a)); return; }
+  for (const [id, nome] of PRATELEIRAS) {
+    const doGrupo = filtrados.filter((a) => (PRATELEIRAS.has(a.categoria) ? a.categoria : 'other') === id);
+    if (!doGrupo.length) continue;
+    const t = document.createElement('h3');
+    t.className = 'titulo-prateleira';
+    t.textContent = nome;
+    lista.appendChild(t);
+    for (const a of doGrupo) lista.appendChild(linhaApp(a));
+  }
 }
+
 
 function linhaApp(a) {
   const linha = document.createElement('div');

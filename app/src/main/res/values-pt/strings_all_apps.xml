@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">Filmes e séries</string>
+    <string name="aa_shelf_video">Vídeos</string>
+    <string name="aa_shelf_sports">Esportes</string>
+    <string name="aa_shelf_kids">Infantil</string>
+    <string name="aa_shelf_music_audio">Música e áudio</string>
+    <string name="aa_shelf_news">Notícias</string>
+    <string name="aa_shelf_games">Jogos</string>
+    <string name="aa_shelf_education">Educação</string>
+    <string name="aa_shelf_health_fitness">Saúde e exercício</string>
+    <string name="aa_shelf_lifestyle">Estilo de vida</string>
+    <string name="aa_shelf_tools">Ferramentas</string>
+    <string name="aa_shelf_system">Sistema</string>
+    <string name="aa_shelf_other">Outros</string>
+    <string name="aa_frozen">Congelados</string>
+    <string name="aa_hidden">Escondidos</string>
+    <string name="aa_badge_frozen">congelado</string>
+    <string name="aa_badge_hidden">escondido</string>
+    <string name="aa_lock">Escondidos (%1$d)</string>
+    <string name="aa_count_hidden">escondidos: %1$d</string>
+    <string name="aa_count_frozen">congelados: %1$d</string>
+    <string name="aa_pin_title">PIN para ver os escondidos</string>
+    <string name="aa_used_today">Aberto hoje</string>
+    <string name="aa_used_days">Aberto pela última vez há %1$d dias</string>
+    <string name="aa_used_never">Ainda não foi aberto por aqui</string>
+    <string name="aa_size">Ocupa %1$s</string>
+    <string name="aa_risk_safe">Seguro mexer, segundo a ficha</string>
+    <string name="aa_risk_care">Mexa com cuidado, segundo a ficha</string>
+    <string name="aa_risk_essential">Essencial para a TV: não congele</string>
+    <string name="aa_tip_idle">Não abre há %1$d dias. Congelar libera memória e dá para desfazer.</string>
+    <string name="aa_hint_app">OK abre · segure OK para mover, esconder, congelar ou desinstalar</string>
+    <string name="aa_hint_frozen">OK descongela e abre</string>
+    <string name="aa_hint_lock">OK pede o PIN e mostra os escondidos aqui</string>
+    <string name="aa_open">Abrir</string>
+    <string name="aa_freeze">Congelar</string>
+    <string name="aa_freezing">Congelando %1$s…</string>
+    <string name="aa_frozen_done">%1$s congelado. Em 10 minutos a TV confere se tudo segue funcionando e desfaz se algo parou.</string>
+    <string name="aa_freeze_failed">Não deu para congelar %1$s: %2$s</string>
+    <string name="aa_unfreeze_open">Descongelar e abrir</string>
+    <string name="aa_unfreeze_refreeze">Abrir e congelar de novo quando eu voltar</string>
+    <string name="aa_unfreezing">Descongelando %1$s…</string>
+    <string name="aa_unfreeze_failed">Não deu para descongelar %1$s: %2$s</string>
+    <string name="aa_move_auto">Automático</string>
+</resources>

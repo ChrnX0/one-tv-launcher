@@ -1,5 +1,15 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Vídeos":"動画",
+"Esportes":"スポーツ",
+"Infantil":"キッズ",
+"Música e áudio":"音楽・オーディオ",
+"Notícias":"ニュース",
+"Jogos":"ゲーム",
+"Educação":"教育",
+"Saúde e exercício":"健康・フィットネス",
+"Estilo de vida":"ライフスタイル",
+"Outros":"その他",
 "nesta versão os apps são instalados pela Play Store":"このバージョンではアプリは Play ストアからインストールします",
 "Próximo jogo do seu time no item TV da tela inicial":"ホーム画面のテレビ項目にあなたのチームの次の試合",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"天気の横に為替レート（Frankfurter、無料）",
