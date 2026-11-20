@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Volume da TV LG pelo painel e pelo assistente: as teclas de volume e mudo agora mudam o som de verdade (iam para a saída HDMI, que fica travada no máximo)</item>
         <item>Celular vira controle: no app Sofaly do celular, toque na TV para deslizar, tocar e digitar; volume e ⏯ também na notificação e no bloco de atalhos</item>
         <item>Despertador tocou na TV: o celular com o painel instalado recebe um aviso</item>
         <item>No painel do computador, arraste um vídeo, uma música ou uma foto para a página e veja na TV</item>

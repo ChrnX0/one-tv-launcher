@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>LG TV volume from the panel and the assistant: the volume and mute keys now really change the sound (they went to the HDMI output, which stays locked at maximum)</item>
         <item>Your phone becomes a remote: in the Sofaly phone app, tap the TV to swipe, tap and type; volume and ⏯ also in the notification and the quick settings tile</item>
         <item>Alarm rang on the TV: the phone with the panel installed gets a notice</item>
         <item>In the panel on a computer, drag a video, song or photo onto the page and watch it on the TV</item>
