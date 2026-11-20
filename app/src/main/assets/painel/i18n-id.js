@@ -1,5 +1,10 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"Semua",
+"páginas":"halaman",
+"ajustes":"pengaturan",
+"Nesta página":"Di halaman ini",
+"Buscar qualquer ajuste…":"Cari pengaturan apa pun…",
 "Vídeos":"Video",
 "Esportes":"Olahraga",
 "Infantil":"Anak",

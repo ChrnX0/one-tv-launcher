@@ -1,5 +1,10 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"全部",
+"páginas":"个页面",
+"ajustes":"项设置",
+"Nesta página":"本页内容",
+"Buscar qualquer ajuste…":"搜索任意设置…",
 "Vídeos":"视频",
 "Esportes":"体育",
 "Infantil":"儿童",

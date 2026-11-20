@@ -1,5 +1,10 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"Tümü",
+"páginas":"sayfa",
+"ajustes":"ayar",
+"Nesta página":"Bu sayfada",
+"Buscar qualquer ajuste…":"Herhangi bir ayarı ara…",
 "Vídeos":"Videolar",
 "Esportes":"Spor",
 "Infantil":"Çocuk",

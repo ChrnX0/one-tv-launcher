@@ -222,6 +222,7 @@ const PAGINAS = {
   inicio: { acorda: ['inicio'] },
   controle: { acorda: ['controle'] },
   natv: { acorda: [] },
+  tudo: { acorda: [] },   // celular: Na TV + Configurações numa tela (navigation.js)
   apps: { grupo: 'natv', acorda: ['apps'] },
   loja: { grupo: 'natv', acorda: ['extras'] },
   arquivos: { grupo: 'natv', acorda: ['arquivos'] },
@@ -270,7 +271,7 @@ function mudarAba(nome, historico = true) {
   const ancora = ANCORAS[nome];
   if (ancora) nome = ancora[0];
   nome = APELIDOS[nome] || nome;
-  if (paginasDoPapel.length && !paginasDoPapel.includes(nome)) nome = paginasDoPapel[0];
+  if (paginasDoPapel.length && !paginasDoPapel.includes(nome) && nome !== 'tudo') nome = paginasDoPapel[0];
   if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
   paginaAtual = nome;
   const secao = PAGINAS[nome].grupo || nome;

@@ -1,5 +1,10 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"전체",
+"páginas":"페이지",
+"ajustes":"설정",
+"Nesta página":"이 페이지",
+"Buscar qualquer ajuste…":"설정 검색…",
 "Vídeos":"동영상",
 "Esportes":"스포츠",
 "Infantil":"어린이",

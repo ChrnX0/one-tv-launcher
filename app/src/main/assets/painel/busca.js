@@ -25,12 +25,16 @@ function todosOsItens() {
     const nome = b.querySelector('.t')?.textContent || b.querySelector('span:not(.ic)')?.textContent || b.textContent;
     r.push({ tipo: 'Página', nome, icone: b.querySelector('.ic svg') || '›', fazer: () => mudarAba(b.dataset.aba) });
   }
+  // Todo bloco com título entra (navigation.js dá id a quem não tem), e a frase que explica o bloco também conta:
+  // "dormir" acha "Desligar sozinha" pelo que ele faz (estudo do painel 20/11/2026, regra 2).
+  if (typeof garantirIdsDosBlocos === 'function') garantirIdsDosBlocos();
   for (const h of document.querySelectorAll('.painel-aba .cartao[id] > h2')) {
     const cartao = h.parentElement;
-    if (cartao.hidden) continue;
+    if (cartao.hidden || cartao.parentElement.closest('.cartao')) continue;
     const pagina = cartao.closest('.painel-aba');
     const onde = pagina.querySelector('.titulo-pagina')?.textContent || '';
-    r.push({ tipo: onde, nome: h.textContent, icone: '›', fazer: () => irPara('x.' + cartao.id) });
+    const sobre = cartao.querySelector(':scope > p')?.textContent || '';
+    r.push({ tipo: onde, nome: h.textContent, sobre, icone: '›', fazer: () => irPara('x.' + cartao.id) });
   }
   for (const [nome, tecla, icone] of ACOES_BUSCA) {
     r.push({ tipo: 'Ação', nome, icone, fazer: async () => { await chamar('POST', '/api/tela/tecla', { tecla }); aviso(nome + ': feito.', 'ok'); } });
@@ -54,6 +58,8 @@ function nota(item, q) {
   if (n.startsWith(q)) return 3;
   if (n.split(/\s+/).some((w) => w.startsWith(q))) return 2;
   if (n.includes(q) || p.includes(q)) return 1;
+  // Pelo que o bloco faz: só com 3 letras ou mais (menos que isso casa com quase tudo) e abaixo de qualquer nome.
+  if (q.length >= 3 && item.sobre && semAcento(item.sobre).split(/[^a-z0-9]+/).some((w) => w.startsWith(q))) return 0.5;
   return -1;
 }
 
@@ -61,7 +67,7 @@ function desenharBusca() {
   const q = semAcento($('campoBusca').value.trim());
   const todos = todosOsItens();
   itensBusca = todos.map((it, i) => ({ it, n: nota(it, q), i })).filter((x) => x.n >= 0)
-    .sort((a, b) => b.n - a.n || a.i - b.i).slice(0, 12).map((x) => x.it);
+    .sort((a, b) => b.n - a.n || a.i - b.i).slice(0, 14).map((x) => x.it);
   escolhido = 0;
   const lista = $('resultadosBusca');
   lista.replaceChildren();

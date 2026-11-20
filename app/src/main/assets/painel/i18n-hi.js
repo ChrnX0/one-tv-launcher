@@ -1,5 +1,10 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"सब कुछ",
+"páginas":"पेज",
+"ajustes":"सेटिंग्स",
+"Nesta página":"इस पेज पर",
+"Buscar qualquer ajuste…":"कोई भी सेटिंग खोजें…",
 "Vídeos":"वीडियो",
 "Esportes":"खेल",
 "Infantil":"बच्चे",

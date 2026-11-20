@@ -35,6 +35,7 @@
     <symbol id="i-saude" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
     <symbol id="i-backup" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 15.5v2.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/></symbol>
     <symbol id="i-acessos" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-tudo" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" stroke-width="2.4"/></symbol>
     <symbol id="i-mais" viewBox="0 0 24 24"><path d="M5.5 12h.01M12 12h.01M18.5 12h.01" stroke-width="3"/></symbol>
     <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M9 7 4.5 11.5 9 16"/><path d="M4.5 11.5h10a5 5 0 0 1 0 10H12"/></symbol>
     <symbol id="i-tocar" viewBox="0 0 24 24"><path d="M5 5.5v13l8-6.5z"/><path d="M16 6v12M20 6v12"/></symbol>
@@ -157,11 +158,15 @@
     <nav class="abas" aria-label="Seções do painel">
       <button class="aba ativa" data-aba="inicio"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-inicio"/></svg></span><span>Início</span></button>
       <button class="aba" data-aba="controle"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-controle"/></svg></span><span>Controle</span></button>
-      <button class="aba" data-aba="natv"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-tv"/></svg></span><span>Na TV</span></button>
+      <!-- Celular (20/11/2026, estudo do painel): a barra de baixo é Início · Controle · Apps · Tudo; "Na TV" e
+           "Configurações" moram dentro de Tudo. No computador estes dois botões somem e a coluna mostra tudo. -->
+      <button class="aba so-celular" data-aba="apps"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-apps"/></svg></span><span>Apps</span></button>
+      <button class="aba so-celular" data-aba="tudo"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-tudo"/></svg></span><span>Tudo</span></button>
+      <button class="aba so-computador" data-aba="natv"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-tv"/></svg></span><span>Na TV</span></button>
       <button class="aba sub" data-aba="apps"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-apps"/></svg></span><span>Apps</span></button>
       <button class="aba sub" data-aba="loja"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-loja"/></svg></span><span>Instalar apps</span></button>
       <button class="aba sub" data-aba="arquivos"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-arquivos"/></svg></span><span>Arquivos</span></button>
-      <button class="aba" data-aba="ajustes"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-config"/></svg></span><span>Configurações</span></button>
+      <button class="aba so-computador" data-aba="ajustes"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-config"/></svg></span><span>Configurações</span></button>
       <button class="aba sub" data-aba="telainicial"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-paleta"/></svg></span><span>Tela inicial</span></button>
       <button class="aba sub" data-aba="tvfilmes"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-filme"/></svg></span><span>TV e filmes</span></button>
       <button class="aba sub" data-aba="familia"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-familia"/></svg></span><span>Família</span></button>
@@ -409,6 +414,13 @@
         <button type="button" class="linha-hub" data-aba="sistema"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-saude"/></svg></span><span class="txt"><span class="t">Sistema</span><span class="s">Diagnóstico, backup e diário da TV</span></span><svg class="i seta" aria-hidden="true"><use href="#i-seguinte"/></svg></button>
         <button type="button" class="linha-hub" data-aba="avancado"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-extras"/></svg></span><span class="txt"><span class="t">Avançado</span><span class="s">Rede, ferramentas, recursos e shell. Raramente precisa</span></span><svg class="i seta" aria-hidden="true"><use href="#i-seguinte"/></svg></button>
       </div>
+    </section>
+
+    <!-- Tudo (celular): as páginas de Na TV e Configurações numa tela só; navigation.js copia as duas listas acima. -->
+    <section id="abaTudo" class="painel-aba hub" hidden>
+      <h1 class="titulo-pagina">Tudo</h1>
+      <p class="explica-pagina"><span id="contaPaginas"></span> <span>páginas</span> · <span id="contaBlocos"></span> <span>ajustes</span></p>
+      <button id="btnBuscaTudo" type="button" class="campo-busca-tudo"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><span>Buscar qualquer ajuste…</span></button>
     </section>
 
     <section id="abaTelainicial" class="painel-aba pagina-ajustes" hidden>
@@ -1430,6 +1442,7 @@
   <script src="ia.js"></script>
   <script src="ui.js"></script>
   <script src="busca.js"></script>
+  <script src="navigation.js"></script>   <!-- índice da página, rótulo da cruz e aba Tudo (20/11/2026) -->
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
