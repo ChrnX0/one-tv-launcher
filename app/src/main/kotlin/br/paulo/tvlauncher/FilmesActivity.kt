@@ -155,7 +155,8 @@ class FilmesActivity : Activity() {
             v.post { if (!isDestroyed) { grade.numColumns = m.colunas; adaptadorGrade.notifyDataSetChanged() } }
         }
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(Estilo.dicasDeTexto(this, getString(R.string.vod_grade_teclas)).apply { setPaddingRelative(dp(4), dp(8), 0, 0) })   // a barra de dicas de todo o sistema (crítica de design 19/11/2026)
+        // Sem faixa de dicas embaixo (Paulo, 20/11/2026: tirava espaço dos pôsteres). Como no Netflix, Google TV e Apple TV,
+        // a grade de pôsteres é só conteúdo; o "segurar OK" continua na Ajuda.
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
@@ -689,7 +690,10 @@ class FilmesActivity : Activity() {
             // Etiqueta: "faltam 1 h 04" (a barra já dá a proporção; sem número de %), "Finalizado" (95% ou mais) ou
             // "Assistido" (servidor sem duração).
             // 14/11/2026: concluído (régua de minutos) = "Assistido" em verde; começado sem duração não ganha etiqueta.
-            val pct = Vod.progresso(pos)?.takeIf { it != 0 }
+            // 20/11/2026 (Paulo: o selo "falta 1 h 12 min" cobria o pôster e quebrava em duas linhas): no pôster só a barra,
+            // como no "Continuar" do Netflix e do Apple TV; o "faltam…" fica na caixa de cima do filme em foco.
+            // O selo fica só para "Assistido".
+            val pct = Vod.progresso(pos)?.takeIf { it == 100 }
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> BarraTempo.faltam(this@FilmesActivity, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
@@ -711,6 +715,7 @@ class FilmesActivity : Activity() {
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+            maxLines = 1; ellipsize = TextUtils.TruncateAt.END   // selo de uma linha: nunca cobre metade do pôster
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         val estrela = TextView(this).apply {
