@@ -28,6 +28,8 @@ class ObserverPackagesTest {
         // Desconhecido de sistema vem primeiro: é o que pede mais cuidado.
         assertEquals(listOf("com.google.android.coisa.nova", "zz.app.novo"), inv.unknown.map { it.name })
         assertEquals(2, inv.toJson().getInt("unknown_total"))
+        assertTrue(inv.toJson().getBoolean("complete"))
+        assertEquals(false, ObserverPackages.inventory(emptyList(), fichas, complete = false).toJson().getBoolean("complete"))
     }
 
     /** As fichas do APK: todo pacote com risco válido, texto curto e fonte (as novas de 20/11 trazem "src"). */

@@ -222,7 +222,9 @@ object ObserverTv {
             ObserverPackages.Pkg(a.packageName, (a.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0, !a.enabled)
         }
         val fichas = runCatching { org.json.JSONObject(ComunidadeApps.fichasJuntas(ctx)) }.getOrDefault(org.json.JSONObject())
-        return ObserverPackages.inventory(lista, fichas)
+        // Versão da Play: sem QUERY_ALL_PACKAGES o Android filtra a lista; o inventário diz que está incompleto.
+        val completo = ctx.checkSelfPermission(android.Manifest.permission.QUERY_ALL_PACKAGES) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        return ObserverPackages.inventory(lista, fichas, completo)
     }
 
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
@@ -289,7 +291,7 @@ object ObserverTv {
             m.items.joinToString("; ") { "${it.signal.name} ${it.tonight} (normal ${it.usual}) ${it.change}" } +
             "; achados 24 h: ${m.events24h.ifEmpty { null } ?: "nenhum"}")
         runCatching { packages(ctx) }.getOrNull()?.let { inv ->
-            appendLine("pacotes: ${inv.total} (${inv.system} de sistema, ${inv.frozen.size} congelados); por risco ${inv.byRisk}; " +
+            appendLine("pacotes${if (inv.complete) "" else " (só os visíveis: versão sem QUERY_ALL_PACKAGES)"}: ${inv.total} (${inv.system} de sistema, ${inv.frozen.size} congelados); por risco ${inv.byRisk}; " +
                 "sem ficha ${inv.unknown.size}" + inv.unknown.take(20).joinToString("") { "\n  ? ${it.name}${if (it.system) " (sistema)" else ""}" })
         }
         val n = notes(ctx)

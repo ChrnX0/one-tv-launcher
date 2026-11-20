@@ -27,16 +27,18 @@ object ObserverPackages {
         val byRisk: Map<String, Int>,
         /** Sem ficha: sistema primeiro, depois por nome. */
         val unknown: List<Pkg>,
+        /** false = o app não vê todos os pacotes (versão da Play, sem QUERY_ALL_PACKAGES): os números são só dos visíveis. */
+        val complete: Boolean = true,
     ) {
         fun toJson(max: Int = 60): JSONObject = JSONObject()
-            .put("total", total).put("system", system)
+            .put("complete", complete).put("total", total).put("system", system)
             .put("frozen", JSONArray(frozen))
             .put("by_risk", JSONObject().apply { byRisk.forEach { (k, n) -> put(k, n) } })
             .put("unknown_total", unknown.size)
             .put("unknown", JSONArray().apply { unknown.take(max).forEach { put(JSONObject().put("package", it.name).put("system", it.system).put("frozen", it.frozen)) } })
     }
 
-    fun inventory(installed: List<Pkg>, fichas: JSONObject): Inventory {
+    fun inventory(installed: List<Pkg>, fichas: JSONObject, complete: Boolean = true): Inventory {
         val porRisco = sortedMapOf<String, Int>()
         val desconhecidos = ArrayList<Pkg>()
         for (p in installed) {
@@ -49,6 +51,7 @@ object ObserverPackages {
             frozen = installed.filter { it.frozen }.map { it.name }.sorted(),
             byRisk = porRisco,
             unknown = desconhecidos.sortedWith(compareBy<Pkg>({ !it.system }, { it.name })),
+            complete = complete,
         )
     }
 }
