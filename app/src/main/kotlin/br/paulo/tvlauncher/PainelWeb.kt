@@ -1146,7 +1146,12 @@ object PainelWeb {
         "/icone-512.png" to ("icone-512.png" to "image/png"),
         "/icone-mascaravel.png" to ("icone-mascaravel.png" to "image/png"),
         "/icone-apple.png" to ("icone-apple.png" to "image/png"),
-        "/favicon.ico" to ("icone-192.png" to "image/png"),   // o navegador pede sozinho; sem isso, 404 no registro
+        // Favicon da marca (versão simplificada para tamanho pequeno, 20/11/2026). Nomes novos de propósito: o navegador
+        // guarda o ícone da aba pelo endereço e não pedia de novo o icone-192.png (o Brave seguia com um ícone antigo).
+        "/sofaly-favicon.svg" to ("sofaly-favicon.svg" to "image/svg+xml"),
+        "/sofaly-favicon-32.png" to ("sofaly-favicon-32.png" to "image/png"),
+        "/sofaly-favicon-180.png" to ("sofaly-favicon-180.png" to "image/png"),
+        "/favicon.ico" to ("sofaly-favicon-32.png" to "image/png"),   // o navegador pede sozinho; sem isso, 404 no registro
         "/jmuxer.min.js" to ("jmuxer.min.js" to "text/javascript; charset=utf-8"),
         "/ia.js" to ("ia.js" to "text/javascript; charset=utf-8"),   // aba "Conectar uma IA" (10/11/2026)
         "/sofy.js" to ("sofy.js" to "text/javascript; charset=utf-8"),   // a Sofy desenhada em SVG (20/11/2026)
