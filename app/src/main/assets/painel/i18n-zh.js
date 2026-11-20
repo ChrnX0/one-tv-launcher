@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"正在电视上播放。",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"这种文件无法在电视上打开。视频、音乐和照片可以。",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","正在发送 $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "新电视拒绝了：$1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "新电视拒绝了（$1）"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "无法准备发送（$1）"],

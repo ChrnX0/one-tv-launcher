@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"TV에서 재생 중.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"이 파일 형식은 TV에서 열리지 않아요. 동영상, 음악, 사진은 열려요.",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","보내는 중 $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "새 TV가 거부함: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "새 TV가 거부함($1)"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "전송을 준비하지 못했습니다($1)"],

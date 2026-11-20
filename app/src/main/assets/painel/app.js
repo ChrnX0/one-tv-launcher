@@ -2486,7 +2486,9 @@ async function verNaTv(f) {
       const jaEsta = (r.itens || []).some((i) => i.nome === f.name);
       if (!jaEsta) {
         const url = '/api/arquivos/enviar?pasta=' + encodeURIComponent(PASTA_NA_TV) + '&nome=' + encodeURIComponent(f.name);
-        await enviarComProgresso(url, f, (p) => aviso(`Mandando ${f.name}: ${Math.round(p * 100)}%`));
+        try {
+          await enviarComProgresso(url, f, (p) => avisoProgresso('verNaTv', `Mandando ${f.name} · ${Math.round(p * 100)}%`, p));
+        } finally { fimProgresso('verNaTv'); }
       }
       await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(PASTA_NA_TV, f.name) });
       aviso('Tocando na TV.', 'ok');

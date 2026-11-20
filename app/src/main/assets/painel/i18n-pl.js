@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"Odtwarzanie na telewizorze.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Ten typ pliku nie otwiera się na telewizorze. Wideo, muzyka i zdjęcia tak.",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","Wysyłanie $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "nowy telewizor odrzucił: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "nowy telewizor odrzucił ($1)"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "nie udało się przygotować wysyłki ($1)"],
