@@ -79,4 +79,11 @@ class FimDoVideoTest {
         assertEquals(listOf("c", "a"), FimDoVideo.podar(arqs, max = 2))
         assertTrue(FimDoVideo.podar(arqs, max = 4).isEmpty())
     }
+
+    @Test fun tunelSoVoltaComErroDeDecodificadorOuAudio() {
+        assertTrue(FimDoVideo.erroDoTunel(4001))   // ERROR_CODE_DECODER_INIT_FAILED
+        assertTrue(FimDoVideo.erroDoTunel(5002))   // ERROR_CODE_AUDIO_TRACK_WRITE_FAILED
+        assertFalse(FimDoVideo.erroDoTunel(2001))  // rede: tenta de novo, não mexe no túnel
+        assertFalse(FimDoVideo.erroDoTunel(3001))  // arquivo estragado
+    }
 }

@@ -66,6 +66,12 @@ object FimDoVideo {
      */
     fun erroDeRede(codigo: Int): Boolean = codigo in 2000..2999 || codigo == 1003
 
+    /**
+     * Modo túnel (proposta C, item 12, 20/11/2026): erros de decodificador (4xxx) e de saída de áudio (5xxx) podem ser
+     * o túnel falhando neste aparelho. Com o túnel ligado, eles fazem o player voltar ao modo comum no mesmo ponto.
+     */
+    fun erroDoTunel(codigo: Int): Boolean = codigo in 4000..4999 || codigo in 5000..5999
+
     // ---------------------------------------------------------------- 21: legenda com tamanho ajustável
 
     /** Tamanhos da legenda em sp (pequena, normal, grande, enorme). O normal é o de antes (30 sp). */
