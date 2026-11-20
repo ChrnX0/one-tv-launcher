@@ -1254,7 +1254,7 @@ class MainActivity : Activity() {
         // Congelados sob demanda (OnDemandTv): congelado some da consulta acima; entra com o nome e o ícone guardados.
         // App de sistema marcado (ficha "seguro") entra também, mesmo fora de SEMPRE_MOSTRAR: foi o dono que pediu.
         for (e in OnDemandTv.entries(this)) {
-            if (e.pkg in itens || e.pkg == packageName) continue
+            if (e.pkg in itens || e.pkg == packageName || !OnDemandTv.installed(this, e.pkg)) continue
             val chave = "sob-demanda|" + pacoteIcones
             itens[e.pkg] = cacheApps[e.pkg]?.takeIf { it.first == chave }?.second ?: run {
                 val original = OnDemandTv.icon(this, e.pkg) ?: pm.defaultActivityIcon

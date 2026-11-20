@@ -133,13 +133,28 @@ object OnDemandTv {
         }
     }
 
-    /** Apps com mídia tocando agora (música em segundo plano não congela). Sem o ouvinte de notificações: nenhum. */
+    /**
+     * Apps com mídia tocando agora (música em segundo plano não congela). Sem o ouvinte de notificações não dá para saber
+     * QUEM toca (Codex, #338): se algum som toca, vale como "todos tocando" e ninguém congela nesta batida.
+     */
     private fun playing(ctx: Context): Set<String> = try {
         ctx.getSystemService(MediaSessionManager::class.java)
             ?.getActiveSessions(ComponentName(ctx, OuvinteNotificacoes::class.java))
             ?.filter { it.playbackState?.state == PlaybackState.STATE_PLAYING }
             ?.map { it.packageName }?.toSet() ?: emptySet()
-    } catch (_: Exception) { emptySet() }
+    } catch (_: Exception) {
+        val tocando = runCatching { ctx.getSystemService(android.media.AudioManager::class.java)?.isMusicActive == true }.getOrDefault(true)
+        if (tocando) entries(ctx).map { it.pkg }.toSet() else emptySet()
+    }
+
+    /** Ainda instalado (congelado conta). Desinstalado sai da lista (Codex, #338: sobrava um card morto na HOME). */
+    fun installed(ctx: Context, pkg: String): Boolean {
+        @Suppress("DEPRECATION")
+        val ai = runCatching { ctx.packageManager.getApplicationInfo(pkg, android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS) }.getOrNull()
+        val ok = ai != null && ai.flags and android.content.pm.ApplicationInfo.FLAG_INSTALLED != 0
+        if (!ok) forget(ctx, pkg)
+        return ok
+    }
 
     /** adb (EXTRAS ondemand). */
     fun report(ctx: Context): String {
