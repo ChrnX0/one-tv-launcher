@@ -27,11 +27,20 @@ object MenuApp {
      */
     fun ocultarPedePin(risco: String) = risco != "seguro"
 
-    enum class Acao { MOVER, OCULTAR, MOSTRAR, DESINSTALAR }
+    enum class Acao { MOVER, OCULTAR, MOSTRAR, SOB_DEMANDA, TIRAR_SOB_DEMANDA, DESINSTALAR }
 
-    fun acoes(naPastaOcultos: Boolean, desinstalavel: Boolean): List<Acao> {
+    /**
+     * [sobDemanda] (20/11/2026, OnDemand.kt): null = o app não pode ser congelado sob demanda (não aparece nada);
+     * false = pode e ainda não é ("Congelar quando não estiver em uso"); true = já é ("Deixar de congelar").
+     */
+    fun acoes(naPastaOcultos: Boolean, desinstalavel: Boolean, sobDemanda: Boolean? = null): List<Acao> {
         val base = if (naPastaOcultos) listOf(Acao.MOSTRAR) else listOf(Acao.MOVER, Acao.OCULTAR)
-        return if (desinstalavel) base + Acao.DESINSTALAR else base
+        val demanda = when {
+            naPastaOcultos || sobDemanda == null -> emptyList()
+            sobDemanda -> listOf(Acao.TIRAR_SOB_DEMANDA)
+            else -> listOf(Acao.SOB_DEMANDA)
+        }
+        return base + demanda + if (desinstalavel) listOf(Acao.DESINSTALAR) else emptyList()
     }
 
     /**

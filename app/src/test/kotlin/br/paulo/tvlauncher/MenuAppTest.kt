@@ -37,6 +37,10 @@ class MenuAppTest {
     @Test fun menuNaPastaOcultos() {
         assertEquals(listOf(Acao.MOSTRAR, Acao.DESINSTALAR), MenuApp.acoes(naPastaOcultos = true, desinstalavel = true))
         assertEquals(listOf(Acao.MOSTRAR), MenuApp.acoes(naPastaOcultos = true, desinstalavel = false))
+        // Sob demanda (20/11/2026): entra antes de Desinstalar; some na pasta Ocultos e quando o app não pode.
+        assertEquals(listOf(Acao.MOVER, Acao.OCULTAR, Acao.SOB_DEMANDA, Acao.DESINSTALAR), MenuApp.acoes(false, true, sobDemanda = false))
+        assertEquals(listOf(Acao.MOVER, Acao.OCULTAR, Acao.TIRAR_SOB_DEMANDA), MenuApp.acoes(false, false, sobDemanda = true))
+        assertEquals(listOf(Acao.MOSTRAR), MenuApp.acoes(true, false, sobDemanda = true))
     }
 
     @Test fun pilhaFrentePrimeiroESoOsQuePodem() = assertEquals(

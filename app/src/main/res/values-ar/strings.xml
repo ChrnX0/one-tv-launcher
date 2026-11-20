@@ -150,6 +150,11 @@
     <string name="home_remover">إخراج</string>
     <string name="home_mostrar">إظهار في الشاشة الرئيسية</string>
     <string name="home_ocultar">إخفاء من الشاشة الرئيسية</string>
+    <string name="home_sob_demanda">التجميد عند عدم الاستخدام</string>
+    <string name="home_sob_demanda_tirar">إيقاف التجميد</string>
+    <string name="sob_demanda_ligado">تم التجميد. يبقى هنا: زر OK يلغي التجميد ويفتحه، ثم يُجمَّد من جديد بعد دقيقتين من خروجك.</string>
+    <string name="sob_demanda_desligado">أُلغي التجميد. يعمل كما كان.</string>
+    <string name="sob_demanda_falhou">تعذّر التغيير الآن. حاول مرة أخرى بعد قليل.</string>
     <string name="home_desinstalar_app">إلغاء تثبيت %1$s</string>
     <string name="home_desinstalar">إلغاء التثبيت</string>
     <string name="home_app_sistema"> (تطبيق نظام)</string>

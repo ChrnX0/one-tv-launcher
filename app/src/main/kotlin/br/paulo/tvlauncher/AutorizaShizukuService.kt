@@ -46,6 +46,7 @@ class AutorizaShizukuService : AccessibilityService() {
             JanelaNaFrente.apareceu(evento.packageName, evento.className)   // quem está na frente (MCP, rotinas, Casa, saúde do acesso)
             ShizukuEmbutido.janelaApareceu(this, evento.packageName)   // shell emprestado sob demanda: cliente na frente sobe o servidor
             SomNavegacaoTv.pacoteNaFrente = evento.packageName?.toString()
+            OnDemandTv.onWindow(this, evento.packageName)   // sob demanda: saiu da frente -> congela de novo depois de 2 min
             SaudeAcesso.janela(this, evento.packageName, evento.className)   // HOME na frente: hora boa para aviso pendente
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME
             TempoTelaTv.janela(this, evento.packageName)   // tempo de tela por dia (ideia 33): conta e fecha se acabou

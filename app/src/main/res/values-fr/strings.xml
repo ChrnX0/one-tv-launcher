@@ -150,6 +150,11 @@
     <string name="home_remover">Retirer</string>
     <string name="home_mostrar">Afficher sur l’accueil</string>
     <string name="home_ocultar">Masquer de l’accueil</string>
+    <string name="home_sob_demanda">Geler quand elle ne sert pas</string>
+    <string name="home_sob_demanda_tirar">Ne plus geler</string>
+    <string name="sob_demanda_ligado">Gelée. Elle reste ici : OK la dégèle et l\'ouvre, et elle se regèle 2 minutes après votre sortie.</string>
+    <string name="sob_demanda_desligado">Dégelée. Elle fonctionne comme avant.</string>
+    <string name="sob_demanda_falhou">Impossible de changer maintenant. Réessayez dans un instant.</string>
     <string name="home_desinstalar_app">Désinstaller %1$s</string>
     <string name="home_desinstalar">Désinstaller</string>
     <string name="home_app_sistema"> (app système)</string>
