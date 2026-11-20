@@ -75,7 +75,11 @@ object ObserverTv {
         }
         val agora = System.currentTimeMillis()
         val snap = blackBox.snapshot()
-        val findings = ObserverCore.judge(snap, agora)
+        val (hw, hd) = hours(agora)
+        val base = baseline(p)
+        // Julga ANTES de aprender: a leitura de agora não pode puxar a base na própria direção e se esconder (Codex, #329).
+        val findings = ObserverCore.judge(snap, agora, base, hw, hd)
+        learn(p, base, snap, hw, hd, agora)
         val change = ObserverCore.diff(active.toList(), findings)
         if (change.appeared.isEmpty() && change.cleared.isEmpty()) return
         var log = p.getString("log", null)
@@ -95,6 +99,42 @@ object ObserverTv {
         Log.i(TAG, "apareceu=${change.appeared.map { it.kind }} sumiu=${change.cleared}")
     }
 
+    // ---------------------------------------------------------------- linha de base (fase 2)
+
+    @Volatile private var base: ObserverBaseline? = null
+    private val lastLearned = HashMap<ObserverCore.Signal, Long>()
+    private var lastBaseSave = 0L
+    /** Uma leitura por sinal a cada 4,5 min no máximo: durante uma queda a rede amostra a cada 30 s e pesaria demais. */
+    private const val LEARN_GAP_MS = 270_000L
+    private const val BASE_SAVE_GAP_MS = 30 * 60_000L
+
+    /** Hora da semana (0 = domingo 0h) e hora do dia, no fuso da TV. */
+    fun hours(at: Long): Pair<Int, Int> {
+        val c = java.util.Calendar.getInstance().apply { timeInMillis = at }
+        val h = c.get(java.util.Calendar.HOUR_OF_DAY)
+        return ((c.get(java.util.Calendar.DAY_OF_WEEK) - 1) * 24 + h) to h
+    }
+
+    private fun baseline(p: android.content.SharedPreferences): ObserverBaseline =
+        base ?: ObserverBaseline.fromJson(p.getString("baseline", null)?.let { runCatching { org.json.JSONObject(it) }.getOrNull() })
+            .also { base = it }
+
+    private fun learn(p: android.content.SharedPreferences, b: ObserverBaseline, snap: Map<ObserverCore.Signal, ObserverCore.Reading>, hw: Int, hd: Int, agora: Long) {
+        var learned = false
+        for (s in ObserverBaseline.LEARNED) {
+            val r = snap[s] ?: continue
+            if (agora - r.at > ObserverCore.STALE_MS || r.at - (lastLearned[s] ?: 0L) < LEARN_GAP_MS) continue
+            if (s == ObserverCore.Signal.WIFI_DBM && r.value !in -126L..-1L) continue   // sem Wi-Fi (cabo): não é um sinal
+            b.learn(s, r.value, hw, hd)
+            lastLearned[s] = r.at
+            learned = true
+        }
+        if (learned && agora - lastBaseSave > BASE_SAVE_GAP_MS) {
+            lastBaseSave = agora
+            p.edit().putString("baseline", b.toJson().toString()).apply()
+        }
+    }
+
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 
     /** Os recados que valem agora, do mais novo ao mais velho. Quem mostra escolhe a frase pelo [ObserverCore.Note.kind]. */
@@ -111,19 +151,22 @@ object ObserverTv {
 
     /**
      * O mesmo retrato do [report], em JSON, para a ferramenta MCP `observer`: sinais (valor, unidade, idade), o que o
-     * juiz vê agora, recados na fila e as [logMax] linhas mais novas do registro. Só leitura.
+     * juiz vê agora (limites fixos + linha de base), o normal desta hora de cada sinal ("normal", quando já aprendido), recados na fila e as [logMax] linhas mais novas do registro. Só leitura.
      */
     fun reportJson(ctx: Context, logMax: Int = 30): org.json.JSONObject {
         val agora = System.currentTimeMillis()
         val snap = blackBox.snapshot()
         val sinais = org.json.JSONObject()
+        val (hw, hd) = hours(agora)
+        val b = base ?: runCatching { baseline(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)) }.getOrNull()
         for ((s, r) in snap.entries.sortedBy { it.key.ordinal })
             sinais.put(s.name, org.json.JSONObject().put("value", r.value).put("unit", s.unit)
-                .put("age_s", (agora - r.at) / 1000).put("in_black_box", blackBox.series(s).size))
+                .put("age_s", (agora - r.at) / 1000).put("in_black_box", blackBox.series(s).size)
+                .apply { b?.expected(s, hw, hd)?.let { c -> put("normal", Math.round(c.mean)).put("normal_samples", c.n) } })
         val agoraJson = org.json.JSONArray()
-        for (f in ObserverCore.judge(snap, agora))
+        for (f in ObserverCore.judge(snap, agora, b, hw, hd))
             agoraJson.put(org.json.JSONObject().put("kind", f.kind.name).put("severity", f.severity.name).put("why", f.why))
-        val log = try { org.json.JSONArray(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", "[]")) } catch (_: Exception) { org.json.JSONArray() }
+        val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
         val logNovo = org.json.JSONArray()
         for (i in 0 until minOf(logMax, log.length())) logNovo.put(log.get(i))
         return org.json.JSONObject()
@@ -141,11 +184,12 @@ object ObserverTv {
         if (snap.isEmpty()) appendLine("  nenhum ainda (o primeiro chega com a amostra de rede, até 5 min)")
         for ((s, r) in snap.entries.sortedBy { it.key.ordinal })
             appendLine("  ${s.name} = ${r.value} ${s.unit} (${(agora - r.at) / 1000} s, ${blackBox.series(s).size} na caixa-preta)")
-        val f = ObserverCore.judge(snap, agora)
+        val (hw, hd) = hours(agora)
+        val f = ObserverCore.judge(snap, agora, base, hw, hd)
         appendLine("agora: " + if (f.isEmpty()) "tudo normal" else f.joinToString("; ") { "${it.kind} [${it.severity}] ${it.why}" })
         val n = notes(ctx)
         appendLine("recados na fila: ${n.size}" + n.joinToString("") { "\n  ${it.kind} ${it.severity}${if (it.seen) " (visto)" else ""}" })
-        val log = try { org.json.JSONArray(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", "[]")) } catch (_: Exception) { org.json.JSONArray() }
+        val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
         appendLine("registro (${log.length()} linhas, as 10 mais novas):")
         for (i in 0 until minOf(10, log.length())) {
             val o = log.getJSONObject(i)

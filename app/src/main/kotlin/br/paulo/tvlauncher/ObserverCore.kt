@@ -57,14 +57,16 @@ object ObserverCore {
     const val WINDOW_MS = 30 * 60_000L
     const val MAX_PER_SIGNAL = 120
 
-    // ---------------------------------------------------------------- juiz (regras escritas; a estatística vem na fase 2)
+    // ---------------------------------------------------------------- juiz (regras escritas + a linha de base da casa, fase 2)
 
     enum class Severity { INFO, WARNING, CRITICAL }
 
     /** O que o juiz vê. [why] é a frase técnica do porquê (vai para o registro e o adb; o rosto usa o [kind]). */
     data class Finding(val kind: Kind, val severity: Severity, val why: String)
 
-    enum class Kind { NO_INTERNET, SLOW_INTERNET, WEAK_WIFI, LOW_MEMORY, MEMORY_PRESSURE, SLOW_HOME, LOW_DISK }
+    enum class Kind { NO_INTERNET, SLOW_INTERNET, WEAK_WIFI, LOW_MEMORY, MEMORY_PRESSURE, SLOW_HOME, LOW_DISK,
+        // Fase 2: dentro dos limites fixos, mas fora do normal DESTA casa nesta hora (ObserverBaseline). Só INFO: registro e diário.
+        UNUSUAL_LATENCY, UNUSUAL_MEMORY, UNUSUAL_WIFI, UNUSUAL_FRAMES }
 
     /** Abaixo disto o Android começa a fechar apps em segundo plano num aparelho de 2 GB (inferido; a fase 2 troca pela linha de base da casa). */
     const val LOW_MEMORY_MB = 150L
@@ -103,6 +105,39 @@ object ObserverCore {
             if (it < LOW_DISK_MB) add(Finding(Kind.LOW_DISK, Severity.CRITICAL, "só $it MB livres no disco (limite $LOW_DISK_MB)"))
         }
     }.sortedByDescending { it.severity.ordinal }
+
+    /** Qual achado de limite fixo cobre o mesmo sinal: com ele presente, o "fora do normal" desse sinal seria repetição. */
+    private val UNUSUAL = linkedMapOf(
+        Signal.LATENCY_MS to (Kind.UNUSUAL_LATENCY to Kind.SLOW_INTERNET),
+        Signal.MEMORY_AVAILABLE_MB to (Kind.UNUSUAL_MEMORY to Kind.LOW_MEMORY),
+        Signal.WIFI_DBM to (Kind.UNUSUAL_WIFI to Kind.WEAK_WIFI),
+        Signal.SLOW_FRAMES_PCT to (Kind.UNUSUAL_FRAMES to Kind.SLOW_HOME),
+    )
+
+    /**
+     * Fase 2: o juiz completo = limites fixos ([judge]) + o que está fora do normal desta casa nesta hora
+     * ([ObserverBaseline.badness] ≥ [ObserverBaseline.UNUSUAL_Z]). Sem internet, latência e Wi-Fi não são julgados contra a base.
+     */
+    fun judge(snapshot: Map<Signal, Reading>, now: Long, base: ObserverBaseline?, hourOfWeek: Int, hourOfDay: Int): List<Finding> {
+        val fixed = judge(snapshot, now)
+        if (base == null) return fixed
+        val kinds = fixed.map { it.kind }.toSet()
+        val offline = Kind.NO_INTERNET in kinds
+        val extra = buildList {
+            for ((s, pair) in UNUSUAL) {
+                val (kind, covering) = pair
+                if (covering in kinds) continue
+                if (offline && (s == Signal.LATENCY_MS || s == Signal.WIFI_DBM)) continue
+                val r = snapshot[s]?.takeIf { now - it.at <= STALE_MS } ?: continue
+                if (s == Signal.WIFI_DBM && r.value !in -126L..-1L) continue
+                val z = base.badness(s, r.value, hourOfWeek, hourOfDay) ?: continue
+                if (z < ObserverBaseline.UNUSUAL_Z) continue
+                val c = base.expected(s, hourOfWeek, hourOfDay) ?: continue
+                add(Finding(kind, Severity.INFO, "${r.value} ${s.unit}, o normal desta hora é ~${Math.round(c.mean)} ${s.unit} (${"%.1f".format(java.util.Locale.ROOT, z)} desvios)"))
+            }
+        }
+        return (fixed + extra).sortedByDescending { it.severity.ordinal }
+    }
 
     /** O que mudou entre dois julgamentos: só isso vai ao registro, ao diário e aos recados (sem repetir a cada sinal). */
     data class Change(val appeared: List<Finding>, val cleared: List<Kind>)
@@ -157,6 +192,14 @@ object ObserverCore {
     }
 
     /** Põe [entry] na frente; corta acima de [LOG_MAX] linhas ou de [LOG_DAYS] dias. Texto estragado = começa vazio. */
+    /** O registro como está guardado, sem o que passou de [LOG_DAYS] (o corte do [appendLog] só roda quando entra linha nova). */
+    fun readLog(stored: String?, now: Long): JSONArray {
+        val a = try { JSONArray(stored ?: "[]") } catch (_: Exception) { JSONArray() }
+        return JSONArray().apply {
+            for (i in 0 until a.length()) a.optJSONObject(i)?.takeIf { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }?.let { put(it) }
+        }
+    }
+
     fun appendLog(stored: String?, entry: JSONObject, now: Long): String = prepend(stored, entry, LOG_MAX) { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }
 
     // ---------------------------------------------------------------- recados (a saída que o rosto do Observador vai usar)
@@ -204,6 +247,10 @@ object ObserverCore {
             Kind.MEMORY_PRESSURE -> Signal.MEMORY_PRESSURE
             Kind.SLOW_HOME -> Signal.SLOW_FRAMES_PCT
             Kind.LOW_DISK -> Signal.DISK_FREE_MB
+            Kind.UNUSUAL_LATENCY -> Signal.LATENCY_MS
+            Kind.UNUSUAL_MEMORY -> Signal.MEMORY_AVAILABLE_MB
+            Kind.UNUSUAL_WIFI -> Signal.WIFI_DBM
+            Kind.UNUSUAL_FRAMES -> Signal.SLOW_FRAMES_PCT
         } ?: return emptyList()
         return listOfNotNull(snapshot[s]?.value?.toString())
     }
