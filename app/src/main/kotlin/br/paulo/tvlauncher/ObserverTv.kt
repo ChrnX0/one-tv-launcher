@@ -221,9 +221,15 @@ object ObserverTv {
     fun packages(ctx: Context): ObserverPackages.Inventory {
         val pm = ctx.packageManager
         @Suppress("DEPRECATION")
-        val apps = pm.getInstalledApplications(android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS)
+        // MATCH_UNINSTALLED_PACKAGES: app oculto pelo Device Owner (congelado por nós, inclusive sob demanda) some da lista
+        // comum. Visto na Sala 20/11 15:45Z: 133 pacotes viraram 131 depois de congelar dois. Desinstalado de verdade
+        // (sem FLAG_INSTALLED) fica fora; oculto conta como congelado.
+        val apps = pm.getInstalledApplications(android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS or
+            android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)
+            .filter { it.flags and android.content.pm.ApplicationInfo.FLAG_INSTALLED != 0 }
         val lista = apps.map { a ->
-            ObserverPackages.Pkg(a.packageName, (a.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0, !a.enabled)
+            ObserverPackages.Pkg(a.packageName, (a.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0,
+                !a.enabled || PrivilegioDO.estaOculto(ctx, a.packageName))
         }
         val fichas = runCatching { org.json.JSONObject(ComunidadeApps.fichasJuntas(ctx)) }.getOrDefault(org.json.JSONObject())
         // Versão da Play: sem QUERY_ALL_PACKAGES o Android filtra a lista; o inventário diz que está incompleto.
