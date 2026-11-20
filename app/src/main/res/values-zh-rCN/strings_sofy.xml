@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">%1$s%% 的画面帧延迟了。</string>
     <string name="observer_low_disk_title">存储空间快满了</string>
     <string name="observer_low_disk_text">只剩 %1$s MB。保存可能会失败。</string>
+    <string name="observer_freeze_undone_title">我撤销了一次冻结</string>
+    <string name="observer_freeze_undone_text">%1$s 被冻结后 %2$s 无法使用，所以我把它解冻了。</string>
 </resources>

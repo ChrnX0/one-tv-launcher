@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">프레임의 %1$s%%가 늦었어요.</string>
     <string name="observer_low_disk_title">저장 공간이 거의 가득 참</string>
     <string name="observer_low_disk_text">%1$s MB만 남았어요. 저장이 실패할 수 있어요.</string>
+    <string name="observer_freeze_undone_title">정지를 되돌렸습니다</string>
+    <string name="observer_freeze_undone_text">%1$s을(를) 정지했더니 %2$s이(가) 작동하지 않아 다시 켰습니다.</string>
 </resources>

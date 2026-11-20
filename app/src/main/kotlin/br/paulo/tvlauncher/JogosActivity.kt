@@ -140,7 +140,7 @@ class JogosActivity : Activity() {
     }
 
     private fun lerVisual(pacote: String): Visual {
-        val icone = runCatching { packageManager.getApplicationIcon(pacote) }.getOrNull()
+        val icone = runCatching { packageManager.getApplicationIcon(pacote) }.getOrNull() ?: OnDemandTv.icon(this, pacote)
         val cor = icone?.let { runCatching { CapaFoco.corDoIcone(it)[0] }.getOrNull() } ?: COR_JOGAR
         return Visual(icone, cor)
     }
@@ -379,6 +379,10 @@ class JogosActivity : Activity() {
     // ================================================================ ações
 
     private fun abrir(pacote: String): Boolean {
+        // Congelado sob demanda (OnDemandTv): descongela e abre fora da tela; volta a congelar 2 min depois de sair.
+        if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) {
+            if (!isDestroyed) AvisoTv.rapido(this, getString(R.string.jogos_titulo), getString(R.string.jogos_nao_abriu))
+        }; return true }
         val i = packageManager.getLeanbackLaunchIntentForPackage(pacote) ?: packageManager.getLaunchIntentForPackage(pacote) ?: return false
         return try { startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); true } catch (_: Exception) { false }
     }
@@ -405,7 +409,29 @@ class JogosActivity : Activity() {
         // App de PC: "Ligar o PC e jogar" com este app vem primeiro (era o botão ao lado do Jogar).
         val pc = if (j.grupo == Jogos.Grupo.PC) listOf(getString(R.string.jogos_ligar_pc_jogar) to { jogarNoPc(j.pacote) }) else emptyList()
         lista(j.nome, pc + Jogos.Grupo.values().map { g -> ((if (g == j.grupo) "✓ " else "") + nomeGrupo(g)) to { escolherValor(j, g.name) } } +
-            listOf(getString(R.string.jogos_tirar) to { escolherValor(j, Jogos.FORA) }, getString(R.string.jogos_automatico) to { escolherValor(j, null) }))
+            listOf(getString(R.string.jogos_tirar) to { escolherValor(j, Jogos.FORA) }, getString(R.string.jogos_automatico) to { escolherValor(j, null) }) +
+            sobDemanda(j))
+    }
+
+    /** Congelar sob demanda (OnDemandTv), como no menu dos apps da HOME: jogos moram aqui, não na lista de apps. */
+    private fun sobDemanda(j: JogosTv.App): List<Pair<String, () -> Unit>> {
+        val marcado = OnDemandTv.marked(this, j.pacote)
+        if (!marcado && !OnDemandTv.eligible(this, j.pacote)) return emptyList()
+        return listOf(getString(if (marcado) R.string.home_sob_demanda_tirar else R.string.home_sob_demanda) to {
+            Fundo.rodar("sob-demanda-jogos") {
+                val motivo = if (marcado) OnDemandTv.unmark(this, j.pacote) else OnDemandTv.mark(this, j.pacote)
+                runOnUiThread {
+                    if (isDestroyed) return@runOnUiThread
+                    AvisoTv.rapido(this, j.nome, getString(when {
+                        motivo != null -> R.string.sob_demanda_falhou
+                        marcado -> R.string.sob_demanda_desligado
+                        else -> R.string.sob_demanda_ligado
+                    }))
+                    focoPacote = j.pacote
+                    carregar()
+                }
+            }
+        })
     }
 
     private fun escolherValor(j: JogosTv.App, valor: String?) {

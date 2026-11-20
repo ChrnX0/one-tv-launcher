@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">تأخرت %1$s%% من الإطارات.</string>
     <string name="observer_low_disk_title">مساحة التخزين ممتلئة تقريبًا</string>
     <string name="observer_low_disk_text">تبقّى %1$s ميغابايت فقط. قد يفشل الحفظ.</string>
+    <string name="observer_freeze_undone_title">ألغيت تجميدًا</string>
+    <string name="observer_freeze_undone_text">كان %1$s مجمّدًا وتوقف %2$s عن العمل، فألغيت التجميد.</string>
 </resources>

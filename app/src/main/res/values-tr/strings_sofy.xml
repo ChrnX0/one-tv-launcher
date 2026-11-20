@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">Karelerin %%%1$s kadarı gecikti.</string>
     <string name="observer_low_disk_title">Depolama neredeyse dolu</string>
     <string name="observer_low_disk_text">Yalnızca %1$s MB kaldı. Kaydetme başarısız olabilir.</string>
+    <string name="observer_freeze_undone_title">Bir dondurmayı geri aldım</string>
+    <string name="observer_freeze_undone_text">%1$s donmuştu ve %2$s çalışmayı bıraktı, bu yüzden çözdüm.</string>
 </resources>

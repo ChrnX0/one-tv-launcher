@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">Il %1$s%% dei fotogrammi è arrivato in ritardo.</string>
     <string name="observer_low_disk_title">Spazio quasi pieno</string>
     <string name="observer_low_disk_text">Restano solo %1$s MB. Il salvataggio può non riuscire.</string>
+    <string name="observer_freeze_undone_title">Ho annullato un congelamento</string>
+    <string name="observer_freeze_undone_text">%1$s era congelata e %2$s ha smesso di funzionare, così l\'ho scongelata.</string>
 </resources>

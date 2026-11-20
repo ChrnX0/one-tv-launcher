@@ -53,7 +53,9 @@ object JogosTv {
 
     /** O app é jogo? Uma consulta ao PackageManager por pacote (depois, cache). Qualquer thread. */
     fun ehJogo(ctx: Context, pacote: String): Boolean = cacheJogo.getOrPut(pacote) {
-        val cat = try { categoriaJogo(ctx.packageManager.getApplicationInfo(pacote, 0)) } catch (_: Exception) { false }
+        // MATCH_UNINSTALLED_PACKAGES: um jogo congelado sob demanda (OnDemandTv) está oculto e continua sendo jogo.
+        @Suppress("DEPRECATION")
+        val cat = try { categoriaJogo(ctx.packageManager.getApplicationInfo(pacote, android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)) } catch (_: Exception) { false }
         Jogos.ehJogo(pacote, cat, escolhas(ctx))
     }
 
@@ -76,7 +78,11 @@ object JogosTv {
             val cat = categoriaJogo(ri.activityInfo.applicationInfo)
             cacheJogo[p] = Jogos.ehJogo(p, cat, esc)
             if (!Jogos.ehJogo(p, cat, esc)) null else App(p, ri.loadLabel(pm).toString(), Jogos.grupo(p, esc))
-        }.sortedBy { it.nome.lowercase() }
+        }.plus(
+            // Congelados sob demanda (OnDemandTv) somem da consulta: entram com o nome guardado; o OK descongela e abre.
+            OnDemandTv.entries(ctx).filter { it.pkg !in vistos && OnDemandTv.installed(ctx, it.pkg) && ehJogo(ctx, it.pkg) }
+                .map { App(it.pkg, it.label, Jogos.grupo(it.pkg, esc)) }
+        ).sortedBy { it.nome.lowercase() }
     }
 
     fun instalado(ctx: Context, pacote: String) = try { ctx.packageManager.getPackageInfo(pacote, 0); true } catch (_: Exception) { false }

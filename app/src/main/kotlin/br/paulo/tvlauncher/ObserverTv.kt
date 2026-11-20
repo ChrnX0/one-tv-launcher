@@ -285,6 +285,7 @@ object ObserverTv {
         val agoraChecks by lazy { checks(ctx) }
         var log = p.getString("log", null)
         val restantes = ArrayList<ObserverTrial.Trial>()
+        var avisarSofy = false
         for (t in lista) {
             if (agora - t.at > ObserverTrial.EXPIRE_MS) continue
             // Alguém já descongelou à mão: a prova acabou.
@@ -304,13 +305,30 @@ object ObserverTv {
                     log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "trial_undone", null, null, t.pkg, blackBox.snapshot())
                         .put("broke", org.json.JSONArray(v.broke.map { it.name })).put("restored", voltou), agora)
                     runCatching { Diario.anotar(ctx, "tv", "Observer: ${t.pkg}", "congelamento desfeito: parou ${v.broke.joinToString { it.name }}") }
+                    // Recado para a Sofy: ela agiu sozinha e desfez (ACTED_FELT). Nome e o que parou já no idioma da TV.
+                    runCatching {
+                        val nome = runCatching { ctx.packageManager.getApplicationInfo(t.pkg, 0).loadLabel(ctx.packageManager).toString() }.getOrDefault(t.pkg)
+                        val parou = v.broke.joinToString(", ") { checkLabel(ctx, it) }
+                        p.edit().putString("notes", ObserverCore.enqueue(p.getString("notes", null), ObserverCore.freezeUndoneNote(agora, nome, parou), agora)).apply()
+                        avisarSofy = true
+                    }
                     Log.w(TAG, "prova: ${t.pkg} quebrou ${v.broke}; descongelado=$voltou")
                 }
             }
         }
         p.edit().putString("trials", ObserverTrial.toJson(restantes)).putString("log", log).apply()
         trialsPending = restantes.isNotEmpty()
+        if (avisarSofy) Fundo.rodar { runCatching { SofyTv.present(ctx) } }   // fora do lock do Observador
     }
+
+    /** O nome da conferência no idioma da TV, para o recado da Sofy. */
+    private fun checkLabel(ctx: Context, c: ObserverTrial.Check): String = ctx.getString(when (c) {
+        ObserverTrial.Check.VOICE -> R.string.observer_check_voice
+        ObserverTrial.Check.PLAY_STORE -> R.string.observer_check_play_store
+        ObserverTrial.Check.SETTINGS -> R.string.observer_check_settings
+        ObserverTrial.Check.CAST -> R.string.observer_check_cast
+        ObserverTrial.Check.INTERNET -> R.string.observer_check_internet
+    })
 
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 

@@ -15,4 +15,6 @@
     <string name="observer_slow_home_text">%1$s%% のフレームが遅れました。</string>
     <string name="observer_low_disk_title">ストレージがほぼいっぱい</string>
     <string name="observer_low_disk_text">残り %1$s MB です。保存に失敗することがあります。</string>
+    <string name="observer_freeze_undone_title">停止を元に戻しました</string>
+    <string name="observer_freeze_undone_text">%1$s を停止したら %2$s が動かなくなったので、元に戻しました。</string>
 </resources>
