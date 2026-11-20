@@ -97,4 +97,14 @@ class ManutencaoNoturnaTest {
         assertFalse(ManutencaoRegras.deveMostrarResumo(r, 1_000L + 21 * hora, true, true, true))   // velho demais
         assertFalse(ManutencaoRegras.deveMostrarResumo(null, manha, true, true, true))
     }
+
+    @Test fun limpaCacheSoQuandoAdianta() {
+        val mb = 1L shl 20
+        val min = 1024 * mb; val crit = 500 * mb
+        assertFalse(ManutencaoRegras.limparCaches(1100 * mb, 0, min, crit))           // folga: nada
+        assertTrue(ManutencaoRegras.limparCaches(900 * mb, 0, min, crit))             // nunca limpou
+        assertFalse(ManutencaoRegras.limparCaches(881 * mb, 924 * mb, min, crit))     // a Sala em 20/11: limpou ontem, ganharia ~15 MB
+        assertTrue(ManutencaoRegras.limparCaches(760 * mb, 924 * mb, min, crit))      // juntou 164 MB de cache novo
+        assertTrue(ManutencaoRegras.limparCaches(480 * mb, 490 * mb, min, crit))      // crítico: sempre
+    }
 }

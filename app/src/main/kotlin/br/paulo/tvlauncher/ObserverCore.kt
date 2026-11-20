@@ -194,6 +194,17 @@ object ObserverCore {
             .put("severity", severity?.name ?: JSONObject.NULL).put("why", why).put("signals", signals)
     }
 
+    /**
+     * A TV ligou de novo (20/11/2026): sem isto o registro não mostrava nem o sistema caindo nem a TV presa no boot (Sala,
+     * 17:10Z: o system_server caiu no meio de um `pm move-package` e ninguém soube pelo Observador). [reason] = o motivo
+     * que o Android guardou (vazio quando não dá para ler); [aliveAt] = a última batida da rede antes de cair (0 = nunca).
+     */
+    fun bootWhy(reason: String?, aliveAt: Long, bootAt: Long): String {
+        val r = reason?.trim()?.takeIf { it.isNotEmpty() } ?: "desconhecido"
+        val fora = if (aliveAt in 1 until bootAt) "; sem sinal desde ${(bootAt - aliveAt) / 60_000} min antes de ligar" else ""
+        return "ligou de novo (motivo: $r)$fora"
+    }
+
     /** O registro como está guardado, sem o que passou de [LOG_DAYS] (o corte do [appendLog] só roda quando entra linha nova). */
     fun readLog(stored: String?, now: Long): JSONArray {
         val a = try { JSONArray(stored ?: "[]") } catch (_: Exception) { JSONArray() }
