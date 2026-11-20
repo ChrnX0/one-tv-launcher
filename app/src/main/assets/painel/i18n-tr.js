@@ -1,5 +1,16 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Kısayollarınız",
+"Nenhum atalho fixado.":"Sabitlenmiş kısayol yok.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Buraya sabitlemek için herhangi bir ayarın yıldızına dokunun.",
+"Conversa com":"Birlikte çalışır",
+"Fixar na Início":"Ana sayfaya sabitle",
+"Tirar da Início":"Ana sayfadan kaldır",
+"Fixado na Início.":"Ana sayfaya sabitlendi.",
+"Saiu da Início.":"Ana sayfadan kaldırıldı.",
+"Desfeito.":"Geri alındı.",
+"Ligado na TV.":"TV'de açıldı.",
+"Desligado na TV.":"TV'de kapatıldı.",
 "Ver o porquê →":"Nedenini gör →",
 "Religar na TV":"TV'de yeniden aç",
 "Controle total: ativo":"Tam kontrol: etkin",

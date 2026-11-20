@@ -66,6 +66,7 @@ async function carregarExtras() {
 function linhaChave(chave, ligado, e) {
   const rotulo = document.createElement('label');
   rotulo.className = 'linha-chave';
+  rotulo.dataset.atalho = 'chave:' + chave;   // a estrela de "Seus atalhos" (shortcuts.js)
   const caixa = document.createElement('input');
   caixa.type = 'checkbox';
   caixa.setAttribute('role', 'switch');
@@ -83,6 +84,9 @@ function linhaChave(chave, ligado, e) {
         : await mudar();
       if (!r) { caixa.checked = !caixa.checked; pintar(); return; }   // cancelou
       carregarChaves(r);
+      // Estudo do painel (PR 4): Desfazer na própria página. O mesmo caminho de volta (PIN se a chave pedir).
+      if (typeof avisoDesfazer === 'function') avisoDesfazer(NOMES_CHAVES[chave] || chave, caixa.checked, () => { caixa.checked = !caixa.checked; caixa.dispatchEvent(new Event('change')); });
+      if (typeof desenharAtalhos === 'function' && !rotulo.closest('#listaAtalhos')) desenharAtalhos();
     } catch (err) { caixa.checked = !caixa.checked; pintar(); aviso(textoErro(err), 'erro'); }
   });
   const nome = document.createElement('span');

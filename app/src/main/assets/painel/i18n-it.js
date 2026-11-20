@@ -1,5 +1,16 @@
 // Painel em it (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Le tue scorciatoie",
+"Nenhum atalho fixado.":"Nessuna scorciatoia fissata.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Tocca la stella di qualsiasi impostazione per fissarla qui.",
+"Conversa com":"Funziona con",
+"Fixar na Início":"Fissa in Home",
+"Tirar da Início":"Togli da Home",
+"Fixado na Início.":"Fissato in Home.",
+"Saiu da Início.":"Tolto da Home.",
+"Desfeito.":"Annullato.",
+"Ligado na TV.":"Attivato sulla TV.",
+"Desligado na TV.":"Disattivato sulla TV.",
 "Ver o porquê →":"Vedi perché →",
 "Religar na TV":"Riattiva sulla TV",
 "Controle total: ativo":"Controllo totale: attivo",

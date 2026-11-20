@@ -1,5 +1,16 @@
 // Painel em de (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Deine Verknüpfungen",
+"Nenhum atalho fixado.":"Keine Verknüpfungen angeheftet.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Tippe auf den Stern einer Einstellung, um sie hier anzuheften.",
+"Conversa com":"Hängt zusammen mit",
+"Fixar na Início":"An Start anheften",
+"Tirar da Início":"Von Start entfernen",
+"Fixado na Início.":"An Start angeheftet.",
+"Saiu da Início.":"Von Start entfernt.",
+"Desfeito.":"Rückgängig gemacht.",
+"Ligado na TV.":"Am Fernseher eingeschaltet.",
+"Desligado na TV.":"Am Fernseher ausgeschaltet.",
 "Ver o porquê →":"Warum? →",
 "Religar na TV":"Am Fernseher wieder einschalten",
 "Controle total: ativo":"Volle Kontrolle: aktiv",

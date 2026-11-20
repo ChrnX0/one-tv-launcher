@@ -1,5 +1,16 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"आपके शॉर्टकट",
+"Nenhum atalho fixado.":"कोई शॉर्टकट पिन नहीं है।",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"किसी भी सेटिंग का तारा छूकर उसे यहाँ पिन करें।",
+"Conversa com":"इनके साथ काम करता है",
+"Fixar na Início":"होम पर पिन करें",
+"Tirar da Início":"होम से हटाएँ",
+"Fixado na Início.":"होम पर पिन किया गया।",
+"Saiu da Início.":"होम से हटाया गया।",
+"Desfeito.":"पूर्ववत किया गया।",
+"Ligado na TV.":"टीवी पर चालू किया गया।",
+"Desligado na TV.":"टीवी पर बंद किया गया।",
 "Ver o porquê →":"वजह देखें →",
 "Religar na TV":"टीवी पर फिर से चालू करें",
 "Controle total: ativo":"पूरा नियंत्रण: चालू",

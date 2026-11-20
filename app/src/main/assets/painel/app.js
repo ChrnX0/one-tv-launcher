@@ -1241,11 +1241,18 @@ async function carregarConfig() {
 /** Grava um campo. Se a TV pedir o PIN, o confirmar() mostra o campo do PIN; cancelado, a tela volta ao estado gravado. */
 async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
   mostrar($('statusConfig'), '');
-  try { desenharConfig(await chamar('POST', '/api/config', corpo)); aviso(ok, 'ok'); return true; }
+  // Estudo do painel (PR 4): opção de liga/desliga ganha "Desfazer" no aviso; as outras seguem com o aviso simples.
+  const feito = () => {
+    if (typeof corpo.valor === 'boolean' && corpo.campo !== 'atalhos' && typeof avisoDesfazer === 'function') {
+      avisoDesfazer(ok, null, () => gravarConfig({ ...corpo, valor: !corpo.valor }, ok, titulo));
+    } else aviso(ok, 'ok');
+    if (typeof desenharAtalhos === 'function' && corpo.campo !== 'atalhos') desenharAtalhos();
+  };
+  try { desenharConfig(await chamar('POST', '/api/config', corpo)); feito(); return true; }
   catch (e) {
     if (e instanceof PrecisaPin) {
       const r = await confirmar(titulo, 'Esta opção pede o PIN do painel.', 'Confirmar', () => chamar('POST', '/api/config', corpo), false);
-      if (r) { desenharConfig(r); aviso(ok, 'ok'); return true; }
+      if (r) { desenharConfig(r); feito(); return true; }
     } else mostrar($('statusConfig'), textoErro(e));
     if (estadoConfig) desenharConfig(estadoConfig);
     return false;

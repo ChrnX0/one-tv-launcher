@@ -1,5 +1,16 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"اختصاراتك",
+"Nenhum atalho fixado.":"لا توجد اختصارات مثبتة.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"المس النجمة بجانب أي إعداد لتثبيته هنا.",
+"Conversa com":"يعمل مع",
+"Fixar na Início":"تثبيت في الرئيسية",
+"Tirar da Início":"إزالة من الرئيسية",
+"Fixado na Início.":"تم التثبيت في الرئيسية.",
+"Saiu da Início.":"تمت الإزالة من الرئيسية.",
+"Desfeito.":"تم التراجع.",
+"Ligado na TV.":"تم التشغيل على التلفزيون.",
+"Desligado na TV.":"تم الإيقاف على التلفزيون.",
 "Ver o porquê →":"اعرف السبب ←",
 "Religar na TV":"أعد التشغيل على التلفاز",
 "Controle total: ativo":"التحكم الكامل: مفعّل",

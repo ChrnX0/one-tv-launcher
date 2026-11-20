@@ -1236,3 +1236,39 @@ button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--
 /* Lista vazia com a Sofy dormindo e a frase do que fazer. */
 .vazio-sofy { display: flex; align-items: center; gap: 12px; }
 .vazio-sofy .aviso { margin: 0; }
+
+/* ---------------------------------------------------------------- Seus atalhos, "Conversa com" e Desfazer (PR 4; shortcuts.js) */
+/* Estrela: contorno quando solta, cheia na cor de foco quando fixada. Alvo de 44 px, mesmo dentro do título. */
+.cartao > h2:has(.estrela) { display: flex; align-items: center; gap: 8px; }
+.estrela { flex: none; display: inline-grid; place-items: center; width: 48px; height: 48px; margin: -8px -8px -8px auto; padding: 0;
+  border: none; border-radius: 50%; background: none; color: var(--texto-fraco); cursor: pointer;
+  transition: color var(--t-ms-quick), background-color var(--t-ms-quick); }
+.estrela .i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.estrela:hover { color: var(--texto); background: var(--superficie-hover); }
+.estrela[aria-pressed="true"] { color: var(--foco); }
+.estrela[aria-pressed="true"] .i { fill: currentColor; }
+label[data-atalho] { display: flex; align-items: center; gap: 8px; }
+label[data-atalho] > .estrela { margin: -8px -8px -8px auto; }
+.linha-chave > .estrela { margin: -8px -8px -8px 0; order: 3; }
+
+/* Conversa com: o pé do bloco, letra menor e os links separados por ponto. */
+.conversa-com { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; margin: 20px 0 0; padding-top: 8px;
+  border-top: 1px solid var(--borda); font-size: 15px; }
+.conversa-com .rotulo { color: var(--texto-fraco); font-weight: 700; }
+.conversa-com .link { display: inline-flex; align-items: center; min-height: 48px; font-size: 15px; }
+
+/* Seus atalhos na Início: a mesma linha de chave das páginas; bloco fixado = linha com seta. */
+.atalhos .linha-atalho { display: flex; align-items: center; gap: 16px; min-height: 60px; padding: 12px 0; border-top: 1px solid var(--borda); }
+.atalhos .linha-atalho:first-child { border-top: none; }
+.atalhos .linha-atalho > button[data-ir] { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 44px; padding: 0; border: none; background: none; color: var(--texto); font: inherit; font-size: 17px; font-weight: 600;
+  text-align: left; cursor: pointer; }
+.atalhos .linha-atalho > button[data-ir]:hover { text-decoration: underline; text-underline-offset: 3px; }
+.atalhos .linha-atalho > .estrela { margin: -8px -8px -8px 0; }
+.atalhos > .aviso-curto { margin: 12px 0 0; }
+
+/* Aviso com Desfazer: o único aviso que se toca (a pilha de avisos não recebe clique). */
+.toast-desfazer { pointer-events: auto; flex-wrap: wrap; }
+.toast-desfazer strong { font-weight: 800; }
+.toast-desfazer .link { margin-left: auto; font-weight: 800; min-height: 44px; }
+@media (prefers-reduced-motion: reduce) { .estrela { transition: none; } }

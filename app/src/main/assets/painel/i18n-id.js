@@ -1,5 +1,16 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Pintasan Anda",
+"Nenhum atalho fixado.":"Tidak ada pintasan yang disematkan.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Ketuk bintang di pengaturan mana pun untuk menyematkannya di sini.",
+"Conversa com":"Terkait dengan",
+"Fixar na Início":"Sematkan di Beranda",
+"Tirar da Início":"Hapus dari Beranda",
+"Fixado na Início.":"Disematkan di Beranda.",
+"Saiu da Início.":"Dihapus dari Beranda.",
+"Desfeito.":"Dibatalkan.",
+"Ligado na TV.":"Dinyalakan di TV.",
+"Desligado na TV.":"Dimatikan di TV.",
 "Ver o porquê →":"Lihat alasannya →",
 "Religar na TV":"Nyalakan lagi di TV",
 "Controle total: ativo":"Kontrol penuh: aktif",

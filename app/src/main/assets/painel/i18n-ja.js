@@ -1,5 +1,16 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"あなたのショートカット",
+"Nenhum atalho fixado.":"固定したショートカットはありません。",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"設定の星をタップすると、ここに固定できます。",
+"Conversa com":"連動する設定",
+"Fixar na Início":"ホームに固定",
+"Tirar da Início":"ホームから外す",
+"Fixado na Início.":"ホームに固定しました。",
+"Saiu da Início.":"ホームから外しました。",
+"Desfeito.":"元に戻しました。",
+"Ligado na TV.":"テレビでオンにしました。",
+"Desligado na TV.":"テレビでオフにしました。",
 "Ver o porquê →":"理由を見る →",
 "Religar na TV":"テレビで再び有効にする",
 "Controle total: ativo":"フルコントロール: 有効",

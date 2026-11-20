@@ -1,5 +1,16 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"你的快捷方式",
+"Nenhum atalho fixado.":"没有固定的快捷方式。",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"点按任一设置旁的星标，即可固定到这里。",
+"Conversa com":"相关设置",
+"Fixar na Início":"固定到首页",
+"Tirar da Início":"从首页移除",
+"Fixado na Início.":"已固定到首页。",
+"Saiu da Início.":"已从首页移除。",
+"Desfeito.":"已撤销。",
+"Ligado na TV.":"已在电视上开启。",
+"Desligado na TV.":"已在电视上关闭。",
 "Ver o porquê →":"查看原因 →",
 "Religar na TV":"在电视上重新开启",
 "Controle total: ativo":"完全控制：已开启",

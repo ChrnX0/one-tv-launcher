@@ -1,5 +1,16 @@
 // Painel em fr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Seus atalhos":"Vos raccourcis",
+"Nenhum atalho fixado.":"Aucun raccourci épinglé.",
+"Toque na estrela de qualquer ajuste para fixar aqui.":"Touchez l'étoile d'un réglage pour l'épingler ici.",
+"Conversa com":"Fonctionne avec",
+"Fixar na Início":"Épingler à l'accueil",
+"Tirar da Início":"Retirer de l'accueil",
+"Fixado na Início.":"Épinglé à l'accueil.",
+"Saiu da Início.":"Retiré de l'accueil.",
+"Desfeito.":"Annulé.",
+"Ligado na TV.":"Activé sur la TV.",
+"Desligado na TV.":"Désactivé sur la TV.",
 "Ver o porquê →":"Voir pourquoi →",
 "Religar na TV":"Réactiver sur la TV",
 "Controle total: ativo":"Contrôle total : actif",
