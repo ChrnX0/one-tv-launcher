@@ -936,6 +936,7 @@
             android:theme="@style/One.Tela" />
         <!-- Backup noturno cifrado (BackupNoturno.kt): a tela de opções e o alarme da noite (não exportados). -->
         <activity android:name=".BackupNoturnoActivity" android:exported="false" android:excludeFromRecents="true" />
+        <activity android:name=".StorageActivity" android:exported="false" android:excludeFromRecents="true" />
         <receiver android:name=".BackupNoturnoReceiver" android:exported="false" />
         <!-- "Tocando agora" (10/11/2026): ler as sessões de mídia exige ser ouvinte de notificações. Só o sistema liga
              (BIND_NOTIFICATION_LISTENER_SERVICE); quem autoriza é o shell próprio (cmd notification allow_listener),

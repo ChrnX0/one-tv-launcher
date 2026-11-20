@@ -75,6 +75,7 @@ declare -A FONTES=(
   [SofyMotionTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [SofyStringsTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [OnDemandTest]="OnDemand"
+  [StorageModeRulesTest]="StorageModeRules"
 )
 
 falhou=0
