@@ -60,6 +60,7 @@ object ObserverTv {
             blackBox.put(ObserverCore.Signal.MEMORY_AVAILABLE_MB, mi.availMem / 1_048_576, agora)
         }
         runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, ctx.filesDir.usableSpace / 1_048_576, agora) }
+        runCatching { learnHabit(ctx, agora) }
         // O último put passa pelo publish para acordar o juiz uma vez só por amostra.
         publish(ObserverCore.Signal.INTERNET, if (internet) 1 else 0)
     }
@@ -135,6 +136,58 @@ object ObserverTv {
         }
     }
 
+    // ---------------------------------------------------------------- hábito e sonda noturna (fase 2b)
+
+    @Volatile private var habit: ObserverHabit? = null
+    @Volatile private var lastHabitAt = 0L
+    @Volatile private var lastHabitSave = 0L
+
+    private fun habit(ctx: Context): ObserverHabit = habit ?: ObserverHabit.fromJson(
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("habit", null)?.let { runCatching { org.json.JSONObject(it) }.getOrNull() })
+        .also { habit = it }
+
+    /** Em uso = tela acesa e controle tocado há menos de 1 h (TV esquecida ligada na madrugada não conta como hábito). */
+    @Synchronized private fun learnHabit(ctx: Context, agora: Long) {
+        if (agora - lastHabitAt < LEARN_GAP_MS) return
+        lastHabitAt = agora
+        val inUse = ctx.getSystemService(android.os.PowerManager::class.java)?.isInteractive == true && Rotinas.minutosSemTecla() < 60
+        val h = habit(ctx)
+        h.learn(hours(agora).second, inUse)
+        if (agora - lastHabitSave > BASE_SAVE_GAP_MS) {
+            lastHabitSave = agora
+            ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("habit", h.toJson().toString()).apply()
+        }
+    }
+
+    /** Hora em que a manutenção da madrugada (e a sonda) começa: a mais quieta desta casa, ou 4h sem dados. */
+    fun quietStart(ctx: Context): Int = habit(ctx.applicationContext).quietStart()
+
+    /**
+     * A sonda da madrugada (ManutencaoNoturna, depois dos passos dela): uma fotografia de todos os sinais com a casa
+     * parada, no registro como "night", e a linha de base e o hábito gravados. O relatório da manhã compara noite a noite.
+     */
+    fun nightProbe(ctx: Context) {
+        val app = ctx.applicationContext
+        val agora = System.currentTimeMillis()
+        val p = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        runCatching {
+            val mi = android.app.ActivityManager.MemoryInfo()
+            app.getSystemService(android.app.ActivityManager::class.java).getMemoryInfo(mi)
+            blackBox.put(ObserverCore.Signal.MEMORY_AVAILABLE_MB, mi.availMem / 1_048_576, agora)
+        }
+        runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, app.filesDir.usableSpace / 1_048_576, agora) }
+        val snap = blackBox.snapshot().filterValues { agora - it.at <= ObserverCore.STALE_MS }
+        synchronized(this) {
+            val log = ObserverCore.appendLog(p.getString("log", null),
+                ObserverCore.logEntry(agora, "night", null, null, "${quietStart(app)}h", snap), agora)
+            val e = p.edit().putString("log", log)
+            base?.let { e.putString("baseline", it.toJson().toString()) }
+            habit?.let { e.putString("habit", it.toJson().toString()) }
+            e.apply()
+        }
+        Log.i(TAG, "sonda da madrugada: ${snap.mapValues { it.value.value }}")
+    }
+
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 
     /** Os recados que valem agora, do mais novo ao mais velho. Quem mostra escolhe a frase pelo [ObserverCore.Note.kind]. */
@@ -170,7 +223,8 @@ object ObserverTv {
         val logNovo = org.json.JSONArray()
         for (i in 0 until minOf(logMax, log.length())) logNovo.put(log.get(i))
         return org.json.JSONObject()
-            .put("phase", 1).put("acts", false).put("running", app != null)
+            .put("phase", 2).put("acts", false).put("running", app != null)
+            .put("quiet_start_hour", runCatching { quietStart(ctx) }.getOrDefault(ObserverHabit.DEFAULT_HOUR))
             .put("signals", sinais).put("now", agoraJson)
             .put("notes", ObserverCore.toJson(notes(ctx)))
             .put("log_total", log.length()).put("log", logNovo)
@@ -178,7 +232,10 @@ object ObserverTv {
 
     fun report(ctx: Context): String = buildString {
         val agora = System.currentTimeMillis()
-        appendLine("Observer (fase 1: observa e registra). ativa=${app != null}")
+        appendLine("Observer (fase 2: observa, aprende e registra). ativa=${app != null}")
+        val hab = habit(ctx)
+        appendLine("madrugada começa às ${hab.quietStart()}h; uso por hora (0-23): " +
+            (0 until 24).joinToString(" ") { h -> hab.hour(h)?.let { "${Math.round(it.use * 100)}%" } ?: "-" })
         appendLine("sinais (último valor, idade):")
         val snap = blackBox.snapshot()
         if (snap.isEmpty()) appendLine("  nenhum ainda (o primeiro chega com a amostra de rede, até 5 min)")
@@ -194,7 +251,7 @@ object ObserverTv {
         for (i in 0 until minOf(10, log.length())) {
             val o = log.getJSONObject(i)
             appendLine("  ${java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.ROOT).format(o.getLong("at"))} " +
-                "${o.getString("event")} ${o.getString("kind")}: ${o.getString("why")}")
+                "${o.optString("event")} ${o.optString("kind")}: ${o.optString("why")}")
         }
     }
 }

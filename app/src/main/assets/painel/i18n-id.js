@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fi tidak seperti biasa",
 "tela inicial diferente do normal":"layar utama tidak seperti biasa",
 "a conexão até 1.1.1.1 não abriu":"koneksi ke 1.1.1.1 tidak terbuka",
+"sonda da madrugada":"pemeriksaan dini hari",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","latensi $1 ms (batas $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","sinyal Wi-Fi $1 dBm (batas $2)"],

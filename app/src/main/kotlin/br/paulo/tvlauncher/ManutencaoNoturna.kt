@@ -33,7 +33,8 @@ import java.util.TimeZone
  *  4. agendamentos: o despertador e as rotinas estão agendados no Android? Faltando, agenda de novo.
  *  5. espaco: menos de 1 GB livre = limpa o cache de todos os apps (Caches.limpar, só cache; logins ficam).
  *
- * Quando: alarme às [HORA] (AlarmManager, acorda o aparelho). TV em uso (tela acesa com um app na frente, ou alguém
+ * Quando: alarme às [HORA] (AlarmManager, acorda o aparelho); desde 20/11/2026 a hora vem do hábito da casa que o
+ * Observador aprende ([ObserverTv.quietStart], 1h a 4h, 4h sem dados). TV em uso (tela acesa com um app na frente, ou alguém
  * mexeu no controle há menos de 1 h) = tenta de novo 1 h depois; passou das 5h59 = fica para a noite seguinte.
  */
 object ManutencaoNoturna {
@@ -53,11 +54,14 @@ object ManutencaoNoturna {
     private fun pendente(ctx: Context) = PendingIntent.getBroadcast(ctx, 7, Intent(ctx, ManutencaoReceiver::class.java),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
+    /** Começo da janela da madrugada: o aprendido pelo Observador, ou [HORA] se ele ainda não sabe. */
+    private fun inicio(ctx: Context): Int = runCatching { ObserverTv.quietStart(ctx) }.getOrDefault(HORA)
+
     /** (Re)agenda a próxima. Idempotente: chamar no boot, ao ligar o serviço de acessibilidade e quando o fuso muda. */
     fun agendar(ctx: Context, quando: Long? = null) {
         val am = ctx.getSystemService(AlarmManager::class.java) ?: return
         val agora = System.currentTimeMillis()
-        val normal = ManutencaoRegras.proxima(agora, HORA, TimeZone.getDefault())
+        val normal = ManutencaoRegras.proxima(agora, inicio(ctx), TimeZone.getDefault())
         // Adiada (TV em uso às 4h) para daqui a 1 h: um reagendar comum (boot, acessibilidade religando) não pode trocar
         // as 5h pelas 4h de amanhã e perder a noite. O adiamento vale enquanto estiver no futuro e antes da hora normal.
         val adiado = prefs(ctx).getLong("adiado_para", 0L)
@@ -80,10 +84,14 @@ object ManutencaoNoturna {
                 // Revisão 10/11/2026: "só a HOME" = a NOSSA MainActivity. Antes passava qualquer tela do nosso pacote (o
                 // player de TV ao vivo, filmes e séries) e "não sei o que está na frente" (logo depois de um reinício).
                 val decisao = ManutencaoRegras.decidir(c.get(Calendar.HOUR_OF_DAY), telaAcesa(app), Rotinas.minutosSemTecla(),
-                    SaudeAcesso.naHome(app))
+                    SaudeAcesso.naHome(app), inicio(app))
                 Log.i(TAG, "alarme: $decisao")
                 when (decisao) {
-                    ManutencaoRegras.Decisao.RODAR -> { prefs(app).edit().remove("adiado_para").apply(); rodar(app); agendar(app) }
+                    ManutencaoRegras.Decisao.RODAR -> {
+                        prefs(app).edit().remove("adiado_para").apply(); rodar(app)
+                        runCatching { ObserverTv.nightProbe(app) }   // a sonda do Observador, na mesma janela quieta
+                        agendar(app)
+                    }
                     ManutencaoRegras.Decisao.ADIAR -> {
                         agendar(app, System.currentTimeMillis() + 60 * 60_000L)
                         // TV acesa e em uso às 4h (ideia 3, 12/11/2026): pode ser alguém que dormiu com ela ligada.
@@ -291,14 +299,16 @@ object ManutencaoRegras {
     }
 
     /**
-     * Roda agora? Só de madrugada (3h a 5h59). Tela apagada = roda. Tela acesa sem ninguém (1 h sem tecla e nada além
-     * da HOME na frente: TV esquecida ligada) = roda. Senão alguém está vendo: tenta de novo em 1 h, ou desiste às 5h.
+     * Roda agora? Só na janela da madrugada: da hora antes de [inicio] até [inicio]+1h59 (3h a 5h59 com o padrão 4h; a
+     * hora de antes cobre o alarme inexato que chega cedo). Tela apagada = roda. Tela acesa sem ninguém (1 h sem
+     * tecla e nada além da HOME na frente: TV esquecida ligada) = roda. Senão alguém está vendo: tenta de novo em 1 h, ou
+     * desiste na última hora da janela.
      */
-    fun decidir(hora: Int, telaAcesa: Boolean, minutosSemTecla: Long, soHomeNaFrente: Boolean): Decisao = when {
-        hora !in 3..5 -> Decisao.DESISTIR
+    fun decidir(hora: Int, telaAcesa: Boolean, minutosSemTecla: Long, soHomeNaFrente: Boolean, inicio: Int = 4): Decisao = when {
+        hora !in (inicio - 1)..(inicio + 1) -> Decisao.DESISTIR
         !telaAcesa -> Decisao.RODAR
         minutosSemTecla >= 60 && soHomeNaFrente -> Decisao.RODAR
-        hora < 5 -> Decisao.ADIAR
+        hora < inicio + 1 -> Decisao.ADIAR
         else -> Decisao.DESISTIR
     }
 

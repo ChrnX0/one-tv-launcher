@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fi가 평소와 다름",
 "tela inicial diferente do normal":"홈 화면이 평소와 다름",
 "a conexão até 1.1.1.1 não abriu":"1.1.1.1 연결이 열리지 않음",
+"sonda da madrugada":"새벽 점검",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","지연 $1 ms (한도 $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","Wi-Fi 신호 $1 dBm (한도 $2)"],

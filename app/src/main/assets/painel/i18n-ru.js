@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fi не как обычно",
 "tela inicial diferente do normal":"главный экран не как обычно",
 "a conexão até 1.1.1.1 não abriu":"соединение с 1.1.1.1 не открылось",
+"sonda da madrugada":"ночная проверка",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","задержка $1 мс (предел $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","сигнал Wi-Fi $1 дБм (предел $2)"],

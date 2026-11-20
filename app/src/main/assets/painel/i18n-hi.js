@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fi सामान्य से अलग",
 "tela inicial diferente do normal":"होम स्क्रीन सामान्य से अलग",
 "a conexão até 1.1.1.1 não abriu":"1.1.1.1 से कनेक्शन नहीं खुला",
+"sonda da madrugada":"रात की जाँच",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","लेटेंसी $1 ms (सीमा $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","Wi-Fi सिग्नल $1 dBm (सीमा $2)"],
