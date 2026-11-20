@@ -295,6 +295,8 @@ object ObserverTv {
                 is ObserverTrial.Verdict.Undo -> {
                     PrivilegioDO.ocultar(ctx, t.pkg, false)
                     val voltou = pkgOk(ctx, t.pkg) == true
+                    // O Android recusou (shell fora do ar, DPM disse não): a prova fica para tentar na próxima batida (Codex, #335).
+                    if (!voltou) { restantes += t; Log.w(TAG, "prova: ${t.pkg} quebrou ${v.broke}; descongelar falhou, tenta de novo"); continue }
                     log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "trial_undone", null, null, t.pkg, blackBox.snapshot())
                         .put("broke", org.json.JSONArray(v.broke.map { it.name })).put("restored", voltou), agora)
                     runCatching { Diario.anotar(ctx, "tv", "Observer: ${t.pkg}", "congelamento desfeito: parou ${v.broke.joinToString { it.name }}") }
@@ -341,7 +343,7 @@ object ObserverTv {
         val logNovo = org.json.JSONArray()
         for (i in 0 until minOf(logMax, log.length())) logNovo.put(log.get(i))
         return org.json.JSONObject()
-            .put("phase", 2).put("acts", false).put("running", app != null)
+            .put("phase", 3).put("acts", true).put("running", app != null)
             .put("quiet_start_hour", runCatching { quietStart(ctx) }.getOrDefault(ObserverHabit.DEFAULT_HOUR))
             .put("signals", sinais).put("now", agoraJson)
             .put("notes", ObserverCore.toJson(notes(ctx)))
@@ -354,7 +356,7 @@ object ObserverTv {
 
     fun report(ctx: Context): String = buildString {
         val agora = System.currentTimeMillis()
-        appendLine("Observer (fase 2: observa, aprende e registra). ativa=${app != null}")
+        appendLine("Observer (fase 3: observa, aprende, registra e desfaz congelamento que quebrou algo). ativa=${app != null}")
         val hab = habit(ctx)
         appendLine("madrugada começa às ${hab.quietStart()}h; uso por hora (0-23): " +
             (0 until 24).joinToString(" ") { h -> hab.hour(h)?.let { "${Math.round(it.use * 100)}%" } ?: "-" })
