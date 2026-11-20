@@ -184,14 +184,14 @@ object ObserverCore {
     const val LOG_DAYS = 7
 
     /** Uma linha: quando, o que (apareceu/sumiu), o tipo, a gravidade, o porquê e os sinais daquele momento. */
-    fun logEntry(at: Long, event: String, kind: Kind, severity: Severity?, why: String, snapshot: Map<Signal, Reading>): JSONObject {
+    /** [kind] null = linha que não é achado (a sonda da madrugada, evento "night"). */
+    fun logEntry(at: Long, event: String, kind: Kind?, severity: Severity?, why: String, snapshot: Map<Signal, Reading>): JSONObject {
         val signals = JSONObject()
         for ((s, r) in snapshot.entries.sortedBy { it.key.ordinal }) signals.put(s.name, r.value)
-        return JSONObject().put("at", at).put("event", event).put("kind", kind.name)
+        return JSONObject().put("at", at).put("event", event).put("kind", kind?.name ?: JSONObject.NULL)
             .put("severity", severity?.name ?: JSONObject.NULL).put("why", why).put("signals", signals)
     }
 
-    /** Põe [entry] na frente; corta acima de [LOG_MAX] linhas ou de [LOG_DAYS] dias. Texto estragado = começa vazio. */
     /** O registro como está guardado, sem o que passou de [LOG_DAYS] (o corte do [appendLog] só roda quando entra linha nova). */
     fun readLog(stored: String?, now: Long): JSONArray {
         val a = try { JSONArray(stored ?: "[]") } catch (_: Exception) { JSONArray() }
@@ -200,6 +200,7 @@ object ObserverCore {
         }
     }
 
+    /** Põe [entry] na frente; corta acima de [LOG_MAX] linhas ou de [LOG_DAYS] dias. Texto estragado = começa vazio. */
     fun appendLog(stored: String?, entry: JSONObject, now: Long): String = prepend(stored, entry, LOG_MAX) { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }
 
     // ---------------------------------------------------------------- recados (a saída que o rosto do Observador vai usar)

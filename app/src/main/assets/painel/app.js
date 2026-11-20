@@ -1603,8 +1603,9 @@ async function carregarObservador() {
     linha.className = 'linha-registro';
     const q = document.createElement('span'); q.className = 'quando';
     q.textContent = new Date(l.at).toLocaleString(document.documentElement.lang || 'pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-    const nome = document.createElement('strong'); nome.textContent = ACHADOS_OBSERVADOR[l.kind] || l.kind;
-    const porque = document.createElement('span'); porque.textContent = l.why;
+    const nome = document.createElement('strong');
+    nome.textContent = l.event === 'night' ? 'sonda da madrugada' : (ACHADOS_OBSERVADOR[l.kind] || l.kind);
+    const porque = document.createElement('span'); porque.textContent = l.why;   // na sonda: a hora aprendida ("3h")
     linha.append(q, ' ', nome, ' ', porque);
     lista.appendChild(linha);
   }

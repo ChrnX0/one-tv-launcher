@@ -64,6 +64,7 @@ declare -A FONTES=(
   [AutoDesligarRegraTest]="AutoDesligarRegra"
   [ObserverCoreTest]="ObserverCore"
   [ObserverBaselineTest]="ObserverCore ObserverBaseline"
+  [ObserverHabitTest]="ObserverHabit ManutencaoNoturna"
 )
 
 falhou=0

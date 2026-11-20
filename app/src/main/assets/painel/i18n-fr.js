@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fi inhabituel",
 "tela inicial diferente do normal":"écran d'accueil inhabituel",
 "a conexão até 1.1.1.1 não abriu":"la connexion à 1.1.1.1 ne s'est pas ouverte",
+"sonda da madrugada":"contrôle de nuit",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","latence de $1 ms (limite $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","signal Wi-Fi à $1 dBm (limite $2)"],

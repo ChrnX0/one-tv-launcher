@@ -1419,6 +1419,7 @@ traduzirPainelCom({T:{
 "Wi-Fi diferente do normal":"Wi-Fiがいつもと違う",
 "tela inicial diferente do normal":"ホーム画面がいつもと違う",
 "a conexão até 1.1.1.1 não abriu":"1.1.1.1 への接続が開けませんでした",
+"sonda da madrugada":"深夜のチェック",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","遅延 $1 ms（上限 $2）"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","Wi-Fiの電波 $1 dBm（下限 $2）"],
