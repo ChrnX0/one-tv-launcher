@@ -1252,10 +1252,14 @@ class SeriesActivity : Activity() {
         val vEsta = outra?.let { Idioma.versaoComPar(s.nome, s.grupo, it.first.nome, it.first.grupo) } ?: Idioma.versao(s.nome, s.grupo)
         val naOutra = epOutra != null && prefsIdioma.titulos[s.chave]?.let { Idioma.versaoDesejada(it) == vOutra } == true
         val (srcSerie, srcEp) = if (naOutra) outra!!.first to epOutra!! else s to ep
+        val temProximo = fichaAberta?.let { Series.proximo(it, ep) } != null
+        val contagem = Conforto.contagem(this)
         VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, srcSerie.fonteId, srcEp.id, srcEp.extensao,
             titulo, doComeco, chaveIdioma = s.chave,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(s.nome), temporada = ep.temporada, episodio = ep.numero,
                 tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = if (naOutra) vOutra else vEsta)) { i ->
+            // Proposta C, etapa 1: com episódio seguinte, o player oferece "Próximo episódio" já nos créditos.
+            if (temProximo) i.putExtra(VodActivity.EXTRA_PROXIMO_CONTAGEM, contagem)
             when {
                 epOutra == null -> i
                 naOutra -> VodActivity.comOutraVersao(i, s.fonteId, ep.id, ep.extensao, titulo, vEsta)
@@ -1288,7 +1292,12 @@ class SeriesActivity : Activity() {
                 // 3 seguidos sem tecla, pergunta "ainda está assistindo?"; e nada segue se era para desligar ao fim.
                 val contagem = Conforto.contagem(this)
                 val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos, contagem)
-                if (prox != null && s != null && passo != FimDoVideo.Passo.NADA && passo != FimDoVideo.Passo.DESLIGAR) {
+                // "Próximo episódio" já escolhido nos créditos (OK ou contagem no player): começa sem contar de novo.
+                val ja = data?.getBooleanExtra(VodActivity.RESULTADO_PROXIMO_JA, false) == true
+                if (prox != null && s != null && ja && passo == FimDoVideo.Passo.PROXIMO_CONTANDO) {
+                    temporada = prox.temporada; desenharFicha(); tocar(s, prox, doComeco = true)
+                }
+                else if (prox != null && s != null && passo != FimDoVideo.Passo.NADA && passo != FimDoVideo.Passo.DESLIGAR) {
                     temporada = prox.temporada; desenharFicha()
                     avisarProximo(s, prox, perguntar = passo == FimDoVideo.Passo.PERGUNTAR)
                 }

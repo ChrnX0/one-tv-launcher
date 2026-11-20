@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Series: “Next episode” shows up when the credits start, “Skip recap” works like “Skip intro”, the bar says when the video ends, and ⏮ (or ▼ › Subtitles) replays the last 10 s with subtitles</item>
         <item>LG TV volume from the panel and the assistant: the volume and mute keys now really change the sound (they went to the HDMI output, which stays locked at maximum)</item>
         <item>Your phone becomes a remote: in the Sofaly phone app, tap the TV to swipe, tap and type; volume and ⏯ also in the notification and the quick settings tile</item>
         <item>Alarm rang on the TV: the phone with the panel installed gets a notice</item>
@@ -65,6 +66,7 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>player_creditos</item>
         <item>descanso_hora</item>
         <item>busca_voz</item>
         <item>estado_vazio</item>
@@ -102,6 +104,7 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Next episode in the credits</item>
         <item>Screensaver by the hour</item>
         <item>Speak to search</item>
         <item>Empty screen</item>
@@ -139,6 +142,7 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In a series episode, when the credits started, did “Next episode” appear and did OK start the next one?</item>
         <item>Let the screensaver come up at night: does it get softer, and late at night dark and without the logo?</item>
         <item>Open Search: is the first item Speak, with your past searches right below it?</item>
         <item>Open the Forecast without internet: does the sofa show up with a title, the explanation and Try again?</item>

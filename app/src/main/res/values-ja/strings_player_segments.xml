@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">あらすじをスキップ · OK</string>
+    <string name="seg_proximo">次のエピソード · OK</string>
+    <string name="seg_proximo_em">%1$d 秒後に次のエピソード · OK</string>
+    <string name="seg_termina">%1$s に終了</string>
+    <string name="seg_repetir">今なんて？</string>
+    <string name="seg_repetir_info">字幕つきで 10 秒戻る</string>
+    <string name="seg_sem_legenda">この動画には字幕がありません</string>
+</resources>

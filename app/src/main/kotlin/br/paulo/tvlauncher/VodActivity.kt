@@ -103,6 +103,13 @@ class VodActivity : Activity() {
         const val RESULTADO_TECLA = "tecla"
         /** "Desligar quando este acabar" estava marcado: a tela apagou e a série não segue para o próximo. */
         const val RESULTADO_DESLIGOU = "desligou"
+        /** O "Próximo episódio" dos créditos já foi escolhido (OK ou contagem no player): a série começa o próximo sem contar de novo. */
+        const val RESULTADO_PROXIMO_JA = "proximo_ja"
+        /**
+         * Segundos da contagem do "Próximo episódio" nos créditos (Conforto.contagem, lido pela tela de séries no processo
+         * principal); ausente = não há próximo episódio, 0 = só oferece, sem começar sozinho.
+         */
+        const val EXTRA_PROXIMO_CONTAGEM = "proximo_contagem"
         private const val SALVAR_MS = 15_000L
         private const val ESCONDER_MS = 4_000L
 
@@ -239,6 +246,17 @@ class VodActivity : Activity() {
     private var abertura: AberturaSerie.Marca? = null
     private var avisouPulo = false         // a pílula já apareceu neste trecho (some depois de 8 s e não volta até sair dele)
     private lateinit var pilulaPular: TextView
+    // Proposta C, etapa 1 (20/11/2026): resumo e créditos (EpisodeSegments). A mesma pílula serve aos três avisos.
+    private var resumo: AberturaSerie.Marca? = null
+    private var creditosBanco: Long? = null            // início dos créditos segundo o IntroDB
+    private var pularPara = -1L                        // OK com a pílula de pular: para onde vai
+    private var avisadoTrecho = -1L                    // fim do trecho cuja pílula já apareceu (não repete a cada 8 s)
+    private var pilulaProximo = false                  // a pílula na tela é "Próximo episódio"
+    private var proximoDispensado = false              // a pessoa mexeu durante os créditos: deixa os créditos correrem
+    private var proximoResta = -1                      // segundos da contagem na pílula (-1 = sem contagem)
+    private var proximoContagem = -1                   // do intent: -1 = sem próximo episódio
+    private var repetindoAte = -1L                     // "O que ele disse?": até onde a legenda fica ligada
+    private var paramsAntesRepetir: androidx.media3.common.TrackSelectionParameters? = null
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
@@ -278,6 +296,7 @@ class VodActivity : Activity() {
         }.orEmpty()
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
+        proximoContagem = if (serie && intent.hasExtra(EXTRA_PROXIMO_CONTAGEM)) intent.getIntExtra(EXTRA_PROXIMO_CONTAGEM, -1) else -1
         ligarJunto(direto)
         podeSondar = direto != null
 
@@ -407,11 +426,14 @@ class VodActivity : Activity() {
         val tmdb = b.tmdb ?: return
         if (!b.eEpisodio) return
         Fundo.rodar("abertura-pronta") {
-            val m = runCatching { AberturaProntaTv.buscar(this, tmdb, b.temporada!!, b.episodio!!) }.getOrNull() ?: return@rodar
+            val t = runCatching { AberturaProntaTv.buscar(this, tmdb, b.temporada!!, b.episodio!!) }.getOrNull() ?: return@rodar
             tela.post {
                 if (isDestroyed) return@post
-                if (abertura !== manual && !aberturaDoArquivo) return@post   // a pessoa marcou enquanto isso
-                abertura = m; aberturaDoArquivo = false; vigiarAbertura()
+                t.resumo?.let { resumo = it }
+                t.creditos?.let { creditosBanco = it }
+                // a pessoa marcou a abertura enquanto isso: vale a dela
+                if (t.abertura != null && (abertura === manual || aberturaDoArquivo)) { abertura = t.abertura; aberturaDoArquivo = false }
+                vigiarAbertura()
             }
         }
     }
@@ -514,8 +536,10 @@ class VodActivity : Activity() {
                 // Ideia 5: sem abertura marcada na série, vale o capítulo "Opening"/"Abertura" do próprio arquivo.
                 if (abertura == null) Capitulos.abertura(caps)?.let { c ->
                     val m = AberturaSerie.Marca(c.inicioMs, c.fimMs)
-                    if (AberturaSerie.valida(m)) { abertura = m; aberturaDoArquivo = true; vigiarAbertura() }
+                    if (AberturaSerie.valida(m)) { abertura = m; aberturaDoArquivo = true }
                 }
+                if (resumo == null) resumo = EpisodeSegments.resumoDoCapitulo(caps)
+                vigiarAbertura()
             }
         }
     }
@@ -768,20 +792,7 @@ class VodActivity : Activity() {
                     }
                 }
                 Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.vod_carregando))
-                Player.STATE_ENDED -> {
-                    salvar(terminou = true)
-                    Gatilhos.avisarDoPlayer(this@VodActivity, false, acabou = true)   // elevação 10.6: filme acabou
-                    // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
-                    player?.let { p -> avisar(FontesMidia.Momento.PAROU, p.duration.takeIf { it > 0 } ?: p.currentPosition) }
-                    avisouInicio = false   // o fim já foi avisado; o onStop não repete
-                    // A tela de séries usa isto para decidir o próximo episódio (FimDoVideo.depois).
-                    setResult(RESULT_OK, Intent().putExtra(RESULTADO_TERMINOU, true).putExtra(RESULTADO_TECLA, apertouTecla)
-                        .putExtra(RESULTADO_DESLIGOU, desligarAoFim))
-                    // Ideia 19: "desligar quando este acabar". Este processo (:player) não tem o serviço de acessibilidade;
-                    // o apagarTela cai no lockNow do Device Owner, que só apaga a tela (nada se perde).
-                    if (desligarAoFim) Desligamento.apagarTela(applicationContext)
-                    finish()
-                }
+                Player.STATE_ENDED -> terminar(proximoJa = false)
                 else -> {}
             }
             atualizarBarra()
@@ -861,9 +872,10 @@ class VodActivity : Activity() {
     /** Grava onde parou. Terminou = posição igual à duração (sai do "continuar assistindo"). */
     /** Saiu pela troca de versão: a posição MUDOU de arquivo (ver [trocarVersao]); o onStop não grava de volta. */
     private var saiuPelaTroca = false
+    private var concluido = false   // terminar() já gravou o fim: o onStop não grava a posição dos créditos por cima
 
     private fun salvar(terminou: Boolean = false) {
-        if (saiuPelaTroca) return
+        if (saiuPelaTroca || (concluido && !terminou)) return
         val p = player ?: return
         val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
         val ms = if (terminou) dur else p.currentPosition
@@ -890,12 +902,19 @@ class VodActivity : Activity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         val p = player
         apertouTecla = true   // ideia 19: alguém está mexendo, então não é hora de perguntar "ainda está assistindo?"
+        // Nos créditos, outra tecla que não o OK = quer ver os créditos: a pílula some e não volta neste trecho.
+        if (pilulaProximo && keyCode != KeyEvent.KEYCODE_DPAD_CENTER && keyCode != KeyEvent.KEYCODE_ENTER && keyCode != KeyEvent.KEYCODE_BACK) {
+            proximoDispensado = true; esconderPilula()
+        }
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_SPACE -> {
                 // Ideia 24: com a pílula "Pular abertura" na tela, o OK pula a abertura (sem pausar). Fora dela, pausa.
                 val ok = keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER
                 if (ok && ::pilulaPular.isInitialized && pilulaPular.visibility == View.VISIBLE) {
-                    if (event.repeatCount == 0) AberturaSerie.alvo(abertura)?.let { alvo -> p?.seekTo(alvo); esconderPilula(); mostrarBarra() }
+                    if (event.repeatCount == 0) {
+                        if (pilulaProximo) terminar(proximoJa = true)
+                        else if (pularPara >= 0) { p?.seekTo(pularPara); esconderPilula(); mostrarBarra() }
+                    }
                     return true
                 }
                 if (event.repeatCount == 0) p?.let { if (it.isPlaying) it.pause() else it.play() }
@@ -908,7 +927,7 @@ class VodActivity : Activity() {
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_INFO -> { mostrarBarra(); return true }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CAPTIONS -> { if (event.repeatCount == 0) escolherFaixas(); return true }
             KeyEvent.KEYCODE_MEDIA_NEXT -> if (event.repeatCount == 0 && pularCapitulo(true)) return true
-            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> if (event.repeatCount == 0 && pularCapitulo(false)) return true
+            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> if (event.repeatCount == 0) { if (!pularCapitulo(false)) repetirFala(); return true }
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -985,6 +1004,7 @@ class VodActivity : Activity() {
 
     private fun usarFaixa(tipo: Int, g: androidx.media3.common.TrackGroup, indice: Int) {
         val p = player ?: return
+        if (tipo == C.TRACK_TYPE_TEXT) { paramsAntesRepetir = null; repetindoAte = -1L }   // escolha da pessoa vence
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
             .setTrackTypeDisabled(tipo, false)
             .setOverrideForType(TrackSelectionOverride(g, indice)).build()
@@ -1012,6 +1032,8 @@ class VodActivity : Activity() {
             Idioma.normalizar(f.language)?.let { l -> lembrarSerie { it.copy(legenda = l) } }
             usarFaixa(C.TRACK_TYPE_TEXT, g, i)
         }
+        // "O que ele disse?" (proposta C, etapa 1): volta 10 s com legenda só nesse trecho.
+        if (!comLegenda && temLegendaNoArquivo()) itens += PlayerMenu.acao(getString(R.string.seg_repetir), getString(R.string.seg_repetir_info)) { repetirFala() }
         // Legenda da internet (OpenSubtitles, com a conta do dono).
         itens += PlayerMenu.acao(getString(R.string.legenda_buscar)) { buscarLegenda() }
         itens += PlayerMenu.abre(getString(R.string.pm_leg_ajustes), null) { menuAjustesLegenda() }
@@ -1020,6 +1042,7 @@ class VodActivity : Activity() {
 
     private fun desligarLegenda() {
         val p = player ?: return
+        paramsAntesRepetir = null; repetindoAte = -1L
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
         lembrarSerie { it.copy(legenda = "") }
         // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
@@ -1028,6 +1051,41 @@ class VodActivity : Activity() {
             val k = chave
             legendaArquivo = null; legendaTraduzida = false
             Fundo.rodar { LegendaBaixar.apagar(this, k) }
+        }
+    }
+
+    private fun temLegendaNoArquivo() = player?.currentTracks?.groups?.any { g ->
+        g.type == C.TRACK_TYPE_TEXT && (0 until g.length).any { g.isTrackSupported(it) } } == true
+
+    /**
+     * "O que ele disse?" (proposta C, etapa 1, 20/11/2026): volta 10 s e, se a legenda estava desligada, liga a do idioma
+     * da TV (senão a primeira) só até o ponto em que estava; depois volta como era. Com legenda já ligada, só volta.
+     */
+    private fun repetirFala() {
+        val p = player ?: return
+        val agora = p.currentPosition
+        val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
+        p.seekTo(EpisodeSegments.repetirDe(agora))
+        mostrarBarra()
+        if (comLegenda) return
+        val grupos = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
+        val escolha = grupos.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
+            .let { l -> l.firstOrNull { (g, i) -> Idioma.normalizar(g.getTrackFormat(i).language) == idiomaTv } ?: l.firstOrNull() }
+        if (escolha == null) { avisoBreve(getString(R.string.seg_sem_legenda)); return }
+        if (paramsAntesRepetir == null) paramsAntesRepetir = p.trackSelectionParameters
+        repetindoAte = maxOf(repetindoAte, agora)
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+            .setOverrideForType(TrackSelectionOverride(escolha.first.mediaTrackGroup, escolha.second)).build()
+        tela.removeCallbacks(vigiaRepetir); tela.postDelayed(vigiaRepetir, 500)
+    }
+
+    /** Desliga a legenda do "O que ele disse?" quando o vídeo passa do ponto em que a pessoa estava. */
+    private val vigiaRepetir: Runnable = object : Runnable {
+        override fun run() {
+            val p = player ?: return
+            if (p.currentPosition < repetindoAte) { tela.postDelayed(this, 500); return }
+            paramsAntesRepetir?.let { p.trackSelectionParameters = it }
+            paramsAntesRepetir = null; repetindoAte = -1L
         }
     }
 
@@ -1209,7 +1267,7 @@ class VodActivity : Activity() {
         if (!inicio && !AberturaSerie.valida(nova)) { avisoBreve(getString(R.string.abertura_invalida)); return }
         abertura = nova; aberturaDoArquivo = false
         gravarAbertura(nova)
-        avisouPulo = true   // quem acabou de marcar está no trecho: não oferece pular agora
+        avisouPulo = true; avisadoTrecho = nova.fim   // quem acabou de marcar está no trecho: não oferece pular agora
         avisoBreve(if (AberturaSerie.valida(nova)) getString(R.string.abertura_salva, relogio(nova.ini), relogio(nova.fim))
             else getString(R.string.abertura_inicio_marcado, relogio(nova.ini)))
         vigiarAbertura()
@@ -1231,31 +1289,94 @@ class VodActivity : Activity() {
         }
     }
 
-    /** Confere a posição duas vezes por segundo, só enquanto há abertura válida marcada na série. */
+    /**
+     * O vídeo acabou, ou a pessoa escolheu "Próximo episódio" nos créditos ([proximoJa]: a tela de séries começa o
+     * próximo sem contar de novo). Nos dois casos o episódio conta como visto.
+     */
+    private fun terminar(proximoJa: Boolean) {
+        if (isFinishing) return
+        esconderPilula()
+        salvar(terminou = true)
+        concluido = true
+        Gatilhos.avisarDoPlayer(this@VodActivity, false, acabou = true)   // elevação 10.6: filme acabou
+        // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
+        player?.let { p -> avisar(FontesMidia.Momento.PAROU, p.duration.takeIf { it > 0 } ?: p.currentPosition) }
+        avisouInicio = false   // o fim já foi avisado; o onStop não repete
+        // A tela de séries usa isto para decidir o próximo episódio (FimDoVideo.depois).
+        setResult(RESULT_OK, Intent().putExtra(RESULTADO_TERMINOU, true).putExtra(RESULTADO_TECLA, apertouTecla)
+            .putExtra(RESULTADO_DESLIGOU, desligarAoFim).putExtra(RESULTADO_PROXIMO_JA, proximoJa))
+        // Ideia 19: "desligar quando este acabar". Este processo (:player) não tem o serviço de acessibilidade;
+        // o apagarTela cai no lockNow do Device Owner, que só apaga a tela (nada se perde).
+        if (desligarAoFim) Desligamento.apagarTela(applicationContext)
+        player?.pause()
+        finish()
+    }
+
+    /**
+     * Confere a posição duas vezes por segundo enquanto há algo a oferecer: pular o resumo ou a abertura, ou, nos
+     * créditos de um episódio com próximo, "Próximo episódio" (proposta C, etapa 1, 20/11/2026).
+     */
     private fun vigiarAbertura() {
         tela.removeCallbacks(vigiaAbertura)
-        if ((serie || aberturaDoArquivo) && AberturaSerie.valida(abertura)) tela.post(vigiaAbertura)
+        val pular = (serie || aberturaDoArquivo) && (AberturaSerie.valida(abertura) || AberturaSerie.valida(resumo))
+        if (pular || proximoContagem >= 0) tela.post(vigiaAbertura)
     }
 
     private val vigiaAbertura: Runnable = object : Runnable {
         override fun run() {
             val p = player ?: return
-            val m = abertura
-            if (!AberturaSerie.valida(m)) { esconderPilula(); return }
-            if (!AberturaSerie.mostrarPulo(m, p.currentPosition)) { avisouPulo = false; esconderPilula() }
-            else if (!avisouPulo) {
-                avisouPulo = true
-                pilulaPular.visibility = View.VISIBLE
-                tela.removeCallbacks(esconderPilulaDepois); tela.postDelayed(esconderPilulaDepois, AberturaSerie.AVISO_MS)
+            val pos = p.currentPosition
+            val dur = p.duration.takeIf { it != C.TIME_UNSET } ?: 0L
+            val creditos = if (proximoContagem >= 0 && !desligarAoFim) EpisodeSegments.inicioCreditos(creditosBanco, capitulos, dur) else null
+            if (EpisodeSegments.mostrarProximo(creditos, pos, dur)) {
+                if (!proximoDispensado && !pilulaProximo) mostrarProximo()
+            } else {
+                if (pilulaProximo) esconderPilula()
+                proximoDispensado = false   // saiu dos créditos (voltou no filme): pode oferecer de novo
+                val m = if (serie || aberturaDoArquivo) EpisodeSegments.pularAgora(resumo, abertura, pos) else null
+                if (m == null) { avisouPulo = false; avisadoTrecho = -1L; if (pularPara >= 0) esconderPilula() }
+                else if (avisadoTrecho != m.fim) {
+                    // uma vez por trecho: some depois de 8 s e só volta quando entrar em outro trecho
+                    avisouPulo = true; avisadoTrecho = m.fim; pularPara = m.fim
+                    pilulaPular.text = getString(if (m === resumo) R.string.seg_pular_resumo else R.string.abertura_pular)
+                    pilulaPular.visibility = View.VISIBLE
+                    tela.removeCallbacks(esconderPilulaDepois); tela.postDelayed(esconderPilulaDepois, AberturaSerie.AVISO_MS)
+                }
             }
             tela.postDelayed(this, 500)
+        }
+    }
+
+    /** "Próximo episódio" nos créditos, com a contagem das Configurações (0 = só oferece). */
+    private fun mostrarProximo() {
+        pilulaProximo = true; pularPara = -1L
+        tela.removeCallbacks(esconderPilulaDepois)
+        proximoResta = if (proximoContagem > 0) proximoContagem else -1
+        pintarProximo()
+        pilulaPular.visibility = View.VISIBLE
+        if (proximoResta > 0) tela.postDelayed(contaProximo, 1_000)
+    }
+
+    private fun pintarProximo() {
+        pilulaPular.text = if (proximoResta > 0) getString(R.string.seg_proximo_em, proximoResta) else getString(R.string.seg_proximo)
+    }
+
+    private val contaProximo: Runnable = object : Runnable {
+        override fun run() {
+            if (!pilulaProximo || proximoResta <= 0) return
+            if (player?.isPlaying != true) { tela.postDelayed(this, 1_000); return }   // pausado: a contagem espera
+            proximoResta--
+            if (proximoResta <= 0) { terminar(proximoJa = true); return }
+            pintarProximo()
+            tela.postDelayed(this, 1_000)
         }
     }
 
     private val esconderPilulaDepois = Runnable { esconderPilula() }
 
     private fun esconderPilula() {
-        tela.removeCallbacks(esconderPilulaDepois)
+        tela.removeCallbacks(esconderPilulaDepois); tela.removeCallbacks(contaProximo)
+        pilulaProximo = false; pularPara = -1L
         if (::pilulaPular.isInitialized) pilulaPular.visibility = View.GONE
     }
 
@@ -1571,7 +1692,10 @@ class VodActivity : Activity() {
         val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 }
         val pos = avanco.alvo.takeIf { it >= 0 } ?: p.currentPosition   // segurando ◀ ▶: mostra para onde vai
         val pausa = if (p.isPlaying) "" else "⏸  "
-        tempo.text = pausa + (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos))
+        // "termina às 22:40" (como Plex e Apple TV; proposta C, etapa 1): na velocidade atual, no formato 12/24 h da TV.
+        val fim = dur?.let { EpisodeSegments.terminaEm(System.currentTimeMillis(), pos, it, p.playbackParameters.speed) }
+        val termina = fim?.let { "   ·   " + getString(R.string.seg_termina, android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(it))) }.orEmpty()
+        tempo.text = pausa + (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos)) + termina
         progresso.progress = dur?.let { (pos * 1000 / it).toInt() } ?: 0
         progresso.secondaryProgress = dur?.let { (p.bufferedPosition * 1000 / it).toInt() } ?: 0
     }
