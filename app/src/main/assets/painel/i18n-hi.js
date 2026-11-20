@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"टीवी पर चल रहा है।",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"यह फ़ाइल टीवी पर नहीं खुलती। वीडियो, संगीत और फ़ोटो खुलते हैं।",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","भेजा जा रहा है $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "नए टीवी ने मना किया: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "नए टीवी ने मना किया ($1)"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "भेजने की तैयारी नहीं हो सकी ($1)"],

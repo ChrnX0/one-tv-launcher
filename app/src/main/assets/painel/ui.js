@@ -20,6 +20,33 @@ function aviso(texto, tipo) {
   setTimeout(() => { t.classList.remove('visivel'); setTimeout(() => t.remove(), 300); }, tipo === 'erro' ? 7000 : 4000);
 }
 
+/**
+ * Aviso com barra de progresso (teste do Paulo 20/11: cada porcentagem virava um aviso novo e a pilha cobria a tela).
+ * Por quê: um envio é UMA coisa acontecendo. Como: um só aviso, que troca o texto e enche a barra laranja (laranja =
+ * progresso, regra da marca); devolve a função que o fecha. fracao = 0..1.
+ */
+const progressos = {};
+function avisoProgresso(chave, texto, fracao) {
+  let t = progressos[chave];
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'toast toast-progresso';
+    t.setAttribute('role', 'status');
+    t.innerHTML = '<span class="toast-texto"></span><span class="toast-barra"><span></span></span>';
+    $('toasts').appendChild(t);
+    requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('visivel')));
+    progressos[chave] = t;
+  }
+  t.querySelector('.toast-texto').textContent = texto;
+  t.querySelector('.toast-barra > span').style.width = Math.round(Math.max(0, Math.min(1, fracao)) * 100) + '%';
+}
+function fimProgresso(chave) {
+  const t = progressos[chave];
+  if (!t) return;
+  delete progressos[chave];
+  t.classList.remove('visivel'); setTimeout(() => t.remove(), 300);
+}
+
 // A tela "Mais" do celular saiu no painel v3 (16/11/2026): as 4 seções cabem na barra de baixo e as páginas internas
 // ficam em listas dentro de "Na TV" e "Configurações" (index.html, .lista-hub).
 

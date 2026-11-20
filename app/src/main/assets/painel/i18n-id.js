@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"Diputar di TV.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Jenis file ini tidak terbuka di TV. Video, musik, dan foto bisa.",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","Mengirim $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "TV baru menolak: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "TV baru menolak ($1)"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "tidak bisa menyiapkan pengiriman ($1)"],

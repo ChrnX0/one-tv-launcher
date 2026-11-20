@@ -1100,3 +1100,10 @@ button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--
 
 /* Dica de arrastar (ideia 17): só aparece onde existe arrastar de verdade (mouse). */
 @media not (pointer: fine) { .so-ponteiro-fino { display: none; } }
+
+/* Aviso com barra (envio para a TV): texto em cima, barra laranja embaixo; um só aviso que se atualiza. */
+.toast-progresso { flex-wrap: wrap; row-gap: 8px; }
+.toast-progresso .toast-texto { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toast-barra { flex-basis: 100%; height: 6px; border-radius: var(--pilula); background: var(--superficie-hover); overflow: hidden; }
+.toast-barra > span { display: block; height: 100%; width: 0; background: var(--acento); transition: width var(--t-ms-fast) linear; }
+@media (prefers-reduced-motion: reduce) { .toast-barra > span { transition: none; } }
