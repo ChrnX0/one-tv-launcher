@@ -55,7 +55,9 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
     private val conta: TextView
     private val coluna = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
     private val rolagem = ScrollView(ctx).apply {
-        isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isSmoothScrollingEnabled = true
+        // Corta no próprio limite (o vão de 12/40 dp do padding deixa o cartão crescer no foco): sem isso as fileiras roladas
+        // para cima desenhavam por cima do título.
+        isVerticalScrollBarEnabled = false; clipChildren = true; clipToPadding = false; isSmoothScrollingEnabled = true
         setPadding(0, dp(12), 0, dp(40))
         addView(coluna)
     }
@@ -70,9 +72,10 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
     init {
         isFocusable = false
         clipChildren = false
-        // Véu Noite sobre o fundo da casa (o mesmo da grade antiga e das telas Rádio/Jogos).
+        // Véu Noite sobre o fundo da casa. Quase opaco: com 80% a ilha recolhida da barra de cima (hora, "feriado hoje")
+        // aparecia por trás do título (visto na Sala, 20/11/2026).
         background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(0xCC121528.toInt(), 0xB3121528.toInt(), 0xE6121528.toInt()))
+            intArrayOf(0xFA121528.toInt(), 0xF0121528.toInt(), 0xF5121528.toInt()))
         val margem = dp(Grade.MARGEM)
         val titulo = TextView(ctx).apply {
             text = ctx.getString(R.string.cruz_todos_apps).uppercase(); letterSpacing = 0.16f; includeFontPadding = false
@@ -126,7 +129,9 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
                 if (alvo == null && c.pkg == focus) alvo = v
             }
             coluna.addView(HorizontalScrollView(context).apply {
-                isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
+                // clipChildren = true: a fileira não passa por baixo do painel da direita (o 4º cartão aparecia atrás dele na
+                // Sala, 20/11/2026). O padding de 8 dp com clipToPadding = false deixa espaço para o cartão crescer no foco.
+                isHorizontalScrollBarEnabled = false; clipChildren = true; clipToPadding = false
                 setPadding(dp(8), dp(8), dp(8), dp(8))
                 addView(linha)
             }, LinearLayout.LayoutParams(MATCH, WRAP))
