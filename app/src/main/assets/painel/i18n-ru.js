@@ -1420,6 +1420,9 @@ traduzirPainelCom({T:{
 "tela inicial diferente do normal":"главный экран не как обычно",
 "a conexão até 1.1.1.1 não abriu":"соединение с 1.1.1.1 не открылось",
 "sonda da madrugada":"ночная проверка",
+"congelado, em prova":"заморожен, идёт проверка",
+"congelado e conferido":"заморожен и проверен",
+"congelamento desfeito":"заморозка отменена",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","задержка $1 мс (предел $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","сигнал Wi-Fi $1 дБм (предел $2)"],

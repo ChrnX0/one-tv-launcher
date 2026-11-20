@@ -1420,6 +1420,9 @@ traduzirPainelCom({T:{
 "tela inicial diferente do normal":"الشاشة الرئيسية على غير المعتاد",
 "a conexão até 1.1.1.1 não abriu":"لم يُفتح الاتصال بـ 1.1.1.1",
 "sonda da madrugada":"فحص الفجر",
+"congelado, em prova":"مجمّد، قيد الاختبار",
+"congelado e conferido":"مجمّد وتم التحقق",
+"congelamento desfeito":"أُلغي التجميد",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","زمن الاستجابة $1 مللي ثانية (الحد $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","إشارة الواي فاي $1 dBm (الحد $2)"],

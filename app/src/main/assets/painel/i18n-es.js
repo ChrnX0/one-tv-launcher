@@ -1420,6 +1420,9 @@ traduzirPainelCom({T:{
 "tela inicial diferente do normal":"pantalla de inicio distinta de lo normal",
 "a conexão até 1.1.1.1 não abriu":"la conexión a 1.1.1.1 no se abrió",
 "sonda da madrugada":"revisión de madrugada",
+"congelado, em prova":"congelado, en prueba",
+"congelado e conferido":"congelado y comprobado",
+"congelamento desfeito":"congelación deshecha",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","latencia de $1 ms (límite $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","señal del Wi-Fi en $1 dBm (límite $2)"],
