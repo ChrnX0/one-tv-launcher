@@ -2449,19 +2449,25 @@ $('abaArquivos').addEventListener('drop', (ev) => {
 // Por quê: mostrar o vídeo da viagem era copiar para a TV e procurar o arquivo com a cruz. Como: foto vai como recado
 // com foto (a mesma rota do cartão Foto); vídeo e música vão para a pasta Movies da TV e tocam no player do Sofaly.
 const PASTA_NA_TV = 'Movies';
-$('abaControle').addEventListener('dragover', (ev) => {
+// Correção 20/11 (teste do Paulo): o arquivo solto FORA da seção do Controle (cabeçalho, menu, margem) caía no
+// navegador, que abria o vídeo numa aba nova. Agora a página inteira recebe: na aba Arquivos, envia para a pasta
+// aberta (ouvinte próprio dela); em qualquer outra aba, manda para a TV e toca.
+const naAbaArquivos = (ev) => $('abaArquivos').contains(ev.target) && !$('abaArquivos').hidden;
+document.addEventListener('dragover', (ev) => {
+  if (![...(ev.dataTransfer?.types || [])].includes('Files')) return;
+  ev.preventDefault();   // sem isto o navegador abre o arquivo ao soltar
+  if (naAbaArquivos(ev)) return;
+  $('abaControle').dataset.soltar = 'Solte para ver na TV';
+  if (!$('abaControle').hidden) $('abaControle').classList.add('soltando');
+});
+document.addEventListener('dragleave', (ev) => { if (!ev.relatedTarget) $('abaControle').classList.remove('soltando'); });
+document.addEventListener('drop', async (ev) => {
   if (![...(ev.dataTransfer?.types || [])].includes('Files')) return;
   ev.preventDefault();
-  $('abaControle').dataset.soltar = 'Solte para ver na TV';
-  $('abaControle').classList.add('soltando');
-});
-$('abaControle').addEventListener('dragleave', (ev) => { if (ev.target === $('abaControle')) $('abaControle').classList.remove('soltando'); });
-$('abaControle').addEventListener('drop', async (ev) => {
   $('abaControle').classList.remove('soltando');
-  const f = ev.dataTransfer?.files?.[0];
-  if (!f) return;
-  ev.preventDefault();
-  await verNaTv(f);
+  if (naAbaArquivos(ev)) return;   // a aba Arquivos já tratou (envia para a pasta aberta)
+  const f = ev.dataTransfer.files?.[0];
+  if (f) await verNaTv(f);
 });
 
 async function verNaTv(f) {
@@ -2473,8 +2479,15 @@ async function verNaTv(f) {
       aviso('A foto está na tela da TV.', 'ok');
     } else if (tipo === 'video' || tipo === 'audio') {
       try { await chamar('POST', '/api/arquivos/pasta', { pasta: '', nome: PASTA_NA_TV }); } catch (e) { /* já existe */ }
-      const url = '/api/arquivos/enviar?pasta=' + encodeURIComponent(PASTA_NA_TV) + '&nome=' + encodeURIComponent(f.name) + '&substituir=1';
-      await enviarComProgresso(url, f, (p) => aviso(`Mandando ${f.name}: ${Math.round(p * 100)}%`));
+      // Sem "substituir": substituir apaga o antigo e pede o PIN de novo. Se o mesmo nome já está na TV, é o mesmo
+      // vídeo arrastado de novo: toca o que já está lá, sem mandar outra vez.
+      // Confere ANTES de mandar: a TV recusa nome repetido fechando a conexão no meio (vira "a conexão caiu").
+      const r = await chamar('GET', '/api/arquivos?caminho=' + encodeURIComponent(PASTA_NA_TV));
+      const jaEsta = (r.itens || []).some((i) => i.nome === f.name);
+      if (!jaEsta) {
+        const url = '/api/arquivos/enviar?pasta=' + encodeURIComponent(PASTA_NA_TV) + '&nome=' + encodeURIComponent(f.name);
+        await enviarComProgresso(url, f, (p) => aviso(`Mandando ${f.name}: ${Math.round(p * 100)}%`));
+      }
       await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(PASTA_NA_TV, f.name) });
       aviso('Tocando na TV.', 'ok');
     } else {
