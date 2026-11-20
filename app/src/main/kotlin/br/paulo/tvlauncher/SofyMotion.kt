@@ -133,6 +133,32 @@ object SofyMotion {
     /** Os olhos em [ms] (a última troca até ali). */
     fun faceAt(c: Clip, ms: Long): Face = c.faces.lastOrNull { it.atMs <= ms } ?: c.faces.first()
 
+    /**
+     * Os mesmos movimentos para o painel web e o celular (sofy.js desenha em SVG): uma fonte só, a TV manda tudo em JSON.
+     * Formato: {max_ms, parts:{NOME:[px,py]}, clips:{EXPR:{eyes, mouth, antennas:[lx,ly,rx,ry,curl], length_ms,
+     * faces:[[ms,olhos,boca]], tracks:[[parte, início, duração, curva, [[t,rot,tx,ty,sx,sy]…]]]}}}.
+     */
+    fun toJson(): org.json.JSONObject {
+        fun arr(vararg v: Any) = org.json.JSONArray().apply { v.forEach { put(it) } }
+        fun Float.r(): Double = Math.round(this * 1000.0) / 1000.0   // 0.3f vira 0.3, não 0.30000001192092896
+        val parts = org.json.JSONObject().apply { Part.entries.forEach { put(it.name, arr(it.pivotX.r(), it.pivotY.r())) } }
+        val clips = org.json.JSONObject()
+        for (e in Expression.entries) {
+            val c = clip(e); val a = c.antennas
+            clips.put(e.name, org.json.JSONObject()
+                .put("eyes", e.eyes).put("mouth", e.mouth).put("length_ms", c.lengthMs)
+                .put("antennas", arr(a.lx.r(), a.ly.r(), a.rx.r(), a.ry.r(), a.rightCurl))
+                .put("faces", org.json.JSONArray().apply { c.faces.forEach { put(arr(it.atMs, it.eyes, it.mouth)) } })
+                .put("tracks", org.json.JSONArray().apply {
+                    c.tracks.forEach { t ->
+                        val keys = org.json.JSONArray().apply { t.keys.forEach { k -> put(arr(k.t.r(), k.rot.r(), k.tx.r(), k.ty.r(), k.sx.r(), k.sy.r())) } }
+                        put(arr(t.part.name, t.startMs, t.durationMs, t.ease.name, keys))
+                    }
+                }))
+        }
+        return org.json.JSONObject().put("max_ms", MAX_MS).put("parts", parts).put("clips", clips)
+    }
+
     /** A boca enquanto ela fala: aberta "o", fechada "-" (ASCII, como o resto do rosto). */
     fun talkingMouth(open: Boolean): String = if (open) "o" else "-"
 

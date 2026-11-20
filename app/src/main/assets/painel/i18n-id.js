@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"Diputar di TV.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Jenis file ini tidak terbuka di TV. Video, musik, dan foto bisa.",
 "Observador":"Pengamat",
+"Sofy fala em voz alta":"Sofy berbicara dengan suara",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"Ia membacakan apa yang ditampilkan di TV. Jika TalkBack aktif, TalkBack yang membaca.",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"Yang dipantau TV sendiri: memori, internet, Wi-Fi, kelancaran layar utama, dan ruang penyimpanan. Saat ada yang tidak normal, akan muncul di sini beserta alasannya. Untuk saat ini ia hanya mengamati dan mencatat.",
 "Tudo normal agora.":"Semua normal saat ini.",
 "Nada fora do normal nos últimos 7 dias.":"Tidak ada yang tidak normal dalam 7 hari terakhir.",

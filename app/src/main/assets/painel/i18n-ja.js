@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"テレビで再生中。",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"この種類のファイルはテレビで開けません。動画、音楽、写真は開けます。",
 "Observador":"オブザーバー",
+"Sofy fala em voz alta":"Sofy が声で話す",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"テレビに表示した内容を読み上げます。TalkBack がオンなら TalkBack が読み上げます。",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"テレビが自分で見守っていること：メモリ、インターネット、Wi-Fi、ホーム画面のなめらかさ、空き容量。何かがいつもと違うと、理由と一緒にここに表示されます。今は見守って記録するだけです。",
 "Tudo normal agora.":"今はすべて正常です。",
 "Nada fora do normal nos últimos 7 dias.":"過去7日間に異常はありません。",

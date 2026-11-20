@@ -1027,6 +1027,14 @@
       <div id="cartaoObservador" class="cartao">
         <h2>Observador</h2>
         <p class="aviso">O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.</p>
+        <!-- Sofy (20/11/2026): o rosto do Observador, com a cara do estado de agora, e a chave da voz (desligada de fábrica). -->
+        <div class="sofy-linha">
+          <span id="sofyObservador" class="sofy-rosto"></span>
+          <div>
+            <label class="marcar"><input id="sofyFala" type="checkbox"> Sofy fala em voz alta</label>
+            <p class="aviso-curto">Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.</p>
+          </div>
+        </div>
         <div id="numerosObservador" class="numeros-saude"></div>
         <p id="agoraObservador" class="aviso">Lendo…</p>
         <div id="listaObservador" class="lista-registro"></div>
@@ -1403,6 +1411,7 @@
 
   <script src="i18n.js"></script>   <!-- ideia 76: inglês quando o navegador não está em português -->
   <script src="cadeado.js"></script>   <!-- 16/11/2026: no http, leva ao https se este aparelho já confia no certificado -->
+  <script src="sofy.js"></script>   <!-- 20/11/2026: a Sofy desenhada (mesmos movimentos da TV, via /api/sofy) -->
   <script src="app.js"></script>
   <script src="jmuxer.min.js"></script>
   <script src="extras.js"></script>

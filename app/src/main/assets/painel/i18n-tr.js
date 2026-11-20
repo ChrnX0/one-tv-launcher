@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"TV'de oynatılıyor.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Bu dosya türü TV'de açılmaz. Video, müzik ve fotoğraf açılır.",
 "Observador":"Gözlemci",
+"Sofy fala em voz alta":"Sofy sesli konuşur",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"TV'de gösterdiğini sesli okur. TalkBack açıksa TalkBack okur.",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"TV'nin kendi kendine izlediği şeyler: bellek, internet, Wi-Fi, ana ekranın akıcılığı ve depolama. Bir şey normalin dışına çıktığında burada nedeniyle birlikte görünür. Şimdilik yalnızca izler ve not alır.",
 "Tudo normal agora.":"Şu an her şey normal.",
 "Nada fora do normal nos últimos 7 dias.":"Son 7 günde olağan dışı bir şey yok.",
