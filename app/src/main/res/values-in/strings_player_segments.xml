@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">Lewati rangkuman · OK</string>
+    <string name="seg_proximo">Episode berikutnya · OK</string>
+    <string name="seg_proximo_em">Episode berikutnya dalam %1$d · OK</string>
+    <string name="seg_termina">selesai pukul %1$s</string>
+    <string name="seg_repetir">Tadi bilang apa?</string>
+    <string name="seg_repetir_info">Mundur 10 dtk dengan subtitel</string>
+    <string name="seg_sem_legenda">Video ini tidak punya subtitel</string>
+</resources>

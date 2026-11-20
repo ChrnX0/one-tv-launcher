@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">सारांश छोड़ें · OK</string>
+    <string name="seg_proximo">अगला एपिसोड · OK</string>
+    <string name="seg_proximo_em">अगला एपिसोड %1$d में · OK</string>
+    <string name="seg_termina">%1$s पर खत्म</string>
+    <string name="seg_repetir">क्या कहा?</string>
+    <string name="seg_repetir_info">सबटाइटल के साथ 10 से. पीछे</string>
+    <string name="seg_sem_legenda">इस वीडियो में सबटाइटल नहीं है</string>
+</resources>

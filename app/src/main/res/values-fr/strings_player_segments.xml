@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">Passer le récap · OK</string>
+    <string name="seg_proximo">Épisode suivant · OK</string>
+    <string name="seg_proximo_em">Épisode suivant dans %1$d · OK</string>
+    <string name="seg_termina">fin à %1$s</string>
+    <string name="seg_repetir">Qu’a-t-il dit ?</string>
+    <string name="seg_repetir_info">Recule de 10 s avec sous-titres</string>
+    <string name="seg_sem_legenda">Cette vidéo n’a pas de sous-titres</string>
+</resources>

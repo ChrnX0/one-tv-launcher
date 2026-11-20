@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">Özeti atla · OK</string>
+    <string name="seg_proximo">Sonraki bölüm · OK</string>
+    <string name="seg_proximo_em">Sonraki bölüm %1$d sn sonra · OK</string>
+    <string name="seg_termina">bitiş %1$s</string>
+    <string name="seg_repetir">Ne dedi?</string>
+    <string name="seg_repetir_info">Altyazıyla 10 sn geri</string>
+    <string name="seg_sem_legenda">Bu videoda altyazı yok</string>
+</resources>

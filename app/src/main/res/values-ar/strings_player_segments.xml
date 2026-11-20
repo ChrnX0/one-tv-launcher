@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">تخطي الملخص · OK</string>
+    <string name="seg_proximo">الحلقة التالية · OK</string>
+    <string name="seg_proximo_em">الحلقة التالية خلال %1$d · OK</string>
+    <string name="seg_termina">ينتهي في %1$s</string>
+    <string name="seg_repetir">ماذا قال؟</string>
+    <string name="seg_repetir_info">رجوع 10 ث مع الترجمة</string>
+    <string name="seg_sem_legenda">لا توجد ترجمة لهذا الفيديو</string>
+</resources>

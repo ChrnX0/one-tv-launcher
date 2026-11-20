@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">跳过前情提要 · OK</string>
+    <string name="seg_proximo">下一集 · OK</string>
+    <string name="seg_proximo_em">%1$d 秒后播放下一集 · OK</string>
+    <string name="seg_termina">%1$s 结束</string>
+    <string name="seg_repetir">刚才说了什么？</string>
+    <string name="seg_repetir_info">带字幕后退 10 秒</string>
+    <string name="seg_sem_legenda">此视频没有字幕</string>
+</resources>

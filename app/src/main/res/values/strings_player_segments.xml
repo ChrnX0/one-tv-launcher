@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Players, proposta C, etapa 1 (20/11/2026): resumo, créditos, "termina às", "o que foi dito?". -->
+<resources>
+    <string name="seg_pular_resumo">Skip recap · OK</string>
+    <string name="seg_proximo">Next episode · OK</string>
+    <string name="seg_proximo_em">Next episode in %1$d · OK</string>
+    <string name="seg_termina">ends at %1$s</string>
+    <string name="seg_repetir">What did they say?</string>
+    <string name="seg_repetir_info">Back 10 s with subtitles</string>
+    <string name="seg_sem_legenda">This video has no subtitles</string>
+</resources>

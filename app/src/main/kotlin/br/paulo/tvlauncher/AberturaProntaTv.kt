@@ -22,7 +22,12 @@ object AberturaProntaTv {
         if (velhas.isNotEmpty()) p.edit().apply { velhas.forEach { remove(it) } }.apply()
     }
 
-    fun buscar(ctx: Context, tmdbSerie: Int, temporada: Int, episodio: Int): AberturaSerie.Marca? {
+    /**
+     * Abertura, resumo e créditos do episódio (EpisodeSegments). Guarda a resposta crua do IntroDB (cerca de 400 bytes):
+     * desde 20/11/2026 ela serve para os três trechos, não só para a abertura. "-" = não tem marcação (pergunta de novo
+     * depois de [AberturaPronta.REPERGUNTAR_MS]).
+     */
+    fun buscar(ctx: Context, tmdbSerie: Int, temporada: Int, episodio: Int): EpisodeSegments.Trechos? {
         val imdb = InfoExternaCache.imdbPorTmdb(ctx, tmdbSerie) ?: return null   // sem o id: nada a perguntar
         val url = AberturaPronta.url(imdb, temporada, episodio) ?: return null
         // Chave nas Configurações (Sistema > Mais opções), ligada de fábrica: desligada, nada vai ao IntroDB.
@@ -34,13 +39,19 @@ object AberturaProntaTv {
         val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         if (prefs.all.size > MAX_CACHE) prefs.edit().clear().apply()
         limparAntigas(ctx)
-        val k = "$imdb:$temporada:$episodio"
+        val k = "v2:$imdb:$temporada:$episodio"
         val agora = System.currentTimeMillis()
-        AberturaPronta.doCache(prefs.getString(k, null), agora)?.let { return it.first }
+        prefs.getString(k, null)?.let { guardado ->
+            val em = guardado.substringBefore('|').toLongOrNull()
+            val corpo = guardado.substringAfter('|', "")
+            if (em != null && corpo.isNotEmpty() && (corpo != "-" || agora - em < AberturaPronta.REPERGUNTAR_MS))
+                return if (corpo == "-") null else EpisodeSegments.lerIntroDb(corpo)
+        }
         val resposta = Endereco.httpGet(url) ?: return null   // sem rede: tenta na próxima vez (nada guardado)
-        val m = AberturaPronta.ler(resposta)
-        prefs.edit().putString(k, AberturaPronta.paraCache(m, agora)).apply()
-        Log.i(TAG, "IntroDB $imdb s${temporada}e$episodio: ${m ?: "sem marcação"}")
-        return m
+        val t = EpisodeSegments.lerIntroDb(resposta)
+        val vazio = t == null || (t.abertura == null && t.resumo == null && t.creditos == null)
+        prefs.edit().putString(k, "$agora|" + if (vazio) "-" else resposta.replace('\n', ' ')).apply()
+        Log.i(TAG, "IntroDB $imdb s${temporada}e$episodio: ${t ?: "sem marcação"}")
+        return t?.takeUnless { vazio }
     }
 }
