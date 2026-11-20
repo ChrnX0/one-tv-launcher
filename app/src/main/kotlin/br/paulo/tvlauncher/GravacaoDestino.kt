@@ -184,7 +184,7 @@ object GravacaoDestino {
         override fun apagar(arquivo: String) { arquivo(arquivo).delete() }
         override fun uri(arquivo: String): String = Uri.fromFile(arquivo(arquivo)).toString()
         override fun ler(arquivo: String): java.io.InputStream = java.io.FileInputStream(arquivo(arquivo))
-        override fun tamanho(arquivo: String): Long = arquivo(arquivo).let { if (it.isFile) it.length() else throw IOException("sumiu") }
+        override fun tamanho(arquivo: String): Long = arquivo(arquivo).let { if (it.isFile) it.length() else throw java.io.FileNotFoundException(arquivo) }
         override fun close() {}
     }
 

@@ -157,12 +157,14 @@ object RecordingCloudCopy {
                 feitas[nomeAlvo!!] = (feitas[nomeAlvo] ?: 0) + 1
                 if (c.apagar) runCatching { GravacaoDestino.abrir(app, c.destino)?.takeIf { it.id == c.destino }?.use { it.apagar(c.arquivo) } }
             }
-            val prox = CloudCopyRules.depois(c, ok)
+            // A gravação foi apagada antes de copiar (20/11/2026: o teste viu 5 tentativas à toa): sai da fila sem aviso.
+            val sumiu = r.exceptionOrNull() is java.io.FileNotFoundException
+            val prox = if (sumiu) null else CloudCopyRules.depois(c, ok)
             synchronized(this) {
                 val resto = fila(app).filter { !(it.destino == c.destino && it.arquivo == c.arquivo) }
                 salvar(app, if (prox != null) resto + prox else resto)
             }
-            if (!ok && prox == null) Avisos.enviar(app, Avisos.Tipo.GRAVACAO, app.getString(R.string.grv_nao_copiou, nomeAlvo ?: "?"),
+            if (!ok && prox == null && !sumiu) Avisos.enviar(app, Avisos.Tipo.GRAVACAO, app.getString(R.string.grv_nao_copiou, nomeAlvo ?: "?"),
                 GravacaoRegras.lerNome(c.arquivo).second)
             if (!ok && prox != null && fila(app).all { it.tentativas > 0 }) break   // tudo já falhou uma vez: tenta mais tarde
         }
