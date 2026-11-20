@@ -3,7 +3,9 @@ package br.paulo.tvlauncher
 /**
  * Cronômetros da onda 0 da elevação (17/11/2026), só a conta (CronometrosTest):
  *  - [TrocaCanal] (5.1): da tecla até o primeiro quadro do canal novo;
- *  - [Instalacao] (20.4): da primeira abertura do launcher até o primeiro canal tocando.
+ *  - [Instalacao] (20.4): da primeira abertura do launcher até o primeiro canal tocando;
+ *  - [SessaoVod] (players, proposta C, item 14, 20/11/2026): filmes e séries, da tela aberta ao primeiro quadro, e as
+ *    travadas e quadros perdidos por tempo de vídeo tocando.
  */
 object Cronometros {
     /**
@@ -45,4 +47,58 @@ object Cronometros {
             return d.takeIf { it in 1..LIMITE_MS }
         }
     }
+
+    /**
+     * Um filme ou episódio aberto. Relógio monotônico de fora (teste). Travada = o vídeo já tinha aparecido, a pessoa
+     * queria ver (playWhenReady) e ele parou para carregar SEM ter sido pulado: carregar depois de ◀ ▶ não é travada.
+     */
+    class SessaoVod {
+        private var abriuEm = 0L
+        private var apareceu = false
+        private var pulou = false
+        private var tocandoDesde = 0L
+        private var tocadoMs = 0L
+        var travadas = 0
+            private set
+
+        fun abriu(agora: Long) { if (abriuEm == 0L) abriuEm = agora }
+
+        /** O primeiro quadro: o tempo desde [abriu], uma vez só por sessão (voltar de outra tela não conta de novo). */
+        fun primeiroQuadro(agora: Long): Long? {
+            if (apareceu || abriuEm == 0L) return null
+            apareceu = true
+            return (agora - abriuEm).takeIf { it in 0..LIMITE_MS }
+        }
+
+        fun pulou() { pulou = true }
+
+        fun carregando(querTocar: Boolean) {
+            if (apareceu && querTocar && !pulou) travadas++
+            pulou = false
+        }
+
+        fun pronto() { pulou = false }
+
+        fun tocando(sim: Boolean, agora: Long) {
+            if (sim) { if (tocandoDesde == 0L) tocandoDesde = agora }
+            else if (tocandoDesde > 0L) { tocadoMs += (agora - tocandoDesde).coerceAtLeast(0); tocandoDesde = 0L }
+        }
+
+        /**
+         * Fecha o trecho (a tela saiu da frente) e devolve as taxas, ou null se tocou menos de [MIN_TOCADO_MS] (2 min de
+         * vídeo com uma travada viraria "30 por hora"). Zera as contas: a volta à tela começa um trecho novo.
+         */
+        fun fechar(agora: Long, perdidos: Int): Resumo? {
+            tocando(false, agora)
+            val t = tocadoMs
+            val r = if (t < MIN_TOCADO_MS) null else Resumo(travadas * 3_600_000L / t, perdidos.coerceAtLeast(0) * 60_000L / t)
+            tocadoMs = 0L; travadas = 0
+            return r
+        }
+    }
+
+    /** [travadasPorHora] e [perdidosPorMin] de vídeo tocando (arredondados para baixo). */
+    data class Resumo(val travadasPorHora: Long, val perdidosPorMin: Long)
+
+    const val MIN_TOCADO_MS = 5 * 60_000L
 }

@@ -252,10 +252,38 @@ class LembreteReceiver : BroadcastReceiver() {
 class LembreteActivity : Activity() {
     private val ui = Handler(Looper.getMainLooper())
 
+    // Players, proposta C, B8 (20/11/2026): com a TV apagada, o lembrete insiste em ligar a TV pelo HDMI-CEC como o
+    // despertador (TvWakeRetry): o Android pede uma vez só e a LG às vezes não ouve. Para quando alguém aperta uma tecla.
+    @Volatile private var aberta = false
+    @Volatile private var alguemMexeu = false
+    private var tentativasTv = 0
+    private val ligarTv = object : Runnable {
+        override fun run() {
+            if (!TvWakeRetry.tentar(aberta, alguemMexeu)) return
+            tentativasTv++
+            val app = applicationContext
+            val n = tentativasTv
+            Thread {
+                val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
+                Log.i("TvLauncher.Lembrete", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
+            }.start()
+            TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
+        }
+    }
+
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        alguemMexeu = true
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)
         if (VigiaAtualizacao.fechada(this)) return
-        if (intent.getBooleanExtra("acordar", false)) AcenderTela.em(this)
+        if (intent.getBooleanExtra("acordar", false)) {
+            AcenderTela.em(this)
+            aberta = true
+            TvWakeRetry.proxima(0)?.let { ui.postDelayed(ligarTv, it) }
+        }
         val canal = intent.getStringExtra("canal").orEmpty()
         val titulo = intent.getStringExtra("titulo").orEmpty()
         val nome = intent.getStringExtra("nome").orEmpty()
@@ -301,5 +329,5 @@ class LembreteActivity : Activity() {
         ui.postDelayed(tique, 1_000)
     }
 
-    override fun onDestroy() { super.onDestroy(); ui.removeCallbacksAndMessages(null) }
+    override fun onDestroy() { super.onDestroy(); aberta = false; ui.removeCallbacksAndMessages(null) }
 }

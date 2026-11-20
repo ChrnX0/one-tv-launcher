@@ -99,7 +99,8 @@ object MedidasTv {
     /** `EXTRAS --es o placar`: o JSON do placar e as séries cruas (para a bancada e o roteiro do Release). */
     fun textoAdb(ctx: Context): String {
         val o = Placar.json(linhas(ctx))
-        for (c in listOf(Placar.Chave.HOME, Placar.Chave.HOME_FRIA, Placar.Chave.CANAL, Placar.Chave.INSTALACAO, Placar.Chave.LIMPEZA))
+        for (c in listOf(Placar.Chave.HOME, Placar.Chave.HOME_FRIA, Placar.Chave.CANAL, Placar.Chave.INSTALACAO, Placar.Chave.LIMPEZA,
+                Placar.Chave.VOD, Placar.Chave.VOD_TRAVADAS, Placar.Chave.VOD_PERDIDOS))
             o.put("serie_$c", org.json.JSONArray(Placar.texto(ler(ctx, c))))
         LimpezaMedida.ultimaFrase(ctx)?.let { o.put("limpeza_frase", it) }
         return o.toString(2)
