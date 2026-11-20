@@ -1272,3 +1272,8 @@ label[data-atalho] > .estrela { margin: -8px -8px -8px auto; }
 .toast-desfazer strong { font-weight: 800; }
 .toast-desfazer .link { margin-left: auto; font-weight: 800; min-height: 44px; }
 @media (prefers-reduced-motion: reduce) { .estrela { transition: none; } }
+/* A cor de cada porta vem por classe: a CSP do painel (style-src 'self') ignora style="..." no HTML. */
+.porta.mundo-watch { --cor: var(--t-world-watch); }
+.porta.mundo-listen { --cor: var(--t-world-listen); }
+.porta.mundo-play { --cor: var(--t-world-play); }
+.porta.mundo-apps { --cor: var(--t-world-apps); }
