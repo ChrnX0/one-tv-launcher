@@ -63,7 +63,7 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
     }.apply {
         isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isSmoothScrollingEnabled = true
         isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))
-        setPadding(0, dp(12), 0, dp(40))
+        setPadding(0, dp(12), 0, dp(64))
         addView(coluna)
     }
     private val painelBanner = ImageView(ctx).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
@@ -245,9 +245,23 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
                 painelBanner.visibility = if (img.drawable == null) GONE else VISIBLE
                 painelNome.text = c.name; painelLinhas.removeAllViews(); painelDica.visibility = GONE
                 host.focused(c)
+                v.postDelayed({ folgaEmbaixo(v) }, DesignTokens.MS_FAST + 50L)
             }
         }
         return moldura
+    }
+
+    /**
+     * O cartão em foco da última fileira ficava encostado na borda de baixo da TV, com o anel cortado (visto na Sala,
+     * 20/11/2026, mesmo com a folga da rolagem). Depois que a rolagem assenta, mede onde o cartão está NA TELA e, se
+     * passou do limite, rola o que falta. Usa a tela e não a altura da rolagem porque é a borda da TV que corta.
+     */
+    private fun folgaEmbaixo(v: View) {
+        if (!v.hasFocus() || !v.isAttachedToWindow) return
+        val loc = IntArray(2); v.getLocationOnScreen(loc)
+        val limite = rootView.height - dp(40)
+        val fundo = loc[1] + (v.height * v.scaleY).toInt()
+        if (fundo > limite) rolagem.smoothScrollBy(0, fundo - limite)
     }
 
     private fun selo(c: Card): String? = when (c.kind) {
