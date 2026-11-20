@@ -1,5 +1,15 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Vídeos":"동영상",
+"Esportes":"스포츠",
+"Infantil":"어린이",
+"Música e áudio":"음악 및 오디오",
+"Notícias":"뉴스",
+"Jogos":"게임",
+"Educação":"교육",
+"Saúde e exercício":"건강 및 피트니스",
+"Estilo de vida":"라이프스타일",
+"Outros":"기타",
 "nesta versão os apps são instalados pela Play Store":"이 버전에서는 앱을 Play 스토어에서 설치합니다",
 "Próximo jogo do seu time no item TV da tela inicial":"홈 화면 TV 항목에 응원 팀의 다음 경기",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"날씨 옆에 환율 (Frankfurter, 무료)",

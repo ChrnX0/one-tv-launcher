@@ -18,6 +18,8 @@ import org.json.JSONObject
  * Pura (sem Android além das constantes): AppShelfTest.
  */
 object AppShelf {
+    /** O `cat` de cada ficha (APK + comunidade), lido uma vez fora da tela pela HOME. Null até ler. */
+    @Volatile var sheetCats: Map<String, String>? = null
 
     /** Ordem da tela = ordem do enum. [id] é o que fica gravado (ficha `cat`, escolha manual): não mudar. */
     enum class Shelf(val id: String, val world: CruzLogica.Categoria) {

@@ -1208,8 +1208,6 @@ class MainActivity : Activity() {
         const val ALTURA_CONTINUAR = 112    // título + cards do tamanho dos apps (63 dp) + folga do card focado
         /** As fichas de fichas-apps.json para a frase do destaque (ideia 13). Lidas uma vez, na filaApps; null até lá. */
         @Volatile var fichasHome: Map<String, FrasesApps.Ficha>? = null
-        /** A categoria de cada ficha no padrão da Play (AppShelf): a cruz e a tela Todos os apps usam. Null até ler. */
-        @Volatile var catsFicha: Map<String, String>? = null
         const val CARTAO_TRANCA = "aa:lock"            // o cartão "N escondidos · PIN" (nenhum pacote tem esse nome)
         const val COR_CONGELADOS = 0xFF9CC8E8.toInt()  // gelo
         const val COR_ESCONDIDOS = 0xFF9A9AA6.toInt()  // neutro: não é mundo nenhum
@@ -3978,6 +3976,10 @@ class MainActivity : Activity() {
     // Organizacao.ocultos (Escondidos, com PIN), PainelApps.ocultar (Congelados) e a prova do Observador (ObserverTv).
 
     private var telaTodos: AllAppsScreen? = null
+    /** A categoria de cada ficha no padrão da Play (AppShelf.sheetCats): a cruz, esta tela e o painel usam. */
+    private var catsFicha: Map<String, String>?
+        get() = AppShelf.sheetCats
+        set(v) { AppShelf.sheetCats = v }
     /** Os escondidos aparecem nesta abertura da tela (o PIN foi certo). Fechar a tela tranca de novo. */
     private var escondidosLiberados = false
     /** O que custa disco/IPC, lido fora da tela a cada abertura: categoria das fichas, apps de sistema e congelados. */

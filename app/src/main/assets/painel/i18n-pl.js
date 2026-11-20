@@ -1,5 +1,15 @@
 // Painel em pl (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Vídeos":"Wideo",
+"Esportes":"Sport",
+"Infantil":"Dla dzieci",
+"Música e áudio":"Muzyka i audio",
+"Notícias":"Wiadomości",
+"Jogos":"Gry",
+"Educação":"Edukacja",
+"Saúde e exercício":"Zdrowie i fitness",
+"Estilo de vida":"Styl życia",
+"Outros":"Inne",
 "nesta versão os apps são instalados pela Play Store":"w tej wersji aplikacje instaluje się ze Sklepu Play",
 "Próximo jogo do seu time no item TV da tela inicial":"Najbliższy mecz Twojej drużyny przy pozycji TV na ekranie głównym",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"Kursy walut obok pogody (Frankfurter, bezpłatnie)",

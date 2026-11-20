@@ -1,5 +1,15 @@
 // Painel em en (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Vídeos":"Videos",
+"Esportes":"Sports",
+"Infantil":"Kids",
+"Música e áudio":"Music & audio",
+"Notícias":"News",
+"Jogos":"Games",
+"Educação":"Education",
+"Saúde e exercício":"Health & fitness",
+"Estilo de vida":"Lifestyle",
+"Outros":"Other",
 "nesta versão os apps são instalados pela Play Store":"in this version apps are installed from the Play Store",
 "Próximo jogo do seu time no item TV da tela inicial":"Your team's next game on the TV item of the home screen",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"Exchange rates next to the weather (Frankfurter, free)",
