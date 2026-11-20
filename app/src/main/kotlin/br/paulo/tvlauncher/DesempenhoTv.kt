@@ -33,11 +33,23 @@ object DesempenhoTv {
     @Volatile var limiteMs = MovimentoAdaptativo.limiteQuadroMs(60f)
     @Volatile private var contarDesde = 0L
     private var rodada = 0
+    /** Quadros por rodada do Observador: ~10 s de HOME animando a 60 quadros por segundo. */
+    private const val OBS_RODADA = 600
     private var lentos = 0
 
+    // ---- Observador: a mesma contagem, sempre (o juiz do movimento acima só conta enquanto pode descer um degrau).
+    private var obsQuadros = 0
+    private var obsLentos = 0
+
     private fun julgar(ms: Double) {
-        val acao = aoPesado ?: return
         if (SystemClock.uptimeMillis() < contarDesde) return   // montar a tela não conta
+        obsQuadros++
+        if (ms > limiteMs) obsLentos++
+        if (obsQuadros >= OBS_RODADA) {
+            ObserverTv.publish(ObserverCore.Signal.SLOW_FRAMES_PCT, obsLentos * 100L / obsQuadros)
+            obsQuadros = 0; obsLentos = 0
+        }
+        val acao = aoPesado ?: return
         rodada++
         if (ms > limiteMs) lentos++
         if (rodada < MovimentoAdaptativo.AMOSTRA) return

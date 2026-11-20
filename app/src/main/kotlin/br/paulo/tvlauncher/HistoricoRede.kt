@@ -175,6 +175,7 @@ object HistoricoRede {
         anteriorComInternet = a.internet
         if (antes == false && a.internet) runCatching { avisarVolta(app) }.onFailure { Log.w(TAG, "aviso de volta: $it") }
         runCatching { cuidarDoWifi(app, a) }.onFailure { Log.w(TAG, "reparo do Wi-Fi: $it") }
+        runCatching { ObserverTv.fromNetworkSample(app, a.internet, a.latMs, a.dbm) }   // a batida do Observador é esta amostra
         val hoje = LocalDate.now()
         if (hoje != ultimoDiaDiario) {
             ultimoDiaDiario = hoje

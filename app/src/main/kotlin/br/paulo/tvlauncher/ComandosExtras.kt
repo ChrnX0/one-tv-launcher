@@ -143,6 +143,7 @@ object ComandosExtras {
         "modo_seguro_testar" -> { ModoSeguro.ligarParaTeste(ctx); "modo de segurança ligado: aperte HOME" }
         "modo_seguro_sair" -> { ModoSeguro.sair(ctx); "modo de segurança desligado" }
         "leveza" -> LevezaTv.json(ctx).toString()   // degrau 2: memória e tempo da HOME (volte à HOME umas vezes antes)
+        "observer" -> ObserverTv.report(ctx)   // Observador: sinais, o que está fora do normal, recados e registro
         "vazamentos" -> LeakWatch.relatorio()   // telas fechadas que continuam na memória (LeakWatch.kt)
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         // Elevação, onda 0: placar dos 7 pilares (JSON + séries cruas); a tela "Como esta TV está indo"; antes e depois da limpeza.

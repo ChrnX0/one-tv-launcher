@@ -856,6 +856,8 @@ object PainelWeb {
             // Barato (lê memória e prefs), então vai também no ?rapido=1.
             "/api/saude" -> if (req.metodo == "GET") return json(200, PainelSaude.estado(app, req.consulta["rapido"] != "1")
                 .put("acesso", SaudeAcesso.json(app)))
+            // Observador (ObserverTv, 20/11/2026): leituras, o que o juiz vê agora, recados e registro. Só leitura.
+            "/api/observer" -> if (req.metodo == "GET") return json(200, ObserverTv.reportJson(app, 20))
             "/api/saude/liberar" -> if (req.metodo == "POST") {
                 val ganho = PainelSaude.liberar(app)
                 PainelArmazem.registrar(app, ip, "liberar memória", if (ganho == null) "sem shell" else "ok, ${ganho / 1048576} MB")
