@@ -34,9 +34,32 @@ object PlayerMenu {
      * A escolha não tem valor (o ✓ diz qual vale) e a ação também não (ela só faz).
      */
     fun valorNaLinha(item: Item): String? = when (item.tipo) {
-        Tipo.ABRE -> listOfNotNull(item.valor?.takeIf { it.isNotBlank() }, "›").joinToString(" ")
-        Tipo.CHAVE -> item.valor
+        Tipo.ABRE -> listOfNotNull(item.valor?.takeIf { it.isNotBlank() }?.let(::maiuscula), "›").joinToString(" ")
+        Tipo.CHAVE -> item.valor?.let(::maiuscula)
         else -> null
+    }
+
+    /** Valor sempre com a 1ª letra maiúscula (na TV saía "português", "padrão" ao lado de "Normal", "Ligado"). */
+    fun maiuscula(s: String) = s.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+    /**
+     * De onde se entrou numa lista de dentro: ao voltar (VOLTAR), a lista de cima abre com o foco nesse item, e não no
+     * 1º (visto na TV em 20/11/2026: voltar de "Legenda" caía em "Áudio"). Guarda o nome, não a posição: os itens mudam.
+     */
+    private var retorno: Pair<String, String>? = null
+
+    /** Onde pôr o foco ao abrir [titulo]: o pedido, senão o item de onde se entrou numa lista de dentro. */
+    internal fun focoAoAbrir(titulo: String, itens: List<Item>, pedido: Int?): Int? {
+        if (pedido != null) return pedido
+        val (t, nome) = retorno ?: return null
+        if (t != titulo) return null
+        retorno = null
+        return itens.indexOfFirst { it.nome == nome }.takeIf { it >= 0 }
+    }
+
+    /** Depois do OK num item: abrir outra lista guarda o caminho de volta; o resto o esquece. */
+    internal fun escolheu(titulo: String, item: Item) {
+        retorno = if (item.tipo == Tipo.ABRE) titulo to item.nome else null
     }
 
     /** Depois do OK: a chave reabre a mesma lista (no mesmo item); o resto fecha. */
@@ -51,9 +74,12 @@ object PlayerMenu {
               montar: () -> List<Item>) {
         val itens = montar()
         if (itens.isEmpty()) return
-        Estilo.lista(ctx, titulo, itens.map { if (it.tipo == Tipo.ACAO && !it.valor.isNullOrBlank()) Estilo.comInfo(it.nome, it.valor) else it.nome }, marcadas(itens), focoInicial = foco, entrar = entrar, aoVoltar = voltar,
+        val focoInicial = focoAoAbrir(titulo, itens, foco)
+        Estilo.lista(ctx, titulo, itens.map { if (it.tipo == Tipo.ACAO && !it.valor.isNullOrBlank()) Estilo.comInfo(it.nome, it.valor) else it.nome }, marcadas(itens),
+            focoInicial = focoInicial, entrar = entrar, aoVoltar = voltar,
             valores = itens.map { valorNaLinha(it) }) { i ->
             val item = itens[i]
+            escolheu(titulo, item)
             item.acao()
             if (reabre(item)) abrir(ctx, titulo, voltar, foco = i, entrar = false, montar = montar)
         }
