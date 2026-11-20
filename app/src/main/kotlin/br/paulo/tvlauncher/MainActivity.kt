@@ -344,6 +344,18 @@ class MainActivity : Activity() {
         super.onResume()
         homeNaFrente = true
         recongelarPendentes()   // "congelar de novo ao voltar" (Todos os apps, 20/11/2026)
+        // Pen drive com apps foi tirado (AppStorage): diz quais sumiram até ele voltar.
+        AppStorage.ausentes(this).takeIf { it.isNotEmpty() }?.let { f ->
+            mostrarAviso(getString(R.string.st_sumiram, f.joinToString(", ")))
+        }
+        // Memória quase cheia e pen drive como memória da TV: a Sofy sugere o maior app para mover (1x por dia).
+        Fundo.rodar("StorageAdvice") {
+            val s = runCatching { StorageMode.sugestao(applicationContext) }.getOrNull() ?: return@rodar
+            runOnUiThread {
+                if (!isDestroyed) mostrarAviso(getString(R.string.st_sugestao, s.first,
+                    android.text.format.Formatter.formatShortFileSize(this, s.second)))
+            }
+        }
         SonsCruz.naFrente = true
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)
@@ -2608,8 +2620,12 @@ class MainActivity : Activity() {
         if (pastaToken == TOKEN_OCULTOS || (pastaToken == null && entrada is Entrada.App)) {
             titulo = nomeDe(token) + if (PainelApps.eSistema(this, token)) getString(R.string.home_app_sistema) else ""
             val sobDemanda = when { OnDemandTv.marked(this, token) -> true; OnDemandTv.eligible(this, token) -> false; else -> null }
-            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda)
+            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda,
+                AppStorage.opcaoMenu(this, token))
+            AppStorage.atualizarEmFundo(this)   // pen drive entrou/saiu: o próximo menu já sabe
             for (a in acoes) opcoes += when (a) {
+                MenuApp.Acao.INSTALAR_EXTERNO -> Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(token, true) }
+                MenuApp.Acao.INSTALAR_DISPOSITIVO -> Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(token, false) }
                 MenuApp.Acao.SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda)) { mudarSobDemanda(token, true) }
                 MenuApp.Acao.TIRAR_SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda_tirar)) { mudarSobDemanda(token, false) }
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
@@ -2667,6 +2683,28 @@ class MainActivity : Activity() {
     }
 
     private fun mostrarAviso(texto: String) = AvisoTv.rapido(this, "Apps", texto)
+
+    /**
+     * Leva o app para o pen drive adotado ou de volta para a TV (AppStorage.kt). O Android fecha o app enquanto copia;
+     * 1 GB leva ~1,5 min num pen drive comum. Dá para desfazer pelo mesmo menu, então não pede confirmação.
+     */
+    private fun mudarArmazenamento(pacote: String, paraExterno: Boolean) {
+        val nome = nomeDe(pacote)
+        mostrarAviso(getString(R.string.home_instalando_lugar, nome))
+        Fundo.rodar("AppStorage") {
+            val motivo = AppStorage.mover(this, pacote, paraExterno)
+            runOnUiThread {
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                mostrarAviso(when {
+                    motivo == null && paraExterno -> getString(R.string.home_instalado_externo, nome)
+                    motivo == null -> getString(R.string.home_instalado_dispositivo, nome)
+                    motivo == "sem_adotado" -> getString(R.string.home_instalar_lugar_falhou, nome, getString(R.string.home_instalar_lugar_sem_pendrive))
+                    motivo == "shell" -> getString(R.string.home_instalar_lugar_falhou, nome, getString(R.string.home_instalar_lugar_sem_shell))
+                    else -> getString(R.string.home_instalar_lugar_falhou, nome, motivo)
+                })
+            }
+        }
+    }
 
     /** Depois de mostrar/ocultar: fecha a pasta aberta, relê tudo e leva o foco para [foco] (ou perto de onde estava). */
     private fun atualizarAposMudanca(foco: String?) {
@@ -4328,6 +4366,12 @@ class MainActivity : Activity() {
         opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
         opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(pacote) }
         opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
+        when (AppStorage.opcaoMenu(this, pacote)) {
+            true -> opcoes += Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(pacote, true) }
+            false -> opcoes += Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(pacote, false) }
+            null -> {}
+        }
+        AppStorage.atualizarEmFundo(this)
         val desinstala = PainelApps.podeDesinstalar(this, pacote)
         if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
         val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""

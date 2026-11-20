@@ -1024,6 +1024,16 @@
         <p class="aviso-curto">Fecha os apps em segundo plano (o da frente continua). Nada é apagado; o app fechado abre do zero.</p>
         <p id="statusSaude" class="aviso" hidden></p>
       </div>
+      <!-- Pen drive e armazenamento (20/11/2026, storage.js + PainelStorage.kt): o mesmo da tela da TV. -->
+      <div id="cartaoStorage" class="cartao">
+        <h2>Pen drive e armazenamento</h2>
+        <p class="aviso">Escolha como a TV usa o pen drive. Como memória da TV, ele recebe os apps pesados. Formatar apaga o pen drive: copie antes pelo PC (Este Computador &gt; a TV &gt; Drive USB). Mover e formatar pedem o PIN.</p>
+        <p class="aviso-curto" id="storageTv"></p>
+        <div id="storagePens"></div>
+        <h3 id="storageAppsTitulo" hidden>Apps no pen drive</h3>
+        <div id="storageApps"></div>
+        <p class="aviso" id="statusStorage" hidden></p>
+      </div>
       <div id="cartaoObservador" class="cartao">
         <h2>Observador</h2>
         <p class="aviso">O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.</p>
@@ -1424,7 +1434,8 @@
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
   <script src="primeira.js"></script>
-  <script src="addons.js"></script>   <!-- addons no formato do Stremio, só HTTP -->
+  <script src="addons.js"></script>
+  <script src="storage.js"></script>   <!-- pen drive e armazenamento (PainelStorage.kt) -->   <!-- addons no formato do Stremio, só HTTP -->
   <script src="emprestimo.js"></script>   <!-- shell (Shizuku) e dono (Dhizuku) emprestados -->
   <script src="chave.js"></script>   <!-- ideia 99: entrar com a digital (passkey) -->   <!-- ideia 97: assistente da primeira configuração -->
 </body>
