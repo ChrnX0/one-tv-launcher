@@ -360,9 +360,12 @@ object Idioma {
         val va = c.versao(alvo)
         val anoA = ano(alvo)
         val mesmoTitulo = candidatos.filter { o -> o !== alvo && (anoA == null || ano(o) == null || ano(o) == anoA) }
-        val oposta = mesmoTitulo.firstOrNull { o -> c.versao(o).let { it != Versao.DESCONHECIDA && it != va } }
+        val oposta = mesmoTitulo.firstOrNull { o -> c.versao(o).let { it != Versao.DESCONHECIDA && it != va } &&
+            (va != Versao.DESCONHECIDA || ano(o) == anoA) }   // o par é recíproco: a mesma regra do ano vale dos dois lados
         if (oposta != null || va == Versao.DESCONHECIDA) return oposta
-        return mesmoTitulo.firstOrNull { o -> c.versao(o) == Versao.DESCONHECIDA }
+        // Sem marca de um lado, o ano é a única prova de ser o MESMO filme: tem de ser igual nos dois (ou faltar nos
+        // dois). Um lado com ano e o outro sem juntava "O Rei Leão" e "O Rei Leão (2019) [L]" (debug 20/11/2026).
+        return mesmoTitulo.firstOrNull { o -> c.versao(o) == Versao.DESCONHECIDA && ano(o) == anoA }
     }
 
     /**

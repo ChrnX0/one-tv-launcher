@@ -579,7 +579,9 @@ class SeriesActivity : Activity() {
                 }
             },
             demorou = { if (!isDestroyed) { aviso.text = getString(R.string.series_carregando); aviso.visibility = View.VISIBLE; avisoDaConta = true } },
-            fim = { if (avisoDaConta) { aviso.visibility = View.GONE; avisoDaConta = false } },
+            // pedidoPendente também aqui: o fim roda com erro ou sucesso (com erro o aplicar não roda e o pedido ficava
+            // preso, e toda conta seguinte voltava a grade ao topo; debug 20/11/2026).
+            fim = { pedidoPendente = null; if (avisoDaConta) { aviso.visibility = View.GONE; avisoDaConta = false } },
         )
     }
 
@@ -852,8 +854,6 @@ class SeriesActivity : Activity() {
                 // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
                 pedirDesenho(if (externoVem && externo?.first !== s) ESPERA_EXTERNO_MS else 0)
             }
-            // A outra versão (dublada/legendada): os episódios dela, para trocar no player sem voltar à ficha.
-            outraVersao(s)?.let { o -> PlayerCarga.fichaSerie(this, o)?.let { fo -> tela.post { if (!isDestroyed && aberta === s) outraFicha = o to fo } } }
             // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
             if (externoVem) {
                 val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
@@ -867,6 +867,9 @@ class SeriesActivity : Activity() {
                 val id = g.tmdb
                 if (f != null && id != null) tela.post { if (!isDestroyed && aberta === s) trazerEpisodiosVistos(s, f, id) }
             }
+            // A outra versão (dublada/legendada): os episódios dela, para trocar no player sem voltar à ficha. Por último:
+            // antes vinha antes da ficha de fora e a ida ao servidor atrasava ela (a ficha piscava; debug 20/11/2026).
+            outraVersao(s)?.let { o -> PlayerCarga.fichaSerie(this, o)?.let { fo -> tela.post { if (!isDestroyed && aberta === s) outraFicha = o to fo } } }
         }
     }
 

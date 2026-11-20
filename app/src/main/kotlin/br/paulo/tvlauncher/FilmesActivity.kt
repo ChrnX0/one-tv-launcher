@@ -536,7 +536,9 @@ class FilmesActivity : Activity() {
                 }
             },
             demorou = { if (!isDestroyed) { aviso.text = getString(R.string.filmes_carregando); aviso.visibility = View.VISIBLE; avisoDaConta = true } },
-            fim = { if (avisoDaConta) { aviso.visibility = View.GONE; avisoDaConta = false } },
+            // pedidoPendente também aqui: o fim roda com erro ou sucesso (com erro o aplicar não roda e o pedido ficava
+            // preso, e toda conta seguinte voltava a grade ao topo; debug 20/11/2026).
+            fim = { pedidoPendente = null; if (avisoDaConta) { aviso.visibility = View.GONE; avisoDaConta = false } },
         )
     }
     private var avisoDaConta = false
