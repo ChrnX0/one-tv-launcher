@@ -42,7 +42,9 @@ object AcordarComLg {
         }
         val f = IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) }
         if (Build.VERSION.SDK_INT >= 33) a.registerReceiver(r, f, Context.RECEIVER_NOT_EXPORTED) else a.registerReceiver(r, f)
-        if (!acesa(a)) comecar(a)
+        // Processo nasceu com a tela já apagada (atualização ou o Android matou o launcher bem na hora do sono): o
+        // SCREEN_OFF passou sem ninguém ouvir e a LG ficava ligada sem sinal (Sala, 20/11/2026 15:10). Confere agora.
+        if (!acesa(a)) { Desligamento.lgAoApagar(a); comecar(a) }
     }
 
     /**
