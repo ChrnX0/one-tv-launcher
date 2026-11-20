@@ -554,7 +554,7 @@
     <string name="home_card_filmes">Filmes</string>
     <string name="home_destaque_series">Séries da sua lista · continue de onde parou</string>
     <string name="home_destaque_filmes">Filmes da sua lista · continue de onde parou</string>
-    <string name="home_card_rede">Do computador</string>
+    <string name="home_card_rede">Rede</string>
     <string name="home_destaque_rede">Os seus vídeos, músicas e fotos</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">d \'de\' MMMM</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">Filmes · o último que abriu</string>
     <string name="home_dest_serie">Séries · está no %1$s</string>
     <string name="home_dest_tv">TV · canal %1$d</string>
-    <string name="rede_titulo">Do computador</string>
+    <string name="rede_titulo">Rede</string>
     <string name="rede_procurando">A procurar servidores de mídia na rede…</string>
     <string name="rede_nenhum">Nenhum servidor de mídia ligado na rede agora. Adicione um abaixo: Plex e Jellyfin entram com a sua conta; pasta do PC ou do NAS, com o endereço.</string>
     <string name="rede_secao_seus">Seus servidores</string>
