@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">इंटरनेट नहीं है</string>
+    <string name="observer_no_internet_text">इसके लौटने तक वीडियो रुक सकते हैं।</string>
+    <string name="observer_slow_internet_title">इंटरनेट धीमा है</string>
+    <string name="observer_slow_internet_text">जवाब में %1$s ms लग रहे हैं। वीडियो लोड होने के लिए रुक सकते हैं।</string>
+    <string name="observer_weak_wifi_title">Wi-Fi कमज़ोर है</string>
+    <string name="observer_weak_wifi_text">सिग्नल %1$s dBm है। राउटर को टीवी के पास रखने से मदद मिलती है।</string>
+    <string name="observer_low_memory_title">मेमोरी लगभग भर गई</string>
+    <string name="observer_low_memory_text">सिर्फ़ %1$s MB खाली है। ऐप बंद होकर फिर खुल सकते हैं।</string>
+    <string name="observer_memory_pressure_title">टीवी पर बहुत भार है</string>
+    <string name="observer_memory_pressure_text">Android जगह बनाने के लिए ऐप बंद कर रहा है।</string>
+    <string name="observer_slow_home_title">होम स्क्रीन धीमी है</string>
+    <string name="observer_slow_home_text">%1$s%% फ़्रेम देर से आए।</string>
+    <string name="observer_low_disk_title">स्टोरेज लगभग भर गई</string>
+    <string name="observer_low_disk_text">सिर्फ़ %1$s MB बचा है। सेव करना विफल हो सकता है।</string>
+</resources>

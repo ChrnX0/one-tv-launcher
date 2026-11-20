@@ -133,6 +133,9 @@ object SofyMotion {
     /** Os olhos em [ms] (a última troca até ali). */
     fun faceAt(c: Clip, ms: Long): Face = c.faces.lastOrNull { it.atMs <= ms } ?: c.faces.first()
 
+    /** A boca enquanto ela fala: aberta "o", fechada "-" (ASCII, como o resto do rosto). */
+    fun talkingMouth(open: Boolean): String = if (open) "o" else "-"
+
     /** A pose de uma parte em [ms]: soma das trilhas dessa parte (antes de começar = primeiro ponto; depois = último). */
     fun poseAt(c: Clip, p: Part, ms: Long): Key {
         var rot = 0f; var tx = 0f; var ty = 0f; var sx = 1f; var sy = 1f

@@ -40,6 +40,12 @@ class SofyDrawable(
     private var animator: ValueAnimator? = null
     private var alpha255 = 255
 
+    /** Falando (SofyVoice): a boca alterna "o" e "-" a cada palavra; os olhos ficam os da expressão. */
+    var talking = false
+        set(v) { field = v; aberta = v; invalidateSelf() }
+    private var aberta = false
+    fun word() { if (talking) { aberta = !aberta; invalidateSelf() } }
+
     private val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
     private val stroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND
@@ -115,7 +121,7 @@ class SofyDrawable(
         c.drawRoundRect(r, 15.75f, 15.75f, stroke)
 
         // Rosto escrito na tela (a boca só quando a expressão tem).
-        val face = SofyMotion.faceAt(clip, ms)
+        val face = SofyMotion.faceAt(clip, ms).let { if (talking) it.copy(mouth = SofyMotion.talkingMouth(aberta)) else it }
         glyph.alpha = a
         glyph.textSize = if (face.eyes.length > 3) 20f else 22f
         glyph.letterSpacing = 0.1f

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">Нет интернета</string>
+    <string name="observer_no_internet_text">Видео могут остановиться, пока он не вернётся.</string>
+    <string name="observer_slow_internet_title">Медленный интернет</string>
+    <string name="observer_slow_internet_text">Ответ идёт %1$s мс. Видео могут вставать на загрузку.</string>
+    <string name="observer_weak_wifi_title">Слабый Wi-Fi</string>
+    <string name="observer_weak_wifi_text">Сигнал %1$s дБм. Роутер ближе к телевизору поможет.</string>
+    <string name="observer_low_memory_title">Память почти заполнена</string>
+    <string name="observer_low_memory_text">Свободно всего %1$s МБ. Приложения могут закрываться.</string>
+    <string name="observer_memory_pressure_title">Телевизор перегружен</string>
+    <string name="observer_memory_pressure_text">Android закрывает приложения, чтобы освободить место.</string>
+    <string name="observer_slow_home_title">Главный экран тормозит</string>
+    <string name="observer_slow_home_text">%1$s%% кадров опоздали.</string>
+    <string name="observer_low_disk_title">Хранилище почти заполнено</string>
+    <string name="observer_low_disk_text">Осталось %1$s МБ. Сохранение может не пройти.</string>
+</resources>

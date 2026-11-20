@@ -52,6 +52,9 @@ import java.io.File
  * Sofy (20/11/2026, SofyDrawable):
  *  - sofy [--es expr HAPPY|QUESTION|…] [--es balao aspas|musica]   prévia: a Sofy aparece na pílula com a expressão
  *    e o movimento dela (sem histórico; só para conferir o desenho na TV). Sem expr: lista as expressões.
+ *    Com --es texto "...": ela também fala esse texto (boca mexendo) mesmo com a chave desligada.
+ *  - sofy_voz [--ez ligar true|false]   mede a voz da TV (motor, língua, vozes) e mostra/troca a chave "Sofy fala".
+ *  - sofy_olhar            passa a fila de recados do Observador pela regra agora (SofyTv.present)
  * Volume da LG pela rede (14/11/2026, ideia 49; ver VolumeLg). Demoram (rede): o adb espera a resposta.
  *  - lg_procurar --es ip <qualquer IP da casa>   lista as LG da mesma rede /24
  *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
@@ -66,6 +69,8 @@ import java.io.File
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
         "sofy" -> previaSofy(ctx, i)
+        "sofy_voz" -> vozSofy(ctx, i)
+        "sofy_olhar" -> { SofyTv.present(ctx); SofyTv.now(ctx.applicationContext).let { "olhou; falas nas últimas 24 h: ${it.shownAt.size}" } }
         "teclas_armar" -> { TesteTeclas.armar(); "armado por ${TesteTeclas.JANELA_MS / 1000} s" }
         "teclas" -> TesteTeclas.json().toString()
         "teclas_tela" -> abrir(ctx, TesteTeclasActivity::class.java)
@@ -263,8 +268,20 @@ object ComandosExtras {
         val nome = i.getStringExtra("expr") ?: return SofyPolicy.Expression.entries.joinToString(" ") { it.name }
         val e = SofyPolicy.Expression.entries.firstOrNull { it.name.equals(nome, true) } ?: return "expressão desconhecida: $nome"
         val balao = when (i.getStringExtra("balao")) { "aspas" -> SofyDrawable.QUOTE; "musica" -> SofyDrawable.MUSIC; else -> null }
-        val r = AvisoTv.mostrar(ctx, "Sofy", "${e.name.lowercase()}  ${e.eyes} ${e.mouth}".trim(), 6, false, false,
-            icone = SofyDrawable(ctx.applicationContext, e, balao), historico = false)
+        val face = SofyDrawable(ctx.applicationContext, e, balao)
+        val fala = i.getStringExtra("texto")
+        val r = AvisoTv.mostrar(ctx, "Sofy", fala ?: "${e.name.lowercase()}  ${e.eyes} ${e.mouth}".trim(),
+            if (fala != null) SofyPolicy.secondsOnScreen(fala) + 2 else 6, false, false, icone = face, historico = false)
+        if (fala != null && r == AvisoTv.Resultado.MOSTRADO) SofyVoice.say(ctx, SofyPolicy.Voice.SPEAK, fala, face)
         return "${e.name}: $r"
+    }
+
+    private fun vozSofy(ctx: Context, i: Intent): String {
+        if (i.hasExtra("ligar")) SofyVoice.setVoiceOn(ctx, i.getBooleanExtra("ligar", false))
+        val fim = java.util.concurrent.CountDownLatch(1)
+        var r = org.json.JSONObject()
+        SofyVoice.status(ctx) { r = it; fim.countDown() }
+        if (!fim.await(8, java.util.concurrent.TimeUnit.SECONDS)) r.put("error", "o motor de voz não respondeu em 8 s")
+        return r.toString()
     }
 }

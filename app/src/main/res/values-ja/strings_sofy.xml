@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">インターネットに接続できません</string>
+    <string name="observer_no_internet_text">戻るまで動画が止まることがあります。</string>
+    <string name="observer_slow_internet_title">インターネットが遅い</string>
+    <string name="observer_slow_internet_text">応答に %1$s ms かかっています。動画が読み込みで止まることがあります。</string>
+    <string name="observer_weak_wifi_title">Wi-Fi が弱い</string>
+    <string name="observer_weak_wifi_text">電波は %1$s dBm です。ルーターをテレビの近くに置くと改善します。</string>
+    <string name="observer_low_memory_title">メモリがほぼいっぱい</string>
+    <string name="observer_low_memory_text">空きは %1$s MB だけです。アプリが閉じることがあります。</string>
+    <string name="observer_memory_pressure_title">テレビに負荷がかかっています</string>
+    <string name="observer_memory_pressure_text">Android が空きを作るためにアプリを閉じています。</string>
+    <string name="observer_slow_home_title">ホーム画面が重い</string>
+    <string name="observer_slow_home_text">%1$s%% のフレームが遅れました。</string>
+    <string name="observer_low_disk_title">ストレージがほぼいっぱい</string>
+    <string name="observer_low_disk_text">残り %1$s MB です。保存に失敗することがあります。</string>
+</resources>

@@ -71,6 +71,7 @@ declare -A FONTES=(
   [ObserverTrialTest]="ObserverTrial"
   [SofyPolicyTest]="SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [SofyMotionTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
+  [SofyStringsTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [OnDemandTest]="OnDemand"
 )
 
