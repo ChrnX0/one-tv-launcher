@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">コピー後にここから削除</string>
     <string name="grv_apagar_depois_explica">クラウドへのコピーが終わったら USB やフォルダを空けます</string>
     <string name="grv_sem_nuvem">「ネットワーク」で OneDrive・Dropbox・Box にログインするか、「自動バックアップ」で Google Drive を接続してください。</string>
+    <string name="grv_memoria_tv">テレビのストレージ</string>
 </resources>

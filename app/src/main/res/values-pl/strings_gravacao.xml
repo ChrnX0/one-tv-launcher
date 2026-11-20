@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Usuń tutaj po skopiowaniu</string>
     <string name="grv_apagar_depois_explica">Zwalnia pendrive lub folder, gdy kopia w chmurze jest gotowa</string>
     <string name="grv_sem_nuvem">Zaloguj się do OneDrive, Dropbox lub Box w Sieci albo połącz Google Drive w Automatycznej kopii.</string>
+    <string name="grv_memoria_tv">Pamięć telewizora</string>
 </resources>

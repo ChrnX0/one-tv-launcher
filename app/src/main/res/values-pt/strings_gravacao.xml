@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Apagar daqui depois de copiar</string>
     <string name="grv_apagar_depois_explica">Libera o pendrive ou a pasta quando a cópia na nuvem termina</string>
     <string name="grv_sem_nuvem">Entre no OneDrive, Dropbox ou Box em Rede, ou conecte o Google Drive em Backup automático.</string>
+    <string name="grv_memoria_tv">Memória da TV</string>
 </resources>

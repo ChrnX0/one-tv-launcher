@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">복사 후 여기서 삭제</string>
     <string name="grv_apagar_depois_explica">클라우드 복사가 끝나면 USB나 폴더 공간을 비웁니다</string>
     <string name="grv_sem_nuvem">네트워크에서 OneDrive, Dropbox 또는 Box에 로그인하거나 자동 백업에서 Google Drive를 연결하세요.</string>
+    <string name="grv_memoria_tv">TV 저장공간</string>
 </resources>

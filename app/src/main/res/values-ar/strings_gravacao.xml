@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">الحذف من هنا بعد النسخ</string>
     <string name="grv_apagar_depois_explica">يُفرغ الذاكرة أو المجلد عند اكتمال النسخة السحابية</string>
     <string name="grv_sem_nuvem">سجّل الدخول إلى OneDrive أو Dropbox أو Box في الشبكة، أو اربط Google Drive في النسخ الاحتياطي التلقائي.</string>
+    <string name="grv_memoria_tv">ذاكرة التلفاز</string>
 </resources>

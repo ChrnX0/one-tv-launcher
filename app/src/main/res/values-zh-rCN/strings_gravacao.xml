@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">复制后从这里删除</string>
     <string name="grv_apagar_depois_explica">云端副本完成后释放 U 盘或文件夹空间</string>
     <string name="grv_sem_nuvem">请在“网络”中登录 OneDrive、Dropbox 或 Box，或在“自动备份”中连接 Google Drive。</string>
+    <string name="grv_memoria_tv">电视存储空间</string>
 </resources>

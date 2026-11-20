@@ -89,6 +89,18 @@ object GravacaoDestino {
 
     private const val USB = "usb:"
     private const val CONTA = "conta:"
+    private const val INTERNA = "interna"
+
+    /**
+     * A memória da TV só vira opção com bastante espaço (20/11/2026). Num Chromecast comum (1,8 GB livres) ela nunca
+     * aparece; com o pendrive formatado como memória da TV (Android "armazenamento interno adotado", que leva junto a
+     * área compartilhada) passa a ter dezenas de GB e aparece. Uma hora de canal ocupa até 3,6 GB.
+     */
+    const val MINIMO_INTERNA = 8L * 1024 * 1024 * 1024
+
+    /** A área compartilhada da TV (/sdcard), se tiver espaço para gravar. */
+    private fun interna(): File? = runCatching { Environment.getExternalStorageDirectory() }.getOrNull()
+        ?.takeIf { runCatching { it.usableSpace }.getOrDefault(0L) >= MINIMO_INTERNA }
 
     /**
      * Todos os lugares de agora (20/11/2026, pedido do dono: escolher na hora de gravar): cada pendrive/disco ligado com
@@ -102,7 +114,8 @@ object GravacaoDestino {
                 .map { Opcao(USB + it.directory!!.absolutePath, it.getDescription(ctx)) }
         }.getOrDefault(emptyList())
         val rede = MidiaArmazem.contas(ctx).filter { Pastas.gravavel(it) }.map { Opcao(CONTA + it.id, it.nome) }
-        return GravacaoRegras.ordenarOpcoes(usb + rede, ultimo(ctx)) { it.id }
+        val tv = listOfNotNull(interna()?.let { Opcao(INTERNA, ctx.getString(R.string.grv_memoria_tv)) })
+        return GravacaoRegras.ordenarOpcoes(usb + tv + rede, ultimo(ctx)) { it.id }
     }
 
     /**
@@ -114,8 +127,9 @@ object GravacaoDestino {
         pendrive(ctx)?.let { (nome, raiz) ->
             if (PainelArquivos.garantirAcesso(ctx.applicationContext)) return Local(nome, File(raiz, GravacaoRegras.PASTA), USB + raiz.absolutePath)
         }
-        val conta = pastaRede(ctx).ifEmpty { return null }.let { MidiaArmazem.conta(ctx, it) }?.takeIf { Pastas.gravavel(it) } ?: return null
-        return Rede(conta)
+        pastaRede(ctx).takeIf { it.isNotEmpty() }?.let { MidiaArmazem.conta(ctx, it) }?.takeIf { Pastas.gravavel(it) }?.let { return Rede(it) }
+        // Último recurso: a memória da TV, só quando tem muito espaço (pendrive adotado como memória da TV).
+        return abrirEscolhido(ctx, INTERNA)
     }
 
     private fun abrirEscolhido(ctx: Context, id: String): Destino? = when {
@@ -125,6 +139,8 @@ object GravacaoDestino {
                 ?.firstOrNull { it.state == Environment.MEDIA_MOUNTED && it.directory?.absolutePath == raiz.absolutePath }
             if (vol != null && PainelArquivos.garantirAcesso(ctx.applicationContext)) Local(vol.getDescription(ctx), File(raiz, GravacaoRegras.PASTA), id) else null
         }
+        id == INTERNA -> interna()?.takeIf { PainelArquivos.garantirAcesso(ctx.applicationContext) }
+            ?.let { Local(ctx.getString(R.string.grv_memoria_tv), File(it, GravacaoRegras.PASTA), INTERNA) }
         id.startsWith(CONTA) -> MidiaArmazem.conta(ctx, id.removePrefix(CONTA))?.takeIf { Pastas.gravavel(it) }?.let { Rede(it) }
         else -> null
     }
@@ -151,6 +167,7 @@ object GravacaoDestino {
     /** Descrição sem abrir conexão (para a linha "Onde grava" da tela). */
     fun descricao(ctx: Context): String? = pendrive(ctx)?.first
         ?: pastaRede(ctx).takeIf { it.isNotEmpty() }?.let { id -> MidiaArmazem.conta(ctx, id)?.nome }
+        ?: interna()?.let { ctx.getString(R.string.grv_memoria_tv) }
 
     private class Local(override val nome: String, private val dir: File, override val id: String) : Destino {
         private fun arquivo(n: String): File {

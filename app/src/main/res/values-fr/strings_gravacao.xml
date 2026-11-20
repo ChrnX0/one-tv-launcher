@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Supprimer ici après la copie</string>
     <string name="grv_apagar_depois_explica">Libère la clé USB ou le dossier une fois la copie cloud terminée</string>
     <string name="grv_sem_nuvem">Connectez OneDrive, Dropbox ou Box dans Réseau, ou Google Drive dans Sauvegarde automatique.</string>
+    <string name="grv_memoria_tv">Mémoire de la TV</string>
 </resources>

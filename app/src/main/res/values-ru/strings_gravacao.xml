@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Удалять здесь после копирования</string>
     <string name="grv_apagar_depois_explica">Освобождает флешку или папку, когда копия в облаке готова</string>
     <string name="grv_sem_nuvem">Войдите в OneDrive, Dropbox или Box в разделе «Сеть» или подключите Google Drive в «Автоматическом резервном копировании».</string>
+    <string name="grv_memoria_tv">Память ТВ</string>
 </resources>

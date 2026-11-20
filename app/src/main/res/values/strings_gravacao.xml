@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Delete here after copying</string>
     <string name="grv_apagar_depois_explica">Frees the USB drive or folder once the cloud copy is complete</string>
     <string name="grv_sem_nuvem">Sign in to OneDrive, Dropbox or Box in On the network, or connect Google Drive in Automatic backup.</string>
+    <string name="grv_memoria_tv">TV storage</string>
 </resources>

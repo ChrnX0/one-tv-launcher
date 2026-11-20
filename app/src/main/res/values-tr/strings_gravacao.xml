@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Kopyaladıktan sonra burada sil</string>
     <string name="grv_apagar_depois_explica">Bulut kopyası bitince USB belleği veya klasörü boşaltır</string>
     <string name="grv_sem_nuvem">Ağ bölümünde OneDrive, Dropbox veya Box\'a giriş yapın ya da Otomatik yedeklemede Google Drive\'ı bağlayın.</string>
+    <string name="grv_memoria_tv">TV belleği</string>
 </resources>

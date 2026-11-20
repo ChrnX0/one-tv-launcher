@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Elimina qui dopo la copia</string>
     <string name="grv_apagar_depois_explica">Libera la chiavetta o la cartella quando la copia nel cloud è completa</string>
     <string name="grv_sem_nuvem">Accedi a OneDrive, Dropbox o Box in Rete, o collega Google Drive in Backup automatico.</string>
+    <string name="grv_memoria_tv">Memoria della TV</string>
 </resources>

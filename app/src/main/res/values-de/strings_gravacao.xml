@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Hier nach dem Kopieren löschen</string>
     <string name="grv_apagar_depois_explica">Gibt USB-Stick oder Ordner frei, sobald die Cloud-Kopie fertig ist</string>
     <string name="grv_sem_nuvem">Melde dich unter Netzwerk bei OneDrive, Dropbox oder Box an oder verbinde Google Drive unter Automatische Sicherung.</string>
+    <string name="grv_memoria_tv">TV-Speicher</string>
 </resources>

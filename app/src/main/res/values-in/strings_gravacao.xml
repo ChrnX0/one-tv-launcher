@@ -87,4 +87,5 @@
     <string name="grv_apagar_depois">Hapus di sini setelah disalin</string>
     <string name="grv_apagar_depois_explica">Mengosongkan flashdisk atau folder setelah salinan cloud selesai</string>
     <string name="grv_sem_nuvem">Masuk ke OneDrive, Dropbox, atau Box di Jaringan, atau hubungkan Google Drive di Cadangan otomatis.</string>
+    <string name="grv_memoria_tv">Memori TV</string>
 </resources>
