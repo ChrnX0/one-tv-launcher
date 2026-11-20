@@ -123,6 +123,7 @@ class VigiaDesfazer private constructor(
     private val rotulo: String,
     private val categorias: Set<Categoria>?,
     private val aoDesfazer: () -> Unit,
+    private val mostrarBarra: Boolean,
 ) : SharedPreferences.OnSharedPreferenceChangeListener {
     private val ui = Handler(Looper.getMainLooper())
     private val fotos = HashMap<String, Map<String, *>>()
@@ -130,9 +131,14 @@ class VigiaDesfazer private constructor(
     private var ativa = false
 
     companion object {
-        fun ligar(activity: Activity, rotulo: String, categorias: Set<Categoria>? = null,
+        /**
+         * [mostrarBarra] = false: a mudança só entra no Diário ("Mudanças recentes"), sem o aviso que pega o foco.
+         * Nas Configurações cada linha já mostra o próprio valor e outro OK volta atrás; o aviso tirava o foco da opção
+         * a cada troca (Paulo, 20/11/2026; Material "snackbar não rouba o foco", WCAG 3.2.2 "mudar um ajuste não muda o contexto").
+         */
+        fun ligar(activity: Activity, rotulo: String, categorias: Set<Categoria>? = null, mostrarBarra: Boolean = true,
                   aoDesfazer: () -> Unit = { activity.recreate() }): VigiaDesfazer {
-            val v = VigiaDesfazer(activity, rotulo, categorias, aoDesfazer)
+            val v = VigiaDesfazer(activity, rotulo, categorias, aoDesfazer, mostrarBarra)
             activity.application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
                 override fun onActivityResumed(a: Activity) { if (a === activity) v.iniciar() }
                 override fun onActivityPaused(a: Activity) { if (a === activity) v.parar() }
@@ -189,7 +195,7 @@ class VigiaDesfazer private constructor(
         mudancas.groupBy { DesfazerRegras.categoria(it.prefs, it.chave)!! }
             .filterKeys { categorias == null || it in categorias }
             .forEach { (cat, ms) -> Desfazer.registrar(ctx, cat, rotulo, ms)?.let { ultimo = it } }
-        ultimo?.let { BarraDesfazer.mostrar(activity, it, aoDesfazer) }
+        if (mostrarBarra) ultimo?.let { BarraDesfazer.mostrar(activity, it, aoDesfazer) }
     }
 }
 

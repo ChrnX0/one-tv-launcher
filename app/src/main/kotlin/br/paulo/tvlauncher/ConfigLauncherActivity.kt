@@ -114,7 +114,7 @@ class ConfigLauncherActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Elevação 2.11: toda mudança feita aqui vira um passo com "Desfazer" por 10 s (Desfazer.kt).
-        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_config)) { if (::conteudo.isInitialized) recarregarAba() }
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_config), mostrarBarra = false) { if (::conteudo.isInitialized) recarregarAba() }
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
         linhaSalva = savedInstanceState?.getInt(ESTADO_LINHA, -1) ?: -1
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
@@ -1857,12 +1857,12 @@ class ConfigLauncherActivity : Activity() {
                     val mudou = Debloat.definir(app, item.pacote, ocultar)
                     val ocultoAgora = PrivilegioDO.estaOculto(app, item.pacote)
                     // Elevação 2.11: a limpeza desfaz pela ação contrária (mostrar o que ocultou e vice-versa).
-                    val passo = if (mudou) Desfazer.registrarLimpeza(app, item.pacote, nomeDebloat(item), ocultar) else null
+                    if (mudou) Desfazer.registrarLimpeza(app, item.pacote, nomeDebloat(item), ocultar)
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
                         if (mudou) linhaApp.ligado(!ocultoAgora)
                         else linhaApp.detalhe(getString(R.string.cl_nao_mudou))
-                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
+                        // sem aviso de desfazer aqui: o foco fica na linha; a volta está no Diário e no próprio OK
                     }
                 }
             }
@@ -1898,11 +1898,11 @@ class ConfigLauncherActivity : Activity() {
                     val antes = Debloat.ocultosPorAqui(app)
                     val n = Debloat.desfazerTudo(app)
                     val voltaram = antes.filter { !PrivilegioDO.estaOculto(app, it) }
-                    val passo = Desfazer.registrar(app, DesfazerRegras.Categoria.LIMPEZA, getString(R.string.cl_mostrar_todos),
+                    Desfazer.registrar(app, DesfazerRegras.Categoria.LIMPEZA, getString(R.string.cl_mostrar_todos),
                         emptyList(), voltaram.map { DesfazerRegras.reversoDe(it, ocultou = false) })
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
-                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
+                        // sem aviso de desfazer aqui: o foco fica na linha; a volta está no Diário e no próprio OK
                         linhaDesfazer.detalhe(getString(R.string.cl_apps_de_volta, n))
                         ui.postDelayed({ if (!isDestroyed) recarregarAba() }, 1200)
                     }

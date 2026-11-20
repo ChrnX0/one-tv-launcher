@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Settings: turning on high contrast (or changing the text size or a ready-made look) keeps the focus on the same option</item>
+        <item>Settings: turning on high contrast (or changing the text size or a ready-made look) keeps the focus on the same option, and changing an option no longer shows the “Undo” notice that took the focus away (undo stays in System › Recent changes)</item>
         <item>New app name on the TV (tv.sofaly.launcher): settings, add-ons, plugins and the panel move over by themselves, with no reset</item>
         <item>One colour system: orange only marks the brand, the focus and progress; secondary text in soft white; every world keeps its own colour and drawing in every top-bar style</item>
         <item>Movies and Series get the same blue background as the home screen; “On the network” is now “From the computer”, with a folder icon</item>

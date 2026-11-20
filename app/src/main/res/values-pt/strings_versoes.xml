@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Configurações: ligar o alto contraste (ou trocar o tamanho do texto ou o visual pronto) mantém o foco na mesma opção</item>
+        <item>Configurações: ligar o alto contraste (ou trocar o tamanho do texto ou o visual pronto) mantém o foco na mesma opção, e trocar uma opção não mostra mais o aviso “Desfazer” que tirava o foco (desfazer continua em Sistema › Mudanças recentes)</item>
         <item>Novo nome do app na TV (tv.sofaly.launcher): ajustes, add-ons, plugins e o painel passam sozinhos, sem reset</item>
         <item>Um sistema de cores: o laranja só marca a marca, o foco e o progresso; texto secundário em branco suave; cada mundo tem a sua cor e o seu desenho em todos os estilos da barra</item>
         <item>Filmes e Séries ganham o mesmo fundo azul da tela inicial; “Na rede” virou “Do computador”, com ícone de pasta</item>
