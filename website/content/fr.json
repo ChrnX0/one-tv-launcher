@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Thèmes et fonds",
-      "Sombre, avec l'image de ce qui a le focus. Galerie, avec un tableau du Met chaque jour. Ciel, avec satellite et carte. Ou votre propre fond, photo ou vidéo.",
+      "Sombre, avec l'image de ce qui a le focus. Galerie, avec un tableau du Met chaque jour. Ciel, avec satellite et carte. Ou votre propre fond, photo ou vidéo. Accepte aussi les fonds de plugin, comme les images aériennes d’Overflight.",
       "Sombre, Galerie et Ciel dans le Basique ; les autres dans le Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Les cartes s'affichent à la fin de Regarder."
     ],
     "network-library": [
-      "Sur le réseau",
+      "Depuis l'ordinateur",
       "Vidéos, musique et photos de Plex, Jellyfin, Emby, dossiers du PC ou du NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP et clé USB.",
       "Les serveurs allumés et la clé apparaissent seuls ; les autres via Ajouter."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Fiches complètes",
-      "Affiche, note, distribution, bande-annonce, classification et collection du film sur une belle fiche en gros caractères.",
+      "Affiche, note, distribution, bande-annonce, classification et collection du film sur une belle fiche en gros caractères. Avec « Qui est cet acteur ? » : photo, personnage et autres films.",
       "OK sur un film ou une série."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Jouer sur le PC de la chambre",
-      "La TV réveille l'ordinateur par le réseau, attend sa réponse et ouvre Moonlight ou Steam Link.",
+      "La TV réveille l'ordinateur par le réseau, attend sa réponse et ouvre Moonlight ou Steam Link. Réveiller le PC par le réseau marche aussi hors de Jouer, depuis un raccourci de l'écran d'accueil.",
       "Enregistrez l'ordinateur une fois dans le panneau."
     ],
     "network-test": [

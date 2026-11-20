@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Temi e sfondi",
-      "Scuro, con l'immagine di ciò che è selezionato. Galleria, con un quadro del Met ogni giorno. Cielo, con satellite e mappa. Oppure uno sfondo tuo, foto o video.",
+      "Scuro, con l'immagine di ciò che è selezionato. Galleria, con un quadro del Met ogni giorno. Cielo, con satellite e mappa. Oppure uno sfondo tuo, foto o video. Accetta anche sfondi dei plugin, come le riprese aeree di Overflight.",
       "Scuro, Galleria e Cielo in Basic; gli altri in Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Le schede appaiono in fondo a Guarda."
     ],
     "network-library": [
-      "In rete",
+      "Dal computer",
       "Video, musica e foto da Plex, Jellyfin, Emby, cartelle del PC o del NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP e chiavette USB.",
       "I server accesi e le chiavette appaiono da soli; il resto va in Aggiungi."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Schede complete dei film",
-      "Locandina, voto, cast, trailer, classificazione per età e la saga del film in una bella pagina, con testo grande.",
+      "Locandina, voto, cast, trailer, classificazione per età e la saga del film in una bella pagina, con testo grande. Con “Chi è quell’attore?”: foto, personaggio e altri lavori.",
       "OK su un film o una serie."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Gioca sul PC al piano di sopra",
-      "La TV sveglia il computer via rete, aspetta che risponda e apre Moonlight o Steam Link.",
+      "La TV sveglia il computer via rete, aspetta che risponda e apre Moonlight o Steam Link. Svegliare il PC dalla rete funziona anche fuori da Giocare, con una scorciatoia nella schermata iniziale.",
       "Salva il computer una volta nel pannello web."
     ],
     "network-test": [

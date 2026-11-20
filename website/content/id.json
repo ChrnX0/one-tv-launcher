@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Tema dan latar",
-      "Gelap, dengan gambar dari yang sedang disorot. Galeri, dengan lukisan dari The Met setiap hari. Langit, dengan satelit dan peta. Atau latar Anda sendiri, foto atau video.",
+      "Gelap, dengan gambar dari yang sedang disorot. Galeri, dengan lukisan dari The Met setiap hari. Langit, dengan satelit dan peta. Atau latar Anda sendiri, foto atau video. Latar dari plugin juga bisa, seperti rekaman udara dari Overflight.",
       "Gelap, Galeri, dan Langit di Basic; lainnya di Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Kartu muncul di akhir Tonton."
     ],
     "network-library": [
-      "Di jaringan",
+      "Dari komputer",
       "Video, musik, dan foto dari Plex, Jellyfin, Emby, folder PC atau NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP, dan flashdisk.",
       "Server yang menyala dan flashdisk muncul sendiri; sisanya lewat Tambah."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Halaman film lengkap",
-      "Poster, rating, pemeran, trailer, rating usia, dan koleksi film dalam halaman yang indah, dengan huruf besar.",
+      "Poster, rating, pemeran, trailer, rating usia, dan koleksi film dalam halaman yang indah, dengan huruf besar. Dengan “Siapa aktor itu?”: foto, peran, dan karya lainnya.",
       "OK pada film atau serial."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Main di PC lantai atas",
-      "TV membangunkan komputer lewat jaringan, menunggu jawabannya, lalu membuka Moonlight atau Steam Link.",
+      "TV membangunkan komputer lewat jaringan, menunggu jawabannya, lalu membuka Moonlight atau Steam Link. Membangunkan PC lewat jaringan juga bisa di luar Main, dari pintasan di layar utama.",
       "Simpan komputer sekali di panel web."
     ],
     "network-test": [

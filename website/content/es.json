@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Temas y fondos",
-      "Oscuro, con el arte de lo que está en foco. Galería, con un cuadro del Met cada día. Cielo, con satélite y mapa. O un fondo tuyo, foto o video.",
+      "Oscuro, con el arte de lo que está en foco. Galería, con un cuadro del Met cada día. Cielo, con satélite y mapa. O un fondo tuyo, foto o video. También acepta fondos de plugins, como las imágenes aéreas de Overflight.",
       "Oscuro, Galería y Cielo en el Básico; los demás en el Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Aparecen al final de Ver."
     ],
     "network-library": [
-      "En la red",
+      "Desde el ordenador",
       "Videos, música y fotos de Plex, Jellyfin, Emby, carpetas del PC o del NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP y pendrive.",
       "Los servidores encendidos y el pendrive aparecen solos; los demás entran en Añadir."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Fichas completas",
-      "Póster, nota, reparto, tráiler, clasificación y la colección de la película en una ficha bonita, con letra grande.",
+      "Póster, nota, reparto, tráiler, clasificación y la colección de la película en una ficha bonita, con letra grande. Con “¿Quién es ese actor?”: foto, personaje y otros trabajos.",
       "OK en una película o serie."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Jugar en el PC del cuarto",
-      "La TV despierta el ordenador por la red, espera a que responda y abre Moonlight o Steam Link.",
+      "La TV despierta el ordenador por la red, espera a que responda y abre Moonlight o Steam Link. Despertar el PC por la red también funciona fuera de Jugar, con un atajo en la pantalla de inicio.",
       "Guarda el ordenador una vez en el panel."
     ],
     "network-test": [
