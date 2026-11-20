@@ -63,6 +63,10 @@ class SaudeAcessoTest {
         assertFalse(SaudeRegras.lugarSeguro("com.netflix.ninja", "com.netflix.ninja.MainActivity", p))
         assertFalse(SaudeRegras.lugarSeguro(Home.LAUNCHERX, "x", p))
         assertFalse(SaudeRegras.lugarSeguro(null, null, p))
+        // Pacote novo (19/11/2026): a classe continua no namespace do código.
+        val n = "tv.sofaly.launcher"
+        assertTrue(SaudeRegras.lugarSeguro(n, "br.paulo.tvlauncher.MainActivity", n))
+        assertFalse(SaudeRegras.lugarSeguro(n, "$n.MainActivity", n))
     }
 
     @Test fun jsonDoItem() {

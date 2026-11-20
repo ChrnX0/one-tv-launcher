@@ -31,16 +31,16 @@ if($LASTEXITCODE -ne 0){ "INSTALL FALHOU: pare aqui. NAO desinstale o launcher (
 # Compilação AOT (04/11/2026). O Android 14 força o app de HOME para "speed-profile" (ignora o -m speed) e, sem perfil,
 # cai em "verify". Por isso: 1) pede ao profileinstaller do app que grave o perfil embutido (baseline-prof.txt);
 # 2) compila com ele. Vale para o release. No debug (debuggable) o ART sempre usa verify, e este passo não faz mal.
-# Conferir: adb shell "dumpsys package dexopt | grep -A2 br.paulo.tvlauncher"  ->  status=speed-profile
-& $adb -s $s shell "am broadcast -a androidx.profileinstaller.action.INSTALL_PROFILE -n br.paulo.tvlauncher/androidx.profileinstaller.ProfileInstallReceiver"
-& $adb -s $s shell "cmd package compile -m speed-profile -f br.paulo.tvlauncher"
+# Conferir: adb shell "dumpsys package dexopt | grep -A2 tv.sofaly.launcher"  ->  status=speed-profile
+& $adb -s $s shell "am broadcast -a androidx.profileinstaller.action.INSTALL_PROFILE -n tv.sofaly.launcher/androidx.profileinstaller.ProfileInstallReceiver"
+& $adb -s $s shell "cmd package compile -m speed-profile -f tv.sofaly.launcher"
 # O código compilado só vale num processo novo, e o shell não consegue matar o launcher (Device Owner + acessibilidade):
 # ele mesmo se reinicia por este comando (só adb, DUMP). O sistema sobe a HOME e religa a acessibilidade sozinho.
-& $adb -s $s shell "am broadcast -a br.paulo.tvlauncher.REINICIAR -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver"
+& $adb -s $s shell "am broadcast -a br.paulo.tvlauncher.REINICIAR -n tv.sofaly.launcher/br.paulo.tvlauncher.ControleShizukuAdbReceiver"
 Start-Sleep 6
-& $adb -s $s shell "dumpsys package dexopt | grep -A2 '\[br.paulo.tvlauncher\]' | tail -1"
+& $adb -s $s shell "dumpsys package dexopt | grep -A2 '\[tv.sofaly.launcher\]' | tail -1"
 # Abre a NOSSA HOME pelo nome: com o launcherx do Google ativo, o HOME genérico passa antes pela tela dele (ver Home.kt).
-& $adb -s $s shell "am start -a android.intent.action.MAIN -c android.intent.category.HOME -n br.paulo.tvlauncher/.MainActivity"
+& $adb -s $s shell "am start -a android.intent.action.MAIN -c android.intent.category.HOME -n tv.sofaly.launcher/br.paulo.tvlauncher.MainActivity"
 Start-Sleep 2
 1..5 | % { & $adb -s $s shell "input keyevent DPAD_RIGHT"; Start-Sleep -Milliseconds 300 }
 & $adb -s $s shell "input keyevent DPAD_UP"

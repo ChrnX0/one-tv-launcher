@@ -240,7 +240,7 @@ object SaudeRegras {
      * tem o player de TV ao vivo, filmes e séries, por isso a classe precisa ser a MainActivity.
      */
     fun lugarSeguro(pacote: String?, classe: String?, nossoPacote: String): Boolean =
-        pacote == nossoPacote && classe == "$nossoPacote.MainActivity"
+        pacote == nossoPacote && classe == AppIdentity.className("MainActivity")
 
     fun estado(item: Item): String = when (item.ok) { true -> "ok"; false -> "fora"; null -> "desligado" }
 

@@ -8,6 +8,10 @@
 
     <!-- Trailer (TrailerTv.kt): fechar o YouTube que ficou em segundo plano quando não há o shell próprio. Permissão comum. -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!-- Troca de pacote (19/11/2026, PackageMigration.kt): só os dois apps da troca, com a NOSSA chave, conversam pelo
+         MigrationProvider. Nível assinatura: nenhum outro app recebe esta permissão. Os dois apps a declaram (mesma chave). -->
+    <permission android:name="tv.sofaly.permission.MIGRATION" android:protectionLevel="signature" />
+    <uses-permission android:name="tv.sofaly.permission.MIGRATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- A biblioteca do Shizuku (módulo provider) traz o pedido da permissão dos CLIENTES e a marca V3_SUPPORT. O launcher é
          o gerente, não cliente: sem isto ele apareceria na lista de apps do app Shizuku oficial, se instalado. -->
@@ -85,6 +89,9 @@
     <!-- Watch Next dos outros apps (WatchNextTv, degrau 1): só leitura; diz se a fileira "Continuar" é possível. -->
     <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
     <queries>
+        <!-- Troca de pacote (PackageMigration.kt): os dois nomes deste launcher precisam se enxergar. -->
+        <package android:name="tv.sofaly.launcher" />
+        <package android:name="br.paulo.tvlauncher" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
@@ -957,8 +964,16 @@
                 android:resource="@xml/device_admin" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.TRANSFER_OWNERSHIP_COMPLETE" />
             </intent-filter>
         </receiver>
+        <!-- Troca de pacote (PackageMigration.kt): processo próprio (nada do launcher sobe nele) e permissão de assinatura. -->
+        <provider
+            android:name=".MigrationProvider"
+            android:authorities="${applicationId}.migration"
+            android:exported="true"
+            android:process=":migration"
+            android:permission="tv.sofaly.permission.MIGRATION" />
         <!-- Resposta do PackageInstaller para o Atualizador. exported=false: só o sistema (pelo PendingIntent) chega aqui. -->
         <receiver
             android:name=".Atualizador$Resultado"

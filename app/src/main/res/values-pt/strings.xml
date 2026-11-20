@@ -455,6 +455,8 @@
     <string name="atu_pacote">Release %1$d: pacote diferente (%2$s)</string>
     <string name="atu_versao">Release %1$d: versão do APK (%2$d) não bate com a tag</string>
     <string name="atu_chave">o GitHub tem a versão %1$d, mas ela é assinada com outra chave e esta TV não aceita: esta TV se atualiza pelo PC</string>
+    <string name="atu_migracao_disponivel">versão %1$d: pronta para passar esta TV para o app novo (tv.sofaly.launcher)</string>
+    <string name="atu_migracao_instalando">instalando o app novo (%1$d); depois ele assume esta TV com todos os ajustes</string>
     <string name="atu_disponivel">versão %1$d pronta para instalar (instalada %2$d)</string>
     <string name="atu_trocou">a versão mudou desde a última procura · OK procura de novo</string>
     <string name="atu_instalando">instalando %1$d (instalada %2$d)</string>

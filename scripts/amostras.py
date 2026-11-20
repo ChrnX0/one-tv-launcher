@@ -297,7 +297,7 @@ if __name__ == "__main__":
     ap.add_argument("--porta", type=int, default=8000)
     ap.add_argument("--aparelho")
     ap.add_argument("--base")
-    ap.add_argument("--pacote", default="br.paulo.tvlauncher")
+    ap.add_argument("--pacote", default="tv.sofaly.launcher")
     o = ap.parse_args()
     if o.gerar:
         sys.exit(gerar(o.pasta))

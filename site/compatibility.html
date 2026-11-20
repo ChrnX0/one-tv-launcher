@@ -45,7 +45,7 @@ code{font-size:.9em;word-break:break-all}
 <details>
 <summary data-t="como">How to measure your own device</summary>
 <p data-t="como1">Install the launcher and use it for a day. Then open the web panel and go to <code>/api/extras/ideias/compatibilidade</code>, or run:</p>
-<p><code>adb shell am broadcast -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o compat</code></p>
+<p><code>adb shell am broadcast -n tv.sofaly.launcher/br.paulo.tvlauncher.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o compat</code></p>
 <p data-t="como2">The report holds only the model, the system version and the measurements: no serial number, account, network or name.</p>
 </details>
 <p class="data"><span data-t="atualizado">Updated</span> <span id="data"></span> · <a href="https://github.com/ChrnX0/one-tv-launcher/issues" data-t="pedir">Ask for a device</a></p>
@@ -133,7 +133,7 @@ function desenhar() {
 let tamanhos = "";
 fetch("https://api.github.com/repos/ChrnX0/one-tv-launcher/releases/latest").then(r => r.json()).then(r => {
   const mb = n => { const a = (r.assets || []).find(x => x.name === n); return a ? (a.size / 1048576).toFixed(1) + " MB" : null; };
-  const p = [mb("one-tv-launcher.apk") && "32-bit " + mb("one-tv-launcher.apk"), mb("one-tv-launcher-arm64.apk") && "64-bit " + mb("one-tv-launcher-arm64.apk")].filter(Boolean);
+  const p = [mb("sofaly-launcher.apk") && "32-bit " + mb("sofaly-launcher.apk"), mb("sofaly-launcher-arm64.apk") && "64-bit " + mb("sofaly-launcher-arm64.apk")].filter(Boolean);
   if (p.length) { tamanhos = p.join(" · ") + " (v" + String(r.tag_name).replace(/^v/, "") + ")"; desenhar(); }
 }).catch(() => {});
 

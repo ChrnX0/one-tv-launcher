@@ -74,7 +74,7 @@ object PrivilegioDO {
     private fun fixarProtetor(ctx: Context) {
         try {
             val cr = ctx.contentResolver
-            val nosso = "${ctx.packageName}/.ProtetorTela"
+            val nosso = ComponentName(ctx, ProtetorTela::class.java).flattenToShortString()   // "pacote/classe": com o pacote novo o ".ProtetorTela" curto apontava para tv.sofaly.launcher.ProtetorTela, que não existe
             if (Settings.Secure.getString(cr, "screensaver_components") != nosso) {
                 Settings.Secure.putString(cr, "screensaver_components", nosso)
                 Settings.Secure.putString(cr, "screensaver_enabled", "1")

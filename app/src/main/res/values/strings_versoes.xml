@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>New app name on the TV (tv.sofaly.launcher): settings, add-ons, plugins and the panel move over by themselves, with no reset</item>
         <item>Clearer text: “Season 1, episode 2”, “Continue from 19 min” on the movie page, Extras in sections, the Scoreboard without a repeated line</item>
         <item>Errors with a way out: without network, the phone and move-from-another-TV screens show “Try again”; so does the Forecast with no data; in Diagnostics, a failing Wi-Fi opens Wi-Fi settings</item>
         <item>Help: the QR moved out of the clock corner to beside the text; an app’s menu covers the home screen behind it better</item>
@@ -40,6 +41,7 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>pacote_novo</item>
         <item>textos_claros</item>
         <item>erro_tentar</item>
         <item>ajuda_qr</item>
@@ -60,6 +62,7 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Everything still there</item>
         <item>Clear text</item>
         <item>Try again</item>
         <item>Help QR</item>
@@ -80,6 +83,7 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>After the move to the new app name, are your home screen, add-ons, plugins, profiles and the panel PIN the same as before?</item>
         <item>For a series in Continue, does the home screen say “Season 1, episode 2” (not “T1 E2”), and a half-watched movie show “Continue · from N min” on its page?</item>
         <item>Open the Forecast with no internet (or wait for the source to fail): does a focused “Try again” button appear?</item>
         <item>In Help, is the QR beside the text, away from the clock, with the title at the same height as other screens?</item>

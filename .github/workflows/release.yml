@@ -20,6 +20,10 @@
 # - Republicar (14/11/2026, ideia 62b): o campo "commit" recompila um commit ANTIGO da main. O versionCode vem da hora da
 #   compilação, então sai MAIOR que a versão ruim e as TVs aceitam por cima (o Android não deixa voltar versão). Risco:
 #   o código antigo precisa ler o que a versão nova gravou (preferências, banco); confira o que mudou entre os dois.
+#   Commit de antes de 19/11/2026 não serve mais: ele sai com o pacote antigo e a conferência de pacote abaixo para.
+# - Pacote (19/11/2026, decisão do Paulo): o app é tv.sofaly.launcher (sofaly-launcher*.apk). "bridge" publica junto a
+#   PONTE br.paulo.tvlauncher (one-tv-launcher*.apk), que as TVs ainda no pacote antigo instalam e que passa o Device
+#   Owner e os ajustes para o app novo (PackageMigration.kt). Sem TV no pacote antigo, rode sem "bridge".
 #
 # Segredo necessário (Settings > Secrets and variables > Actions): ASSINATURA_KEYSTORE_B64 = a chave PÚBLICA do
 # projeto em base64 (+ ASSINATURA_SENHA / ASSINATURA_ALIAS se não forem os padrões). NUNCA o debug.keystore do PC de build:
@@ -41,6 +45,10 @@ on:
         description: 'Republicar: commit antigo da main para recompilar (vazio = a ponta da main)'
         type: string
         default: ''
+      bridge:
+        description: 'Também a ponte br.paulo.tvlauncher (one-tv-launcher*.apk): só enquanto houver TV no pacote antigo'
+        type: boolean
+        default: false
 
 # Mínimo para todos (PR inclusive): só ler. Só o job "publicar" (main, à mão) ganha a escrita para criar o Release.
 permissions:
@@ -139,22 +147,34 @@ jobs:
           OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.OPENSUBTITLES_CHAVE || '' }}
           # Para onde vai o "Relatar um problema" (RelatarProblema.kt). Variável do repo, não secret: o e-mail aparece no QR.
           SUPORTE_EMAIL: ${{ vars.SUPORTE_EMAIL || '' }}
+          PONTE: ${{ github.event_name == 'workflow_dispatch' && inputs.bridge || false }}
         run: |
           chmod +x gradlew
           # Ideia 101: o app de celular sai junto (mesma chave). Num "commit=" antigo sem a pasta celular/, só o launcher.
           if [ -d celular ]; then CEL=":celular:testReleaseUnitTest :celular:assembleRelease"; else CEL=""; fi
-          ./gradlew :app:assembleRelease $CEL --no-daemon --stacktrace
+          # Um versionCode só para o app e a ponte (19/11/2026): a ponte reconhece o app novo do MESMO Release pela tag.
+          CODIGO=$(( ($(date +%s) * 1000 - 1767225600000) / 60000 ))
+          echo "VERSION_CODE=$CODIGO" >> "$GITHUB_ENV"
+          SAIDA=app/build/outputs/apk/release
+          mkdir -p publicar
+          # Ponte (pacote antigo br.paulo.tvlauncher), só com bridge=true: passa o Device Owner e os ajustes da TV para o
+          # app novo (PackageMigration.kt). Compila antes, porque o app novo usa a mesma pasta de saída.
+          if [ "$PONTE" = "true" ]; then
+            ./gradlew :app:assembleRelease -Plegacy -PversionCode=$CODIGO --no-daemon --stacktrace
+            cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/one-tv-launcher.apk
+            cp "$SAIDA/app-arm64-v8a-release.apk" publicar/one-tv-launcher-arm64.apk
+          fi
+          # O app: tv.sofaly.launcher (decisão do Paulo, 19/11/2026: nenhum pacote público com o nome dele).
+          ./gradlew :app:assembleRelease $CEL -PversionCode=$CODIGO --no-daemon --stacktrace
+          cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/sofaly-launcher.apk
+          cp "$SAIDA/app-arm64-v8a-release.apk" publicar/sofaly-launcher-arm64.apk
 
       # Dois APKs (splits em app/build.gradle.kts), com o mesmo versionCode. NOME é o nome dos arquivos do Release
-      # (o Atualizador.kt procura one-tv-launcher*.apk e ainda aceita o nome antigo tv-launcher*.apk).
+      # (o app tv.sofaly.launcher procura sofaly-launcher*.apk; a ponte antiga, one-tv-launcher*.apk).
       - name: Versão e SHA-256
         id: info
         run: |
-          SAIDA=app/build/outputs/apk/release
-          NOME=one-tv-launcher
-          mkdir -p publicar
-          cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/$NOME.apk
-          cp "$SAIDA/app-arm64-v8a-release.apk" publicar/$NOME-arm64.apk
+          NOME=sofaly-launcher
           # App de celular: nome que NÃO começa com one-tv-launcher (o Atualizador da TV nunca o pega por engano).
           CEL=celular/build/outputs/apk/release/celular-release.apk
           if [ -f "$CEL" ]; then
@@ -167,7 +187,16 @@ jobs:
           if [ "$CODIGO" != "$C64" ]; then echo "::error::versionCode diferente: 32=$CODIGO 64=$C64"; exit 1; fi
           # Sem número lido, a tag sairia "v" e nenhuma TV atualizaria (Atualizador.kt lê o número da tag).
           if ! printf '%s' "$CODIGO" | grep -Eq '^[0-9]+$'; then echo "::error::versionCode não lido do APK"; exit 1; fi
-          for APK in "$NOME.apk" "$NOME-arm64.apk"; do
+          if [ "$CODIGO" != "$VERSION_CODE" ]; then echo "::error::versionCode $CODIGO, esperado $VERSION_CODE"; exit 1; fi
+          APKS="$NOME.apk $NOME-arm64.apk"
+          [ -f publicar/one-tv-launcher.apk ] && APKS="$APKS one-tv-launcher.apk one-tv-launcher-arm64.apk"
+          for APK in $APKS; do
+            # Pacote e versão certos em cada arquivo: o app nunca sai com o nome antigo, nem a ponte com o novo.
+            PKG=$("$AAPT" dump badging "publicar/$APK" | sed -n "s/^package: name='\([^']*\)'.*/\1/p")
+            VC=$("$AAPT" dump badging "publicar/$APK" | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
+            case "$APK" in one-tv-launcher*) ESPERADO=br.paulo.tvlauncher ;; *) ESPERADO=tv.sofaly.launcher ;; esac
+            if [ "$PKG" != "$ESPERADO" ]; then echo "::error::$APK é $PKG, esperado $ESPERADO"; exit 1; fi
+            if [ "$VC" != "$CODIGO" ]; then echo "::error::$APK versionCode $VC, esperado $CODIGO"; exit 1; fi
             # Cada APK só pode ter as libs da própria arquitetura (confere o splits).
             unzip -l "publicar/$APK" | grep -o 'lib/[^/]*/' | sort -u | tr '\n' ' '; echo " <- $APK"
             # O compilarTunel só avisa quando o go build falha: aqui um Release sem o túnel (MCP pela internet) não sai.
@@ -225,6 +254,8 @@ jobs:
           # O commit só existe no repo do código: no repo público a tag nasce no main dele (o número vem da tag).
           if [ "$DESTINO" = "$GITHUB_REPOSITORY" ]; then ALVO_TAG="--target $COMMIT"; else ALVO_TAG=""; fi
           EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
+          # Ponte (só com bridge=true): as TVs ainda em br.paulo.tvlauncher instalam a ponte e passam para o app novo.
+          [ -f one-tv-launcher.apk ] && EXTRA="$EXTRA one-tv-launcher.apk one-tv-launcher.apk.sha256 one-tv-launcher-arm64.apk one-tv-launcher-arm64.apk.sha256"
           [ -f leveza.json ] && EXTRA="$EXTRA leveza.json"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
