@@ -31,7 +31,8 @@ import java.util.TimeZone
  *     DNS (ExtrasDO) e na VPN, e a regra é não tocar em rede de madrugada.
  *  3. limpeza: restos de download e temporários do PRÓPRIO app (ver [ManutencaoRegras.apagavel]). Nada de outro app.
  *  4. agendamentos: o despertador e as rotinas estão agendados no Android? Faltando, agenda de novo.
- *  5. espaco: menos de 1 GB livre = limpa o cache de todos os apps (Caches.limpar, só cache; logins ficam).
+ *  5. espaco: menos de 1 GB livre = limpa o cache de todos os apps (Caches.limpar, só cache; logins ficam), se adianta
+ *     ([ManutencaoRegras.limparCaches]: 150 MB de cache novo desde a última, ou menos de 500 MB livres).
  *
  * Quando: alarme às [HORA] (AlarmManager, acorda o aparelho); desde 20/11/2026 a hora vem do hábito da casa que o
  * Observador aprende ([ObserverTv.quietStart], 1h a 4h, 4h sem dados). TV em uso (tela acesa com um app na frente, ou alguém
@@ -228,8 +229,11 @@ object ManutencaoNoturna {
         fun livre() = StatFs(Environment.getDataDirectory().path).availableBytes
         val antes = livre()
         if (antes >= ESPACO_MINIMO) return ManutencaoRegras.Resultado.OK to ConsumoRede.texto(antes)
+        val ultima = prefs(app).getLong("livre_pos_limpeza", 0L)
+        if (!ManutencaoRegras.limparCaches(antes, ultima, ESPACO_MINIMO, ESPACO_CRITICO)) return ManutencaoRegras.Resultado.OK to ConsumoRede.texto(antes)
         val saida = Caches.limpar(app)
         val depois = livre()
+        if (saida.startsWith("liberado")) prefs(app).edit().putLong("livre_pos_limpeza", depois).apply()
         // Caches.limpar devolve "sem shell…" / "falhou: …" quando não limpou: só é conserto se liberou espaço de fato.
         return if (depois < ESPACO_CRITICO || !saida.startsWith("liberado") || depois <= antes)
             ManutencaoRegras.Resultado.FALHOU to "$saida (${ConsumoRede.texto(depois)} livres)"
@@ -315,6 +319,22 @@ object ManutencaoRegras {
         minutosSemTecla >= 60 && soHomeNaFrente -> Decisao.RODAR
         hora < inicio + 1 -> Decisao.ADIAR
         else -> Decisao.DESISTIR
+    }
+
+    /** Cache novo que precisa juntar desde a última limpeza para valer limpar de novo ([limparCaches]). */
+    const val CACHE_NOVO_MINIMO = 150L shl 20
+
+    /**
+     * Limpa o cache de TODOS os apps esta noite? Abaixo de [minimo] livre, sim, mas só se adianta: numa TV de 4 GB o
+     * livre fica abaixo de 1 GB para sempre (Sala, 20/11/2026: 881 MB livres, a limpeza liberou 15 MB), e limpar toda
+     * noite só fazia cada app baixar capas e miniaturas de novo de manhã. Então: abaixo de [critico], sempre; senão, só
+     * se o livre caiu [CACHE_NOVO_MINIMO] desde o fim da última limpeza ([livreDepoisDaUltima], 0 = nunca limpou).
+     */
+    fun limparCaches(livre: Long, livreDepoisDaUltima: Long, minimo: Long, critico: Long): Boolean = when {
+        livre >= minimo -> false
+        livre < critico -> true
+        livreDepoisDaUltima <= 0L -> true
+        else -> livreDepoisDaUltima - livre >= CACHE_NOVO_MINIMO
     }
 
     /**
