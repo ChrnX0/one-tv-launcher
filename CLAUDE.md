@@ -32,7 +32,10 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
   that only TVs with `EXTRAS canal --es canal teste` install ("Promover para todos" workflow releases it to everyone);
   `commit=<hash on main>` rebuilds an older commit with a newer versionCode (the way back from a bad version).
   Before each Release, rewrite `res/values*/strings_versoes.xml`: `novidades` ("What changed", Settings > System) and
-  the `roteiro_*` checklist ("Check on the TV"; answers via `EXTRAS --es o roteiro`), in both languages.
+  the `roteiro_*` checklist ("Check on the TV"; answers via `EXTRAS --es o roteiro`), in both languages. Then run
+  `python3 scripts/readme.py`: the README feature list, "What changed", the Release notes and the CHANGELOG come from
+  that file and from the website's feature list (`website/features.json` + `content/en.json`); the workflow refuses to
+  publish when they are stale. README pictures: `node scripts/readme-images.js` (source `docs/readme/art.html`).
   Pull requests only compile (and cost CI minutes): batch commits; use `[skip ci]` for text-only commits.
 - **Closed source (decided 15/11/2026).** The code repo becomes private; TVs keep reading the PUBLIC repo with the old name
   (`Config.ATUALIZACAO_REPO`). Repo variable `REPO_PUBLICO` + secret `PUBLICO_TOKEN` make "Build e Release" / "Promover"

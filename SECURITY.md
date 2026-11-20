@@ -1,6 +1,6 @@
 # Security Policy
 
-One TV Launcher can run with strong privileges on a TV: it may be the **device owner**, it pairs a built-in ADB client
+Sofaly can run with strong privileges on a TV: it may be the **device owner**, it pairs a built-in ADB client
 with the TV (shell user), it serves a web panel on the local network and, if you turn it on, an MCP server reachable
 through a Tailscale tunnel. Security bugs here matter, and we take them seriously.
 
@@ -25,7 +25,7 @@ In scope, for example:
 - reaching the web panel or the MCP server from outside the home network without the owner enabling it;
 - getting the launcher to run shell commands, install or remove apps, or read secrets without the owner's consent;
 - an update accepted by the self-updater that was not signed with the project key;
-- secrets (IPTV, Home Assistant, Tailscale, backup password) leaking in logs, backups or crash reports.
+- secrets (account logins, Home Assistant, Tailscale, backup password) leaking in logs, backups or crash reports.
 
 Out of scope: attacks that need the owner's PIN, physical access with the remote and Developer options already
 unlocked, or a rooted device.

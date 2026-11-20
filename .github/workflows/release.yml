@@ -127,6 +127,12 @@ jobs:
             echo "::warning::Sem o segredo ASSINATURA_KEYSTORE_B64: compila, mas não publica Release."
           fi
 
+      # Página do GitHub em dia (20/11/2026, Paulo: "o repositório tem que receber as atualizações"): README, notas e
+      # CHANGELOG saem do strings_versoes.xml e da lista de funções do site. Atrasados = não publica; o conserto é
+      # rodar `python3 scripts/readme.py` e mesclar. Num "commit=" antigo o script não existe e o passo não faz nada.
+      - name: Página do GitHub em dia
+        run: '[ ! -f scripts/readme.py ] || python3 scripts/readme.py --check'
+
       # 62a: teste vermelho = não publica. 21.1: também em todo PR (teste vermelho = PR vermelho, sem compilar o APK).
       - name: Testes JVM
         run: |
