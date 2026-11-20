@@ -861,4 +861,6 @@ AS\\Movies）。</string>
     <string name="bu_falar_det">リモコンで入力するより速い</string>
     <string name="bu_recentes">最近の検索</string>
     <string name="bu_recente_det">もう一度検索</string>
+    <string name="aviso_alarme_tocou_titulo">テレビでアラームが鳴りました</string>
+    <string name="aviso_alarme_tocou_texto">%1$s に鳴り始めました。</string>
 </resources>

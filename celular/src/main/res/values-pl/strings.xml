@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">np. Domek nad morzem, U mamy</string>
     <string name="cel_baixado">Zapisano w Pobranych: %1$s</string>
     <string name="cel_baixar_falhou">Nie udało się zapisać pliku. Spróbuj ponownie.</string>
+    <string name="cel_painel_completo">Pełny panel</string>
+    <string name="cel_ctrl_dica">Przesuń, aby się poruszać, dotknij, aby OK</string>
+    <string name="cel_ctrl_area">Przesuń lub dotknij tutaj</string>
+    <string name="cel_ctrl_digite">Wpisz tutaj i wyślij do telewizora</string>
+    <string name="cel_ctrl_voltar">Wstecz</string>
+    <string name="cel_ctrl_inicio">Start</string>
+    <string name="cel_ctrl_play">Odtwórz/pauza</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Wycisz</string>
+    <string name="cel_ctrl_sem_tv">Telewizor nie odpowiada. Czy jest włączony i w tej samej sieci?</string>
+    <string name="cel_ctrl_recusou">Telewizor nie mógł teraz tego zrobić.</string>
+    <string name="cel_ctrl_entrar">Zaloguj się raz PIN-em telewizora w panelu; potem pilot działa.</string>
+    <string name="cel_notif_canal">Pilot TV</string>
+    <string name="cel_notif_texto">Pauza i głośność bez otwierania aplikacji</string>
+    <string name="cel_bloco">Pilot TV</string>
 </resources>

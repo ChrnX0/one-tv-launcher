@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">es.: Casa al mare, Da mamma</string>
     <string name="cel_baixado">Salvato in Download: %1$s</string>
     <string name="cel_baixar_falhou">Impossibile salvare il file. Riprova.</string>
+    <string name="cel_painel_completo">Pannello completo</string>
+    <string name="cel_ctrl_dica">Scorri per muoverti, tocca per OK</string>
+    <string name="cel_ctrl_area">Scorri o tocca qui</string>
+    <string name="cel_ctrl_digite">Scrivi qui e invia alla TV</string>
+    <string name="cel_ctrl_voltar">Indietro</string>
+    <string name="cel_ctrl_inicio">Home</string>
+    <string name="cel_ctrl_play">Riproduci/pausa</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Muto</string>
+    <string name="cel_ctrl_sem_tv">La TV non ha risposto. È accesa e sulla stessa rete?</string>
+    <string name="cel_ctrl_recusou">La TV non è riuscita a farlo ora.</string>
+    <string name="cel_ctrl_entrar">Entra una volta col PIN della TV nel pannello; poi il telecomando funziona.</string>
+    <string name="cel_notif_canal">Telecomando</string>
+    <string name="cel_notif_texto">Pausa e volume senza aprire l\'app</string>
+    <string name="cel_bloco">Telecomando</string>
 </resources>

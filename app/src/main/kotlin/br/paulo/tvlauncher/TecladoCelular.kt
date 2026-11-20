@@ -17,6 +17,14 @@ object TecladoCelular {
     @Volatile private var ultimo = 0L
     @Volatile private var ultimoPacote = ""
 
+    /**
+     * O teclado da TV está na tela agora? Lido na hora, pelas janelas que o serviço de acessibilidade já enxerga
+     * (flagRetrieveInteractiveWindows): não precisa de evento a mais nem de inscrição. Sem o serviço, false.
+     */
+    fun tecladoNaTela(): Boolean = runCatching {
+        AutorizaShizukuService.instancia?.windows?.any { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD } == true
+    }.getOrDefault(false)
+
     fun ativo(ctx: Context): Boolean =
         Avisos.ligado(ctx, Avisos.Tipo.DIGITAR) && Avisos.inscricoes(ctx).isNotEmpty()
 

@@ -864,4 +864,6 @@ AS\\Movies)।</string>
     <string name="bu_falar_det">रिमोट से टाइप करने से तेज़</string>
     <string name="bu_recentes">हाल की खोजें</string>
     <string name="bu_recente_det">फिर से खोजें</string>
+    <string name="aviso_alarme_tocou_titulo">टीवी पर अलार्म बजा</string>
+    <string name="aviso_alarme_tocou_texto">%1$s बजे बजना शुरू हुआ।</string>
 </resources>

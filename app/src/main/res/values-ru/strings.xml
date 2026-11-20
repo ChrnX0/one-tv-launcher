@@ -870,4 +870,6 @@ AS\\Фильмы).</string>
     <string name="bu_falar_det">Быстрее, чем печатать пультом</string>
     <string name="bu_recentes">Недавние запросы</string>
     <string name="bu_recente_det">Искать снова</string>
+    <string name="aviso_alarme_tocou_titulo">На телевизоре сработал будильник</string>
+    <string name="aviso_alarme_tocou_texto">Начал звонить в %1$s.</string>
 </resources>

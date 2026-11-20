@@ -904,4 +904,6 @@
     <string name="bu_falar_det">Mais rápido que digitar com o controle</string>
     <string name="bu_recentes">Buscas recentes</string>
     <string name="bu_recente_det">Buscar de novo</string>
+    <string name="aviso_alarme_tocou_titulo">O despertador tocou na TV</string>
+    <string name="aviso_alarme_tocou_texto">Começou a tocar às %1$s.</string>
 </resources>

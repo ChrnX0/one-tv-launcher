@@ -876,4 +876,6 @@ AS\\Movies).</string>
     <string name="bu_falar_det">أسرع من الكتابة بجهاز التحكم</string>
     <string name="bu_recentes">عمليات البحث الأخيرة</string>
     <string name="bu_recente_det">ابحث مرة أخرى</string>
+    <string name="aviso_alarme_tocou_titulo">رنّ المنبّه على التلفاز</string>
+    <string name="aviso_alarme_tocou_texto">بدأ الرنين في %1$s.</string>
 </resources>

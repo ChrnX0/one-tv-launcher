@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">ex. : Maison de plage, Chez maman</string>
     <string name="cel_baixado">Enregistré dans Téléchargements : %1$s</string>
     <string name="cel_baixar_falhou">Impossible d\'enregistrer le fichier. Réessaie.</string>
+    <string name="cel_painel_completo">Panneau complet</string>
+    <string name="cel_ctrl_dica">Glissez pour bouger, touchez pour OK</string>
+    <string name="cel_ctrl_area">Glissez ou touchez ici</string>
+    <string name="cel_ctrl_digite">Tapez ici et envoyez à la TV</string>
+    <string name="cel_ctrl_voltar">Retour</string>
+    <string name="cel_ctrl_inicio">Accueil</string>
+    <string name="cel_ctrl_play">Lecture/pause</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Muet</string>
+    <string name="cel_ctrl_sem_tv">La TV n\'a pas répondu. Est-elle allumée et sur le même réseau ?</string>
+    <string name="cel_ctrl_recusou">La TV n\'a pas pu le faire maintenant.</string>
+    <string name="cel_ctrl_entrar">Connectez-vous une fois avec le PIN de la TV dans le panneau ; ensuite la télécommande marche.</string>
+    <string name="cel_notif_canal">Télécommande</string>
+    <string name="cel_notif_texto">Pause et volume sans ouvrir l\'app</string>
+    <string name="cel_bloco">Télécommande</string>
 </resources>

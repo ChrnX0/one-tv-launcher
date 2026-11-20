@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">напр.: Дача, У мамы</string>
     <string name="cel_baixado">Сохранено в «Загрузки»: %1$s</string>
     <string name="cel_baixar_falhou">Не удалось сохранить файл. Попробуйте ещё раз.</string>
+    <string name="cel_painel_completo">Вся панель</string>
+    <string name="cel_ctrl_dica">Проведите для перемещения, коснитесь для OK</string>
+    <string name="cel_ctrl_area">Проведите или коснитесь здесь</string>
+    <string name="cel_ctrl_digite">Введите здесь и отправьте на ТВ</string>
+    <string name="cel_ctrl_voltar">Назад</string>
+    <string name="cel_ctrl_inicio">Домой</string>
+    <string name="cel_ctrl_play">Пуск/пауза</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Без звука</string>
+    <string name="cel_ctrl_sem_tv">ТВ не отвечает. Он включён и в той же сети?</string>
+    <string name="cel_ctrl_recusou">ТВ сейчас не смог это сделать.</string>
+    <string name="cel_ctrl_entrar">Войдите один раз с PIN-кодом ТВ в панели; потом пульт заработает.</string>
+    <string name="cel_notif_canal">Пульт ТВ</string>
+    <string name="cel_notif_texto">Пауза и громкость без открытия приложения</string>
+    <string name="cel_bloco">Пульт ТВ</string>
 </resources>

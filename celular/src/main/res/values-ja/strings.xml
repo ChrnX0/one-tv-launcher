@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">例：別荘、実家</string>
     <string name="cel_baixado">ダウンロードに保存しました: %1$s</string>
     <string name="cel_baixar_falhou">ファイルを保存できませんでした。もう一度お試しください。</string>
+    <string name="cel_painel_completo">パネル全体</string>
+    <string name="cel_ctrl_dica">スワイプで移動、タップで決定</string>
+    <string name="cel_ctrl_area">ここをスワイプまたはタップ</string>
+    <string name="cel_ctrl_digite">ここに入力してテレビへ送信</string>
+    <string name="cel_ctrl_voltar">戻る</string>
+    <string name="cel_ctrl_inicio">ホーム</string>
+    <string name="cel_ctrl_play">再生/一時停止</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">消音</string>
+    <string name="cel_ctrl_sem_tv">テレビが応答しません。電源が入っていて同じネットワークにありますか？</string>
+    <string name="cel_ctrl_recusou">テレビは今それを実行できませんでした。</string>
+    <string name="cel_ctrl_entrar">パネルでテレビの PIN を一度入力すると、リモコンが使えます。</string>
+    <string name="cel_notif_canal">テレビのリモコン</string>
+    <string name="cel_notif_texto">アプリを開かずに一時停止と音量</string>
+    <string name="cel_bloco">テレビのリモコン</string>
 </resources>

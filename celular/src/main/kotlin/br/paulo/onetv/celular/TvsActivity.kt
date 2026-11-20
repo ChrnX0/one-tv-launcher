@@ -106,6 +106,12 @@ class TvsActivity : Activity() {
     }
 
     private fun abrir(tv: Pareamento.Tv, lido: Pareamento.Lido? = null) {
+        // Ideia 14 (estudo global 20/11): TV pareada pelo QR e nada vindo do "Compartilhar" = o controle nativo. O painel
+        // completo continua a 1 toque no canto do controle (e abre sozinho quando for preciso entrar com o PIN).
+        if (lido == null && compartilhado == null && ApiTv.podeUsar(tv)) {
+            startActivity(Intent(this, ControleActivity::class.java).putExtra(ControleActivity.EXTRA_CHAVE, Pareamento.chave(tv)))
+            return
+        }
         val i = Intent(this, PainelActivity::class.java).putExtra(PainelActivity.EXTRA_IP, tv.ip)
             .putExtra(PainelActivity.EXTRA_CHAVE, Pareamento.chave(tv))
         if (lido != null) i.putExtra(PainelActivity.EXTRA_FRAGMENTO, Pareamento.fragmento(lido))

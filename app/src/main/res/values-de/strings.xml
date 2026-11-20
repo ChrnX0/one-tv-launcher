@@ -864,4 +864,6 @@ AS\\Filme).</string>
     <string name="bu_falar_det">Schneller als mit der Fernbedienung tippen</string>
     <string name="bu_recentes">Letzte Suchen</string>
     <string name="bu_recente_det">Erneut suchen</string>
+    <string name="aviso_alarme_tocou_titulo">Der Wecker hat am Fernseher geklingelt</string>
+    <string name="aviso_alarme_tocou_texto">Er hat um %1$s angefangen.</string>
 </resources>

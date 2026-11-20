@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">जैसे: समुद्र वाला घर, माँ का घर</string>
     <string name="cel_baixado">डाउनलोड में सहेजा गया: %1$s</string>
     <string name="cel_baixar_falhou">फ़ाइल सहेजी नहीं जा सकी। फिर से कोशिश करें।</string>
+    <string name="cel_painel_completo">पूरा पैनल</string>
+    <string name="cel_ctrl_dica">चलने के लिए स्वाइप करें, OK के लिए टैप करें</string>
+    <string name="cel_ctrl_area">यहाँ स्वाइप या टैप करें</string>
+    <string name="cel_ctrl_digite">यहाँ लिखें और टीवी पर भेजें</string>
+    <string name="cel_ctrl_voltar">वापस</string>
+    <string name="cel_ctrl_inicio">होम</string>
+    <string name="cel_ctrl_play">चलाएँ/रोकें</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">म्यूट</string>
+    <string name="cel_ctrl_sem_tv">टीवी ने जवाब नहीं दिया। क्या वह चालू है और उसी नेटवर्क पर है?</string>
+    <string name="cel_ctrl_recusou">टीवी अभी यह नहीं कर सका।</string>
+    <string name="cel_ctrl_entrar">पैनल में टीवी के PIN से एक बार लॉग इन करें; फिर रिमोट चलेगा।</string>
+    <string name="cel_notif_canal">टीवी रिमोट</string>
+    <string name="cel_notif_texto">ऐप खोले बिना रोकें और आवाज़ बदलें</string>
+    <string name="cel_bloco">टीवी रिमोट</string>
 </resources>

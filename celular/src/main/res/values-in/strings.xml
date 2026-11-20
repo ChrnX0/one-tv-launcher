@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">mis.: Rumah pantai, Rumah ibu</string>
     <string name="cel_baixado">Disimpan di Unduhan: %1$s</string>
     <string name="cel_baixar_falhou">File tidak dapat disimpan. Coba lagi.</string>
+    <string name="cel_painel_completo">Panel lengkap</string>
+    <string name="cel_ctrl_dica">Geser untuk bergerak, ketuk untuk OK</string>
+    <string name="cel_ctrl_area">Geser atau ketuk di sini</string>
+    <string name="cel_ctrl_digite">Ketik di sini dan kirim ke TV</string>
+    <string name="cel_ctrl_voltar">Kembali</string>
+    <string name="cel_ctrl_inicio">Beranda</string>
+    <string name="cel_ctrl_play">Putar/jeda</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Bisu</string>
+    <string name="cel_ctrl_sem_tv">TV tidak menjawab. Apakah menyala dan di jaringan yang sama?</string>
+    <string name="cel_ctrl_recusou">TV tidak bisa melakukannya sekarang.</string>
+    <string name="cel_ctrl_entrar">Masuk sekali dengan PIN TV di panel; lalu remote berfungsi.</string>
+    <string name="cel_notif_canal">Remote TV</string>
+    <string name="cel_notif_texto">Jeda dan volume tanpa membuka aplikasi</string>
+    <string name="cel_bloco">Remote TV</string>
 </resources>

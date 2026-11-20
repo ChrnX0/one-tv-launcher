@@ -864,4 +864,6 @@ AS\\Films).</string>
     <string name="bu_falar_det">Plus rapide que de taper avec la télécommande</string>
     <string name="bu_recentes">Recherches récentes</string>
     <string name="bu_recente_det">Rechercher à nouveau</string>
+    <string name="aviso_alarme_tocou_titulo">Le réveil a sonné sur la TV</string>
+    <string name="aviso_alarme_tocou_texto">Il a commencé à sonner à %1$s.</string>
 </resources>

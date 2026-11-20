@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Controle remoto em traço (o mesmo desenho de linha dos ícones da cruz): ícone da notificação e do bloco rápido. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.8"
+        android:pathData="M8,2h8a2,2 0,0 1,2 2v16a2,2 0,0 1,-2 2h-8a2,2 0,0 1,-2 -2v-16a2,2 0,0 1,2 -2z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M12,6.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M9,13h2v2h-2z M13,13h2v2h-2z M9,17h2v2h-2z M13,17h2v2h-2z" />
+</vector>

@@ -51,6 +51,8 @@ object Avisos {
         INTERNET_VOLTOU("Internet voltou (quanto ficou fora)", true),
         ARMAZENAMENTO("Armazenamento da TV enchendo", true),
         DIGITAR("Campo de texto aberto na TV (toque para digitar pelo celular)", false, semLimite = true),   // ideia 57
+        // Estudo global 20/11 (ideia 15): a TV chama o celular também quando o despertador toca (quem cuida fica sabendo).
+        ALARME_TOCOU("Despertador tocou na TV", false),
     }
 
     data class Inscricao(val endpoint: String, val p256dh: String, val auth: String, val nome: String, val desde: Long)
