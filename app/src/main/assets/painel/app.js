@@ -2370,6 +2370,15 @@ function desenharArquivos(r) {
     info.append(nome, det);
     const acoes = document.createElement('div');
     acoes.className = 'acoes';
+    if (tp === 'video' || tp === 'audio') {
+      const ver = document.createElement('button');
+      ver.type = 'button'; ver.className = 'botao-secundario'; ver.textContent = 'Ver na TV';
+      ver.addEventListener('click', async () => {
+        try { await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(pastaAtual, it.nome) }); aviso('Tocando na TV.', 'ok'); }
+        catch (e) { aviso(textoErro(e), 'erro'); }
+      });
+      acoes.appendChild(ver);
+    }
     if (!it.pasta) {
       // Link comum: o navegador baixa direto da TV (com barra de progresso dele), sem passar o arquivo pela memória.
       const a = document.createElement('a');
@@ -2435,6 +2444,44 @@ $('abaArquivos').addEventListener('drop', (ev) => {
   if (arquivos.length < ev.dataTransfer.files.length) aviso('Pastas não são enviadas: arraste os arquivos de dentro delas.', 'erro');
   enviarArquivos(arquivos);
 });
+
+// Ideia 17 (estudo global 20/11): arrastar um vídeo, música ou foto para o Controle e ver na TV num gesto.
+// Por quê: mostrar o vídeo da viagem era copiar para a TV e procurar o arquivo com a cruz. Como: foto vai como recado
+// com foto (a mesma rota do cartão Foto); vídeo e música vão para a pasta Movies da TV e tocam no player do Sofaly.
+const PASTA_NA_TV = 'Movies';
+$('abaControle').addEventListener('dragover', (ev) => {
+  if (![...(ev.dataTransfer?.types || [])].includes('Files')) return;
+  ev.preventDefault();
+  $('abaControle').dataset.soltar = 'Solte para ver na TV';
+  $('abaControle').classList.add('soltando');
+});
+$('abaControle').addEventListener('dragleave', (ev) => { if (ev.target === $('abaControle')) $('abaControle').classList.remove('soltando'); });
+$('abaControle').addEventListener('drop', async (ev) => {
+  $('abaControle').classList.remove('soltando');
+  const f = ev.dataTransfer?.files?.[0];
+  if (!f) return;
+  ev.preventDefault();
+  await verNaTv(f);
+});
+
+async function verNaTv(f) {
+  const tipo = tipoDoArquivo(f.name);   // arquivos.js
+  try {
+    if (tipo === 'imagem') {
+      aviso('Mandando a foto…');
+      await chamar('POST', '/api/extras/recado-foto', { imagem: await reduzir(f), texto: '' });   // extras.js
+      aviso('A foto está na tela da TV.', 'ok');
+    } else if (tipo === 'video' || tipo === 'audio') {
+      try { await chamar('POST', '/api/arquivos/pasta', { pasta: '', nome: PASTA_NA_TV }); } catch (e) { /* já existe */ }
+      const url = '/api/arquivos/enviar?pasta=' + encodeURIComponent(PASTA_NA_TV) + '&nome=' + encodeURIComponent(f.name) + '&substituir=1';
+      await enviarComProgresso(url, f, (p) => aviso(`Mandando ${f.name}: ${Math.round(p * 100)}%`));
+      await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(PASTA_NA_TV, f.name) });
+      aviso('Tocando na TV.', 'ok');
+    } else {
+      aviso('Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.', 'erro');
+    }
+  } catch (e) { aviso(textoErro(e), 'erro'); }
+}
 
 async function enviarArquivos(arquivos) {
   if (!arquivos.length) return;

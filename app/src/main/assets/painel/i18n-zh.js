@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"未选择照片",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"重启整台电视：屏幕会变黑，然后自己恢复。",
 "ainda medindo":"仍在测量",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"把视频、歌曲或照片拖到此页面，即可在电视上观看。",
+"Solte para ver na TV":"松开即可在电视上观看",
+"Mandando a foto…":"正在发送照片…",
+"A foto está na tela da TV.":"照片已在电视屏幕上。",
+"Tocando na TV.":"正在电视上播放。",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"这种文件无法在电视上打开。视频、音乐和照片可以。",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "新电视拒绝了：$1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "新电视拒绝了（$1）"],

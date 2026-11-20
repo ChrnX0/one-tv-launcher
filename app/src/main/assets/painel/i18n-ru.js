@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"Фото не выбрано",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"Перезапускает весь телевизор: экран гаснет и возвращается сам.",
 "ainda medindo":"ещё измеряю",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"Перетащите видео, песню или фото на эту страницу, чтобы увидеть на ТВ.",
+"Solte para ver na TV":"Отпустите, чтобы увидеть на ТВ",
+"Mandando a foto…":"Отправляю фото…",
+"A foto está na tela da TV.":"Фото на экране ТВ.",
+"Tocando na TV.":"Играет на ТВ.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Такой файл не открывается на ТВ. Видео, музыка и фото — да.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "новый телевизор отказал: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "новый телевизор отказал ($1)"],

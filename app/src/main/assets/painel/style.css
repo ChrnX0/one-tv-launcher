@@ -467,9 +467,9 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
   cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .nome-arquivo.pasta, .nome-arquivo.com-previa { color: var(--texto); }
 .nome-arquivo:hover { text-decoration: underline; text-underline-offset: 3px; }
-#abaArquivos { position: relative; }
-#abaArquivos.soltando { outline: 2px dashed var(--foco); outline-offset: -6px; border-radius: var(--raio); background: var(--superficie2); }
-#abaArquivos.soltando::after { content: attr(data-soltar); position: absolute; inset: 0; display: grid; place-items: center;
+#abaArquivos, #abaControle { position: relative; }
+#abaArquivos.soltando, #abaControle.soltando { outline: 2px dashed var(--foco); outline-offset: -6px; border-radius: var(--raio); background: var(--superficie2); }
+#abaArquivos.soltando::after, #abaControle.soltando::after { content: attr(data-soltar); position: absolute; inset: 0; display: grid; place-items: center;
   font-size: 17px; font-weight: 700; color: var(--texto); background: var(--veu); border-radius: var(--raio); pointer-events: none; }
 
 /* ---------------------------------------------------------------- janelas */
@@ -1092,3 +1092,6 @@ input[type=time]:focus-within, input[type=date]:focus-within { border-color: var
 /* Escolha feita (filtro, opção ligada): mesma marca da sub-aba ativa, uma barra laranja embaixo.
    Por quê: laranja quer dizer "escolhido/ligado"; um botão principal (branco) quer dizer "faça isto". */
 button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--acento); font-weight: 700; }
+
+/* Dica de arrastar (ideia 17): só aparece onde existe arrastar de verdade (mouse). */
+@media not (pointer: fine) { .so-ponteiro-fino { display: none; } }

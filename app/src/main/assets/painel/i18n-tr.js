@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"Fotoğraf seçilmedi",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"Tüm TV'yi yeniden başlatır: ekran kararır ve kendiliğinden geri gelir.",
 "ainda medindo":"hâlâ ölçülüyor",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"Bir video, şarkı ya da fotoğrafı bu sayfaya sürükleyin ve TV'de görün.",
+"Solte para ver na TV":"TV'de görmek için bırakın",
+"Mandando a foto…":"Fotoğraf gönderiliyor…",
+"A foto está na tela da TV.":"Fotoğraf TV ekranında.",
+"Tocando na TV.":"TV'de oynatılıyor.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Bu dosya türü TV'de açılmaz. Video, müzik ve fotoğraf açılır.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "yeni TV reddetti: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "yeni TV reddetti ($1)"],

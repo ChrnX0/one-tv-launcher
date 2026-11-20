@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"선택한 사진 없음",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"TV 전체를 다시 시작합니다: 화면이 꺼졌다가 저절로 돌아옵니다.",
 "ainda medindo":"아직 측정 중",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"동영상, 노래, 사진을 이 페이지로 끌어 오면 TV에서 볼 수 있어요.",
+"Solte para ver na TV":"놓으면 TV에서 보기",
+"Mandando a foto…":"사진 보내는 중…",
+"A foto está na tela da TV.":"사진이 TV 화면에 있어요.",
+"Tocando na TV.":"TV에서 재생 중.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"이 파일 형식은 TV에서 열리지 않아요. 동영상, 음악, 사진은 열려요.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "새 TV가 거부함: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "새 TV가 거부함($1)"],

@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"写真が選ばれていません",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"テレビ全体を再起動します：画面が消えて、自動で戻ります。",
 "ainda medindo":"測定中",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"動画、音楽、写真をこのページにドラッグするとテレビで見られます。",
+"Solte para ver na TV":"ドロップしてテレビで見る",
+"Mandando a foto…":"写真を送信中…",
+"A foto está na tela da TV.":"写真がテレビに表示されています。",
+"Tocando na TV.":"テレビで再生中。",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"この種類のファイルはテレビで開けません。動画、音楽、写真は開けます。",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "新しいテレビが拒否しました：$1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "新しいテレビが拒否しました（$1）"],

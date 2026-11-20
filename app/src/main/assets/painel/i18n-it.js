@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"Nessuna foto scelta",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"Riavvia tutta la TV: lo schermo si spegne e torna da solo.",
 "ainda medindo":"ancora in misurazione",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"Trascina un video, una canzone o una foto su questa pagina per vederla sulla TV.",
+"Solte para ver na TV":"Rilascia per vederlo sulla TV",
+"Mandando a foto…":"Invio della foto…",
+"A foto está na tela da TV.":"La foto è sullo schermo della TV.",
+"Tocando na TV.":"In riproduzione sulla TV.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Questo tipo di file non si apre sulla TV. Video, musica e foto sì.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "la TV nuova ha rifiutato: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "la TV nuova ha rifiutato ($1)"],

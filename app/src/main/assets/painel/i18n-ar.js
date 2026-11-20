@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"لم تُختر صورة",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"يعيد تشغيل التلفاز كله: تنطفئ الشاشة ثم تعود وحدها.",
 "ainda medindo":"ما زال يقيس",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"اسحب فيديو أو أغنية أو صورة إلى هذه الصفحة لتراها على التلفاز.",
+"Solte para ver na TV":"أفلت لتراه على التلفاز",
+"Mandando a foto…":"جارٍ إرسال الصورة…",
+"A foto está na tela da TV.":"الصورة على شاشة التلفاز.",
+"Tocando na TV.":"يعمل على التلفاز.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"هذا النوع من الملفات لا يفتح على التلفاز. الفيديو والموسيقى والصور تفتح.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "رفض التلفاز الجديد: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "رفض التلفاز الجديد ($1)"],

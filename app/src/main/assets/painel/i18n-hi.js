@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"कोई फ़ोटो नहीं चुनी",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"पूरा टीवी फिर से शुरू करता है: स्क्रीन बंद होकर अपने आप लौट आती है।",
 "ainda medindo":"अभी माप रहा है",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"कोई वीडियो, गाना या फ़ोटो इस पेज पर खींचें और टीवी पर देखें।",
+"Solte para ver na TV":"टीवी पर देखने के लिए छोड़ें",
+"Mandando a foto…":"फ़ोटो भेज रहे हैं…",
+"A foto está na tela da TV.":"फ़ोटो टीवी स्क्रीन पर है।",
+"Tocando na TV.":"टीवी पर चल रहा है।",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"यह फ़ाइल टीवी पर नहीं खुलती। वीडियो, संगीत और फ़ोटो खुलते हैं।",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "नए टीवी ने मना किया: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "नए टीवी ने मना किया ($1)"],

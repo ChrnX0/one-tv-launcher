@@ -1391,6 +1391,12 @@ traduzirPainelCom({T:{
 "Nenhuma foto escolhida":"Belum ada foto dipilih",
 "Reinicia a TV inteira: a tela apaga e volta sozinha.":"Memulai ulang seluruh TV: layar mati lalu kembali sendiri.",
 "ainda medindo":"masih mengukur",
+"Arraste um vídeo, música ou foto para esta página e veja na TV.":"Seret video, lagu, atau foto ke halaman ini untuk melihatnya di TV.",
+"Solte para ver na TV":"Lepaskan untuk melihat di TV",
+"Mandando a foto…":"Mengirim foto…",
+"A foto está na tela da TV.":"Foto ada di layar TV.",
+"Tocando na TV.":"Diputar di TV.",
+"Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Jenis file ini tidak terbuka di TV. Video, musik, dan foto bisa.",
 },P:[
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "TV baru menolak: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "TV baru menolak ($1)"],
