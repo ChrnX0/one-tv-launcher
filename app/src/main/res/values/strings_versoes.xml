@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Podcasts and radio: holding OK no longer pauses and resumes on its own, the PLAY and PAUSE keys do only what they say, and the remote\'s volume works inside the podcast player</item>
+        <item>Movies and Series: switching between dubbed and subtitled continues from where you were; titles without a synopsis no longer show the word “null”</item>
+        <item>Home (HA): the TV only talks to the Home Assistant it already knows; the podcast sleep timer no longer turns the radio off</item>
         <item>An update installed while the TV sleeps is now optimised that same night (before, the new version ran slower all the next day, until the screen turned off again)</item>
         <item>Movies and Series open faster: joining the dubbed and subtitled copies of each title now takes a fraction of the time (on big lists it kept the TV busy for over a minute after opening)</item>
         <item>Home screen: moving along the cross is lighter, because the faded items no longer need an extra drawing pass on every frame</item>
@@ -52,6 +55,9 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>podcast_teclas</item>
+        <item>trocar_versao</item>
+        <item>alarme_subida</item>
         <item>filmes_rapido</item>
         <item>cruz_leve</item>
         <item>menu_player</item>
@@ -80,6 +86,9 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Podcast keys</item>
+        <item>Switch version</item>
+        <item>Alarm: rise</item>
         <item>Movies open fast</item>
         <item>Smooth home screen</item>
         <item>Player menu</item>
@@ -108,6 +117,9 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>With a podcast playing, hold OK for 2 seconds: does it keep playing (no pausing and resuming), and does the remote\'s volume change the sound?</item>
+        <item>In a movie with both versions, watch a bit and switch to the other through ▼: does the other version start from the same point?</item>
+        <item>When editing an alarm, do the sound rise options say “Rises over 1½ min” and “Rises over 2 min” (none says “1 min”)?</item>
         <item>Open Movies, then Series: do the posters show in a few seconds, and does moving through them stay smooth in the first minute (no long pauses)?</item>
         <item>On the home screen, move left and right along the cross a few times: do the items glide without stutter, and do the faded neighbours look the same as before?</item>
         <item>In a movie, does ▼ show a short menu (Audio, Subtitles, Picture and sound, More options) with the current value on the right, and does BACK inside a list go back to the one above?</item>

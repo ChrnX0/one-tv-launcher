@@ -115,4 +115,12 @@ class TraktDetailsTest {
         assertEquals("EN" to "Sum", TraktDetails.lerEpisodio("""{"title":"EN","overview":"Sum"}""", null))
         assertNull(TraktDetails.lerEpisodio("""{"title":"EN","overview":""}""", null))
     }
+
+    @Test fun campoNullNaoViraPalavraNull() {
+        val o = org.json.JSONObject("""{"overview":null,"title":"T"}""")
+        assertEquals("", TraktDetails.txt(o, "overview"))
+        assertEquals("T", TraktDetails.txt(o, "title"))
+        assertEquals("", TraktDetails.txt(null, "title"))
+        assertEquals("Título" to "", TraktDetails.lerTraducao("""[{"country":"br","title":"Título","overview":null}]""", "br"))
+    }
 }

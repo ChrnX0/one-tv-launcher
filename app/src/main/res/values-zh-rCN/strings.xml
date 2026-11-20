@@ -286,7 +286,7 @@
     <string name="som_classico">经典</string>
     <string name="som_sino">铃声</string>
     <string name="som_direto">最大音量</string>
-    <string name="som_rampa1">1 分钟内渐强</string>
+    <string name="som_rampa1">1.5 分钟内渐强</string>
     <string name="som_rampa2">2 分钟内渐强</string>
     <string name="vel_resultado">网速：%1$.0f Mbps（%3$.1f 秒下载 %2$.0f MB）</string>
     <string name="vel_falhou">测试失败（无网络或服务器中断）</string>

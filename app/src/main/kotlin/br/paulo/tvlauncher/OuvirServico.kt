@@ -222,6 +222,9 @@ class OuvirServico : Service() {
         if (radio?.id == r.id && player != null) { continuar(); return }
         pedidoEp++   // episódio pedido e ainda não começado não passa por cima da rádio
         largarAtual()
+        // O timer para dormir é do player de podcast: sem isto a rádio pausava sozinha depois, sem nada na tela dizendo
+        // por quê (debug 20/11/2026).
+        ui.removeCallbacks(dormir); dormirAte = 0L
         radio = r; musica = ""
         player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
         garantirSessao()

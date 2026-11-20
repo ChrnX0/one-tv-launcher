@@ -29,4 +29,9 @@ class PodcastBuscaTest {
         assertEquals("Café com Notícia", l[0].titulo)
         assertTrue(PodcastBusca.ler("lixo").isEmpty())
     }
+
+    @Test fun semCampoExplicitContaComoExplicito() {
+        val r = PodcastBusca.ler("""{"feeds":[{"url":"https://a.org/f","title":"A"},{"url":"https://a.org/g","title":"B","explicit":null},{"url":"https://a.org/h","title":"C","explicit":false}]}""")
+        assertEquals(listOf(true, true, false), r.map { it.explicito })
+    }
 }

@@ -65,7 +65,18 @@ class RadioActivity : Activity() {
     private var carregando = true
     private var resultado: Pair<String, List<Radios.Radio>>? = null
     private val pais: String = Locale.getDefault().country.uppercase().takeIf { it.length == 2 } ?: ""
-    private val escurecer = Runnable { if (OuvirServico.instancia?.tocando == true) veu.visibility = View.VISIBLE }
+    private val escurecer = Runnable { if (OuvirServico.instancia?.tocando == true) veuLigado(true) }
+
+    /**
+     * O véu cobre a tela; a cruz por baixo some junto (debug 20/11/2026): ela seguia desenhando o ícone "Tocando" a
+     * 30 quadros por segundo debaixo do preto, no Chromecast, a noite toda. Ao acender, o foco volta para ela.
+     */
+    private fun veuLigado(ligado: Boolean) {
+        if ((veu.visibility == View.VISIBLE) == ligado) return
+        veu.visibility = if (ligado) View.VISIBLE else View.GONE
+        cruz.visibility = if (ligado) View.INVISIBLE else View.VISIBLE
+        if (!ligado) cruz.requestFocus()
+    }
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -124,7 +135,7 @@ class RadioActivity : Activity() {
         OuvirServico.esquecer(mudou)
         if (!::veu.isInitialized) return   // fechada pela atualização no onCreate
         ui.removeCallbacks(escurecer)
-        veu.visibility = View.GONE
+        veuLigado(false)
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         resultado = null   // a busca não volta na próxima vez (a tela abre limpa)
         // O jeito antigo, para quem escolheu: sair da tela para o som. Tela que só apagou também conta (o serviço já para).
@@ -143,7 +154,7 @@ class RadioActivity : Activity() {
         // Tela acesa só com o som saindo E esta tela na frente; fora dela, o protetor de tela entra normalmente.
         if (s?.tocando == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (r == null) { ui.removeCallbacks(escurecer); veu.visibility = View.GONE }
+        if (r == null) { ui.removeCallbacks(escurecer); veuLigado(false) }
         val agora = Triple(r?.id, s?.musica.orEmpty(), s?.pausado == true)
         if (agora != visto) {
             // Começou a tocar (OK numa rádio): o foco fica onde está; o cartão de cima à direita já mostra o que toca.
@@ -160,13 +171,15 @@ class RadioActivity : Activity() {
         if (e.action == KeyEvent.ACTION_DOWN) {
             mexeuNaLista = true
             mexeu()
-            if (veu.visibility == View.VISIBLE) { veu.visibility = View.GONE; return true }   // 1ª tecla só acende a tela
+            if (veu.visibility == View.VISIBLE) { veuLigado(false); return true }   // 1ª tecla só acende a tela
             val n = e.keyCode - KeyEvent.KEYCODE_1
             if (n in 0..8) { favoritas.getOrNull(n)?.let { tocar(it) }; return true }
             when (e.keyCode) {
                 // ⏯ do controle: pausa/continua daqui também (a sessão de mídia já faz isso fora da tela)
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE ->
-                    if (tocando != null) { OuvirServico.instancia?.alternar(); return true }
+                // ▶ e ⏸ separados (controle da LG pelo HDMI) fazem o que dizem; só ⏯ alterna (debug 20/11/2026).
+                KeyEvent.KEYCODE_MEDIA_PLAY -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.continuar(); return true }
+                KeyEvent.KEYCODE_MEDIA_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.pausar(); return true }
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.alternar(); return true }
             }
         }
         return super.dispatchKeyEvent(e)

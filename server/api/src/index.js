@@ -45,7 +45,7 @@ export default {
     if (path.startsWith(`${PD_BASE}/`) && req.method === 'GET') return handlePublicDomain(path);
 
     const podcasts = path.match(/^\/v1\/podcasts\/(search|trending)$/);
-    if (podcasts && req.method === 'GET') return handlePodcasts(podcasts[1], url, env);
+    if (podcasts && req.method === 'GET') return handlePodcasts(podcasts[1], url, env, { ip: req.headers.get('cf-connecting-ip') ?? '' });
 
     if (path === '/v1/weather' && req.method === 'GET') {
       return handleWeather(url, env, { ip: req.headers.get('cf-connecting-ip') ?? '' });

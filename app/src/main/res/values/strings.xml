@@ -333,7 +333,7 @@
     <string name="som_classico">Classic</string>
     <string name="som_sino">Bell</string>
     <string name="som_direto">Full volume</string>
-    <string name="som_rampa1">Rises over 1 min</string>
+    <string name="som_rampa1">Rises over 1½ min</string>
     <string name="som_rampa2">Rises over 2 min</string>
     <!-- Velocidade.kt -->
     <string name="vel_resultado">Internet: %1$.0f Mbps (downloaded %2$.0f MB in %3$.1f s)</string>

@@ -335,7 +335,7 @@
     <string name="som_classico">Clássico</string>
     <string name="som_sino">Sino</string>
     <string name="som_direto">Direto</string>
-    <string name="som_rampa1">Sobe em 1 min</string>
+    <string name="som_rampa1">Sobe em 1 min e meio</string>
     <string name="som_rampa2">Sobe em 2 min</string>
     <!-- Velocidade.kt -->
     <string name="vel_resultado">Internet: %1$.0f Mbps (baixou %2$.0f MB em %3$.1f s)</string>

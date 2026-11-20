@@ -429,7 +429,9 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
     private fun atalhoDa(chave: String, a: MtpArmazem): File? {
         if (a.id != Mtp.ARMAZEM) return null
         val rel = relDa(chave)
-        if ('/' in rel || rel.isEmpty()) return null
+        // Só um nome com a extensão do atalho monta o atalho (que lê as redes e o arquivo): antes TODA consulta a um item
+        // da raiz montava (debug 20/11/2026).
+        if ('/' in rel || rel.isEmpty() || !rel.endsWith(PanelShortcut.EXTENSION)) return null
         val f = try { atalho() } catch (_: Exception) { null } ?: return null
         if (!PanelShortcut.isShortcut(rel, f.name) || File(a.raiz(), rel).exists()) return null
         return f

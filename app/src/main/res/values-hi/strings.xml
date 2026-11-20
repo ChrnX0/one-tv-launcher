@@ -286,7 +286,7 @@
     <string name="som_classico">क्लासिक</string>
     <string name="som_sino">घंटी</string>
     <string name="som_direto">पूरा वॉल्यूम</string>
-    <string name="som_rampa1">1 मिनट में बढ़ती है</string>
+    <string name="som_rampa1">1½ मिनट में बढ़ती है</string>
     <string name="som_rampa2">2 मिनट में बढ़ती है</string>
     <string name="vel_resultado">इंटरनेट: %1$.0f Mbps (%3$.1f s में %2$.0f MB डाउनलोड)</string>
     <string name="vel_falhou">जाँच विफल (इंटरनेट नहीं या सर्वर बंद)</string>

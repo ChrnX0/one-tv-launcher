@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">चालू</string>
     <string name="elv_cat_desligado">बंद</string>
     <string name="elv_cat_ep">%1$s · सी%2$d ए%3$d</string>
+    <string name="pod_temp_ep">सी%1$d ए%2$d</string>
     <string name="elv_cat_so_ep">%1$s · एपिसोड %2$d</string>
     <string name="elv_cat_temporada">%1$s · सीज़न %2$d</string>
     <string name="elv_cat_filme_ano">%1$s (%2$d)</string>

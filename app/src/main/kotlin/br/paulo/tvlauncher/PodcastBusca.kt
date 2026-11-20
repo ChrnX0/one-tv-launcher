@@ -41,7 +41,9 @@ object PodcastBusca {
             val t = PodcastFeed.limpar(o.optString("title"), 200)
             if (!PodcastFeed.urlValida(url) || t.isEmpty()) null
             else Resultado(url, t, PodcastFeed.limpar(o.optString("author"), 200), o.optString("image").takeIf { PodcastFeed.urlValida(it) }.orEmpty(),
-                o.optBoolean("explicit"))
+                // Sem o campo (o "Em alta" do Podcast Index não informa): conta como explícito. Só pesa com o modo
+                // protegido ligado, que antes deixava passar tudo do Em alta (debug 20/11/2026).
+                if (o.has("explicit") && !o.isNull("explicit")) o.optBoolean("explicit") else true)
         }.distinctBy { it.url }.take(MAX)
     }.getOrDefault(emptyList())
 

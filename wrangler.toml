@@ -42,3 +42,15 @@ simple = { limit = 30, period = 60 }
 name = "WEATHER_UPSTREAM_LIMITER"
 namespace_id = "1002"
 simple = { limit = 20, period = 60 }
+
+# Busca e "em alta" de podcasts (src/podcasts.js). Por IP: a TV pede poucas vezes por minuto (digitar a busca).
+[[ratelimits]]
+name = "PODCASTS_IP_LIMITER"
+namespace_id = "1003"
+simple = { limit = 30, period = 60 }
+
+# Chamadas ao Podcast Index (fora do cache), todas as TVs juntas.
+[[ratelimits]]
+name = "PODCASTS_UPSTREAM_LIMITER"
+namespace_id = "1004"
+simple = { limit = 60, period = 60 }

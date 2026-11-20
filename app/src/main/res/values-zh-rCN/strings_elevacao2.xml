@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">开</string>
     <string name="elv_cat_desligado">关</string>
     <string name="elv_cat_ep">%1$s · 第%2$d季 第%3$d集</string>
+    <string name="pod_temp_ep">第%1$d季 第%2$d集</string>
     <string name="elv_cat_so_ep">%1$s · 第%2$d集</string>
     <string name="elv_cat_temporada">%1$s · 第%2$d季</string>
     <string name="elv_cat_filme_ano">%1$s（%2$d）</string>

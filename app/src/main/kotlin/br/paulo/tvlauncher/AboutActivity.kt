@@ -23,7 +23,8 @@ class AboutActivity : Activity() {
         coluna.addView(SofalyWordmark(this, dp(80).toFloat()), LinearLayout.LayoutParams(-2, -2))
         coluna.addView(TextView(this).apply {
             text = getString(R.string.brand_slogan)
-            setTextColor(Estilo.TEXTO)   // slogan em branco, acima do cinza da versão (crítica de design 19/11/2026); typeface = Fontes.nunito(context, 400)
+            setTextColor(Estilo.TEXTO)   // slogan em branco, acima do cinza da versão (crítica de design 19/11/2026)
+            typeface = Fontes.nunito(context, 400)   // estava dentro do comentário acima e nunca valia (debug 20/11/2026)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f); gravity = Gravity.CENTER
         }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(12) })
         val nome = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { null }

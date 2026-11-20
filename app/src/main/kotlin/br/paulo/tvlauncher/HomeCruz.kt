@@ -127,7 +127,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     /** Quanto os ícones se mexem (MovimentoAdaptativo); quem usa decide pelo aparelho e pelos quadros medidos. */
     var nivel: MovimentoAdaptativo.Nivel = MovimentoAdaptativo.Nivel.COMPLETO
         set(v) { if (field != v) { field = v; posicionar(animar = false) } }
-    var aoSubirTopo: (() -> Unit)? = null
+    /** ▲ no 1º item saiu da cruz; o número é o repeatCount da tecla (0 = toque novo, >0 = vinha segurando). */
+    var aoSubirTopo: ((Int) -> Unit)? = null
     /** Andou com uma seta (para a arte deslizar ao contrário: paralaxe, onda 3). Não vem na HOME nem na borda. */
     var aoPasso: ((CruzLogica.Tecla) -> Unit)? = null
     /** Som de cada passo (SonsCruz): quem usa decide se toca. */
@@ -346,7 +347,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             else -> return super.onKeyDown(keyCode, event)
         }
         if (t == CruzLogica.Tecla.CIMA && CruzLogica.passo(mapa, estado, t) is CruzLogica.Resultado.SubirTopo) {
-            aoSubirTopo?.invoke()
+            aoSubirTopo?.invoke(repeticao)
             return false   // o Android procura o foco acima (a barra de cima)
         }
         aplicar(t)
