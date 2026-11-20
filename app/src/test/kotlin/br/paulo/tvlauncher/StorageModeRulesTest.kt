@@ -3,7 +3,9 @@ package br.paulo.tvlauncher
 import br.paulo.tvlauncher.StorageModeRules.Modo
 import br.paulo.tvlauncher.StorageModeRules.Motivo
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class StorageModeRulesTest {
