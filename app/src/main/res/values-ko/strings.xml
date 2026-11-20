@@ -150,6 +150,11 @@
     <string name="home_remover">빼기</string>
     <string name="home_mostrar">홈 화면에 표시</string>
     <string name="home_ocultar">홈 화면에서 숨기기</string>
+    <string name="home_sob_demanda">사용하지 않을 때 정지</string>
+    <string name="home_sob_demanda_tirar">정지 해제</string>
+    <string name="sob_demanda_ligado">정지했습니다. 여기 그대로 있습니다. OK를 누르면 다시 켜져 열리고, 나간 지 2분 뒤 다시 정지합니다.</string>
+    <string name="sob_demanda_desligado">정지를 해제했습니다. 전처럼 작동합니다.</string>
+    <string name="sob_demanda_falhou">지금은 바꿀 수 없습니다. 잠시 후 다시 시도하세요.</string>
     <string name="home_desinstalar_app">%1$s 제거</string>
     <string name="home_desinstalar">제거</string>
     <string name="home_app_sistema"> (시스템 앱)</string>

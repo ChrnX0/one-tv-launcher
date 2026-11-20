@@ -150,6 +150,11 @@
     <string name="home_remover">Entfernen</string>
     <string name="home_mostrar">Auf dem Startbildschirm zeigen</string>
     <string name="home_ocultar">Vom Startbildschirm ausblenden</string>
+    <string name="home_sob_demanda">Einfrieren, wenn nicht benutzt</string>
+    <string name="home_sob_demanda_tirar">Nicht mehr einfrieren</string>
+    <string name="sob_demanda_ligado">Eingefroren. Sie bleibt hier: OK taut sie auf und öffnet sie, 2 Minuten nach dem Verlassen friert sie wieder ein.</string>
+    <string name="sob_demanda_desligado">Aufgetaut. Sie funktioniert wie vorher.</string>
+    <string name="sob_demanda_falhou">Konnte gerade nicht geändert werden. Gleich noch einmal versuchen.</string>
     <string name="home_desinstalar_app">%1$s deinstallieren</string>
     <string name="home_desinstalar">Deinstallieren</string>
     <string name="home_app_sistema"> (System-App)</string>

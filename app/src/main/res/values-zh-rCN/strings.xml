@@ -150,6 +150,11 @@
     <string name="home_remover">移出</string>
     <string name="home_mostrar">在主屏幕显示</string>
     <string name="home_ocultar">从主屏幕隐藏</string>
+    <string name="home_sob_demanda">不用时冻结</string>
+    <string name="home_sob_demanda_tirar">不再冻结</string>
+    <string name="sob_demanda_ligado">已冻结。它仍留在这里：按 OK 会解冻并打开，离开 2 分钟后再次冻结。</string>
+    <string name="sob_demanda_desligado">已解冻。和以前一样使用。</string>
+    <string name="sob_demanda_falhou">现在无法更改。请稍后再试。</string>
     <string name="home_desinstalar_app">卸载 %1$s</string>
     <string name="home_desinstalar">卸载</string>
     <string name="home_app_sistema">（系统应用）</string>

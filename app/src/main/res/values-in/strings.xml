@@ -150,6 +150,11 @@
     <string name="home_remover">Keluarkan</string>
     <string name="home_mostrar">Tampilkan di layar utama</string>
     <string name="home_ocultar">Sembunyikan dari layar utama</string>
+    <string name="home_sob_demanda">Bekukan saat tidak dipakai</string>
+    <string name="home_sob_demanda_tirar">Berhenti membekukan</string>
+    <string name="sob_demanda_ligado">Dibekukan. Tetap di sini: OK mencairkan dan membukanya, lalu beku lagi 2 menit setelah Anda keluar.</string>
+    <string name="sob_demanda_desligado">Dicairkan. Berfungsi seperti sebelumnya.</string>
+    <string name="sob_demanda_falhou">Tidak bisa diubah sekarang. Coba lagi sebentar lagi.</string>
     <string name="home_desinstalar_app">Copot %1$s</string>
     <string name="home_desinstalar">Copot</string>
     <string name="home_app_sistema"> (aplikasi sistem)</string>

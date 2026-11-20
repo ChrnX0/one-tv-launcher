@@ -61,6 +61,7 @@ object ObserverTv {
         }
         runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, ctx.filesDir.usableSpace / 1_048_576, agora) }
         runCatching { learnHabit(ctx, agora) }
+        runCatching { OnDemandTv.tick(ctx) }   // sob demanda: congela de novo o que ficou aberto (cinto do onWindow)
         if (trialsPending) Fundo.rodar("observer-trials") { runCatching { checkTrials(ctx) }.onFailure { Log.w(TAG, "provas: $it") } }
         // O último put passa pelo publish para acordar o juiz uma vez só por amostra.
         publish(ObserverCore.Signal.INTERNET, if (internet) 1 else 0)
@@ -294,6 +295,7 @@ object ObserverTv {
                 }
                 is ObserverTrial.Verdict.Undo -> {
                     PrivilegioDO.ocultar(ctx, t.pkg, false)
+                    runCatching { OnDemandTv.forget(ctx, t.pkg) }   // quebrou algo: não volta a congelar sozinho depois de usado
                     val voltou = pkgOk(ctx, t.pkg) == true
                     // O Android recusou (shell fora do ar, DPM disse não): a prova fica para tentar na próxima batida (Codex, #335).
                     if (!voltou) { restantes += t; Log.w(TAG, "prova: ${t.pkg} quebrou ${v.broke}; descongelar falhou, tenta de novo"); continue }
@@ -351,6 +353,7 @@ object ObserverTv {
             .put("packages", runCatching { packages(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
             .put("trials", runCatching { org.json.JSONArray(ObserverTrial.toJson(ObserverTrial.fromJson(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("trials", null)))) }.getOrNull() ?: org.json.JSONArray())
             .put("checks", runCatching { org.json.JSONObject().apply { checks(ctx).forEach { (c, v) -> put(c.name, v) } } }.getOrNull() ?: org.json.JSONObject.NULL)
+            .put("on_demand", runCatching { org.json.JSONArray(OnDemand.toJson(OnDemandTv.entries(ctx))) }.getOrNull() ?: org.json.JSONArray())
             .put("log_total", log.length()).put("log", logNovo)
     }
 
@@ -377,6 +380,10 @@ object ObserverTv {
             appendLine("pacotes${if (inv.complete) "" else " (só os visíveis: versão sem QUERY_ALL_PACKAGES)"}: ${inv.total} (${inv.system} de sistema, ${inv.frozen.size} congelados); por risco ${inv.byRisk}; " +
                 "sem ficha ${inv.unknown.size}" + inv.unknown.take(20).joinToString("") { "\n  ? ${it.name}${if (it.system) " (sistema)" else ""}" })
         }
+        val provas = ObserverTrial.fromJson(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("trials", null))
+        appendLine("provas: " + if (provas.isEmpty()) "nenhuma" else provas.joinToString("; ") { "${it.pkg} há ${(agora - it.at) / 60_000} min" })
+        appendLine("conferências: " + runCatching { checks(ctx).entries.joinToString(" ") { "${it.key.name}=${it.value}" } }.getOrDefault("?"))
+        appendLine(runCatching { OnDemandTv.report(ctx) }.getOrDefault("sob demanda: ?"))
         val n = notes(ctx)
         appendLine("recados na fila: ${n.size}" + n.joinToString("") { "\n  ${it.kind} ${it.severity}${if (it.seen) " (visto)" else ""}" })
         val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)

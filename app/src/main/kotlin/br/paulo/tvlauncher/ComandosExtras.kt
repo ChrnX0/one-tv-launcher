@@ -143,7 +143,17 @@ object ComandosExtras {
         "modo_seguro_testar" -> { ModoSeguro.ligarParaTeste(ctx); "modo de segurança ligado: aperte HOME" }
         "modo_seguro_sair" -> { ModoSeguro.sair(ctx); "modo de segurança desligado" }
         "leveza" -> LevezaTv.json(ctx).toString()   // degrau 2: memória e tempo da HOME (volte à HOME umas vezes antes)
-        "observer" -> ObserverTv.report(ctx)   // Observador: sinais, o que está fora do normal, recados e registro
+        "observer" -> ObserverTv.report(ctx)
+        // Congelar sob demanda (OnDemandTv) e a prova do Observador: estado; marcar/desmarcar um app; congelar com prova (teste da fase 3).
+        "ondemand" -> OnDemandTv.report(ctx)
+        "ondemand_mark" -> i.getStringExtra("pacote")?.let { OnDemandTv.mark(ctx, it) ?: "ok: $it sob demanda" } ?: "falta --es pacote"
+        "ondemand_unmark" -> i.getStringExtra("pacote")?.let { OnDemandTv.unmark(ctx, it) ?: "ok: $it descongelado" } ?: "falta --es pacote"
+        "freeze_trial" -> i.getStringExtra("pacote")?.let { p ->
+            if (PainelApps.protegido(ctx, p)) "protegido" else {
+                val antes = ObserverTv.beforeFreeze(ctx)
+                if (PrivilegioDO.ocultar(ctx, p, true)) { ObserverTv.startTrial(ctx, p, antes); "congelado; prova aberta: $antes" } else "não congelou"
+            }
+        } ?: "falta --es pacote"   // Observador: sinais, o que está fora do normal, recados e registro
         "vazamentos" -> LeakWatch.relatorio()   // telas fechadas que continuam na memória (LeakWatch.kt)
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         // Elevação, onda 0: placar dos 7 pilares (JSON + séries cruas); a tela "Como esta TV está indo"; antes e depois da limpeza.

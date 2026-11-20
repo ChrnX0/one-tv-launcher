@@ -150,6 +150,11 @@
     <string name="home_remover">Remover</string>
     <string name="home_mostrar">Mostrar no ecrã inicial</string>
     <string name="home_ocultar">Ocultar do ecrã inicial</string>
+    <string name="home_sob_demanda">Congelar quando não estiver em uso</string>
+    <string name="home_sob_demanda_tirar">Deixar de congelar</string>
+    <string name="sob_demanda_ligado">Congelado. Continua aqui: o OK descongela e abre, e volta a congelar 2 minutos depois de sair.</string>
+    <string name="sob_demanda_desligado">Descongelado. Funciona como antes.</string>
+    <string name="sob_demanda_falhou">Não foi possível mudar agora. Tente de novo daqui a pouco.</string>
     <string name="home_desinstalar_app">Desinstalar %1$s</string>
     <string name="home_desinstalar">Desinstalar</string>
     <string name="home_app_sistema"> (app do sistema)</string>

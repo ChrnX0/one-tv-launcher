@@ -150,6 +150,11 @@
     <string name="home_remover">Usuń</string>
     <string name="home_mostrar">Pokaż na ekranie głównym</string>
     <string name="home_ocultar">Ukryj z ekranu głównego</string>
+    <string name="home_sob_demanda">Zamrażaj, gdy nieużywana</string>
+    <string name="home_sob_demanda_tirar">Nie zamrażaj</string>
+    <string name="sob_demanda_ligado">Zamrożona. Zostaje tutaj: OK ją odmraża i otwiera, a 2 minuty po wyjściu zamraża się znowu.</string>
+    <string name="sob_demanda_desligado">Odmrożona. Działa jak wcześniej.</string>
+    <string name="sob_demanda_falhou">Nie udało się teraz zmienić. Spróbuj za chwilę.</string>
     <string name="home_desinstalar_app">Odinstaluj %1$s</string>
     <string name="home_desinstalar">Odinstaluj</string>
     <string name="home_app_sistema"> (aplikacja systemowa)</string>
