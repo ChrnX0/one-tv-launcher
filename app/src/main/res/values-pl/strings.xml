@@ -742,6 +742,7 @@ AS\\Filmy).</string>
     <string name="legenda_buscar">Szukaj napisów online</string>
     <string name="legenda_procurando">Szukanie napisów…</string>
     <string name="legenda_baixando">Pobieranie napisów…</string>
+    <string name="legenda_acertada">Napisy dopasowane do mowy · %1$s</string>
     <string name="legenda_pronta">Napisy gotowe</string>
     <string name="legenda_nenhuma">Brak napisów w języku telewizora dla tego wideo</string>
     <string name="legenda_erro">Nie udało się wyszukać napisów</string>

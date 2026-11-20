@@ -742,6 +742,7 @@ AS\\Film).</string>
     <string name="legenda_buscar">Cari subtitle online</string>
     <string name="legenda_procurando">Mencari subtitle…</string>
     <string name="legenda_baixando">Mengunduh subtitle…</string>
+    <string name="legenda_acertada">Subtitle disesuaikan dengan ucapan · %1$s</string>
     <string name="legenda_pronta">Subtitle siap</string>
     <string name="legenda_nenhuma">Tidak ada subtitle dalam bahasa TV untuk video ini</string>
     <string name="legenda_erro">Tidak bisa mencari subtitle</string>

@@ -207,6 +207,15 @@ class VodActivity : Activity() {
     // Legendas na mesma pasta do vídeo ("Filme.srt", "Filme.pt-BR.ass"): endereço + o que o nome diz (LegendaAoLado).
     private var legendasAoLado: List<Pair<String, LegendaAoLado.Achada>> = emptyList()
     private var atrasoLegenda = 0L
+    // Legenda que se acerta sozinha (SubtitleSync + SpeechTap, 20/11/2026): para quando a pessoa escolhe o atraso à mão,
+    // depois de 2 acertos ou quando a conta diz que a legenda já está no lugar.
+    private var atrasoManual = false
+    private var acertosAuto = 0
+    private var acertando = false
+    private var tiquesLegenda = 0
+    private val vigiaLegenda = object : Runnable {
+        override fun run() { vigiarLegenda(); tela.postDelayed(this, 5_000) }
+    }
     private lateinit var legenda: TextView
     private lateinit var legendaImg: LegendaImagem.Vista   // PGS, VobSub, DVB e ASS (libass): legenda que chega como imagem
     // Jellyfin, Emby ou Plex: a quem contar onde parou (é assim que o "Continuar assistindo" deles anda).
@@ -407,6 +416,7 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
+                SpeechTap.zerar()
                 url = endereco; retomarEm = pos; legendaArquivo = legFinal; legendaTraduzida = trad; atrasoLegenda = atraso; legendasAoLado = aoLado
                 memSerie = mem
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat(); legenda2.textSize = tamLeg.toFloat(); assAjustes.escala(FimDoVideo.escalaAss(tamLeg))
@@ -453,6 +463,7 @@ class VodActivity : Activity() {
         // Os relógios da tela param junto (o tocar() da volta liga de novo): sem isso, com a barra à mostra, o :player
         // acordava a cada 1 s e o salvar a cada 15 s, com a tela atrás de outro app.
         tela.removeCallbacks(salvarDepois); tela.removeCallbacks(tique); tela.removeCallbacks(esconderBarra)
+        tela.removeCallbacks(vigiaLegenda); SpeechTap.ligado = false
         super.onStop()
         visivel = false
         salvar()
@@ -503,9 +514,11 @@ class VodActivity : Activity() {
             .build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
+        SpeechTap.proximaPosicao(retomarEm)
         p.setMediaItem(item(u), retomarEm)
         p.prepare()
         p.playWhenReady = true
+        tela.removeCallbacks(vigiaLegenda); tela.postDelayed(vigiaLegenda, 5_000)
         player = p
         sessao.ligar(p)   // o sistema, o Gemini e o MCP passam a ver o filme (SessaoMidia)
         tela.removeCallbacks(salvarDepois); tela.postDelayed(salvarDepois, SALVAR_MS)
@@ -773,13 +786,14 @@ class VodActivity : Activity() {
         val u = url ?: return
         val pos = p.currentPosition
         legendaDecidida = false
+        SpeechTap.proximaPosicao(pos)
         p.setMediaItem(item(u), pos)
         p.prepare()
     }
 
     private val ouvinte = object : Player.Listener {
         override fun onPositionDiscontinuity(velha: Player.PositionInfo, nova: Player.PositionInfo, motivo: Int) {
-            if (motivo == Player.DISCONTINUITY_REASON_SEEK) { medida.pulou(); player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) } }
+            if (motivo == Player.DISCONTINUITY_REASON_SEEK) { medida.pulou(); SpeechTap.proximaPosicao(nova.positionMs); player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) } }
         }
         override fun onRenderedFirstFrame() {
             medida.primeiroQuadro(android.os.SystemClock.elapsedRealtime())?.let { MedidasTv.anotar(this@VodActivity, Placar.Chave.VOD, it) }
@@ -825,6 +839,7 @@ class VodActivity : Activity() {
             val pos = p.currentPosition
             tela.postDelayed({
                 if (player !== p || !visivel) return@postDelayed
+                SpeechTap.proximaPosicao(pos)
                 p.setMediaItem(item(url ?: return@postDelayed), pos)
                 p.prepare()
             }, espera)
@@ -1475,7 +1490,7 @@ class VodActivity : Activity() {
                     tela.post {
                         if (isDestroyed || chave != k || legendaArquivo != null) return@post
                         r.onSuccess { (f, bate) ->
-                            legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0
+                            legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0
                             LegendaTraduzida.esquecer(this, k)
                             avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome) + " · " + LegendaExterna.CREDITO)
                             recarregarComLegenda()
@@ -1500,7 +1515,7 @@ class VodActivity : Activity() {
         fun usar(f: java.io.File, aviso: Int) = tela.post {
             if (isDestroyed || chave != k || pararTraducao.get()) return@post
             if (legendaArquivo != null && !legendaTraduzida) return@post   // a pessoa já escolheu outra
-            legendaArquivo = f; legendaTraduzida = true; atrasoLegenda = 0
+            legendaArquivo = f; legendaTraduzida = true; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0
             avisoBreve(getString(aviso) + " · " + LegendaExterna.CREDITO)   // a original veio do OpenSubtitles
             recarregarComLegenda()
         }
@@ -1549,7 +1564,7 @@ class VodActivity : Activity() {
                 r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
                 r.onSuccess { f ->
                     pararTraducao.set(true); LegendaTraduzida.esquecer(this, k)   // a escolhida pela pessoa vale mais que a tradução
-                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta) + " · " + LegendaExterna.CREDITO); recarregarComLegenda()
+                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0; avisoBreve(getString(R.string.legenda_pronta) + " · " + LegendaExterna.CREDITO); recarregarComLegenda()
                 }
             }
         }
@@ -1565,6 +1580,7 @@ class VodActivity : Activity() {
         val atual = ATRASOS.indexOfFirst { it == atrasoLegenda }
         Estilo.lista(this, getString(R.string.legenda_atraso_titulo), ATRASOS.map { rotuloAtraso(it) }, listOf(atual), aoVoltar = voltar) { i ->
             val ms = ATRASOS[i]; val k = chave
+            atrasoManual = true   // a pessoa escolheu: o acerto automático não mexe mais neste vídeo
             Fundo.rodar {
                 val f = LegendaBaixar.ajustar(this, k, ms)
                 getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", ms).apply()
@@ -1698,6 +1714,41 @@ class VodActivity : Activity() {
         tempo.text = (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos)) + termina
         progresso.progress = dur?.let { (pos * 1000 / it).toInt() } ?: 0
         progresso.secondaryProgress = dur?.let { (p.bufferedPosition * 1000 / it).toInt() } ?: 0
+    }
+
+    /**
+     * A cada 5 s: liga o ouvido ([SpeechTap]) só com legenda baixada; confere o relógio dele contra o do player; e a cada
+     * minuto tenta o acerto ([SubtitleSync]). Com encaixe seguro, refaz a legenda no novo atraso e avisa.
+     */
+    private fun vigiarLegenda() {
+        val p = player ?: return
+        val arq = legendaArquivo
+        SpeechTap.ligado = arq != null && !atrasoManual && acertosAuto < 2
+        if (!SpeechTap.ligado || !p.isPlaying) return
+        SpeechTap.relogioMs()?.let { r -> if (r - p.currentPosition !in -500L..5_000L) SpeechTap.invalidar() }
+        if (++tiquesLegenda % 12 != 0 || acertando || arq == null) return
+        acertando = true
+        val k = chave; val atual = atrasoLegenda
+        Fundo.rodar("legenda-acerta") {
+            val r = runCatching {
+                val (inicio, e) = SpeechTap.trecho(SubtitleSync.JANELA_ANALISE_MS) ?: return@runCatching null
+                SubtitleSync.ajustar(SubtitleSync.marcarFala(e), inicio, SubtitleSync.falasDoSrt(arq.readText()))
+            }.getOrNull()
+            val total = atual + (r?.atrasoMs ?: 0L)
+            val f = if (SubtitleSync.aplicar(r)) LegendaBaixar.ajustar(this, k, total) else null
+            if (f != null) getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", total).apply()
+            tela.post {
+                acertando = false
+                if (isDestroyed || atrasoManual || legendaArquivo?.path != arq.path || atrasoLegenda != atual) return@post
+                if (r != null) android.util.Log.i("TvLauncher.Legenda", " ajuste ${r.atrasoMs} ms, confiança ${"%.1f".format(Locale.ROOT, r.confianca)}")
+                if (r != null && !SubtitleSync.aplicar(r)) { acertosAuto = 2; return@post }   // já está no lugar: para de escutar
+                if (f == null) return@post
+                acertosAuto++
+                legendaArquivo = f; atrasoLegenda = total
+                avisoBreve(getString(R.string.legenda_acertada, rotuloAtraso(total)))
+                recarregarComLegenda()
+            }
+        }
     }
 
     /** Fecha o trecho medido (a tela saiu da frente ou o vídeo acabou) e grava as taxas, se tocou o bastante. */

@@ -742,6 +742,7 @@ AS\\Movies).</string>
     <string name="legenda_buscar">البحث عن ترجمة على الإنترنت</string>
     <string name="legenda_procurando">جارٍ البحث عن ترجمة…</string>
     <string name="legenda_baixando">جارٍ تنزيل الترجمة…</string>
+    <string name="legenda_acertada">تمت مزامنة الترجمة مع الكلام · %1$s</string>
     <string name="legenda_pronta">الترجمة جاهزة</string>
     <string name="legenda_nenhuma">لا توجد ترجمة بلغة التلفزيون لهذا الفيديو</string>
     <string name="legenda_erro">تعذّر البحث عن ترجمة</string>

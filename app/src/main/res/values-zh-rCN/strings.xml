@@ -742,6 +742,7 @@ AS\\Movies）。</string>
     <string name="legenda_buscar">在线查找字幕</string>
     <string name="legenda_procurando">正在查找字幕…</string>
     <string name="legenda_baixando">正在下载字幕…</string>
+    <string name="legenda_acertada">字幕已按语音对齐 · %1$s</string>
     <string name="legenda_pronta">字幕已就绪</string>
     <string name="legenda_nenhuma">此视频没有电视语言的字幕</string>
     <string name="legenda_erro">无法搜索字幕</string>

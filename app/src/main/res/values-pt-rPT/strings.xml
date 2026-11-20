@@ -742,6 +742,7 @@ AS\\Filmes).</string>
     <string name="legenda_buscar">Pesquisar legenda na internet</string>
     <string name="legenda_procurando">A procurar legenda…</string>
     <string name="legenda_baixando">A transferir legenda…</string>
+    <string name="legenda_acertada">Legendas acertadas pela fala · %1$s</string>
     <string name="legenda_pronta">Legenda pronta</string>
     <string name="legenda_nenhuma">Nenhuma legenda em português para este vídeo</string>
     <string name="legenda_erro">Não consegui buscar a legenda</string>
