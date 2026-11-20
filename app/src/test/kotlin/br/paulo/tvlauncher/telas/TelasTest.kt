@@ -59,6 +59,9 @@ class TelasTest {
         "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão por algumas horas na onda 3)
         "home-recua" to MainActivity::class.java,    // cruz com a barra Recua ("home" usa a Ilha, padrão desde 18/11/2026)
         "configuracoes" to ConfigLauncherActivity::class.java,
+        // Configurações iguais ao painel (20/11/2026): abas com o índice "Nesta página" e as pílulas "Conversa com".
+        "configuracoes-remoto" to ConfigLauncherActivity::class.java,
+        "configuracoes-familia" to ConfigLauncherActivity::class.java,
         "sobre" to br.paulo.tvlauncher.AboutActivity::class.java,   // logo Sofaly, slogan e versão (18/11/2026)
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -155,7 +158,7 @@ class TelasTest {
             if (semRede) { br.paulo.tvlauncher.ClimaMet.esquecerCache(); br.paulo.tvlauncher.WeatherApiSource.esquecerCache()
                 System.setProperty("https.proxyHost", "127.0.0.1"); System.setProperty("https.proxyPort", "9")
                 System.setProperty("http.proxyHost", "127.0.0.1"); System.setProperty("http.proxyPort", "9") }
-            val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
+            val m = try { medir(cls, "$idioma-$nome", ABA_DA_TELA[nome]) } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             } finally {
                 if (semRede) for ((k, v) in proxyAntes) if (v == null) System.clearProperty(k) else System.setProperty(k, v)
@@ -187,8 +190,12 @@ class TelasTest {
             "\nFoi de propósito? ./gradlew testReleaseUnitTest -Ptelas -PtelasAtualizar e mande app/src/test/telas/referencia.json junto.")
     }
 
-    private fun medir(cls: Class<out Activity>, arquivo: String): Medida {
-        val a = Robolectric.buildActivity(cls).setup().get()
+    /** Telas das Configurações abertas numa aba que não é a primeira (EXTRA_ABA). */
+    private val ABA_DA_TELA = mapOf("configuracoes-remoto" to ConfigLauncherActivity.ABA_REMOTO, "configuracoes-familia" to 2)
+
+    private fun medir(cls: Class<out Activity>, arquivo: String, aba: Int? = null): Medida {
+        val intent = android.content.Intent(RuntimeEnvironment.getApplication(), cls).apply { if (aba != null) putExtra(ConfigLauncherActivity.EXTRA_ABA, aba) }
+        val a = Robolectric.buildActivity(cls, intent).setup().get()
         // A HOME lê apps e player fora da tela e desenha depois: espera essas voltas (a cruz só aparece com elas).
         if (cls == MainActivity::class.java) repeat(10) { Thread.sleep(100); org.robolectric.shadows.ShadowLooper.idleMainLooper(200, java.util.concurrent.TimeUnit.MILLISECONDS) }
         val raiz: View = a.window.decorView
