@@ -286,4 +286,10 @@
         <item quantity="one">%d रुकावट</item>
         <item quantity="other">%d रुकावटें</item>
     </plurals>
+    <string name="vod_vazio_texto">फ़िल्में और सीरीज़ आपकी टीवी सूची से आती हैं। सेटिंग्स, खाता में एक सूची जोड़ें।</string>
+    <string name="vod_adicionar_lista">सूची जोड़ें</string>
+    <string name="uso_recomendado">सुझाया गया</string>
+    <string name="aut_nenhuma_acao">कोई कार्रवाई नहीं</string>
+    <string name="mtv_fila_pronto">आपके ऐप वापस आ गए</string>
+    <string name="mtv_ir_inicio">होम स्क्रीन पर जाएँ</string>
 </resources>

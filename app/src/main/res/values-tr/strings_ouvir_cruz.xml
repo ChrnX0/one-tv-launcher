@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Favoriler kumandadaki 1–9 tuşlarıyla da çalar</string>
     <string name="ouv_tecla">Kumandada %d tuşu</string>
     <string name="ouv_ao_sair">Çıkınca</string>
-    <string name="ouv_ao_sair_continua">Ana ekranda çalmaya devam eder\n⏯ kumandada her ekrandan duraklatır</string>
+    <string name="ouv_ao_sair_continua">Ana ekranda çalmaya devam eder\n▶❙❙ kumandada her ekrandan duraklatır</string>
     <string name="ouv_ao_sair_para">Bu ekrandan çıkınca durur</string>
     <string name="ouv_recentes">Son dinlenen</string>
     <string name="ouv_sem_favoritas">Henüz favori yok</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">Canlı</string>
     <string name="ouv_dica_pular">atla</string>
     <string name="ouv_voltar">15 sn geri</string>
-    <string name="ouv_voltar_det">Kumandada ⏪ da olur</string>
+    <string name="ouv_voltar_det">Kumandada ◀◀ da olur</string>
     <string name="ouv_avancar">30 sn ileri</string>
-    <string name="ouv_avancar_det">Kumandada ⏩ da olur</string>
+    <string name="ouv_avancar_det">Kumandada ▶▶ da olur</string>
     <string name="ouv_velocidade_det">%s · ses tonu değişmez</string>
     <string name="ouv_parar_pod_det">Kaldığınız yer saklanır</string>
     <string name="ouv_seguindo">Takipte</string>

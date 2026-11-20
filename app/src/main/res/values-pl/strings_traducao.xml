@@ -300,4 +300,10 @@
         <item quantity="many">%d przerw</item>
         <item quantity="other">%d przerwy</item>
     </plurals>
+    <string name="vod_vazio_texto">Filmy i seriale pochodzą z Twojej listy TV. Dodaj ją w Ustawieniach, Konto.</string>
+    <string name="vod_adicionar_lista">Dodaj listę</string>
+    <string name="uso_recomendado">Zalecane</string>
+    <string name="aut_nenhuma_acao">brak akcji</string>
+    <string name="mtv_fila_pronto">Twoje aplikacje wróciły</string>
+    <string name="mtv_ir_inicio">Przejdź do ekranu głównego</string>
 </resources>

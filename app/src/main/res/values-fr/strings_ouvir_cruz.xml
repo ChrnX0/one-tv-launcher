@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Les favoris se lancent aussi avec les touches 1 à 9 de la télécommande</string>
     <string name="ouv_tecla">Touche %d de la télécommande</string>
     <string name="ouv_ao_sair">En quittant</string>
-    <string name="ouv_ao_sair_continua">Continue sur l’écran d’accueil\n⏯ sur la télécommande met en pause depuis n’importe quel écran</string>
+    <string name="ouv_ao_sair_continua">Continue sur l’écran d’accueil\n▶❙❙ sur la télécommande met en pause depuis n’importe quel écran</string>
     <string name="ouv_ao_sair_para">S’arrête quand vous quittez cet écran</string>
     <string name="ouv_recentes">Récentes</string>
     <string name="ouv_sem_favoritas">Pas encore de favoris</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">En direct</string>
     <string name="ouv_dica_pular">sauter</string>
     <string name="ouv_voltar">Reculer 15 s</string>
-    <string name="ouv_voltar_det">Aussi ⏪ sur la télécommande</string>
+    <string name="ouv_voltar_det">Aussi ◀◀ sur la télécommande</string>
     <string name="ouv_avancar">Avancer 30 s</string>
-    <string name="ouv_avancar_det">Aussi ⏩ sur la télécommande</string>
+    <string name="ouv_avancar_det">Aussi ▶▶ sur la télécommande</string>
     <string name="ouv_velocidade_det">%s · la voix garde son ton</string>
     <string name="ouv_parar_pod_det">L’endroit où vous vous êtes arrêté est gardé</string>
     <string name="ouv_seguindo">Suivi</string>

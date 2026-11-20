@@ -682,7 +682,7 @@ class PainelRapidoActivity : Activity() {
                 tWifi.ligado = true
                 tWifi.titulo.text = r.nome
                 val sinal = getString(when (r.nivel) { 0 -> R.string.pr_sinal_bom; 1 -> R.string.pr_sinal_medio; else -> R.string.pr_sinal_fraco })
-                tWifi.detalhe(if (r.mbps > 0) "${r.mbps} Mbps" else sinal)
+                tWifi.detalhe(sinal)   // "Sinal bom", não "433 Mbps" (jargão; crítica de design 19/11/2026)
             }
         }
     }

@@ -36,7 +36,7 @@
     <string name="ra_generos">Жанры</string>
     <string name="ra_paises">Другая страна</string>
     <string name="ra_paises_det">Страны с наибольшим числом станций</string>
-    <string name="ra_perto">Рядом с вами</string>
+    <string name="ra_perto">Рядом</string>
     <string name="ra_mais_ouvidas">Популярное: %s</string>
     <string name="ra_mundo">Популярное в мире</string>
     <string name="ra_resultado">Поиск: %s</string>

@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">Выход с этого экрана тоже его останавливает</string>
     <string name="ra_ajustes">Настройки</string>
     <string name="ra_ao_sair">При выходе с этого экрана</string>
-    <string name="ra_ao_sair_det">Если радио играет, ⏯ на пульте ставит его на паузу с любого экрана</string>
+    <string name="ra_ao_sair_det">Если радио играет, ▶❙❙ на пульте ставит его на паузу с любого экрана</string>
     <string name="ra_ao_sair_continua">продолжает играть</string>
     <string name="ra_ao_sair_para">останавливается</string>
     <string name="ouv_canal">Играет радио</string>

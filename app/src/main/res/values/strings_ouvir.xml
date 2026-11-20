@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">Leaving this screen also stops it</string>
     <string name="ra_ajustes">Settings</string>
     <string name="ra_ao_sair">When you leave this screen</string>
-    <string name="ra_ao_sair_det">If it keeps playing, ⏯ on the remote pauses it from any screen</string>
+    <string name="ra_ao_sair_det">If it keeps playing, ▶❙❙ on the remote pauses it from any screen</string>
     <string name="ra_ao_sair_continua">keeps playing</string>
     <string name="ra_ao_sair_para">stops</string>
     <string name="ouv_canal">Radio playing</string>

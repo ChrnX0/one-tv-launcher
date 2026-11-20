@@ -433,7 +433,7 @@
     <string name="player_ao_vivo">ライブ</string>
     <string name="player_a_seguir">次: %1$s</string>
     <string name="player_teclas">▲ ▼ チャンネル · OK チャンネルリスト · OK を 2 秒長押し: お気に入り · ◀ 前のチャンネル · ▶▶ オプション · 戻る 終了</string>
-    <string name="player_teclas_pausa">⏯ または OK 再開 · ▶ オプション（ライブに戻る） · ▲ ▼ チャンネル · 戻る 終了</string>
+    <string name="player_teclas_pausa">▶❙❙ または OK 再開 · ▶ オプション（ライブに戻る） · ▲ ▼ チャンネル · 戻る 終了</string>
     <string name="player_cat_busca">検索: %1$s</string>
     <string name="player_acao_buscar">検索</string>
     <string name="player_acao_filtros">フィルター</string>
@@ -441,7 +441,7 @@
     <string name="player_acao_series">シリーズ</string>
     <string name="filmes_titulo">映画</string>
     <string name="filmes_carregando">映画を読み込み中…</string>
-    <string name="filmes_vazio">保存したアカウントに映画がありません（映画は Xtream アカウントからのみ取得されます）。</string>
+    <string name="filmes_vazio">映画はまだありません</string>
     <string name="filmes_cabecalho">%1$s · 映画 %2$d 本</string>
     <string name="filmes_continuar">続きを見る</string>
     <string name="filmes_ordem">並べ替え: %1$s</string>
@@ -477,7 +477,7 @@
     <string name="vod_teclas">OK 一時停止 · ◀ 10 秒 · ▶ 30 秒（長押しで高速）· ▼ 音声、字幕、映像 · ⏮ ⏭ チャプター · 戻る 終了</string>
     <string name="series_titulo">シリーズ</string>
     <string name="series_carregando">シリーズを読み込み中…</string>
-    <string name="series_vazio">保存したアカウントにシリーズがありません（シリーズは Xtream アカウントからのみ取得されます）。</string>
+    <string name="series_vazio">シリーズはまだありません</string>
     <string name="series_cabecalho">%1$s · シリーズ %2$d 作品</string>
     <string name="series_ordem_recentes">新しいエピソードあり</string>
     <string name="series_busca_dica">シリーズの名前</string>
@@ -554,8 +554,8 @@
     <string name="home_card_filmes">映画</string>
     <string name="home_destaque_series">リストの番組 · 続きから再生</string>
     <string name="home_destaque_filmes">リストの映画 · 続きから再生</string>
-    <string name="home_card_rede">ネットワーク</string>
-    <string name="home_destaque_rede">ホームネットワークの動画、音楽、写真</string>
+    <string name="home_card_rede">パソコンから</string>
+    <string name="home_destaque_rede">あなたの動画、音楽、写真</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">M月d日</string>
     <string name="home_busca">検索</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">映画 · 最後に開いたもの</string>
     <string name="home_dest_serie">番組 · %1$s を視聴中</string>
     <string name="home_dest_tv">TV · チャンネル %1$d</string>
-    <string name="rede_titulo">ネットワーク</string>
+    <string name="rede_titulo">パソコンから</string>
     <string name="rede_procurando">ネットワーク上のメディアサーバーを探しています…</string>
     <string name="rede_nenhum">現在オンになっているメディアサーバーはありません。下で追加してください: Plex と Jellyfin はアカウントを、PC や NAS のフォルダはアドレスを使います。</string>
     <string name="rede_secao_seus">自分のサーバー</string>

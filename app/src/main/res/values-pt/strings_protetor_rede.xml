@@ -13,7 +13,7 @@
     </plurals>
     <string name="rede_fotos_usando">Copiando as fotos. Elas aparecem na próxima vez que o protetor abrir.</string>
     <string name="rede_fotos_paradas">O protetor deixou de usar esta pasta.</string>
-    <!-- "Na rede" com cara de catálogo (ideia 29) -->
+    <!-- "Do computador" com cara de catálogo (ideia 29) -->
     <string name="rede_continuar">Continuar assistindo</string>
     <string name="rede_recentes">Adicionados há pouco</string>
     <string name="rede_buscar">Buscar</string>

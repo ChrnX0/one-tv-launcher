@@ -36,7 +36,7 @@
     <string name="ra_generos">Géneros</string>
     <string name="ra_paises">Otro país</string>
     <string name="ra_paises_det">Los países con más emisoras</string>
-    <string name="ra_perto">Cerca de ti</string>
+    <string name="ra_perto">Cerca</string>
     <string name="ra_mais_ouvidas">Las más escuchadas en %s</string>
     <string name="ra_mundo">Las más escuchadas del mundo</string>
     <string name="ra_resultado">Búsqueda: %s</string>

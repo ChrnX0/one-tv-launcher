@@ -36,7 +36,7 @@
     <string name="ra_generos">장르</string>
     <string name="ra_paises">다른 국가</string>
     <string name="ra_paises_det">방송국이 가장 많은 국가</string>
-    <string name="ra_perto">내 주변</string>
+    <string name="ra_perto">근처</string>
     <string name="ra_mais_ouvidas">%s에서 가장 많이 듣는 방송국</string>
     <string name="ra_mundo">전 세계에서 가장 많이 듣는 방송국</string>
     <string name="ra_resultado">검색: %s</string>

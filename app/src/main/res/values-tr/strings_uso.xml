@@ -8,7 +8,7 @@
     <string name="uso_cuida">Baktığım biri için</string>
     <string name="uso_pergunta">Bu TV nasıl kullanılacak?</string>
     <string name="uso_pergunta_det">Bunu daha sonra Ayarlar &gt; Sistem\'den değiştirebilirsiniz.</string>
-    <string name="uso_simples_det">Sadece güzel bir ana ekran: uygulamalar, saat ve hava durumu. Ayarlarda daha az seçenek.</string>
+    <string name="uso_simples_det">Yalnızca temel şeyler: uygulamalar, saat ve hava durumu. Ayarlarda daha az seçenek.</string>
     <string name="uso_completo_det">Her şey: telefondan kontrol, ev cihazları, ağ sürücüsü ve gelişmiş seçenekler.</string>
     <string name="uso_cuida_det">Anne-baba ya da büyükanne-büyükbabanın TV\'si: onlar için kolay, siz de uzaktan telefondan yardım edersiniz.</string>
     <string name="uso_cuidar_longe">Uzaktan ilgilen</string>

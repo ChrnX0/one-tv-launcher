@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">As favoritas também tocam com as teclas 1 a 9 do comando</string>
     <string name="ouv_tecla">Tecla %d do comando</string>
     <string name="ouv_ao_sair">Ao sair do ecrã</string>
-    <string name="ouv_ao_sair_continua">Continua a tocar no ecrã inicial\n⏯ no comando pausa em qualquer ecrã</string>
+    <string name="ouv_ao_sair_continua">Continua a tocar no ecrã inicial\n▶❙❙ no comando pausa em qualquer ecrã</string>
     <string name="ouv_ao_sair_para">Para quando sai deste ecrã</string>
     <string name="ouv_recentes">Recentes</string>
     <string name="ouv_sem_favoritas">Ainda sem favoritas</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">Em direto</string>
     <string name="ouv_dica_pular">saltar</string>
     <string name="ouv_voltar">Recuar 15 s</string>
-    <string name="ouv_voltar_det">Também ⏪ no comando</string>
+    <string name="ouv_voltar_det">Também ◀◀ no comando</string>
     <string name="ouv_avancar">Avançar 30 s</string>
-    <string name="ouv_avancar_det">Também ⏩ no comando</string>
+    <string name="ouv_avancar_det">Também ▶▶ no comando</string>
     <string name="ouv_velocidade_det">%s · a voz não muda de tom</string>
     <string name="ouv_parar_pod_det">Onde parou fica guardado</string>
     <string name="ouv_seguindo">A seguir</string>

@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Favorit juga diputar dengan tombol 1–9 di remote</string>
     <string name="ouv_tecla">Tombol %d di remote</string>
     <string name="ouv_ao_sair">Saat keluar</string>
-    <string name="ouv_ao_sair_continua">Tetap diputar di layar utama\n⏯ di remote menjeda dari layar mana pun</string>
+    <string name="ouv_ao_sair_continua">Tetap diputar di layar utama\n▶❙❙ di remote menjeda dari layar mana pun</string>
     <string name="ouv_ao_sair_para">Berhenti saat Anda keluar dari layar ini</string>
     <string name="ouv_recentes">Terbaru</string>
     <string name="ouv_sem_favoritas">Belum ada favorit</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">Langsung</string>
     <string name="ouv_dica_pular">lompat</string>
     <string name="ouv_voltar">Mundur 15 dtk</string>
-    <string name="ouv_voltar_det">Juga ⏪ di remote</string>
+    <string name="ouv_voltar_det">Juga ◀◀ di remote</string>
     <string name="ouv_avancar">Maju 30 dtk</string>
-    <string name="ouv_avancar_det">Juga ⏩ di remote</string>
+    <string name="ouv_avancar_det">Juga ▶▶ di remote</string>
     <string name="ouv_velocidade_det">%s · nada suara tidak berubah</string>
     <string name="ouv_parar_pod_det">Posisi terakhir disimpan</string>
     <string name="ouv_seguindo">Diikuti</string>

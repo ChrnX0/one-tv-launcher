@@ -144,7 +144,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.CONTINUAR -> continuar(c)
             Tipo.SERIES -> series(c)
             Tipo.FILMES -> claquete(c)
-            Tipo.REDE -> pendrive(c)
+            Tipo.REDE -> pasta(c)
             Tipo.ADDONS, Tipo.PLUGIN -> peca(c)
             Tipo.RADIO -> radio(c)
             Tipo.PODCASTS -> microfone(c)
@@ -218,15 +218,15 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         solido(0xFF6B7080); rr(c, 26f, 62f, 44f, 6f, 3f); rr(c, 26f, 75f, 64f, 6f, 3f)
     }
 
-    private fun pendrive(c: Canvas) {
-        solido(0xFFCFD2D9); rr(c, 30f, 16f, 34f, 26f, 3f)
-        solido(0xFF6B7080); rr(c, 38f, 23f, 6f, 7f, 0f); rr(c, 50f, 23f, 6f, 7f, 0f)
-        vert(0xFF5A82BD, 0xFF2A4170, 38f, 94f); rr(c, 22f, 38f, 50f, 56f, 11f)
-        solido(0xFFFFFFFF, .85f); rr(c, 30f, 56f, 34f, 18f, 4f)
-        solido(0xFFFFFFFF, .18f); rr(c, 26f, 42f, 8f, 30f, 4f)
-        traco.shader = null; traco.color = cor(0xFF93B8E8); traco.strokeWidth = 5f
-        r.set(68f, 48f, 100f, 80f); c.drawArc(r, -48f, 96f, false, traco)
-        r.set(66f, 37f, 120f, 91f); c.drawArc(r, -45f, 90f, false, traco)
+    /** Pasta ilustrada (Objeto) para "Do computador": aba atrás, folha saindo, frente da pasta. */
+    private fun pasta(c: Canvas) {
+        vert(0xFFE0B85A, 0xFFB98A2E, 18f, 90f); p.reset()
+        p.moveTo(14f, 90f); p.lineTo(14f, 26f); p.quadTo(14f, 18f, 22f, 18f); p.lineTo(46f, 18f); p.lineTo(54f, 28f)
+        p.lineTo(98f, 28f); p.quadTo(106f, 28f, 106f, 36f); p.lineTo(106f, 90f); p.close(); c.drawPath(p, cheio)
+        solido(0xFFF4F1EC); rr(c, 28f, 30f, 64f, 40f, 4f)
+        solido(0xFFC9C4BC); rr(c, 36f, 40f, 40f, 4f, 2f); rr(c, 36f, 50f, 30f, 4f, 2f)
+        vert(0xFFF6D27A, 0xFFD9A441, 44f, 92f); rr(c, 10f, 44f, 100f, 48f, 8f)
+        solido(0xFFFFFFFF, .18f); rr(c, 10f, 44f, 100f, 10f, 5f)
     }
 
     private fun peca(c: Canvas) {
@@ -299,12 +299,11 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
 
     // ------------------------------------------------------------------ símbolo (24 x 24, traço na cor do grupo)
 
-    private fun corDoGrupo(): Int = when (tipo) {
-        Tipo.OUVIR, Tipo.RADIO, Tipo.PODCASTS -> 0xFF93D6D0.toInt()
-        Tipo.JOGAR, Tipo.JOGOS, Tipo.SOFA, Tipo.CENTRAL -> 0xFFB4B9FF.toInt()
-        Tipo.APLICATIVOS, Tipo.TODOS_APPS, Tipo.PLUGIN -> 0xFFE8E2DA.toInt()
-        else -> 0xFFFFB48E.toInt()   // Continuar e Assistir: o laranja claro da marca (nada rosado)
-    }
+    /**
+     * Cor do Símbolo e do Duotom = a MESMA da Linha (crítica de design 19/11/2026, decisão 3): o estilo muda o traço e a
+     * luz, nunca o matiz. Antes cada estilo tinha a sua paleta (Ouvir verde-água numa, azul noutra; Jogar violeta ou lavanda).
+     */
+    private fun corDoGrupo(): Int = corLinha(tipo)
 
     private fun simbolo(c: Canvas) {
         traco.shader = null; traco.color = corTraco; traco.strokeWidth = 1.5f; traco.pathEffect = null
@@ -400,10 +399,11 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 c.drawLine(7.5f, 3.5f, 7.5f, 20.5f, traco); c.drawLine(16.5f, 3.5f, 16.5f, 20.5f, traco)
                 if (fase < 0f) for (y in floatArrayOf(8f, 12f, 16f)) { c.drawLine(3f, y, 7.5f, y, traco); c.drawLine(16.5f, y, 21f, y, traco) }
             }
-            Tipo.REDE -> {   // dois servidores
-                ret(3.5f, 4f, 20.5f, 10.5f, 1.6f); ret(3.5f, 13.5f, 20.5f, 20f, 1.6f)
-                c.drawCircle(7f, 7.25f, 0.9f, cheio); c.drawCircle(7f, 16.75f, 0.9f, cheio)
-                c.drawLine(13f, 7.25f, 17f, 7.25f, traco); c.drawLine(13f, 16.75f, 17f, 16.75f, traco)
+            Tipo.REDE -> {   // pasta ("Do computador", crítica de design 19/11/2026; eram dois servidores)
+                p.reset(); p.moveTo(3f, 18.5f); p.lineTo(3f, 6.5f); p.quadTo(3f, 5f, 4.5f, 5f); p.lineTo(9f, 5f); p.lineTo(11f, 7.5f)
+                p.lineTo(19.5f, 7.5f); p.quadTo(21f, 7.5f, 21f, 9f); p.lineTo(21f, 18.5f); p.quadTo(21f, 20f, 19.5f, 20f)
+                p.lineTo(4.5f, 20f); p.quadTo(3f, 20f, 3f, 18.5f); p.close(); c.drawPath(p, traco)
+                c.drawLine(3f, 10.5f, 21f, 10.5f, traco)
             }
             Tipo.ADDONS, Tipo.PLUGIN -> {   // peça de encaixe
                 p.reset(); p.moveTo(4f, 7f); p.lineTo(9f, 7f); p.arcTo(RectF(9f, 4.5f, 14f, 9.5f), 180f, 180f); p.lineTo(18f, 7f); p.lineTo(18f, 11f)
@@ -518,9 +518,9 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 }
                 c.restore()
             }
-            Tipo.REDE -> {   // tráfego: a luz de cima, depois a de baixo
-                alfa(sino(((f) / 0.55f).coerceIn(0f, 1f))); c.drawCircle(7f, 7.25f, 1.9f, traco)
-                alfa(sino(((f - 0.45f) / 0.55f).coerceIn(0f, 1f))); c.drawCircle(7f, 16.75f, 1.9f, traco)
+            Tipo.REDE -> {   // uma folha sobe de dentro da pasta e volta
+                val sobe = 3.2f * sino
+                if (sobe > 0.05f) { alfa(1f); c.drawLine(7.5f, 10.5f - sobe, 16.5f, 10.5f - sobe, traco) }
             }
             Tipo.ADDONS, Tipo.PLUGIN -> {   // uma peça nova chega e encaixa no dente da direita
                 val x = 6f * (1f - easeOut((f / 0.6f).coerceIn(0f, 1f)))

@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">お気に入りはリモコンの 1〜9 でも再生できます</string>
     <string name="ouv_tecla">リモコンの %d</string>
     <string name="ouv_ao_sair">画面を出るとき</string>
-    <string name="ouv_ao_sair_continua">ホーム画面でも再生を続けます\nリモコンの ⏯ でどの画面からでも一時停止</string>
+    <string name="ouv_ao_sair_continua">ホーム画面でも再生を続けます\nリモコンの ▶❙❙ でどの画面からでも一時停止</string>
     <string name="ouv_ao_sair_para">この画面を出ると止まります</string>
     <string name="ouv_recentes">最近</string>
     <string name="ouv_sem_favoritas">お気に入りはまだありません</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">ライブ</string>
     <string name="ouv_dica_pular">スキップ</string>
     <string name="ouv_voltar">15 秒戻る</string>
-    <string name="ouv_voltar_det">リモコンの ⏪ でも</string>
+    <string name="ouv_voltar_det">リモコンの ◀◀ でも</string>
     <string name="ouv_avancar">30 秒進む</string>
-    <string name="ouv_avancar_det">リモコンの ⏩ でも</string>
+    <string name="ouv_avancar_det">リモコンの ▶▶ でも</string>
     <string name="ouv_velocidade_det">%s · 声の高さは変わりません</string>
     <string name="ouv_parar_pod_det">止めた位置は保存されます</string>
     <string name="ouv_seguindo">フォロー中</string>

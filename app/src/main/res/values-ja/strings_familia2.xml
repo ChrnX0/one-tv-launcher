@@ -36,7 +36,7 @@
     <string name="ra_generos">ジャンル</string>
     <string name="ra_paises">他の国</string>
     <string name="ra_paises_det">放送局の多い国</string>
-    <string name="ra_perto">近くの局</string>
+    <string name="ra_perto">近く</string>
     <string name="ra_mais_ouvidas">%s で人気の局</string>
     <string name="ra_mundo">世界で人気の局</string>
     <string name="ra_resultado">検索: %s</string>

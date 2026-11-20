@@ -20,7 +20,7 @@
     <string name="extras_ENTRADAS_TV">Entradas HDMI na linha de apps (só em TV com entrada)</string>
     <string name="ra_titulo">Sua TV em %d</string>
     <string name="ra_canal">Canal favorito: %1$s (%2$s)</string>
-    <string name="ra_coluna">Rádios</string>
+    <string name="ra_coluna">Rádio</string>
     <string name="ra_dica_ouvir">ouvir</string>
     <string name="ra_dica_favoritar">favoritar</string>
     <string name="ra_carregando">A carregar as rádios…</string>
@@ -36,7 +36,7 @@
     <string name="ra_generos">Géneros</string>
     <string name="ra_paises">Outro país</string>
     <string name="ra_paises_det">Os países com mais rádios</string>
-    <string name="ra_perto">Perto de si</string>
+    <string name="ra_perto">Perto</string>
     <string name="ra_mais_ouvidas">Mais ouvidas: %s</string>
     <string name="ra_mundo">Mais ouvidas no mundo</string>
     <string name="ra_resultado">Pesquisa: %s</string>

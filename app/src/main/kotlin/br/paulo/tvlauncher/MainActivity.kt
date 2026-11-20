@@ -978,6 +978,9 @@ class MainActivity : Activity() {
         return FrameLayout(this).apply {
             clipChildren = false   // a tela que sobe (Continuar) desenha o que estava abaixo da borda
             addView(vivo, FrameLayout.LayoutParams(MATCH, MATCH))
+            // Alto contraste (crítica de design 19/11/2026): véu quase preto sobre o fundo vivo e sem a capa do foco, para
+            // o texto ficar sobre fundo chapado. Só existe com o tema ligado (é uma camada de tela cheia a mais).
+            if (Estilo.altoContraste) { capa.desligada = true; addView(View(this@MainActivity).apply { setBackgroundColor(0xE6000000.toInt()) }, FrameLayout.LayoutParams(MATCH, MATCH)) }
             // A capa do foco: alto à direita, do tamanho do esboço (680 x 330 dp), atrás do topo e dos apps. Desenhada em
             // METADE da resolução e ampliada 2x (06/11: a capa cheia custava ~5 ms de GPU por quadro na Sala; é uma imagem
             // de fundo escurecida, a perda de nitidez não aparece). A ampliação parte do canto de cima à direita.
@@ -1156,6 +1159,7 @@ class MainActivity : Activity() {
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
         const val ILHA_VERMELHO = 0xFFFF5A4F.toInt()   // ponto e "gravando" da Ilha (alerta)
+        const val ILHA_PONTO_CALMO = 0x99F4F1EC.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
@@ -1995,6 +1999,9 @@ class MainActivity : Activity() {
         if (tipo == IconeApp.Tipo.JOGOS) ultimoJogo?.first?.let { p -> capas[p]?.first?.let { capa.mostrar(it, null); return } }
         // Séries e Filmes: a arte do último título, grande à direita (12/11/2026). Sem arte, o ícone como os outros.
         arteAtalho[tipo]?.second?.let { capa.mostrar(it, null, arte = true); return }
+        // Na cruz, sem arte não vai o ícone gigante esmaecido atrás do foco (crítica de design 19/11/2026: cruzava o eixo
+        // e encostava no mundo da direita). Fica o fundo limpo.
+        if (LayoutHome.cruz(this)) { capa.esconder(); return }
         val img = capasAtalho[tipo]?.second?.firstOrNull()
         val cores = when (tipo) {
             IconeApp.Tipo.SERIES -> CORES_SERIES
@@ -2963,7 +2970,8 @@ class MainActivity : Activity() {
         val sombra = 0x99000000.toInt()
         addView(RelogioTela(this@MainActivity, data = false).apply {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f)
+            // 44 sp (era 72): o relógio do canto não pode gritar mais que o item em foco da cruz (32 sp); crítica 19/11/2026
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 44f)
             setTextColor(Color.WHITE)
             typeface = Typeface.create(fonteUi, Typeface.NORMAL)
             letterSpacing = -0.02f
@@ -3056,7 +3064,8 @@ class MainActivity : Activity() {
         ilhaVeu = veu
 
         val sombra = 0x99000000.toInt()
-        val ponto = View(this).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(IconeCruz.COR_ACESA) } }
+        // Ponto calmo em branco apagado (crítica de design 19/11/2026): laranja só no foco; âmbar/vermelho seguem como semáforo.
+        val ponto = View(this).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(ILHA_PONTO_CALMO) } }
         ilhaPontoView = ponto
         val hora = RelogioTela(this, data = false).apply {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"
@@ -3244,7 +3253,7 @@ class MainActivity : Activity() {
             (ilhaPontoView?.background as? GradientDrawable)?.setColor(when (BarraIlha.ponto(fila)) {
                 BarraIlha.Ponto.ALERTA -> ILHA_VERMELHO
                 BarraIlha.Ponto.ATENCAO -> Estilo.ATENCAO
-                BarraIlha.Ponto.CALMO -> IconeCruz.COR_ACESA
+                BarraIlha.Ponto.CALMO -> ILHA_PONTO_CALMO
             })
             ui.removeCallbacks(tarefaIlhaGira)
             if (fila.size > 1 && homeNaFrente) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
@@ -3986,9 +3995,10 @@ class MainActivity : Activity() {
         opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
         opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(pacote) }
         opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
-        if (PainelApps.podeDesinstalar(this, pacote)) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
+        val desinstala = PainelApps.podeDesinstalar(this, pacote)
+        if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
         val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""
-        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }) { i -> opcoes[i].acao() }
+        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }, separarUltimo = desinstala) { i -> opcoes[i].acao() }
     }
 
     /**

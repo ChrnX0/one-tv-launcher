@@ -189,7 +189,7 @@ class PodcastPlayerActivity : Activity() {
         capa = CapaOuvir(this, 22f).apply { fonte(fonteForte); cobrir = true; elevation = dp(14f) }
         raiz.addView(capa, FrameLayout.LayoutParams(dpi(CAPA), dpi(CAPA)).apply { marginStart = dpi(MARGEM); topMargin = dpi(TOPO) })
 
-        rotulo = texto(15f, Estilo.ACENTO, forte = true).apply { letterSpacing = 0.16f }
+        rotulo = texto(15f, Estilo.TEXTO_2, forte = true).apply { letterSpacing = 0.16f }
         podcast = texto(FONTE_PODCAST, HomeCruz.COR_SUB, forte = true)
         titulo = texto(FONTE_TITULO, Estilo.TEXTO, forte = true, linhas = 2).apply { setLineSpacing(dp(3f), 1f) }
         info = texto(FONTE_INFO, HomeCruz.COR_SUB)
@@ -234,7 +234,7 @@ class PodcastPlayerActivity : Activity() {
             orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false
             setPaddingRelative(dpi(MARGEM), dpi(14), dpi(MARGEM), dpi(22))
             background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xE60E1020.toInt(), 0xFA0E1020.toInt()))
-            addView(texto(15f, Estilo.ACENTO, forte = true).apply { letterSpacing = 0.16f; text = getString(R.string.pl_a_seguir).uppercase() },
+            addView(texto(15f, Estilo.TEXTO_2, forte = true).apply { letterSpacing = 0.16f; text = getString(R.string.pl_a_seguir).uppercase() },
                 LinearLayout.LayoutParams(-1, -2))
             addView(fila, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(10) })
             visibility = View.INVISIBLE

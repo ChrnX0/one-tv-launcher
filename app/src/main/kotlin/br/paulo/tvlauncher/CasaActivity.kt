@@ -162,10 +162,15 @@ class CasaActivity : Activity() {
         cartoes.clear()
         grade.tag = FORA
         val google = cartaoGoogle()
+        // Erro com saída (crítica de design 19/11/2026): "Tentar de novo" já focado; a tela também tenta sozinha.
+        val tentar = Estilo.botao(this, getString(R.string.tentar_de_novo)).apply { isFocusable = true; setOnClickListener { carregar() } }
         grade.addView(Estilo.estadoVazio(this, IconeCardDrawable("casa"), getString(R.string.casa_fora_titulo),
-            getString(R.string.casa_fora_texto)))
+            getString(R.string.casa_fora_texto), tentar))
         grade.addView(linha(listOf(google)))
-        google.requestFocus()
+        // Sem "OK ligar ou desligar" quando nada responde: só a tecla que vale agora.
+        dicas.removeAllViews()
+        dicas.addView(Estilo.barraDicas(this, "OK" to getString(R.string.tentar_de_novo).lowercase(), getString(R.string.cl_tecla_voltar) to getString(R.string.rede_dica_sair)))
+        tentar.requestFocus()
     }
 
     private fun mostrar(r: Result<List<CasaHA.Entidade>>) {

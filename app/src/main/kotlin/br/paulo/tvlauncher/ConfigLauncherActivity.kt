@@ -277,7 +277,7 @@ class ConfigLauncherActivity : Activity() {
         conteudo.removeAllViews()
         rolagem.scrollTo(0, 0)
         val aba = abas[i]
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { textSize = 24f; setPaddingRelative(dp(8), dp(4), 0, 0) })   // menor que o título da tela (crítica 19/11/2026)
         conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
         aba.montar(conteudo)
         // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
@@ -2107,7 +2107,7 @@ class ConfigLauncherActivity : Activity() {
         itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = t.hasFocus(), escolhido = false) }
         conteudo.removeAllViews()
         rolagem.scrollTo(0, 0)
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { textSize = 24f; setPaddingRelative(dp(8), dp(4), 0, 0) })
         conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_aj_explica)).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
         val campo = android.widget.EditText(this).apply {
             hint = getString(R.string.elv_aj_dica)
@@ -2307,11 +2307,11 @@ class ConfigLauncherActivity : Activity() {
 
         fun detalhe(novo: String) = montarLinha(tTitulo.text.toString(), novo, tDetalhe.maxLines)
 
-        /** Foco = linha branca: os textos escurecem e o valor passa para o acento escuro (legível no branco). */
+        /** Foco = linha branca: os textos escurecem (o valor também; laranja ficou só para marca, foco e progresso). */
         private fun pintarTextos() {
             tTitulo.setTextColor(if (focada) Estilo.TEXTO_NO_FOCO else Estilo.TEXTO)
             tDetalhe.setTextColor(if (focada) Estilo.TEXTO_NO_FOCO_2 else Estilo.TEXTO_2)
-            tValor?.setTextColor(if (focada) Estilo.ACENTO_NO_FOCO else Estilo.ACENTO)
+            tValor?.setTextColor(if (focada) Estilo.TEXTO_NO_FOCO_2 else Estilo.TEXTO_2)   // valor sem laranja (crítica de design 19/11/2026)
             tSeta?.setTextColor(if (focada) Estilo.TEXTO_NO_FOCO_2 else Estilo.TEXTO_3)
             ligadoAgora?.let { pintarChave(it) }
         }
@@ -2365,7 +2365,8 @@ class ConfigLauncherActivity : Activity() {
 
         fun seta() {
             direita.removeAllViews()
-            direita.addView(Estilo.texto(context, Estilo.Papel.TITULO, "›").apply { typeface = Estilo.fonte(200) }.also { tSeta = it })
+            // A mesma seta do valor ("Escuro  ›"): antes era uma seta fina no tamanho de título, de outro desenho.
+            direita.addView(Estilo.texto(context, Estilo.Papel.CORPO, "›").also { tSeta = it })
             pintarTextos()
         }
     }

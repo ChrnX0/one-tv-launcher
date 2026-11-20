@@ -286,4 +286,10 @@
     <string name="pg_aviso_as">Aviso às %1$s: %2$s</string>
     <string name="at_timer">TIMER</string>
     <string name="at_despertador">DESPERTADOR</string>
+    <string name="vod_vazio_texto">Filmes e séries vêm da sua lista de TV. Adicione uma em Configurações, Conta.</string>
+    <string name="vod_adicionar_lista">Adicionar lista</string>
+    <string name="uso_recomendado">Recomendado</string>
+    <string name="aut_nenhuma_acao">nenhuma ação</string>
+    <string name="mtv_fila_pronto">Seus apps voltaram</string>
+    <string name="mtv_ir_inicio">Ir para a tela inicial</string>
 </resources>

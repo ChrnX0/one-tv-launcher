@@ -57,7 +57,7 @@
     <!-- Esboço A "Console" (14/11/2026): destaque do jogo em foco + fila dos jogados por último. -->
     <string name="jogos_seus">Seus jogos</string>
     <string name="jogos_mais_jogos">Mais jogos</string>
-    <string name="jogos_mais_opcoes">Mais opções</string>
+    <string name="jogos_mais_opcoes">Mais</string>
     <string name="jogos_por_tipo">Por tipo</string>
     <string name="jogos_jogar">Jogar</string>
     <string name="jogos_ligar_pc_jogar">Ligar o PC e jogar</string>
@@ -76,6 +76,6 @@
     <string name="jogos_tecla_escolher">escolher</string>
     <string name="jogos_tecla_jogar">jogar</string>
     <string name="jogos_tecla_mais">mais opções</string>
-    <string name="jogos_tecla_segurar">segure OK</string>
+    <string name="jogos_tecla_segurar">segurar OK</string>
     <string name="jogos_tecla_opcoes">mudar de grupo</string>
 </resources>

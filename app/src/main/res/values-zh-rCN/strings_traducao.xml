@@ -279,4 +279,10 @@
     <plurals name="rt_quedas">
         <item quantity="other">%d 次中断</item>
     </plurals>
+    <string name="vod_vazio_texto">电影和剧集来自你的电视列表。请在“设置 > 账户”中添加。</string>
+    <string name="vod_adicionar_lista">添加列表</string>
+    <string name="uso_recomendado">推荐</string>
+    <string name="aut_nenhuma_acao">无操作</string>
+    <string name="mtv_fila_pronto">你的应用已恢复</string>
+    <string name="mtv_ir_inicio">前往主屏幕</string>
 </resources>

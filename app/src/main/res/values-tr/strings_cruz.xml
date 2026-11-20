@@ -77,8 +77,8 @@
     <string name="cruz_tocou">Dinlendi: %1$s</string>
     <string name="cruz_por_ultimo">Son: %1$s</string>
     <string name="cruz_addons_n">Yüklü eklentiler: %1$d</string>
-    <string name="cruz_apps_n">Izgaradaki uygulamalar: %1$d</string>
-    <string name="cruz_apps_ocultos">Izgarada: %1$d · gizli: %2$d</string>
+    <string name="cruz_apps_n">%1$d uygulama</string>
+    <string name="cruz_apps_ocultos">%1$d uygulama · gizli: %2$d</string>
     <string name="cruz_podcasts_n">Takip edilen podcastler: %1$d</string>
     <string name="cruz_pendrive">USB bellek: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant yanıt vermiyor</string>

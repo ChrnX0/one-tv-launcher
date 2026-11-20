@@ -104,7 +104,7 @@ class OuvirTelaTest {
             CruzOuvir.Item(id, nome, sub, cor = cor, monograma = CapaOuvir.iniciais(nome), abrir = { tocados += id }, opcoes = { favoritados += id })
         cruz.definirTitulo(a.getString(R.string.ra_coluna))
         cruz.definirDicas(a.getString(R.string.grv_dica_ok) to a.getString(R.string.ra_dica_ouvir),
-            a.getString(R.string.grv_dica_segurar) to a.getString(R.string.ra_dica_favoritar), "⏯" to a.getString(R.string.ra_pausar))
+            a.getString(R.string.grv_dica_segurar) to a.getString(R.string.ra_dica_favoritar), "▶❙❙" to a.getString(R.string.ra_pausar))
         cruz.definir(listOf(
             CruzOuvir.Prateleira("tocando", a.getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
                 CruzOuvir.Item("pausar", a.getString(R.string.ouv_pausar), CruzLogica.linhas("Rádio Mar Azul FM", "Tom Jobim - Wave", "Brasil · 128 kbps"), IconeOuvir.Tipo.PAUSAR),
@@ -173,7 +173,7 @@ class OuvirTelaTest {
             CruzOuvir.Item(id, titulo, sub, cor = azul, monograma = CapaOuvir.iniciais("Café com Ciência"), cobrir = true, progresso = prog)
         cruz.definirTitulo(a.getString(R.string.pod_titulo))
         cruz.definirDicas(a.getString(R.string.grv_dica_ok) to a.getString(R.string.ra_dica_ouvir),
-            a.getString(R.string.grv_dica_segurar) to a.getString(R.string.pod_dica_mais), "⏪ ⏩" to a.getString(R.string.ouv_dica_pular))
+            a.getString(R.string.grv_dica_segurar) to a.getString(R.string.pod_dica_mais), "◀◀ ▶▶" to a.getString(R.string.ouv_dica_pular))
         cruz.definir(listOf(
             CruzOuvir.Prateleira("tocando", a.getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
                 CruzOuvir.Item("abrir", a.getString(R.string.pl_abrir), CruzLogica.linhas("Os vulcões do Pacífico", a.getString(R.string.pl_abrir_det)),

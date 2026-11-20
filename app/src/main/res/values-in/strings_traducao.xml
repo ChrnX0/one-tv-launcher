@@ -279,4 +279,10 @@
     <plurals name="rt_quedas">
         <item quantity="other">%d gangguan</item>
     </plurals>
+    <string name="vod_vazio_texto">Film dan serial berasal dari daftar TV Anda. Tambahkan di Setelan, Akun.</string>
+    <string name="vod_adicionar_lista">Tambah daftar</string>
+    <string name="uso_recomendado">Disarankan</string>
+    <string name="aut_nenhuma_acao">tidak ada tindakan</string>
+    <string name="mtv_fila_pronto">Aplikasi Anda sudah kembali</string>
+    <string name="mtv_ir_inicio">Ke layar utama</string>
 </resources>

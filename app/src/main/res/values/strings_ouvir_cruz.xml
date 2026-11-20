@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Favorites also play with keys 1 to 9 on the remote</string>
     <string name="ouv_tecla">Key %d on the remote</string>
     <string name="ouv_ao_sair">On leaving</string>
-    <string name="ouv_ao_sair_continua">Keeps playing on the home screen\n⏯ on the remote pauses it from any screen</string>
+    <string name="ouv_ao_sair_continua">Keeps playing on the home screen\n▶❙❙ on the remote pauses it from any screen</string>
     <string name="ouv_ao_sair_para">Stops when you leave this screen</string>
     <string name="ouv_recentes">Recent</string>
     <string name="ouv_sem_favoritas">No favorites yet</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">Live</string>
     <string name="ouv_dica_pular">skip</string>
     <string name="ouv_voltar">Back 15 s</string>
-    <string name="ouv_voltar_det">Also ⏪ on the remote</string>
+    <string name="ouv_voltar_det">Also ◀◀ on the remote</string>
     <string name="ouv_avancar">Forward 30 s</string>
-    <string name="ouv_avancar_det">Also ⏩ on the remote</string>
+    <string name="ouv_avancar_det">Also ▶▶ on the remote</string>
     <string name="ouv_velocidade_det">%s · the voice keeps its pitch</string>
     <string name="ouv_parar_pod_det">Where you stopped is saved for later</string>
     <string name="ouv_seguindo">Following</string>

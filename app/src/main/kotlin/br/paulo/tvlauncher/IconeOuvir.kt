@@ -43,18 +43,18 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
             Tipo.DORMIR -> 0xFFB9C6E4                                 // luar
             Tipo.FAVORITAS -> 0xFFF2B84B                              // âmbar
             Tipo.RECENTES -> 0xFFB9C6E4
-            Tipo.PERTO -> 0xFFF59E5B                                  // laranja claro
+            Tipo.PERTO -> 0xFF45C2B1                                  // turquesa do Ouvir (laranja = só marca/foco/progresso, 19/11/2026)
             Tipo.PAIS -> 0xFF6FC3B2                                   // verde-água
             Tipo.GENEROS -> 0xFF8E92FA                                // violeta-azulado
             Tipo.BUSCAR -> 0xFFE8E2DA
-            Tipo.EM_ALTA -> 0xFFF59E5B
+            Tipo.EM_ALTA -> 0xFFE6C46A   // dourado (era laranja claro)
             Tipo.ADICIONAR -> 0xFF9CD27E
             Tipo.CELULAR -> 0xFF8FB4F0
             Tipo.NOVOS -> 0xFFF2B84B
             Tipo.MEUS, Tipo.EPISODIOS, Tipo.PODCAST -> 0xFF7FB2FF     // o azul dos podcasts (o mesmo da cruz)
             Tipo.RADIO -> 0xFF45C2B1                                  // o turquesa da rádio (o mesmo da cruz)
             Tipo.CONTROLE -> 0xFF8E92FA                               // o violeta do Jogar (o mesmo da cruz)
-            Tipo.SOFA -> 0xFFF59E5B                                   // laranja claro
+            Tipo.SOFA -> 0xFFA9B0FF                                   // o lilás do sofá da cruz (era laranja claro)
             Tipo.TURMA -> 0xFF8FB4F0                                  // azul acinzentado
             Tipo.REDE -> 0xFF9CD27E                                   // verde-folha
             Tipo.PC -> 0xFF7FB2FF

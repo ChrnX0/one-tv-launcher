@@ -30,13 +30,13 @@
     <string name="l51_tela_Previsao">Previsão do tempo</string>
     <string name="l51_tela_Elenco">Elenco</string>
     <string name="l51_tela_ConfigLauncher">Definições</string>
-    <string name="l51_tela_MidiaRede">Na rede</string>
+    <string name="l51_tela_MidiaRede">Do computador</string>
     <string name="l51_tela_Calendario">Agenda</string>
     <string name="l51_tela_Gravacoes">Gravações</string>
     <string name="l51_tela_Busca">Pesquisar</string>
     <string name="l51_tela_Casa">Minha casa</string>
     <string name="l51_tela_AlarmeTocando">Despertador a tocar</string>
-    <string name="l51_tela_Radio">Rádios</string>
+    <string name="l51_tela_Radio">Rádio</string>
     <string name="l51_tela_Diagnostico">Diagnóstico</string>
     <string name="l51_uso_zerar">Zerar</string>
     <string name="l51_digitar_titulo">Escrever na TV</string>

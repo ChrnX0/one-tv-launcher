@@ -286,4 +286,10 @@
         <item quantity="one">%d coupure</item>
         <item quantity="other">%d coupures</item>
     </plurals>
+    <string name="vod_vazio_texto">Les films et séries viennent de votre liste TV. Ajoutez-en une dans Paramètres, Compte.</string>
+    <string name="vod_adicionar_lista">Ajouter une liste</string>
+    <string name="uso_recomendado">Recommandé</string>
+    <string name="aut_nenhuma_acao">aucune action</string>
+    <string name="mtv_fila_pronto">Vos applis sont de retour</string>
+    <string name="mtv_ir_inicio">Aller à l’écran d’accueil</string>
 </resources>

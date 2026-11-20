@@ -18,6 +18,10 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>New app name on the TV (tv.sofaly.launcher): settings, add-ons, plugins and the panel move over by themselves, with no reset</item>
+        <item>One colour system: orange only marks the brand, the focus and progress; secondary text in soft white; every world keeps its own colour and drawing in every top-bar style</item>
+        <item>Movies and Series get the same blue background as the home screen; “On the network” is now “From the computer”, with a folder icon</item>
+        <item>High contrast for real: solid black background, columns at full strength; app menu with “Uninstall” set apart at the end; Diagnostics without the repeated summary; Home (HA) offline shows “Try again”</item>
+        <item>Screens on one standard: Radio, Games, Alarm, Movies and Series titles in the same size and place; the remote hints look the same on every screen; empty Movies and Series show “Add a list”; menus without the “1 of 5”</item>
         <item>Clearer text: “Season 1, episode 2”, “Continue from 19 min” on the movie page, Extras in sections, the Scoreboard without a repeated line</item>
         <item>Errors with a way out: without network, the phone and move-from-another-TV screens show “Try again”; so does the Forecast with no data; in Diagnostics, a failing Wi-Fi opens Wi-Fi settings</item>
         <item>Help: the QR moved out of the clock corner to beside the text; an app’s menu covers the home screen behind it better</item>
@@ -42,6 +46,10 @@
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>pacote_novo</item>
+        <item>cores_sistema</item>
+        <item>do_computador</item>
+        <item>alto_contraste</item>
+        <item>telas_padrao</item>
         <item>textos_claros</item>
         <item>erro_tentar</item>
         <item>ajuda_qr</item>
@@ -63,6 +71,10 @@
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Everything still there</item>
+        <item>Colour system</item>
+        <item>From the computer</item>
+        <item>High contrast</item>
+        <item>Screens on one standard</item>
         <item>Clear text</item>
         <item>Try again</item>
         <item>Help QR</item>
@@ -84,6 +96,10 @@
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>After the move to the new app name, are your home screen, add-ons, plugins, profiles and the panel PIN the same as before?</item>
+        <item>On the home screen and in Settings, is orange only on the focus and the logo, with values in soft white (not orange)?</item>
+        <item>In Movies, is the background blue like the home screen, and does the old “On the network” item now say “From the computer” with a folder?</item>
+        <item>Turn on high contrast in Settings: is the background black and are the columns easy to read? In an app’s menu, is “Uninstall” set apart at the bottom?</item>
+        <item>Open Alarm, Radio and Movies: is the title the same size in the same corner, and do the footer hints look the same (key in a pill + what it does)?</item>
         <item>For a series in Continue, does the home screen say “Season 1, episode 2” (not “T1 E2”), and a half-watched movie show “Continue · from N min” on its page?</item>
         <item>Open the Forecast with no internet (or wait for the source to fail): does a focused “Try again” button appear?</item>
         <item>In Help, is the QR beside the text, away from the clock, with the title at the same height as other screens?</item>
