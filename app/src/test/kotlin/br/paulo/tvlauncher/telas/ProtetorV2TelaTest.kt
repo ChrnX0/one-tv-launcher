@@ -53,7 +53,7 @@ class ProtetorV2TelaTest {
     }
 
     private class Caso(val nome: String, val relogio: String, val pos: String, val tam: String, val mostrar: String, val tecla: Boolean,
-        val estilos: Map<String, String> = emptyMap())
+        val estilos: Map<String, String> = emptyMap(), val hora: Int = 15)
 
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi") @Test fun portugues() = conferir("pt", listOf(
         Caso("fino-alto-tudo", Protetor.REL_FINO, Protetor.POS_ALTO, "normal", Protetor.MOSTRAR_SEMPRE, false),
@@ -73,6 +73,10 @@ class ProtetorV2TelaTest {
         Caso("var-grande-maiusculas-texto", Protetor.REL_FINO, Protetor.POS_BAIXO, "normal", Protetor.MOSTRAR_SEMPRE, false, mapOf(
             "protetor_widget" to Protetor.WIDGET_GRANDE, "protetor_textos" to Protetor.TEXTOS_MAIUSCULAS, "protetor_linhas" to Protetor.LINHAS_TEXTO,
             "protetor_avisos" to Protetor.AVISOS_UM)),
+        // Fases do dia (estudo global 20/11, ideia 9): madrugada escura sem logo; manhã com o resumo mesmo em "só a hora".
+        Caso("fase-madrugada", Protetor.REL_FINO, Protetor.POS_BAIXO, "normal", Protetor.MOSTRAR_SEMPRE, false, hora = 3),
+        Caso("fase-manha-so-hora", Protetor.REL_FINO, Protetor.POS_BAIXO, "normal", Protetor.MOSTRAR_SO_HORA, false, hora = 8),
+        Caso("fase-noite", Protetor.REL_EDITORIAL, Protetor.POS_ALTO, "normal", Protetor.MOSTRAR_SEMPRE, false, hora = 21),
     ))
 
     @Config(qualifiers = "de-w960dp-h540dp-land-television-xhdpi") @Test fun alemao() = conferir("de", listOf(
@@ -95,6 +99,7 @@ class ProtetorV2TelaTest {
             a.getSharedPreferences("clima", Context.MODE_PRIVATE).edit().clear()
                 .putInt("temp", 22).putLong("em", agora).putInt("codigo", 2).putInt("max", 27).putInt("min", 18)
                 .putInt("umidade", 70).putInt("chuva", 20).putBoolean("eDia", false).commit()
+            br.paulo.tvlauncher.DescansoFase.horaFixa = caso.hora
             val raiz = FrameLayout(a)
             val g = ProtetorGaleria(a, SoTerra(), comPintura = false, terra = true)
             g.montar(raiz)
@@ -136,6 +141,7 @@ class ProtetorV2TelaTest {
             a.finish()
             g.soltar()
         }
+        br.paulo.tvlauncher.DescansoFase.horaFixa = null
         if (problemas.isNotEmpty()) fail("Protetor v2 ($idioma):\n" + problemas.joinToString("\n"))
     }
 }

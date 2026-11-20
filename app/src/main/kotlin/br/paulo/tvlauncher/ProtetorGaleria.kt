@@ -101,6 +101,22 @@ class ProtetorGaleria(
     private var extras12: List<Triple<String, String, String>> = emptyList()
     private val icones = HashMap<String, Drawable?>()
 
+    // Fase do dia (estudo global 20/11, ideia 9; ver [DescansoFase]): logo, brilho, véu e tom quente mudam com a hora.
+    private var fase = DescansoFase.agora()
+    private var logo: View? = null
+    private var veuFase: View? = null
+    private var quenteFase: View? = null
+
+    /** Aplica a fase atual. Troca de fase anima devagar (3 s): quem está olhando não vê um corte. */
+    private fun aplicarFase(animar: Boolean) {
+        val f = fase
+        logo?.animate()?.alpha(if (f.logo) 1f else 0f)?.setDuration(if (animar) 3000 else 0)?.start()
+        veuFase?.setBackgroundColor(f.veu shl 24)
+        quenteFase?.setBackgroundColor(DescansoFase.corQuente(f))
+        if (animar) camadaInfo.animate().alpha(f.brilhoInfo).setDuration(3000).start()
+        conferirMostrar.run()
+    }
+
     fun montar(raiz: FrameLayout) {
         this.raiz = raiz
         fundo = if (comPintura) FundoGaleria(ctx, { t -> if (!carregador.isShutdown) carregador.execute(t) }, comEtiqueta = false, veus = false).also { f ->
@@ -127,13 +143,15 @@ class ProtetorGaleria(
             }
         }
         raiz.addView(veuCanto, FrameLayout.LayoutParams(-1, -1))
+        veuFase = View(ctx).also { raiz.addView(it, FrameLayout.LayoutParams(-1, -1)) }
 
         camadaInfo = FrameLayout(ctx)
         montarTopo()
         colunaAvisos = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
         // Logo Sofaly pequena e apagada no canto de cima à direita (18/11/2026, pedido do Paulo). Fica na camada que anda
         // (anti-burn-in) e empurra os avisos um pouco para baixo.
-        camadaInfo.addView(SofalyWordmark(ctx, dp(22).toFloat(), dim = 0.55f), FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply {
+        // De madrugada ele some ([DescansoFase.logo]).
+        camadaInfo.addView(SofalyWordmark(ctx, dp(22).toFloat(), dim = 0.55f).also { logo = it }, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply {
             topMargin = dp(26); marginEnd = dp(36)
         })
         camadaInfo.addView(colunaAvisos, FrameLayout.LayoutParams(dp(250), -2, Gravity.TOP or Gravity.END).apply {
@@ -154,6 +172,9 @@ class ProtetorGaleria(
             marginEnd = dp(Estilo.MARGEM_LATERAL)
         })
         raiz.addView(camadaInfo, FrameLayout.LayoutParams(-1, -1))
+        // Tom quente por cima de tudo (fica parado, não anda com o anti-burn-in, e não recebe toque).
+        quenteFase = View(ctx).also { raiz.addView(it, FrameLayout.LayoutParams(-1, -1)) }
+        aplicarFase(animar = false)
 
         NotificacoesTv.ouvir(aoMudarNotificacoes)
         garantirOuvinte()
@@ -163,7 +184,7 @@ class ProtetorGaleria(
         aplicarElementos()
         // Entrada suave: as informações aparecem em 1,5 s depois da pintura.
         camadaInfo.alpha = 0f
-        camadaInfo.animate().alpha(1f).setStartDelay(600).setDuration(1500).withLayer().start()
+        camadaInfo.animate().alpha(fase.brilhoInfo).setStartDelay(600).setDuration(1500).withLayer().start()
         fundo?.let { kenBurns(it) }
         // O grupo da hora se reposiciona quando muda de tamanho (agenda, frase e curiosidade chegam depois).
         grupo.addOnLayoutChangeListener { _, _, t, _, b, _, ot, _, ob -> if (b - t != ob - ot) posicionarGrupo(true) }
@@ -218,7 +239,8 @@ class ProtetorGaleria(
         override fun run() {
             if (!::grupo.isInitialized) return
             grupo.removeCallbacks(this)
-            val v = Protetor.infoVisivel(modoMostrar, System.currentTimeMillis(), teclaAte, abertoEm)
+            // De manhã o resumo do dia fica à mostra mesmo no modo "só a hora" (ideia 9: responder "como está o dia?").
+            val v = fase.resumoSempre || Protetor.infoVisivel(modoMostrar, System.currentTimeMillis(), teclaAte, abertoEm)
             if (v != infoVisivel) revelar(v, animar = infoVisivel != null)
             if (modoMostrar != Protetor.MOSTRAR_SEMPRE) grupo.postDelayed(this, 1000)
         }
@@ -395,6 +417,7 @@ class ProtetorGaleria(
     // ------------------------------------------------------------------ atualizar tudo (a cada 15 min, pelo ProtetorTela)
     fun atualizar() {
         val agora = System.currentTimeMillis()
+        DescansoFase.agora().let { if (it != fase) { fase = it; aplicarFase(animar = true) } }
         val (lat, lon) = lugar()
         val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
         val estado = EstadoCeu(agora, lat, lon, clima.getInt("codigo", 0), clima.getBoolean("chovendo", false))
