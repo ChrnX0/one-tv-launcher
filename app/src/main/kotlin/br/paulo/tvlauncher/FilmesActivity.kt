@@ -700,6 +700,7 @@ class FilmesActivity : Activity() {
                 (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD9121528.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
+            (c.capa as? CapaCartao)?.semente = Idioma.semMarca(f.nome)   // capa gerada quando não há pôster (ideia 8)
             PlayerLogos.carregar(this@FilmesActivity, f.capa, c.capa, lado = 360)
             return v
         }

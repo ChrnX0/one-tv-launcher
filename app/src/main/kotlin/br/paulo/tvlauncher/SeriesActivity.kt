@@ -774,6 +774,7 @@ class SeriesActivity : Activity() {
                 c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(prog.vistos.toLong(), prog.total.toLong())
             } else c.barra.visibility = View.GONE
             c.estrela.visibility = if (s.chave in interesses) View.VISIBLE else View.GONE
+            (c.capa as? CapaCartao)?.semente = Idioma.semMarca(s.nome)   // capa gerada quando não há pôster (ideia 8)
             PlayerLogos.carregar(this@SeriesActivity, s.capa, c.capa, lado = 360)
             return v
         }
