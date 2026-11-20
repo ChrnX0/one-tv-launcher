@@ -98,8 +98,8 @@ object ObserverMorning {
             ?: return Report(null, 0, emptyList(), eventos)
         val antes = ordenadas.drop(1).take(COMPARE_NIGHTS)
         val itens = THRESHOLDS.mapNotNull { (s, t) ->
-            val hoje = esta.signals[s] ?: return@mapNotNull null
-            val valores = antes.mapNotNull { it.signals[s] }
+            val hoje = esta.signals[s]?.takeIf { valid(s, it) } ?: return@mapNotNull null
+            val valores = antes.mapNotNull { n -> n.signals[s]?.takeIf { valid(s, it) } }
             if (valores.isEmpty()) return@mapNotNull null
             val usual = median(valores)
             val d = hoje - usual
@@ -113,6 +113,9 @@ object ObserverMorning {
         }
         return Report(esta, antes.size, itens, eventos)
     }
+
+    /** Sem Wi-Fi (cabo, ou a medida falhou) o HistoricoRede grava 0 ou -127: não é um sinal, fica fora da comparação. */
+    fun valid(s: ObserverCore.Signal, v: Long) = s != ObserverCore.Signal.WIFI_DBM || v in -126L..-1L
 
     /** Mediana; com número par, a média das duas do meio (arredondada para baixo). */
     fun median(v: List<Long>): Long {

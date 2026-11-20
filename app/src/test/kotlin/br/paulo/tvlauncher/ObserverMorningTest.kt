@@ -59,6 +59,16 @@ class ObserverMorningTest {
         assertEquals(400L, ObserverMorning.median(listOf(100, 700)))
     }
 
+    @Test fun semWifiNaoEntraNaComparacao() {
+        // Hoje no cabo (0): Wi-Fi fora do relatório, não "melhora".
+        val r = ObserverMorning.report(listOf(noite(0, wifi = 0)) + (1..3).map { noite(it) }, JSONArray(), agora)
+        assertEquals(0, r.items.count { it.signal == Signal.WIFI_DBM })
+        // Noites antigas sem Wi-Fi (0 e -127) não puxam a mediana: -62 contra -55 continua pior.
+        val r2 = ObserverMorning.report(listOf(noite(0, wifi = -62), noite(1, wifi = 0), noite(2, wifi = -127), noite(3), noite(4)), JSONArray(), agora)
+        assertEquals(-55L, item(r2, Signal.WIFI_DBM).usual)
+        assertEquals(Change.WORSE, item(r2, Signal.WIFI_DBM).change)
+    }
+
     @Test fun achadosDas24hPorTipo() {
         val log = JSONArray()
             .put(JSONObject().put("at", agora - 3_600_000L).put("event", "appeared").put("kind", "NO_INTERNET"))
