@@ -79,7 +79,7 @@ object Estilo {
         /** Linhas, cards, botões. */
         CORPO(18f, 500, 1),        // era 16 (18/11/2026: ler a 3 m, pensando em idosos; a cruz usa 22-32)
         /** Explicação, metadado. */
-        LEGENDA(15f, 400, 2),      // era 13
+        LEGENDA(17f, 400, 2),      // era 13, depois 15 (estudo global 20/11: explicações das listas se leem do sofá)
         /** Nome de grupo ("PRÓXIMOS 9 DIAS"). */
         SECAO(15f, 600, 3, caixaAlta = true, espaco = 0.14f);   // era 13 (pente fino 19/11/2026: nada menor que 15 sp a 3 m)
 
@@ -380,6 +380,10 @@ object Estilo {
      * tamanho, cor e espaço. Antes havia 4 desenhos diferentes.
      */
     fun barraDicas(ctx: Context, vararg dicas: Pair<String, String>): ViewGroup = LinhaQuebravel(ctx, dp(ctx, 20), dp(ctx, 8)).apply {
+        // Estudo global 20/11 (ideia 5): a barra de dicas ocupava a tela para sempre (Paulo já tinha tirado a de Filmes).
+        // Por quê: depois de aprender as teclas, a dica é só ruído. Para quê: a tela fica com o que importa. Como: cada
+        // tela mostra as dicas nas DICAS_VEZES primeiras aberturas e depois some (a ajuda continua em Configurações > Ajuda).
+        if (!dicaAindaAjuda(ctx)) visibility = View.GONE
         for ((tecla, acao) in dicas) addView(LinearLayout(ctx).apply {
             // tecla + ação juntas: numa linha que não cabe, a dupla quebra inteira (nunca a tecla de um lado e a ação do outro)
             orientation = LinearLayout.HORIZONTAL
@@ -401,6 +405,19 @@ object Estilo {
      * Dicas escritas numa frase só ("OK abrir · segure OK: mais opções · VOLTAR categorias") viram a [barraDicas] padrão:
      * cada trecho separado por " · " vira tecla + ação (antes do ":" é a tecla; sem ":", a primeira palavra).
      */
+    /** Quantas vezes cada tela mostra as dicas antes de sumir. */
+    const val DICAS_VEZES = 3
+    private val dicasContadas = java.util.WeakHashMap<Context, Boolean>()
+
+    /** Conta uma abertura por tela (o mesmo Context redesenhando não conta de novo). Testes de tela: sempre mostram. */
+    fun dicaAindaAjuda(ctx: Context): Boolean {
+        val tela = ctx.javaClass.name
+        val p = ctx.getSharedPreferences("dicas_vistas", Context.MODE_PRIVATE)
+        val vistas = p.getInt(tela, 0)
+        if (dicasContadas.put(ctx, true) == null) p.edit().putInt(tela, vistas + 1).apply()
+        return vistas < DICAS_VEZES
+    }
+
     fun dicasDeTexto(ctx: Context, frase: String): ViewGroup = barraDicas(ctx, *paresDeDicas(frase).toTypedArray())
 
     /** A parte pura de [dicasDeTexto] (testável sem Android). */
