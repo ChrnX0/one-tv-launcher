@@ -35,7 +35,9 @@ class PlayPolicyTest {
     @Test fun asFerramentasTiradasExistemDeVerdade() {
         // Se alguém renomear a ferramenta, o filtro deixaria de pegar: o nome tem que continuar numa lista do MCP.
         val nomes = (McpPoder.LISTA + McpPoder2.LISTA).map { it.optString("name") }.toSet()
-        assertTrue(nomes.containsAll(PlayPolicy.PLAY_REMOVED_MCP_TOOLS))
+        // executar_shell é montada em McpFerramentas (não nas listas): confere pelo código-fonte.
+        assertTrue(fonte("McpFerramentas.kt").contains("ferramenta(\"executar_shell\""))
+        assertTrue(nomes.containsAll(PlayPolicy.PLAY_REMOVED_MCP_TOOLS - "executar_shell"))
     }
 
     @Test fun instrucoesDaPlayNaoCitamOQueSaiu() {

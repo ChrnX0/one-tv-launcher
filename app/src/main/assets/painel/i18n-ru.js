@@ -1,5 +1,6 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"nesta versão os apps são instalados pela Play Store":"в этой версии приложения устанавливаются из Play Маркета",
 "Próximo jogo do seu time no item TV da tela inicial":"Ближайший матч вашей команды в пункте ТВ на главном экране",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"Курсы валют рядом с погодой (Frankfurter, бесплатно)",
 "Contagem regressiva no alto da tela inicial (últimos 7 dias)":"Обратный отсчёт вверху главного экрана (последние 7 дней)",

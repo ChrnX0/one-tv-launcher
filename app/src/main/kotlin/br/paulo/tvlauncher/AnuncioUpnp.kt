@@ -86,7 +86,11 @@ object AnuncioUpnp {
         )
         fun anuncios(vivo: Boolean) = aparelhos.flatMap { (u, l, t) -> Ssdp.notify(u, l, vivo, t) }
         val grupo = InetAddress.getByName(Ssdp.GRUPO)
-        val envio = try { DatagramSocket(InetSocketAddress(InetAddress.getByName(ip), 0)) } catch (e: Exception) { Log.w(TAG, "sem socket: $e"); return }
+        // Sem socket: solta a vaga (thread = null) para o próximo ligar() tentar de novo; antes o anúncio nunca mais voltava
+        // (debug 20/11/2026), o que ficou mais provável com a volta a cada troca de IP.
+        val envio = try { DatagramSocket(InetSocketAddress(InetAddress.getByName(ip), 0)) } catch (e: Exception) {
+            Log.w(TAG, "sem socket: $e"); synchronized(this) { if (thread === eu) thread = null }; return
+        }
         fun mandar(textos: List<String>, para: InetAddress, porta: Int) = textos.forEach {
             val b = it.toByteArray(Charsets.US_ASCII)
             try { envio.send(DatagramPacket(b, b.size, para, porta)) } catch (e: Exception) { Log.w(TAG, "envio: $e") }

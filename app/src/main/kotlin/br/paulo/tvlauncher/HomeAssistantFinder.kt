@@ -49,6 +49,19 @@ object HomeAssistantFinder {
 
     fun endereco(host: String, porta: Int): String = "http://$host:$porta"
 
+    /**
+     * A chave só vai a um anúncio do MESMO Home Assistant (20/11/2026, debug: antes ia a qualquer aparelho da rede que
+     * dissesse "homeassistant", e um aparelho falso na rede recebia o controle da casa). [uuidSalvo] = o `uuid` do
+     * anúncio mDNS do HA que já aceitou a chave uma vez; sem ele (1ª procura) vale qualquer anúncio.
+     */
+    fun anuncioAceito(uuidSalvo: String?, uuidAnuncio: String?): Boolean = uuidSalvo == null || uuidSalvo == uuidAnuncio
+
+    /** A varredura da porta 8123 (HA em Docker, sem anúncio) só quando o HA nunca se anunciou: nada prova quem responde. */
+    fun podeVarrer(uuidSalvo: String?): Boolean = uuidSalvo == null
+
+    /** Nunca a própria TV (127/8): um app qualquer nesta TV poderia ouvir a 8123 e receber a chave. */
+    fun hostAceito(host: String): Boolean = !host.startsWith("127.") && host != "localhost"
+
     // ---------------------------------------------------------------- na TV (fora da thread da tela)
 
     @Volatile private var ultimaProcura = 0L
@@ -67,16 +80,20 @@ object HomeAssistantFinder {
         val vistos = HashSet<String>()
         fun testar(host: String, porta: Int): String? {
             val e = endereco(host, porta)
-            if (!vistos.add(e) || CasaHA.enderecoValido(e) == null) return null
+            if (!hostAceito(host) || !vistos.add(e) || CasaHA.enderecoValido(e) == null) return null
             val (c1, b1) = get("$e/auth/providers", null) ?: return null
             if (!pareceHomeAssistant(c1, b1)) return null
             val (c2, b2) = get("$e/api/", token) ?: return null
             return e.takeIf { aceitouChave(c2, b2) }
         }
-        // 1. anúncio na rede (HA OS, HA Core com host network)
-        for ((h, porta) in anunciados(app)) testar(h, porta)?.let { return gravar(app, it) }
-        // 2. porta 8123 aberta em algum endereço da rede (HA em Docker no PC)
-        for (h in abertos(candidatos(ipTv, ultimoHost))) testar(h, PORTA)?.let { return gravar(app, it) }
+        val uuidSalvo = CasaHA.uuidHa(app)
+        // 1. anúncio na rede (HA OS, HA Core com host network), só do MESMO HA quando já sabemos qual é
+        for ((h, porta, uuid) in anunciados(app)) {
+            if (!anuncioAceito(uuidSalvo, uuid)) { Log.w(TAG, "procura: anúncio de outro Home Assistant ignorado"); continue }
+            testar(h, porta)?.let { e -> if (uuid != null) CasaHA.guardarUuidHa(app, uuid); return gravar(app, e) }
+        }
+        // 2. porta 8123 aberta em algum endereço da rede (HA em Docker no PC), só se este HA nunca se anunciou
+        if (podeVarrer(uuidSalvo)) for (h in abertos(candidatos(ipTv, ultimoHost))) testar(h, PORTA)?.let { return gravar(app, it) }
         Log.i(TAG, "procura: nenhum Home Assistant aceitou a chave")
         return null
     }
@@ -115,7 +132,7 @@ object HomeAssistantFinder {
 
     /** Os Home Assistant que se anunciam na rede (mDNS), por [ANUNCIO_MS]. */
     @Suppress("DEPRECATION")
-    private fun anunciados(ctx: Context): List<Pair<String, Int>> {
+    private fun anunciados(ctx: Context): List<Triple<String, Int, String?>> {
         val nsd = ctx.getSystemService(Context.NSD_SERVICE) as? NsdManager ?: return emptyList()
         val achados = java.util.Collections.synchronizedList(ArrayList<NsdServiceInfo>())
         val ouvinte = object : NsdManager.DiscoveryListener {
@@ -129,20 +146,21 @@ object HomeAssistantFinder {
         try { nsd.discoverServices("_home-assistant._tcp", NsdManager.PROTOCOL_DNS_SD, ouvinte) } catch (e: Exception) { return emptyList() }
         try { Thread.sleep(ANUNCIO_MS) } catch (e: InterruptedException) {}
         runCatching { nsd.stopServiceDiscovery(ouvinte) }
-        val saida = ArrayList<Pair<String, Int>>()
+        val saida = java.util.Collections.synchronizedList(ArrayList<Triple<String, Int, String?>>())
         for (s in achados.toList().take(4)) {   // um resolve por vez (Android antigo não aceita dois juntos)
             val pronto = CountDownLatch(1)
             runCatching {
                 nsd.resolveService(s, object : NsdManager.ResolveListener {
                     override fun onResolveFailed(i: NsdServiceInfo, e: Int) { pronto.countDown() }
                     override fun onServiceResolved(i: NsdServiceInfo) {
-                        i.host?.hostAddress?.takeIf { '.' in it }?.let { saida += it to i.port }
+                        val uuid = runCatching { i.attributes["uuid"]?.toString(Charsets.UTF_8)?.trim() }.getOrNull()?.takeIf { it.isNotEmpty() }
+                        i.host?.hostAddress?.takeIf { '.' in it }?.let { saida += Triple(it, i.port, uuid) }
                         pronto.countDown()
                     }
                 })
             }.onFailure { pronto.countDown() }
             pronto.await(2, TimeUnit.SECONDS)
         }
-        return saida
+        return saida.toList()
     }
 }
