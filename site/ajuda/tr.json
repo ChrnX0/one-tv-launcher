@@ -39,7 +39,7 @@
   "filmes": {
    "resumo": "Katalog, devam et, altyazı, ev sunucuları",
    "texto": "Filmler ve Diziler aynı IPTV hesabından (M3U listesinden de) gelir; afiş, puan, özet ve «kaldığınız yerden devam» ile.\n\n• Filmler: Filtre (tür, dönem, en düşük puan, yalnızca izlenmemiş), Rastgele film seç ve ayrıntı sayfasında «Bu filmin serisi».\n• Oynatıcıda ▼ menüyü açar: ses, altyazı ve altyazı boyutu, «Bu bitince TV’yi kapat» ve jeneriği işaretleme (sonra «Jeneriği atla · OK» çıkar).\n• Daha az gören veya duyanlar için aynı ▼’da (ve Ayarlar › TV ve filmler’de): siyah arka planlı altyazı, sarı altyazı, «Kanallar arasında eşit ses» (sessiz ses yükselir, yüksek ses sınırın altında kalır) ve «Daha net sesler» (konuşma aralığını güçlendirir). Basit mod açıkken TV, Filmler ve Diziler Favoriler veya Devam et’te, daha az satır ve daha büyük metinle açılır.\n• Oynatıcı Dolby (AC3, E-AC3), DTS ve TrueHD sesini ve Blu-ray, DVD ve ASS (anime) altyazılarını kendisi işler; Kodi veya VLC gerekmez.\n• Diziler: sonraki bölüm 10 sn geri sayımdan sonra başlar; art arda 3 bölümden sonra TV hâlâ izleyip izlemediğinizi sorar.\n• Tercih edilen ses (altyazılı orijinal veya dublaj) ve çevrimiçi altyazılar (OpenSubtitles): Ayarlar › TV ve filmler.\n\nAğ: Plex, Jellyfin, Emby, bilgisayar veya NAS klasörleri (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP ve TV’ye takılı USB bellekten videolar, müzikler ve fotoğraflar. Açık sunucular kendiliğinden görünür; diğerleri aynı ekrandaki Ekle’den eklenir.",
-   "titulo": "Filmler, diziler ve Bilgisayardan"
+   "titulo": "Filmler, diziler ve Ağ"
   },
   "inicio": {
    "resumo": "Uygulamalar, yığınlar, gizli uygulamalar, temalar, metin boyutu",

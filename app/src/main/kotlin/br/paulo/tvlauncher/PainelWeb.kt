@@ -858,6 +858,16 @@ object PainelWeb {
                 .put("acesso", SaudeAcesso.json(app)))
             // Observador (ObserverTv, 20/11/2026): leituras, o que o juiz vê agora, recados e registro. Só leitura.
             "/api/observer" -> if (req.metodo == "GET") return json(200, ObserverTv.reportJson(app, 20))
+            // Sofy (20/11/2026): os movimentos (mesma fonte da TV, SofyMotion) e a chave "Sofy fala". O POST só liga/desliga a voz.
+            "/api/sofy" -> when (req.metodo) {
+                "GET" -> return json(200, SofyMotion.toJson().put("voice_on", SofyVoice.voiceOn(app)).put("screen_reader", SofyVoice.screenReaderOn(app)))
+                "POST" -> {
+                    val ligar = try { JSONObject(req.corpoTexto()).getBoolean("voice") } catch (e: Exception) { return erro(400, "falta voice") }
+                    SofyVoice.setVoiceOn(app, ligar)
+                    PainelArmazem.registrar(app, ip, "Sofy fala", if (ligar) "ligada" else "desligada")
+                    return json(200, JSONObject().put("ok", true).put("voice_on", ligar))
+                }
+            }
             "/api/saude/liberar" -> if (req.metodo == "POST") {
                 val ganho = PainelSaude.liberar(app)
                 PainelArmazem.registrar(app, ip, "liberar memória", if (ganho == null) "sem shell" else "ok, ${ganho / 1048576} MB")
@@ -1122,6 +1132,7 @@ object PainelWeb {
         "/favicon.ico" to ("icone-192.png" to "image/png"),   // o navegador pede sozinho; sem isso, 404 no registro
         "/jmuxer.min.js" to ("jmuxer.min.js" to "text/javascript; charset=utf-8"),
         "/ia.js" to ("ia.js" to "text/javascript; charset=utf-8"),   // aba "Conectar uma IA" (10/11/2026)
+        "/sofy.js" to ("sofy.js" to "text/javascript; charset=utf-8"),   // a Sofy desenhada em SVG (20/11/2026)
         "/ideias.js" to ("ideias.js" to "text/javascript; charset=utf-8"),   // ideias de 12/11/2026 (aba Extras)
         "/cuidar.js" to ("cuidar.js" to "text/javascript; charset=utf-8"),   // Cuidar de longe (ideias 77-79)
         "/sw.js" to ("sw.js" to "text/javascript; charset=utf-8"),   // avisos no celular (Web Push): o service worker

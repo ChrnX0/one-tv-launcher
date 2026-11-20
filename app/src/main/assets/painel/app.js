@@ -1572,6 +1572,7 @@ async function carregarObservador() {
     return;
   }
   const atuais = new Set((o.now || []).map((f) => f.kind));
+  desenharSofy(o.now);
   caixa.replaceChildren();
   const item = (rotulo, valor, ruim) => {
     const d = document.createElement('div');
@@ -1610,6 +1611,26 @@ async function carregarObservador() {
     lista.appendChild(linha);
   }
   if (!lista.children.length) lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: 'Nada fora do normal nos últimos 7 dias.' }));
+}
+
+/** A Sofy no cartão do Observador: cara do estado de agora (toca o movimento quando a cara muda) e a chave da voz. */
+async function desenharSofy(agora) {
+  const lugar = $('sofyObservador'), chave = $('sofyFala');
+  if (!lugar || typeof Sofy === 'undefined') return;
+  let d;
+  try { d = await Sofy.carregar(); } catch (e) { lugar.closest('.sofy-linha').hidden = true; return; }   // versão sem a Sofy
+  const expr = Sofy.expressaoDoObservador(agora);
+  let svg = lugar.querySelector('svg');
+  if (!svg) { svg = Sofy.criar(expr, { tamanho: 84 }); svg.setAttribute('aria-hidden', 'true'); lugar.appendChild(svg); Sofy.tocar(svg, expr); }
+  else if (svg._sofy.expr !== expr) Sofy.tocar(svg, expr);
+  chave.checked = !!d.voice_on;
+  if (!chave.dataset.ligada) {
+    chave.dataset.ligada = '1';
+    chave.addEventListener('change', async () => {
+      try { const r = await chamar('POST', '/api/sofy', { voice: chave.checked }); d.voice_on = r.voice_on; Sofy.tocar(svg, chave.checked ? 'HAPPY' : 'SLEEPING'); }
+      catch (e) { chave.checked = !chave.checked; }
+    });
+  }
 }
 
 /** Linhas do registro que não são achados: a sonda da madrugada e a prova de congelamento (fase 3). */

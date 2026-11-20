@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">İnternet yok</string>
+    <string name="observer_no_internet_text">Geri gelene kadar videolar durabilir.</string>
+    <string name="observer_slow_internet_title">İnternet yavaş</string>
+    <string name="observer_slow_internet_text">Yanıtlar %1$s ms sürüyor. Videolar yüklenmek için durabilir.</string>
+    <string name="observer_weak_wifi_title">Wi-Fi zayıf</string>
+    <string name="observer_weak_wifi_text">Sinyal %1$s dBm. Modemi TV\'ye yaklaştırmak yardımcı olur.</string>
+    <string name="observer_low_memory_title">Bellek neredeyse dolu</string>
+    <string name="observer_low_memory_text">Yalnızca %1$s MB boş. Uygulamalar kapanabilir.</string>
+    <string name="observer_memory_pressure_title">TV aşırı yüklü</string>
+    <string name="observer_memory_pressure_text">Android yer açmak için uygulamaları kapatıyor.</string>
+    <string name="observer_slow_home_title">Ana ekran yavaş</string>
+    <string name="observer_slow_home_text">Karelerin %%%1$s kadarı gecikti.</string>
+    <string name="observer_low_disk_title">Depolama neredeyse dolu</string>
+    <string name="observer_low_disk_text">Yalnızca %1$s MB kaldı. Kaydetme başarısız olabilir.</string>
+</resources>

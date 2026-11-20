@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">Tidak ada internet</string>
+    <string name="observer_no_internet_text">Video bisa berhenti sampai internet kembali.</string>
+    <string name="observer_slow_internet_title">Internet lambat</string>
+    <string name="observer_slow_internet_text">Respons butuh %1$s ms. Video bisa berhenti untuk memuat.</string>
+    <string name="observer_weak_wifi_title">Wi-Fi lemah</string>
+    <string name="observer_weak_wifi_text">Sinyal di %1$s dBm. Router yang lebih dekat ke TV membantu.</string>
+    <string name="observer_low_memory_title">Memori hampir penuh</string>
+    <string name="observer_low_memory_text">Hanya %1$s MB tersisa. Aplikasi bisa tertutup.</string>
+    <string name="observer_memory_pressure_title">TV kelebihan beban</string>
+    <string name="observer_memory_pressure_text">Android menutup aplikasi untuk memberi ruang.</string>
+    <string name="observer_slow_home_title">Layar utama lambat</string>
+    <string name="observer_slow_home_text">%1$s%% bingkai terlambat.</string>
+    <string name="observer_low_disk_title">Penyimpanan hampir penuh</string>
+    <string name="observer_low_disk_text">Hanya tersisa %1$s MB. Penyimpanan bisa gagal.</string>
+</resources>

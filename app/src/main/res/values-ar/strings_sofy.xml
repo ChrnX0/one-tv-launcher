@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">لا يوجد إنترنت</string>
+    <string name="observer_no_internet_text">قد تتوقف مقاطع الفيديو حتى يعود.</string>
+    <string name="observer_slow_internet_title">الإنترنت بطيء</string>
+    <string name="observer_slow_internet_text">الاستجابة تستغرق %1$s مللي ثانية. قد يتوقف الفيديو للتحميل.</string>
+    <string name="observer_weak_wifi_title">إشارة Wi-Fi ضعيفة</string>
+    <string name="observer_weak_wifi_text">الإشارة عند %1$s ديسيبل ميلي واط. جهاز توجيه أقرب إلى التلفاز يساعد.</string>
+    <string name="observer_low_memory_title">الذاكرة ممتلئة تقريبًا</string>
+    <string name="observer_low_memory_text">المتاح %1$s ميغابايت فقط. قد تُغلق التطبيقات.</string>
+    <string name="observer_memory_pressure_title">التلفاز محمّل فوق طاقته</string>
+    <string name="observer_memory_pressure_text">يغلق Android بعض التطبيقات لتوفير مساحة.</string>
+    <string name="observer_slow_home_title">الشاشة الرئيسية بطيئة</string>
+    <string name="observer_slow_home_text">تأخرت %1$s%% من الإطارات.</string>
+    <string name="observer_low_disk_title">مساحة التخزين ممتلئة تقريبًا</string>
+    <string name="observer_low_disk_text">تبقّى %1$s ميغابايت فقط. قد يفشل الحفظ.</string>
+</resources>
