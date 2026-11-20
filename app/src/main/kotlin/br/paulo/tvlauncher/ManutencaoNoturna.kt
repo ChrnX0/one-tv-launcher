@@ -61,7 +61,12 @@ object ManutencaoNoturna {
     fun agendar(ctx: Context, quando: Long? = null) {
         val am = ctx.getSystemService(AlarmManager::class.java) ?: return
         val agora = System.currentTimeMillis()
-        val normal = ManutencaoRegras.proxima(agora, inicio(ctx), TimeZone.getDefault())
+        // A hora usada fica guardada: se o Observador aprender outra antes de o alarme tocar, o alarme julga pela janela
+        // em que FOI marcado (senão uma mudança de 3h para 1h fazia o alarme das 3h desistir e pular a noite; Codex, #330).
+        // Na nova tentativa (adiada, [quando]) vale a mesma janela da primeira.
+        val ini = if (quando != null) prefs(ctx).getInt("inicio_agendado", inicio(ctx)) else inicio(ctx)
+        prefs(ctx).edit().putInt("inicio_agendado", ini).apply()
+        val normal = ManutencaoRegras.proxima(agora, ini, TimeZone.getDefault())
         // Adiada (TV em uso às 4h) para daqui a 1 h: um reagendar comum (boot, acessibilidade religando) não pode trocar
         // as 5h pelas 4h de amanhã e perder a noite. O adiamento vale enquanto estiver no futuro e antes da hora normal.
         val adiado = prefs(ctx).getLong("adiado_para", 0L)
@@ -84,7 +89,7 @@ object ManutencaoNoturna {
                 // Revisão 10/11/2026: "só a HOME" = a NOSSA MainActivity. Antes passava qualquer tela do nosso pacote (o
                 // player de TV ao vivo, filmes e séries) e "não sei o que está na frente" (logo depois de um reinício).
                 val decisao = ManutencaoRegras.decidir(c.get(Calendar.HOUR_OF_DAY), telaAcesa(app), Rotinas.minutosSemTecla(),
-                    SaudeAcesso.naHome(app), inicio(app))
+                    SaudeAcesso.naHome(app), prefs(app).getInt("inicio_agendado", inicio(app)))
                 Log.i(TAG, "alarme: $decisao")
                 when (decisao) {
                     ManutencaoRegras.Decisao.RODAR -> {
