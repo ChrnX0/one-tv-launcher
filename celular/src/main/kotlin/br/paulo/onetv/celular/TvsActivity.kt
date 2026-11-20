@@ -38,7 +38,10 @@ class TvsActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Visual.atualizar(this)
         window.statusBarColor = Visual.FUNDO
+        // Ícones escuros na barra de cima quando o fundo é claro (senão somem).
+        if (Visual.claro) window.decorView.systemUiVisibility = android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         window.navigationBarColor = Visual.FUNDO
         if (intent?.action == Intent.ACTION_SEND) compartilhado = intent
         val raiz = LinearLayout(this).apply {

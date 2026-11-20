@@ -428,7 +428,7 @@ class ColunaCategorias(
         const val COR_NOVOS = 0xFF5FD3B0.toInt()   // o verde-água dos ícones no esboço
         const val COR_ETIQUETA = 0xFFCFD6E0.toInt()   // selo das listas de fora: cinza claro (cores de marca ficam fora)
         // Ícones em repouso no tom do texto secundário (era verde-água): a cor fica só para a escolhida, como na cruz.
-        const val COR_ICONE = 0xB3F4F1EC.toInt()
+        const val COR_ICONE = 0xB3FFF3E6.toInt()
         // Os trechos da coluna, de cima para baixo (▲▼ anda nesta ordem).
         const val PARADA_TITULO = 0
         const val PARADA_LISTAS = 2

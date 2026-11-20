@@ -223,7 +223,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         vert(0xFFE0B85A, 0xFFB98A2E, 18f, 90f); p.reset()
         p.moveTo(14f, 90f); p.lineTo(14f, 26f); p.quadTo(14f, 18f, 22f, 18f); p.lineTo(46f, 18f); p.lineTo(54f, 28f)
         p.lineTo(98f, 28f); p.quadTo(106f, 28f, 106f, 36f); p.lineTo(106f, 90f); p.close(); c.drawPath(p, cheio)
-        solido(0xFFF4F1EC); rr(c, 28f, 30f, 64f, 40f, 4f)
+        solido(0xFFFFF3E6); rr(c, 28f, 30f, 64f, 40f, 4f)
         solido(0xFFC9C4BC); rr(c, 36f, 40f, 40f, 4f, 2f); rr(c, 36f, 50f, 30f, 4f, 2f)
         vert(0xFFF6D27A, 0xFFD9A441, 44f, 92f); rr(c, 10f, 44f, 100f, 48f, 8f)
         solido(0xFFFFFFFF, .18f); rr(c, 10f, 44f, 100f, 10f, 5f)
@@ -612,25 +612,25 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
          * itens ficam na mesma família; dentro da coluna, cada item tem o seu tom.
          */
         fun corLinha(t: Tipo): Int = when (t) {
-            Tipo.CONTINUAR -> 0xFFF2B84B      // âmbar
-            Tipo.ASSISTIR, Tipo.TV -> 0xFFFF7A45   // o laranja da marca
-            Tipo.SERIES -> 0xFFF59E5B         // laranja claro
-            Tipo.FILMES -> 0xFFE6C46A         // dourado
-            Tipo.REDE -> 0xFF6FC3B2           // verde-água
-            Tipo.ADDONS, Tipo.PLUGIN -> 0xFF8FB4F0   // azul acinzentado
-            Tipo.OUVIR, Tipo.RADIO -> 0xFF45C2B1   // turquesa
-            Tipo.PODCASTS -> 0xFF7FB2FF       // azul
-            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> 0xFF8E92FA   // violeta-azulado
-            Tipo.SOFA -> 0xFFA9B0FF
-            Tipo.APLICATIVOS, Tipo.TODOS_APPS -> 0xFF9CD27E   // verde-folha
-            Tipo.DORMIR -> 0xFFB9C6E4         // luar
-        }.toInt()
+            Tipo.CONTINUAR -> DesignTokens.WORLD_CONTINUE      // âmbar
+            Tipo.ASSISTIR, Tipo.TV -> DesignTokens.WORLD_WATCH   // a família quente da marca
+            Tipo.SERIES -> 0xFFF59E5B.toInt()         // laranja claro
+            Tipo.FILMES -> 0xFFE6C46A.toInt()         // dourado
+            Tipo.REDE -> DesignTokens.WORLD_NETWORK           // verde-água
+            Tipo.ADDONS, Tipo.PLUGIN -> 0xFF8FB4F0.toInt()   // azul acinzentado
+            Tipo.OUVIR, Tipo.RADIO -> DesignTokens.WORLD_LISTEN   // turquesa
+            Tipo.PODCASTS -> 0xFF7FB2FF.toInt()       // azul
+            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> DesignTokens.WORLD_PLAY   // violeta-azulado
+            Tipo.SOFA -> 0xFFA9B0FF.toInt()
+            Tipo.APLICATIVOS, Tipo.TODOS_APPS -> DesignTokens.WORLD_APPS   // verde-folha
+            Tipo.DORMIR -> 0xFFB9C6E4.toInt()         // luar
+        }
 
         /** A cor clara do traço (Símbolo/Duotom), também nos ícones de app do pacote embutido. */
-        const val COR_TRACO = 0xFFF4F1EC.toInt()
-        private const val COR_CLARA = 0xFFF4F1EC.toInt()
+        const val COR_TRACO = 0xFFFFF3E6.toInt()
+        private const val COR_CLARA = 0xFFFFF3E6.toInt()
         /** Linha: o item escolhido acende na cor da marca (vermelho-laranja; nada rosado). */
-        const val COR_ACESA = 0xFFFF6A2B.toInt()
+        const val COR_ACESA = DesignTokens.ORANGE
         /** Linha: traço de 1,25 no quadro de 24 (o Símbolo usa 1,5). */
         const val TRACO_FINO = 1.25f
         /** A TV-sofá desenhada menor que o quadro: a barra do programa embaixo do ícone não pode encostar (Paulo, 18/11/2026). */

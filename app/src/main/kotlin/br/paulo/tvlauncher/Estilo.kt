@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.PathInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -38,7 +39,7 @@ object Estilo {
     // Formato 0xAARRGGBB: os dois primeiros dígitos são a opacidade (FF = sólido, 00 = invisível).
 
     /** Fundo de toda tela sem imagem atrás (era o fundo mais usado no código antigo). */
-    const val FUNDO = 0xFF0E1020.toInt()
+    const val FUNDO = DesignTokens.NIGHT
     /** Superfície de card/linha em tela lisa: branco a 6%. */
     const val SUPERFICIE = 0x0FFFFFFF
     /** Superfície um nível acima (linha focada sem virar pílula, chip ativo): branco a 12%. */
@@ -46,26 +47,26 @@ object Estilo {
     /** Fio de borda das superfícies: branco a 8%. */
     val BORDA: Int get() = if (altoContraste) 0x8CFFFFFF.toInt() else 0x14FFFFFF
     /** Vidro (sobre imagem): tinta escura translúcida + fio claro. Igual à pílula da HOME que o dono aprovou. */
-    const val VIDRO_TINTA = 0x8C0E1020.toInt()
+    const val VIDRO_TINTA = 0x8C121528.toInt()
     const val VIDRO_BORDA = 0x38FFFFFF
 
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
-    const val TEXTO = 0xFFF4F1EC.toInt()
-    val TEXTO_2: Int get() = if (altoContraste) 0xFFF4F1EC.toInt() else 0xB3F4F1EC.toInt()
-    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x86F4F1EC.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
+    const val TEXTO = DesignTokens.CREAM
+    val TEXTO_2: Int get() = if (altoContraste) 0xFFFFF3E6.toInt() else 0xB3FFF3E6.toInt()
+    val TEXTO_3: Int get() = if (altoContraste) 0xD9FFF3E6.toInt() else 0x86FFF3E6.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
     /** Texto em cima do foco branco (linha de lista focada). */
-    const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
-    val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA60E1020.toInt()
+    const val TEXTO_NO_FOCO = DesignTokens.NIGHT
+    val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA6121528.toInt()
 
     /** O ÚNICO acento: "ligado", valor escolhido, progresso. Foco NÃO usa acento: foco é branco. */
-    val ACENTO: Int get() = if (altoContraste) 0xFFFF9A3C.toInt() else 0xFFFF6A2B.toInt()
+    val ACENTO: Int get() = if (altoContraste) DesignTokens.ORANGE_HIGH else DesignTokens.ORANGE
     /** Acento legível sobre o foco branco. */
-    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else 0xFFCE3D00.toInt()
+    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else DesignTokens.ORANGE_ON_LIGHT
     /** Semânticas: atenção (chuva, vencimento) e erro/ao vivo. Não contam como acento. */
-    const val ATENCAO = 0xFFF5B544.toInt()
-    val ERRO: Int get() = if (altoContraste) 0xFFFF8F70.toInt() else 0xFFFF5252.toInt()
+    const val ATENCAO = DesignTokens.ATTENTION
+    val ERRO: Int get() = if (altoContraste) 0xFFFFA08C.toInt() else DesignTokens.ERROR
     /** Foco: branco. A TV é vista a 3 m; o foco tem que ser a coisa mais óbvia da tela. */
-    const val FOCO = 0xFFFFFFFF.toInt()
+    const val FOCO = DesignTokens.FOCUS
 
     // ------------------------------------------------------------------ tipografia (5 papéis, Nunito)
 
@@ -135,9 +136,9 @@ object Estilo {
     // ------------------------------------------------------------------ forma, espaço, movimento
 
     /** Só 3 raios: chip pequeno, card/painel e pílula (botão, foco de lista, avisos). */
-    const val RAIO_PEQUENO = 8
-    const val RAIO = 16
-    const val RAIO_PILULA = 999
+    const val RAIO_PEQUENO = DesignTokens.RADIUS_SMALL
+    const val RAIO = DesignTokens.RADIUS_MEDIUM
+    const val RAIO_PILULA = DesignTokens.RADIUS_PILL
 
     /** Grade de 8 dp. */
     const val E1 = 8
@@ -148,10 +149,11 @@ object Estilo {
     const val MARGEM_LATERAL = 48
     const val MARGEM_VERTICAL = 27
 
-    /** Só 2 tempos: foco (140 ms) e entrar/sair (220 ms), sempre desacelerando. */
-    const val FOCO_MS = 140L
-    const val TRANSICAO_MS = 220L
-    private val desacelera = DecelerateInterpolator()
+    /** Só 2 tempos, os mesmos do painel e do celular (design/tokens.json, escala do transitions.dev): foco 150 ms (o controle
+     *  tem que parecer instantâneo) e entrar/sair 250 ms, sempre com a curva smooth-out (começa rápido, pousa macio). */
+    const val FOCO_MS = DesignTokens.MS_QUICK
+    const val TRANSICAO_MS = DesignTokens.MS_FAST
+    private val desacelera = DesignTokens.EASE_OUT.let { PathInterpolator(it[0], it[1], it[2], it[3]) }
 
     /** Quanto cresce o que ganha foco: card 8%, linha de lista 2%. */
     const val ESCALA_CARD = 1.08f

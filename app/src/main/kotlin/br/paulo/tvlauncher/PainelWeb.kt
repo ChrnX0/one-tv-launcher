@@ -1152,6 +1152,8 @@ object PainelWeb {
             o.put("aparelho", Settings.Global.getString(app.contentResolver, "device_name") ?: "TV")
             o.put("naTela", PainelApps.naTela(app))
             o.put("elevada", sessoes.elevada(token))
+            // Alto contraste da TV vale também no painel (e no app do celular, que mostra o painel): estudo global, ideia 3.
+            o.put("altoContraste", AltoContraste.ligado(app))
             val papel = sessoes.papel(token) ?: PapeisPainel.Papel.DONO
             o.put("papel", papel.chave).put("paginas", JSONArray(PapeisPainel.paginas(papel)))
         }

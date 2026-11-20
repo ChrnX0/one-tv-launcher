@@ -28,6 +28,7 @@ object PainelConfig {
             .put("tema", Tema.atual(app).name.lowercase())
             .put("temas", org.json.JSONArray().apply { for (t in Tema.values()) put(JSONObject().put("valor", t.name.lowercase()).put("nome", t.nome)) })
             .put("tamanhoTexto", TamanhoTexto.atual(app))
+            .put("altoContraste", AltoContraste.ligado(app))
             .put("pilhas", Organizacao.pilhasAutomaticas(app))
             .put("avisoChuva", AvisoChuva.ligado(app))
             .put("taxaQuadros", TaxaQuadros.ligada(app))
@@ -68,6 +69,8 @@ object PainelConfig {
                 val n = (v as? Number)?.toInt()?.takeIf { it in TamanhoTexto.OPCOES } ?: return Resultado.Erro("tamanho inválido")
                 TamanhoTexto.definir(app, n); registrar("tamanho do texto: $n%")
             }
+            // Estudo global 20/11/2026 (ideia 3): uma chave só de alto contraste; o painel e o celular seguem a da TV.
+            "altoContraste" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); AltoContraste.definir(app, b); registrar("alto contraste: $b") }
             "pilhas" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); Organizacao.definirPilhasAutomaticas(app, b); registrar("pilhas automáticas: $b") }
             "avisoChuva" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); AvisoChuva.definirLigado(app, b); registrar("aviso de chuva: $b") }
             "taxaQuadros" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); TaxaQuadros.definir(app, b); registrar("taxa de quadros do filme: $b") }

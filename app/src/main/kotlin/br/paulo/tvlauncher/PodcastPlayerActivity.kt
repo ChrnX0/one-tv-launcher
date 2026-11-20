@@ -180,10 +180,10 @@ class PodcastPlayerActivity : Activity() {
         raiz.addView(arte, FrameLayout.LayoutParams(-1, -1))
         // Véus: a capa desfocada dá a cor da tela, mas o texto e os botões ficam sempre legíveis.
         raiz.addView(View(this).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0x880E1020.toInt(), 0xCC0E1020.toInt(), 0xE60E1020.toInt()))
+            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0x88121528.toInt(), 0xCC121528.toInt(), 0xE6121528.toInt()))
         }, FrameLayout.LayoutParams(-1, -1))
         raiz.addView(View(this).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0x000E1020, 0x000E1020, 0xF00E1020.toInt()))
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0x00121528, 0x00121528, 0xF0121528.toInt()))
         }, FrameLayout.LayoutParams(-1, -1))
 
         capa = CapaOuvir(this, 22f).apply { fonte(fonteForte); cobrir = true; elevation = dp(14f) }
@@ -233,7 +233,7 @@ class PodcastPlayerActivity : Activity() {
         painel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false
             setPaddingRelative(dpi(MARGEM), dpi(14), dpi(MARGEM), dpi(22))
-            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xE60E1020.toInt(), 0xFA0E1020.toInt()))
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xE6121528.toInt(), 0xFA121528.toInt()))
             addView(texto(15f, Estilo.TEXTO_2, forte = true).apply { letterSpacing = 0.16f; text = getString(R.string.pl_a_seguir).uppercase() },
                 LinearLayout.LayoutParams(-1, -2))
             addView(fila, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(10) })

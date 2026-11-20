@@ -147,6 +147,7 @@ async function atualizarEstado() {
   const e = await chamar('GET', '/api/estado');
   if (!e.logado) { mostrarEntrar(); return; }
   ultimoEstado = e;
+  aplicarContraste(e.altoContraste);
   aplicarPapel(e);
   $('nomeAparelho').textContent = e.aparelho;
   document.title = e.aparelho;
@@ -1167,6 +1168,8 @@ function desenharConfig(r) {
   tema.replaceChildren(...r.temas.map((t) => { const o = document.createElement('option'); o.value = t.valor; o.textContent = t.nome; return o; }));
   tema.value = r.tema;
   $('cfgTamanho').value = String(r.tamanhoTexto);
+  $('cfgAltoContraste').checked = !!r.altoContraste;
+  aplicarContraste(r.altoContraste);
   $('cfgPilhas').checked = r.pilhas;
   $('cfgChuva').checked = r.avisoChuva;
   $('cfgTemperatura').checked = r.avisoTemperatura !== false;
@@ -1188,6 +1191,8 @@ function desenharConfig(r) {
   $('btnApagarPinFamilia').hidden = !r.pinFamilia;
   $('cfgLiberarTudo').checked = r.confirmacoes.liberarTudo;
   const lista = $('cfgConfirmacoes');
+  // Ideia 13 (estudo global): a lista é redesenhada a cada troca; sem isto o foco caía no começo da página.
+  const focoAntes = lista.contains(document.activeElement) ? document.activeElement.getAttribute('aria-label') : null;
   lista.replaceChildren();
   for (const a of r.confirmacoes.acoes) {
     const linha = document.createElement('div');
@@ -1203,6 +1208,7 @@ function desenharConfig(r) {
     sel.addEventListener('change', () => gravarConfig({ campo: 'confirmacao', acao: a.chave, valor: sel.value }, `${a.titulo}: ${sel.options[sel.selectedIndex].textContent}.`));
     linha.append(nome, sel);
     lista.appendChild(linha);
+    if (focoAntes && focoAntes === a.titulo) sel.focus();
   }
 }
 
@@ -1227,6 +1233,7 @@ async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
 }
 
 $('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', valor: e.target.value }, 'Tema trocado.'));
+$('cfgAltoContraste').addEventListener('change', (e) => gravarConfig({ campo: 'altoContraste', valor: e.target.checked }, e.target.checked ? 'Alto contraste ligado.' : 'Alto contraste desligado.'));
 $('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
 $('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
 $('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
@@ -1466,7 +1473,7 @@ function desenharNumeros(s, caixa = $('numerosSaude')) {
   // Ideia 41: tendência do espaço livre (uma medida por dia).
   if (n(s.discoDiasAteEncher)) item('o armazenamento enche, nesse ritmo', s.discoDiasAteEncher < 14 ? `em ${s.discoDiasAteEncher} dias` : `em ~${Math.round(s.discoDiasAteEncher / 7)} semanas`, s.discoDiasAteEncher <= 21);
   else if (n(s.discoMedidas) && s.discoTotal) item('espaço livre, tendência', s.discoMedidas < 5 ? 'medindo…' : 'estável', false);
-  if (!caixa.children.length) item('números', '—', false);
+  if (!caixa.children.length) item('ainda medindo', '…', false);
 }
 
 /** Nome de cada passo da manutenção da noite (ManutencaoNoturna.kt) e do resultado, em português simples. */
@@ -2619,6 +2626,30 @@ $('btnClimaAuto').addEventListener('click', async () => {
     $('cepClima').value = ''; $('numeroClima').value = ''; $('cidadeClima').value = '';
     mostrar($('statusControle'), 'Endereço apagado: a TV se acha só pelo Wi-Fi ou pela internet.');
   } catch (e) { mostrar($('statusControle'), textoErro(e)); }
+});
+
+// ---------- Alto contraste (estudo global 20/11/2026, ideia 3) ----------
+// Por quê: só a TV tinha. Para quê: quem enxerga pouco liga uma vez (na TV ou aqui) e vale em tudo. Como: a chave
+// da TV vem no /api/estado; o "mais contraste" do aparelho (prefers-contrast) também liga, pelo CSS.
+function aplicarContraste(ligado) {
+  if (ligado) document.documentElement.dataset.contraste = 'alto';
+  else delete document.documentElement.dataset.contraste;
+}
+
+// ---------- Abas do Controle (ideia 11): uma coisa de cada vez embaixo do controle ----------
+document.querySelectorAll('.abas-controle [role=tab]').forEach((aba) => {
+  aba.addEventListener('click', () => {
+    document.querySelectorAll('.abas-controle [role=tab]').forEach((b) => {
+      const ativa = b === aba;
+      b.setAttribute('aria-selected', String(ativa));
+      $(b.dataset.painel).hidden = !ativa;
+    });
+  });
+});
+// Seletor de foto com a cara do painel: o nome do arquivo escolhido aparece ao lado do botão.
+$('fotoExtras').addEventListener('change', (e) => {
+  const f = e.target.files[0];
+  $('nomeFotoExtras').textContent = f ? f.name : 'Nenhuma foto escolhida';
 });
 
 $('btnReiniciarTv').addEventListener('click', async () => {

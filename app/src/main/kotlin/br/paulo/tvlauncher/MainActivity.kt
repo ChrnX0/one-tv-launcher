@@ -640,7 +640,7 @@ class MainActivity : Activity() {
             clipToOutline = true
         }
         barrasTocando = BarrasSom(this)
-        val corSub = 0xB3F4F1EC.toInt()
+        val corSub = 0xB3FFF3E6.toInt()
         txtTocandoTitulo = texto(12.5f, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(220)
         }
@@ -903,7 +903,7 @@ class MainActivity : Activity() {
             veuTodos = View(this).apply {
                 visibility = View.GONE
                 background = android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(0xB30E1020.toInt(), 0x990E1020.toInt(), 0xD90E1020.toInt()))
+                    intArrayOf(0xB3121528.toInt(), 0x99121528.toInt(), 0xD9121528.toInt()))
             }
             raiz.addView(veuTodos, 0, FrameLayout.LayoutParams(MATCH, MATCH))
             val forte = Fontes.nunito(800)
@@ -1159,7 +1159,7 @@ class MainActivity : Activity() {
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
         const val ILHA_VERMELHO = 0xFFFF5A4F.toInt()   // ponto e "gravando" da Ilha (alerta)
-        const val ILHA_PONTO_CALMO = 0x99F4F1EC.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
+        const val ILHA_PONTO_CALMO = 0x99FFF3E6.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
@@ -2122,7 +2122,7 @@ class MainActivity : Activity() {
                 maxLines = if (aoVivo) 3 else 1
                 ellipsize = TextUtils.TruncateAt.END
                 setPaddingRelative(dp(8), dp(3), dp(8), dp(3))
-                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0E1020.toInt()) }
+                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF121528.toInt()) }
             }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
                 setMargins(dp(8), dp(8), dp(8), dp(8))
             })

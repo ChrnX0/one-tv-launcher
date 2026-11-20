@@ -697,7 +697,7 @@ class FilmesActivity : Activity() {
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> BarraTempo.faltam(this@FilmesActivity, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
-                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90E1020.toInt())
+                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD9121528.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
             PlayerLogos.carregar(this@FilmesActivity, f.capa, c.capa, lado = 360)
@@ -714,13 +714,13 @@ class FilmesActivity : Activity() {
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END   // selo de uma linha: nunca cobre metade do pôster
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         val estrela = TextView(this).apply {
             text = "★"; textSize = 15f; setTextColor(ambar); setPaddingRelative(dp(6), dp(1), dp(6), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         // 19/11/2026: o nome saiu de cima do pôster (repetia o título da arte e gastava 48 dp por fileira). Fica POR CIMA
@@ -735,7 +735,7 @@ class FilmesActivity : Activity() {
         val selo = TextView(this).apply {
             text = getString(R.string.filmes_selo_leg); textSize = 11f; typeface = fonteMedia; setTextColor(papel)
             setPaddingRelative(dp(6), dp(1), dp(6), dp(2)); visibility = View.GONE
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
         }
         moldura.addView(selo, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(5), dp(5), 0, 0) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(medidaGrade.alturaPoster)))
@@ -1294,7 +1294,7 @@ class FilmesActivity : Activity() {
         return if (min < 60) "$min min" else String.format(Locale.ROOT, "%d h %02d min", min / 60, min % 60)
     }
 
-    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
+    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }
