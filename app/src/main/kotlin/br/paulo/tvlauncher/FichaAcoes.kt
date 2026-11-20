@@ -55,6 +55,13 @@ object FichaAcoes {
         val s = ServicosFilmes.Servico.SIMKL
         if (DataSources.simklSemLogin(ctx) || !ServicosContas.disponivel(s) || ServicosSync.bloqueado(ctx)) return
         if (ServicosContas.conta(ctx, s) != null) return
+        // Estudo global 20/11: o convite aparecia em TODA ficha, para sempre (um passo de D-pad a mais entre "Assistir"
+        // e o resto). Agora aparece nas 5 primeiras fichas abertas por dia; quem quer, acha na linha de serviços de filmes das Configurações.
+        val p = ctx.getSharedPreferences("convite_simkl", Context.MODE_PRIVATE)
+        val hoje = java.time.LocalDate.now().toString()
+        val vezes = if (p.getString("dia", "") == hoje) p.getInt("vezes", 0) else 0
+        if (vezes >= 5) return
+        p.edit().putString("dia", hoje).putInt("vezes", vezes + 1).apply()
         adicionar(acoes, acao(ctx, ctx.getString(R.string.sv_simkl_convite), ctx.getString(R.string.sv_simkl_convite_det), marca = "simkl") {
             ServicosFilmesActivity.abrirEntrar(ctx, s)
         })

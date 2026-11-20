@@ -791,7 +791,7 @@ class SeriesActivity : Activity() {
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         val etiqueta = TextView(this).apply {
-            textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
+            textSize = Estilo.Leitura.DICA; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END   // selo de uma linha: nunca cobre metade do pôster
         }
@@ -806,7 +806,7 @@ class SeriesActivity : Activity() {
         capa.aoTrocar = { tem -> nome.visibility = if (tem) View.INVISIBLE else View.VISIBLE }
         // Selo LEG em cima, à esquerda (a estrela dos interesses fica à direita).
         val selo = TextView(this).apply {
-            text = getString(R.string.filmes_selo_leg); textSize = 11f; typeface = fonteMedia; setTextColor(papel)
+            text = getString(R.string.filmes_selo_leg); textSize = Estilo.Leitura.DICA; typeface = fonteMedia; setTextColor(papel)
             setPaddingRelative(dp(6), dp(1), dp(6), dp(2)); visibility = View.GONE
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
         }
@@ -1034,7 +1034,7 @@ class SeriesActivity : Activity() {
             }
             // Atribuição da nota do Simkl na ficha (17/11/2026): "Dados de Simkl (simkl.com)", discreta.
             if (ext?.let { InfoExterna.notasDe(it).simkl } != null)
-                texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
+                texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DICA; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
             // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
             tmdbDe(s, f)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
                 val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }

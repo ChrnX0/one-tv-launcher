@@ -248,7 +248,7 @@ class AlarmesActivity : Activity() {
         val alarmes = Despertador.listar(this@AlarmesActivity).sortedWith(compareBy({ it.hora }, { it.minuto }))
         val cab = novoCabecalho()
         val coluna = CrossColumn(this@AlarmesActivity)
-        val proxRotulo = texto(16f, Estilo.TEXTO_3, 800).apply { letterSpacing = 0.14f }   // rótulo de seção: cinza, como nas outras telas
+        val proxRotulo = texto(18f, Estilo.TEXTO_3, 800).apply { letterSpacing = 0.14f }   // rótulo de seção: cinza, como nas outras telas
         val proxHora = texto(72f, Estilo.TEXTO, 700)
         val proxDia = texto(22f, HomeCruz.COR_SUB, 600).apply { setLineSpacing(dp(4).toFloat(), 1f) }
         val lg = VolumeLg.configurado(this@AlarmesActivity) && VolumeLg.alarmeLigado(this@AlarmesActivity)

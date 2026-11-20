@@ -713,7 +713,7 @@ class FilmesActivity : Activity() {
         val moldura = FrameLayout(this)
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val etiqueta = TextView(this).apply {
-            textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
+            textSize = Estilo.Leitura.DICA; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END   // selo de uma linha: nunca cobre metade do pôster
         }
@@ -733,7 +733,7 @@ class FilmesActivity : Activity() {
         capa.aoTrocar = { tem -> nome.visibility = if (tem) View.INVISIBLE else View.VISIBLE }
         // Selo LEG (em cima, à esquerda; a estrela fica à direita): no lugar do "Leg" que vinha colado no nome.
         val selo = TextView(this).apply {
-            text = getString(R.string.filmes_selo_leg); textSize = 11f; typeface = fonteMedia; setTextColor(papel)
+            text = getString(R.string.filmes_selo_leg); textSize = Estilo.Leitura.DICA; typeface = fonteMedia; setTextColor(papel)
             setPaddingRelative(dp(6), dp(1), dp(6), dp(2)); visibility = View.GONE
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD9121528.toInt()) }
         }
@@ -1000,7 +1000,7 @@ class FilmesActivity : Activity() {
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPaddingRelative(0, dp(6), 0, 0) })
             // Atribuição da nota do Simkl na ficha (17/11/2026): "Dados de Simkl (simkl.com)", discreta.
-            if (n.simkl != null) texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
+            if (n.simkl != null) texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DICA; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
         }
         // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
         (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
@@ -1100,7 +1100,7 @@ class FilmesActivity : Activity() {
      */
     private fun listasDoFiltro(): List<Pair<String, String>> = itens.filter { it.chave.startsWith("x:") }.map { it.chave to it.nome }
 
-    private fun nomeListaFiltro(): String? = filtro.lista?.let { k -> listasDoFiltro().firstOrNull { it.first == k }?.second ?: "?" }
+    private fun nomeListaFiltro(): String? = filtro.lista?.let { k -> listasDoFiltro().firstOrNull { it.first == k }?.second ?: getString(R.string.pp_carregando) }
 
     private fun escolherLista() {
         val opcoes = listOf<Pair<String, String>?>(null) + listasDoFiltro()

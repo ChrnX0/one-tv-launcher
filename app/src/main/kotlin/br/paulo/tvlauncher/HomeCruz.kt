@@ -505,7 +505,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             }.measureText(n) > dpi(TEXTO_MAX) }
         detalhe.animate().cancel()
         if (linhas.isEmpty() && s == null && nomeInteiro == null) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
-        // 1ª linha: a situação, com o rótulo em laranja ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
+        // 1ª linha: a situação, com o rótulo em negrito (laranja é só marca, foco e progresso; estudo global 20/11) ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
         val texto = android.text.SpannableStringBuilder().apply {
             if (nomeInteiro != null) {
                 append(nomeInteiro, android.text.style.ForegroundColorSpan(Estilo.TEXTO), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -513,7 +513,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             }
             if (s != null) {
                 val ini = length
-                append(s.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                append(s.rotulo, android.text.style.ForegroundColorSpan(Estilo.TEXTO), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), ini, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 append("  ").append(s.texto)
                 if (linhas.isNotEmpty()) append("\n")

@@ -59,8 +59,8 @@ class PodcastPlayerActivity : Activity() {
         const val ESPACO_BOTOES = 16
         const val FONTE_TITULO = 30f
         const val FONTE_PODCAST = 19f
-        const val FONTE_INFO = 17f
-        const val FONTE_TEMPO = 17f
+        const val FONTE_INFO = 18f
+        const val FONTE_TEMPO = 18f
         const val FONTE_ROTULO_BOTAO = 18f
         const val SEGUIR_CAPA = 64
         const val SEGUIR_L = 266
@@ -361,8 +361,8 @@ class PodcastPlayerActivity : Activity() {
             cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST); carregar(e?.capaPodcast?.ifEmpty { x.capa } ?: x.capa, 160)
         }
         addView(c, LinearLayout.LayoutParams(dpi(SEGUIR_CAPA), dpi(SEGUIR_CAPA)))
-        val t = texto(16f, Estilo.TEXTO, forte = true, linhas = 2)
-        val d = texto(14f, HomeCruz.COR_SUB)
+        val t = texto(18f, Estilo.TEXTO, forte = true, linhas = 2)
+        val d = texto(15f, HomeCruz.COR_SUB)
         addView(LinearLayout(this@PodcastPlayerActivity).apply {
             orientation = LinearLayout.VERTICAL
             addView(t, LinearLayout.LayoutParams(-1, -2))
@@ -418,7 +418,19 @@ class PodcastPlayerActivity : Activity() {
             v.animate().scaleX(if (f) 1.04f else 1f).scaleY(if (f) 1.04f else 1f).alpha(if (!abrir || f) 1f else 0.7f)
                 .setDuration(if (animar) 140 else 0).start()
         }
+        // Leitor de tela (estudo global 20/11): a raiz guarda o foco, então ela diz o que está escolhido e o episódio,
+        // como CruzOuvir.anunciar. Por quê: sem isso o TalkBack ficava mudo no player inteiro.
+        val itemFila = if (abrir) ((fila.getChildAt(naFila) as? android.view.ViewGroup)?.let { textoDe(it) }) else null
+        val raiz = window.decorView.findFocus() ?: return
+        raiz.contentDescription = listOfNotNull(itemFila ?: rotuloBotao.text?.toString(), titulo.text?.toString(), podcast.text?.toString())
+            .filter { it.isNotBlank() }.joinToString(", ")
+        raiz.sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
+
+    /** Junta os textos de um cartão da fila ("A seguir") para o leitor de tela. */
+    private fun textoDe(v: android.view.ViewGroup): String = (0 until v.childCount).joinToString(" ") { i ->
+        when (val c = v.getChildAt(i)) { is TextView -> c.text.toString(); is android.view.ViewGroup -> textoDe(c); else -> "" }
+    }.trim()
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
         if (e.action != KeyEvent.ACTION_DOWN) {
@@ -539,7 +551,7 @@ class PodcastPlayerActivity : Activity() {
         override fun onDraw(cv: Canvas) {
             val w = width.toFloat(); val h = height.toFloat(); val raio = minOf(w, h) / 2f
             fundo.color = when {
-                grande -> Estilo.ACENTO
+                grande && !focado -> 0x33FFFFFF   // ⏯ maior, mas sem laranja: um só destaque na tela, o foco branco
                 // Pente fino 19/11/2026: o foco era branco 25% (~1,6:1 contra o botão sem foco, abaixo dos 3:1 da WCAG
                 // 1.4.11) e na Sala não dava para saber onde estava. Regra da casa: foco é BRANCO, ícone escuro em cima.
                 focado -> Estilo.FOCO
@@ -550,8 +562,8 @@ class PodcastPlayerActivity : Activity() {
             val m = (raio * if (grande) 0.48f else 0.52f).toInt()
             ic?.let {
                 it.setBounds(m, m, width - m, height - m)
-                it.alpha = if (ligado || focado) 255 else 140
-                it.colorFilter = if (grande || focado) escuro else null
+                it.alpha = if (ligado || focado || grande) 255 else 140
+                it.colorFilter = if (focado) escuro else null
                 it.draw(cv)
             }
             escrita?.let {

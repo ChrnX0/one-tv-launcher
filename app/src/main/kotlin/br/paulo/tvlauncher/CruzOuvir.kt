@@ -87,7 +87,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         const val CARTAO_CAPA = 120
         const val CARTAO_TEXTO = 296     // largura do texto à esquerda da capa
         const val FONTE_CARTAO_TITULO = 21f
-        const val FONTE_CARTAO = 16f
+        const val FONTE_CARTAO = 18f
         const val FONTE_TITULO = 32f     // nome da tela ("Rádio"); era 26 e perdia para o rótulo laranja (crítica 19/11/2026)
         const val ONDA_MS = HomeCruz.ONDA_MS
         const val ONDA_MAX_MS = HomeCruz.ONDA_MAX_MS
@@ -198,7 +198,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
 
         // ---- cartão "Tocando agora": texto à esquerda, capa grande à direita
         cartaoRotulo = TextView(ctx).apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f); setTextColor(Estilo.ACENTO); typeface = fonteForte
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setTextColor(Estilo.ACENTO); typeface = fonteForte
             letterSpacing = 0.14f; includeFontPadding = false; maxLines = 1
         }
         cartaoTitulo = TextView(ctx).apply {

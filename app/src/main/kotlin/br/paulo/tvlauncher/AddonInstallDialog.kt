@@ -86,9 +86,9 @@ object AddonInstallDialog {
             filters = arrayOf(android.text.InputFilter.LengthFilter(2000))
         }
         val caixa = LinearLayout(tela).apply {
-            orientation = LinearLayout.VERTICAL; setPaddingRelative(48, 16, 48, 0)
+            orientation = LinearLayout.VERTICAL; setPaddingRelative(Estilo.dp(context, 24), Estilo.dp(context, 8), Estilo.dp(context, 24), 0)
             if (erro != null) addView(Estilo.texto(tela, Estilo.Papel.LEGENDA, erro).apply {
-                textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(0xFFFF8A80.toInt())
+                textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(Estilo.ERRO)
             })
             addView(edit)
         }

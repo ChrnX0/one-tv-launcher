@@ -1088,3 +1088,7 @@ input[type=time]:focus-within, input[type=date]:focus-within { border-color: var
   label:has(> input[type=checkbox]) { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
   input[type=checkbox] { width: 24px; height: 24px; }
 }
+
+/* Escolha feita (filtro, opção ligada): mesma marca da sub-aba ativa, uma barra laranja embaixo.
+   Por quê: laranja quer dizer "escolhido/ligado"; um botão principal (branco) quer dizer "faça isto". */
+button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--acento); font-weight: 700; }

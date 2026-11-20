@@ -630,7 +630,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         const val COR_TRACO = 0xFFFFF3E6.toInt()
         private const val COR_CLARA = 0xFFFFF3E6.toInt()
         /** Linha: o item escolhido acende na cor da marca (vermelho-laranja; nada rosado). */
-        const val COR_ACESA = DesignTokens.ORANGE
+        val COR_ACESA: Int get() = br.paulo.tvlauncher.Estilo.ACENTO   // segue o alto contraste (estudo global 20/11)
         /** Linha: traço de 1,25 no quadro de 24 (o Símbolo usa 1,5). */
         const val TRACO_FINO = 1.25f
         /** A TV-sofá desenhada menor que o quadro: a barra do programa embaixo do ícone não pode encostar (Paulo, 18/11/2026). */

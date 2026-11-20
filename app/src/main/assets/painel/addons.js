@@ -56,7 +56,7 @@ function desenharAddons() {
   barra.hidden = grupos.length <= 2;
   for (const g of grupos) {
     const b = Object.assign(document.createElement('button'), {
-      type: 'button', textContent: g.nome, className: g.id === filtroAddon ? 'botao-primario' : 'botao-secundario',
+      type: 'button', textContent: g.nome, className: 'botao-secundario',
     });
     b.setAttribute('aria-pressed', String(g.id === filtroAddon));
     b.addEventListener('click', () => { filtroAddon = g.id; desenharAddons(); });
