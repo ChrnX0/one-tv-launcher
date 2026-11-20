@@ -47,4 +47,9 @@ class MenuAppTest {
 
     @Test fun pilhaSemNinguemDesinstalavel() =
         assertEquals(emptyList<String>(), MenuApp.desinstalaveisDaPilha(listOf("a", "b"), 0) { false })
+
+    @Test fun ocultarSoSemPinOQueAFichaDizSeguro() {
+        org.junit.Assert.assertFalse(MenuApp.ocultarPedePin("seguro"))
+        for (r in listOf("cuidado", "essencial", "sem informação", "")) org.junit.Assert.assertTrue(r, MenuApp.ocultarPedePin(r))
+    }
 }

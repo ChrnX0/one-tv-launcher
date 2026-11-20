@@ -525,7 +525,7 @@ async function alternarOculto(a, botao) {
       const f = await chamar('GET', '/api/apps/' + encodeURIComponent(a.pacote) + '/ficha').catch(() => null);
       const emUso = await tvEmUso();
       const ok = await confirmar('Ocultar ' + a.nome + '?',
-        `Risco: ${a.risco}. ${f ? f.efeito : ''}` + (emUso ? ` A TV está em uso agora (${emUso}).` : ''), 'Ocultar mesmo assim', fazer, false);
+        `Risco: ${a.risco}. ${f ? f.efeito : ''}` + (emUso ? ` A TV está em uso agora (${emUso}).` : ''), 'Ocultar mesmo assim', fazer, a.risco === 'essencial');
       if (!ok) { botao.disabled = false; return; }
       a.oculto = true;
       desenharApps();

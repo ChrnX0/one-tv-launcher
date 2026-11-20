@@ -20,6 +20,13 @@ object MenuApp {
         "com.android.providers.settings", "com.android.shell",
     )
 
+    /**
+     * Congelar à mão qualquer pacote (Paulo, 20/11/2026: "às vezes a gente pode querer manualmente congelar"): o painel
+     * deixa ocultar também app de sistema sem tela, menos os [PROTEGIDOS_FIXOS] (sem eles a TV não se conserta pela TV).
+     * O freio passa a ser o PIN: só o que a ficha diz "seguro" oculta sem PIN; cuidado, essencial e sem informação pedem.
+     */
+    fun ocultarPedePin(risco: String) = risco != "seguro"
+
     enum class Acao { MOVER, OCULTAR, MOSTRAR, DESINSTALAR }
 
     fun acoes(naPastaOcultos: Boolean, desinstalavel: Boolean): List<Acao> {
