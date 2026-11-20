@@ -931,4 +931,13 @@ AS\\Filmler).</string>
     <string name="st_trazendo">%1$s TV\'ye geri alınıyor…</string>
     <string name="st_sumiram">USB bellek çıkarıldı: %1$s geri takılana kadar gizli.</string>
     <string name="st_sugestao">TV belleği neredeyse dolu. %1$s (%2$s) uygulamasını USB belleğe taşıyın: uygulamada OK\'a basılı tutun.</string>
+    <string name="st_medindo">USB belleğin hızı ölçülüyor…</string>
+    <string name="st_lento_titulo">USB bellek çok yavaş</string>
+    <string name="st_lento_bloqueado">Bu bellek %1$s MB/sn yazıyor. TV belleği olmak için en az %2$d MB/sn gerekir: altında uygulamalar takılır ve TV açılmayabilir. Normal USB bellek olarak kullanın.</string>
+    <string name="st_aviso_boot">Hep takılı bırakın: bozulur veya çıkarılırsa, siz çıkarana kadar TV açılmayabilir.</string>
+    <string name="home_grande_titulo">%1$s taşınsın mı?</string>
+    <string name="home_grande_aviso">%1$s %2$s yer kaplıyor. Yavaş bellekte taşıma 10 dakikayı geçebilir ve bir TV\'yi yarıda kilitledi. Yalnızca kimse izlemiyorken devam edin.</string>
+    <string name="home_liberar_arquivos">USB bellekleri ve dosyaları açabilsin</string>
+    <string name="home_arquivos_liberado">%1$s artık USB bellekleri ve tüm dosyaları açabilir</string>
+    <string name="home_arquivos_falhou">%1$s için izin verilemedi: %2$s</string>
 </resources>

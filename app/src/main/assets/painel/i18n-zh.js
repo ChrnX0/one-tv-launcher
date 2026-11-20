@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"移到 U 盘？",
 "Mover":"移动",
 "no pen drive":"在 U 盘上",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"其中所有内容都将被清除。作为电视存储，它只能在这台电视上使用，并且必须一直插着：如果它损坏或被拔出，在拔下之前电视可能无法启动。如果上面已有应用，会先移回电视。",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"大型应用：在慢速U盘上移动可能超过 10 分钟，曾导致电视中途死机。移动期间应用会关闭。请仅在无人观看时继续。",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"未执行：此U盘写入太慢（低于 10 MB/s），无法作为电视存储。请将它用作普通U盘。",
+"Medindo a velocidade…":"正在测量速度…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","电视存储：$2 中剩余 $1"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","没有成功：$1"],

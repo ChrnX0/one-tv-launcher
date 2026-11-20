@@ -3,7 +3,9 @@ package br.paulo.tvlauncher
 import br.paulo.tvlauncher.StorageModeRules.Modo
 import br.paulo.tvlauncher.StorageModeRules.Motivo
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class StorageModeRulesTest {
@@ -65,5 +67,16 @@ class StorageModeRulesTest {
     @Test fun caminhos() {
         org.junit.Assert.assertTrue(StorageModeRules.caminhoSeguro("/storage/8991-1F25"))
         org.junit.Assert.assertFalse(StorageModeRules.caminhoSeguro("/storage/x'; reboot"))
+    }
+
+    @Test fun penLentoNaoViraMemoriaDaTv() {
+        assertTrue(StorageModeRules.podeFormatar(Modo.COMUM, 1.0, medivel = true))
+        assertFalse(StorageModeRules.podeFormatar(Modo.MEMORIA_TV, null, medivel = true))   // sem medida: mede antes
+        assertFalse(StorageModeRules.podeFormatar(Modo.MISTO, 9.9, medivel = true))
+        assertTrue(StorageModeRules.podeFormatar(Modo.MISTO, 10.0, medivel = true))
+        assertTrue(StorageModeRules.podeFormatar(Modo.MEMORIA_TV, null, medivel = false))   // já adotado inteiro
+        assertFalse(StorageModeRules.podeFormatar(Modo.DESCONHECIDO, 50.0, medivel = true))
+        val gb = 1024L * 1024 * 1024
+        assertEquals(StorageModeRules.Motivo.PEN_LENTO, StorageModeRules.recomendar(1 * gb, 64 * gb, 8.0).motivo)
     }
 }

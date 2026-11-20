@@ -9,7 +9,7 @@ import org.json.JSONObject
  * (StorageMode / AppStorage), para escolher do sofá com o celular na mão.
  *
  *   GET  /api/storage            estado: memória da TV, pens (modo, tamanho, recomendação), apps móveis, tarefa em curso
- *   POST /api/storage/app        {pacote, externo}             move um app (PIN de novo)
+ *   POST /api/storage/app        {pacote, externo, confirmar}  move um app (PIN de novo; app grande só com confirmar=true)
  *   POST /api/storage/formatar   {disco, modo, comum}          APAGA o pen drive (PIN de novo; traz os apps antes)
  *
  * Mover e formatar levam minutos: rodam em segundo plano, uma tarefa por vez; o GET mostra o andamento.
@@ -43,15 +43,19 @@ object PainelStorage {
         o.put("livreTv", e.livreTv).put("totalTv", e.totalTv).put("primarioNoPen", e.primarioNoPen)
         o.put("pens", JSONArray().apply {
             e.pens.forEach { p ->
-                val r = StorageModeRules.recomendar(e.livreTv, p.tamanho, null)
+                // Recomenda pela velocidade real: sem medida ainda, mede agora em segundo plano (o cartão relê sozinho).
+                if (p.velocidade == null && p.comum != null && tarefa == null) StorageMode.medirEmFundo(app, p.comum)
+                val r = StorageModeRules.recomendar(e.livreTv, p.tamanho, p.velocidade)
                 put(JSONObject().put("disco", p.disco).put("modo", p.modo.name).put("tamanho", p.tamanho)
                     .put("adotado", p.adotadoUuid != null)
+                    .put("velocidade", p.velocidade ?: JSONObject.NULL).put("medindo", p.velocidade == null && p.comum != null)
                     .put("recomendado", r.modo.name).put("recomendadoComum", r.comumPorcento).put("motivo", r.motivo.name))
             }
         })
         o.put("apps", JSONArray().apply {
             StorageMode.appsMoveis(app).forEach { a ->
-                put(JSONObject().put("pacote", a.pacote).put("nome", a.nome).put("bytes", a.bytes).put("noPen", a.noExterno))
+                put(JSONObject().put("pacote", a.pacote).put("nome", a.nome).put("bytes", a.bytes).put("noPen", a.noExterno)
+                    .put("grande", a.arriscado))
             }
         })
         return o
@@ -68,6 +72,9 @@ object PainelStorage {
                 val pode = AppStorage.destino(app, pacote)
                 val esperado = if (externo) AppStorageRules.Destino.EXTERNO else AppStorageRules.Destino.DISPOSITIVO
                 if (pode != esperado) return erro(422, "este app não pode ir para lá agora", "INVALIDO")
+                // App grande (o que derrubou a Sala em 20/11): só com o aviso lido no painel.
+                if (corpo?.optBoolean("confirmar") != true && StorageMode.appMovel(app, pacote)?.arriscado == true)
+                    return erro(409, "app grande: confirme o aviso", "GRANDE")
                 rodar(app, ip, "mover app") { AppStorage.mover(app, pacote, externo) }
             }
             post && rota == "/formatar" -> {
@@ -80,6 +87,11 @@ object PainelStorage {
                 rodar(app, ip, "formatar pen drive") {
                     val e = StorageMode.ler(app) ?: return@rodar "shell"
                     val pen = e.pens.firstOrNull { it.disco == disco } ?: return@rodar "sem pen drive"
+                    // Misto/memória da TV: mede antes; pen drive lento não vira memória da TV (StorageModeRules.ADOTAR_MIN_MBS).
+                    if (modo != StorageModeRules.Modo.COMUM && pen.comum != null) {
+                        val v = StorageMode.medir(app, pen.comum) ?: return@rodar "dd"
+                        if (!StorageModeRules.podeFormatar(modo, v, medivel = true)) return@rodar "PEN_LENTO"
+                    }
                     val volta = if (pen.adotadoUuid != null) StorageBackup.trazerTudoDeVolta(app, e.primarioNoPen) {} else null
                     volta ?: StorageMode.formatar(app, disco, modo, comum)
                 }

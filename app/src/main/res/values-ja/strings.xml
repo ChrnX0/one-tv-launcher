@@ -928,4 +928,13 @@ AS\\Movies）。</string>
     <string name="st_trazendo">%1$s を TV に戻しています…</string>
     <string name="st_sumiram">USB メモリが外れました: 戻すまで %1$s は表示されません。</string>
     <string name="st_sugestao">TV のストレージがほぼいっぱいです。%1$s（%2$s）を USB メモリに移しましょう: アプリで OK を長押し。</string>
+    <string name="st_medindo">USBメモリの速度を測定中…</string>
+    <string name="st_lento_titulo">USBメモリが遅すぎます</string>
+    <string name="st_lento_bloqueado">このUSBメモリの書き込みは%1$s MB/秒です。テレビのストレージにするには%2$d MB/秒以上が必要です。それ未満ではアプリが固まり、テレビが起動しないことがあります。通常のUSBメモリとして使ってください。</string>
+    <string name="st_aviso_boot">常に挿したままにしてください。故障したり抜かれたりすると、外すまでテレビが起動しないことがあります。</string>
+    <string name="home_grande_titulo">%1$sを移動しますか？</string>
+    <string name="home_grande_aviso">%1$sは%2$sあります。遅いUSBメモリでは移動に10分以上かかり、途中でテレビが固まったことがあります。誰も見ていないときだけ続けてください。</string>
+    <string name="home_liberar_arquivos">USBメモリとファイルを開けるようにする</string>
+    <string name="home_arquivos_liberado">%1$sがUSBメモリとすべてのファイルを開けるようになりました</string>
+    <string name="home_arquivos_falhou">%1$sを許可できませんでした：%2$s</string>
 </resources>

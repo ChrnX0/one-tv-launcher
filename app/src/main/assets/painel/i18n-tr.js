@@ -1465,6 +1465,10 @@ traduzirPainelCom({T:{
 "Levar para o pen drive?":"USB belleğe taşınsın mı?",
 "Mover":"Taşı",
 "no pen drive":"USB bellekte",
+"Tudo o que está nele será apagado. Como memória da TV, ele só funciona nesta TV e precisa ficar sempre ligado: se falhar ou for tirado, a TV pode não ligar até você desconectá-lo. Se ele já tem apps, eles voltam para a TV antes.":"Üzerindeki her şey silinecek. TV belleği olarak yalnızca bu TV'de çalışır ve hep takılı kalmalıdır: bozulur veya çıkarılırsa, siz çıkarana kadar TV açılmayabilir. Üzerinde uygulama varsa önce TV'ye geri döner.",
+"App grande: em pen drive lento a mudança pode passar de 10 minutos e já travou uma TV no meio. O app fecha enquanto é movido. Só continue com ninguém assistindo.":"Büyük uygulama: yavaş bellekte taşıma 10 dakikayı geçebilir ve bir TV'yi yarıda kilitledi. Uygulama taşınırken kapanır. Yalnızca kimse izlemiyorken devam edin.",
+"Não deu: este pen drive grava devagar demais (menos de 10 MB/s) para virar memória da TV. Use como pen drive comum.":"Yapılmadı: bu bellek TV belleği olmak için çok yavaş yazıyor (10 MB/sn altı). Normal USB bellek olarak kullanın.",
+"Medindo a velocidade…":"Hız ölçülüyor…",
 },P:[
 ["^Memória\\ da\\ TV:\\ (.+?)\\ livres\\ de\\ (.+?)$","TV belleği: $2 içinde $1 boş"],
 ["^Não\\ deu\\ certo:\\ (.+?)$","Olmadı: $1"],

@@ -931,4 +931,13 @@ AS\\Films).</string>
     <string name="st_trazendo">Retour de %1$s sur la TV…</string>
     <string name="st_sumiram">La clé USB est retirée : %1$s sont masquées jusqu\'à son retour.</string>
     <string name="st_sugestao">Mémoire de la TV presque pleine. Mettez %1$s (%2$s) sur la clé USB : maintenez OK sur l\'app.</string>
+    <string name="st_medindo">Mesure de la vitesse de la clé USB…</string>
+    <string name="st_lento_titulo">Clé USB trop lente</string>
+    <string name="st_lento_bloqueado">Cette clé écrit à %1$s Mo/s. Pour devenir mémoire de la TV il faut au moins %2$d Mo/s : en dessous les apps se figent et la TV peut ne plus démarrer. Utilisez-la comme clé normale.</string>
+    <string name="st_aviso_boot">Laissez-la toujours branchée : si elle tombe en panne ou est retirée, la TV peut ne plus démarrer tant qu\'elle n\'est pas débranchée.</string>
+    <string name="home_grande_titulo">Déplacer %1$s ?</string>
+    <string name="home_grande_aviso">%1$s occupe %2$s. Sur une clé lente le transfert peut dépasser 10 minutes et a déjà bloqué une TV en cours de route. Continuez seulement si personne ne regarde.</string>
+    <string name="home_liberar_arquivos">Autoriser l\'accès aux clés USB et fichiers</string>
+    <string name="home_arquivos_liberado">%1$s ouvre maintenant les clés USB et tous les fichiers</string>
+    <string name="home_arquivos_falhou">Impossible d\'autoriser %1$s : %2$s</string>
 </resources>

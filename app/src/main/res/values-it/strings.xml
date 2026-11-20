@@ -931,4 +931,13 @@ AS\\Film).</string>
     <string name="st_trazendo">%1$s torna sulla TV…</string>
     <string name="st_sumiram">Chiavetta scollegata: %1$s restano nascoste finché non torna.</string>
     <string name="st_sugestao">Memoria della TV quasi piena. Sposta %1$s (%2$s) sulla chiavetta: tieni premuto OK sull\'app.</string>
+    <string name="st_medindo">Misuro la velocità della chiavetta…</string>
+    <string name="st_lento_titulo">Chiavetta troppo lenta</string>
+    <string name="st_lento_bloqueado">Questa chiavetta scrive a %1$s MB/s. Per diventare memoria della TV servono almeno %2$d MB/s: sotto, le app si bloccano e la TV potrebbe non avviarsi. Usala come chiavetta normale.</string>
+    <string name="st_aviso_boot">Lasciala sempre collegata: se si guasta o viene tolta, la TV potrebbe non avviarsi finché non la scolleghi.</string>
+    <string name="home_grande_titulo">Spostare %1$s?</string>
+    <string name="home_grande_aviso">%1$s occupa %2$s. Su una chiavetta lenta lo spostamento può superare 10 minuti e ha già bloccato una TV a metà. Continua solo se nessuno sta guardando.</string>
+    <string name="home_liberar_arquivos">Consenti di aprire chiavette e file</string>
+    <string name="home_arquivos_liberado">%1$s ora apre chiavette USB e tutti i file</string>
+    <string name="home_arquivos_falhou">Impossibile consentire %1$s: %2$s</string>
 </resources>

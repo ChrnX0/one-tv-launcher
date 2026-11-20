@@ -931,4 +931,13 @@ AS\\Movies)।</string>
     <string name="st_trazendo">%1$s टीवी पर वापस आ रहा है…</string>
     <string name="st_sumiram">USB ड्राइव निकाली गई: %1$s उसके लौटने तक छिपे हैं।</string>
     <string name="st_sugestao">टीवी स्टोरेज लगभग भर गया है। %1$s (%2$s) को USB ड्राइव पर ले जाएं: ऐप पर OK दबाए रखें।</string>
+    <string name="st_medindo">पेन ड्राइव की गति मापी जा रही है…</string>
+    <string name="st_lento_titulo">पेन ड्राइव बहुत धीमी है</string>
+    <string name="st_lento_bloqueado">यह पेन ड्राइव %1$s MB/s पर लिखती है। TV मेमोरी बनने के लिए कम से कम %2$d MB/s चाहिए: इससे कम पर ऐप अटकते हैं और TV चालू नहीं भी हो सकता। इसे सामान्य पेन ड्राइव की तरह इस्तेमाल करें।</string>
+    <string name="st_aviso_boot">इसे हमेशा लगा रहने दें: अगर यह खराब हो या निकाली जाए, तो इसे हटाने तक TV चालू नहीं भी हो सकता।</string>
+    <string name="home_grande_titulo">%1$s ले जाएँ?</string>
+    <string name="home_grande_aviso">%1$s %2$s लेता है। धीमी पेन ड्राइव पर यह 10 मिनट से ज़्यादा ले सकता है और एक TV को बीच में अटका चुका है। तभी जारी रखें जब कोई देख न रहा हो।</string>
+    <string name="home_liberar_arquivos">पेन ड्राइव और फ़ाइलें खोलने दें</string>
+    <string name="home_arquivos_liberado">%1$s अब पेन ड्राइव और सभी फ़ाइलें खोल सकता है</string>
+    <string name="home_arquivos_falhou">%1$s को अनुमति नहीं दी जा सकी: %2$s</string>
 </resources>

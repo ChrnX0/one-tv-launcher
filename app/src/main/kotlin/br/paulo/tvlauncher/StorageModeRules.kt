@@ -79,17 +79,34 @@ object StorageModeRules {
 
     /**
      * [livreTv] e [tamanhoPen] em bytes; [velocidadeMBs] = gravação medida (null = não medida).
-     * - Pen drive lento (< 5 MB/s, abaixo disso o próprio Android avisa ao adotar) ou pequeno (< 8 GB): comum.
+     * - Pen drive lento (< [ADOTAR_MIN_MBS]) ou pequeno (< 8 GB): comum.
      * - TV com folga (>= 4 GB livres): comum (não vale apagar o pen drive).
      * - Pen drive grande (>= 32 GB): misto meio a meio (apps + gravações/arquivos).
      * - Senão: memória da TV.
      */
     fun recomendar(livreTv: Long, tamanhoPen: Long, velocidadeMBs: Double?): Recomendacao = when {
-        velocidadeMBs != null && velocidadeMBs < 5.0 -> Recomendacao(Modo.COMUM, 100, Motivo.PEN_LENTO)
+        velocidadeMBs != null && velocidadeMBs < ADOTAR_MIN_MBS -> Recomendacao(Modo.COMUM, 100, Motivo.PEN_LENTO)
         tamanhoPen < 8 * GB -> Recomendacao(Modo.COMUM, 100, Motivo.PEN_PEQUENO)
         livreTv >= 4 * GB -> Recomendacao(Modo.COMUM, 100, Motivo.TV_FOLGADA)
         tamanhoPen >= 32 * GB -> Recomendacao(Modo.MISTO, 50, Motivo.PEN_GRANDE)
         else -> Recomendacao(Modo.MEMORIA_TV, 0, Motivo.TV_APERTADA)
+    }
+
+    /**
+     * Gravação mínima (MB/s, medida com dd + fsync) para virar memória da TV ou misto. Porquê (Sala, 20/11/2026): um pen
+     * drive que o Android mediu em r1572 w1001 s285 ms moveu um app a ~45 MB/min, o system_server caiu no meio e, com ele
+     * adotado, a TV travou no boot. Abaixo disso a tela recusa adotar; só dá para usar como pen drive comum.
+     */
+    const val ADOTAR_MIN_MBS = 10.0
+
+    /**
+     * Pode formatar em [modo]? Comum sempre pode. Misto e memória da TV só com a velocidade medida e acima do mínimo;
+     * [medivel] = false quando não há parte comum montada para medir (já adotado inteiro): aí a decisão já foi tomada antes.
+     */
+    fun podeFormatar(modo: Modo, velocidadeMBs: Double?, medivel: Boolean): Boolean = when (modo) {
+        Modo.COMUM -> true
+        Modo.MISTO, Modo.MEMORIA_TV -> !medivel || (velocidadeMBs != null && velocidadeMBs >= ADOTAR_MIN_MBS)
+        Modo.DESCONHECIDO -> false
     }
 
     /**

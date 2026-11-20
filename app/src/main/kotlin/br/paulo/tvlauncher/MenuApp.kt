@@ -27,15 +27,17 @@ object MenuApp {
      */
     fun ocultarPedePin(risco: String) = risco != "seguro"
 
-    enum class Acao { MOVER, OCULTAR, MOSTRAR, SOB_DEMANDA, TIRAR_SOB_DEMANDA, INSTALAR_EXTERNO, INSTALAR_DISPOSITIVO, DESINSTALAR }
+    enum class Acao { MOVER, OCULTAR, MOSTRAR, SOB_DEMANDA, TIRAR_SOB_DEMANDA, INSTALAR_EXTERNO, INSTALAR_DISPOSITIVO, LIBERAR_ARQUIVOS, DESINSTALAR }
 
     /**
      * [sobDemanda] (20/11/2026, OnDemand.kt): null = o app não pode ser congelado sob demanda (não aparece nada);
      * false = pode e ainda não é ("Congelar quando não estiver em uso"); true = já é ("Deixar de congelar").
      * [armazenamento] (20/11/2026, AppStorage.kt): null = não pode mudar de lugar; true = pode ir para o pen drive
      * adotado ("Instalar no armazenamento externo"); false = está nele e pode voltar ("Instalar no dispositivo").
+     * [arquivosBloqueados] (20/11/2026): o app pede "todos os arquivos" e não tem ("Deixar ler pen drives e arquivos").
      */
-    fun acoes(naPastaOcultos: Boolean, desinstalavel: Boolean, sobDemanda: Boolean? = null, armazenamento: Boolean? = null): List<Acao> {
+    fun acoes(naPastaOcultos: Boolean, desinstalavel: Boolean, sobDemanda: Boolean? = null, armazenamento: Boolean? = null,
+              arquivosBloqueados: Boolean = false): List<Acao> {
         val base = if (naPastaOcultos) listOf(Acao.MOSTRAR) else listOf(Acao.MOVER, Acao.OCULTAR)
         val demanda = when {
             naPastaOcultos || sobDemanda == null -> emptyList()
@@ -47,7 +49,8 @@ object MenuApp {
             true -> listOf(Acao.INSTALAR_EXTERNO)
             false -> listOf(Acao.INSTALAR_DISPOSITIVO)
         }
-        return base + demanda + lugar + if (desinstalavel) listOf(Acao.DESINSTALAR) else emptyList()
+        val arquivos = if (arquivosBloqueados && !naPastaOcultos) listOf(Acao.LIBERAR_ARQUIVOS) else emptyList()
+        return base + demanda + lugar + arquivos + if (desinstalavel) listOf(Acao.DESINSTALAR) else emptyList()
     }
 
     /**

@@ -23,6 +23,7 @@ class StorageActivity : Activity() {
     private lateinit var coluna: LinearLayout
     private var estado: StorageMode.Estado? = null
     private var velocidade = mutableMapOf<String, Double>()
+    private val autoMedidos = mutableSetOf<String>()
     private var misto = 50
     private var ocupado = false
     private var pinOk = false
@@ -86,6 +87,11 @@ class StorageActivity : Activity() {
         var primeira: TextView? = null
         for (pen in e.pens) {
             secao(getString(R.string.st_pen, tam(pen.tamanho), nomeModo(pen.modo)))
+            pen.velocidade?.let { velocidade.putIfAbsent(pen.disco, it) }
+            // Detecta sozinho: sem medida guardada, mede uma vez ao abrir (32 MB, alguns segundos) e recomenda por ela.
+            if (velocidade[pen.disco] == null && pen.comum != null && autoMedidos.add(pen.disco)) {
+                mostrar(getString(R.string.st_medindo)); medir(pen.disco, pen.comum)
+            }
             val rec = StorageModeRules.recomendar(e.livreTv, pen.tamanho, velocidade[pen.disco])
             val textoRec = getString(R.string.st_recomendado, nomeModo(rec.modo), nomeMotivo(rec.motivo)) +
                 (velocidade[pen.disco]?.let { "  ·  " + getString(R.string.st_medido, "%.1f".format(it)) }
@@ -137,7 +143,7 @@ class StorageActivity : Activity() {
         }
     }
 
-    private fun medir(disco: String, comum: String) {
+    private fun medir(disco: String, comum: String, depois: (() -> Unit)? = null) {
         val app = applicationContext
         ocupado = true
         Fundo.rodar("Storage") {
@@ -147,6 +153,7 @@ class StorageActivity : Activity() {
                 if (isDestroyed) return@runOnUiThread
                 if (v != null) velocidade[disco] = v else mostrar(getString(R.string.st_falhou, "dd"))
                 montar()
+                if (v != null) depois?.invoke()
             }
         }
     }
@@ -164,6 +171,17 @@ class StorageActivity : Activity() {
      * apps e a área compartilhada de volta ANTES (senão eles sumiriam junto) e só então formata.
      */
     private fun confirmarFormatar(pen: StorageMode.Pen, modo: StorageModeRules.Modo) {
+        // Passo 0 (Sala, 20/11/2026): pen drive lento não vira memória da TV. Sem medida ainda, mede e volta aqui.
+        if (modo != StorageModeRules.Modo.COMUM && pen.comum != null) {
+            val v = velocidade[pen.disco]
+            if (v == null) { mostrar(getString(R.string.st_medindo)); medir(pen.disco, pen.comum) { confirmarFormatar(pen, modo) }; return }
+            if (!StorageModeRules.podeFormatar(modo, v, medivel = true)) {
+                CaixaTv(this).setTitle(getString(R.string.st_lento_titulo))
+                    .setMessage(getString(R.string.st_lento_bloqueado, "%.1f".format(v), StorageModeRules.ADOTAR_MIN_MBS.toInt()))
+                    .setPositiveButton("OK", null).show()
+                return
+            }
+        }
         val comum = pen.comum?.let { java.io.File(it) }
         if (comum == null) { avisoApagar(pen, modo); return }
         val app = applicationContext
@@ -208,7 +226,8 @@ class StorageActivity : Activity() {
         val primarioNoPen = estado?.primarioNoPen == true && pen.adotadoUuid != null
         val d = CaixaTv(this)
             .setTitle(getString(R.string.st_aviso_titulo))
-            .setMessage(getString(R.string.st_aviso, nomeModo(modo)))
+            .setMessage(getString(R.string.st_aviso, nomeModo(modo)) +
+                (if (modo != StorageModeRules.Modo.COMUM) "\n\n" + getString(R.string.st_aviso_boot) else ""))
             .setNegativeButton(R.string.home_cancelar, null)
             .setPositiveButton(R.string.st_apagar) { _, _ ->
                 comPin {
@@ -259,9 +278,23 @@ class StorageActivity : Activity() {
                     rodape = getString(R.string.st_apps_rodape)) { i ->
                     val a = apps[i]
                     val vai = !a.noExterno
-                    trabalhar(getString(R.string.home_instalando_lugar, a.nome), { AppStorage.mover(app, a.pacote, vai) })
+                    val mover = { trabalhar(getString(R.string.home_instalando_lugar, a.nome), { AppStorage.mover(app, a.pacote, vai) }) }
+                    if (a.arriscado) avisoGrande(this, a.nome, tam(a.bytes), mover) else mover()
                 }
             }
+        }
+    }
+
+    companion object {
+        /** Aviso antes de mover um app grande (AppStorageRules.arriscado); o foco fica no Cancelar. Também no menu da home. */
+        fun avisoGrande(a: android.app.Activity, nome: String, tamanho: String, continuar: () -> Unit) {
+            val d = CaixaTv(a)
+                .setTitle(a.getString(R.string.home_grande_titulo, nome))
+                .setMessage(a.getString(R.string.home_grande_aviso, nome, tamanho))
+                .setNegativeButton(R.string.home_cancelar, null)
+                .setPositiveButton(R.string.st_mover) { _, _ -> continuar() }
+                .show()
+            d.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)?.requestFocus()
         }
     }
 }
