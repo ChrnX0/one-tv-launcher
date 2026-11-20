@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">カテゴリでブロック中</string>
     <string name="bc_bloqueado">ブロック中</string>
     <string name="qr_gerar_outro">新しいコード</string>
+    <string name="tentar_de_novo">再試行</string>
     <string name="qr_fechar">閉じる</string>
     <string name="qr_painel_fora">パネルが動いていません。\nランチャーの設定 &gt; リモートアクセス &gt; パネル でオンにしてください（PIN が必要）。</string>
     <string name="qr_pronto">完了</string>

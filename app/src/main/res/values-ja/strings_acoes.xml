@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">時刻、リモコンのボタン、イベント、シーンのリンク</string>
     <string name="aut_horario">時刻になったら</string>
     <string name="aut_botao">ボタンが押されたら</string>
-    <string name="aut_evento">何かが起きたら（シーンを実行）</string>
+    <string name="aut_evento">何かが起きたら</string>
     <string name="aut_link">リンクで</string>
     <string name="aut_link_det">ウェブパネル › 追加機能 › シーンで作成と編集</string>
     <string name="ev_midia_tocou">映画や動画が始まった</string>

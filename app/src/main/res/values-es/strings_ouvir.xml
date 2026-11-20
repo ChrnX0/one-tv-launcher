@@ -24,7 +24,6 @@
     <string name="pod_desligado">desactivado</string>
     <string name="pod_dica_pular">En la línea que suena, ◀ ▶ retroceden 15 s / avanzan 30 s</string>
     <string name="pod_continuar">Continuar</string>
-    <string name="pod_faltam">quedan %s</string>
     <string name="pod_novos">Episodios nuevos</string>
     <string name="pod_video">video</string>
     <string name="pod_meus">Mis podcasts</string>

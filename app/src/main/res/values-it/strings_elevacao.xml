@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Controllo da ovunque</string>
     <string name="elv_pilar_todos">Chiunque la usa</string>
     <string name="elv_pilar_instala">Si installa e si ripara da sola</string>
-    <string name="elv_prom_liga">Schermata iniziale pronta in meno di 1 secondo; nessun arresto in 30 giorni</string>
+    <string name="elv_prom_liga">Schermata iniziale pronta in meno di 1 secondo</string>
     <string name="elv_prom_ao_vivo">Cambiare canale richiede meno di 1,5 secondi, dal tasto all\'immagine</string>
     <string name="elv_prom_player">Riproduce qualsiasi file; sottotitoli giusti senza toccare nulla</string>
     <string name="elv_prom_casa">La sveglia suona in orario, ogni volta</string>

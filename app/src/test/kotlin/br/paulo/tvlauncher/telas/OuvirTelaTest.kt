@@ -196,7 +196,7 @@ class OuvirTelaTest {
                 CruzOuvir.Item("celular", a.getString(R.string.pod_pelo_celular), a.getString(R.string.pod_pelo_celular_det), IconeOuvir.Tipo.CELULAR))),
         ), "continuar" to null)
         cruz.tocando(CruzOuvir.Tocando("Os vulcões do Pacífico e o anel de fogo", "Café com Ciência", "", azul, CapaOuvir.iniciais("Café com Ciência"),
-            cobrir = true, progresso = 0.55f, tempo = a.getString(R.string.pod_de, "25:10", "46:00") + " · " + a.getString(R.string.pod_faltam, "21 min"),
+            cobrir = true, progresso = 0.55f, tempo = a.getString(R.string.pod_de, "25:10", "46:00") + " · " + br.paulo.tvlauncher.BarraTempo.faltam(a, "21 min"),
             pausado = false))
         cruz.requestFocus()
         ShadowLooper.idleMainLooper(2, TimeUnit.SECONDS)

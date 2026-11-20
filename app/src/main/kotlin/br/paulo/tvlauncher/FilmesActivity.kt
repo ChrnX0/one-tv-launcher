@@ -680,7 +680,7 @@ class FilmesActivity : Activity() {
             val pct = Vod.progresso(pos)?.takeIf { it != 0 }
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
-                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> getString(R.string.tempo_faltam, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
+                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> BarraTempo.faltam(this@FilmesActivity, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
                 (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90E1020.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
@@ -750,7 +750,7 @@ class FilmesActivity : Activity() {
             if (soLegendado(f)) getString(R.string.idioma_legendado) else null,
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
-            pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) },
+            pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> BarraTempo.faltam(this, BarraTempo.duracao(p.duracao - p.ms)) },
             extRapidas[f.chave]?.ifEmpty { null })))
         focoRapido = f; if (f.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }   // espera o dedo parar
     }
@@ -922,7 +922,7 @@ class FilmesActivity : Activity() {
         val (colAcoes, acoes) = FichaAcoes.coluna(this)
         val primeiro: View
         if (Vod.deveRetomar(pos)) {
-            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_continuar), relogio(pos!!.ms), marca = "continuar") { tocar(f, doComeco = false) }
+            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_continuar), getString(R.string.ficha_continuar_de, ponto(pos!!.ms)), marca = "continuar") { tocar(f, doComeco = false) }
             FichaAcoes.adicionar(acoes, primeiro)
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_do_comeco), marca = "comeco") { tocar(f, doComeco = true) })
         } else {
@@ -1268,9 +1268,13 @@ class FilmesActivity : Activity() {
         setPaddingRelative(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
-    private fun relogio(ms: Long): String {
-        val s = ms / 1000
-        return if (s >= 3600) String.format(Locale.ROOT, "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) else String.format(Locale.ROOT, "%d:%02d", s / 60, s % 60)
+    /**
+     * Ponto onde parou, em minutos ("19 min", "1 h 05 min"). Antes era "19:26", que de longe parece a hora do dia
+     * (crítica de design 19/11/2026). Arredonda para baixo: volta um pouco antes, nunca depois.
+     */
+    private fun ponto(ms: Long): String {
+        val min = (ms / 60_000).coerceAtLeast(1)
+        return if (min < 60) "$min min" else String.format(Locale.ROOT, "%d h %02d min", min / 60, min % 60)
     }
 
     private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }

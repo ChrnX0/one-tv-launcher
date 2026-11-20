@@ -45,20 +45,9 @@ class AjudaActivity : Activity() {
         }
         tTitulo = Estilo.tituloTela(this, "")
         tResumo = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPaddingRelative(0, dp(4), 0, 0) }
-        // Ajuda por QR (degrau 2): à direita do título, o QR do mesmo assunto no site, para ler no celular.
-        val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = android.view.Gravity.CENTER_VERTICAL }
-        val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; addView(tTitulo); addView(tResumo) }
-        topo.addView(textos, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        qr = android.widget.ImageView(this)
-        val ladoQr = dp(104)
-        topo.addView(LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; gravity = android.view.Gravity.CENTER_HORIZONTAL
-            addView(qr, LinearLayout.LayoutParams(ladoQr, ladoQr))
-            addView(Estilo.texto(this@AjudaActivity, Estilo.Papel.LEGENDA, getString(R.string.ajq_celular)).apply {
-                gravity = android.view.Gravity.CENTER; setPaddingRelative(0, dp(4), 0, 0)
-            })
-        }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(24) })
-        raiz.addView(topo)
+        // Título no lugar padrão das telas (o QR ao lado empurrava o título para baixo e batia na data do relógio).
+        raiz.addView(tTitulo)
+        raiz.addView(tResumo)
         // Corpo: cor cheia (não a apagada das legendas) e entrelinha folgada, para ler de longe.
         tCorpo = Estilo.texto(this, Estilo.Papel.CORPO).apply {
             textSize = 20f
@@ -72,7 +61,20 @@ class AjudaActivity : Activity() {
             background = Estilo.superficie(context, false)
             addView(tCorpo)
         }
-        raiz.addView(rolagem, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(Estilo.E2) })
+        // Ajuda por QR (degrau 2): à direita do texto, alinhado ao topo do cartão (crítica de design 19/11/2026: no canto
+        // de cima ele colidia com a data do relógio).
+        qr = android.widget.ImageView(this)
+        val ladoQr = dp(104)
+        val meio = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        meio.addView(rolagem, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
+        meio.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL; gravity = android.view.Gravity.CENTER_HORIZONTAL
+            addView(qr, LinearLayout.LayoutParams(ladoQr, ladoQr))
+            addView(Estilo.texto(this@AjudaActivity, Estilo.Papel.LEGENDA, getString(R.string.ajq_celular)).apply {
+                gravity = android.view.Gravity.CENTER; setPaddingRelative(0, dp(4), 0, 0)
+            })
+        }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(Estilo.E3) })
+        raiz.addView(meio, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(Estilo.E2) })
         raiz.addView(Estilo.barraDicas(this, "◀ ▶" to getString(R.string.aj_dica_assunto), "▲ ▼" to getString(R.string.aj_dica_rolar),
             getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_sair)).apply { setPaddingRelative(0, dp(12), 0, 0) })
         setContentView(raiz)

@@ -188,6 +188,7 @@
     <string name="bc_bloqueado_cat">blocked by category</string>
     <string name="bc_bloqueado">blocked</string>
     <string name="qr_gerar_outro">New code</string>
+    <string name="tentar_de_novo">Try again</string>
     <string name="qr_fechar">Close</string>
     <string name="qr_painel_fora">The panel is not running.\nTurn it on in Launcher settings &gt; Remote access &gt; Panel (needs a PIN).</string>
     <string name="qr_pronto">Done</string>

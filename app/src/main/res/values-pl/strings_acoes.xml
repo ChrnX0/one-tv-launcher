@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Godziny, przyciski pilota, zdarzenia i linki scen</string>
     <string name="aut_horario">O określonej godzinie</string>
     <string name="aut_botao">Po naciśnięciu przycisku</string>
-    <string name="aut_evento">Gdy coś się dzieje (uruchamia scenę)</string>
+    <string name="aut_evento">Gdy coś się dzieje</string>
     <string name="aut_link">Przez link</string>
     <string name="aut_link_det">Twórz i edytuj w panelu WWW › Dodatki › Sceny</string>
     <string name="ev_midia_tocou">Film lub wideo się zaczęło</string>

@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Время сна</string>
     <string name="dormir_texto">Это приложение сейчас не разрешено. Спокойной ночи!</string>
     <string name="dormir_pin">PIN для изменения времени сна</string>
-    <string name="dormir_inicio">Время сна: начало</string>
-    <string name="dormir_fim">Время сна: конец</string>
-    <string name="dormir_teto">Время сна: макс. громкость</string>
+    <string name="dormir_inicio">Начало</string>
+    <string name="dormir_fim">Конец</string>
+    <string name="dormir_teto">Макс. громкость</string>
     <string name="recado_link_titulo">Сообщение</string>
     <string name="extras_HORA_DORMIR">Время сна (только разрешённые приложения, ограниченная громкость)</string>
     <string name="extras_TOCANDO_AGORA">Сейчас играет (читает, что воспроизводится)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Интернет по приложениям (7 дней)</string>
     <string name="extras_tocando">Сейчас играет</string>
     <string name="extras_aguarde">Минутку…</string>
-    <string name="dormir_dia">Время сна: день</string>
+    <string name="dormir_dia">День</string>
     <string name="dormir_todos">все (по умолчанию)</string>
     <string name="dormir_proprio">своё расписание</string>
     <string name="dormir_segue">как по умолчанию</string>
-    <string name="dormir_voltar_padrao">Время сна: сбросить этот день к умолчанию</string>
+    <string name="dormir_voltar_padrao">Сбросить этот день к умолчанию</string>
     <string name="extras_VER_TELA">Разрешить Claude видеть экран (MCP ver_tela; ТВ показывает оповещение)</string>
     <string name="casa_titulo">Дом</string>
     <string name="casa_sem_config">Настройте Home Assistant в панели на телефоне: вкладка «Дополнительно», карточка «Дом».</string>

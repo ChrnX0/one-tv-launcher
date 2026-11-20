@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">どこからでも操作</string>
     <string name="elv_pilar_todos">誰でも使える</string>
     <string name="elv_pilar_instala">自分で設定し、自分で直る</string>
-    <string name="elv_prom_liga">ホーム画面は1秒以内に準備完了。30日間クラッシュなし</string>
+    <string name="elv_prom_liga">ホーム画面は1秒以内に準備完了</string>
     <string name="elv_prom_ao_vivo">チャンネル切り替えはボタンから映像まで1.5秒以内</string>
     <string name="elv_prom_player">どんなファイルも再生。字幕は設定なしで正しく</string>
     <string name="elv_prom_casa">目覚ましは毎回、時間どおりに鳴る</string>

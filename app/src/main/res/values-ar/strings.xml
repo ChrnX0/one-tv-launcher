@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">أفلام · آخر ما فتحته</string>
     <string name="home_dest_serie">برامج · أنت في %1$s</string>
     <string name="home_dest_tv">التلفزيون · القناة %1$d</string>
-    <string name="home_faltam">متبقٍ %1$s</string>
     <string name="rede_titulo">الشبكة</string>
     <string name="rede_procurando">جارٍ البحث عن خوادم وسائط على الشبكة…</string>
     <string name="rede_nenhum">لا يوجد خادم وسائط يعمل الآن. أضف واحدًا أدناه: Plex وJellyfin يستخدمان حسابك؛ ومجلد الكمبيوتر أو NAS يستخدم عنوانه.</string>
@@ -757,6 +756,9 @@ AS\\Movies).</string>
     <string name="legenda_conta_sim">مُعد</string>
     <string name="legenda_conta_nao">غير مُعد</string>
     <string name="tempo_faltam">متبقٍ %1$s</string>
+    <string name="tempo_falta_um">متبقٍ %1$s</string>
+    <string name="serie_ep_longo">الموسم %1$d، الحلقة %2$d</string>
+    <string name="ficha_continuar_de">من %1$s</string>
     <string name="tempo_termina_as">ينتهي الساعة %1$s</string>
     <string name="tempo_episodios_vistos">%1$s حلقات</string>
     <string name="tempo_x_de_y">%1$d من %2$d</string>

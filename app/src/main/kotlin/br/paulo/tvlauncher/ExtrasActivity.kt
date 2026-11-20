@@ -41,9 +41,12 @@ class ExtrasActivity : Activity() {
     private fun montar() {
         // As chaves liga/desliga moraram aqui até 14/11/2026; agora cada uma está na aba dela das Configurações (ideia 46,
         // ExtrasAbas). Aqui ficam os ajustes finos e as ferramentas.
+        // Agrupado em seções (crítica de design 19/11/2026): antes eram 20 linhas iguais com "Hora de dormir:" repetido.
+        secao(R.string.pb_filtro)
         numero(R.string.extras_filtro_inicio, FiltroNoturno.CHAVE_INICIO, FiltroNoturno.PADRAO_INICIO, 30, 0, 24 * 60 - 30, hora = true)
         numero(R.string.extras_filtro_fim, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM, 30, 0, 24 * 60 - 30, hora = true)
         numero(R.string.extras_filtro_forca, FiltroNoturno.CHAVE_FORCA, FiltroNoturno.PADRAO_FORCA, 5, 5, 100, hora = false)
+        secao(R.string.dormir_titulo)
         // Hora de dormir por dia: a linha "dia" escolhe o que as duas de baixo editam (todos = o padrão; um dia = só ele).
         linhaDormir({ getString(R.string.dormir_dia) + ": " + textoDia() }, 1, protegida = false) { delta ->
             diaSel = Math.floorMod(diaSel + 1 + delta, 8) - 1   // -1 (todos), 0 (dom) .. 6 (sáb)
@@ -57,6 +60,7 @@ class ExtrasActivity : Activity() {
             val v = Math.floorMod(Extras.numero(this, HoraDormir.CHAVE_TETO, HoraDormir.PADRAO_TETO) + d, 105)   // 0..100, dá a volta
             Extras.definirNumero(this, HoraDormir.CHAVE_TETO, v)
         }
+        secao(R.string.tela_titulo)
         // Tempo de tela por dia (ideia 33): a cota (OK = +30 min; ← →) e "mais 30 min hoje". Mudar pede o PIN com a chave ligada.
         linhaTela({ getString(R.string.tela_cota_linha, TempoTela.texto(TempoTelaTv.cota(this) * 60_000L, getString(R.string.tela_h), getString(R.string.tela_min)),
             TempoTela.texto(TempoTelaTv.restanteMs(this), getString(R.string.tela_h), getString(R.string.tela_min))) }) { d ->
@@ -65,6 +69,7 @@ class ExtrasActivity : Activity() {
         linhaTela({ getString(R.string.tela_mais, TempoTela.EXTRA_MIN) }, setas = false) { _ ->
             TempoTelaTv.darMais(this); aviso(getString(R.string.tela_mais_ok, TempoTela.EXTRA_MIN))
         }
+        secao(R.string.cfg2_sec_ferramentas)
         linha({ getString(R.string.extras_caches) + " (" + getString(R.string.extras_livre, Caches.livreTexto()) + ")" }) {
             emSegundoPlano { Caches.limpar(it) }
         }
@@ -88,6 +93,9 @@ class ExtrasActivity : Activity() {
         linhas.firstOrNull()?.first?.requestFocus()
     }
 
+
+    /** Rótulo de seção do sistema de design (o mesmo das Configurações). */
+    private fun secao(texto: Int) = coluna.addView(Estilo.secao(this, getString(texto)))
 
     private fun linha(texto: () -> String, ao: () -> Unit): TextView {
         // A linha padrão do sistema de design (a mesma das Configurações).

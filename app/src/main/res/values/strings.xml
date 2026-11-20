@@ -283,7 +283,7 @@
     <string name="pv_voz_sem_chuva">", no rain expected. "</string>
     <string name="pv_voz_amanha">Tomorrow, %1$s, a high of %2$d and a low of %3$d</string>
     <string name="pv_voz_amanha_chuva">, a %1$d percent chance of rain</string>
-    <string name="pv_sem">No forecast now (no internet or source down).</string>
+    <string name="pv_sem">Couldn\'t get the forecast right now. Check the internet and try again.</string>
     <string name="pv_max_min">high %1$d°   low %2$d°   ·   feels like %3$d°</string>
     <string name="pv_24h">Next 24 hours</string>
     <string name="pv_agora">Now</string>
@@ -628,7 +628,6 @@
     <string name="home_dest_filme_ultimo">Movies · the last one you opened</string>
     <string name="home_dest_serie">Shows · you are on %1$s</string>
     <string name="home_dest_tv">TV · channel %1$d</string>
-    <string name="home_faltam">%1$s left</string>
     <string name="rede_titulo">Network</string>
     <string name="rede_procurando">Looking for media servers on the network…</string>
     <string name="rede_nenhum">No media server is on right now. Add one below: Plex and Jellyfin use your account; a PC or NAS folder uses its address.</string>
@@ -834,6 +833,9 @@
     <string name="legenda_conta_nao">not set up</string>
     <!-- Barra + tempo (BarraTempo.kt): %1$s is replaced by the highlighted value. -->
     <string name="tempo_faltam">%1$s left</string>
+    <string name="tempo_falta_um">%1$s left</string>
+    <string name="serie_ep_longo">Season %1$d, episode %2$d</string>
+    <string name="ficha_continuar_de">from %1$s</string>
     <string name="tempo_termina_as">ends at %1$s</string>
     <string name="tempo_episodios_vistos">%1$s episodes</string>
     <string name="tempo_x_de_y">%1$d of %2$d</string>

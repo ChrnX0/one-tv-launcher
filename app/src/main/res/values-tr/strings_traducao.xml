@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">kategori nedeniyle engelli</string>
     <string name="bc_bloqueado">engelli</string>
     <string name="qr_gerar_outro">Yeni kod</string>
+    <string name="tentar_de_novo">Tekrar dene</string>
     <string name="qr_fechar">Kapat</string>
     <string name="qr_painel_fora">Panel çalışmıyor.\nLauncher ayarları &gt; Uzaktan erişim &gt; Panel’den açın (PIN gerekir).</string>
     <string name="qr_pronto">Tamam</string>

@@ -65,7 +65,7 @@
     <string name="aut_cfg_det">Horários, botões do controle, eventos e links de cena</string>
     <string name="aut_horario">Quando for hora</string>
     <string name="aut_botao">Quando apertar um botão</string>
-    <string name="aut_evento">Quando algo acontecer (roda uma cena)</string>
+    <string name="aut_evento">Quando algo acontecer</string>
     <string name="aut_link">Por link</string>
     <string name="aut_link_det">Criar e editar no painel web › Extras › Cenas</string>
     <plurals name="aut_links">

@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Yatma saati</string>
     <string name="dormir_texto">Bu uygulamaya şu an izin verilmiyor. İyi geceler!</string>
     <string name="dormir_pin">Yatma saatini değiştirmek için PIN</string>
-    <string name="dormir_inicio">Yatma saati: başlangıç</string>
-    <string name="dormir_fim">Yatma saati: bitiş</string>
-    <string name="dormir_teto">Yatma saati: en yüksek ses</string>
+    <string name="dormir_inicio">Başlangıç</string>
+    <string name="dormir_fim">Bitiş</string>
+    <string name="dormir_teto">En yüksek ses</string>
     <string name="recado_link_titulo">Mesaj</string>
     <string name="extras_HORA_DORMIR">Yatma saati (yalnızca izin verilen uygulamalar, sınırlı ses)</string>
     <string name="extras_TOCANDO_AGORA">Şimdi çalıyor (çalanı okur)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Uygulama başına internet (7 gün)</string>
     <string name="extras_tocando">Şimdi çalıyor</string>
     <string name="extras_aguarde">Bir dakika…</string>
-    <string name="dormir_dia">Yatma saati: gün</string>
+    <string name="dormir_dia">Gün</string>
     <string name="dormir_todos">tümü (varsayılan)</string>
     <string name="dormir_proprio">kendi programı</string>
     <string name="dormir_segue">varsayılanı izler</string>
-    <string name="dormir_voltar_padrao">Yatma saati: bu günü varsayılana döndür</string>
+    <string name="dormir_voltar_padrao">Bu günü varsayılana döndür</string>
     <string name="extras_VER_TELA">Claude ekranı görebilsin (MCP ver_tela; TV bir uyarı gösterir)</string>
     <string name="casa_titulo">Ev</string>
     <string name="casa_sem_config">Home Assistant’ı telefon panelinde ayarlayın: Ekstralar sekmesi, Ev kartı.</string>

@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">电影 · 上次打开的</string>
     <string name="home_dest_serie">剧集 · 看到 %1$s</string>
     <string name="home_dest_tv">电视 · 频道 %1$d</string>
-    <string name="home_faltam">剩余 %1$s</string>
     <string name="rede_titulo">网络</string>
     <string name="rede_procurando">正在查找网络中的媒体服务器…</string>
     <string name="rede_nenhum">当前没有开启的媒体服务器。请在下方添加：Plex 和 Jellyfin 使用你的账号；电脑或 NAS 文件夹使用其地址。</string>
@@ -757,6 +756,9 @@ AS\\Movies）。</string>
     <string name="legenda_conta_sim">已设置</string>
     <string name="legenda_conta_nao">未设置</string>
     <string name="tempo_faltam">剩余 %1$s</string>
+    <string name="tempo_falta_um">剩余 %1$s</string>
+    <string name="serie_ep_longo">第%1$d季 第%2$d集</string>
+    <string name="ficha_continuar_de">从%1$s</string>
     <string name="tempo_termina_as">%1$s 结束</string>
     <string name="tempo_episodios_vistos">%1$s 集</string>
     <string name="tempo_x_de_y">%1$d / %2$d</string>

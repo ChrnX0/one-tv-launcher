@@ -84,8 +84,10 @@ class ReceberTvActivity : Activity() {
         if (c == null) {
             qr.visibility = View.INVISIBLE; codigo.text = ""
             texto.text = getString(R.string.pc_sem_rede)
+            outro.text = getString(R.string.tentar_de_novo)   // sem rede não há código para "gerar outro"
             return
         }
+        outro.text = getString(R.string.qr_gerar_outro)
         qr.setImageBitmap(try { QrCodigo.bitmap(c.texto(), dp(320)) } catch (e: Exception) { null })
         qr.visibility = View.VISIBLE
         codigo.text = c.ip + "\n" + c.codigo()

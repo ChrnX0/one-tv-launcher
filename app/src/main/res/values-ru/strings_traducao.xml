@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">заблокирован категорией</string>
     <string name="bc_bloqueado">заблокирован</string>
     <string name="qr_gerar_outro">Новый код</string>
+    <string name="tentar_de_novo">Повторить</string>
     <string name="qr_fechar">Закрыть</string>
     <string name="qr_painel_fora">Панель не запущена.\nВключите её в Настройки лаунчера &gt; Удалённый доступ &gt; Панель (нужен PIN).</string>
     <string name="qr_pronto">Готово</string>

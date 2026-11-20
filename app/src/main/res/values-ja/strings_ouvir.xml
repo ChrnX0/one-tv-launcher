@@ -24,7 +24,6 @@
     <string name="pod_desligado">オフ</string>
     <string name="pod_dica_pular">再生中の行で ◀ ▶ を押すと 15 秒戻る / 30 秒進む</string>
     <string name="pod_continuar">続きから</string>
-    <string name="pod_faltam">残り %s</string>
     <string name="pod_novos">新しいエピソード</string>
     <string name="pod_video">動画</string>
     <string name="pod_meus">マイポッドキャスト</string>

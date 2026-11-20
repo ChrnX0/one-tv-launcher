@@ -24,7 +24,6 @@
     <string name="pod_desligado">выкл.</string>
     <string name="pod_dica_pular">В строке воспроизведения ◀ ▶: назад на 15 с / вперёд на 30 с</string>
     <string name="pod_continuar">Продолжить</string>
-    <string name="pod_faltam">осталось %s</string>
     <string name="pod_novos">Новые выпуски</string>
     <string name="pod_video">видео</string>
     <string name="pod_meus">Мои подкасты</string>

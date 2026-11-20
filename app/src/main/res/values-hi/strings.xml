@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">फ़िल्में · आख़िरी खोली गई</string>
     <string name="home_dest_serie">शो · आप %1$s पर हैं</string>
     <string name="home_dest_tv">TV · चैनल %1$d</string>
-    <string name="home_faltam">%1$s बाकी</string>
     <string name="rede_titulo">नेटवर्क</string>
     <string name="rede_procurando">नेटवर्क पर मीडिया सर्वर ढूँढे जा रहे हैं…</string>
     <string name="rede_nenhum">अभी कोई मीडिया सर्वर चालू नहीं है। नीचे एक जोड़ें: Plex और Jellyfin आपके खाते से चलते हैं; PC या NAS फ़ोल्डर अपने पते से।</string>
@@ -757,6 +756,9 @@ AS\\Movies)।</string>
     <string name="legenda_conta_sim">सेट है</string>
     <string name="legenda_conta_nao">सेट नहीं</string>
     <string name="tempo_faltam">%1$s बाकी</string>
+    <string name="tempo_falta_um">%1$s बाकी</string>
+    <string name="serie_ep_longo">सीज़न %1$d, एपिसोड %2$d</string>
+    <string name="ficha_continuar_de">%1$s से</string>
     <string name="tempo_termina_as">%1$s पर ख़त्म</string>
     <string name="tempo_episodios_vistos">%1$s एपिसोड</string>
     <string name="tempo_x_de_y">%2$d में से %1$d</string>

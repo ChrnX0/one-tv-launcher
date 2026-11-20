@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">시간, 리모컨 버튼, 이벤트, 장면 링크</string>
     <string name="aut_horario">정해진 시간에</string>
     <string name="aut_botao">버튼을 누를 때</string>
-    <string name="aut_evento">어떤 일이 생길 때(장면 실행)</string>
+    <string name="aut_evento">어떤 일이 생길 때</string>
     <string name="aut_link">링크로</string>
     <string name="aut_link_det">웹 패널 › 부가 기능 › 장면에서 만들고 편집</string>
     <string name="ev_midia_tocou">영화 또는 동영상 시작됨</string>

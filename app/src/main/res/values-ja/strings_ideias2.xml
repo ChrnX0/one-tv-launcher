@@ -4,9 +4,9 @@
     <string name="dormir_titulo">就寝時間</string>
     <string name="dormir_texto">このアプリは今は使えません。おやすみなさい！</string>
     <string name="dormir_pin">就寝時間を変更するための PIN</string>
-    <string name="dormir_inicio">就寝時間: 開始</string>
-    <string name="dormir_fim">就寝時間: 終了</string>
-    <string name="dormir_teto">就寝時間: 最大音量</string>
+    <string name="dormir_inicio">開始</string>
+    <string name="dormir_fim">終了</string>
+    <string name="dormir_teto">最大音量</string>
     <string name="recado_link_titulo">メッセージ</string>
     <string name="extras_HORA_DORMIR">就寝時間（許可したアプリのみ、音量制限）</string>
     <string name="extras_TOCANDO_AGORA">再生中（再生中のものを読み取る）</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">アプリごとのインターネット使用量（7 日間）</string>
     <string name="extras_tocando">再生中</string>
     <string name="extras_aguarde">少々お待ちください…</string>
-    <string name="dormir_dia">就寝時間: 曜日</string>
+    <string name="dormir_dia">曜日</string>
     <string name="dormir_todos">すべて（標準）</string>
     <string name="dormir_proprio">個別のスケジュール</string>
     <string name="dormir_segue">標準に従う</string>
-    <string name="dormir_voltar_padrao">就寝時間: この曜日を標準に戻す</string>
+    <string name="dormir_voltar_padrao">この曜日を標準に戻す</string>
     <string name="extras_VER_TELA">Claude に画面を見せる（MCP ver_tela、TV にお知らせが表示されます）</string>
     <string name="casa_titulo">ホーム</string>
     <string name="casa_sem_config">スマートフォンのパネルで Home Assistant を設定してください: 追加機能タブ、ホームカード。</string>

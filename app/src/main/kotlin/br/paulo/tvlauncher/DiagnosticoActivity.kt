@@ -128,6 +128,10 @@ class DiagnosticoActivity : Activity() {
             ui.post {
                 if (isDestroyed || g != geracao) return@post
                 linha.mostrar(r)
+                // Wi-Fi com falha vira botão que abre o Wi-Fi do sistema: o erro passa a ter saída (crítica de design 19/11/2026).
+                if (i == 0 && r.nivel == 2) virarAcao(linha) {
+                    try { startActivity(android.content.Intent(android.provider.Settings.ACTION_WIFI_SETTINGS)) } catch (e: Exception) {}
+                }
                 resultados[i] = r
                 if (resultados.all { it != null })
                     resumo.mostrar(Diagnostico.veredito(resultados[0]!!, resultados[1]!!, resultados[2]!!, resultados[3]!!))
@@ -264,6 +268,19 @@ class DiagnosticoActivity : Activity() {
 
     /** Linhas que podem passar de 3 linhas (a frase da internet). */
     private val longas = HashSet<TextView>()
+
+    /** Torna uma linha de informação focável e clicável, com o mesmo foco das linhas de ação ([linha]). */
+    private fun virarAcao(t: TextView, aoClicar: () -> Unit) {
+        if (t.isFocusable) return
+        t.isFocusable = true
+        t.isClickable = true
+        t.background = Estilo.superficie(this, false)
+        t.setOnClickListener { aoClicar() }
+        t.setOnFocusChangeListener { v, temFoco ->
+            v.background = Estilo.superficie(this, temFoco)
+            (v.tag as? Conteudo)?.let { (v as TextView).montarLinha(it.titulo, it.detalhe, it.nivel, temFoco) }
+        }
+    }
 
     private fun info(titulo: String, detalhe: String, nivel: Int = -1): TextView = TextView(this).apply {
         montarLinha(titulo, detalhe, nivel)

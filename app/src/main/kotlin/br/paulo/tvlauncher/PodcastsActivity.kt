@@ -224,7 +224,7 @@ class PodcastsActivity : Activity() {
         val v = OuvirServico.velocidade(this)
         val texto = listOfNotNull(
             if (dur > 0) getString(R.string.pod_de, tempo(pos), tempo(dur)) else tempo(pos),
-            if (dur > pos && dur > 0) getString(R.string.pod_faltam, duracaoCurta(((dur - pos) / v).toLong())) else null,
+            if (dur > pos && dur > 0) BarraTempo.faltam(this, duracaoCurta(((dur - pos) / v).toLong())) else null,
             if (v != 1f) rotuloVelocidade(v) else null).joinToString(" · ")
         return (if (dur > 0) pos.toFloat() / dur else null) to texto
     }
@@ -264,7 +264,7 @@ class PodcastsActivity : Activity() {
         return when {
             tocandoEste -> "● " + getString(R.string.ouv_tocando_agora) to p?.takeIf { it.durMs > 0 }?.let { it.ms.toFloat() / it.durMs }
             p?.ouvido == true -> "✓ " + getString(R.string.pod_ouvido).replaceFirstChar { it.titlecase(Locale.getDefault()) } to null
-            p != null && p.ms >= Podcasts.MIN_CONTINUAR_MS && p.durMs > 0 -> getString(R.string.pod_faltam, duracaoCurta(p.durMs - p.ms)) to p.ms.toFloat() / p.durMs
+            p != null && p.ms >= Podcasts.MIN_CONTINUAR_MS && p.durMs > 0 -> BarraTempo.faltam(this, duracaoCurta(p.durMs - p.ms)) to p.ms.toFloat() / p.durMs
             else -> duracaoEp(ep) to null
         }
     }

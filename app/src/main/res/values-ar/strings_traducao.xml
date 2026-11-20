@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">محظورة بالفئة</string>
     <string name="bc_bloqueado">محظورة</string>
     <string name="qr_gerar_outro">رمز جديد</string>
+    <string name="tentar_de_novo">إعادة المحاولة</string>
     <string name="qr_fechar">إغلاق</string>
     <string name="qr_painel_fora">اللوحة لا تعمل.\nفعّلها في إعدادات المشغّل &gt; الوصول عن بُعد &gt; اللوحة (تحتاج PIN).</string>
     <string name="qr_pronto">تم</string>

@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Время, кнопки пульта, события и ссылки сцен</string>
     <string name="aut_horario">По времени</string>
     <string name="aut_botao">По нажатию кнопки</string>
-    <string name="aut_evento">По событию (запускает сцену)</string>
+    <string name="aut_evento">По событию</string>
     <string name="aut_link">По ссылке</string>
     <string name="aut_link_det">Создавайте и меняйте в веб-панели › Дополнительно › Сцены</string>
     <string name="ev_midia_tocou">Фильм или видео запущено</string>

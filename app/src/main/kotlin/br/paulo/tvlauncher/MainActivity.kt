@@ -566,7 +566,10 @@ class MainActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
             addView(texto(12.5f, textoClaro).apply { text = " · "; includeFontPadding = false })
             addView(txtChuva)
+            // Sem texto de chuva, o " · " ficava solto ("… ·" na pílula do clima; crítica de design 19/11/2026).
+            visibility = View.GONE
         }
+        txtChuva.addTextChangedListener(espelho { linhaChuva.visibility = if (txtChuva.text.isNullOrBlank()) View.GONE else View.VISIBLE })
         val blocoClima = pilula(vidro = false).apply {
             addView(caixaIcone, LinearLayout.LayoutParams(dp(20), dp(20)).apply { marginEnd = dp(6) })
             addView(txtTemp)
@@ -1795,7 +1798,7 @@ class MainActivity : Activity() {
         meta.append("● " + getString(R.string.player_ao_vivo), android.text.style.ForegroundColorSpan(Estilo.ERRO), 0)
         meta.setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, meta.length, 0)
         meta.append("   ${fmt.format(java.util.Date(p.inicio))} – ${fmt.format(java.util.Date(p.fim))}")
-        meta.append("  ·  " + getString(R.string.home_faltam, duracaoTexto(((p.fim - agora + 59_999) / 60_000).toInt())))
+        meta.append("  ·  " + BarraTempo.faltam(this, duracaoTexto(((p.fim - agora + 59_999) / 60_000).toInt())))
         mostrarDestaque(rotulo, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
     }
 
@@ -1814,7 +1817,7 @@ class MainActivity : Activity() {
         // com 20 s vistos a HOME dizia "continue" e a ficha "Assistir" do começo (visto na Sala, 17/11/2026).
         val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }
         val sub = when {
-            serie -> getString(R.string.home_dest_serie, f.episodio)
+            serie -> getString(R.string.home_dest_serie, epLegivel(f.episodio))
             pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo
             else -> getString(R.string.home_dest_filme_ultimo)
         }
@@ -1827,13 +1830,19 @@ class MainActivity : Activity() {
             f.genero.split(',', '/', '|').firstOrNull()?.trim()?.takeIf { it.isNotEmpty() },
             f.ano?.toString(),
             f.duracaoMin?.let { duracaoTexto(it) },
-            pos?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) },
+            pos?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) },
         )
         if (partes.isNotEmpty()) { if (meta.isNotEmpty()) meta.append("   "); meta.append(partes.joinToString("  ·  ")) }
         mostrarDestaque(null, f.titulo, sub, meta, f.sinopse)
     }
 
     /** "1 h 59 min", "45 min", "2 h". */
+    /** "T1 E2" (como fica gravado) vira "Temporada 1, episódio 2": sigla é jargão (crítica de design 19/11/2026). */
+    private fun epLegivel(e: String): String {
+        val m = Regex("""^T(\d+) ?E(\d+)$""").find(e.trim()) ?: return e
+        return getString(R.string.serie_ep_longo, m.groupValues[1].toInt(), m.groupValues[2].toInt())
+    }
+
     private fun duracaoTexto(min: Int): String {
         val h = min / 60; val m = min % 60
         return when { h == 0 -> "$m min"; m == 0 -> "$h h"; else -> "$h h $m min" }
@@ -2875,8 +2884,10 @@ class MainActivity : Activity() {
         if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
             val t = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; text = txtTemp.text; alpha = 0f }
             direita.addView(t, 0, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginEnd = dp(4) })
-            txtTemp.addTextChangedListener(espelho { t.text = "${txtTemp.text}  ·" })
-            t.text = "${txtTemp.text}  ·"
+            // Enquanto o clima não chegou ("…"), nada: "… ·" solto parecia texto quebrado (crítica de design 19/11/2026).
+            fun copiar() { t.text = txtTemp.text.toString().takeIf { it.isNotBlank() && it != "…" }?.let { "$it  ·" }.orEmpty() }
+            txtTemp.addTextChangedListener(espelho { copiar() })
+            copiar()
             tempoCruz = t
         }
         // A pílula "Tocando agora" costuma aparecer DEPOIS que a barra já recolheu (estava GONE, sem posição): a cada novo
@@ -3384,7 +3395,7 @@ class MainActivity : Activity() {
      */
     /** O programa no ar e quanto falta ("SP1 · faltam 58 min"); [comPrograma] = false só o quanto falta. */
     private fun linhaAgoraTv(agora: Programa?, ms: Long, comPrograma: Boolean): String {
-        val falta = agora?.let { ((it.fim - ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        val falta = agora?.let { ((it.fim - ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
         return listOfNotNull(agora?.titulo?.trim()?.takeIf { comPrograma && it.isNotEmpty() }, falta).joinToString(" · ")
     }
 
@@ -3404,7 +3415,7 @@ class MainActivity : Activity() {
         val agora = System.currentTimeMillis()
         val programa = ultimoTv?.programas?.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
         fun faltaFilme(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && Vod.deveRetomar(it) }
-            ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+            ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
         // Quanto já foi visto (barra no pé do ícone em Continuar): filme/série pela posição salva; TV, o programa no ar.
         fun visto(f: PlayerArmazem.FichaHome, serie: Boolean): Float? = posicoesHome[f.chave]
             ?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }?.let { (it.ms.toFloat() / it.duracao).coerceIn(0f, 1f) }
@@ -3460,10 +3471,10 @@ class MainActivity : Activity() {
         val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
         if (cruzTemVod) {
             fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", getString(R.string.continue_series),
-                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), CruzLogica.juntar(f.episodio, faltaSerie(f)), metaFicha(f, serie = true)),
+                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), metaFicha(f, serie = true)),
                 icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }, progresso = visto(f, serie = true),
-                situacao = situacaoParou(f.episodio, visto(f, serie = true), faltaSerie(f),
-                    CruzLogica.juntar(f.episodio, faltaSerie(f)), "c:serie")) }
+                situacao = situacaoParou(epLegivel(f.episodio), visto(f, serie = true), faltaSerie(f),
+                    CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), "c:serie")) }
             fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", getString(R.string.cruz_filme),
                 CruzLogica.linhas(CruzLogica.semMarca(f.titulo), faltaFilme(f), metaFicha(f, serie = false)),
                 icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }, progresso = visto(f, serie = false),
@@ -3502,11 +3513,11 @@ class MainActivity : Activity() {
             situacao = situacaoTv(programa?.titulo, programa?.let { linhaAgoraTv(it, agora, comPrograma = true) }))
         if (cruzTemVod) {
             assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
-                precisa ?: fichaSerie?.let { f -> CruzLogica.linhas(f.titulo, CruzLogica.juntar(f.episodio, faltaSerie(f)), metaFicha(f, serie = true), f.genero) }
+                precisa ?: fichaSerie?.let { f -> CruzLogica.linhas(f.titulo, CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), metaFicha(f, serie = true), f.genero) }
                     ?: getString(R.string.home_destaque_series),
                 icCruz("series", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) },
                 situacao = fichaSerie?.takeIf { precisa == null }?.let { f ->
-                    situacaoParou(f.episodio, visto(f, serie = true), faltaSerie(f), CruzLogica.juntar(f.episodio, faltaSerie(f)), "series") })
+                    situacaoParou(epLegivel(f.episodio), visto(f, serie = true), faltaSerie(f), CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), "series") })
             assistir += HomeCruz.Item("filmes", getString(R.string.home_card_filmes),
                 precisa ?: fichaFilme?.let { f -> CruzLogica.linhas(f.titulo, metaFicha(f, serie = false), f.genero, faltaFilme(f)) }
                     ?: getString(R.string.home_destaque_filmes),
@@ -3651,10 +3662,10 @@ class MainActivity : Activity() {
 
     /** Quanto falta do episódio parado no meio. */
     private fun faltaSerie(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && it.ms > 0 && it.ms < it.duracao }
-        ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
 
     private fun faltaMidia(r: MidiaRecente.Registro): String? = r.takeIf { it.durMs > 0 && it.posMs in 1 until it.durMs }
-        ?.let { ((it.durMs - it.posMs) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        ?.let { ((it.durMs - it.posMs) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
 
     /** Um app na cruz: a frase dele, o que você viu/ouviu por último nele (sessão de mídia) e quando abriu. */
     private fun linhasApp(pacote: String, nome: String): String = CruzLogica.linhas(subApp(pacote, nome),
@@ -3675,7 +3686,7 @@ class MainActivity : Activity() {
     }.getOrDefault(emptyList()).take(2)
 
     private fun faltaPodcast(p: Podcasts.Posicao): String =
-        if (p.durMs > p.ms) ((p.durMs - p.ms) / 60_000).toInt().takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) } ?: ""
+        if (p.durMs > p.ms) ((p.durMs - p.ms) / 60_000).toInt().takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) } ?: ""
         else ""
 
     private fun tocarRadioCruz(r: Radios.Radio) {

@@ -4,9 +4,9 @@
     <string name="dormir_titulo">सोने का समय</string>
     <string name="dormir_texto">यह ऐप अभी अनुमत नहीं है। शुभ रात्रि!</string>
     <string name="dormir_pin">सोने का समय बदलने के लिए PIN</string>
-    <string name="dormir_inicio">सोने का समय: शुरू</string>
-    <string name="dormir_fim">सोने का समय: ख़त्म</string>
-    <string name="dormir_teto">सोने का समय: अधिकतम वॉल्यूम</string>
+    <string name="dormir_inicio">शुरू</string>
+    <string name="dormir_fim">ख़त्म</string>
+    <string name="dormir_teto">अधिकतम वॉल्यूम</string>
     <string name="recado_link_titulo">संदेश</string>
     <string name="extras_HORA_DORMIR">सोने का समय (सिर्फ़ अनुमत ऐप, सीमित वॉल्यूम)</string>
     <string name="extras_TOCANDO_AGORA">अभी चल रहा (जो चल रहा है उसे पढ़ता है)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">हर ऐप का इंटरनेट (7 दिन)</string>
     <string name="extras_tocando">अभी चल रहा</string>
     <string name="extras_aguarde">एक पल…</string>
-    <string name="dormir_dia">सोने का समय: दिन</string>
+    <string name="dormir_dia">दिन</string>
     <string name="dormir_todos">सभी (डिफ़ॉल्ट)</string>
     <string name="dormir_proprio">अपना शेड्यूल</string>
     <string name="dormir_segue">डिफ़ॉल्ट के अनुसार</string>
-    <string name="dormir_voltar_padrao">सोने का समय: इस दिन को डिफ़ॉल्ट पर लौटाएँ</string>
+    <string name="dormir_voltar_padrao">इस दिन को डिफ़ॉल्ट पर लौटाएँ</string>
     <string name="extras_VER_TELA">Claude को स्क्रीन देखने दें (MCP ver_tela; TV सूचना दिखाता है)</string>
     <string name="casa_titulo">घर</string>
     <string name="casa_sem_config">फ़ोन पैनल में Home Assistant सेट करें: एक्स्ट्रा टैब, घर कार्ड।</string>

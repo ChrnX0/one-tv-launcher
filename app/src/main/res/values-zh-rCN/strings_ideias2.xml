@@ -4,9 +4,9 @@
     <string name="dormir_titulo">就寝时间</string>
     <string name="dormir_texto">此应用现在不可用。晚安！</string>
     <string name="dormir_pin">更改就寝时间需要 PIN</string>
-    <string name="dormir_inicio">就寝时间：开始</string>
-    <string name="dormir_fim">就寝时间：结束</string>
-    <string name="dormir_teto">就寝时间：最大音量</string>
+    <string name="dormir_inicio">开始</string>
+    <string name="dormir_fim">结束</string>
+    <string name="dormir_teto">最大音量</string>
     <string name="recado_link_titulo">留言</string>
     <string name="extras_HORA_DORMIR">就寝时间（仅允许的应用，限制音量）</string>
     <string name="extras_TOCANDO_AGORA">正在播放（读取正在播放的内容）</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">各应用的网络用量（7 天）</string>
     <string name="extras_tocando">正在播放</string>
     <string name="extras_aguarde">请稍候…</string>
-    <string name="dormir_dia">就寝时间：日期</string>
+    <string name="dormir_dia">日期</string>
     <string name="dormir_todos">全部（默认）</string>
     <string name="dormir_proprio">单独安排</string>
     <string name="dormir_segue">跟随默认</string>
-    <string name="dormir_voltar_padrao">就寝时间：将这一天恢复为默认</string>
+    <string name="dormir_voltar_padrao">将这一天恢复为默认</string>
     <string name="extras_VER_TELA">让 Claude 查看屏幕（MCP ver_tela；电视会显示提醒）</string>
     <string name="casa_titulo">家居</string>
     <string name="casa_sem_config">请在手机面板中设置 Home Assistant：附加功能标签页，家居卡片。</string>
