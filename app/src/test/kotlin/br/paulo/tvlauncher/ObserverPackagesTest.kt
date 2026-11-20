@@ -35,7 +35,8 @@ class ObserverPackagesTest {
         val f = listOf(File("src/main/assets/fichas-apps.json"), File("app/src/main/assets/fichas-apps.json")).first { it.exists() }
         val o = JSONObject(f.readText())
         val validas = FichasComunidade.validarFichas(f.readText())!!
-        assertEquals(o.length(), validas.length())
+        // "android" (sem ponto) só existe no APK: a conferência das fichas de fora não aceita nome sem ponto.
+        assertEquals(o.length() - 1, validas.length())
         assertTrue(o.length() >= 140)
         for (p in listOf("com.google.android.tvrecommendations", "com.android.tv.feedbackconsent", "tv.sofaly.launcher"))
             assertTrue(p, o.getJSONObject(p).optString("src").isNotEmpty())
