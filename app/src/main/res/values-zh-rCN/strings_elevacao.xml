@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">%1$d 天内没有崩溃或卡死</string>
     <string name="elv_reserva">%1$s 断了。改为播放 %2$s。</string>
     <string name="elv_zap_solte">松开即可观看</string>
-    <string name="elv_leg_estilo">字幕样式：%1$s</string>
     <string name="elv_leg_padrao">标准</string>
     <string name="elv_leg_contraste">高对比度</string>
     <string name="elv_leg_amarela">黄色</string>
-    <string name="elv_leg_posicao">字幕位置：%1$s</string>
     <string name="elv_leg_embaixo">下方</string>
     <string name="elv_leg_em_cima">上方</string>
     <string name="elv_bf_fazer">执行</string>

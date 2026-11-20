@@ -717,12 +717,10 @@ AS\\Movies）。</string>
     <string name="tvv_hoje">今日</string>
     <string name="tvv_ontem">昨日</string>
     <string name="imagem_titulo">アスペクト比</string>
-    <string name="imagem_opcao">アスペクト比: %1$s</string>
     <string name="imagem_ajustar">画面に合わせる</string>
     <string name="imagem_esticar">引き伸ばす</string>
     <string name="imagem_zoom">ズーム（端を切り取る）</string>
     <string name="velocidade_titulo">再生速度</string>
-    <string name="velocidade_opcao">再生速度: %1$s</string>
     <string name="trailer">予告編</string>
     <string name="trailer_sem_app">予告編を開くアプリが見つかりません。</string>
     <string name="series_visto_ate_aqui">%1$s まで視聴済みにする</string>
@@ -748,7 +746,6 @@ AS\\Movies）。</string>
     <string name="legenda_surdos">聴覚障がい者向け</string>
     <string name="legenda_bate">このファイル用</string>
     <string name="lista_dica_escolher">選ぶ</string>
-    <string name="legenda_atraso_opcao">字幕の遅延: %1$s</string>
     <string name="legenda_atraso_titulo">字幕の遅延（+ = 文字を遅く表示）</string>
     <string name="legenda_atraso_zero">遅延なし</string>
     <string name="legenda_conta_titulo">オンライン字幕</string>
@@ -783,7 +780,6 @@ AS\\Movies）。</string>
     <string name="vod_dialogo_opcao">セリフを大きく</string>
     <string name="vod_dialogo_ligado">セリフを大きく: オン</string>
     <string name="vod_dialogo_desligado">セリフを大きく: オフ</string>
-    <string name="vod_atraso_audio_opcao">音声の遅延: %1$s</string>
     <string name="vod_atraso_audio_titulo">音声の遅延（%1$s）</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">なし</string>
@@ -839,5 +835,24 @@ AS\\Movies）。</string>
         <item>西</item>
         <item>北西</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · ここから続ける</string>
+    <string name="lista_dica_voltar">戻る</string>
+    <string name="pm_ligado">オン</string>
+    <string name="pm_desligado">オフ</string>
+    <string name="pm_imagem_som">映像と音声</string>
+    <string name="pm_mais">その他のオプション</string>
+    <string name="pm_versao_legendada">字幕版を見る</string>
+    <string name="pm_versao_dublada">吹替版を見る</string>
+    <string name="pm_versao_info">この位置から再生</string>
+    <string name="pm_leg_ajustes">字幕の設定</string>
+    <string name="pm_leg_tamanho">サイズ</string>
+    <string name="pm_leg_estilo">スタイル</string>
+    <string name="pm_leg_posicao">位置</string>
+    <string name="pm_leg_atraso">ずれ</string>
+    <string name="pm_leg_auto">ないときは自動でダウンロード</string>
+    <string name="pm_leg_traduzir">ないときはテレビで翻訳</string>
+    <string name="pm_velocidade">速度</string>
+    <string name="pm_proporcao">画面サイズ</string>
+    <string name="pm_atraso_audio">音声のずれ</string>
+    <string name="pm_quadros">映画のフレームレートに合わせる</string>
+    <string name="pm_qualidade">画質</string>
 </resources>

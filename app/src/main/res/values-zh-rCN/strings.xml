@@ -717,12 +717,10 @@ AS\\Movies）。</string>
     <string name="tvv_hoje">今天</string>
     <string name="tvv_ontem">昨天</string>
     <string name="imagem_titulo">画面比例</string>
-    <string name="imagem_opcao">画面比例：%1$s</string>
     <string name="imagem_ajustar">适应屏幕</string>
     <string name="imagem_esticar">拉伸</string>
     <string name="imagem_zoom">缩放（裁剪边缘）</string>
     <string name="velocidade_titulo">播放速度</string>
-    <string name="velocidade_opcao">播放速度：%1$s</string>
     <string name="trailer">预告片</string>
     <string name="trailer_sem_app">找不到可打开预告片的应用。</string>
     <string name="series_visto_ate_aqui">标记为已看到 %1$s</string>
@@ -748,7 +746,6 @@ AS\\Movies）。</string>
     <string name="legenda_surdos">听障</string>
     <string name="legenda_bate">适配此文件</string>
     <string name="lista_dica_escolher">选择</string>
-    <string name="legenda_atraso_opcao">字幕延迟：%1$s</string>
     <string name="legenda_atraso_titulo">字幕延迟（+ = 文字稍后显示）</string>
     <string name="legenda_atraso_zero">无延迟</string>
     <string name="legenda_conta_titulo">在线字幕</string>
@@ -783,7 +780,6 @@ AS\\Movies）。</string>
     <string name="vod_dialogo_opcao">增强对白</string>
     <string name="vod_dialogo_ligado">增强对白已开启</string>
     <string name="vod_dialogo_desligado">增强对白已关闭</string>
-    <string name="vod_atraso_audio_opcao">音频延迟：%1$s</string>
     <string name="vod_atraso_audio_titulo">音频延迟（%1$s）</string>
     <string name="vod_atraso_audio_tv">电视</string>
     <string name="vod_atraso_audio_zero">无</string>
@@ -839,5 +835,24 @@ AS\\Movies）。</string>
         <item>西</item>
         <item>西北</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · 从这里继续</string>
+    <string name="lista_dica_voltar">返回</string>
+    <string name="pm_ligado">开</string>
+    <string name="pm_desligado">关</string>
+    <string name="pm_imagem_som">画面和声音</string>
+    <string name="pm_mais">更多选项</string>
+    <string name="pm_versao_legendada">看字幕版</string>
+    <string name="pm_versao_dublada">看配音版</string>
+    <string name="pm_versao_info">从这里接着播</string>
+    <string name="pm_leg_ajustes">字幕设置</string>
+    <string name="pm_leg_tamanho">大小</string>
+    <string name="pm_leg_estilo">样式</string>
+    <string name="pm_leg_posicao">位置</string>
+    <string name="pm_leg_atraso">延迟</string>
+    <string name="pm_leg_auto">没有时自动下载</string>
+    <string name="pm_leg_traduzir">没有时在电视上翻译</string>
+    <string name="pm_velocidade">速度</string>
+    <string name="pm_proporcao">画面大小</string>
+    <string name="pm_atraso_audio">音频延迟</string>
+    <string name="pm_quadros">跟随影片帧率</string>
+    <string name="pm_qualidade">画质</string>
 </resources>

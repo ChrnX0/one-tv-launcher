@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Masih menonton?</string>
     <string name="vod_ainda_assistindo_texto">Beberapa episode diputar tanpa ada yang menyentuh remote, jadi episode berikutnya menunggu Anda.</string>
     <string name="vod_desligar_ao_fim">Matikan TV saat ini selesai</string>
-    <string name="vod_desligar_ao_fim_ligado">TV mati saat ini selesai</string>
-    <string name="vod_desligar_ao_fim_desligado">TV tetap menyala saat ini selesai</string>
-    <string name="vod_legenda_tamanho_opcao">Ukuran subtitle: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Ukuran subtitle</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Kecil</item>

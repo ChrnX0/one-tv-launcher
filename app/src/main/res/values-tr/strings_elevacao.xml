@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">%1$d günde hiç çökme veya donma yok</string>
     <string name="elv_reserva">%1$s çalışmıyor. Yerine %2$s oynatılıyor.</string>
     <string name="elv_zap_solte">İzlemek için bırakın</string>
-    <string name="elv_leg_estilo">Altyazı stili: %1$s</string>
     <string name="elv_leg_padrao">standart</string>
     <string name="elv_leg_contraste">yüksek kontrast</string>
     <string name="elv_leg_amarela">sarı</string>
-    <string name="elv_leg_posicao">Altyazı konumu: %1$s</string>
     <string name="elv_leg_embaixo">altta</string>
     <string name="elv_leg_em_cima">üstte</string>
     <string name="elv_bf_fazer">Yap</string>

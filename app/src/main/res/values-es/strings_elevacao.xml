@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Sin cierres ni bloqueos en %1$d días</string>
     <string name="elv_reserva">%1$s se cayó. Poniendo %2$s en su lugar.</string>
     <string name="elv_zap_solte">Suelta para ver</string>
-    <string name="elv_leg_estilo">Estilo del subtítulo: %1$s</string>
     <string name="elv_leg_padrao">normal</string>
     <string name="elv_leg_contraste">alto contraste</string>
     <string name="elv_leg_amarela">amarillo</string>
-    <string name="elv_leg_posicao">Posición del subtítulo: %1$s</string>
     <string name="elv_leg_embaixo">abajo</string>
     <string name="elv_leg_em_cima">arriba</string>
     <string name="elv_bf_fazer">Hacer</string>

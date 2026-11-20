@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Вы ещё смотрите?</string>
     <string name="vod_ainda_assistindo_texto">Несколько серий прошли без нажатий на пульт, поэтому следующая ждёт вас.</string>
     <string name="vod_desligar_ao_fim">Выключить ТВ по окончании</string>
-    <string name="vod_desligar_ao_fim_ligado">ТВ выключится по окончании</string>
-    <string name="vod_desligar_ao_fim_desligado">ТВ останется включённым по окончании</string>
-    <string name="vod_legenda_tamanho_opcao">Размер субтитров: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Размер субтитров</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Мелкий</item>

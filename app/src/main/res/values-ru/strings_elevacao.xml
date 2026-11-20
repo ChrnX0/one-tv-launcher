@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Ни одного сбоя или зависания за %1$d дн.</string>
     <string name="elv_reserva">%1$s не работает. Вместо него — %2$s.</string>
     <string name="elv_zap_solte">Отпустите, чтобы смотреть</string>
-    <string name="elv_leg_estilo">Стиль субтитров: %1$s</string>
     <string name="elv_leg_padrao">стандартный</string>
     <string name="elv_leg_contraste">высокий контраст</string>
     <string name="elv_leg_amarela">жёлтый</string>
-    <string name="elv_leg_posicao">Положение субтитров: %1$s</string>
     <string name="elv_leg_embaixo">внизу</string>
     <string name="elv_leg_em_cima">вверху</string>
     <string name="elv_bf_fazer">Сделать</string>

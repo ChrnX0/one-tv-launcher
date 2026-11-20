@@ -929,26 +929,28 @@ class PlayerActivity : Activity() {
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
         if (origem != null && Gravacoes.atual == null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
         if (arquivo == null) opcoesGravacao(c, itens)
-        if (arquivo == null && familias.variantes.containsKey(c.id)) {
-            val manual = QualidadeTv.manual(this, c.id)
-            itens += getString(R.string.qual_menu, manual?.let { rotuloNivel(it) } ?: getString(R.string.qual_auto)) to { escolherQualidade(c) }
+        // Mesma regra do menu dos filmes (PlayerMenu, 20/11/2026): ações fecham; o que abre outra lista ou liga/desliga
+        // mostra à direita o valor de agora, e o ✓ some daqui (antes marcava as chaves ligadas, igual a uma escolha).
+        PlayerMenu.abrir(this, c.nome) {
+            val menu = ArrayList<PlayerMenu.Item>()
+            itens.forEach { (nome, acao) -> menu += PlayerMenu.acao(nome, acao = acao) }
+            if (arquivo == null && familias.variantes.containsKey(c.id)) {
+                val manual = QualidadeTv.manual(this, c.id)
+                menu += PlayerMenu.abre(getString(R.string.pm_qualidade), manual?.let { rotuloNivel(it) } ?: getString(R.string.qual_auto)) { escolherQualidade(c) }
+            }
+            menu += PlayerMenu.abre(getString(R.string.pm_proporcao), PlayerImagem.rotulo(this, modoImagem)) { escolherImagem() }
+            // Para quem ouve pior (14/11/2026). Só aparece se o aparelho tem o efeito.
+            if (EfeitosSom.disponivel()) {
+                menu += PlayerMenu.chave(this, getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(c, PlayerAcessivel.VOLUME_IGUAL) }
+                menu += PlayerMenu.chave(this, getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
+            }
+            menu += PlayerMenu.abre(getString(R.string.fone_menu), getString(if (SomNoFone.ligado) R.string.pm_ligado else R.string.pm_desligado)) { SomNoFone.janela(this) }
+            if (EntreTvs.ligado(this)) {
+                menu += PlayerMenu.acao(getString(R.string.junto_menu)) { junto?.menu(c.nome, JuntoTvsProvider.tvs(this)) }
+                menu += PlayerMenu.acao(getString(R.string.cont_menu)) { junto?.enviarPara(c.nome, JuntoTvsProvider.tvs(this), 0L, null) }
+            }
+            menu
         }
-        itens += getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem)) to { escolherImagem() }
-        // Para quem ouve pior (14/11/2026): ligar/desligar, marcado quando ligado. Só aparece se o aparelho tem o efeito.
-        val marcadas = ArrayList<Int>()
-        if (EfeitosSom.disponivel()) {
-            if (EfeitosSom.volumeIgual(this)) marcadas += itens.size
-            itens += getString(R.string.acess_volume) to { alternarSom(c, PlayerAcessivel.VOLUME_IGUAL) }
-            if (EfeitosSom.vozClara(this)) marcadas += itens.size
-            itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
-        }
-        if (SomNoFone.ligado) marcadas += itens.size
-        itens += getString(R.string.fone_menu) to { SomNoFone.janela(this) }
-        if (EntreTvs.ligado(this)) {
-            itens += getString(R.string.junto_menu) to { junto?.menu(c.nome, JuntoTvsProvider.tvs(this)) }
-            itens += getString(R.string.cont_menu) to { junto?.enviarPara(c.nome, JuntoTvsProvider.tvs(this), 0L, null) }
-        }
-        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas, focoNaMarcada = false) { i -> itens[i].second() }
     }
 
     // ---------------------------------------------------------------- sessão junto (degrau 4)
@@ -1045,7 +1047,7 @@ class PlayerActivity : Activity() {
         Estilo.lista(this, getString(R.string.grv_conflito, g.canalNome, Gravacoes.hora(g.fim)), itens.map { it.first }) { i -> itens[i].second() }
     }
 
-    private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem) { m ->
+    private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem, voltar = { opcoes() }) { m ->
         modoImagem = m
         tamanhoVideo?.let { v -> PlayerImagem.aplicar(video, modoImagem, v.width, v.height, v.pixelWidthHeightRatio) }
     }

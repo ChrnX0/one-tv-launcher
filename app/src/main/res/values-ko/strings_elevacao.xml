@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">%1$d일 동안 다운이나 멈춤 없음</string>
     <string name="elv_reserva">%1$s 채널이 끊겼습니다. 대신 %2$s 재생 중.</string>
     <string name="elv_zap_solte">놓으면 시청</string>
-    <string name="elv_leg_estilo">자막 스타일: %1$s</string>
     <string name="elv_leg_padrao">기본</string>
     <string name="elv_leg_contraste">고대비</string>
     <string name="elv_leg_amarela">노란색</string>
-    <string name="elv_leg_posicao">자막 위치: %1$s</string>
     <string name="elv_leg_embaixo">아래</string>
     <string name="elv_leg_em_cima">위</string>
     <string name="elv_bf_fazer">실행</string>

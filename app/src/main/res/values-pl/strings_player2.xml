@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Nadal oglądasz?</string>
     <string name="vod_ainda_assistindo_texto">Kilka odcinków odtworzono bez dotykania pilota, więc następny na Ciebie czeka.</string>
     <string name="vod_desligar_ao_fim">Wyłącz telewizor po zakończeniu</string>
-    <string name="vod_desligar_ao_fim_ligado">Telewizor wyłączy się po zakończeniu</string>
-    <string name="vod_desligar_ao_fim_desligado">Telewizor zostanie włączony po zakończeniu</string>
-    <string name="vod_legenda_tamanho_opcao">Rozmiar napisów: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Rozmiar napisów</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Mały</item>

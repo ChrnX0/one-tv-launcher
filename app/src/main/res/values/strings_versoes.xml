@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Player (movies, series, files and live TV): the ▼ menu is simpler. The first screen has Audio, Subtitles, Watch dubbed/subtitled, Picture and sound, More options; the current value shows on the right, › opens the next list, ✓ only marks what is chosen, and BACK goes to the list above</item>
         <item>Movies and Series: no more key hints along the bottom, so the posters get the space; the poster shows only the progress bar (the time left is in the box at the top), and labels never take two lines</item>
         <item>Settings: turning on high contrast (or changing the text size or a ready-made look) keeps the focus on the same option, and changing an option no longer shows the “Undo” notice that took the focus away (undo stays in System › Recent changes)</item>
         <item>New app name on the TV (tv.sofaly.launcher): settings, add-ons, plugins and the panel move over by themselves, with no reset</item>
@@ -47,6 +48,7 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>menu_player</item>
         <item>pacote_novo</item>
         <item>cores_sistema</item>
         <item>do_computador</item>
@@ -72,6 +74,7 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Player menu</item>
         <item>Everything still there</item>
         <item>Colour system</item>
         <item>From the computer</item>
@@ -97,6 +100,7 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In a movie, does ▼ show a short menu (Audio, Subtitles, Picture and sound, More options) with the current value on the right, and does BACK inside a list go back to the one above?</item>
         <item>After the move to the new app name, are your home screen, add-ons, plugins, profiles and the panel PIN the same as before?</item>
         <item>On the home screen and in Settings, is orange only on the focus and the logo, with values in soft white (not orange)?</item>
         <item>In Movies, is the background blue like the home screen, and does the old “On the network” item now say “From the computer” with a folder?</item>

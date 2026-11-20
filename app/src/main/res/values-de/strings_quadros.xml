@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">Filme mit eigener Bildrate (24 Hz)</string>
     <string name="quadros_det">Der Fernseher wechselt auf 24 Hz, während der Film läuft, damit das Bild bei Kameraschwenks nicht ruckelt. Der Bildschirm wird am Anfang 1 bis 2 s schwarz. Nicht bei Live-TV.</string>
-    <string name="quadros_ligado">Film-Bildrate an: gilt ab dem nächsten Video</string>
-    <string name="quadros_desligado">Film-Bildrate aus</string>
 </resources>

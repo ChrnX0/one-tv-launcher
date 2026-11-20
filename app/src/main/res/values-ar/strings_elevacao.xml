@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">لا أعطال ولا تجمّد خلال %1$d يومًا</string>
     <string name="elv_reserva">توقفت %1$s. يتم تشغيل %2$s بدلًا منها.</string>
     <string name="elv_zap_solte">اترك الزر للمشاهدة</string>
-    <string name="elv_leg_estilo">نمط الترجمة: %1$s</string>
     <string name="elv_leg_padrao">افتراضي</string>
     <string name="elv_leg_contraste">تباين عالٍ</string>
     <string name="elv_leg_amarela">أصفر</string>
-    <string name="elv_leg_posicao">موضع الترجمة: %1$s</string>
     <string name="elv_leg_embaixo">أسفل</string>
     <string name="elv_leg_em_cima">أعلى</string>
     <string name="elv_bf_fazer">تنفيذ</string>

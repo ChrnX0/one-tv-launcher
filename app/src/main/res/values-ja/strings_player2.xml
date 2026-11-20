@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">まだ見ていますか？</string>
     <string name="vod_ainda_assistindo_texto">リモコンに触れないまま数話が再生されたので、次のエピソードは待機しています。</string>
     <string name="vod_desligar_ao_fim">終わったら TV を消す</string>
-    <string name="vod_desligar_ao_fim_ligado">終わったら TV が消えます</string>
-    <string name="vod_desligar_ao_fim_desligado">終わっても TV はついたままです</string>
-    <string name="vod_legenda_tamanho_opcao">字幕サイズ: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">字幕サイズ</string>
     <string-array name="vod_legenda_tamanhos">
         <item>小</item>

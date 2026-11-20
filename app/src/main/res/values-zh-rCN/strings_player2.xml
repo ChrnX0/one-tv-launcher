@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">还在看吗？</string>
     <string name="vod_ainda_assistindo_texto">已连续播放几集且没有人碰遥控器，所以下一集在等你。</string>
     <string name="vod_desligar_ao_fim">播放结束后关闭电视</string>
-    <string name="vod_desligar_ao_fim_ligado">播放结束后电视将关闭</string>
-    <string name="vod_desligar_ao_fim_desligado">播放结束后电视保持开启</string>
-    <string name="vod_legenda_tamanho_opcao">字幕大小：%1$s</string>
     <string name="vod_legenda_tamanho_titulo">字幕大小</string>
     <string-array name="vod_legenda_tamanhos">
         <item>小</item>

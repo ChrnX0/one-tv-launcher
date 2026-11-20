@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">%1$d日間クラッシュ・フリーズなし</string>
     <string name="elv_reserva">%1$sが止まりました。代わりに%2$sを再生中。</string>
     <string name="elv_zap_solte">離すと視聴します</string>
-    <string name="elv_leg_estilo">字幕スタイル：%1$s</string>
     <string name="elv_leg_padrao">標準</string>
     <string name="elv_leg_contraste">高コントラスト</string>
     <string name="elv_leg_amarela">黄色</string>
-    <string name="elv_leg_posicao">字幕の位置：%1$s</string>
     <string name="elv_leg_embaixo">下</string>
     <string name="elv_leg_em_cima">上</string>
     <string name="elv_bf_fazer">実行</string>

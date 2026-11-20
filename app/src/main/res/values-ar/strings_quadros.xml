@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">الأفلام بمعدل إطاراتها الأصلي (24 هرتز)</string>
     <string name="quadros_det">يتحول التلفزيون إلى 24 هرتز أثناء عرض الفيلم، كي لا تهتز الصورة في حركات الكاميرا. تسودّ الشاشة ثانية أو ثانيتين في البداية. لا يُستخدم للتلفزيون المباشر.</string>
-    <string name="quadros_ligado">معدل إطارات الأفلام مفعّل: يُطبَّق من الفيديو التالي</string>
-    <string name="quadros_desligado">معدل إطارات الأفلام متوقف</string>
 </resources>

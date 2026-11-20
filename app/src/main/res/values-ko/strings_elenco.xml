@@ -27,16 +27,10 @@
     <string name="onde_grupo">다른 곳(JustWatch)</string>
     <string name="legenda_auto_pronta">자막이 자동으로 다운로드됨(이 파일용) · ▼로 변경</string>
     <string name="legenda_auto_pronta_nome">자막이 자동으로 다운로드됨 · ▼로 변경하거나 지연 조정</string>
-    <string name="legenda_auto_opcao">자막 자동 다운로드</string>
-    <string name="legenda_auto_ligada">자막이 없으면 다운로드합니다</string>
-    <string name="legenda_auto_desligada">자동 자막 꺼짐</string>
     <string name="legenda_trad_rotulo">자동 번역</string>
     <string name="legenda_trad_traduzindo">내 언어의 자막이 없습니다: TV에서 영어 자막을 번역하는 중…</string>
     <string name="legenda_trad_parcial">TV에서 번역한 자막(자동 번역). 나머지도 계속 번역 중입니다.</string>
     <string name="legenda_trad_pronta">자막 번역 완료</string>
-    <string name="legenda_trad_opcao">자막이 없으면 TV에서 번역</string>
-    <string name="legenda_trad_ligada">자막이 없으면 TV에서 번역합니다</string>
-    <string name="legenda_trad_desligada">더 이상 자막을 번역하지 않습니다</string>
     <string name="series_sinopse_mais">전체 줄거리</string>
     <string name="series_sinopse_menos">짧은 줄거리</string>
     <string name="series_continuar_curto">▶  %1$s 이어서 보기</string>

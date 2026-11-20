@@ -27,16 +27,10 @@
     <string name="onde_grupo">Em outros lugares (JustWatch)</string>
     <string name="legenda_auto_pronta">Legenda transferida automaticamente (feita para este ficheiro) · ▼ para trocar</string>
     <string name="legenda_auto_pronta_nome">Legenda transferida automaticamente · ▼ para trocar ou ajustar o atraso</string>
-    <string name="legenda_auto_opcao">Transferir legenda automaticamente</string>
-    <string name="legenda_auto_ligada">A legenda será transferida quando faltar</string>
-    <string name="legenda_auto_desligada">Legenda automática desligada</string>
     <string name="legenda_trad_rotulo">Tradução automática</string>
     <string name="legenda_trad_traduzindo">Sem legenda em português: a traduzir a inglesa na TV…</string>
     <string name="legenda_trad_parcial">Legenda traduzida na TV (tradução automática). O resto continua a traduzir.</string>
     <string name="legenda_trad_pronta">Tradução da legenda terminada</string>
-    <string name="legenda_trad_opcao">Traduzir a legenda na TV quando faltar</string>
-    <string name="legenda_trad_ligada">A legenda será traduzida na TV quando faltar</string>
-    <string name="legenda_trad_desligada">A legenda não será mais traduzida</string>
     <string name="series_sinopse_mais">Sinopse inteira</string>
     <string name="series_sinopse_menos">Sinopse curta</string>
     <string name="series_continuar_curto">▶  Continuar %1$s</string>

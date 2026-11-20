@@ -717,12 +717,10 @@ AS\\Movies).</string>
     <string name="tvv_hoje">오늘</string>
     <string name="tvv_ontem">어제</string>
     <string name="imagem_titulo">화면 비율</string>
-    <string name="imagem_opcao">화면 비율: %1$s</string>
     <string name="imagem_ajustar">화면에 맞춤</string>
     <string name="imagem_esticar">늘이기</string>
     <string name="imagem_zoom">확대(가장자리 잘림)</string>
     <string name="velocidade_titulo">속도</string>
-    <string name="velocidade_opcao">속도: %1$s</string>
     <string name="trailer">예고편</string>
     <string name="trailer_sem_app">예고편을 열 앱을 찾을 수 없습니다.</string>
     <string name="series_visto_ate_aqui">%1$s까지 시청함으로 표시</string>
@@ -748,7 +746,6 @@ AS\\Movies).</string>
     <string name="legenda_surdos">청각 장애인용</string>
     <string name="legenda_bate">이 파일용</string>
     <string name="lista_dica_escolher">선택</string>
-    <string name="legenda_atraso_opcao">자막 지연: %1$s</string>
     <string name="legenda_atraso_titulo">자막 지연(+ = 자막이 늦게 표시됨)</string>
     <string name="legenda_atraso_zero">지연 없음</string>
     <string name="legenda_conta_titulo">온라인 자막</string>
@@ -783,7 +780,6 @@ AS\\Movies).</string>
     <string name="vod_dialogo_opcao">대사 크게</string>
     <string name="vod_dialogo_ligado">대사 크게 켜짐</string>
     <string name="vod_dialogo_desligado">대사 크게 꺼짐</string>
-    <string name="vod_atraso_audio_opcao">오디오 지연: %1$s</string>
     <string name="vod_atraso_audio_titulo">오디오 지연(%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">없음</string>
@@ -839,5 +835,24 @@ AS\\Movies).</string>
         <item>서</item>
         <item>북서</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · 여기서 이어서</string>
+    <string name="lista_dica_voltar">뒤로</string>
+    <string name="pm_ligado">켜짐</string>
+    <string name="pm_desligado">꺼짐</string>
+    <string name="pm_imagem_som">화면과 소리</string>
+    <string name="pm_mais">더보기</string>
+    <string name="pm_versao_legendada">자막판 보기</string>
+    <string name="pm_versao_dublada">더빙판 보기</string>
+    <string name="pm_versao_info">이 위치부터 이어서</string>
+    <string name="pm_leg_ajustes">자막 설정</string>
+    <string name="pm_leg_tamanho">크기</string>
+    <string name="pm_leg_estilo">스타일</string>
+    <string name="pm_leg_posicao">위치</string>
+    <string name="pm_leg_atraso">지연</string>
+    <string name="pm_leg_auto">없으면 하나 받기</string>
+    <string name="pm_leg_traduzir">없으면 TV에서 번역</string>
+    <string name="pm_velocidade">속도</string>
+    <string name="pm_proporcao">화면 크기</string>
+    <string name="pm_atraso_audio">오디오 지연</string>
+    <string name="pm_quadros">영화 프레임 속도에 맞추기</string>
+    <string name="pm_qualidade">화질</string>
 </resources>

@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">هل ما زلت تشاهد؟</string>
     <string name="vod_ainda_assistindo_texto">عُرضت عدة حلقات دون أن يلمس أحد جهاز التحكم، لذا تنتظرك الحلقة التالية.</string>
     <string name="vod_desligar_ao_fim">إطفاء التلفزيون عند انتهاء هذا</string>
-    <string name="vod_desligar_ao_fim_ligado">سينطفئ التلفزيون عند انتهاء هذا</string>
-    <string name="vod_desligar_ao_fim_desligado">سيبقى التلفزيون يعمل عند انتهاء هذا</string>
-    <string name="vod_legenda_tamanho_opcao">حجم الترجمة: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">حجم الترجمة</string>
     <string-array name="vod_legenda_tamanhos">
         <item>صغير</item>

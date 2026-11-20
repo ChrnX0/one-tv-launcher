@@ -717,12 +717,10 @@ AS\\Фильмы).</string>
     <string name="tvv_hoje">Сегодня</string>
     <string name="tvv_ontem">Вчера</string>
     <string name="imagem_titulo">Формат изображения</string>
-    <string name="imagem_opcao">Формат изображения: %1$s</string>
     <string name="imagem_ajustar">Вписать в экран</string>
     <string name="imagem_esticar">Растянуть</string>
     <string name="imagem_zoom">Увеличить (обрезает края)</string>
     <string name="velocidade_titulo">Скорость</string>
-    <string name="velocidade_opcao">Скорость: %1$s</string>
     <string name="trailer">Трейлер</string>
     <string name="trailer_sem_app">Не найдено приложение для трейлера.</string>
     <string name="series_visto_ate_aqui">Отметить просмотренным до %1$s</string>
@@ -748,7 +746,6 @@ AS\\Фильмы).</string>
     <string name="legenda_surdos">для слабослышащих</string>
     <string name="legenda_bate">для этого файла</string>
     <string name="lista_dica_escolher">выбрать</string>
-    <string name="legenda_atraso_opcao">Задержка субтитров: %1$s</string>
     <string name="legenda_atraso_titulo">Задержка субтитров (+ = текст позже)</string>
     <string name="legenda_atraso_zero">Без задержки</string>
     <string name="legenda_conta_titulo">Субтитры из интернета</string>
@@ -783,7 +780,6 @@ AS\\Фильмы).</string>
     <string name="vod_dialogo_opcao">Громче диалоги</string>
     <string name="vod_dialogo_ligado">Громкие диалоги вкл</string>
     <string name="vod_dialogo_desligado">Громкие диалоги выкл</string>
-    <string name="vod_atraso_audio_opcao">Задержка звука: %1$s</string>
     <string name="vod_atraso_audio_titulo">Задержка звука (%1$s)</string>
     <string name="vod_atraso_audio_tv">ТВ</string>
     <string name="vod_atraso_audio_zero">Нет</string>
@@ -848,5 +844,24 @@ AS\\Фильмы).</string>
         <item>З</item>
         <item>СЗ</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · с этого места</string>
+    <string name="lista_dica_voltar">назад</string>
+    <string name="pm_ligado">Вкл</string>
+    <string name="pm_desligado">Выкл</string>
+    <string name="pm_imagem_som">Изображение и звук</string>
+    <string name="pm_mais">Другие параметры</string>
+    <string name="pm_versao_legendada">Смотреть с субтитрами</string>
+    <string name="pm_versao_dublada">Смотреть дубляж</string>
+    <string name="pm_versao_info">Продолжит с этого места</string>
+    <string name="pm_leg_ajustes">Настройки субтитров</string>
+    <string name="pm_leg_tamanho">Размер</string>
+    <string name="pm_leg_estilo">Стиль</string>
+    <string name="pm_leg_posicao">Положение</string>
+    <string name="pm_leg_atraso">Задержка</string>
+    <string name="pm_leg_auto">Скачать, если нет</string>
+    <string name="pm_leg_traduzir">Переводить на ТВ, если нет</string>
+    <string name="pm_velocidade">Скорость</string>
+    <string name="pm_proporcao">Размер изображения</string>
+    <string name="pm_atraso_audio">Задержка звука</string>
+    <string name="pm_quadros">Частота кадров фильма</string>
+    <string name="pm_qualidade">Качество</string>
 </resources>

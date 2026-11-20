@@ -717,12 +717,10 @@ AS\\Movies)।</string>
     <string name="tvv_hoje">आज</string>
     <string name="tvv_ontem">कल</string>
     <string name="imagem_titulo">आस्पेक्ट रेशियो</string>
-    <string name="imagem_opcao">आस्पेक्ट रेशियो: %1$s</string>
     <string name="imagem_ajustar">स्क्रीन में फ़िट</string>
     <string name="imagem_esticar">खींचें</string>
     <string name="imagem_zoom">ज़ूम (किनारे कटते हैं)</string>
     <string name="velocidade_titulo">गति</string>
-    <string name="velocidade_opcao">गति: %1$s</string>
     <string name="trailer">ट्रेलर</string>
     <string name="trailer_sem_app">ट्रेलर खोलने के लिए कोई ऐप नहीं मिला।</string>
     <string name="series_visto_ate_aqui">%1$s तक देखा हुआ चिह्नित करें</string>
@@ -748,7 +746,6 @@ AS\\Movies)।</string>
     <string name="legenda_surdos">श्रवण-बाधितों के लिए</string>
     <string name="legenda_bate">इसी फ़ाइल के लिए</string>
     <string name="lista_dica_escolher">चुनें</string>
-    <string name="legenda_atraso_opcao">सबटाइटल देरी: %1$s</string>
     <string name="legenda_atraso_titulo">सबटाइटल देरी (+ = टेक्स्ट बाद में दिखता है)</string>
     <string name="legenda_atraso_zero">कोई देरी नहीं</string>
     <string name="legenda_conta_titulo">ऑनलाइन सबटाइटल</string>
@@ -783,7 +780,6 @@ AS\\Movies)।</string>
     <string name="vod_dialogo_opcao">संवाद तेज़</string>
     <string name="vod_dialogo_ligado">संवाद तेज़ चालू</string>
     <string name="vod_dialogo_desligado">संवाद तेज़ बंद</string>
-    <string name="vod_atraso_audio_opcao">ऑडियो देरी: %1$s</string>
     <string name="vod_atraso_audio_titulo">ऑडियो देरी (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">कोई नहीं</string>
@@ -842,5 +838,24 @@ AS\\Movies)।</string>
         <item>प</item>
         <item>उप</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · यहीं से जारी</string>
+    <string name="lista_dica_voltar">वापस</string>
+    <string name="pm_ligado">चालू</string>
+    <string name="pm_desligado">बंद</string>
+    <string name="pm_imagem_som">तस्वीर और आवाज़</string>
+    <string name="pm_mais">और विकल्प</string>
+    <string name="pm_versao_legendada">सबटाइटल के साथ देखें</string>
+    <string name="pm_versao_dublada">डब किया हुआ देखें</string>
+    <string name="pm_versao_info">यहीं से आगे चलेगा</string>
+    <string name="pm_leg_ajustes">सबटाइटल सेटिंग</string>
+    <string name="pm_leg_tamanho">आकार</string>
+    <string name="pm_leg_estilo">शैली</string>
+    <string name="pm_leg_posicao">जगह</string>
+    <string name="pm_leg_atraso">देरी</string>
+    <string name="pm_leg_auto">न हो तो एक डाउनलोड करें</string>
+    <string name="pm_leg_traduzir">न हो तो टीवी पर अनुवाद करें</string>
+    <string name="pm_velocidade">गति</string>
+    <string name="pm_proporcao">तस्वीर का आकार</string>
+    <string name="pm_atraso_audio">आवाज़ की देरी</string>
+    <string name="pm_quadros">फ़िल्म की फ़्रेम दर पर चलाएँ</string>
+    <string name="pm_qualidade">क्वालिटी</string>
 </resources>
