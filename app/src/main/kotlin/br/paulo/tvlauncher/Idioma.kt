@@ -211,10 +211,20 @@ object Idioma {
         RegexOption.IGNORE_CASE)
 
     /** Dublado ou legendado, pelo nome; sem marca no nome, pela categoria ("Filmes Legendados", "Séries | Dubladas"). */
-    fun versao(nome: String, grupo: String): Versao {
+    fun versao(nome: String, grupo: String): Versao = versaoDoNome(nome) ?: versaoDoGrupo(grupo)
+
+    // As duas metades do [versao], separadas (20/11/2026) para a conta do catálogo inteiro olhar cada categoria uma vez só:
+    // são poucas centenas de categorias para 21 mil filmes.
+    private fun versaoDoNome(nome: String): Versao? {
         val n = nome.trim()
-        if (reLeg.containsMatchIn(n)) return Versao.LEGENDADA
-        if (reDub.containsMatchIn(n)) return Versao.DUBLADA
+        // Pré-checagem: as marcas só existem entre colchetes/parênteses ou como última palavra (ver [podeTerMarca]).
+        val entre = n.indexOf('[') >= 0 || n.indexOf('(') >= 0
+        if ((entre || terminaCom(n, "leg", "legendado")) && reLeg.containsMatchIn(n)) return Versao.LEGENDADA
+        if ((entre || terminaCom(n, "dub", "dublado")) && reDub.containsMatchIn(n)) return Versao.DUBLADA
+        return null
+    }
+
+    private fun versaoDoGrupo(grupo: String): Versao {
         val g = semAcento(grupo).lowercase()
         return when {
             "legendad" in g -> Versao.LEGENDADA
@@ -223,9 +233,67 @@ object Idioma {
         }
     }
 
+    /**
+     * Chave e versão de cada item calculadas UMA vez por conta (20/11/2026). Medido na Sala: juntar as versões de 21 mil
+     * filmes levou 75 s de CPU, porque cada título passava até 6 vezes pela [chaveTitulo] e pela [versao] (cada uma com
+     * várias expressões regulares). Vale só durante uma conta: guarda pela identidade do item, não pelo conteúdo.
+     */
+    private class Contas<T>(private val nome: (T) -> String, private val grupo: (T) -> String, tamanho: Int = 16) {
+        private val chaves = java.util.IdentityHashMap<T, String>(tamanho)
+        private val versoes = java.util.IdentityHashMap<T, Versao>(tamanho)
+        private val porGrupo = HashMap<String, Versao>()
+
+        fun chave(x: T): String = chaves[x] ?: chaveTitulo(nome(x)).also { chaves[x] = it }
+
+        fun versao(x: T): Versao = versoes[x]
+            ?: (versaoDoNome(nome(x)) ?: grupo(x).let { g -> porGrupo[g] ?: versaoDoGrupo(g).also { porGrupo[g] = it } })
+                .also { versoes[x] = it }
+    }
+
     /** O nome como veio, sem a marca de versão: "O Sonho da Liberdade Leg" -> "O Sonho da Liberdade" (o selo LEG vai no pôster). */
-    fun semMarca(nome: String): String = nome.replace(reMarcas, " ").replace(reEspacos, " ").trim().ifEmpty { nome }
+    fun semMarca(nome: String): String = tirarMarcas(nome).let { if (espacosSeguidos(it)) it.replace(reEspacos, " ") else it }
+        .trim().ifEmpty { nome }
     private val reEspacos = Regex("""\s{2,}""")
+
+    // ---- pré-checagens (20/11/2026). No Android cada replace/find cria um "matcher" nativo (ICU) que a coleta de lixo
+    // solta depois; com 21 mil filmes por conta, isso dava dezenas de segundos de CPU no :player da Sala (medido: 34 s
+    // só na thread da conta, mais 15 s de coleta). Cada checagem abaixo é uma condição NECESSÁRIA para a expressão casar:
+    // se ela diz "não", a expressão não mudaria nada e não precisa rodar. O resultado é sempre o mesmo de antes
+    // (IdiomaRapidoTest compara com as expressões em milhares de nomes).
+
+    /** Tudo o que o \s das expressões pode ser (no Android, o \s é o White_Space do Unicode, que inclui o U+0085). */
+    internal fun espaco(c: Char) = c.isWhitespace() || c == '\u0085'
+
+    internal fun espacosSeguidos(s: String): Boolean {
+        for (i in 1 until s.length) if (espaco(s[i]) && espaco(s[i - 1])) return true
+        return false
+    }
+
+    /** [s], sem os espaços do fim, termina com um dos [sufixos] (maiúscula ou minúscula)? */
+    private fun terminaCom(s: String, vararg sufixos: String): Boolean {
+        var fim = s.length
+        while (fim > 0 && espaco(s[fim - 1])) fim--
+        return sufixos.any { suf -> fim >= suf.length && s.regionMatches(fim - suf.length, suf, 0, suf.length, ignoreCase = true) }
+    }
+
+    /** [reMarcas] só casa com "[...]"/"(...)" ou com leg/legendado/dub/dublado como última palavra. */
+    private fun podeTerMarca(s: String) =
+        s.indexOf('[') >= 0 || s.indexOf('(') >= 0 || terminaCom(s, "leg", "legendado", "dub", "dublado")
+
+    /** O mesmo que replace(reMarcas, " "), sem rodar a expressão quando ela não tem como casar. */
+    private fun tirarMarcas(s: String) = if (podeTerMarca(s)) s.replace(reMarcas, " ") else s
+
+    /** O mesmo que replace(Regex("[^a-z0-9]+"), " "): cada trecho de outros caracteres vira UM espaço. */
+    private fun soLetrasENumeros(s: String): String {
+        if (s.all { it in 'a'..'z' || it in '0'..'9' }) return s
+        val b = StringBuilder(s.length)
+        var noVao = false
+        for (c in s) {
+            if (c in 'a'..'z' || c in '0'..'9') { b.append(c); noVao = false }
+            else if (!noVao) { b.append(' '); noVao = true }
+        }
+        return b.toString()
+    }
 
     /**
      * Título curto para a linha de cima de Filmes e Séries (19/11/2026): "Lei e Ordem: Unidade de Vítimas Especiais - Law &
@@ -239,10 +307,22 @@ object Idioma {
     }
 
     /** O título sem marca, ano, acento nem pontuação: "Duna: Parte 2 (2024) [L]" e "Duna - Parte 2 (2024)" dão o mesmo. */
-    fun chaveTitulo(nome: String): String =
-        semAcento(Vod.nomeLimpo(nome.replace(reMarcas, " ")).replace(reMarcas, " "))
-            .lowercase().replace(reNaoAlfaNum, " ").trim()
-    private val reNaoAlfaNum = Regex("""[^a-z0-9]+""")
+    fun chaveTitulo(nome: String): String = chavesProntas[nome] ?: calcularChave(nome).also {
+        if (chavesProntas.size >= MAX_CHAVES_PRONTAS) chavesProntas.clear()
+        chavesProntas[nome] = it
+    }
+
+    // A conta de sempre (marcas, ano, prefixo de país, acento, minúsculas, só letras e números), com as pré-checagens.
+    private fun calcularChave(nome: String): String =
+        soLetrasENumeros(semAcento(tirarMarcas(Vod.nomeLimpo(tirarMarcas(nome)))).lowercase()).trim()
+
+    /**
+     * Chaves já calculadas, pelo nome (20/11/2026): o mesmo título passa pela [chaveTitulo] no índice das versões, na
+     * grade, no cruzamento com as listas de fora e de novo a cada vez que Filmes abre. Uma por processo; esvazia se
+     * passar de [MAX_CHAVES_PRONTAS] (~100 bytes por título: 21 mil filmes + 7 mil séries ~ 3 MB).
+     */
+    private val chavesProntas = java.util.concurrent.ConcurrentHashMap<String, String>()
+    private const val MAX_CHAVES_PRONTAS = 60_000
 
     /**
      * Índice do catálogo por título: só os títulos em que pelo menos um item tem marca de versão (dois sem marca nunca
@@ -252,11 +332,14 @@ object Idioma {
     fun <T> indice(lista: List<T>, nome: (T) -> String, grupo: (T) -> String): Map<String, List<T>> {
         val m = HashMap<String, MutableList<T>>()
         val comMarca = HashSet<String>()
+        val porGrupo = HashMap<String, Versao>()   // a categoria só é lida uma vez (ver [Contas])
         for (x in lista) {
-            val k = chaveTitulo(nome(x))
+            val n = nome(x)
+            val k = chaveTitulo(n)
             if (k.isEmpty()) continue
             m.getOrPut(k) { ArrayList(2) } += x
-            if (versao(nome(x), grupo(x)) != Versao.DESCONHECIDA) comMarca += k
+            val v = versaoDoNome(n) ?: grupo(x).let { g -> porGrupo[g] ?: versaoDoGrupo(g).also { porGrupo[g] = it } }
+            if (v != Versao.DESCONHECIDA) comMarca += k
         }
         m.keys.retainAll(comMarca)
         return m
@@ -268,14 +351,18 @@ object Idioma {
      * marca vira par de um com marca e fica com a versão oposta ([versaoComPar]). Par com marca oposta ganha do sem
      * marca; dois sem marca nunca são par.
      */
-    fun <T> outraVersao(alvo: T, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String, ano: (T) -> Int?): T? {
-        val va = versao(nome(alvo), grupo(alvo))
-        val candidatos = indice[chaveTitulo(nome(alvo))] ?: return null
+    fun <T> outraVersao(alvo: T, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String, ano: (T) -> Int?): T? =
+        outraVersao(alvo, indice, Contas(nome, grupo), ano)
+
+    private fun <T> outraVersao(alvo: T, indice: Map<String, List<T>>, c: Contas<T>, ano: (T) -> Int?): T? {
+        // Título sem par no índice (a grande maioria): sai antes de ler a versão.
+        val candidatos = indice[c.chave(alvo)] ?: return null
+        val va = c.versao(alvo)
         val anoA = ano(alvo)
         val mesmoTitulo = candidatos.filter { o -> o !== alvo && (anoA == null || ano(o) == null || ano(o) == anoA) }
-        val oposta = mesmoTitulo.firstOrNull { o -> versao(nome(o), grupo(o)).let { it != Versao.DESCONHECIDA && it != va } }
+        val oposta = mesmoTitulo.firstOrNull { o -> c.versao(o).let { it != Versao.DESCONHECIDA && it != va } }
         if (oposta != null || va == Versao.DESCONHECIDA) return oposta
-        return mesmoTitulo.firstOrNull { o -> versao(nome(o), grupo(o)) == Versao.DESCONHECIDA }
+        return mesmoTitulo.firstOrNull { o -> c.versao(o) == Versao.DESCONHECIDA }
     }
 
     /**
@@ -298,14 +385,15 @@ object Idioma {
         var avisos = 0
         fun pula(x: T, por: String) { if (motivo != null && avisos++ < 8) motivo("nao juntou '${nome(x)}' (${grupo(x)}, ${ano(x)}): $por") }
         val sai = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<T, Boolean>())
+        val c = Contas(nome, grupo, lista.size)
         for (x in lista) {
             if (x in sai) continue
-            val k0 = chaveTitulo(nome(x))
-            val o = outraVersao(x, naGrade, nome, grupo, ano) ?: run { if (naGrade.containsKey(k0)) pula(x, "sem par"); null } ?: continue
+            val k0 = c.chave(x)
+            val o = outraVersao(x, naGrade, c, ano) ?: run { if (naGrade.containsKey(k0)) pula(x, "sem par"); null } ?: continue
             if (o === x || !posicao.containsKey(o) || o in sai) continue
-            if (outraVersao(o, naGrade, nome, grupo, ano) !== x) { pula(x, "par nao reciproco: '${nome(o)}'"); continue }
+            if (outraVersao(o, naGrade, c, ano) !== x) { pula(x, "par nao reciproco: '${nome(o)}'"); continue }
             // 3 ou mais itens na grade com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
-            val k = chaveTitulo(nome(x)); val anoX = ano(x) ?: ano(o)
+            val k = k0; val anoX = ano(x) ?: ano(o)
             if ((naGrade[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) { pula(x, "3+ versoes"); continue }
             val cx = comecado(x); val co = comecado(o)
             if (cx && co) { pula(x, "os dois com algo guardado"); continue }   // os dois têm algo guardado: juntar esconderia um deles
@@ -330,5 +418,29 @@ object Idioma {
     /** A versão que a preferência pede: original = legendada; dublado = dublada. */
     fun versaoDesejada(p: Pref) = if (p == Pref.ORIGINAL) Versao.LEGENDADA else Versao.DUBLADA
 
-    fun semAcento(s: String): String = Normalizer.normalize(s, Normalizer.Form.NFD).replace(Regex("""\p{Mn}+"""), "")
+    /**
+     * Sem acento. Texto só ASCII (a maioria dos nomes de filme) volta igual sem passar pelo Normalizer: o NFD de um texto
+     * ASCII é ele mesmo (20/11/2026; antes, cada chamada também compilava a expressão regular de novo).
+     */
+    fun semAcento(s: String): String {
+        var i = 0
+        while (i < s.length && s[i].code < 0x80) i++
+        if (i == s.length) return s
+        // Latim (até U+024F, sem marca solta): letra por letra pela tabela. Outra escrita: o caminho completo.
+        for (j in i until s.length) if (s[j].code >= LATIM_FIM) return semAcentoCompleto(s)
+        val b = StringBuilder(s.length).append(s, 0, i)
+        for (j in i until s.length) { val c = s[j]; if (c.code < 0x80) b.append(c) else b.append(latimSemAcento[c.code - 0x80]) }
+        return b.toString()
+    }
+
+    private fun semAcentoCompleto(s: String) = Normalizer.normalize(s, Normalizer.Form.NFD).replace(reDiacriticos, "")
+    private val reDiacriticos = Regex("""\p{Mn}+""")
+    private const val LATIM_FIM = 0x250
+
+    /**
+     * Cada letra de U+0080 a U+024F já sem acento, calculada uma vez pelo próprio caminho completo (o mesmo Normalizer e
+     * a mesma expressão): dá exatamente o mesmo texto. Abaixo de U+0300 não há marca solta, então decompor letra por
+     * letra é o mesmo que decompor o texto inteiro.
+     */
+    private val latimSemAcento: Array<String> by lazy { Array(LATIM_FIM - 0x80) { semAcentoCompleto((0x80 + it).toChar().toString()) } }
 }

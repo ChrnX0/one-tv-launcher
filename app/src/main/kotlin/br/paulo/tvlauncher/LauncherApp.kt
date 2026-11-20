@@ -57,7 +57,7 @@ class LauncherApp : Application() {
             override fun onActivityPaused(a: android.app.Activity) {}
             override fun onActivityStopped(a: android.app.Activity) {}
             override fun onActivitySaveInstanceState(a: android.app.Activity, s: android.os.Bundle) {}
-            override fun onActivityDestroyed(a: android.app.Activity) {}
+            override fun onActivityDestroyed(a: android.app.Activity) = LeakWatch.aoDestruir(a)   // adb: EXTRAS --es o vazamentos
         })
         // A IA na nuvem saiu em 05/11/2026: apaga a chave cifrada que ela tenha deixado (fora da thread da tela).
         Fundo.rodar("limpa-ia") { PedidoIa.apagarRestosDaNuvem(this) }

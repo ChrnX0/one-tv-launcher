@@ -84,9 +84,15 @@ object Vod {
     fun anoDoNome(nome: String): Int? = reAno.find(nome)?.groupValues?.get(1)?.toIntOrNull()
 
     /** Nome sem o ano e sem a sujeira de prefixo de país ("BR: ", "|PT| ") para a tela. */
-    fun nomeLimpo(nome: String): String =
-        nome.replace(reAno, "").replace(rePrefixoPais, "").replace(reEspacos, " ").trim()
-            .ifEmpty { nome.trim() }
+    fun nomeLimpo(nome: String): String {
+        // Cada expressão só roda se tem como casar (20/11/2026; ver as pré-checagens no Idioma): o ano exige "(" ou "[",
+        // o prefixo de país exige ":", "|" ou "-", e o espaço repetido exige dois espaços seguidos. Mesmo resultado.
+        var s = nome
+        if (s.indexOf('(') >= 0 || s.indexOf('[') >= 0) s = s.replace(reAno, "")
+        if (s.indexOf(':') >= 0 || s.indexOf('|') >= 0 || s.indexOf('-') >= 0) s = s.replace(rePrefixoPais, "")
+        if (Idioma.espacosSeguidos(s)) s = s.replace(reEspacos, " ")
+        return s.trim().ifEmpty { nome.trim() }
+    }
 
     /**
      * Nome para a tela quando o ano já aparece ao lado: além do [nomeLimpo], tira um ano solto no fim do nome SÓ se for o

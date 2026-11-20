@@ -209,7 +209,11 @@ object InfoExterna {
      * A chave nome+ano que [contarNaLista] e o cruzamento com listas de fora usam. Sem as marcas de qualidade no fim
      * ("Oppenheimer (2023) 4K" do IPTV = "Oppenheimer" 2023 do Simkl; achado no teste de 18/11/2026).
      */
-    fun chaveNomeAno(nome: String, ano: Int?): String = Idioma.chaveTitulo(nome).replace(reQualidade, "") + "|" + (ano ?: 0)
+    fun chaveNomeAno(nome: String, ano: Int?): String =
+        Idioma.chaveTitulo(nome).let { k -> if (QUALIDADES.any { k.endsWith(it) }) k.replace(reQualidade, "") else k } + "|" + (ano ?: 0)
+
+    // A expressão de baixo só casa se a chave termina numa destas (20/11/2026: pré-checagem, ver o Idioma).
+    private val QUALIDADES = listOf("4k", "hd", "hdr", "hdr10", "dv", "sdr", "1080p", "720p", "2160p", "hevc", "h265", "x265")
 
     private val reQualidade = Regex("""(\s+(4k|uhd|fhd|hd|hdr|hdr10|dv|sdr|1080p|720p|2160p|hevc|h265|x265))+$""")
 
