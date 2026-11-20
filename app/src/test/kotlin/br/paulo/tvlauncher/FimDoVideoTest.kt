@@ -86,4 +86,9 @@ class FimDoVideoTest {
         assertFalse(FimDoVideo.erroDoTunel(2001))  // rede: tenta de novo, não mexe no túnel
         assertFalse(FimDoVideo.erroDoTunel(3001))  // arquivo estragado
     }
+
+    @Test fun tunelPresoSoComMuitoBaixado() {
+        assertTrue(FimDoVideo.tunelPreso(30_000))    // o caso visto na Sala: 30 s baixados e parado
+        assertFalse(FimDoVideo.tunelPreso(2_000))    // rede lenta de verdade: espera
+    }
 }

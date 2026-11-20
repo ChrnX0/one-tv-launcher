@@ -711,6 +711,22 @@ class VodActivity : Activity() {
     }
 
     /** Ver [textura]: põe uma TextureView no lugar da SurfaceView e passa o player para ela. */
+    /**
+     * Na Sala (20/11/2026) o túnel ficou uma vez preso em "carregando" depois de pular, com 30 s já baixados e sem
+     * erro nenhum: o decodificador parou de aceitar dados. Se continua carregando com bastante coisa baixada, é o túnel:
+     * volta ao modo comum no mesmo ponto (e não usa mais o túnel neste aparelho até a próxima versão).
+     */
+    private val vigiaTunel = Runnable {
+        val p = player ?: return@Runnable
+        if (!tunelLigado || p.playbackState != Player.STATE_BUFFERING) return@Runnable
+        if (!FimDoVideo.tunelPreso(p.bufferedPosition - p.currentPosition)) return@Runnable
+        android.util.Log.w("TvLauncher.Vod", "túnel preso carregando com ${(p.bufferedPosition - p.currentPosition) / 1000} s baixados: volta ao modo comum")
+        Tunel.desistir(this)
+        val pos = p.currentPosition
+        desligarTunel(p)
+        SpeechTap.proximaPosicao(pos); p.setMediaItem(item(url ?: return@Runnable), pos); p.prepare()
+    }
+
     private fun desligarTunel(p: ExoPlayer) {
         tunelLigado = false
         val tp = p.trackSelectionParameters as? DefaultTrackSelector.Parameters ?: return
@@ -853,7 +869,10 @@ class VodActivity : Activity() {
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> { medida.carregando(player?.playWhenReady == true); if (cortina == null) mostrarAviso(getString(R.string.vod_carregando)) }
+                Player.STATE_BUFFERING -> {
+                    medida.carregando(player?.playWhenReady == true); if (cortina == null) mostrarAviso(getString(R.string.vod_carregando))
+                    if (tunelLigado) { tela.removeCallbacks(vigiaTunel); tela.postDelayed(vigiaTunel, FimDoVideo.TUNEL_PRESO_MS) }
+                }
                 Player.STATE_ENDED -> terminar(proximoJa = false)
                 else -> {}
             }
