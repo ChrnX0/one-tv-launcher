@@ -87,10 +87,12 @@ export function shapeFeeds(data, lang = '', max = MAX) {
 }
 
 /** Atende /v1/podcasts/search e /v1/podcasts/trending. `fetchFn` e `cache` entram por parâmetro para os testes. */
-export async function handlePodcasts(kind, url, env, { fetchFn = fetch, cache = globalThis.caches?.default, nowSec } = {}) {
+export async function handlePodcasts(kind, url, env, { fetchFn = fetch, cache = globalThis.caches?.default, nowSec, ip = '' } = {}) {
   const key = env.PODCASTINDEX_API_KEY;
   const secret = env.PODCASTINDEX_API_SECRET;
   if (!key || !secret) return reply({ error: 'podcasts not configured' }, 503, 0);
+  // Rota pública: sem limite, um script variando o termo fura o cache e gasta a chave do Podcast Index (20/11/2026).
+  if (!(await allowed(env.PODCASTS_IP_LIMITER, `ip:${ip}`, true))) return reply({ error: 'rate limited' }, 429, 0);
   const upstream = upstreamUrl(kind, url.searchParams);
   if (!upstream) return reply({ error: 'bad request' }, 400, 0);
 
@@ -101,6 +103,7 @@ export async function handlePodcasts(kind, url, env, { fetchFn = fetch, cache = 
   const hit = cache ? await cache.match(cacheKey) : null;
   if (hit) return hit;
 
+  if (!(await allowed(env.PODCASTS_UPSTREAM_LIMITER, 'upstream', false))) return reply({ error: 'rate limited' }, 429, 0);
   let res;
   try {
     res = await fetchFn(upstream, { headers: await authHeaders(key, secret, nowSec ?? Math.floor(Date.now() / 1000)) });
@@ -114,6 +117,12 @@ export async function handlePodcasts(kind, url, env, { fetchFn = fetch, cache = 
   const out = reply(shapeFeeds(data, lang, max), 200, CACHE_SEC[kind]);
   if (cache) await cache.put(cacheKey, out.clone());
   return out;
+}
+
+/** Igual ao do weather.js: sem binding deixa passar; o por IP falha aberto, o global (protege a chave) falha fechado. */
+async function allowed(limiter, key, failOpen) {
+  if (!limiter) return true;
+  try { return (await limiter.limit({ key })).success === true; } catch { return failOpen; }
 }
 
 function reply(obj, status, maxAge) {

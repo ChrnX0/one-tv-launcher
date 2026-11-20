@@ -88,3 +88,17 @@ test('chave recusada ou fora do ar: 502, sem guardar no cache', async () => {
   assert.equal(store.size, 0);
   assert.equal((await handlePodcasts('search', new URL('https://api/v1/podcasts/search?q=a'), env, { cache })).status, 400);
 });
+
+test('limite por IP e global devolvem 429 sem chamar o Podcast Index', async () => {
+  const env = { PODCASTINDEX_API_KEY: 'k', PODCASTINDEX_API_SECRET: 's' };
+  let chamou = false;
+  const fetchFn = async () => { chamou = true; return new Response('{"feeds":[]}'); };
+  const nao = { limit: async () => ({ success: false }) };
+  const url = new URL('https://api/v1/podcasts/search?q=nerd');
+  assert.equal((await handlePodcasts('search', url, { ...env, PODCASTS_IP_LIMITER: nao }, { fetchFn, cache: null, ip: '1.2.3.4' })).status, 429);
+  assert.equal((await handlePodcasts('search', url, { ...env, PODCASTS_UPSTREAM_LIMITER: nao }, { fetchFn, cache: null })).status, 429);
+  assert.equal(chamou, false);
+  // Global com erro: recusa (protege a chave).
+  const quebrado = { limit: async () => { throw new Error('x'); } };
+  assert.equal((await handlePodcasts('search', url, { ...env, PODCASTS_UPSTREAM_LIMITER: quebrado }, { fetchFn, cache: null })).status, 429);
+});
