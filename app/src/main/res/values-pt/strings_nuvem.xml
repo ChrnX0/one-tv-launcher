@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Nuvem como fonte (14/11/2026, Nuvem.kt): OneDrive e Dropbox em "Do computador". -->
+    <!-- Nuvem como fonte (14/11/2026, Nuvem.kt): OneDrive e Dropbox em "Rede". -->
     <string name="rede_sub_nuvem">Vídeos, músicas e fotos da sua nuvem</string>
     <string name="rede_nuvem_seguir">Continuar</string>
     <string name="rede_nuvem_entrar">Entrar</string>

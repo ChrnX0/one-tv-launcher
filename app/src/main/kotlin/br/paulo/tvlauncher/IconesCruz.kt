@@ -146,7 +146,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.CONTINUAR -> continuar(c)
             Tipo.SERIES -> series(c)
             Tipo.FILMES -> claquete(c)
-            Tipo.REDE -> pasta(c)
+            Tipo.REDE -> usb(c)
             Tipo.ADDONS, Tipo.PLUGIN -> peca(c)
             Tipo.RADIO -> radio(c)
             Tipo.PODCASTS -> microfone(c)
@@ -220,15 +220,19 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         solido(0xFF6B7080); rr(c, 26f, 62f, 44f, 6f, 3f); rr(c, 26f, 75f, 64f, 6f, 3f)
     }
 
-    /** Pasta ilustrada (Objeto) para "Do computador": aba atrás, folha saindo, frente da pasta. */
-    private fun pasta(c: Canvas) {
-        vert(0xFFE0B85A, 0xFFB98A2E, 18f, 90f); p.reset()
-        p.moveTo(14f, 90f); p.lineTo(14f, 26f); p.quadTo(14f, 18f, 22f, 18f); p.lineTo(46f, 18f); p.lineTo(54f, 28f)
-        p.lineTo(98f, 28f); p.quadTo(106f, 28f, 106f, 36f); p.lineTo(106f, 90f); p.close(); c.drawPath(p, cheio)
-        solido(0xFFFFF3E6); rr(c, 28f, 30f, 64f, 40f, 4f)
-        solido(0xFFC9C4BC); rr(c, 36f, 40f, 40f, 4f, 2f); rr(c, 36f, 50f, 30f, 4f, 2f)
-        vert(0xFFF6D27A, 0xFFD9A441, 44f, 92f); rr(c, 10f, 44f, 100f, 48f, 8f)
-        solido(0xFFFFFFFF, .18f); rr(c, 10f, 44f, 100f, 10f, 5f)
+    /**
+     * Símbolo USB ilustrado (Objeto) para "Rede" (pedido do Paulo, 20/11/2026: o nome "Do computador" e a pasta saíram).
+     * Tronco com a seta em cima e a bolinha embaixo; um braço termina em círculo, o outro em quadrado.
+     */
+    private fun usb(c: Canvas) {
+        val corTronco = 0xFF5A9BE0
+        linha(c, corTronco, 8f, 60f, 92f, 60f, 28f, 60f, 76f, 30f, 58f, 30f, 58f, 30f, 46f, 60f, 64f, 90f, 48f, 90f, 48f, 90f, 38f)
+        vert(0xFF8CC0F5, 0xFF3A6FB8, 8f, 106f)
+        p.reset(); p.moveTo(60f, 8f); p.lineTo(73f, 30f); p.lineTo(47f, 30f); p.close(); c.drawPath(p, cheio)
+        c.drawCircle(30f, 38f, 9f, cheio)
+        rr(c, 81f, 21f, 18f, 18f, 3f)
+        c.drawCircle(60f, 96f, 11f, cheio)
+        solido(0xFFFFFFFF, .25f); c.drawCircle(57f, 93f, 4f, cheio)
     }
 
     private fun peca(c: Canvas) {
@@ -401,11 +405,14 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 c.drawLine(7.5f, 3.5f, 7.5f, 20.5f, traco); c.drawLine(16.5f, 3.5f, 16.5f, 20.5f, traco)
                 if (fase < 0f) for (y in floatArrayOf(8f, 12f, 16f)) { c.drawLine(3f, y, 7.5f, y, traco); c.drawLine(16.5f, y, 21f, y, traco) }
             }
-            Tipo.REDE -> {   // pasta ("Do computador", crítica de design 19/11/2026; eram dois servidores)
-                p.reset(); p.moveTo(3f, 18.5f); p.lineTo(3f, 6.5f); p.quadTo(3f, 5f, 4.5f, 5f); p.lineTo(9f, 5f); p.lineTo(11f, 7.5f)
-                p.lineTo(19.5f, 7.5f); p.quadTo(21f, 7.5f, 21f, 9f); p.lineTo(21f, 18.5f); p.quadTo(21f, 20f, 19.5f, 20f)
-                p.lineTo(4.5f, 20f); p.quadTo(3f, 20f, 3f, 18.5f); p.close(); c.drawPath(p, traco)
-                c.drawLine(3f, 10.5f, 21f, 10.5f, traco)
+            Tipo.REDE -> {   // símbolo USB ("Rede", pedido do Paulo 20/11/2026): tronco, seta, braços com círculo e quadrado
+                c.drawLine(12f, 18f, 12f, 5.5f, traco)
+                p.reset(); p.moveTo(12f, 2.2f); p.lineTo(14.3f, 5.8f); p.lineTo(9.7f, 5.8f); p.close(); c.drawPath(p, cheio)
+                p.reset(); p.moveTo(12f, 15f); p.lineTo(6.5f, 11.8f); p.lineTo(6.5f, 9.4f); c.drawPath(p, traco)
+                c.drawCircle(6.5f, 7.8f, 1.6f, cheio)
+                p.reset(); p.moveTo(12f, 12.6f); p.lineTo(17.5f, 9.6f); p.lineTo(17.5f, 7.9f); c.drawPath(p, traco)
+                r.set(16.1f, 5f, 18.9f, 7.8f); c.drawRect(r, cheio)
+                c.drawCircle(12f, 19.8f, 2.1f, cheio)
             }
             Tipo.ADDONS, Tipo.PLUGIN -> {   // peça de encaixe
                 p.reset(); p.moveTo(4f, 7f); p.lineTo(9f, 7f); p.arcTo(RectF(9f, 4.5f, 14f, 9.5f), 180f, 180f); p.lineTo(18f, 7f); p.lineTo(18f, 11f)
@@ -520,9 +527,9 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 }
                 c.restore()
             }
-            Tipo.REDE -> {   // uma folha sobe de dentro da pasta e volta
-                val sobe = 3.2f * sino
-                if (sobe > 0.05f) { alfa(1f); c.drawLine(7.5f, 10.5f - sobe, 16.5f, 10.5f - sobe, traco) }
+            Tipo.REDE -> {   // um sinal sobe pelo tronco até a seta (dado passando)
+                val y = 17.5f - 11f * easeInOut(f)
+                alfa(sino); c.drawCircle(12f, y, 1.3f, cheio)
             }
             Tipo.ADDONS, Tipo.PLUGIN -> {   // uma peça nova chega e encaixa no dente da direita
                 val x = 6f * (1f - easeOut((f / 0.6f).coerceIn(0f, 1f)))

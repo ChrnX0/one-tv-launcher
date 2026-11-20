@@ -554,7 +554,7 @@
     <string name="home_card_filmes">Фильмы</string>
     <string name="home_destaque_series">Сериалы из вашего списка · продолжайте с того места</string>
     <string name="home_destaque_filmes">Фильмы из вашего списка · продолжайте с того места</string>
-    <string name="home_card_rede">С компьютера</string>
+    <string name="home_card_rede">Сеть</string>
     <string name="home_destaque_rede">Ваши видео, музыка и фото</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">d MMMM</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">Фильмы · последний открытый</string>
     <string name="home_dest_serie">Сериалы · вы на %1$s</string>
     <string name="home_dest_tv">ТВ · канал %1$d</string>
-    <string name="rede_titulo">С компьютера</string>
+    <string name="rede_titulo">Сеть</string>
     <string name="rede_procurando">Поиск медиасерверов в сети…</string>
     <string name="rede_nenhum">Сейчас нет включённых медиасерверов. Добавьте сервер ниже: Plex и Jellyfin используют ваш аккаунт, папка ПК или NAS — свой адрес.</string>
     <string name="rede_secao_seus">Ваши серверы</string>
