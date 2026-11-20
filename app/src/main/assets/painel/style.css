@@ -1083,8 +1083,13 @@ input[type=time]:focus-within, input[type=date]:focus-within { border-color: var
 .acoes-perigo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--borda); }
 
 /* Ideia 13: alvos de toque de 44 px no celular (WCAG 2.5.5; Apple e Google pedem o mesmo). */
-@media (pointer: coarse) {
+/* Por que também a largura: nem todo navegador de celular (nem o emulador da medida) diz "pointer: coarse";
+   tela estreita é dedo na prática. */
+@media (pointer: coarse), (max-width: 699px) {
   .link { min-height: 44px; display: inline-flex; align-items: center; }
+  /* 48 px = alvo do Material (Android); 44 dava 43,9 px com borda fracionária e ficava rente ao limite. */
+  .botao-secundario, .busca-detalhes, .botao-pequeno, .acoes .botao-secundario, .acoes .botao-perigo { min-height: 48px; }
+  .voltar-pagina { min-height: 48px; }
   label:has(> input[type=checkbox]) { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
   input[type=checkbox] { width: 24px; height: 24px; }
 }
