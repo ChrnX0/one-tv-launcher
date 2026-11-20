@@ -109,7 +109,7 @@
  },
  "ar\/filmes": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
@@ -189,7 +189,7 @@
   "semNome": []
  },
  "ar\/jogos": {
-  "menorSp": 14,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -243,7 +243,7 @@
   "semNome": []
  },
  "ar\/radio": {
-  "menorSp": 14,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -253,7 +253,7 @@
  },
  "ar\/series": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
@@ -379,7 +379,7 @@
  },
  "en\/filmes": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
@@ -459,7 +459,7 @@
   "semNome": []
  },
  "en\/jogos": {
-  "menorSp": 14,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -513,7 +513,7 @@
   "semNome": []
  },
  "en\/radio": {
-  "menorSp": 14,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -523,7 +523,7 @@
  },
  "en\/series": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
@@ -649,7 +649,7 @@
  },
  "pt\/filmes": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
@@ -729,7 +729,7 @@
   "semNome": []
  },
  "pt\/jogos": {
-  "menorSp": 14,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -783,7 +783,7 @@
   "semNome": []
  },
  "pt\/radio": {
-  "menorSp": 14,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -793,7 +793,7 @@
  },
  "pt\/series": {
   "menorSp": 15,
-  "foco": false,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],
