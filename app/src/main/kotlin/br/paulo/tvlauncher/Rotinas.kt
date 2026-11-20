@@ -189,9 +189,9 @@ object Rotinas {
      * acordar é o que manda o CEC ligar a TV (revisão da auditoria). O ABRIR troca de app de propósito: sempre roda.
      */
     fun deveAcordar(acao: Acao, telaAcesa: Boolean, protetorNaTela: Boolean, appNaFrente: String? = null,
-                    nossoPacote: String = "br.paulo.tvlauncher"): Boolean {
+                    nossoPacote: String = AppIdentity.NEW_PACKAGE): Boolean {
         if (acao != Acao.LIGAR || !telaAcesa || protetorNaTela) return true
-        val alguemVendo = appNaFrente != null && appNaFrente != nossoPacote && appNaFrente != Home.LAUNCHERX
+        val alguemVendo = appNaFrente != null && appNaFrente != nossoPacote && !AppIdentity.ours(appNaFrente) && appNaFrente != Home.LAUNCHERX
         return !alguemVendo
     }
 

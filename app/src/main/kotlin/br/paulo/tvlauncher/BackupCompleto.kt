@@ -76,6 +76,7 @@ object BackupCompleto {
         "receitas", "familia_video", "entre_tvs",
         // Aceite de mandar dados ao Trakt/Simkl (SincronizarActivity, 16/11/2026): é de quem está nesta TV; restaurar pergunta de novo.
         "sync_consentimento",
+        "package_migration",   // troca de pacote (PackageMigration.kt): a etapa é de cada app e desta TV
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir
         "player_pin", "config_pin",   // erros do PIN no player e nas Configurações (TentativasPin): passageiro, e restaurar não pode zerar nem prender ninguém
         "despertador_estado",   // próximo toque anotado (AlarmeGarantia): um antigo restaurado daria aviso falso de alarme perdido
@@ -268,6 +269,37 @@ object BackupCompleto {
         runCatching { Timer.reagendar(app) }.onFailure { Log.w(TAG, "reagendar timer: $it") }
         Log.i(TAG, "backup completo restaurado: $n preferências, ${iptv.size} contas de TV, ${bytes.size} arquivos")
         return n
+    }
+
+    /**
+     * Troca de pacote (19/11/2026, PackageMigration.kt): os mesmos segredos do [exportar], em claro, para o app novo
+     * trancá-los com o Keystore DELE. Só sai pelo MigrationProvider, que só responde ao app da nossa chave.
+     */
+    fun migrationSecrets(ctx: Context): JSONObject {
+        val app = ctx.applicationContext
+        val s = JSONObject().put("iptv", JSONArray(PlayerDados.fontesParaJson(PlayerArmazem.fontes(app))))
+        UnifiArmazem.chave(app)?.let { s.put("unifi", it) }
+        TunelTailscale.chave(app)?.let { s.put("tailscale", it) }
+        CasaHA.tokenParaBackup(app)?.let { s.put("casa_ha", it) }
+        ServicosContas.paraBackup(app)?.let { s.put("servicos", it) }
+        return s
+    }
+
+    /**
+     * No app novo, depois da cópia dos arquivos: tranca cada segredo de novo. As versões cifradas que vieram copiadas são
+     * do Keystore do antigo e não abrem aqui; cada "definir" grava por cima. Um que falhe não para os outros.
+     */
+    fun applyMigrationSecrets(ctx: Context, s: JSONObject) {
+        val app = ctx.applicationContext
+        fun passo(nome: String, ok: () -> Boolean) {
+            val r = runCatching(ok).getOrElse { Log.w(TAG, "migração, $nome: $it"); false }
+            if (!r) Log.w(TAG, "migração: $nome não passou")
+        }
+        passo("iptv") { PlayerArmazem.substituirContas(app, PlayerDados.fontesDeJson(s.optJSONArray("iptv")?.toString())) }
+        s.optString("unifi").ifEmpty { null }?.let { passo("unifi") { UnifiArmazem.definirChave(app, it) } }
+        s.optString("tailscale").ifEmpty { null }?.let { passo("tailscale") { TunelTailscale.definirChave(app, it) } }
+        s.optString("casa_ha").ifEmpty { null }?.let { passo("casa_ha") { CasaHA.definirToken(app, it) } }
+        s.optString("servicos").ifEmpty { null }?.let { passo("servicos") { ServicosContas.restaurarDoBackup(app, it) } }
     }
 
     /** Volta preferências, arquivos e (se foi mexido) a pasta do túnel ao retrato tirado antes de restaurar. */

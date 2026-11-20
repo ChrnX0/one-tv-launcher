@@ -116,7 +116,7 @@ async function listarApps(endpoint) {
 // responder, fica o nome derivado do pacote, como antes.
 async function rotulosDoLauncher(endpoint) {
     try {
-        const saida = await adbShell(endpoint, 'am broadcast -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.ROTULOS');
+        const saida = await adbShell(endpoint, 'am broadcast -n tv.sofaly.launcher/br.paulo.tvlauncher.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.ROTULOS');
         const m = saida.match(/data="([\s\S]*)"\s*$/m);
         return m ? JSON.parse(m[1]) : {};
     } catch { return {}; }
@@ -142,7 +142,7 @@ async function atualizarNomeDeVerdade(endpoint, pkg) { nomeSeguro(pkg, 'pacote')
 
 // Apps que o painel NUNCA congela nem remove (04/11/2026): o launcher é a tela inicial E o Device Owner da TV —
 // congelá-lo deixaria a TV sem HOME. Antes a lista oferecia "Remover" e o interruptor para ele também.
-const PROTEGIDOS = new Set(['br.paulo.tvlauncher']);
+const PROTEGIDOS = new Set(['tv.sofaly.launcher', 'br.paulo.tvlauncher']);
 // Nome de pacote e de permissão vão para o "adb shell": só letras, números, _ e ponto (senão "x;reboot" vira comando).
 function nomeSeguro(v, oque) {
     if (typeof v !== 'string' || !/^[A-Za-z0-9_.]+$/.test(v)) throw Object.assign(new Error(`${oque} inválido`), { status: 400 });

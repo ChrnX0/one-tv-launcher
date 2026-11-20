@@ -14,7 +14,7 @@ a mediana das últimas 7 noites: piorou mais que o limite, sai com código 3 e e
 Trava de segurança: só roda num aparelho marcado como bancada pelo próprio launcher
 (`am broadcast ... -a br.paulo.tvlauncher.EXTRAS --es o bancada_marcar`). A Sala nunca é marcada.
 
-Uso:  python3 scripts/bancada.py --aparelho 192.168.x.y:5555 --pasta bancada [--filme URL] [--pacote br.paulo.tvlauncher]
+Uso:  python3 scripts/bancada.py --aparelho 192.168.x.y:5555 --pasta bancada [--filme URL] [--pacote tv.sofaly.launcher]
       python3 scripts/bancada.py --conferir --pasta bancada      (só olha o alerta da última noite)
 Só biblioteca padrão do Python 3.8+ (roda no Windows e no Linux).
 """
@@ -108,7 +108,7 @@ class Adb:
         return r.stdout
 
     def extras(self, pacote, o):
-        return self.sh(f"am broadcast -n {pacote}/.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o {o}")
+        return self.sh(f"am broadcast -n {pacote}/br.paulo.tvlauncher.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o {o}")
 
 
 def resultado_broadcast(saida):
@@ -185,7 +185,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--aparelho")
     ap.add_argument("--pasta", default="bancada")
-    ap.add_argument("--pacote", default="br.paulo.tvlauncher")
+    ap.add_argument("--pacote", default="tv.sofaly.launcher")
     ap.add_argument("--filme")
     ap.add_argument("--conferir", action="store_true")
     a = ap.parse_args()

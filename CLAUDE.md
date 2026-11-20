@@ -8,18 +8,23 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
 
 ## Rules that protect installed TVs (do not break)
 
-- **Never change `applicationId` (`br.paulo.tvlauncher`), the Kotlin namespace, or the `AdminReceiver` component name.**
-  Installed TVs have this exact component as Device Owner; a different package/component is a different app and the
-  owner can only be restored with a factory reset.
-- **Product package decided 16/11/2026: `tv.sofaly.launcher`** (product name "Sofaly"). It is ONLY for the new product
-  app (Play Store), as a separate build/flavor added when the Play version is built; the Kotlin namespace stays
-  `br.paulo.tvlauncher`. The build that the installed TVs (Sala) receive keeps `applicationId br.paulo.tvlauncher`
-  until a planned reset. Once published on Play the package can never change.
-- **Never uninstall the launcher or clear its data on a TV**, and never run `dpm remove-active-admin`, `MASTER_CLEAR`,
-  `wipe` or `reboot recovery`. If `adb install -r` fails because of the signature, stop: don't uninstall to "fix" it.
+- **The app's package is `tv.sofaly.launcher`** (19/11/2026, Paulo: no public package with his name), on the site and on
+  Play; once published on Play it can never change. **Never change it, the Kotlin namespace (`br.paulo.tvlauncher`, the
+  code/class names, see `AppIdentity.kt`) or the `AdminReceiver` class.** A Device Owner only moves to another package
+  through `transferOwnership`; any other change of package/component loses the owner, and that is undone only by a
+  factory reset. Class names use `AppIdentity.NAMESPACE`/`className()`, package names use `packageName`/`AppIdentity.ours()`.
+- **Old package `br.paulo.tvlauncher` = only the bridge build** (`-Plegacy`, Release input `bridge=true`, assets
+  `one-tv-launcher*.apk`). A TV still on it installs the bridge, which installs `tv.sofaly.launcher` (same key), copies
+  all data to it and hands it the Device Owner (`PackageMigration.kt`; the old app ends hidden, not uninstalled).
+  adb: `EXTRAS --es o migration` (state), `migration_start` (old app), `migration_rollback` (new app: owner goes back).
+  `migration_remove_legacy` (new app) uninstalls the old one and removes the way back: only when Paulo asks.
+- **Never uninstall the launcher or clear its data on a TV** (the old package after a migration: see above), and never
+  run `dpm remove-active-admin`, `MASTER_CLEAR`, `wipe` or `reboot recovery`. If `adb install -r` fails because of the
+  signature, stop: don't uninstall to "fix" it.
 - **Release tag = `v<versionCode>`** (e.g. `v455713`). `Atualizador.kt` reads the number from the tag; a tag like
   `v1.0` stops every TV from updating. `versionCode` comes from the build time (`app/build.gradle.kts`) and always grows.
-- Release assets are `one-tv-launcher.apk` (armeabi-v7a) and `one-tv-launcher-arm64.apk`; the updater also accepts the
+- Release assets are `sofaly-launcher.apk` (armeabi-v7a) and `sofaly-launcher-arm64.apk` (package `tv.sofaly.launcher`),
+  plus the bridge `one-tv-launcher*.apk` only when published with `bridge=true`. Old-package apps also accept the
   older `tv-launcher*.apk`.
 - **Publishing is separate from merging.** Merging to `main` builds nothing. A Release is created only by running the
   "Build e Release" workflow by hand on `main` (`workflow_dispatch`), which signs with the `ASSINATURA_*` secrets.
@@ -68,7 +73,8 @@ any preferred-activity setting, so `Home.kt` + the accessibility service handle 
 
 ## adb-only commands (receivers protected by `android.permission.DUMP`)
 
-`am broadcast -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver -a <action>`: `br.paulo.tvlauncher.shizuku.INICIAR`
+`am broadcast -n tv.sofaly.launcher/br.paulo.tvlauncher.ControleShizukuAdbReceiver -a <action>` (on a TV still on the old
+package: `-n br.paulo.tvlauncher/.ControleShizukuAdbReceiver`; action names keep the `br.paulo.tvlauncher.` prefix): `br.paulo.tvlauncher.shizuku.INICIAR`
 / `ESTADO` (shell status), `ROTULOS`, `OCULTAR --es pacote <pkg> --ez oculto true|false`, `REINICIAR` (restarts the
 launcher process; shell `force-stop` can't kill a device owner with accessibility), `IA_TESTE` (open a screen via the
 closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}`), `EXTRAS --es o <cmd>`
@@ -135,7 +141,7 @@ which references shaped the result.
   with `-PtelasAtualizar` and commit the new reference. Workflow `telas.yml` runs it on PRs that touch screens.
 - Android 14 forces the HOME app to `speed-profile`; `app/src/main/baseline-prof.txt` + `androidx.profileinstaller`
   provide the profile. Debug builds run in `verify` mode: don't measure performance with them.
-- Measuring: `dumpsys gfxinfo br.paulo.tvlauncher reset`, return to HOME by component name 10×, `dumpsys gfxinfo`,
+- Measuring: `dumpsys gfxinfo tv.sofaly.launcher reset`, return to HOME by component name 10×, `dumpsys gfxinfo`,
   and the `TvLauncher.Apps` log line (`carregar=… desenhar=…`).
 
 ## Testing limits (don't rediscover)

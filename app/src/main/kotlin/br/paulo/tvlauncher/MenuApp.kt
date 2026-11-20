@@ -13,7 +13,7 @@ package br.paulo.tvlauncher
 object MenuApp {
     /** Ver PainelApps.protegido: nunca ocultar nem desinstalar (sem eles a TV quebra ou o painel some). */
     val PROTEGIDOS_FIXOS = setOf(
-        "br.paulo.tvlauncher", "android", "com.android.systemui", "com.android.tv.settings", "com.android.settings",
+        AppIdentity.NEW_PACKAGE, AppIdentity.LEGACY_PACKAGE, "android", "com.android.systemui", "com.android.tv.settings", "com.android.settings",
         "com.android.packageinstaller", "com.google.android.packageinstaller",
         "com.android.permissioncontroller", "com.google.android.permissioncontroller",
         "com.google.android.apps.tv.launcherx", "com.google.android.gms", "com.google.android.gsf",

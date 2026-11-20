@@ -186,7 +186,7 @@ object VigiaAtualizacao {
     /** "PlayerActivity" -> o nome da tela que aparece para o usuário (rótulo do manifesto), ou o próprio nome. */
     private fun nomeDaTela(ctx: Context, classe: String): String = try {
         val pm = ctx.packageManager
-        pm.getActivityInfo(ComponentName(ctx.packageName, "${ctx.packageName}.$classe"), 0).loadLabel(pm).toString()
+        pm.getActivityInfo(ComponentName(ctx.packageName, AppIdentity.className(classe)), 0).loadLabel(pm).toString()
             .takeIf { it.isNotBlank() && it != pm.getApplicationLabel(ctx.applicationInfo).toString() } ?: classe
     } catch (_: Exception) { classe }
 
@@ -199,7 +199,7 @@ object VigiaAtualizacao {
     fun vigiarTelas(app: Application) {
         app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(a: Activity, salvo: Bundle?) {
-                val classe = a.javaClass.name.removePrefix("${app.packageName}.")
+                val classe = a.javaClass.name.removePrefix("${AppIdentity.NAMESPACE}.")
                 if (classe.contains('.')) return   // tela de biblioteca, não nossa
                 if (!VigiaRegras.telaBloqueada(lerRapido(app), versao(), classe)) return
                 Log.w(TAG, "modo seguro: $classe não abre nesta versão")

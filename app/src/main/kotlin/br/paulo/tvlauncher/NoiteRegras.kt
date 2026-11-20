@@ -20,7 +20,7 @@ object HoraDormir {
 
     /** O que nunca é barrado: a própria HOME, a do Google (a nossa vem por cima), a barra do sistema e o assistente de voz. */
     val ESSENCIAIS = setOf(
-        "br.paulo.tvlauncher", "com.google.android.apps.tv.launcherx", "com.android.systemui",
+        AppIdentity.NEW_PACKAGE, AppIdentity.LEGACY_PACKAGE, "com.google.android.apps.tv.launcherx", "com.android.systemui",
         "com.google.android.katniss", "com.google.android.tvrecommendations", "android",
         // Janelas de sistema que só aparecem POR CIMA de outro app (auditoria de 10/11/2026): o teclado, o seletor de
         // contas e os diálogos do Google, e o pedido de permissão. Sem eles, abrir a busca num app permitido mostrava o

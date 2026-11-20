@@ -50,7 +50,7 @@ object Debloat {
         "com.google.android.tungsten.setupwraith", "com.google.android.apps.tv.setupwraith", "com.android.providers.tv",
         "com.google.android.inputmethod.latin", "com.google.android.tvkeyboard", "com.android.packageinstaller",
         "com.google.android.packageinstaller", "com.android.permissioncontroller", "com.google.android.permissioncontroller",
-        "br.paulo.tvlauncher",
+        AppIdentity.NEW_PACKAGE, AppIdentity.LEGACY_PACKAGE,
     )
 
     fun permitido(item: Item) = item.testadoEm != null && item.pacote !in NUNCA

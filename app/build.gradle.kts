@@ -39,14 +39,21 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "br.paulo.tvlauncher"
+        // 19/11/2026 (decisão do Paulo: nenhum pacote público com o nome dele): o app é tv.sofaly.launcher, no site e na
+        // Play. O namespace do código continua br.paulo.tvlauncher (classes não mudam). `-Plegacy` monta a PONTE com o
+        // pacote antigo: a versão que as TVs antigas instalam e que passa o Device Owner e os ajustes para o app novo
+        // (PackageMigration.kt). Só existe enquanto houver TV no pacote antigo.
+        applicationId = if (project.hasProperty("legacy")) "br.paulo.tvlauncher" else "tv.sofaly.launcher"
         minSdk = 29   // Android 10, o mínimo do Google TV (15/11/2026: abaixo disso ~27 chamadas de API 28-29 derrubavam o launcher)
         targetSdk = 34
         // 04/11/2026: a atualização automática (GitHub Releases) precisa de um versionCode que sempre cresce, senão o
         // Android recusa a instalação ("downgrade"). Usamos os minutos desde 01/01/2026 na hora do build, no PC e no
         // GitHub: todo build novo é maior que qualquer um mais antigo, de qualquer branch. Antes era sempre 1.
         // Cabe num Int por uns 4 mil anos.
-        versionCode = ((System.currentTimeMillis() - 1_767_225_600_000L) / 60_000L).toInt()
+        // `-PversionCode=N`: o Release monta a ponte e o app novo com o MESMO número (dois builds podem cair em minutos
+        // diferentes, e a ponte reconhece o app novo do mesmo Release pela tag).
+        versionCode = (project.findProperty("versionCode") as String?)?.toInt()
+            ?: ((System.currentTimeMillis() - 1_767_225_600_000L) / 60_000L).toInt()
         versionName = "1.0"
 
 
@@ -153,6 +160,7 @@ android {
     // Sem flavor de propósito: com flavor todas as tarefas mudariam de nome (assembleRelease, testReleaseUnitTest) e os
     // workflows e scripts da Sala quebrariam.
     if (project.hasProperty("play")) {
+        if (project.hasProperty("legacy")) throw GradleException("-Pplay e -Plegacy não combinam: a Play é só tv.sofaly.launcher")
         defaultConfig.applicationId = "tv.sofaly.launcher"
         sourceSets.getByName("main").assets.srcDir("src/play/assets")
         sourceSets.getByName("release").manifest.srcFile("src/play/AndroidManifest.xml")
