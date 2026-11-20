@@ -855,4 +855,10 @@ AS\\Movies）。</string>
     <string name="pm_atraso_audio">音频延迟</string>
     <string name="pm_quadros">跟随影片帧率</string>
     <string name="pm_qualidade">画质</string>
+    <string name="pv_sem_titulo">暂时没有天气预报</string>
+    <string name="bu_voz_grupo">说话</string>
+    <string name="bu_falar">说出你要找的内容</string>
+    <string name="bu_falar_det">比用遥控器打字更快</string>
+    <string name="bu_recentes">最近搜索</string>
+    <string name="bu_recente_det">再次搜索</string>
 </resources>

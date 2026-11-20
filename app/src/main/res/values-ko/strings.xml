@@ -855,4 +855,10 @@ AS\\Movies).</string>
     <string name="pm_atraso_audio">오디오 지연</string>
     <string name="pm_quadros">영화 프레임 속도에 맞추기</string>
     <string name="pm_qualidade">화질</string>
+    <string name="pv_sem_titulo">지금은 예보가 없어요</string>
+    <string name="bu_voz_grupo">말하기</string>
+    <string name="bu_falar">찾는 것을 말해 보세요</string>
+    <string name="bu_falar_det">리모컨으로 입력하는 것보다 빨라요</string>
+    <string name="bu_recentes">최근 검색</string>
+    <string name="bu_recente_det">다시 검색</string>
 </resources>

@@ -858,4 +858,10 @@ AS\\Film).</string>
     <string name="pm_atraso_audio">Ritardo audio</string>
     <string name="pm_quadros">Segui la cadenza del film</string>
     <string name="pm_qualidade">Qualità</string>
+    <string name="pv_sem_titulo">Nessuna previsione ora</string>
+    <string name="bu_voz_grupo">Parla</string>
+    <string name="bu_falar">Di’ cosa cerchi</string>
+    <string name="bu_falar_det">Più veloce che scrivere col telecomando</string>
+    <string name="bu_recentes">Ricerche recenti</string>
+    <string name="bu_recente_det">Cerca di nuovo</string>
 </resources>

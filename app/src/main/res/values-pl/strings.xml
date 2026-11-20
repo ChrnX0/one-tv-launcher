@@ -864,4 +864,10 @@ AS\\Filmy).</string>
     <string name="pm_atraso_audio">Opóźnienie dźwięku</string>
     <string name="pm_quadros">Klatki jak w filmie</string>
     <string name="pm_qualidade">Jakość</string>
+    <string name="pv_sem_titulo">Brak prognozy w tej chwili</string>
+    <string name="bu_voz_grupo">Mów</string>
+    <string name="bu_falar">Powiedz, czego szukasz</string>
+    <string name="bu_falar_det">Szybciej niż pisanie pilotem</string>
+    <string name="bu_recentes">Ostatnie wyszukiwania</string>
+    <string name="bu_recente_det">Szukaj ponownie</string>
 </resources>

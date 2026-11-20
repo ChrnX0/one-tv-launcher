@@ -858,4 +858,10 @@ AS\\Movies)।</string>
     <string name="pm_atraso_audio">आवाज़ की देरी</string>
     <string name="pm_quadros">फ़िल्म की फ़्रेम दर पर चलाएँ</string>
     <string name="pm_qualidade">क्वालिटी</string>
+    <string name="pv_sem_titulo">अभी मौसम का पूर्वानुमान नहीं</string>
+    <string name="bu_voz_grupo">बोलें</string>
+    <string name="bu_falar">बोलें आप क्या ढूंढ रहे हैं</string>
+    <string name="bu_falar_det">रिमोट से टाइप करने से तेज़</string>
+    <string name="bu_recentes">हाल की खोजें</string>
+    <string name="bu_recente_det">फिर से खोजें</string>
 </resources>

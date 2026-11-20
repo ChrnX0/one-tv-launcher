@@ -858,4 +858,10 @@ AS\\Films).</string>
     <string name="pm_atraso_audio">Décalage du son</string>
     <string name="pm_quadros">Suivre la cadence du film</string>
     <string name="pm_qualidade">Qualité</string>
+    <string name="pv_sem_titulo">Pas de prévisions pour l’instant</string>
+    <string name="bu_voz_grupo">Parler</string>
+    <string name="bu_falar">Dites ce que vous cherchez</string>
+    <string name="bu_falar_det">Plus rapide que de taper avec la télécommande</string>
+    <string name="bu_recentes">Recherches récentes</string>
+    <string name="bu_recente_det">Rechercher à nouveau</string>
 </resources>

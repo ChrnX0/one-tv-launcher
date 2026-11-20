@@ -89,6 +89,8 @@
     <!-- Watch Next dos outros apps (WatchNextTv, degrau 1): só leitura; diz se a fileira "Continuar" é possível. -->
     <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
     <queries>
+        <!-- Busca por voz (estudo global 20/11): saber se a TV tem o reconhecimento de voz do sistema. -->
+        <intent><action android:name="android.speech.action.RECOGNIZE_SPEECH" /></intent>
         <!-- Troca de pacote (PackageMigration.kt): os dois nomes deste launcher precisam se enxergar. -->
         <package android:name="tv.sofaly.launcher" />
         <package android:name="br.paulo.tvlauncher" />

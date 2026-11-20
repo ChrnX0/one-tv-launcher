@@ -855,4 +855,10 @@ AS\\Film).</string>
     <string name="pm_atraso_audio">Jeda audio</string>
     <string name="pm_quadros">Ikuti frame rate film</string>
     <string name="pm_qualidade">Kualitas</string>
+    <string name="pv_sem_titulo">Belum ada prakiraan</string>
+    <string name="bu_voz_grupo">Bicara</string>
+    <string name="bu_falar">Ucapkan yang kamu cari</string>
+    <string name="bu_falar_det">Lebih cepat daripada mengetik dengan remote</string>
+    <string name="bu_recentes">Pencarian terbaru</string>
+    <string name="bu_recente_det">Cari lagi</string>
 </resources>

@@ -436,11 +436,19 @@ object Estilo {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             setPaddingRelative(dp(ctx, E6), dp(ctx, E6), dp(ctx, E6), dp(ctx, E6))
-            if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone); alpha = 0.6f },
-                LinearLayout.LayoutParams(dp(ctx, 48), dp(ctx, 48)).apply { bottomMargin = dp(ctx, E2) })
-            addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 22f; gravity = Gravity.CENTER })
+            // Estudo global 20/11 (ideia 6): o mascote fala nos erros e vazios. Por quê: um erro era uma frase solta no
+            // canto e parecia que a TV tinha quebrado. Para quê: a pessoa vê que o Sofaly sabe o que houve e mostra a saída.
+            // Como: a TV-sofá (o mesmo desenho do logo) em cima; o ícone do assunto, quando há, fica pequeno ao lado dela.
+            addView(LinearLayout(ctx).apply {
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM
+                addView(ImageView(ctx).apply { setImageDrawable(SofalySymbol()); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO },
+                    LinearLayout.LayoutParams(dp(ctx, 96), dp(ctx, 90)))
+                if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone); alpha = 0.7f },
+                    LinearLayout.LayoutParams(dp(ctx, 36), dp(ctx, 36)).apply { marginStart = dp(ctx, E1) })
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(ctx, E2) })
+            addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 26f; gravity = Gravity.CENTER })
             addView(texto(ctx, Papel.LEGENDA, texto).apply {
-                gravity = Gravity.CENTER; textSize = 15f; maxWidth = dp(ctx, 440)
+                gravity = Gravity.CENTER; maxWidth = dp(ctx, 520)
                 setLineSpacing(0f, 1.25f); setPaddingRelative(0, dp(ctx, E1 + 2), 0, dp(ctx, E3))
             })
             if (botoes.isNotEmpty()) addView(LinearLayout(ctx).apply {

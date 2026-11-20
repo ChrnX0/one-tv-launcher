@@ -870,4 +870,10 @@ AS\\Movies).</string>
     <string name="pm_atraso_audio">تأخير الصوت</string>
     <string name="pm_quadros">مطابقة معدل إطارات الفيلم</string>
     <string name="pm_qualidade">الجودة</string>
+    <string name="pv_sem_titulo">لا توجد توقعات الآن</string>
+    <string name="bu_voz_grupo">تحدّث</string>
+    <string name="bu_falar">قل ما تبحث عنه</string>
+    <string name="bu_falar_det">أسرع من الكتابة بجهاز التحكم</string>
+    <string name="bu_recentes">عمليات البحث الأخيرة</string>
+    <string name="bu_recente_det">ابحث مرة أخرى</string>
 </resources>

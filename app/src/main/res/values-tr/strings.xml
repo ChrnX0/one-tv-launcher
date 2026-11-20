@@ -858,4 +858,10 @@ AS\\Filmler).</string>
     <string name="pm_atraso_audio">Ses gecikmesi</string>
     <string name="pm_quadros">Filmin kare hızına uy</string>
     <string name="pm_qualidade">Kalite</string>
+    <string name="pv_sem_titulo">Şu an tahmin yok</string>
+    <string name="bu_voz_grupo">Konuş</string>
+    <string name="bu_falar">Ne aradığını söyle</string>
+    <string name="bu_falar_det">Kumandayla yazmaktan hızlı</string>
+    <string name="bu_recentes">Son aramalar</string>
+    <string name="bu_recente_det">Tekrar ara</string>
 </resources>

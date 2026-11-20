@@ -858,4 +858,10 @@ AS\\Filme).</string>
     <string name="pm_atraso_audio">Tonverzögerung</string>
     <string name="pm_quadros">Bildrate des Films nutzen</string>
     <string name="pm_qualidade">Qualität</string>
+    <string name="pv_sem_titulo">Gerade keine Vorhersage</string>
+    <string name="bu_voz_grupo">Sprechen</string>
+    <string name="bu_falar">Sag, was du suchst</string>
+    <string name="bu_falar_det">Schneller als mit der Fernbedienung tippen</string>
+    <string name="bu_recentes">Letzte Suchen</string>
+    <string name="bu_recente_det">Erneut suchen</string>
 </resources>

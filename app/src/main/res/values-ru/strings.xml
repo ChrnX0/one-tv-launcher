@@ -864,4 +864,10 @@ AS\\Фильмы).</string>
     <string name="pm_atraso_audio">Задержка звука</string>
     <string name="pm_quadros">Частота кадров фильма</string>
     <string name="pm_qualidade">Качество</string>
+    <string name="pv_sem_titulo">Прогноз сейчас недоступен</string>
+    <string name="bu_voz_grupo">Сказать</string>
+    <string name="bu_falar">Скажите, что ищете</string>
+    <string name="bu_falar_det">Быстрее, чем печатать пультом</string>
+    <string name="bu_recentes">Недавние запросы</string>
+    <string name="bu_recente_det">Искать снова</string>
 </resources>

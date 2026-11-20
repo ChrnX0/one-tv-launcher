@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -216,7 +217,7 @@ class BuscaActivity : Activity() {
         val minha = ++geracao
         Fundo.rodar("busca") {
             val t0 = System.currentTimeMillis()
-            val r = try { if (termo.length < 2) hoje(d) else resultados(d, termo) } catch (e: Exception) { Log.w(TAG, "busca: $e"); emptyList() }
+            val r = try { if (termo.length < 2) inicio() + hoje(d) else resultados(d, termo) } catch (e: Exception) { Log.w(TAG, "busca: $e"); emptyList() }
             if (termo.length >= 2) Log.i(TAG, "busca (${termo.length} letras): ${System.currentTimeMillis() - t0} ms")
             ui.post { if (minha == geracao && !isFinishing) desenhar(termo, r) }
             // Ideia 82: depois, sem atrasar o resto, o que não está na lista e onde assistir.
@@ -331,6 +332,42 @@ class BuscaActivity : Activity() {
     }
 
     /** Caixa vazia: "Hoje na TV" (chave HOJE_NA_TV), ou só uma dica. */
+    /**
+     * Busca vazia (estudo global 20/11, ideia 7): o microfone em destaque e as buscas recentes antes do "Hoje na TV".
+     * Por quê: digitar com a cruz é lento e o campo vazio não sugeria nada. Para quê: achar algo em 1 toque ou falando.
+     */
+    private fun inicio(): List<Grupo> {
+        val grupos = ArrayList<Grupo>()
+        if (vozDisponivel()) grupos += Grupo(getString(R.string.bu_voz_grupo),
+            listOf(Item(getString(R.string.bu_falar), getString(R.string.bu_falar_det)) { ouvir() }))
+        val recentes = BuscaRecentes.ler(this)
+        if (recentes.isNotEmpty()) grupos += Grupo(getString(R.string.bu_recentes), recentes.map { t ->
+            Item(t, getString(R.string.bu_recente_det)) { campo.setText(t); campo.setSelection(t.length); buscarJa() }
+        })
+        return grupos
+    }
+
+    private fun vozDisponivel(): Boolean = runCatching {
+        packageManager.queryIntentActivities(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).isNotEmpty()
+    }.getOrDefault(false)
+
+    /** O reconhecimento de voz do sistema; o que a pessoa falou vai para o campo e a busca roda na hora. */
+    private fun ouvir() {
+        val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.bu_falar))
+        runCatching { startActivityForResult(i, PEDIDO_VOZ) }
+    }
+
+    @Deprecated("API antiga, ainda a única sem AndroidX para o resultado da voz")
+    override fun onActivityResult(pedido: Int, resultado: Int, dados: Intent?) {
+        super.onActivityResult(pedido, resultado, dados)
+        if (pedido != PEDIDO_VOZ || resultado != RESULT_OK) return
+        val t = dados?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull()?.trim().orEmpty()
+        if (t.isEmpty()) return
+        campo.setText(t); campo.setSelection(t.length); buscarJa()
+    }
+
     private fun hoje(d: Dados): List<Grupo> {
         if (!Extras.ligado(this, Extras.Chave.HOJE_NA_TV)) return emptyList()
         val agora = System.currentTimeMillis()
@@ -381,7 +418,9 @@ class BuscaActivity : Activity() {
         for (g in grupos) {
             lista.addView(Estilo.secao(this, g.nome))
             for (i in g.itens) lista.addView(Estilo.linhaOpcao(this, i.titulo, i.sub.ifEmpty { null }).apply {
-                setOnClickListener { i.abrir() }
+                // Abriu um resultado: a busca valeu a pena, então entra nas recentes (o próprio item "recente" e o
+                // microfone não contam, por isso só com termo de 2 letras ou mais).
+                setOnClickListener { if (termo.length >= 2) BuscaRecentes.guardar(this@BuscaActivity, termo); i.abrir() }
             }, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(6) })
         }
     }
@@ -444,6 +483,7 @@ class BuscaActivity : Activity() {
     private fun hora(ms: Long) = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))
 
     companion object {
+        private const val PEDIDO_VOZ = 41
         private const val TAG = "TvLauncher.Busca"
         /** Origem dos pedidos que a busca faz (3.11), como "painel" na caixa do celular. */
         const val ORIGEM = "busca"

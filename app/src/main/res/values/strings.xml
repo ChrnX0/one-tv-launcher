@@ -896,4 +896,10 @@
     <string name="pm_atraso_audio">Audio delay</string>
     <string name="pm_quadros">Match the film\'s frame rate</string>
     <string name="pm_qualidade">Quality</string>
+    <string name="pv_sem_titulo">No forecast right now</string>
+    <string name="bu_voz_grupo">Speak</string>
+    <string name="bu_falar">Say what you are looking for</string>
+    <string name="bu_falar_det">Faster than typing with the remote</string>
+    <string name="bu_recentes">Recent searches</string>
+    <string name="bu_recente_det">Search again</string>
 </resources>
