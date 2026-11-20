@@ -49,6 +49,7 @@ class ConfigLauncherActivity : Activity() {
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
         private const val ESTADO_LIBERADO = "hospede_liberado"
+        private const val ESTADO_LINHA = "linha_foco"
         private const val TAG = "TvLauncher.Config"
         /** [abaMontada] quando o conteúdo mostra a busca nos ajustes (12.2), não uma aba. */
         private const val BUSCA = -2
@@ -115,6 +116,7 @@ class ConfigLauncherActivity : Activity() {
         // Elevação 2.11: toda mudança feita aqui vira um passo com "Desfazer" por 10 s (Desfazer.kt).
         VigiaDesfazer.ligar(this, getString(R.string.desf_rot_config)) { if (::conteudo.isInitialized) recarregarAba() }
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
+        linhaSalva = savedInstanceState?.getInt(ESTADO_LINHA, -1) ?: -1
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
         // "liberado" vem do estado salvo só quando a tela foi recriada com o PIN já certo (controle/teclado ligado, giro);
         // antes valia "savedInstanceState == null", e qualquer recriação abria sem PIN (achado de 17/11/2026).
@@ -133,15 +135,27 @@ class ConfigLauncherActivity : Activity() {
         }
     }
 
+    /** Linha das opções que tinha o foco quando a tela se refez (alto contraste, tamanho do texto, visual pronto). */
+    private var linhaSalva = -1
+
     private fun abrirTela() {
         setContentView(montarTela())
         mostrarAba(abaAtual)
-        itensMenu[abaAtual].post { itensMenu[abaAtual].requestFocus() }
+        // Mesmo padrão de [recarregarAba]: quem mudou uma opção que refaz a tela continua na MESMA linha (pela posição),
+        // não volta para a aba (visto na Sala 20/11/2026 ao ligar o alto contraste).
+        val linha = linhaSalva.also { linhaSalva = -1 }
+        itensMenu[abaAtual].post {
+            val alvo = if (linha >= 0) focaveis(conteudo).getOrNull(linha) else null
+            (alvo ?: itensMenu[abaAtual]).requestFocus()
+        }
     }
 
     override fun onSaveInstanceState(estado: Bundle) {
         super.onSaveInstanceState(estado)
         estado.putInt(EXTRA_ABA, abaAtual)
+        if (::conteudo.isInitialized) conteudo.findFocus()?.let { f ->
+            estado.putInt(ESTADO_LINHA, focaveis(conteudo).indexOfFirst { it === f || ehAncestral(it, f) })
+        }
         estado.putBoolean(ESTADO_LIBERADO, liberadoHospede)
     }
 
