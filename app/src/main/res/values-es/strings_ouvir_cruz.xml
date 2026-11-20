@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Las favoritas también suenan con las teclas 1 a 9 del control</string>
     <string name="ouv_tecla">Tecla %d del control</string>
     <string name="ouv_ao_sair">Al salir</string>
-    <string name="ouv_ao_sair_continua">Sigue sonando en la pantalla de inicio\n⏯ en el control pausa desde cualquier pantalla</string>
+    <string name="ouv_ao_sair_continua">Sigue sonando en la pantalla de inicio\n▶❙❙ en el control pausa desde cualquier pantalla</string>
     <string name="ouv_ao_sair_para">Se detiene al salir de esta pantalla</string>
     <string name="ouv_recentes">Recientes</string>
     <string name="ouv_sem_favoritas">Aún no hay favoritas</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">En vivo</string>
     <string name="ouv_dica_pular">saltar</string>
     <string name="ouv_voltar">Atrás 15 s</string>
-    <string name="ouv_voltar_det">También ⏪ en el control</string>
+    <string name="ouv_voltar_det">También ◀◀ en el control</string>
     <string name="ouv_avancar">Adelante 30 s</string>
-    <string name="ouv_avancar_det">También ⏩ en el control</string>
+    <string name="ouv_avancar_det">También ▶▶ en el control</string>
     <string name="ouv_velocidade_det">%s · la voz no cambia de tono</string>
     <string name="ouv_parar_pod_det">Donde paraste queda guardado</string>
     <string name="ouv_seguindo">Siguiendo</string>

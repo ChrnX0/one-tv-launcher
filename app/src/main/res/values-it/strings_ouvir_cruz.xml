@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">Le preferite partono anche con i tasti da 1 a 9 del telecomando</string>
     <string name="ouv_tecla">Tasto %d del telecomando</string>
     <string name="ouv_ao_sair">All’uscita</string>
-    <string name="ouv_ao_sair_continua">Continua nella schermata Home\n⏯ sul telecomando mette in pausa da ogni schermata</string>
+    <string name="ouv_ao_sair_continua">Continua nella schermata Home\n▶❙❙ sul telecomando mette in pausa da ogni schermata</string>
     <string name="ouv_ao_sair_para">Si ferma quando esci da questa schermata</string>
     <string name="ouv_recentes">Recenti</string>
     <string name="ouv_sem_favoritas">Ancora nessuna preferita</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">In diretta</string>
     <string name="ouv_dica_pular">salta</string>
     <string name="ouv_voltar">Indietro 15 s</string>
-    <string name="ouv_voltar_det">Anche ⏪ sul telecomando</string>
+    <string name="ouv_voltar_det">Anche ◀◀ sul telecomando</string>
     <string name="ouv_avancar">Avanti 30 s</string>
-    <string name="ouv_avancar_det">Anche ⏩ sul telecomando</string>
+    <string name="ouv_avancar_det">Anche ▶▶ sul telecomando</string>
     <string name="ouv_velocidade_det">%s · la voce non cambia tono</string>
     <string name="ouv_parar_pod_det">Il punto in cui ti sei fermato resta salvato</string>
     <string name="ouv_seguindo">Segui già</string>

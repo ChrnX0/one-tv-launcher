@@ -77,7 +77,8 @@ class AutomacoesActivity : Activity() {
         val gatilhos = Gatilhos.todos(this).toMutableMap()
         for (e in Gatilhos.Evento.values()) {
             lateinit var v: TextView
-            fun texto() = "${nomeEvento(e)}: ${gatilhos[e] ?: getString(R.string.rot_nenhum)}"
+            // "Evento → o que a TV faz" (crítica de design 19/11/2026): "Filme começou: nenhum" misturava gatilho e estado.
+            fun texto() = "${nomeEvento(e)}  →  ${gatilhos[e] ?: getString(R.string.aut_nenhuma_acao)}"
             fun girar(passo: Int) {
                 val tinha = gatilhos[e] != null
                 val novo = Cenas.girar(cenas, gatilhos[e] ?: "", passo, comNenhuma = true)

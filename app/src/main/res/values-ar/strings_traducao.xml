@@ -316,4 +316,8 @@
     </plurals>
     <string name="vod_vazio_texto">تأتي الأفلام والمسلسلات من قائمة التلفاز. أضف قائمة من الإعدادات، الحساب.</string>
     <string name="vod_adicionar_lista">إضافة قائمة</string>
+    <string name="uso_recomendado">موصى به</string>
+    <string name="aut_nenhuma_acao">لا إجراء</string>
+    <string name="mtv_fila_pronto">عادت تطبيقاتك</string>
+    <string name="mtv_ir_inicio">الذهاب إلى الشاشة الرئيسية</string>
 </resources>

@@ -63,16 +63,20 @@ class BoasVindasActivity : Activity() {
             background = Estilo.fundoTela(context)
             setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
+        // A marca no topo da 1ª tela que a pessoa vê (crítica de design 19/11/2026: a tela não dizia de quem era).
+        raiz.addView(SofalyWordmark(this, dp(34).toFloat()), LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(18) })
         raiz.addView(Estilo.tituloTela(this, getString(R.string.uso_pergunta)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.uso_pergunta_det)),
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
         val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)); clipChildren = false; clipToPadding = false }
-        raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
+        raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; isFocusable = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
         fun opcao(uso: UsoTv, titulo: Int, det: Int) = lista.addView(linha(getString(titulo), getString(det)) {
             UsoTv.escolher(this, uso); montar()
         })
-        opcao(UsoTv.SIMPLES, R.string.uso_simples, R.string.uso_simples_det)
+        // Uma opção recomendada (crítica de design 19/11/2026): quem não sabe escolher fica com a Simples, que já vem focada.
+        fun opcaoTitulo(uso: UsoTv, titulo: String, det: Int) = lista.addView(linha(titulo, getString(det)) { UsoTv.escolher(this, uso); montar() })
+        opcaoTitulo(UsoTv.SIMPLES, getString(R.string.uso_simples) + "  ·  " + getString(R.string.uso_recomendado), R.string.uso_simples_det)
         opcao(UsoTv.COMPLETO, R.string.uso_completo, R.string.uso_completo_det)
         opcao(UsoTv.CUIDA, R.string.uso_cuida, R.string.uso_cuida_det)
         setContentView(raiz)
@@ -91,7 +95,7 @@ class BoasVindasActivity : Activity() {
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bv_texto, Recursos.resumo(this@BoasVindasActivity))),
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
         val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)); clipChildren = false; clipToPadding = false }
-        raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
+        raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; isFocusable = false; addView(lista) }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
 
         val faltam = Recursos.perigosasFaltando(this)
         val comecar = linha(getString(R.string.bv_comecar), getString(R.string.bv_comecar_det)) { finish() }

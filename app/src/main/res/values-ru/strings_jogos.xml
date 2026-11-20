@@ -47,7 +47,7 @@
     <string name="jogos_pc_nao_respondeu">ПК не ответил. Всё равно открываю приложение.</string>
     <string name="jogos_seus">Ваши игры</string>
     <string name="jogos_mais_jogos">Ещё игры</string>
-    <string name="jogos_mais_opcoes">Другие параметры</string>
+    <string name="jogos_mais_opcoes">Ещё</string>
     <string name="jogos_por_tipo">По типу</string>
     <string name="jogos_jogar">Играть</string>
     <string name="jogos_ligar_pc_jogar">Включить ПК и играть</string>

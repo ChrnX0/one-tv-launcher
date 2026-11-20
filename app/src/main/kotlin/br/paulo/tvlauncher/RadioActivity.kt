@@ -76,7 +76,7 @@ class RadioActivity : Activity() {
             definirTitulo(getString(R.string.ra_coluna))
             definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.ra_dica_ouvir),
                 getString(R.string.grv_dica_segurar) to getString(R.string.ra_dica_favoritar),
-                "⏯" to getString(R.string.ra_pausar))
+                "▶❙❙" to getString(R.string.ra_pausar))
             aoSom = { s -> if (OuvirServico.instancia?.tocando != true) SonsCruz.tocar(this@RadioActivity, s, CruzLogica.Categoria.OUVIR) }
         }
         // Véu da tela escura: quase preto, só a capa, o nome e a música, para o quarto ficar escuro com o rádio ligado.
@@ -301,10 +301,9 @@ class RadioActivity : Activity() {
 
     private fun aviso(id: String, nome: String, sub: String, icone: IconeOuvir.Tipo) = CruzOuvir.Item(id, nome, sub, icone)
 
-    /** "Brasil · 128 kbps", sem as partes vazias. */
-    private fun detalhe(r: Radios.Radio): String = listOfNotNull(
-        r.pais.takeIf { it.length == 2 }?.let { Locale("", it).getDisplayCountry(Locale.getDefault()) },
-        if (r.bitrate in 8..512) "${r.bitrate} kbps" else null).joinToString(" · ")
+    /** "Brasil": só o país (o "128 kbps" saiu: jargão que não ajuda a escolher a rádio; crítica de design 19/11/2026). */
+    private fun detalhe(r: Radios.Radio): String =
+        r.pais.takeIf { it.length == 2 }?.let { Locale("", it).getDisplayCountry(Locale.getDefault()) }.orEmpty()
 
     private fun itemRadio(prefixo: String, r: Radios.Radio, numero: Int? = null): CruzOuvir.Item {
         val tocandoEsta = tocando?.id == r.id

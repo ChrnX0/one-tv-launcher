@@ -433,7 +433,7 @@
     <string name="player_ao_vivo">IN DIRETTA</string>
     <string name="player_a_seguir">a seguire: %1$s</string>
     <string name="player_teclas">▲ ▼ canale · OK elenco canali · tieni premuto OK 2 s: preferito · ◀ canale precedente · ▶▶ opzioni · INDIETRO esci</string>
-    <string name="player_teclas_pausa">⏯ o OK riprendi · ▶ opzioni (torna alla diretta) · ▲ ▼ canale · INDIETRO esci</string>
+    <string name="player_teclas_pausa">▶❙❙ o OK riprendi · ▶ opzioni (torna alla diretta) · ▲ ▼ canale · INDIETRO esci</string>
     <string name="player_cat_busca">Ricerca: %1$s</string>
     <string name="player_acao_buscar">Cerca</string>
     <string name="player_acao_filtros">Filtri</string>
@@ -554,8 +554,8 @@
     <string name="home_card_filmes">Film</string>
     <string name="home_destaque_series">Serie della tua lista · riprendi da dove eri rimasto</string>
     <string name="home_destaque_filmes">Film della tua lista · riprendi da dove eri rimasto</string>
-    <string name="home_card_rede">Rete</string>
-    <string name="home_destaque_rede">Video, musica e foto dalla rete di casa</string>
+    <string name="home_card_rede">Dal computer</string>
+    <string name="home_destaque_rede">I tuoi video, musica e foto</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">d MMMM</string>
     <string name="home_busca">Cerca</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">Film · l’ultimo che hai aperto</string>
     <string name="home_dest_serie">Serie · sei a %1$s</string>
     <string name="home_dest_tv">TV · canale %1$d</string>
-    <string name="rede_titulo">Rete</string>
+    <string name="rede_titulo">Dal computer</string>
     <string name="rede_procurando">Ricerca di server multimediali in rete…</string>
     <string name="rede_nenhum">Nessun server multimediale acceso ora. Aggiungine uno qui sotto: Plex e Jellyfin usano il tuo account; una cartella di PC o NAS usa il suo indirizzo.</string>
     <string name="rede_secao_seus">I tuoi server</string>

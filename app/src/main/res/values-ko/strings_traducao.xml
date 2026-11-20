@@ -281,4 +281,8 @@
     </plurals>
     <string name="vod_vazio_texto">영화와 시리즈는 TV 목록에서 가져옵니다. 설정의 계정에서 목록을 추가하세요.</string>
     <string name="vod_adicionar_lista">목록 추가</string>
+    <string name="uso_recomendado">추천</string>
+    <string name="aut_nenhuma_acao">동작 없음</string>
+    <string name="mtv_fila_pronto">앱이 돌아왔습니다</string>
+    <string name="mtv_ir_inicio">홈 화면으로</string>
 </resources>

@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">离开此屏幕也会停止</string>
     <string name="ra_ajustes">设置</string>
     <string name="ra_ao_sair">离开此屏幕时</string>
-    <string name="ra_ao_sair_det">继续播放时，在任何屏幕按遥控器的 ⏯ 都能暂停</string>
+    <string name="ra_ao_sair_det">继续播放时，在任何屏幕按遥控器的 ▶❙❙ 都能暂停</string>
     <string name="ra_ao_sair_continua">继续播放</string>
     <string name="ra_ao_sair_para">停止</string>
     <string name="ouv_canal">电台播放中</string>

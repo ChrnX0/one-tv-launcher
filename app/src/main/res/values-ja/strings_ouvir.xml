@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">この画面を離れると停止します</string>
     <string name="ra_ajustes">設定</string>
     <string name="ra_ao_sair">この画面を離れたとき</string>
-    <string name="ra_ao_sair_det">流れ続ける場合、リモコンの ⏯ でどの画面からでも一時停止できます</string>
+    <string name="ra_ao_sair_det">流れ続ける場合、リモコンの ▶❙❙ でどの画面からでも一時停止できます</string>
     <string name="ra_ao_sair_continua">流れ続ける</string>
     <string name="ra_ao_sair_para">停止する</string>
     <string name="ouv_canal">ラジオ再生中</string>

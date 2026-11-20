@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Um sistema de cores: o laranja só marca a marca, o foco e o progresso; texto secundário em branco suave; cada mundo tem a sua cor e o seu desenho em todos os estilos da barra</item>
+        <item>Filmes e Séries ganham o mesmo fundo azul da tela inicial; “Na rede” virou “Do computador”, com ícone de pasta</item>
+        <item>Alto contraste de verdade: fundo preto, colunas com força total; menu do app com “Desinstalar” separado no fim; Diagnóstico sem o resumo repetido; Casa (HA) fora do ar mostra “Tentar de novo”</item>
         <item>Telas no mesmo padrão: títulos de Rádio, Jogos, Despertador, Filmes e Séries no mesmo tamanho e lugar; as dicas do controle iguais em todas as telas; Filmes e Séries vazios mostram “Adicionar lista”; menus sem o “1 de 5”</item>
         <item>Textos mais claros: “falta 1 min”, “Temporada 1, episódio 2”, “Continuar de 19 min” na ficha, Extras em seções, Placar sem frase repetida</item>
         <item>Erros com saída: sem rede, a tela do celular e a de trazer de outra TV mostram “Tentar de novo”; a Previsão sem dados também; no Diagnóstico, o Wi-Fi com falha abre o Wi-Fi</item>
@@ -38,6 +41,9 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Sistema de cores</item>
+        <item>Do computador</item>
+        <item>Alto contraste</item>
         <item>Telas no mesmo padrão</item>
         <item>Textos claros</item>
         <item>Tentar de novo</item>
@@ -59,6 +65,9 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Na tela inicial e nas Configurações, o laranja aparece só no foco e na marca, com os valores em branco suave (não laranja)?</item>
+        <item>Em Filmes, o fundo é azul como o da tela inicial, e o antigo “Na rede” agora diz “Do computador” com uma pasta?</item>
+        <item>Ligue o alto contraste nas Configurações: o fundo fica preto e as colunas fáceis de ler? No menu de um app, “Desinstalar” fica separado embaixo?</item>
         <item>Abra Despertador, Rádio e Filmes: o título está no mesmo tamanho e no mesmo canto, e as dicas do rodapé têm o mesmo desenho (tecla numa pílula + o que faz)?</item>
         <item>Numa série em Continuar, a tela inicial diz “Temporada 1, episódio 2” (não “T1 E2”), e um filme pela metade mostra “Continuar · de N min” na ficha?</item>
         <item>Abra a Previsão sem internet (ou espere a fonte falhar): aparece o botão “Tentar de novo” com o foco nele?</item>

@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">Keluar dari layar ini juga menghentikannya</string>
     <string name="ra_ajustes">Setelan</string>
     <string name="ra_ao_sair">Saat keluar dari layar ini</string>
-    <string name="ra_ao_sair_det">Jika tetap diputar, ⏯ di remote menjedanya dari layar mana pun</string>
+    <string name="ra_ao_sair_det">Jika tetap diputar, ▶❙❙ di remote menjedanya dari layar mana pun</string>
     <string name="ra_ao_sair_continua">tetap diputar</string>
     <string name="ra_ao_sair_para">berhenti</string>
     <string name="ouv_canal">Radio diputar</string>

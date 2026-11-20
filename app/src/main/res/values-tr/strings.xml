@@ -433,7 +433,7 @@
     <string name="player_ao_vivo">CANLI</string>
     <string name="player_a_seguir">sonraki: %1$s</string>
     <string name="player_teclas">▲ ▼ kanal · OK kanal listesi · OK 2 sn basılı: favori · ◀ önceki kanal · ▶▶ seçenekler · GERİ çık</string>
-    <string name="player_teclas_pausa">⏯ veya OK devam · ▶ seçenekler (canlıya dön) · ▲ ▼ kanal · GERİ çık</string>
+    <string name="player_teclas_pausa">▶❙❙ veya OK devam · ▶ seçenekler (canlıya dön) · ▲ ▼ kanal · GERİ çık</string>
     <string name="player_cat_busca">Ara: %1$s</string>
     <string name="player_acao_buscar">Ara</string>
     <string name="player_acao_filtros">Filtreler</string>
@@ -554,8 +554,8 @@
     <string name="home_card_filmes">Filmler</string>
     <string name="home_destaque_series">Listenizdeki diziler · kaldığınız yerden devam edin</string>
     <string name="home_destaque_filmes">Listenizdeki filmler · kaldığınız yerden devam edin</string>
-    <string name="home_card_rede">Ağ</string>
-    <string name="home_destaque_rede">Ev ağınızdaki videolar, müzikler ve fotoğraflar</string>
+    <string name="home_card_rede">Bilgisayardan</string>
+    <string name="home_destaque_rede">Videolarınız, müzikleriniz ve fotoğraflarınız</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">d MMMM</string>
     <string name="home_busca">Ara</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">Filmler · en son açtığınız</string>
     <string name="home_dest_serie">Diziler · %1$s bölümündesiniz</string>
     <string name="home_dest_tv">TV · kanal %1$d</string>
-    <string name="rede_titulo">Ağ</string>
+    <string name="rede_titulo">Bilgisayardan</string>
     <string name="rede_procurando">Ağda medya sunucuları aranıyor…</string>
     <string name="rede_nenhum">Şu an açık medya sunucusu yok. Aşağıdan ekleyin: Plex ve Jellyfin hesabınızı kullanır; bilgisayar veya NAS klasörü adresini kullanır.</string>
     <string name="rede_secao_seus">Sunucularınız</string>

@@ -143,7 +143,7 @@ class CruzTelaTest {
                 it("tv", "TV", "Canal 156 · Discovery Channel\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 21:30: Aventura Selvagem", IconeCruz.Tipo.TV, visto = 0.7f),
                 it("series", "Séries", "O Último Farol\nT1 E4 · faltam 18 min\n2023 · ★ 8,1\nDrama", IconeCruz.Tipo.SERIES),
                 it("filmes", "Filmes", "Maré Alta\n2021 · 2 h 35 min · ★ 8,0\nFicção científica\nfaltam 52 min", IconeCruz.Tipo.FILMES),
-                it("rede", "Na rede", "Vídeos, músicas e fotos da rede da casa", IconeCruz.Tipo.REDE),
+                it("rede", "Do computador", "Seus vídeos, músicas e fotos", IconeCruz.Tipo.REDE),
                 it("addons", "Addons", "Filmes e séries dos seus addons", IconeCruz.Tipo.ADDONS))),
             HomeCruz.Categoria(CruzLogica.Categoria.OUVIR, "Ouvir", ic(IconeCruz.Tipo.OUVIR), listOf(
                 it("radio", "Rádio", "Rádios do mundo inteiro", IconeCruz.Tipo.RADIO),

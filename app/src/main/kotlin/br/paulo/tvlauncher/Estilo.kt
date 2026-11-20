@@ -278,10 +278,13 @@ object Estilo {
         }
     }
 
-    /** O valor à direita de uma linha ("Escuro ›"), no acento. */
+    /**
+     * O valor à direita de uma linha ("Escuro ›"), em branco suave. Era laranja; a crítica de design (19/11/2026) deixou
+     * o laranja só para marca, foco e progresso, e valor não é nenhum dos três.
+     */
     fun valor(ctx: Context, texto: String, seta: Boolean = true): TextView =
         texto(ctx, Papel.CORPO, if (seta) "$texto  ›" else texto).apply {
-            setTextColor(ACENTO); setTag(R.id.estilo_cor_normal, ACENTO)
+            setTextColor(TEXTO_2); setTag(R.id.estilo_cor_normal, TEXTO_2)
         }
 
     /**
@@ -455,7 +458,9 @@ object Estilo {
      * Escuro (Fundos.kt, desenharFundoEscuro), em vez da textura pontilhada antiga (drawable fundo.jpg) e dos cinzas
      * soltos de cada tela. Telas de lista ficam em fundo liso mesmo no tema Galeria (decisão 1: vidro só com imagem atrás).
      */
-    fun fundoTela(ctx: Context): Drawable = FundoGrafite(World.of(ctx))
+    fun fundoTela(ctx: Context): Drawable =
+        // Alto contraste (crítica de design 19/11/2026): fundo chapado preto, sem brilho nem degradê atrás do texto.
+        if (altoContraste) android.graphics.drawable.ColorDrawable(0xFF000000.toInt()) else FundoGrafite(World.of(ctx))
 
     /**
      * Tela cuja raiz já pinta o grafite na tela toda: a cor de fundo da janela (tema) por baixo é uma camada de tela
@@ -506,6 +511,8 @@ object Estilo {
         }
         raiz.addView(android.widget.ScrollView(ctx).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+            // Sem foco próprio: o foco vai direto na 1ª linha (no teste de telas ele parava na rolagem e nada aparecia focado).
+            isFocusable = false
             // Esmaecer nas pontas (crítica de design 19/11/2026): quando há mais linhas acima/abaixo, a borda some em
             // degradê em vez de cortar a linha seca; o Android só desenha o degradê do lado que ainda tem o que rolar.
             isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, 48))
@@ -623,7 +630,7 @@ object Estilo {
      */
     fun lista(ctx: Context, titulo: CharSequence, itens: List<CharSequence>, marcadas: Collection<Int> = emptyList(),
               aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, focoNaMarcada: Boolean = true,
-              focoInicial: Int? = null, entrar: Boolean = true,
+              focoInicial: Int? = null, entrar: Boolean = true, separarUltimo: Boolean = false,
               aoEscolher: (Int) -> Unit): android.app.Dialog {
         val d = android.app.Dialog(ctx)
         val rtl = ctx.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -635,7 +642,7 @@ object Estilo {
         val nomeLista = titulo.toString().uppercase()
         // Cabeçalho só com o nome da lista (crítica de design 19/11/2026: o "3 de 14" ao lado era ruído; o foco já diz onde se está).
         val cabecalho = TextView(ctx).apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, HomeCruz.FONTE_ROTULO); typeface = forte; setTextColor(ACENTO)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, HomeCruz.FONTE_ROTULO); typeface = forte; setTextColor(HomeCruz.COR_SUB)   // rótulo: cinza (laranja só no mundo da cruz)
             letterSpacing = 0.08f; includeFontPadding = false; maxLines = 3; setLineSpacing(dp(ctx, 4).toFloat(), 1f)
             setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
             text = nomeLista
@@ -718,7 +725,10 @@ object Estilo {
                 }
             }
             vistas += Linha(raiz, ponto, nome)
-            linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(ctx, 2) })
+            // [separarUltimo]: a ação destrutiva (Desinstalar) fica afastada das comuns, por último (crítica 19/11/2026).
+            linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply {
+                if (i > 0) topMargin = dp(ctx, if (separarUltimo && i == itens.size - 1) 22 else 2)
+            })
         }
         // Dicas logo embaixo da lista, no mesmo desenho das do Rádio/Podcasts (tecla numa pílula + o que ela faz).
         // Dicas logo embaixo da lista: a mesma barra de todo o sistema.

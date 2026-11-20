@@ -167,7 +167,7 @@ class CalendarioActivity : Activity() {
         proximos.forEach { e ->
             val dia = fmtDia.format(e.inicio).replaceFirstChar { it.uppercase() }
             if (dia != diaAnterior) {
-                listaEventos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, dia).apply { setTextColor(destaque); setPaddingRelative(0, dp(14), 0, dp(4)) })
+                listaEventos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, dia).apply { setTextColor(Estilo.TEXTO_2); setPaddingRelative(0, dp(14), 0, dp(4)) })
                 diaAnterior = dia
             }
             listaEventos.addView(LinearLayout(this).apply {

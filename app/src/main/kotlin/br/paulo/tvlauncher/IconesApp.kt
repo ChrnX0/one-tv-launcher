@@ -48,10 +48,11 @@ class IconeApp(private val tipo: Tipo, private val cor: Int = 0xFFFFFFFF.toInt()
                 c.drawPath(p, traco)
                 c.drawLine(8.5f, 7.6f, 10.5f, 9f, traco); c.drawLine(14f, 6.1f, 16f, 7.6f, traco)
             }
-            Tipo.REDE -> {   // dois servidores
-                c.drawRoundRect(RectF(4f, 4f, 20f, 10.5f), 2f, 2f, traco)
-                c.drawRoundRect(RectF(4f, 13.5f, 20f, 20f), 2f, 2f, traco)
-                c.drawCircle(7.5f, 7.25f, 1f, cheio); c.drawCircle(7.5f, 16.75f, 1f, cheio)
+            Tipo.REDE -> {   // pasta ("Do computador", crítica de design 19/11/2026)
+                p.reset(); p.moveTo(3f, 18.5f); p.lineTo(3f, 6.5f); p.quadTo(3f, 5f, 4.5f, 5f); p.lineTo(9f, 5f); p.lineTo(11f, 7.5f)
+                p.lineTo(19.5f, 7.5f); p.quadTo(21f, 7.5f, 21f, 9f); p.lineTo(21f, 18.5f); p.quadTo(21f, 20f, 19.5f, 20f)
+                p.lineTo(4.5f, 20f); p.quadTo(3f, 20f, 3f, 18.5f); p.close(); c.drawPath(p, traco)
+                c.drawLine(3f, 10.5f, 21f, 10.5f, traco)
             }
             Tipo.MICROFONE -> {
                 c.drawRoundRect(RectF(9f, 3f, 15f, 14f), 3f, 3f, traco)

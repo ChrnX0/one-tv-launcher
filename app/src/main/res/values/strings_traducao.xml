@@ -288,4 +288,8 @@
     <string name="at_despertador">ALARM</string>
     <string name="vod_vazio_texto">Movies and series come from your TV list. Add one in Settings, Account.</string>
     <string name="vod_adicionar_lista">Add a list</string>
+    <string name="uso_recomendado">Recommended</string>
+    <string name="aut_nenhuma_acao">no action</string>
+    <string name="mtv_fila_pronto">Your apps are back</string>
+    <string name="mtv_ir_inicio">Go to the home screen</string>
 </resources>

@@ -14,7 +14,9 @@ import android.content.Context
 enum class World(val glow: Int) {
     /** Configurações, Casa e o resto: o brilho frio de sempre. */
     NEUTRAL(0x4A7388),
-    WATCH(0xB65A2C),
+    // Assistir usa o azul da cruz (crítica de design 19/11/2026, decisão 4): o brilho marrom-alaranjado de Filmes e
+    // Séries saiu; o laranja fica só para marca, foco e progresso (decisão 1). O mundo continua existindo para o futuro.
+    WATCH(0x4A7388),
     LISTEN(0x2A9A8E),
     PLAY(0x5257C8);
 

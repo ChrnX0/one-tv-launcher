@@ -77,8 +77,8 @@
     <string name="cruz_tocou">सुना गया: %1$s</string>
     <string name="cruz_por_ultimo">आख़िरी: %1$s</string>
     <string name="cruz_addons_n">इंस्टॉल ऐडऑन: %1$d</string>
-    <string name="cruz_apps_n">ग्रिड में ऐप: %1$d</string>
-    <string name="cruz_apps_ocultos">ग्रिड में: %1$d · छिपे हुए: %2$d</string>
+    <string name="cruz_apps_n">%1$d ऐप</string>
+    <string name="cruz_apps_ocultos">%1$d ऐप · छिपे हुए: %2$d</string>
     <string name="cruz_podcasts_n">फ़ॉलो किए पॉडकास्ट: %1$d</string>
     <string name="cruz_pendrive">USB ड्राइव: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant जवाब नहीं दे रहा</string>

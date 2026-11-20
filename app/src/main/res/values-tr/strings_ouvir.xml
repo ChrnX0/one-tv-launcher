@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">Bu ekrandan çıkmak da durdurur</string>
     <string name="ra_ajustes">Ayarlar</string>
     <string name="ra_ao_sair">Bu ekrandan çıkınca</string>
-    <string name="ra_ao_sair_det">Çalmaya devam ederse kumandadaki ⏯ her ekrandan duraklatır</string>
+    <string name="ra_ao_sair_det">Çalmaya devam ederse kumandadaki ▶❙❙ her ekrandan duraklatır</string>
     <string name="ra_ao_sair_continua">çalmaya devam eder</string>
     <string name="ra_ao_sair_para">durur</string>
     <string name="ouv_canal">Radyo çalıyor</string>

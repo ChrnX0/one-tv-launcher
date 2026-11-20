@@ -1484,7 +1484,7 @@ class MidiaRedeActivity : Activity() {
             val s = textos.getChildAt(1) as TextView
             val valor = linha.getChildAt(2) as TextView
             // Cor normal guardada de novo a cada uso: a linha reciclada pode ter vindo com a cor do foco.
-            for ((tv, cor) in listOf(t to Estilo.TEXTO, s to Estilo.TEXTO_2, valor to Estilo.ACENTO)) { tv.setTag(R.id.estilo_cor_normal, cor); tv.setTextColor(cor) }
+            for ((tv, cor) in listOf(t to Estilo.TEXTO, s to Estilo.TEXTO_2, valor to Estilo.TEXTO_2)) { tv.setTag(R.id.estilo_cor_normal, cor); tv.setTextColor(cor) }
             icone.setImageDrawable(IconeMidia(l.icone))
             t.text = l.titulo
             s.text = l.sub.orEmpty(); s.visibility = if (l.sub.isNullOrEmpty()) View.GONE else View.VISIBLE

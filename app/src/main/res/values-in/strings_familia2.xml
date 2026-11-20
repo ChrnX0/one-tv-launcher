@@ -36,7 +36,7 @@
     <string name="ra_generos">Genre</string>
     <string name="ra_paises">Negara lain</string>
     <string name="ra_paises_det">Negara dengan stasiun terbanyak</string>
-    <string name="ra_perto">Di dekat Anda</string>
+    <string name="ra_perto">Terdekat</string>
     <string name="ra_mais_ouvidas">Paling banyak didengar di %s</string>
     <string name="ra_mundo">Paling banyak didengar di dunia</string>
     <string name="ra_resultado">Cari: %s</string>

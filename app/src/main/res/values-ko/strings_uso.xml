@@ -8,7 +8,7 @@
     <string name="uso_cuida">내가 돌보는 사람용</string>
     <string name="uso_pergunta">이 TV를 어떻게 쓰시나요?</string>
     <string name="uso_pergunta_det">나중에 설정 &gt; 시스템에서 바꿀 수 있습니다.</string>
-    <string name="uso_simples_det">예쁜 홈 화면만: 앱, 시계, 날씨. 설정 항목이 줄어듭니다.</string>
+    <string name="uso_simples_det">꼭 필요한 것만: 앱, 시계, 날씨. 설정 옵션도 적게.</string>
     <string name="uso_completo_det">전체: 휴대폰 제어, 집 안 기기, 네트워크 드라이브, 고급 옵션.</string>
     <string name="uso_cuida_det">부모님이나 조부모님의 TV: 그분들에겐 쉽게, 당신은 멀리서 휴대폰으로 도와요.</string>
     <string name="uso_cuidar_longe">멀리서 돌보기</string>

@@ -77,8 +77,8 @@
     <string name="cruz_tocou">Ascoltato %1$s</string>
     <string name="cruz_por_ultimo">Ultimo: %1$s</string>
     <string name="cruz_addons_n">Addon installati: %1$d</string>
-    <string name="cruz_apps_n">App nella griglia: %1$d</string>
-    <string name="cruz_apps_ocultos">Nella griglia: %1$d · nascoste: %2$d</string>
+    <string name="cruz_apps_n">%1$d app</string>
+    <string name="cruz_apps_ocultos">%1$d app · nascoste: %2$d</string>
     <string name="cruz_podcasts_n">Podcast seguiti: %1$d</string>
     <string name="cruz_pendrive">Chiavetta USB: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant non risponde</string>

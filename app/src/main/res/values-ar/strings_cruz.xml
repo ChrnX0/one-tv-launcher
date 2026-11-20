@@ -77,8 +77,8 @@
     <string name="cruz_tocou">شُغّل %1$s</string>
     <string name="cruz_por_ultimo">الأخير: %1$s</string>
     <string name="cruz_addons_n">الإضافات المثبتة: %1$d</string>
-    <string name="cruz_apps_n">التطبيقات في الشبكة: %1$d</string>
-    <string name="cruz_apps_ocultos">في الشبكة: %1$d · مخفية: %2$d</string>
+    <string name="cruz_apps_n">%1$d تطبيقات</string>
+    <string name="cruz_apps_ocultos">%1$d تطبيقات · مخفية: %2$d</string>
     <string name="cruz_podcasts_n">البودكاست التي تتابعها: %1$d</string>
     <string name="cruz_pendrive">ذاكرة USB: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant لا يستجيب</string>

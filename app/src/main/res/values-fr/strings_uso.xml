@@ -8,7 +8,7 @@
     <string name="uso_cuida">Pour un proche dont je m\'occupe</string>
     <string name="uso_pergunta">Comment cette TV sera-t-elle utilisée ?</string>
     <string name="uso_pergunta_det">Vous pourrez changer plus tard dans Paramètres &gt; Système.</string>
-    <string name="uso_simples_det">Juste un bel écran d\'accueil : applis, heure et météo. Moins d\'options dans les Paramètres.</string>
+    <string name="uso_simples_det">L’essentiel seulement : applis, heure et météo. Moins d’options dans les Paramètres.</string>
     <string name="uso_completo_det">Tout : contrôle depuis le téléphone, appareils de la maison, lecteur réseau et options avancées.</string>
     <string name="uso_cuida_det">La TV des parents ou grands-parents : facile pour eux, et vous aidez à distance depuis le téléphone.</string>
     <string name="uso_cuidar_longe">Veiller à distance</string>

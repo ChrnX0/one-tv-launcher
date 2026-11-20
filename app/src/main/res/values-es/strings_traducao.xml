@@ -295,4 +295,8 @@
     </plurals>
     <string name="vod_vazio_texto">Las películas y series vienen de tu lista de TV. Agrega una en Ajustes, Cuenta.</string>
     <string name="vod_adicionar_lista">Agregar lista</string>
+    <string name="uso_recomendado">Recomendado</string>
+    <string name="aut_nenhuma_acao">ninguna acción</string>
+    <string name="mtv_fila_pronto">Tus apps volvieron</string>
+    <string name="mtv_ir_inicio">Ir a la pantalla de inicio</string>
 </resources>

@@ -47,7 +47,7 @@
     <string name="jogos_pc_nao_respondeu">PC が応答しませんでした。このままアプリを開きます。</string>
     <string name="jogos_seus">あなたのゲーム</string>
     <string name="jogos_mais_jogos">その他のゲーム</string>
-    <string name="jogos_mais_opcoes">その他のオプション</string>
+    <string name="jogos_mais_opcoes">その他</string>
     <string name="jogos_por_tipo">種類別</string>
     <string name="jogos_jogar">プレイ</string>
     <string name="jogos_ligar_pc_jogar">PC を起動してプレイ</string>

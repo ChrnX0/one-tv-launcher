@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">इस स्क्रीन से बाहर जाने पर भी रुक जाता है</string>
     <string name="ra_ajustes">सेटिंग</string>
     <string name="ra_ao_sair">इस स्क्रीन से बाहर जाने पर</string>
-    <string name="ra_ao_sair_det">चलता रहे तो रिमोट का ⏯ किसी भी स्क्रीन से इसे रोक देता है</string>
+    <string name="ra_ao_sair_det">चलता रहे तो रिमोट का ▶❙❙ किसी भी स्क्रीन से इसे रोक देता है</string>
     <string name="ra_ao_sair_continua">चलता रहता है</string>
     <string name="ra_ao_sair_para">रुक जाता है</string>
     <string name="ouv_canal">रेडियो चल रहा है</string>

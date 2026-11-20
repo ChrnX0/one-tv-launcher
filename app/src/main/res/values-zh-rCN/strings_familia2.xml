@@ -36,7 +36,7 @@
     <string name="ra_generos">类型</string>
     <string name="ra_paises">其他国家/地区</string>
     <string name="ra_paises_det">电台最多的国家/地区</string>
-    <string name="ra_perto">你附近</string>
+    <string name="ra_perto">附近</string>
     <string name="ra_mais_ouvidas">%s 最受欢迎</string>
     <string name="ra_mundo">全球最受欢迎</string>
     <string name="ra_resultado">搜索：%s</string>

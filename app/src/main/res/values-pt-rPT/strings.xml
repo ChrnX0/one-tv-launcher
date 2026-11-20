@@ -433,7 +433,7 @@
     <string name="player_ao_vivo">EM DIRETO</string>
     <string name="player_a_seguir">a seguir: %1$s</string>
     <string name="player_teclas">▲ ▼ canal · OK lista de canais · segure OK 2 s: favoritar · ◀ canal anterior · ▶▶ opções · VOLTAR sair</string>
-    <string name="player_teclas_pausa">⏯ ou OK continua · ▶ opções (voltar ao direto) · ▲ ▼ canal · VOLTAR sair</string>
+    <string name="player_teclas_pausa">▶❙❙ ou OK continua · ▶ opções (voltar ao direto) · ▲ ▼ canal · VOLTAR sair</string>
     <string name="player_cat_busca">Pesquisa: %1$s</string>
     <string name="player_acao_buscar">Pesquisar</string>
     <string name="player_acao_filtros">Filtros</string>
@@ -463,7 +463,7 @@
     <string name="filmes_interesse_tirou">%1$s saiu dos interesses</string>
     <string name="filmes_interesses_cheio">Já há 500 interesses: tire um antes.</string>
     <string name="filmes_interesses_vazio">Segure OK por 2 segundos num póster para pôr aqui (e de novo para tirar).</string>
-    <string name="vod_grade_teclas">OK abrir · segure OK: mais opções · ▶ no fim da linha: letras · VOLTAR categorias</string>
+    <string name="vod_grade_teclas">OK abrir · segurar OK: mais opções · ▶ no fim da linha: letras · VOLTAR categorias</string>
     <string name="filmes_finalizado">Finalizado</string>
     <string name="filmes_assistido">Assistido</string>
     <string name="filmes_selo_leg">LEG</string>
@@ -554,8 +554,8 @@
     <string name="home_card_filmes">Filmes</string>
     <string name="home_destaque_series">Séries da sua lista · continue de onde parou</string>
     <string name="home_destaque_filmes">Filmes da sua lista · continue de onde parou</string>
-    <string name="home_card_rede">Na rede</string>
-    <string name="home_destaque_rede">Vídeos, músicas e fotos da rede da casa</string>
+    <string name="home_card_rede">Do computador</string>
+    <string name="home_destaque_rede">Os seus vídeos, músicas e fotos</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">d \'de\' MMMM</string>
     <string name="home_busca">Pesquisar</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">Filmes · o último que abriu</string>
     <string name="home_dest_serie">Séries · está no %1$s</string>
     <string name="home_dest_tv">TV · canal %1$d</string>
-    <string name="rede_titulo">Na rede</string>
+    <string name="rede_titulo">Do computador</string>
     <string name="rede_procurando">A procurar servidores de mídia na rede…</string>
     <string name="rede_nenhum">Nenhum servidor de mídia ligado na rede agora. Adicione um abaixo: Plex e Jellyfin entram com a sua conta; pasta do PC ou do NAS, com o endereço.</string>
     <string name="rede_secao_seus">Seus servidores</string>
@@ -596,7 +596,7 @@
     <string name="rede_dica_remover">remover</string>
     <string name="rede_dica_sair">sair</string>
     <string name="rede_dica_subir">voltar uma pasta</string>
-    <string name="rede_tecla_segurar">segure OK</string>
+    <string name="rede_tecla_segurar">segurar OK</string>
     <string name="rede_tecla_voltar">VOLTAR</string>
     <string name="rede_erro">O servidor não respondeu. Tente de novo.</string>
     <string name="rede_erro_senha">Utilizador ou senha não aceitos pelo servidor.</string>

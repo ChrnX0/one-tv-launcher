@@ -341,7 +341,7 @@ class ColunaCategorias(
         p.novos.visibility = if (l.novos > 0) View.VISIBLE else View.GONE
         if (l.novos > 0) p.novos.text = act.getString(R.string.coluna_novos, milhar(l.novos))
         p.numero.text = when { l.detalhe.isNotEmpty() -> l.detalhe; l.quantos < 0 -> ""; else -> milhar(l.quantos) }
-        p.numero.setTextColor(if (l.detalhe.isNotEmpty()) ambar else apagado)
+        p.numero.setTextColor(if (l.detalhe.isNotEmpty()) papel else apagado)   // contagem é valor: sem laranja
     }
 
     // Um Drawable por ícone e cor (as linhas são recicladas; criar um a cada desenho seria lixo à toa na TV de 2 GB).

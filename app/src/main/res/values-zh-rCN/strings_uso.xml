@@ -8,7 +8,7 @@
     <string name="uso_cuida">给我照顾的人</string>
     <string name="uso_pergunta">这台电视将如何使用？</string>
     <string name="uso_pergunta_det">之后可在“设置 &gt; 系统”中更改。</string>
-    <string name="uso_simples_det">只是一个漂亮的主屏幕：应用、时钟和天气。设置中的选项更少。</string>
+    <string name="uso_simples_det">只留必需：应用、时间和天气。设置选项更少。</string>
     <string name="uso_completo_det">全部功能：手机控制、家居设备、网络驱动器和高级选项。</string>
     <string name="uso_cuida_det">父母或祖父母的电视：他们用起来简单，你可以在远处用手机帮忙。</string>
     <string name="uso_cuidar_longe">远程关照</string>

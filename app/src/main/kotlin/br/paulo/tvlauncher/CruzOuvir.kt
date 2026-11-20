@@ -79,7 +79,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         /** Largura do nome de uma prateleira de lado: o vão entre dois ícones vizinhos, menos uma folga. */
         val ROTULO_CAT = (PASSO_CATS - 8).toInt()
         const val NOME_SOBRA = 44
-        private val ALFA_COLUNA = HomeCruz.ALFA_COLUNA
+        private val ALFA_COLUNA get() = HomeCruz.ALFA_COLUNA
 
         // Cartão "Tocando agora" (canto de cima à direita, acima da linha das prateleiras: termina antes de y = 200).
         const val CARTAO_X = 500f
@@ -653,7 +653,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
                     rel < 0 -> LINHA - VAO_CIMA + (rel + 1) * PASSO_COLUNA
                     else -> LINHA + VAO_ESCOLHIDO + extra + (rel - 1) * PASSO_COLUNA
                 }
-                val alfa = if (rel == 0) (if (focada) 1f else 0.75f) else ALFA_COLUNA[rel] ?: 0f
+                val alfa = if (rel == 0) (if (focada) 1f else HomeCruz.ALFA_ESCOLHIDO_FORA) else ALFA_COLUNA[rel] ?: 0f
                 val escala = if (rel == 0) 1f else ESCALA_PEQUENO
                 val x = if (rel == 0) COLUNA - CAPA / 2f else COLUNA - CAPA * ESCALA_PEQUENO / 2f
                 if (alfa == 0f) { esconder(iv, dp(x), dp(cy - CAPA / 2f), animar, onda(kotlin.math.abs(rel)), escala); ic?.animar(false); continue }

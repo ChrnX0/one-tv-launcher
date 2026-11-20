@@ -55,9 +55,11 @@ class FilaAppsActivity : Activity() {
         val prox = MudarDeTv.proximo(this)
         val total = MudarDeTv.fila(this).size
         if (prox == null) {
+            // Um estado só no fim (crítica de design 19/11/2026): o título dizia "voltando" e o texto "todos estão aqui".
+            titulo.text = getString(R.string.mtv_fila_pronto)
             texto.text = getString(R.string.mtv_fila_fim)
             nome.text = ""
-            abrir.text = getString(R.string.qr_fechar)
+            abrir.text = getString(R.string.mtv_ir_inicio)
             abrir.setOnClickListener { MudarDeTv.limpar(this); finish() }
             pular.visibility = android.view.View.GONE
             depois.visibility = android.view.View.GONE   // acabou: só "Fechar"

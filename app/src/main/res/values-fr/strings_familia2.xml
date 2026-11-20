@@ -36,7 +36,7 @@
     <string name="ra_generos">Genres</string>
     <string name="ra_paises">Autre pays</string>
     <string name="ra_paises_det">Les pays avec le plus de stations</string>
-    <string name="ra_perto">Près de chez vous</string>
+    <string name="ra_perto">À proximité</string>
     <string name="ra_mais_ouvidas">Les plus écoutées : %s</string>
     <string name="ra_mundo">Les plus écoutées dans le monde</string>
     <string name="ra_resultado">Recherche : %s</string>

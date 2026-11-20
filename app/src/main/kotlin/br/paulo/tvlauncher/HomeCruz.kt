@@ -86,7 +86,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val FONTE_CATEGORIA = 18f // nome das categorias na linha
         // ---- transparência dos vizinhos na coluna (posição relativa -> alfa)
         // Estudo da HOME (18/11/2026): nenhum nome visível abaixo de 0,6, que a 3 m some (era 0,5 em cima e 0,35 no 3º).
-        val ALFA_COLUNA = mapOf(-1 to 0.6f, 1 to 0.9f, 2 to 0.72f, 3 to 0.6f)
+        private val ALFA_NORMAL = mapOf(-1 to 0.6f, 1 to 0.9f, 2 to 0.72f, 3 to 0.6f)
+        // Alto contraste (crítica de design 19/11/2026): nada apagado demais; a distância do foco fica só na escala.
+        private val ALFA_CONTRASTE = mapOf(-1 to 0.9f, 1 to 1f, 2 to 0.95f, 3 to 0.9f)
+        val ALFA_COLUNA: Map<Int, Float> get() = if (Estilo.altoContraste) ALFA_CONTRASTE else ALFA_NORMAL
+        /** Item escolhido de outra coluna (fora do foco): 75% normal, inteiro no alto contraste. */
+        val ALFA_ESCOLHIDO_FORA: Float get() = if (Estilo.altoContraste) 1f else 0.75f
         // ---- movimento (Paulo 18/11/2026: "mais suave e orgânico"): mola em vez de tempo fixo. A mola guarda a velocidade
         // quando a tecla vem no meio do caminho (nada "freia e recomeça"), e os vizinhos saem um pouco depois (onda).
         const val MOLA_W = 17f          // rigidez (rad/s): ~0,3 s até assentar, perto dos 220 ms de antes
@@ -109,7 +114,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         // Seta ▼ "tem mais embaixo": abaixo do 3º vizinho (o último visível), no centro dos ícones pequenos.
         const val SETA_L = 28
         const val SETA_A = 12
-        const val SETA_Y = 521f
+        const val SETA_Y = 526f
+        const val SETA_DX = 64f        // a seta sai do eixo dos ícones e fica sob os nomes
         const val DICA_MS = 1500L       // cruz parada por este tempo: a seta aparece (some na próxima tecla)
         // O ícone escolhido começa a animação dele depois que a coluna assenta (~0,3 s de mola): durante o movimento a view
         // tem camada de GPU, e um desenho que muda a cada quadro obrigaria a refazer a camada inteira a cada 33 ms.
@@ -239,7 +245,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         cabecalho.translationY = dp(ROTULO_Y)
         maisAbaixo = Seta(ctx).apply { alpha = 0f; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         addView(maisAbaixo, LayoutParams(dpi(SETA_L), dpi(SETA_A)))
-        maisAbaixo.translationX = dp(COLUNA - SETA_L / 2f)
+        // Ao lado dos ícones, embaixo do nome (crítica de design 19/11/2026): no eixo, a seta caía em cima do logo do 4º app.
+        maisAbaixo.translationX = dp(COLUNA + SETA_DX - SETA_L / 2f)
         maisAbaixo.translationY = dp(SETA_Y)
         detalhe = TextView(ctx).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
@@ -626,6 +633,11 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
 
     private fun onda(distancia: Int) = if (semOnda) 0L else minOf(distancia * ONDA_MS, ONDA_MAX_MS)
 
+    override fun onWindowFocusChanged(temFoco: Boolean) {
+        super.onWindowFocusChanged(temFoco)
+        posicionar(animar = false)   // o ponto do escolhido some com um menu por cima e volta quando ele fecha
+    }
+
     /** Põe cada view no lugar do estado atual (animado ou de uma vez). */
     private fun posicionar(animar: Boolean) {
         val f = estado.cat
@@ -670,11 +682,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                     rel < 0 -> LINHA - VAO_CIMA + (rel + 1) * PASSO_COLUNA
                     else -> LINHA + VAO_ESCOLHIDO + extra + (rel - 1) * PASSO_COLUNA
                 }
-                val alfa = if (rel == 0) (if (focada) 1f else 0.75f) else ALFA_COLUNA[rel] ?: 0f
+                val alfa = if (rel == 0) (if (focada) 1f else ALFA_ESCOLHIDO_FORA) else ALFA_COLUNA[rel] ?: 0f
                 val escala = if (rel == 0) 1f else ESCALA_PEQUENO
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
                 mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
-                iv.traco.alpha = if (rel == 0 && focada) 1f else 0f
+                // Sem o ponto quando outra janela (menu do app, lista) está por cima: um foco só na tela (crítica 19/11/2026).
+                iv.traco.alpha = if (rel == 0 && focada && hasWindowFocus()) 1f else 0f
                 // Ícones "Linha" (IconeCruz): o escolhido toca a animação dele (a cor é de cada ícone, sempre).
                 val aceso = rel == 0 && focada
                 if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso

@@ -36,7 +36,7 @@
     <string name="ra_generos">الأنواع</string>
     <string name="ra_paises">بلد آخر</string>
     <string name="ra_paises_det">البلدان ذات المحطات الأكثر</string>
-    <string name="ra_perto">بالقرب منك</string>
+    <string name="ra_perto">بالقرب</string>
     <string name="ra_mais_ouvidas">الأكثر استماعًا في %s</string>
     <string name="ra_mundo">الأكثر استماعًا في العالم</string>
     <string name="ra_resultado">بحث: %s</string>

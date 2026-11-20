@@ -102,7 +102,7 @@ class DiagnosticoActivity : Activity() {
         refazer.requestFocus()
 
         secao(getString(R.string.cfg_sec_rede))
-        val resumo = info(getString(R.string.diag_resumo), getString(R.string.diag_verificando)).also { adicionar(it) }
+        // Sem a linha "Resumo" (crítica de design 19/11/2026): repetia a "Em uma frase" logo embaixo; fica só a frase.
         // "A internet caiu? Em uma frase" (InternetEmUmaFrase): junta histórico, roteador, DNS e teste HTTP. Thread
         // própria para não esperar na fila das 4 verificações acima.
         // A frase com a causa e os sinais passa de 3 linhas quando algo falha (DNS, provedor): cortada, perdia a causa.
@@ -121,8 +121,7 @@ class DiagnosticoActivity : Activity() {
         val dns = info("DNS", getString(R.string.diag_verificando)).also { adicionar(it) }
         val vpn = info("VPN", getString(R.string.diag_verificando)).also { adicionar(it) }
 
-        // Cada verificação numa thread; quando as quatro chegam, calcula o resumo.
-        val resultados = arrayOfNulls<Diagnostico.Item>(4)
+        // Cada verificação numa thread; cada linha aparece quando a sua chega.
         fun rodar(i: Int, linha: TextView, f: () -> Diagnostico.Item) = trabalho.execute {
             val r = try { f() } catch (e: Exception) { Diagnostico.Item(linha.text.toString().substringBefore('\n'), "erro: ${e.javaClass.simpleName}", 2) }
             ui.post {
@@ -132,9 +131,6 @@ class DiagnosticoActivity : Activity() {
                 if (i == 0 && r.nivel == 2) virarAcao(linha) {
                     try { startActivity(android.content.Intent(android.provider.Settings.ACTION_WIFI_SETTINGS)) } catch (e: Exception) {}
                 }
-                resultados[i] = r
-                if (resultados.all { it != null })
-                    resumo.mostrar(Diagnostico.veredito(resultados[0]!!, resultados[1]!!, resultados[2]!!, resultados[3]!!))
             }
         }
         rodar(0, wifi) { Diagnostico.wifi(this) }

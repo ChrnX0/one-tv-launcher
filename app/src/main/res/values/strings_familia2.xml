@@ -40,7 +40,7 @@
     <string name="ra_generos">Genres</string>
     <string name="ra_paises">Other country</string>
     <string name="ra_paises_det">The countries with the most stations</string>
-    <string name="ra_perto">Near you</string>
+    <string name="ra_perto">Nearby</string>
     <string name="ra_mais_ouvidas">Most listened in %s</string>
     <string name="ra_mundo">Most listened in the world</string>
     <string name="ra_resultado">Search: %s</string>

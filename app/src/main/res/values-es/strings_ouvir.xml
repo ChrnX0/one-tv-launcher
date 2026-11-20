@@ -6,7 +6,7 @@
     <string name="ra_parar_det_antigo">Salir de esta pantalla también la detiene</string>
     <string name="ra_ajustes">Ajustes</string>
     <string name="ra_ao_sair">Al salir de esta pantalla</string>
-    <string name="ra_ao_sair_det">Si sigue sonando, ⏯ en el control la pausa desde cualquier pantalla</string>
+    <string name="ra_ao_sair_det">Si sigue sonando, ▶❙❙ en el control la pausa desde cualquier pantalla</string>
     <string name="ra_ao_sair_continua">sigue sonando</string>
     <string name="ra_ao_sair_para">se detiene</string>
     <string name="ouv_canal">Radio sonando</string>

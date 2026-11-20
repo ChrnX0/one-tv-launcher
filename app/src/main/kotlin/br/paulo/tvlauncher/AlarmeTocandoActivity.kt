@@ -137,7 +137,7 @@ class AlarmeTocandoActivity : Activity() {
         // fino; RelogioTela) e o nome do despertador embaixo, no tamanho de título (sistema de design, 12/11/2026).
         coluna.addView(Estilo.texto(this, Estilo.Papel.SECAO, getString(if (timer) R.string.at_timer else R.string.at_despertador)).apply {
             gravity = Gravity.CENTER
-            setTextColor(Estilo.ACENTO)
+            setTextColor(Estilo.TEXTO_2)   // rótulo, não marca: cinza claro (crítica de design 19/11/2026)
         })
         coluna.addView(RelogioTela(this, data = false).apply {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"

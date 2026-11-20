@@ -55,7 +55,7 @@ class PodcastsActivity : Activity() {
             definirTitulo(getString(R.string.pod_titulo))
             definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.ra_dica_ouvir),
                 getString(R.string.grv_dica_segurar) to getString(R.string.pod_dica_mais),
-                "⏪ ⏩" to getString(R.string.ouv_dica_pular))
+                "◀◀ ▶▶" to getString(R.string.ouv_dica_pular))
             aoSom = { s -> if (OuvirServico.instancia?.tocando != true) SonsCruz.tocar(this@PodcastsActivity, s, CruzLogica.Categoria.OUVIR) }
         }
         setContentView(FrameLayout(this).apply {

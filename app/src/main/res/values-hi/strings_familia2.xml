@@ -36,7 +36,7 @@
     <string name="ra_generos">शैलियाँ</string>
     <string name="ra_paises">दूसरा देश</string>
     <string name="ra_paises_det">सबसे ज़्यादा स्टेशनों वाले देश</string>
-    <string name="ra_perto">आपके पास</string>
+    <string name="ra_perto">पास में</string>
     <string name="ra_mais_ouvidas">%s में सबसे ज़्यादा सुने गए</string>
     <string name="ra_mundo">दुनिया में सबसे ज़्यादा सुने गए</string>
     <string name="ra_resultado">खोज: %s</string>

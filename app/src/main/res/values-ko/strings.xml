@@ -433,7 +433,7 @@
     <string name="player_ao_vivo">실시간</string>
     <string name="player_a_seguir">다음: %1$s</string>
     <string name="player_teclas">▲ ▼ 채널 · OK 채널 목록 · OK 2초 길게: 즐겨찾기 · ◀ 이전 채널 · ▶▶ 옵션 · 뒤로 나가기</string>
-    <string name="player_teclas_pausa">⏯ 또는 OK 이어 보기 · ▶ 옵션(실시간으로 돌아가기) · ▲ ▼ 채널 · 뒤로 나가기</string>
+    <string name="player_teclas_pausa">▶❙❙ 또는 OK 이어 보기 · ▶ 옵션(실시간으로 돌아가기) · ▲ ▼ 채널 · 뒤로 나가기</string>
     <string name="player_cat_busca">검색: %1$s</string>
     <string name="player_acao_buscar">검색</string>
     <string name="player_acao_filtros">필터</string>
@@ -554,8 +554,8 @@
     <string name="home_card_filmes">영화</string>
     <string name="home_destaque_series">내 목록의 시리즈 · 보던 곳부터 이어서</string>
     <string name="home_destaque_filmes">내 목록의 영화 · 보던 곳부터 이어서</string>
-    <string name="home_card_rede">네트워크</string>
-    <string name="home_destaque_rede">홈 네트워크의 동영상, 음악, 사진</string>
+    <string name="home_card_rede">컴퓨터에서</string>
+    <string name="home_destaque_rede">내 동영상, 음악, 사진</string>
     <string name="fmt_data_dia">EEEE</string>
     <string name="fmt_data_mes">M월 d일</string>
     <string name="home_busca">검색</string>
@@ -564,7 +564,7 @@
     <string name="home_dest_filme_ultimo">영화 · 마지막으로 연 영화</string>
     <string name="home_dest_serie">시리즈 · 현재 %1$s</string>
     <string name="home_dest_tv">TV · 채널 %1$d</string>
-    <string name="rede_titulo">네트워크</string>
+    <string name="rede_titulo">컴퓨터에서</string>
     <string name="rede_procurando">네트워크에서 미디어 서버를 찾는 중…</string>
     <string name="rede_nenhum">지금 켜진 미디어 서버가 없습니다. 아래에서 추가하세요. Plex와 Jellyfin은 계정을 사용하고, PC나 NAS 폴더는 주소를 사용합니다.</string>
     <string name="rede_secao_seus">내 서버</string>

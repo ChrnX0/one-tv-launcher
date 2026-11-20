@@ -281,4 +281,8 @@
     </plurals>
     <string name="vod_vazio_texto">映画とシリーズはテレビのリストから読み込まれます。設定の「アカウント」でリストを追加してください。</string>
     <string name="vod_adicionar_lista">リストを追加</string>
+    <string name="uso_recomendado">おすすめ</string>
+    <string name="aut_nenhuma_acao">何もしない</string>
+    <string name="mtv_fila_pronto">アプリが戻りました</string>
+    <string name="mtv_ir_inicio">ホーム画面へ</string>
 </resources>

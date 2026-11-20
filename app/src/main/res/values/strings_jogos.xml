@@ -57,7 +57,7 @@
     <!-- Sketch A "Console" (14/11/2026): focused game spotlight + recently played row. -->
     <string name="jogos_seus">Your games</string>
     <string name="jogos_mais_jogos">More games</string>
-    <string name="jogos_mais_opcoes">More options</string>
+    <string name="jogos_mais_opcoes">More</string>
     <string name="jogos_por_tipo">By type</string>
     <string name="jogos_jogar">Play</string>
     <string name="jogos_ligar_pc_jogar">Turn on the PC and play</string>

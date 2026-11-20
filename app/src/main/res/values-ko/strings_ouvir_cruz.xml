@@ -11,7 +11,7 @@
     <string name="ouv_favoritar_det">즐겨찾기는 리모컨 1~9 버튼으로도 재생됩니다</string>
     <string name="ouv_tecla">리모컨 %d 버튼</string>
     <string name="ouv_ao_sair">화면을 나갈 때</string>
-    <string name="ouv_ao_sair_continua">홈 화면에서도 계속 재생\n리모컨 ⏯ 로 어느 화면에서나 일시정지</string>
+    <string name="ouv_ao_sair_continua">홈 화면에서도 계속 재생\n리모컨 ▶❙❙ 로 어느 화면에서나 일시정지</string>
     <string name="ouv_ao_sair_para">이 화면을 나가면 멈춥니다</string>
     <string name="ouv_recentes">최근</string>
     <string name="ouv_sem_favoritas">아직 즐겨찾기가 없습니다</string>
@@ -23,9 +23,9 @@
     <string name="ouv_ao_vivo">라이브</string>
     <string name="ouv_dica_pular">건너뛰기</string>
     <string name="ouv_voltar">15초 뒤로</string>
-    <string name="ouv_voltar_det">리모컨 ⏪ 도 가능</string>
+    <string name="ouv_voltar_det">리모컨 ◀◀ 도 가능</string>
     <string name="ouv_avancar">30초 앞으로</string>
-    <string name="ouv_avancar_det">리모컨 ⏩ 도 가능</string>
+    <string name="ouv_avancar_det">리모컨 ▶▶ 도 가능</string>
     <string name="ouv_velocidade_det">%s · 목소리 높이는 그대로</string>
     <string name="ouv_parar_pod_det">멈춘 위치가 저장됩니다</string>
     <string name="ouv_seguindo">팔로우 중</string>
