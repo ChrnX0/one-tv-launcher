@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Temas e fundos",
-      "Escuro, com a arte do que está em foco. Galeria, com um quadro do Met por dia. Céu, com satélite e mapa. Ou um fundo seu, foto ou vídeo.",
+      "Escuro, com a arte do que está em foco. Galeria, com um quadro do Met por dia. Céu, com satélite e mapa. Ou um fundo seu, foto ou vídeo. Aceita também fundos de plugin, como as imagens aéreas do Overflight.",
       "Escuro, Galeria e Céu no Básico; os outros no Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Os cartões aparecem no fim do Assistir."
     ],
     "network-library": [
-      "Na rede",
+      "Do computador",
       "Vídeos, músicas e fotos do Plex, Jellyfin, Emby, pastas do PC ou do NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP e pendrive.",
       "Os servidores ligados e o pendrive aparecem sozinhos; os outros entram em Adicionar."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Fichas completas",
-      "Pôster, nota, elenco, trailer, classificação e a coleção do filme numa ficha bonita, com letra grande.",
+      "Pôster, nota, elenco, trailer, classificação e a coleção do filme numa ficha bonita, com letra grande. Com “Quem é esse ator?”: foto, personagem e outros trabalhos.",
       "OK num filme ou série."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Jogar no PC do quarto",
-      "A TV acorda o computador pela rede, espera ele responder e abre o Moonlight ou o Steam Link.",
+      "A TV acorda o computador pela rede, espera ele responder e abre o Moonlight ou o Steam Link. Acordar o PC pela rede também funciona fora do Jogar, num atalho da tela inicial.",
       "Guarde o computador uma vez no painel."
     ],
     "network-test": [

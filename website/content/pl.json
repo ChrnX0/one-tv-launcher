@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Motywy i tła",
-      "Ciemny, z grafiką tego, co zaznaczone. Galeria, z obrazem z Met każdego dnia. Niebo, z satelitą i mapą. Albo własne tło, zdjęcie lub wideo.",
+      "Ciemny, z grafiką tego, co zaznaczone. Galeria, z obrazem z Met każdego dnia. Niebo, z satelitą i mapą. Albo własne tło, zdjęcie lub wideo. Obsługuje też tła z wtyczek, np. ujęcia z lotu ptaka z Overflight.",
       "Ciemny, Galeria i Niebo w Basic; pozostałe w Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Karty pojawiają się na końcu Oglądaj."
     ],
     "network-library": [
-      "W sieci",
+      "Z komputera",
       "Wideo, muzyka i zdjęcia z Plex, Jellyfin, Emby, folderów PC lub NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Dysku Google, UPnP i pendrive'ów.",
       "Włączone serwery i pendrive'y pojawiają się same; resztę dodasz w Dodaj."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Pełne strony filmów",
-      "Plakat, ocena, obsada, zwiastun, kategoria wiekowa i kolekcja filmu na pięknej stronie, dużymi literami.",
+      "Plakat, ocena, obsada, zwiastun, kategoria wiekowa i kolekcja filmu na pięknej stronie, dużymi literami. Z „Kim jest ten aktor?”: zdjęcie, postać i inne role.",
       "OK na filmie lub serialu."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Graj na PC piętro wyżej",
-      "Telewizor budzi komputer przez sieć, czeka na odpowiedź i otwiera Moonlight lub Steam Link.",
+      "Telewizor budzi komputer przez sieć, czeka na odpowiedź i otwiera Moonlight lub Steam Link. Budzenie komputera przez sieć działa też poza Grami, ze skrótu na ekranie głównym.",
       "Zapisz komputer raz w panelu WWW."
     ],
     "network-test": [

@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Designs und Hintergründe",
-      "Dunkel, mit dem Bild des Fokus. Galerie, mit einem Gemälde aus dem Met pro Tag. Himmel, mit Satellit und Karte. Oder dein eigener Hintergrund, Foto oder Video.",
+      "Dunkel, mit dem Bild des Fokus. Galerie, mit einem Gemälde aus dem Met pro Tag. Himmel, mit Satellit und Karte. Oder dein eigener Hintergrund, Foto oder Video. Auch Plugin-Hintergründe gehen, etwa die Luftaufnahmen von Overflight.",
       "Dunkel, Galerie und Himmel in Basis; die übrigen in Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Karten erscheinen am Ende von Ansehen."
     ],
     "network-library": [
-      "Im Netzwerk",
+      "Vom Computer",
       "Videos, Musik und Fotos von Plex, Jellyfin, Emby, PC- oder NAS-Ordnern (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP und USB-Sticks.",
       "Laufende Server und USB-Sticks erscheinen von selbst; der Rest über Hinzufügen."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Vollständige Filmseiten",
-      "Poster, Bewertung, Besetzung, Trailer, Altersfreigabe und die Filmreihe auf einer schönen Seite in großer Schrift.",
+      "Poster, Bewertung, Besetzung, Trailer, Altersfreigabe und die Filmreihe auf einer schönen Seite in großer Schrift. Mit „Wer ist dieser Schauspieler?“: Foto, Rolle und weitere Werke.",
       "OK auf einem Film oder einer Serie."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Am PC oben spielen",
-      "Der Fernseher weckt den Computer übers Netzwerk, wartet auf Antwort und öffnet Moonlight oder Steam Link.",
+      "Der Fernseher weckt den Computer übers Netzwerk, wartet auf Antwort und öffnet Moonlight oder Steam Link. Den PC über das Netzwerk wecken geht auch außerhalb von Spielen, per Verknüpfung auf dem Startbildschirm.",
       "Den Computer einmal im Panel speichern."
     ],
     "network-test": [

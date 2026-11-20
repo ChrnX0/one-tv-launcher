@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Temalar ve arka planlar",
-      "Koyu, odaktaki şeyin görseliyle. Galeri, her gün The Met'ten bir tabloyla. Gökyüzü, uydu ve haritayla. Ya da kendi arka planınız, fotoğraf veya video.",
+      "Koyu, odaktaki şeyin görseliyle. Galeri, her gün The Met'ten bir tabloyla. Gökyüzü, uydu ve haritayla. Ya da kendi arka planınız, fotoğraf veya video. Overflight’ın havadan çekimleri gibi eklenti arka planları da olur.",
       "Koyu, Galeri ve Gökyüzü Basic'te; diğerleri Pro'da."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Kartlar İzle'nin sonunda görünür."
     ],
     "network-library": [
-      "Ağda",
+      "Bilgisayardan",
       "Plex, Jellyfin, Emby, PC veya NAS klasörleri (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP ve USB belleklerden video, müzik ve fotoğraf.",
       "Açık sunucular ve USB bellekler kendiliğinden görünür; gerisi Ekle'den."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Tam film sayfaları",
-      "Afiş, puan, oyuncular, fragman, yaş sınırı ve filmin serisi güzel bir sayfada, büyük yazıyla.",
+      "Afiş, puan, oyuncular, fragman, yaş sınırı ve filmin serisi güzel bir sayfada, büyük yazıyla. “Bu oyuncu kim?” ile: fotoğraf, karakter ve diğer işleri.",
       "Bir film veya dizide OK."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Üst kattaki PC'de oynayın",
-      "Televizyon bilgisayarı ağ üzerinden uyandırır, yanıt vermesini bekler ve Moonlight ya da Steam Link'i açar.",
+      "Televizyon bilgisayarı ağ üzerinden uyandırır, yanıt vermesini bekler ve Moonlight ya da Steam Link'i açar. Bilgisayarı ağdan uyandırmak Oyna dışında da çalışır, ana ekrandaki bir kısayolla.",
       "Bilgisayarı web panelinde bir kez kaydedin."
     ],
     "network-test": [

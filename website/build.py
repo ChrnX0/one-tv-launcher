@@ -17,9 +17,11 @@ import html
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "home"))
 OUT = ROOT.parent / "site"
 # SOFALY_PREVIEW=<folder>: build a copy with explicit index.html links (for hosts that don't serve folder indexes).
 PREVIEW = os.environ.get("SOFALY_PREVIEW")
@@ -619,7 +621,25 @@ def page_developers(L):
 """ + footer(L))
 
 
-BUILDERS = {"index": page_index, "features": page_features, "plans": page_plans, "developers": page_developers}
+def redirect(L, anchor):
+    """The features and developers pages became parts of the home page (20/11/2026); old links land on the right part."""
+    target = L.url("index") + "#" + anchor
+    return f"""<!doctype html>
+<html lang="{esc(L.d['lang'])}"><head><meta charset="utf-8"><title>Sofaly</title>
+<meta name="robots" content="noindex"><link rel="canonical" href="{L.abs_url('index')}#{anchor}">
+<meta http-equiv="refresh" content="0; url={target}"></head>
+<body><p><a href="{target}">Sofaly</a></p><script>location.replace({json.dumps(target)} + "");</script></body></html>
+"""
+
+
+def page_home(L):
+    import build_home
+    build_home.B = sys.modules[__name__]
+    return build_home.page_home(L)
+
+
+BUILDERS = {"index": page_home, "features": lambda L: redirect(L, "mundos"), "plans": page_plans,
+            "developers": lambda L: redirect(L, "dev")}
 
 
 def check(code, data, features):
@@ -646,7 +666,10 @@ def main():
     assets = OUT / "assets"
     assets.mkdir(parents=True, exist_ok=True)
     for f in (ROOT / "assets").iterdir():
-        shutil.copy2(f, assets / f.name)
+        if f.is_dir():
+            shutil.copytree(f, assets / f.name, dirs_exist_ok=True)
+        else:
+            shutil.copy2(f, assets / f.name)
     for code, data in langs.items():
         L = Lang(code, data, langs)
         folder = OUT if code == DEFAULT else OUT / code

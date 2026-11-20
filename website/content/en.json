@@ -312,7 +312,7 @@
     ],
     "themes": [
       "Themes and backgrounds",
-      "Dark, with the art of what's in focus. Gallery, with a painting from The Met every day. Sky, with satellite and map. Or a background of your own, photo or video.",
+      "Dark, with the art of what's in focus. Gallery, with a painting from The Met every day. Sky, with satellite and map. Or a background of your own, photo or video. Plugin backgrounds work too, like the aerial footage from Overflight.",
       "Dark, Gallery and Sky in Basic; the others in Pro."
     ],
     "icons": [
@@ -356,7 +356,7 @@
       "Cards show at the end of Watch."
     ],
     "network-library": [
-      "On the network",
+      "From computer",
       "Videos, music and photos from Plex, Jellyfin, Emby, PC or NAS folders (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP and USB drives.",
       "Servers that are on and USB drives show up by themselves; the rest go in Add."
     ],
@@ -392,7 +392,7 @@
     ],
     "movie-pages": [
       "Full movie pages",
-      "Poster, rating, cast, trailer, age rating and the movie's collection on a beautiful page, in large text.",
+      "Poster, rating, cast, trailer, age rating and the movie's collection on a beautiful page, in large text. With “Who is that actor?”: photo, character and other work.",
       "OK on a movie or series."
     ],
     "lists": [
@@ -437,7 +437,7 @@
     ],
     "pc-games": [
       "Play on the PC upstairs",
-      "The TV wakes the computer over the network, waits for it to answer and opens Moonlight or Steam Link.",
+      "The TV wakes the computer over the network, waits for it to answer and opens Moonlight or Steam Link. Waking the PC over the network also works outside Play, from a home screen shortcut.",
       "Save the computer once in the web panel."
     ],
     "network-test": [
