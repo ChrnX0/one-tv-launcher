@@ -150,6 +150,11 @@
     <string name="home_remover">外す</string>
     <string name="home_mostrar">ホーム画面に表示</string>
     <string name="home_ocultar">ホーム画面から隠す</string>
+    <string name="home_sob_demanda">使わないときは停止する</string>
+    <string name="home_sob_demanda_tirar">停止をやめる</string>
+    <string name="sob_demanda_ligado">停止しました。ここに残ります。OKで再開して開き、閉じて2分後にまた停止します。</string>
+    <string name="sob_demanda_desligado">停止を解除しました。前と同じように使えます。</string>
+    <string name="sob_demanda_falhou">今は変更できませんでした。少ししてからもう一度お試しください。</string>
     <string name="home_desinstalar_app">%1$s をアンインストール</string>
     <string name="home_desinstalar">アンインストール</string>
     <string name="home_app_sistema">（システムアプリ）</string>

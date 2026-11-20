@@ -69,6 +69,7 @@ declare -A FONTES=(
   [ObserverMorningTest]="ObserverMorning ObserverCore"
   [ObserverPackagesTest]="ObserverPackages FichasComunidade"
   [ObserverTrialTest]="ObserverTrial"
+  [OnDemandTest]="OnDemand"
 )
 
 falhou=0

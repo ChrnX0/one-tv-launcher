@@ -150,6 +150,11 @@
     <string name="home_remover">हटाएँ</string>
     <string name="home_mostrar">होम स्क्रीन पर दिखाएँ</string>
     <string name="home_ocultar">होम स्क्रीन से छिपाएँ</string>
+    <string name="home_sob_demanda">इस्तेमाल न होने पर फ़्रीज़ करें</string>
+    <string name="home_sob_demanda_tirar">फ़्रीज़ करना बंद करें</string>
+    <string name="sob_demanda_ligado">फ़्रीज़ हो गया। यह यहीं रहेगा: OK दबाने पर खुलेगा, और बाहर निकलने के 2 मिनट बाद फिर फ़्रीज़ होगा।</string>
+    <string name="sob_demanda_desligado">अनफ़्रीज़ हो गया। पहले जैसा काम करेगा।</string>
+    <string name="sob_demanda_falhou">अभी बदलाव नहीं हो सका। थोड़ी देर में फिर कोशिश करें।</string>
     <string name="home_desinstalar_app">%1$s अनइंस्टॉल करें</string>
     <string name="home_desinstalar">अनइंस्टॉल करें</string>
     <string name="home_app_sistema"> (सिस्टम ऐप)</string>

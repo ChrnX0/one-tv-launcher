@@ -150,6 +150,11 @@
     <string name="home_remover">Убрать</string>
     <string name="home_mostrar">Показать на главном</string>
     <string name="home_ocultar">Скрыть с главного</string>
+    <string name="home_sob_demanda">Замораживать, когда не используется</string>
+    <string name="home_sob_demanda_tirar">Больше не замораживать</string>
+    <string name="sob_demanda_ligado">Заморожено. Остаётся здесь: OK размораживает и открывает, а через 2 минуты после выхода снова замораживает.</string>
+    <string name="sob_demanda_desligado">Разморожено. Работает как раньше.</string>
+    <string name="sob_demanda_falhou">Сейчас не удалось изменить. Попробуйте чуть позже.</string>
     <string name="home_desinstalar_app">Удалить %1$s</string>
     <string name="home_desinstalar">Удалить</string>
     <string name="home_app_sistema"> (системное приложение)</string>

@@ -150,6 +150,11 @@
     <string name="home_remover">Kaldır</string>
     <string name="home_mostrar">Ana ekranda göster</string>
     <string name="home_ocultar">Ana ekrandan gizle</string>
+    <string name="home_sob_demanda">Kullanılmadığında dondur</string>
+    <string name="home_sob_demanda_tirar">Dondurmayı bırak</string>
+    <string name="sob_demanda_ligado">Donduruldu. Burada kalır: OK çözer ve açar, çıktıktan 2 dakika sonra yeniden donar.</string>
+    <string name="sob_demanda_desligado">Çözüldü. Eskisi gibi çalışır.</string>
+    <string name="sob_demanda_falhou">Şu an değiştirilemedi. Birazdan tekrar deneyin.</string>
     <string name="home_desinstalar_app">%1$s uygulamasını kaldır</string>
     <string name="home_desinstalar">Kaldır</string>
     <string name="home_app_sistema"> (sistem uygulaması)</string>

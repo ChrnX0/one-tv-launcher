@@ -150,6 +150,11 @@
     <string name="home_remover">Togli</string>
     <string name="home_mostrar">Mostra nella Home</string>
     <string name="home_ocultar">Nascondi dalla Home</string>
+    <string name="home_sob_demanda">Congela quando non la usi</string>
+    <string name="home_sob_demanda_tirar">Non congelare più</string>
+    <string name="sob_demanda_ligado">Congelata. Resta qui: OK la scongela e la apre, e si ricongela 2 minuti dopo che esci.</string>
+    <string name="sob_demanda_desligado">Scongelata. Funziona come prima.</string>
+    <string name="sob_demanda_falhou">Impossibile cambiare ora. Riprova tra poco.</string>
     <string name="home_desinstalar_app">Disinstalla %1$s</string>
     <string name="home_desinstalar">Disinstalla</string>
     <string name="home_app_sistema"> (app di sistema)</string>

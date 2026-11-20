@@ -1251,6 +1251,16 @@ class MainActivity : Activity() {
                 Item(pkg, ri.loadLabel(pm).toString(), icone).also { cacheApps[pkg] = chave to it }
             }
         }
+        // Congelados sob demanda (OnDemandTv): congelado some da consulta acima; entra com o nome e o ícone guardados.
+        // App de sistema marcado (ficha "seguro") entra também, mesmo fora de SEMPRE_MOSTRAR: foi o dono que pediu.
+        for (e in OnDemandTv.entries(this)) {
+            if (e.pkg in itens || e.pkg == packageName) continue
+            val chave = "sob-demanda|" + pacoteIcones
+            itens[e.pkg] = cacheApps[e.pkg]?.takeIf { it.first == chave }?.second ?: run {
+                val original = OnDemandTv.icon(this, e.pkg) ?: pm.defaultActivityIcon
+                Item(e.pkg, e.label, DesenhoHome.iconeRedondo(resources, original)).also { cacheApps[e.pkg] = chave to it }
+            }
+        }
         // Entradas HDMI/AV (EntradasTv, degrau 1): só em TV com entrada; chave "entrada:<id>", ícone redondo como os apps.
         for (e in EntradasTv.listar(this)) itens[e.chave] = cacheApps[e.chave]?.second ?: Item(e.chave, e.nome,
             DesenhoHome.iconeRedondo(resources, e.icone ?: IconeApp(IconeApp.Tipo.TV))).also { cacheApps[e.chave] = "" to it }
@@ -2590,8 +2600,11 @@ class MainActivity : Activity() {
         val opcoes = mutableListOf<Opcao>()
         if (pastaToken == TOKEN_OCULTOS || (pastaToken == null && entrada is Entrada.App)) {
             titulo = nomeDe(token) + if (PainelApps.eSistema(this, token)) getString(R.string.home_app_sistema) else ""
-            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token))
+            val sobDemanda = when { OnDemandTv.marked(this, token) -> true; OnDemandTv.eligible(this, token) -> false; else -> null }
+            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda)
             for (a in acoes) opcoes += when (a) {
+                MenuApp.Acao.SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda)) { mudarSobDemanda(token, true) }
+                MenuApp.Acao.TIRAR_SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda_tirar)) { mudarSobDemanda(token, false) }
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
                 MenuApp.Acao.MOVER -> Opcao(getString(R.string.home_mover)) { iniciarMover(token, porSegurar = false) }
                 MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null); avisarOculto() }
@@ -4149,6 +4162,23 @@ class MainActivity : Activity() {
     }
 
     /** O card "Ocultos" saiu da HOME (14/11/2026): ao ocultar, diz onde mostrar de volta. */
+    /** Congelar sob demanda (OnDemandTv): congela fora da tela (sem dono o shell leva segundos) e redesenha a lista. */
+    private fun mudarSobDemanda(pacote: String, ligar: Boolean) {
+        val nome = nomeDe(pacote)
+        Fundo.rodar("sob-demanda-menu") {
+            val motivo = if (ligar) OnDemandTv.mark(this, pacote) else OnDemandTv.unmark(this, pacote)
+            ui.post {
+                if (isDestroyed) return@post
+                AvisoTv.rapido(this, nome, when {
+                    motivo != null -> getString(R.string.sob_demanda_falhou)
+                    ligar -> getString(R.string.sob_demanda_ligado)
+                    else -> getString(R.string.sob_demanda_desligado)
+                })
+                atualizarAposMudanca(pacote)
+            }
+        }
+    }
+
     private fun avisarOculto() = AvisoTv.rapido(this, getString(R.string.oc_aviso_titulo), getString(R.string.oc_aviso))
 
     private fun restaurarOrdemAutomatica() {
@@ -4175,6 +4205,8 @@ class MainActivity : Activity() {
 
     private fun abrir(pacote: String) {
         if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
+        // Congelado sob demanda (OnDemandTv): descongela, espera a tela dele e abre; volta a congelar depois de usado.
+        if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) { if (!todosAbertos) cruz?.naoAbriu() }; contarAbertura(pacote); return }
         val intent = packageManager.getLeanbackLaunchIntentForPackage(pacote)
             ?: packageManager.getLaunchIntentForPackage(pacote)
             ?: run { if (!todosAbertos) cruz?.naoAbriu(); return }   // sem tela para abrir: a cruz avisa, não falha calada

@@ -150,6 +150,11 @@
     <string name="home_remover">Quitar</string>
     <string name="home_mostrar">Mostrar en el inicio</string>
     <string name="home_ocultar">Ocultar del inicio</string>
+    <string name="home_sob_demanda">Congelar cuando no se use</string>
+    <string name="home_sob_demanda_tirar">Dejar de congelar</string>
+    <string name="sob_demanda_ligado">Congelada. Sigue aquí: OK la descongela y la abre, y se vuelve a congelar 2 minutos después de salir.</string>
+    <string name="sob_demanda_desligado">Descongelada. Funciona como antes.</string>
+    <string name="sob_demanda_falhou">No se pudo cambiar ahora. Inténtalo de nuevo en un momento.</string>
     <string name="home_desinstalar_app">Desinstalar %1$s</string>
     <string name="home_desinstalar">Desinstalar</string>
     <string name="home_app_sistema"> (app del sistema)</string>
