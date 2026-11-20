@@ -60,7 +60,8 @@ object CortinaVideo {
         trilho.addView(corre, FrameLayout.LayoutParams(dp(72), -1))
         bloco.addView(trilho, LinearLayout.LayoutParams(dp(280), dp(4)).apply { topMargin = dp(20) })
         raiz.addView(bloco, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM or Gravity.START).apply {
-            setMargins(dp(Estilo.MARGEM_LATERAL), 0, dp(Estilo.MARGEM_LATERAL), dp(72))
+            // Acima da barra do player (que aparece junto ao abrir e ocupa ~170 dp embaixo): conferido na Sala 20/11.
+            setMargins(dp(Estilo.MARGEM_LATERAL), 0, dp(Estilo.MARGEM_LATERAL), dp(210))
         })
         ObjectAnimator.ofFloat(corre, View.TRANSLATION_X, -dp(72).toFloat(), dp(280).toFloat()).apply {
             duration = 1_100; repeatCount = ValueAnimator.INFINITE; interpolator = LinearInterpolator()
