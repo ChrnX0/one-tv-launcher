@@ -144,4 +144,13 @@ class ObserverCoreTest {
         assertEquals(listOf("90"), ObserverCore.argsFor(Kind.LOW_MEMORY, snap(Signal.MEMORY_AVAILABLE_MB to 90)))
         assertTrue(ObserverCore.argsFor(Kind.NO_INTERNET, snap(Signal.INTERNET to 0)).isEmpty())
     }
+
+    @Test fun recadoDeCongelamentoDesfeito() {
+        val n = ObserverCore.freezeUndoneNote(1000L, "Fila de impressão", "o Cast")
+        assertEquals(ObserverCore.Step.ACTED_FELT, n.step)
+        assertEquals(ObserverCore.State.DONE, n.state)
+        assertEquals("observer_freeze_undone_title", n.titleKey)
+        assertEquals(listOf("Fila de impressão", "o Cast"), n.args)
+        assertEquals(n, ObserverCore.readNotes(ObserverCore.enqueue(null, n, 1000L), 1000L).first())
+    }
 }

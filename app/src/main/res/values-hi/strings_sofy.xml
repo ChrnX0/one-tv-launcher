@@ -15,4 +15,11 @@
     <string name="observer_slow_home_text">%1$s%% फ़्रेम देर से आए।</string>
     <string name="observer_low_disk_title">स्टोरेज लगभग भर गई</string>
     <string name="observer_low_disk_text">सिर्फ़ %1$s MB बचा है। सेव करना विफल हो सकता है।</string>
+    <string name="observer_freeze_undone_title">मैंने फ़्रीज़ हटा दिया</string>
+    <string name="observer_freeze_undone_text">%1$s फ़्रीज़ था और %2$s काम करना बंद कर गया, इसलिए मैंने उसे अनफ़्रीज़ कर दिया।</string>
+    <string name="observer_check_voice">आवाज़ से खोज</string>
+    <string name="observer_check_play_store">Play Store</string>
+    <string name="observer_check_settings">सेटिंग</string>
+    <string name="observer_check_cast">Cast</string>
+    <string name="observer_check_internet">इंटरनेट</string>
 </resources>

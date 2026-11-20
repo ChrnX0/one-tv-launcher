@@ -15,4 +15,11 @@
     <string name="observer_slow_home_text">El %1$s%% de los cuadros llegó tarde.</string>
     <string name="observer_low_disk_title">Almacenamiento casi lleno</string>
     <string name="observer_low_disk_text">Quedan solo %1$s MB. Guardar puede fallar.</string>
+    <string name="observer_freeze_undone_title">Deshice una congelación</string>
+    <string name="observer_freeze_undone_text">%1$s estaba congelada y %2$s dejó de funcionar, así que la descongelé.</string>
+    <string name="observer_check_voice">la búsqueda por voz</string>
+    <string name="observer_check_play_store">Play Store</string>
+    <string name="observer_check_settings">Ajustes</string>
+    <string name="observer_check_cast">Cast</string>
+    <string name="observer_check_internet">internet</string>
 </resources>

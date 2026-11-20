@@ -15,4 +15,11 @@
     <string name="observer_slow_home_text">%1$s %% der Bilder kamen zu spät.</string>
     <string name="observer_low_disk_title">Speicherplatz fast voll</string>
     <string name="observer_low_disk_text">Nur noch %1$s MB. Speichern kann fehlschlagen.</string>
+    <string name="observer_freeze_undone_title">Einfrieren rückgängig gemacht</string>
+    <string name="observer_freeze_undone_text">%1$s war eingefroren und %2$s ging nicht mehr, deshalb habe ich es aufgetaut.</string>
+    <string name="observer_check_voice">die Sprachsuche</string>
+    <string name="observer_check_play_store">der Play Store</string>
+    <string name="observer_check_settings">die Einstellungen</string>
+    <string name="observer_check_cast">Cast</string>
+    <string name="observer_check_internet">das Internet</string>
 </resources>

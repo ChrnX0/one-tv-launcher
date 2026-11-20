@@ -66,7 +66,9 @@ object ObserverCore {
 
     enum class Kind { NO_INTERNET, SLOW_INTERNET, WEAK_WIFI, LOW_MEMORY, MEMORY_PRESSURE, SLOW_HOME, LOW_DISK,
         // Fase 2: dentro dos limites fixos, mas fora do normal DESTA casa nesta hora (ObserverBaseline). Só INFO: registro e diário.
-        UNUSUAL_LATENCY, UNUSUAL_MEMORY, UNUSUAL_WIFI, UNUSUAL_FRAMES }
+        UNUSUAL_LATENCY, UNUSUAL_MEMORY, UNUSUAL_WIFI, UNUSUAL_FRAMES,
+        // Fase 3: não é achado do juiz; é o recado de quando a prova desfez um congelamento que quebrou algo ([freezeUndoneNote]).
+        FREEZE_UNDONE }
 
     /** Abaixo disto o Android começa a fechar apps em segundo plano num aparelho de 2 GB (inferido; a fase 2 troca pela linha de base da casa). */
     const val LOW_MEMORY_MB = 150L
@@ -231,6 +233,17 @@ object ObserverCore {
     const val NOTES_MAX = 20
     const val NOTE_TTL_MS = 6 * 3_600_000L
 
+    /**
+     * Fase 3: a prova desfez sozinha um congelamento porque algo parou (combinado com a thread da Sofy, 20/11/2026).
+     * ACTED_FELT: a pessoa pode ter sentido (voz, loja, Cast pararam), então a Sofy pode aparecer por cima, feliz ("consertei").
+     * [args] = [nome do app, o que parou já em texto no idioma da TV].
+     */
+    fun freezeUndoneNote(at: Long, appLabel: String, brokeText: String): Note {
+        val base = "observer_freeze_undone"
+        return Note("FREEZE_UNDONE-$at", at, Kind.FREEZE_UNDONE, Severity.WARNING, Step.ACTED_FELT, State.DONE,
+            base + "_title", base + "_text", listOf(appLabel, brokeText), null, "freeze_undone", at + NOTE_TTL_MS)
+    }
+
     /** Fase 1: o Observador só observa, então todo recado é OBSERVED + DONE, sem desfazer. */
     fun noteFor(f: Finding, at: Long, args: List<String> = emptyList()): Note {
         val base = "observer_" + f.kind.name.lowercase()
@@ -248,6 +261,7 @@ object ObserverCore {
         Kind.MEMORY_PRESSURE -> Signal.MEMORY_PRESSURE
         Kind.SLOW_HOME, Kind.UNUSUAL_FRAMES -> Signal.SLOW_FRAMES_PCT
         Kind.LOW_DISK -> Signal.DISK_FREE_MB
+        Kind.FREEZE_UNDONE -> null
     }
 
     fun argsFor(kind: Kind, snapshot: Map<Signal, Reading>): List<String> {

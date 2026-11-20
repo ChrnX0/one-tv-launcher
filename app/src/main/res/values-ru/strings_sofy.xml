@@ -15,4 +15,11 @@
     <string name="observer_slow_home_text">%1$s%% кадров опоздали.</string>
     <string name="observer_low_disk_title">Хранилище почти заполнено</string>
     <string name="observer_low_disk_text">Осталось %1$s МБ. Сохранение может не пройти.</string>
+    <string name="observer_freeze_undone_title">Отменила заморозку</string>
+    <string name="observer_freeze_undone_text">%1$s было заморожено, и перестало работать: %2$s. Я его разморозила.</string>
+    <string name="observer_check_voice">голосовой поиск</string>
+    <string name="observer_check_play_store">Play Маркет</string>
+    <string name="observer_check_settings">настройки</string>
+    <string name="observer_check_cast">Cast</string>
+    <string name="observer_check_internet">интернет</string>
 </resources>
