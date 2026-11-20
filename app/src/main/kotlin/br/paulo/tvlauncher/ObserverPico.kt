@@ -96,7 +96,7 @@ class ObserverPico {
 
         /** Pesos de partida = a regra escrita: avisar o que é grave e persistente, sem repetir; agir com a casa parada. */
         fun priors(t: Task): DoubleArray = when (t) {
-            Task.WORTH_TELLING -> doubleArrayOf(-2.0, 1.6, 0.25, 0.8, 0.4, -1.2)
+            Task.WORTH_TELLING -> doubleArrayOf(-1.0, 2.2, 0.25, 0.8, 0.4, -1.2)   // WARNING novo sem mais nada = 77% (a regra avisa); INFO = 27%
             Task.ACT_NOW -> doubleArrayOf(-1.5, 1.2, 0.2, -2.0, -2.5, 0.6)
         }
 

@@ -17,6 +17,9 @@ class ObserverPicoTest {
         val p = ObserverPico()
         assertTrue(p.score(t, graveNova) > 0.7)
         assertTrue(p.score(t, leveRepetida) < 0.3)
+        // A regra de hoje avisa todo WARNING novo e não avisa INFO: o pico de partida concorda (Codex, #331).
+        assertTrue(p.score(t, doubleArrayOf(1.0, 0.0, 0.0, 0.0, 0.0)) >= ObserverPico.MIN_CONFIDENCE)
+        assertTrue(p.score(t, doubleArrayOf(0.0, 0.0, 1.0, 0.0, 0.0)) < 0.5)
         assertEquals(ObserverPico.FEATURES.getValue(t).size + 1, ObserverPico.priors(t).size)
         assertEquals(ObserverPico.FEATURES.getValue(Task.ACT_NOW).size + 1, ObserverPico.priors(Task.ACT_NOW).size)
     }
