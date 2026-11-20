@@ -68,6 +68,7 @@ declare -A FONTES=(
   [ObserverPicoTest]="ObserverPico ObserverCore ObserverBaseline"
   [ObserverMorningTest]="ObserverMorning ObserverCore"
   [ObserverPackagesTest]="ObserverPackages FichasComunidade"
+  [ObserverTrialTest]="ObserverTrial"
 )
 
 falhou=0

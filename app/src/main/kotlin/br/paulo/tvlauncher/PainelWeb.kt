@@ -1544,7 +1544,10 @@ object PainelWeb {
         if (!oculto && !sessoes.elevada(token)) return precisaPin()
         // Ocultar o que a ficha não diz "seguro" (app de sistema, essencial, sem informação) também pede o PIN (20/11/2026).
         if (oculto && !sessoes.elevada(token) && MenuApp.ocultarPedePin(PainelApps.risco(app, pacote) ?: "sem informação")) return precisaPin()
+        // Fase 3 do Observador: as conferências de ANTES; 10 min depois ele confere de novo e desfaz se algo parou.
+        val antes = if (oculto) runCatching { ObserverTv.beforeFreeze(app) }.getOrNull() else null
         val motivo = PainelApps.ocultar(app, pacote, oculto)
+        if (motivo == null && antes != null) runCatching { ObserverTv.startTrial(app, pacote, antes) }
         PainelArmazem.registrar(app, ip, (if (oculto) "ocultar " else "reexibir ") + pacote, motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
     }

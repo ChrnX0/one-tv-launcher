@@ -1420,6 +1420,9 @@ traduzirPainelCom({T:{
 "tela inicial diferente do normal":"ana ekran alışılmışın dışında",
 "a conexão até 1.1.1.1 não abriu":"1.1.1.1 bağlantısı açılmadı",
 "sonda da madrugada":"gece kontrolü",
+"congelado, em prova":"donduruldu, deneniyor",
+"congelado e conferido":"donduruldu ve kontrol edildi",
+"congelamento desfeito":"dondurma geri alındı",
 },P:[
 ["^latência\\ de\\ (\\d+)\\ ms\\ \\(limite\\ (\\d+)\\)$","gecikme $1 ms (sınır $2)"],
 ["^sinal\\ do\\ Wi-Fi\\ em\\ (-?\\d+)\\ dBm\\ \\(limite\\ (-?\\d+)\\)$","Wi-Fi sinyali $1 dBm (sınır $2)"],

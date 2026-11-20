@@ -1604,13 +1604,21 @@ async function carregarObservador() {
     const q = document.createElement('span'); q.className = 'quando';
     q.textContent = new Date(l.at).toLocaleString(document.documentElement.lang || 'pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
     const nome = document.createElement('strong');
-    nome.textContent = l.event === 'night' ? 'sonda da madrugada' : (ACHADOS_OBSERVADOR[l.kind] || l.kind);
+    nome.textContent = EVENTOS_OBSERVADOR[l.event] || ACHADOS_OBSERVADOR[l.kind] || l.kind;
     const porque = document.createElement('span'); porque.textContent = l.why;   // na sonda: a hora aprendida ("3h")
     linha.append(q, ' ', nome, ' ', porque);
     lista.appendChild(linha);
   }
   if (!lista.children.length) lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: 'Nada fora do normal nos últimos 7 dias.' }));
 }
+
+/** Linhas do registro que não são achados: a sonda da madrugada e a prova de congelamento (fase 3). */
+const EVENTOS_OBSERVADOR = {
+  night: 'sonda da madrugada',
+  trial_start: 'congelado, em prova',
+  trial_kept: 'congelado e conferido',
+  trial_undone: 'congelamento desfeito',
+};
 
 async function carregarSaude() {
   carregarErros();   // em paralelo: não espera a lista de memória

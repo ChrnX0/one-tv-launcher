@@ -61,6 +61,7 @@ object ObserverTv {
         }
         runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, ctx.filesDir.usableSpace / 1_048_576, agora) }
         runCatching { learnHabit(ctx, agora) }
+        if (trialsPending) Fundo.rodar("observer-trials") { runCatching { checkTrials(ctx) }.onFailure { Log.w(TAG, "provas: $it") } }
         // O último put passa pelo publish para acordar o juiz uma vez só por amostra.
         publish(ObserverCore.Signal.INTERNET, if (internet) 1 else 0)
     }
@@ -227,6 +228,84 @@ object ObserverTv {
         return ObserverPackages.inventory(lista, fichas, completo)
     }
 
+    // ---------------------------------------------------------------- prova de congelamento (fase 3)
+
+    @Volatile private var trialsPending = true   // até a 1ª leitura das prefs: pode haver prova de antes do reinício
+
+    /** Estado de um pacote: null = não existe nesta TV; true = instalado, visível e ligado; false = oculto ou congelado. */
+    private fun pkgOk(ctx: Context, pkg: String): Boolean? {
+        @Suppress("DEPRECATION")
+        val ai = try { ctx.packageManager.getApplicationInfo(pkg, android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS) }
+            catch (_: Exception) { return null }
+        if (ai.flags and android.content.pm.ApplicationInfo.FLAG_INSTALLED == 0) return null
+        return ai.enabled && !PrivilegioDO.estaOculto(ctx, pkg)
+    }
+
+    /** As conferências de agora. A que não se aplica nesta TV (sem Cast, por exemplo) fica fora do mapa. */
+    fun checks(ctx: Context): Map<ObserverTrial.Check, Boolean> {
+        val pm = ctx.packageManager
+        fun abre(i: android.content.Intent) = runCatching { pm.resolveActivity(i, 0) != null }.getOrDefault(false)
+        val m = LinkedHashMap<ObserverTrial.Check, Boolean>()
+        m[ObserverTrial.Check.VOICE] = abre(android.content.Intent(android.content.Intent.ACTION_ASSIST)) ||
+            abre(android.content.Intent("android.speech.action.WEB_SEARCH"))
+        pkgOk(ctx, "com.android.vending")?.let { v ->
+            m[ObserverTrial.Check.PLAY_STORE] = v && (pm.getLeanbackLaunchIntentForPackage("com.android.vending") ?: pm.getLaunchIntentForPackage("com.android.vending")) != null
+        }
+        m[ObserverTrial.Check.SETTINGS] = abre(android.content.Intent(android.provider.Settings.ACTION_SETTINGS))
+        pkgOk(ctx, "com.google.android.apps.mediashell")?.let { cast ->
+            // O Cast precisa do setupwraith (credenciais de fábrica, 06/11/2026); onde ele não existe, não conta.
+            m[ObserverTrial.Check.CAST] = cast && pkgOk(ctx, "com.google.android.tungsten.setupwraith") != false
+        }
+        val net = blackBox.snapshot()[ObserverCore.Signal.INTERNET]
+        if (net != null && System.currentTimeMillis() - net.at <= ObserverCore.STALE_MS) m[ObserverTrial.Check.INTERNET] = net.value == 1L
+        return m
+    }
+
+    /** O painel congelou [pkg]: guarda as conferências de antes. Chamar logo DEPOIS de congelar não serve: chamar antes. */
+    fun beforeFreeze(ctx: Context): Map<ObserverTrial.Check, Boolean> = checks(ctx.applicationContext)
+
+    @Synchronized fun startTrial(ctx: Context, pkg: String, before: Map<ObserverTrial.Check, Boolean>) {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val agora = System.currentTimeMillis()
+        val lista = ObserverTrial.add(ObserverTrial.fromJson(p.getString("trials", null)), ObserverTrial.start(pkg, agora, before))
+        val log = ObserverCore.appendLog(p.getString("log", null), ObserverCore.logEntry(agora, "trial_start", null, null, pkg, blackBox.snapshot()), agora)
+        p.edit().putString("trials", ObserverTrial.toJson(lista)).putString("log", log).apply()
+        trialsPending = true
+    }
+
+    /** Na batida da rede (5 min): decide as provas vencidas. Desfaz o congelamento que quebrou algo que funcionava. */
+    @Synchronized fun checkTrials(ctx: Context) {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val lista = ObserverTrial.fromJson(p.getString("trials", null))
+        if (lista.isEmpty()) { trialsPending = false; return }
+        val agora = System.currentTimeMillis()
+        val agoraChecks by lazy { checks(ctx) }
+        var log = p.getString("log", null)
+        val restantes = ArrayList<ObserverTrial.Trial>()
+        for (t in lista) {
+            if (agora - t.at > ObserverTrial.EXPIRE_MS) continue
+            // Alguém já descongelou à mão: a prova acabou.
+            if (pkgOk(ctx, t.pkg) != false) continue
+            when (val v = ObserverTrial.decide(t, agora, agoraChecks)) {
+                ObserverTrial.Verdict.Wait -> restantes += t
+                ObserverTrial.Verdict.Keep -> {
+                    log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "trial_kept", null, null, t.pkg, blackBox.snapshot()), agora)
+                    runCatching { Diario.anotar(ctx, "tv", "Observer: ${t.pkg}", "congelado e conferido") }
+                }
+                is ObserverTrial.Verdict.Undo -> {
+                    PrivilegioDO.ocultar(ctx, t.pkg, false)
+                    val voltou = pkgOk(ctx, t.pkg) == true
+                    log = ObserverCore.appendLog(log, ObserverCore.logEntry(agora, "trial_undone", null, null, t.pkg, blackBox.snapshot())
+                        .put("broke", org.json.JSONArray(v.broke.map { it.name })).put("restored", voltou), agora)
+                    runCatching { Diario.anotar(ctx, "tv", "Observer: ${t.pkg}", "congelamento desfeito: parou ${v.broke.joinToString { it.name }}") }
+                    Log.w(TAG, "prova: ${t.pkg} quebrou ${v.broke}; descongelado=$voltou")
+                }
+            }
+        }
+        p.edit().putString("trials", ObserverTrial.toJson(restantes)).putString("log", log).apply()
+        trialsPending = restantes.isNotEmpty()
+    }
+
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 
     /** Os recados que valem agora, do mais novo ao mais velho. Quem mostra escolhe a frase pelo [ObserverCore.Note.kind]. */
@@ -268,6 +347,8 @@ object ObserverTv {
             .put("notes", ObserverCore.toJson(notes(ctx)))
             .put("morning", runCatching { morning(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
             .put("packages", runCatching { packages(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
+            .put("trials", runCatching { org.json.JSONArray(ObserverTrial.toJson(ObserverTrial.fromJson(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("trials", null)))) }.getOrNull() ?: org.json.JSONArray())
+            .put("checks", runCatching { org.json.JSONObject().apply { checks(ctx).forEach { (c, v) -> put(c.name, v) } } }.getOrNull() ?: org.json.JSONObject.NULL)
             .put("log_total", log.length()).put("log", logNovo)
     }
 
