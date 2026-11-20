@@ -910,4 +910,12 @@
     <string name="bu_recente_det">Search again</string>
     <string name="aviso_alarme_tocou_titulo">The alarm rang on the TV</string>
     <string name="aviso_alarme_tocou_texto">It started ringing at %1$s.</string>
+    <string name="home_instalar_externo">Install on external storage</string>
+    <string name="home_instalar_dispositivo">Install on this device</string>
+    <string name="home_instalando_lugar">Moving %1$s… it closes until done.</string>
+    <string name="home_instalado_externo">%1$s is now on the external storage.</string>
+    <string name="home_instalado_dispositivo">%1$s is back on this device.</string>
+    <string name="home_instalar_lugar_falhou">Couldn\'t move %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">the TV\'s own shell isn\'t active</string>
+    <string name="home_instalar_lugar_sem_pendrive">no USB drive set up as TV storage</string>
 </resources>

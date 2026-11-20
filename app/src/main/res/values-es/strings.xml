@@ -875,4 +875,12 @@ AS\\Peliculas).</string>
     <string name="bu_recente_det">Buscar de nuevo</string>
     <string name="aviso_alarme_tocou_titulo">La alarma sonó en la TV</string>
     <string name="aviso_alarme_tocou_texto">Empezó a sonar a las %1$s.</string>
+    <string name="home_instalar_externo">Instalar en almacenamiento externo</string>
+    <string name="home_instalar_dispositivo">Instalar en el dispositivo</string>
+    <string name="home_instalando_lugar">Moviendo %1$s… se cierra hasta terminar.</string>
+    <string name="home_instalado_externo">%1$s ya está en el almacenamiento externo.</string>
+    <string name="home_instalado_dispositivo">%1$s volvió al dispositivo.</string>
+    <string name="home_instalar_lugar_falhou">No se pudo mover %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">el shell propio de la TV no está activo</string>
+    <string name="home_instalar_lugar_sem_pendrive">ninguna memoria USB configurada como almacenamiento de la TV</string>
 </resources>

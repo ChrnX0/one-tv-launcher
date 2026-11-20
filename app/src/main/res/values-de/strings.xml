@@ -872,4 +872,12 @@ AS\\Filme).</string>
     <string name="bu_recente_det">Erneut suchen</string>
     <string name="aviso_alarme_tocou_titulo">Der Wecker hat am Fernseher geklingelt</string>
     <string name="aviso_alarme_tocou_texto">Er hat um %1$s angefangen.</string>
+    <string name="home_instalar_externo">Auf externem Speicher installieren</string>
+    <string name="home_instalar_dispositivo">Auf dem Gerät installieren</string>
+    <string name="home_instalando_lugar">%1$s wird verschoben… sie schließt sich bis zum Ende.</string>
+    <string name="home_instalado_externo">%1$s ist jetzt auf dem externen Speicher.</string>
+    <string name="home_instalado_dispositivo">%1$s ist wieder auf dem Gerät.</string>
+    <string name="home_instalar_lugar_falhou">%1$s konnte nicht verschoben werden: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">die eigene Shell des Fernsehers ist nicht aktiv</string>
+    <string name="home_instalar_lugar_sem_pendrive">kein USB-Stick als TV-Speicher eingerichtet</string>
 </resources>

@@ -872,4 +872,12 @@ AS\\Filmes).</string>
     <string name="bu_recente_det">Buscar de novo</string>
     <string name="aviso_alarme_tocou_titulo">O despertador tocou na TV</string>
     <string name="aviso_alarme_tocou_texto">Começou a tocar às %1$s.</string>
+    <string name="home_instalar_externo">Instalar no armazenamento externo</string>
+    <string name="home_instalar_dispositivo">Instalar no dispositivo</string>
+    <string name="home_instalando_lugar">A mover %1$s… fecha até terminar.</string>
+    <string name="home_instalado_externo">%1$s está agora no armazenamento externo.</string>
+    <string name="home_instalado_dispositivo">%1$s voltou para o dispositivo.</string>
+    <string name="home_instalar_lugar_falhou">Não foi possível mover %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">a shell própria da TV não está ativa</string>
+    <string name="home_instalar_lugar_sem_pendrive">nenhuma pen USB configurada como memória da TV</string>
 </resources>

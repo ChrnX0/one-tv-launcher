@@ -912,4 +912,12 @@
     <string name="bu_recente_det">Buscar de novo</string>
     <string name="aviso_alarme_tocou_titulo">O despertador tocou na TV</string>
     <string name="aviso_alarme_tocou_texto">Começou a tocar às %1$s.</string>
+    <string name="home_instalar_externo">Instalar no armazenamento externo</string>
+    <string name="home_instalar_dispositivo">Instalar no dispositivo</string>
+    <string name="home_instalando_lugar">Movendo %1$s… ele fecha até terminar.</string>
+    <string name="home_instalado_externo">%1$s agora está no armazenamento externo.</string>
+    <string name="home_instalado_dispositivo">%1$s voltou para o dispositivo.</string>
+    <string name="home_instalar_lugar_falhou">Não deu para mover %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">o shell próprio da TV não está ativo</string>
+    <string name="home_instalar_lugar_sem_pendrive">nenhum pen drive configurado como memória da TV</string>
 </resources>

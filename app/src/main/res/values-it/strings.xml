@@ -872,4 +872,12 @@ AS\\Film).</string>
     <string name="bu_recente_det">Cerca di nuovo</string>
     <string name="aviso_alarme_tocou_titulo">La sveglia ha suonato sulla TV</string>
     <string name="aviso_alarme_tocou_texto">Ha iniziato a suonare alle %1$s.</string>
+    <string name="home_instalar_externo">Installa su memoria esterna</string>
+    <string name="home_instalar_dispositivo">Installa sul dispositivo</string>
+    <string name="home_instalando_lugar">Spostamento di %1$s… si chiude fino al termine.</string>
+    <string name="home_instalado_externo">%1$s ora è sulla memoria esterna.</string>
+    <string name="home_instalado_dispositivo">%1$s è tornata sul dispositivo.</string>
+    <string name="home_instalar_lugar_falhou">Impossibile spostare %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">la shell interna della TV non è attiva</string>
+    <string name="home_instalar_lugar_sem_pendrive">nessuna chiavetta USB configurata come memoria della TV</string>
 </resources>
