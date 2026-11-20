@@ -39,7 +39,7 @@
   "filmes": {
    "resumo": "Katalog, kontynuacja, napisy, serwery domowe",
    "texto": "Filmy i Seriale pochodzą z tego samego konta IPTV (także z listy M3U), z plakatem, oceną, opisem i „kontynuuj, gdzie skończyłeś”.\n\n• Filmy: Filtr (gatunek, epoka, minimalna ocena, tylko nieobejrzane), Wylosuj film i „Kolekcja tego filmu” na stronie szczegółów.\n• W odtwarzaczu ▼ otwiera menu: dźwięk, napisy i ich rozmiar, „Wyłącz telewizor po zakończeniu” i oznaczenie czołówki (potem pojawia się „Pomiń czołówkę · OK”).\n• Dla osób, które gorzej widzą lub słyszą, w tym samym ▼ (i w Ustawienia › TV i filmy): napisy na czarnym tle, żółte napisy, „Wyrównana głośność kanałów” (cichy dźwięk staje się głośniejszy, głośny zostaje pod limitem) i „Wyraźniejsze głosy” (wzmacnia pasmo mowy). W trybie prostym TV, Filmy i Seriale otwierają się na Ulubionych lub Kontynuuj, z mniejszą liczbą rzędów i większym tekstem.\n• Odtwarzacz sam obsługuje dźwięk Dolby (AC3, E-AC3), DTS i TrueHD oraz napisy Blu-ray, DVD i ASS (anime), bez Kodi czy VLC.\n• Seriale: następny odcinek startuje po 10 s odliczania; po 3 z rzędu telewizor pyta, czy nadal oglądasz.\n• Preferowany dźwięk (oryginał z napisami lub dubbing) i napisy online (OpenSubtitles): Ustawienia › TV i filmy.\n\nSieć: filmy, muzyka i zdjęcia z Plex, Jellyfin, Emby, folderów na komputerze lub NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Dysku Google, UPnP i pendrive’a podłączonego do telewizora. Włączone serwery pojawiają się same; inne dodaje się w Dodaj, na tym samym ekranie.",
-   "titulo": "Filmy, seriale i Z komputera"
+   "titulo": "Filmy, seriale i Sieć"
   },
   "inicio": {
    "resumo": "Aplikacje, stosy, ukryte aplikacje, motywy, rozmiar tekstu",
