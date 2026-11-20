@@ -344,6 +344,10 @@ class MainActivity : Activity() {
         super.onResume()
         homeNaFrente = true
         recongelarPendentes()   // "congelar de novo ao voltar" (Todos os apps, 20/11/2026)
+        // Pen drive com apps foi tirado (AppStorage): diz quais sumiram até ele voltar.
+        AppStorage.ausentes(this).takeIf { it.isNotEmpty() }?.let { f ->
+            mostrarAviso(getString(R.string.st_sumiram, f.joinToString(", ")))
+        }
         SonsCruz.naFrente = true
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)

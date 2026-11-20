@@ -920,4 +920,14 @@ AS\\Filmler).</string>
     <string name="st_falhou">Olmadı: %1$s</string>
     <string name="st_depois">Şimdi hangi uygulamaların USB belleğe gideceğini seçin.</string>
     <string name="st_pin">USB belleği değiştirmek için panel PIN\'i</string>
+    <string name="st_copiar_titulo">Önce içindekiler kopyalansın mı? (%1$s)</string>
+    <string name="st_copiar_para">%1$s konumuna kopyala</string>
+    <string name="st_copiar_pc">PC ile kopyala (nasıl)</string>
+    <string name="st_copiar_pc_texto">PC\'de Bu Bilgisayar > TV > USB Sürücü\'yü açıp dosyaları bilgisayara kopyalayın. Sonra buraya dönüp biçimlendirin.</string>
+    <string name="st_nao_copiar">Gerek yok, sil</string>
+    <string name="st_copiando_inicio">USB bellek kopyalanıyor… TV çalışmaya devam eder.</string>
+    <string name="st_copiando">%2$s içinden %1$s kopyalandı</string>
+    <string name="st_voltar_comum">Normal USB belleğe dön (uygulamalar TV\'ye döner)</string>
+    <string name="st_trazendo">%1$s TV\'ye geri alınıyor…</string>
+    <string name="st_sumiram">USB bellek çıkarıldı: %1$s geri takılana kadar gizli.</string>
 </resources>

@@ -920,4 +920,14 @@ AS\\Filmes).</string>
     <string name="st_falhou">Não foi possível: %1$s</string>
     <string name="st_depois">Agora escolha que apps vão para a pen USB.</string>
     <string name="st_pin">PIN do painel para mexer na pen USB</string>
+    <string name="st_copiar_titulo">Copiar o que tem antes? (%1$s)</string>
+    <string name="st_copiar_para">Copiar para %1$s</string>
+    <string name="st_copiar_pc">Copiar pelo PC (como fazer)</string>
+    <string name="st_copiar_pc_texto">No PC, abra Este PC > a TV > Unidade USB e copie os ficheiros para o computador. Depois volte aqui e formate.</string>
+    <string name="st_nao_copiar">Não é preciso, pode apagar</string>
+    <string name="st_copiando_inicio">A copiar a pen… a TV continua a funcionar.</string>
+    <string name="st_copiando">Copiados %1$s de %2$s</string>
+    <string name="st_voltar_comum">Voltar a pen USB normal (as apps voltam para a TV)</string>
+    <string name="st_trazendo">A trazer %1$s de volta para a TV…</string>
+    <string name="st_sumiram">A pen USB saiu: %1$s ficam escondidas até ela voltar.</string>
 </resources>

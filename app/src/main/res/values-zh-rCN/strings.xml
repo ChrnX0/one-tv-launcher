@@ -917,4 +917,14 @@ AS\\Movies）。</string>
     <string name="st_falhou">没有成功：%1$s</string>
     <string name="st_depois">现在选择要移到 U 盘的应用。</string>
     <string name="st_pin">修改 U 盘需要面板 PIN</string>
+    <string name="st_copiar_titulo">先复制上面的内容吗？（%1$s）</string>
+    <string name="st_copiar_para">复制到 %1$s</string>
+    <string name="st_copiar_pc">用电脑复制（方法）</string>
+    <string name="st_copiar_pc_texto">在电脑上打开“此电脑”> 电视 > USB 驱动器，把文件复制到电脑，然后回到这里格式化。</string>
+    <string name="st_nao_copiar">不需要，直接清空</string>
+    <string name="st_copiando_inicio">正在复制 U 盘… 电视可以照常使用。</string>
+    <string name="st_copiando">已复制 %1$s / %2$s</string>
+    <string name="st_voltar_comum">恢复为普通 U 盘（应用回到电视）</string>
+    <string name="st_trazendo">正在把 %1$s 移回电视…</string>
+    <string name="st_sumiram">U 盘已拔出：%1$s 会隐藏，直到插回。</string>
 </resources>

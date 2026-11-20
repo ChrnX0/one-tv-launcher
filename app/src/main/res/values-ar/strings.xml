@@ -932,4 +932,14 @@ AS\\Movies).</string>
     <string name="st_falhou">لم ينجح: %1$s</string>
     <string name="st_depois">اختر الآن التطبيقات التي ستنتقل إلى ذاكرة USB.</string>
     <string name="st_pin">رمز PIN للوحة لتغيير ذاكرة USB</string>
+    <string name="st_copiar_titulo">نسخ ما عليها أولًا؟ (%1$s)</string>
+    <string name="st_copiar_para">نسخ إلى %1$s</string>
+    <string name="st_copiar_pc">النسخ عبر الكمبيوتر (كيف)</string>
+    <string name="st_copiar_pc_texto">على الكمبيوتر افتح هذا الكمبيوتر > التلفزيون > محرك USB وانسخ الملفات إليه. ثم عد هنا وهيّئ.</string>
+    <string name="st_nao_copiar">لا حاجة، امسح</string>
+    <string name="st_copiando_inicio">جارٍ نسخ الذاكرة… يظل التلفزيون يعمل.</string>
+    <string name="st_copiando">نُسخ %1$s من %2$s</string>
+    <string name="st_voltar_comum">العودة إلى ذاكرة USB عادية (تعود التطبيقات إلى التلفزيون)</string>
+    <string name="st_trazendo">جارٍ إعادة %1$s إلى التلفزيون…</string>
+    <string name="st_sumiram">أُزيلت ذاكرة USB: %1$s مخفية حتى تعود.</string>
 </resources>

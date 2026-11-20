@@ -917,4 +917,14 @@ AS\\Movies）。</string>
     <string name="st_falhou">できませんでした: %1$s</string>
     <string name="st_depois">USB メモリに移すアプリを選んでください。</string>
     <string name="st_pin">USB メモリを変更するためのパネル PIN</string>
+    <string name="st_copiar_titulo">先に中身をコピーしますか？（%1$s）</string>
+    <string name="st_copiar_para">%1$s にコピー</string>
+    <string name="st_copiar_pc">PC でコピー（方法）</string>
+    <string name="st_copiar_pc_texto">PC で「PC」> TV > USB ドライブを開き、ファイルをパソコンにコピーしてから、ここに戻ってフォーマットしてください。</string>
+    <string name="st_nao_copiar">不要、消去する</string>
+    <string name="st_copiando_inicio">USB メモリをコピー中… TV はそのまま使えます。</string>
+    <string name="st_copiando">%2$s 中 %1$s をコピー</string>
+    <string name="st_voltar_comum">通常の USB メモリに戻す（アプリは TV に戻ります）</string>
+    <string name="st_trazendo">%1$s を TV に戻しています…</string>
+    <string name="st_sumiram">USB メモリが外れました: 戻すまで %1$s は表示されません。</string>
 </resources>

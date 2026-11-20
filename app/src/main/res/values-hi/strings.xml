@@ -920,4 +920,14 @@ AS\\Movies)।</string>
     <string name="st_falhou">नहीं हुआ: %1$s</string>
     <string name="st_depois">अब चुनें कि कौन से ऐप्स USB ड्राइव पर जाएं।</string>
     <string name="st_pin">USB ड्राइव बदलने के लिए पैनल PIN</string>
+    <string name="st_copiar_titulo">पहले इसका डेटा कॉपी करें? (%1$s)</string>
+    <string name="st_copiar_para">%1$s पर कॉपी करें</string>
+    <string name="st_copiar_pc">PC से कॉपी करें (कैसे)</string>
+    <string name="st_copiar_pc_texto">PC पर This PC > टीवी > USB ड्राइव खोलें और फ़ाइलें कंप्यूटर पर कॉपी करें। फिर यहां लौटकर फ़ॉर्मैट करें।</string>
+    <string name="st_nao_copiar">ज़रूरत नहीं, मिटा दें</string>
+    <string name="st_copiando_inicio">USB ड्राइव कॉपी हो रही है… टीवी चलता रहेगा।</string>
+    <string name="st_copiando">%2$s में से %1$s कॉपी हुआ</string>
+    <string name="st_voltar_comum">फिर सामान्य USB ड्राइव (ऐप्स टीवी पर लौटेंगे)</string>
+    <string name="st_trazendo">%1$s टीवी पर वापस आ रहा है…</string>
+    <string name="st_sumiram">USB ड्राइव निकाली गई: %1$s उसके लौटने तक छिपे हैं।</string>
 </resources>

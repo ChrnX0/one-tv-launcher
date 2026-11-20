@@ -920,4 +920,14 @@ AS\\Film).</string>
     <string name="st_falhou">Non è riuscito: %1$s</string>
     <string name="st_depois">Ora scegli quali app vanno sulla chiavetta.</string>
     <string name="st_pin">PIN del pannello per modificare la chiavetta</string>
+    <string name="st_copiar_titulo">Copiare prima il contenuto? (%1$s)</string>
+    <string name="st_copiar_para">Copia su %1$s</string>
+    <string name="st_copiar_pc">Copia con il PC (come)</string>
+    <string name="st_copiar_pc_texto">Sul PC apri Questo PC > la TV > Unità USB e copia i file sul computer. Poi torna qui e formatta.</string>
+    <string name="st_nao_copiar">Non serve, cancella</string>
+    <string name="st_copiando_inicio">Copia della chiavetta… la TV resta utilizzabile.</string>
+    <string name="st_copiando">Copiati %1$s di %2$s</string>
+    <string name="st_voltar_comum">Tornare chiavetta normale (le app tornano sulla TV)</string>
+    <string name="st_trazendo">%1$s torna sulla TV…</string>
+    <string name="st_sumiram">Chiavetta scollegata: %1$s restano nascoste finché non torna.</string>
 </resources>

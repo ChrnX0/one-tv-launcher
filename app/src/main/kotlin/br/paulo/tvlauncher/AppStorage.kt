@@ -76,6 +76,36 @@ object AppStorage {
         val saida = GuardiaoShizuku.comando(ctx, cmd, 15 * 60_000L)
         val motivo = AppStorageRules.falha(saida)
         Log.i(TAG, "$cmd => ${motivo ?: "ok"}")
+        if (motivo == null) lembrar(ctx, pacote, paraExterno)
         return motivo
     }
+
+    private const val CHAVE_MOVIDOS = "moved_packages"
+    @Volatile private var ultimaConferencia = 0L
+
+    private fun lembrar(ctx: Context, pacote: String, fora: Boolean) {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val atual = p.getStringSet(CHAVE_MOVIDOS, emptySet()).orEmpty().toMutableSet()
+        if (fora) atual += pacote else atual -= pacote
+        // O nome guardado serve para o aviso quando o pen drive sai (aí o Android não acha mais o app nem o nome).
+        val nome = info(ctx, pacote)?.loadLabel(ctx.packageManager)?.toString()
+        p.edit().putStringSet(CHAVE_MOVIDOS, atual).apply { if (nome != null) putString("nome:$pacote", nome) }.apply()
+    }
+
+    /**
+     * Apps que movemos para o pen drive e que o Android não acha agora (pen drive fora): a HOME avisa quais sumiram.
+     * No máximo uma conferência por minuto, e só avisa quando a lista muda; sem shell. Vazia = nada novo a avisar.
+     */
+    fun ausentes(ctx: Context): List<String> {
+        val agora = System.currentTimeMillis()
+        if (agora - ultimaConferencia < 60_000) return emptyList()
+        ultimaConferencia = agora
+        val movidos = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getStringSet(CHAVE_MOVIDOS, emptySet()).orEmpty()
+        val faltam = movidos.filter { info(ctx, it) == null }.toSet()
+        if (faltam == ultimosAvisados) return emptyList()   // avisa só quando muda (não a cada volta à HOME)
+        ultimosAvisados = faltam
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return faltam.map { p.getString("nome:$it", null) ?: it }
+    }
+    @Volatile private var ultimosAvisados: Set<String> = emptySet()
 }

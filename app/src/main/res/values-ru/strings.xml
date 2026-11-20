@@ -926,4 +926,14 @@ AS\\Фильмы).</string>
     <string name="st_falhou">Не получилось: %1$s</string>
     <string name="st_depois">Теперь выберите, какие приложения перенести на флешку.</string>
     <string name="st_pin">PIN панели для изменения флешки</string>
+    <string name="st_copiar_titulo">Сначала скопировать содержимое? (%1$s)</string>
+    <string name="st_copiar_para">Копировать в %1$s</string>
+    <string name="st_copiar_pc">Копировать через ПК (как)</string>
+    <string name="st_copiar_pc_texto">На ПК откройте «Этот компьютер» > ТВ > USB-накопитель и скопируйте файлы на компьютер. Потом вернитесь и отформатируйте.</string>
+    <string name="st_nao_copiar">Не нужно, стереть</string>
+    <string name="st_copiando_inicio">Копирование флешки… ТВ продолжает работать.</string>
+    <string name="st_copiando">Скопировано %1$s из %2$s</string>
+    <string name="st_voltar_comum">Снова обычная флешка (приложения вернутся на ТВ)</string>
+    <string name="st_trazendo">Возвращаем %1$s на ТВ…</string>
+    <string name="st_sumiram">Флешка отключена: %1$s скрыты, пока она не вернётся.</string>
 </resources>

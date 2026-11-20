@@ -94,7 +94,7 @@ class StorageActivity : Activity() {
             val l = linha(textoRec, pen.comum?.let { c -> { medir(pen.disco, c) } })
             if (primeira == null) primeira = l
             if (pen.modo != StorageModeRules.Modo.COMUM)
-                linha(getString(R.string.st_usar_comum)) { confirmarFormatar(pen, StorageModeRules.Modo.COMUM) }
+                linha(getString(if (pen.adotadoUuid != null) R.string.st_voltar_comum else R.string.st_usar_comum)) { confirmarFormatar(pen, StorageModeRules.Modo.COMUM) }
             val lm = linha(getString(R.string.st_usar_misto, misto)) { confirmarFormatar(pen, StorageModeRules.Modo.MISTO) }
             lm.setOnKeyListener { v, code, ev ->
                 if (ev.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
@@ -158,8 +158,54 @@ class StorageActivity : Activity() {
         }
     }
 
+    /**
+     * Formatar, em 3 passos: (1) com arquivos na parte comum, oferece copiar antes (pasta do Na rede ou pelo PC);
+     * (2) caixa "Apagar o pen drive?" com o foco no Cancelar + PIN; (3) se o pen drive já era memória da TV, traz os
+     * apps e a área compartilhada de volta ANTES (senão eles sumiriam junto) e só então formata.
+     */
     private fun confirmarFormatar(pen: StorageMode.Pen, modo: StorageModeRules.Modo) {
+        val comum = pen.comum?.let { java.io.File(it) }
+        if (comum == null) { avisoApagar(pen, modo); return }
+        val app = applicationContext
+        ocupado = true
+        Fundo.rodar("Storage") {
+            val (bytes, n) = runCatching { StorageBackup.medir(comum) }.getOrDefault(0L to 0)
+            val contas = runCatching { StorageBackup.destinos(app) }.getOrDefault(emptyList())
+            runOnUiThread {
+                ocupado = false
+                if (isDestroyed) return@runOnUiThread
+                if (n == 0) { avisoApagar(pen, modo); return@runOnUiThread }
+                val itens = contas.map { getString(R.string.st_copiar_para, it.nome) } +
+                    getString(R.string.st_copiar_pc) + getString(R.string.st_nao_copiar)
+                Estilo.lista(this, getString(R.string.st_copiar_titulo, tam(bytes)), itens, separarUltimo = true) { i ->
+                    when {
+                        i < contas.size -> copiarEDepois(comum, contas[i], pen, modo)
+                        i == contas.size -> CaixaTv(this).setTitle(getString(R.string.st_copiar_pc))
+                            .setMessage(getString(R.string.st_copiar_pc_texto)).setPositiveButton("OK", null).show()
+                        else -> avisoApagar(pen, modo)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun copiarEDepois(raiz: java.io.File, conta: ContaMidia, pen: StorageMode.Pen, modo: StorageModeRules.Modo) {
+        val app = applicationContext
+        var ultimo = 0L
+        trabalhar(getString(R.string.st_copiando_inicio), {
+            StorageBackup.copiar(app, raiz, conta) { feito, total ->
+                val agora = System.currentTimeMillis()
+                if (agora - ultimo > 10_000) {   // um aviso a cada 10 s, não a cada bloco
+                    ultimo = agora
+                    runOnUiThread { if (!isDestroyed) mostrar(getString(R.string.st_copiando, tam(feito), tam(total))) }
+                }
+            }
+        }) { motivo -> if (motivo == null) avisoApagar(pen, modo) }
+    }
+
+    private fun avisoApagar(pen: StorageMode.Pen, modo: StorageModeRules.Modo) {
         val pct = misto
+        val primarioNoPen = estado?.primarioNoPen == true && pen.adotadoUuid != null
         val d = CaixaTv(this)
             .setTitle(getString(R.string.st_aviso_titulo))
             .setMessage(getString(R.string.st_aviso, nomeModo(modo)))
@@ -167,7 +213,12 @@ class StorageActivity : Activity() {
             .setPositiveButton(R.string.st_apagar) { _, _ ->
                 comPin {
                     val app = applicationContext
-                    trabalhar(getString(R.string.st_formatando), { StorageMode.formatar(app, pen.disco, modo, pct) }) { motivo ->
+                    trabalhar(getString(R.string.st_formatando), {
+                        val volta = if (pen.adotadoUuid != null) StorageBackup.trazerTudoDeVolta(app, primarioNoPen) { nome ->
+                            runOnUiThread { if (!isDestroyed) mostrar(getString(R.string.st_trazendo, nome)) }
+                        } else null
+                        volta ?: StorageMode.formatar(app, pen.disco, modo, pct)
+                    }) { motivo ->
                         // Virou memória da TV ou misto: o próximo passo natural é escolher os apps.
                         if (motivo == null && modo != StorageModeRules.Modo.COMUM) mostrar(getString(R.string.st_depois))
                     }

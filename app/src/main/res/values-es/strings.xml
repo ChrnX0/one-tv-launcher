@@ -923,4 +923,14 @@ AS\\Peliculas).</string>
     <string name="st_falhou">No funcionó: %1$s</string>
     <string name="st_depois">Ahora elige qué apps van a la memoria USB.</string>
     <string name="st_pin">PIN del panel para cambiar la memoria USB</string>
+    <string name="st_copiar_titulo">¿Copiar su contenido antes? (%1$s)</string>
+    <string name="st_copiar_para">Copiar a %1$s</string>
+    <string name="st_copiar_pc">Copiar con el PC (cómo)</string>
+    <string name="st_copiar_pc_texto">En el PC, abre Este equipo > la TV > Unidad USB y copia los archivos al ordenador. Luego vuelve aquí y formatea.</string>
+    <string name="st_nao_copiar">No hace falta, bórrala</string>
+    <string name="st_copiando_inicio">Copiando la memoria… la TV sigue funcionando.</string>
+    <string name="st_copiando">Copiados %1$s de %2$s</string>
+    <string name="st_voltar_comum">Volver a memoria USB normal (las apps vuelven a la TV)</string>
+    <string name="st_trazendo">Devolviendo %1$s a la TV…</string>
+    <string name="st_sumiram">La memoria USB salió: %1$s quedan ocultas hasta que vuelva.</string>
 </resources>

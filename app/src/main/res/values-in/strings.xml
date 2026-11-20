@@ -917,4 +917,14 @@ AS\\Film).</string>
     <string name="st_falhou">Gagal: %1$s</string>
     <string name="st_depois">Sekarang pilih aplikasi yang dipindah ke flashdisk.</string>
     <string name="st_pin">PIN panel untuk mengubah flashdisk</string>
+    <string name="st_copiar_titulo">Salin isinya dulu? (%1$s)</string>
+    <string name="st_copiar_para">Salin ke %1$s</string>
+    <string name="st_copiar_pc">Salin lewat PC (caranya)</string>
+    <string name="st_copiar_pc_texto">Di PC, buka This PC > TV > USB Drive dan salin file ke komputer. Lalu kembali ke sini dan format.</string>
+    <string name="st_nao_copiar">Tidak perlu, hapus</string>
+    <string name="st_copiando_inicio">Menyalin flashdisk… TV tetap bisa dipakai.</string>
+    <string name="st_copiando">Tersalin %1$s dari %2$s</string>
+    <string name="st_voltar_comum">Kembali jadi flashdisk biasa (aplikasi kembali ke TV)</string>
+    <string name="st_trazendo">Mengembalikan %1$s ke TV…</string>
+    <string name="st_sumiram">Flashdisk dicabut: %1$s tersembunyi sampai dicolok lagi.</string>
 </resources>

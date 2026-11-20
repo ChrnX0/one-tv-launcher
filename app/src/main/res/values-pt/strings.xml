@@ -960,4 +960,14 @@
     <string name="st_falhou">Não deu certo: %1$s</string>
     <string name="st_depois">Agora escolha quais apps vão para o pen drive.</string>
     <string name="st_pin">PIN do painel para mexer no pen drive</string>
+    <string name="st_copiar_titulo">Copiar o que tem nele antes? (%1$s)</string>
+    <string name="st_copiar_para">Copiar para %1$s</string>
+    <string name="st_copiar_pc">Copiar pelo PC (como fazer)</string>
+    <string name="st_copiar_pc_texto">No PC, abra Este Computador > a TV > Drive USB e copie os arquivos para o computador. Depois volte aqui e formate.</string>
+    <string name="st_nao_copiar">Não precisa, pode apagar</string>
+    <string name="st_copiando_inicio">Copiando o pen drive… a TV continua funcionando.</string>
+    <string name="st_copiando">Copiados %1$s de %2$s</string>
+    <string name="st_voltar_comum">Voltar a ser pen drive comum (os apps voltam para a TV)</string>
+    <string name="st_trazendo">Trazendo %1$s de volta para a TV…</string>
+    <string name="st_sumiram">O pen drive saiu: %1$s ficam escondidos até ele voltar.</string>
 </resources>

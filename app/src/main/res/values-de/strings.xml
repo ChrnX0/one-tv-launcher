@@ -920,4 +920,14 @@ AS\\Filme).</string>
     <string name="st_falhou">Hat nicht geklappt: %1$s</string>
     <string name="st_depois">Wähle jetzt, welche Apps auf den USB-Stick kommen.</string>
     <string name="st_pin">Panel-PIN, um den USB-Stick zu ändern</string>
+    <string name="st_copiar_titulo">Vorher Inhalt kopieren? (%1$s)</string>
+    <string name="st_copiar_para">Nach %1$s kopieren</string>
+    <string name="st_copiar_pc">Mit dem PC kopieren (wie)</string>
+    <string name="st_copiar_pc_texto">Am PC: Dieser PC > der Fernseher > USB-Laufwerk öffnen und die Dateien auf den Computer kopieren. Dann hier formatieren.</string>
+    <string name="st_nao_copiar">Nicht nötig, löschen</string>
+    <string name="st_copiando_inicio">USB-Stick wird kopiert… der Fernseher bleibt nutzbar.</string>
+    <string name="st_copiando">%1$s von %2$s kopiert</string>
+    <string name="st_voltar_comum">Wieder normaler USB-Stick (Apps kommen auf den Fernseher zurück)</string>
+    <string name="st_trazendo">%1$s kommt zurück auf den Fernseher…</string>
+    <string name="st_sumiram">USB-Stick entfernt: %1$s sind ausgeblendet, bis er zurück ist.</string>
 </resources>

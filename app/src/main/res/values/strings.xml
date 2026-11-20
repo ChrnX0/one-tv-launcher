@@ -958,4 +958,14 @@
     <string name="st_falhou">It didn\'t work: %1$s</string>
     <string name="st_depois">Now choose which apps go to the USB drive.</string>
     <string name="st_pin">Panel PIN to change the USB drive</string>
+    <string name="st_copiar_titulo">Copy what\'s on it first? (%1$s)</string>
+    <string name="st_copiar_para">Copy to %1$s</string>
+    <string name="st_copiar_pc">Copy using the PC (how)</string>
+    <string name="st_copiar_pc_texto">On the PC, open This PC > the TV > USB drive and copy the files to the computer. Then come back here and format.</string>
+    <string name="st_nao_copiar">No need, erase it</string>
+    <string name="st_copiando_inicio">Copying the USB drive… the TV keeps working meanwhile.</string>
+    <string name="st_copiando">Copied %1$s of %2$s</string>
+    <string name="st_voltar_comum">Back to a regular USB drive (apps come back to the TV)</string>
+    <string name="st_trazendo">Bringing %1$s back to the TV…</string>
+    <string name="st_sumiram">The USB drive is out: %1$s are hidden until it\'s back.</string>
 </resources>

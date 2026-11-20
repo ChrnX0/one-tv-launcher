@@ -920,4 +920,14 @@ AS\\Films).</string>
     <string name="st_falhou">Échec : %1$s</string>
     <string name="st_depois">Choisissez maintenant les apps à mettre sur la clé USB.</string>
     <string name="st_pin">PIN du panneau pour modifier la clé USB</string>
+    <string name="st_copiar_titulo">Copier son contenu avant ? (%1$s)</string>
+    <string name="st_copiar_para">Copier vers %1$s</string>
+    <string name="st_copiar_pc">Copier avec le PC (comment)</string>
+    <string name="st_copiar_pc_texto">Sur le PC, ouvrez Ce PC > la TV > Lecteur USB et copiez les fichiers sur l\'ordinateur. Revenez ensuite formater.</string>
+    <string name="st_nao_copiar">Pas besoin, effacer</string>
+    <string name="st_copiando_inicio">Copie de la clé… la TV reste utilisable.</string>
+    <string name="st_copiando">%1$s copiés sur %2$s</string>
+    <string name="st_voltar_comum">Revenir en clé USB normale (les apps reviennent sur la TV)</string>
+    <string name="st_trazendo">Retour de %1$s sur la TV…</string>
+    <string name="st_sumiram">La clé USB est retirée : %1$s sont masquées jusqu\'à son retour.</string>
 </resources>
