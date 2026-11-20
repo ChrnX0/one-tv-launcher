@@ -79,6 +79,9 @@ class BuscaActivity : Activity() {
         coluna.addView(lista, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E1) })
         setContentView(raiz)
         campo.requestFocus()
+        // Visto na Sala (20/11): a busca abria vazia por uns 4 s, até o índice (canais, filmes, guia) ficar pronto.
+        // Falar e as buscas recentes não dependem dele: aparecem na hora; o "Hoje na TV" chega quando o índice fica pronto.
+        desenhar("", inicio())
         Fundo.rodar("busca-dados") { carregar() }
     }
 
