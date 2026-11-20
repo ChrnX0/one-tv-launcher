@@ -63,6 +63,7 @@ declare -A FONTES=(
   [PerfilCriancaTest]="PerfilCrianca"
   [AutoDesligarRegraTest]="AutoDesligarRegra"
   [ObserverCoreTest]="ObserverCore"
+  [ObserverBaselineTest]="ObserverCore ObserverBaseline"
 )
 
 falhou=0

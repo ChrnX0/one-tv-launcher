@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"latenza",
 "sinal do Wi-Fi":"segnale Wi-Fi",
 "quadros lentos":"fotogrammi lenti",
+"internet diferente do normal":"internet diversa dal solito",
+"memória diferente do normal":"memoria diversa dal solito",
+"Wi-Fi diferente do normal":"Wi-Fi diverso dal solito",
+"tela inicial diferente do normal":"schermata iniziale diversa dal solito",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","Invio di $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "la TV nuova ha rifiutato: $1"],

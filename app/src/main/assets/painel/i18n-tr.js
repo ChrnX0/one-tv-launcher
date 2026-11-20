@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"gecikme",
 "sinal do Wi-Fi":"Wi-Fi sinyali",
 "quadros lentos":"yavaş kareler",
+"internet diferente do normal":"internet alışılmışın dışında",
+"memória diferente do normal":"bellek alışılmışın dışında",
+"Wi-Fi diferente do normal":"Wi-Fi alışılmışın dışında",
+"tela inicial diferente do normal":"ana ekran alışılmışın dışında",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","Gönderiliyor: $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "yeni TV reddetti: $1"],

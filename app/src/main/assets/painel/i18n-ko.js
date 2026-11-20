@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"지연 시간",
 "sinal do Wi-Fi":"Wi-Fi 신호",
 "quadros lentos":"느린 프레임",
+"internet diferente do normal":"인터넷이 평소와 다름",
+"memória diferente do normal":"메모리가 평소와 다름",
+"Wi-Fi diferente do normal":"Wi-Fi가 평소와 다름",
+"tela inicial diferente do normal":"홈 화면이 평소와 다름",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","보내는 중 $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "새 TV가 거부함: $1"],

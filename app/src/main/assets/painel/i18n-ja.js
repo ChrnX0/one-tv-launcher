@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"遅延",
 "sinal do Wi-Fi":"Wi-Fiの電波",
 "quadros lentos":"遅いフレーム",
+"internet diferente do normal":"インターネットがいつもと違う",
+"memória diferente do normal":"メモリがいつもと違う",
+"Wi-Fi diferente do normal":"Wi-Fiがいつもと違う",
+"tela inicial diferente do normal":"ホーム画面がいつもと違う",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","送信中 $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "新しいテレビが拒否しました：$1"],

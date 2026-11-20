@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"زمن الاستجابة",
 "sinal do Wi-Fi":"إشارة الواي فاي",
 "quadros lentos":"إطارات بطيئة",
+"internet diferente do normal":"الإنترنت على غير المعتاد",
+"memória diferente do normal":"الذاكرة على غير المعتاد",
+"Wi-Fi diferente do normal":"الواي فاي على غير المعتاد",
+"tela inicial diferente do normal":"الشاشة الرئيسية على غير المعتاد",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","جارٍ إرسال $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "رفض التلفاز الجديد: $1"],

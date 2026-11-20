@@ -1414,6 +1414,10 @@ traduzirPainelCom({T:{
 "latência":"लेटेंसी",
 "sinal do Wi-Fi":"Wi-Fi सिग्नल",
 "quadros lentos":"धीमे फ़्रेम",
+"internet diferente do normal":"इंटरनेट सामान्य से अलग",
+"memória diferente do normal":"मेमोरी सामान्य से अलग",
+"Wi-Fi diferente do normal":"Wi-Fi सामान्य से अलग",
+"tela inicial diferente do normal":"होम स्क्रीन सामान्य से अलग",
 },P:[
 ["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","भेजा जा रहा है $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "नए टीवी ने मना किया: $1"],
