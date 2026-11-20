@@ -1,6 +1,6 @@
 # Gera site/visual.html: página que lê um código de visual (#sofaly-visual:1:...) e galeria dos visuais prontos.
 import json, base64, io, sys, qrcode, qrcode.image.svg, html
-PAG = "https://chrnx0.github.io/one-tv-launcher/visual.html#"
+PAG = "https://chrnx0.github.io/sofaly/visual.html#"
 PREF = "sofaly-visual:1:"
 # Mesma ordem e valores de VisualCodigo.PRONTOS (o teste VisualCodigoTest confere).
 P = [

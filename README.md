@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/ChrnX0/one-tv-launcher?label=download&style=for-the-badge&color=2bb39a" alt="Download"></a>
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/ChrnX0/sofaly?label=download&style=for-the-badge&color=2bb39a" alt="Download"></a>
   <img src="https://img.shields.io/badge/Android%20TV-10%2B-3ddc84?style=for-the-badge&logo=android&logoColor=white" alt="Android TV 10+">
   <img src="https://img.shields.io/badge/Kotlin-Views-7f52ff?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
   <img src="https://img.shields.io/badge/ads-zero-e5484d?style=for-the-badge" alt="Zero ads">
@@ -236,12 +236,12 @@ You need a **Google TV / Android TV** device. It's tested daily on a Chromecast 
 ### Install with Downloader (no computer needed)
 
 1. Install **Downloader** by AFTVnews from the Play Store on your TV.
-2. Open it and enter the code **`8887571`** (or the short link [`aftv.news/8887571`](https://aftv.news/8887571)). It downloads
+2. Open it and enter the code **`6566820`** (or the short link [`aftv.news/6566820`](https://aftv.news/6566820)). It downloads
    `sofaly-launcher.apk` (32-bit, Chromecast with Google TV).
 3. Tap **Install**.
 
 On a 64-bit TV, type this address in Downloader instead:
-`https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher-arm64.apk`
+`sofaly.tv/download-arm64`
 
 ### Then
 

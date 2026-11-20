@@ -37,7 +37,7 @@ object AvisoTv {
     private const val PREFS = "aviso_tv"
     /** Último aviso mostrado (lido pelo ProtetorGaleria). Fora do backup: é passageiro. */
     const val PREFS_ULTIMO = "aviso_tv_ultimo"
-    private const val SOFY_DP = 44   // a Sofy inteira na pílula (corpo, antenas, braços e o rosto legível a 3 m)
+    private const val SOFY_DP = 60   // a Sofy inteira na pílula; 44 dp ficou pequeno a 3 m (Sala, 20/11/2026): agora ~50% maior
     private const val VALIDADE_PENDENTE_MS = 12 * 60 * 60_000L   // recado de mais de 12 h atrás já não serve
 
     private val principal = Handler(Looper.getMainLooper())

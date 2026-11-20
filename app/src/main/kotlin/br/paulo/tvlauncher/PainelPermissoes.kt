@@ -141,4 +141,30 @@ object PainelPermissoes {
         val esperado = when (acao) { "permitir" -> "permitido"; "negar" -> "negado"; else -> null }
         return if (esperado == null || o.optString("estado") == esperado) null else "o Android não aplicou (ficou ${o.optString("estado")})"
     }
+
+    /**
+     * Pedido do Paulo (20/11/2026): RetroArch e outros apps que leem arquivos precisam abrir ROMs e vídeos grandes direto
+     * do pen drive (no Chromecast não cabem na TV). No Android 11+ isso é o acesso especial "todos os arquivos"
+     * (MANAGE_EXTERNAL_STORAGE), que inclui os pen drives comuns. true = o app pede esse acesso e ainda não tem.
+     */
+    fun arquivosBloqueados(ctx: Context, pacote: String): Boolean {
+        if (PainelApps.protegido(ctx, pacote)) return false
+        val p = info(ctx, pacote) ?: return false
+        if (ARQUIVOS !in (p.requestedPermissions ?: emptyArray())) return false
+        val e = ESPECIAIS.first { it.permissao == ARQUIVOS }
+        val o = JSONObject()
+        estadoEspecial(ctx, pacote, p.applicationInfo?.uid ?: -1, e, o)
+        return o.optString("estado") != "permitido"
+    }
+
+    /** Libera "todos os arquivos" (shell) e, se o app pede, a leitura comum (Device Owner, apps antigos). Bloqueia ~40 s. */
+    fun liberarArquivos(ctx: Context, pacote: String): String? {
+        val p = info(ctx, pacote) ?: return "app não encontrado"
+        if (LEITURA in (p.requestedPermissions ?: emptyArray()) && PrivilegioDO.somosDonos(ctx))
+            mudar(ctx, pacote, LEITURA, "conceder")   // melhor esforço: no Android 13+ ela nem vale mais
+        return mudarEspecial(ctx, pacote, "MANAGE_EXTERNAL_STORAGE", "permitir")
+    }
+
+    private const val ARQUIVOS = "android.permission.MANAGE_EXTERNAL_STORAGE"
+    private const val LEITURA = "android.permission.READ_EXTERNAL_STORAGE"
 }

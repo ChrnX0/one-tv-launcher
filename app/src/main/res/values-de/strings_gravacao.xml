@@ -62,7 +62,8 @@
     <string name="grv_reserva">Netzwerkordner</string>
     <string name="grv_reserva_explica">Wo aufgenommen wird, wenn kein USB-Stick steckt (ein Windows- oder NAS-Ordner aus „Netzwerk“)</string>
     <string name="grv_nenhuma">Keiner</string>
-    <string name="grv_sem_smb">Füge zuerst einen Windows-/NAS-Ordner (SMB) in Netzwerk hinzu.</string>
+    <string name="grv_onde_pergunta">Wo aufnehmen?</string>
+    <string name="grv_sem_smb">Füge zuerst einen Netzwerkordner (Windows/NAS, FTP oder SFTP) unter Netzwerk hinzu.</string>
     <string name="grv_amanha">Morgen</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">ansehen</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Nicht umschalten</string>
     <string name="lb_troca_marcada">Schaltet selbst um</string>
     <string name="lb_troca_marcada_det">Auf %1$s um %2$s (wenn der Fernseher an ist)</string>
+    <string name="grv_nao_copiou">Kopieren nach %1$s fehlgeschlagen</string>
+    <string name="grv_copiada">Aufnahme nach %1$s kopiert</string>
+    <string name="grv_partes_copiadas">%1$d Teil(e) kopiert</string>
+    <string name="grv_copiando">Aufnahme wird nach %1$s kopiert…</string>
+    <string name="grv_nuvem">In die Cloud kopieren</string>
+    <string name="grv_nuvem_explica">Nach der Aufnahme geht eine Kopie in dein Cloud-Konto</string>
+    <string name="grv_na_fila">%1$d warten</string>
+    <string name="grv_apagar_depois">Hier nach dem Kopieren löschen</string>
+    <string name="grv_apagar_depois_explica">Gibt USB-Stick oder Ordner frei, sobald die Cloud-Kopie fertig ist</string>
+    <string name="grv_sem_nuvem">Melde dich unter Netzwerk bei OneDrive, Dropbox oder Box an oder verbinde Google Drive unter Automatische Sicherung.</string>
+    <string name="grv_memoria_tv">TV-Speicher</string>
 </resources>

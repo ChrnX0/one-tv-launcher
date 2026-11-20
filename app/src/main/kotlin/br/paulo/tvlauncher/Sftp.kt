@@ -88,7 +88,7 @@ object Sftp {
         return s
     }
 
-    private class Pasta(private val c: ContaMidia) : PastaArquivos {
+    private class Pasta(private val c: ContaMidia) : PastaArquivos, PastaGravavel {
         private val chaves = Chaves(c.token)
         private val s = sessao(c, chaves)
         val canal: ChannelSftp = try {
@@ -115,6 +115,33 @@ object Sftp {
                 override fun close() { runCatching { super.close() }; runCatching { outro.disconnect() } }
             }
         }
+
+        override fun criarPastas(caminho: String) {
+            var atual = ""
+            for (parte in caminho.split('/').filter { it.isNotEmpty() }) {
+                atual = "$atual/$parte"
+                val existe = runCatching { canal.stat(atual).isDir }.getOrDefault(false)
+                if (!existe) traduz { canal.mkdir(atual) }
+            }
+        }
+
+        override fun escrever(caminho: String): java.io.OutputStream = traduz {
+            // Canal próprio (o mesmo SSH), como a leitura: listar ou tocar enquanto grava não atrapalha.
+            val outro = s.openChannel("sftp") as ChannelSftp
+            outro.connect(TEMPO_MS)
+            val e = try { outro.put(absoluto(caminho), ChannelSftp.OVERWRITE) } catch (x: Exception) { outro.disconnect(); throw x }
+            object : java.io.FilterOutputStream(e.buffered(256 * 1024)) {
+                override fun write(b: ByteArray, off: Int, len: Int) = out.write(b, off, len)
+                override fun close() { try { super.close() } finally { runCatching { outro.disconnect() } } }
+            }
+        }
+
+        override fun apagar(caminho: String) = traduz { canal.rm(absoluto(caminho)) }
+
+        /** statvfs (extensão do OpenSSH); servidor sem ela: "não sei" ([Long.MAX_VALUE]), e a gravação segue. */
+        override fun livre(caminho: String): Long = runCatching {
+            canal.statVFS(absoluto(caminho)).availForNonRoot * 1024
+        }.getOrNull()?.takeIf { it > 0 } ?: Long.MAX_VALUE
 
         private fun <T> traduz(f: () -> T): T = try { f() } catch (e: SftpException) {
             throw when (e.id) {

@@ -9,6 +9,7 @@ export LC_ALL=C.UTF-8
 rm -rf /srv/dados && mkdir -p "/srv/dados/Filmes/Série A" /srv/dados/.oculto
 head -c 300000 /dev/urandom > "/srv/dados/Filmes/vídeo 1.mkv"; echo foto > /srv/dados/Filmes/capa.jpg; echo x > "/srv/dados/Filmes/Série A/ep1.mp4"
 chmod -R a+rX /srv/dados
+rm -rf /srv/gravar && mkdir -p /srv/gravar && chmod 777 /srv/gravar
 id teste >/dev/null 2>&1 || useradd -m teste; echo 'teste:Senh4!' | chpasswd
 # TLS: CA de teste + certificado de "localhost" (pelo IP 127.0.0.1 o nome não bate: o teste confere que recusa).
 mkdir -p /srv/tls && cd /srv/tls
@@ -28,6 +29,7 @@ from pyftpdlib.handlers import FTPHandler, TLS_FTPHandler
 from pyftpdlib.servers import FTPServer
 from OpenSSL import SSL
 a = DummyAuthorizer(); a.add_user("teste", "Senh4!", "/srv/dados", perm="elr"); a.add_anonymous("/srv/dados")
+a.add_user("grava", "Senh4!", "/srv/gravar", perm="elradfmw")   # 20/11/2026: gravação da TV em FTP
 if sys.argv[1] == "tls":
     class H(TLS_FTPHandler): pass
     H.certfile = "/srv/tls/srv.pem"; H.ssl_protocol = SSL.TLS_METHOD; H.tls_control_required = True; H.tls_data_required = True

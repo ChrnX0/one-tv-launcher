@@ -38,7 +38,7 @@ object DriveBackup {
     fun guardarConta(ctx: Context, email: String, refresh: String): Boolean = try {
         val (dados, iv) = PlayerArmazem.cifrar(refresh)
         prefs(ctx).edit().putString("drive_email", email).putString("drive_token_dados", dados)
-            .putString("drive_token_iv", iv).remove("drive_pasta").commit()
+            .putString("drive_token_iv", iv).remove("drive_pasta").remove("drive_pasta_gravacoes").commit()
     } catch (e: Exception) { Log.w(TAG, "não consegui cifrar o token: ${e.javaClass.simpleName}"); false }
 
     private fun refresh(ctx: Context): String? {
@@ -56,14 +56,14 @@ object DriveBackup {
 
     private fun esquecer(ctx: Context) {
         val p = prefs(ctx)
-        p.edit().remove("drive_email").remove("drive_token_dados").remove("drive_token_iv").remove("drive_pasta").apply {
+        p.edit().remove("drive_email").remove("drive_token_dados").remove("drive_token_iv").remove("drive_pasta").remove("drive_pasta_gravacoes").apply {
             // Sem conta, o destino Drive não tem como funcionar: volta a "só na TV" (a tela mostra).
             if (p.getString("destino", null) == BackupNoturnoRegras.DRIVE) putString("destino", BackupNoturnoRegras.SO_TV)
         }.commit()
     }
 
     /** Um access token novo (vale ~1 h). Lança IllegalStateException com texto para a tela/registro. */
-    private fun acesso(ctx: Context): String {
+    internal fun acesso(ctx: Context): String {
         val r = refresh(ctx) ?: run {
             if (conectado(ctx)) esquecer(ctx)   // Keystore perdeu a chave: a conta guardada não abre mais
             throw IllegalStateException("conecte a conta do Google Drive de novo")
@@ -120,22 +120,28 @@ object DriveBackup {
      * O id da pasta "OneTV-backup": o guardado, se ainda existe; senão procura (só as criadas pelo launcher aparecem);
      * senão cria. Se a pessoa apagar a pasta no Drive, a próxima noite cria outra.
      */
-    private fun pastaId(ctx: Context, token: String): String {
-        prefs(ctx).getString("drive_pasta", null)?.takeIf { DriveRegras.idValido(it) }?.let { id ->
+    private fun pastaId(ctx: Context, token: String): String = pasta(ctx, token, DriveRegras.PASTA, "drive_pasta")
+
+    /**
+     * A pasta [nome] na raiz do Drive (criada pelo launcher), guardada em [chave]. Também a "OneTV-gravacoes" das
+     * gravações copiadas (RecordingCloudCopy, 20/11/2026).
+     */
+    internal fun pasta(ctx: Context, token: String, nome: String, chave: String): String {
+        prefs(ctx).getString(chave, null)?.takeIf { DriveRegras.idValido(it) }?.let { id ->
             val (codigo, texto) = pedir("GET", "${DriveRegras.API}/$id?fields=id,trashed", token)
             val naLixeira = runCatching { org.json.JSONObject(texto).optBoolean("trashed") }.getOrDefault(true)
             if (codigo in 200..299 && !naLixeira) return id
         }
-        val (c1, t1) = pedir("GET", "${DriveRegras.API}?pageSize=10&fields=files(id)&q=" + enc(DriveRegras.consultaPasta()), token)
+        val (c1, t1) = pedir("GET", "${DriveRegras.API}?pageSize=10&fields=files(id)&q=" + enc(DriveRegras.consultaPasta(nome)), token)
         if (c1 !in 200..299) throw IllegalStateException("o Drive recusou (${c1}); a API do Drive está ligada no Google Cloud?")
         val achada = org.json.JSONObject(t1).optJSONArray("files")?.optJSONObject(0)?.optString("id")?.takeIf { DriveRegras.idValido(it) }
         val id = achada ?: run {
-            val meta = org.json.JSONObject().put("name", DriveRegras.PASTA).put("mimeType", DriveRegras.TIPO_PASTA).toString()
+            val meta = org.json.JSONObject().put("name", nome).put("mimeType", DriveRegras.TIPO_PASTA).toString()
             val (c2, t2) = pedir("POST", "${DriveRegras.API}?fields=id", token, meta.toByteArray(), "application/json; charset=UTF-8")
             if (c2 !in 200..299) throw IllegalStateException("não consegui criar a pasta no Drive ($c2)")
             org.json.JSONObject(t2).optString("id").takeIf { DriveRegras.idValido(it) } ?: throw IllegalStateException("o Drive não devolveu a pasta")
         }
-        prefs(ctx).edit().putString("drive_pasta", id).apply()
+        prefs(ctx).edit().putString(chave, id).apply()
         return id
     }
 

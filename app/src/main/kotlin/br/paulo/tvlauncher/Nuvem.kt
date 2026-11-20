@@ -93,7 +93,7 @@ object Nuvem {
     // ---------------------------------------------------------------- volta do login pelo celular (Box e Drive)
 
     /** O "Redirect URI" que o dono põe no app do Box e no cliente do Google. Página estática do site (site/volta.html). */
-    const val RETORNO = "https://chrnx0.github.io/one-tv-launcher/volta.html"
+    const val RETORNO = "https://chrnx0.github.io/sofaly/volta.html"
 
     /**
      * O "state" leva o caminho de volta: um número aleatório (a TV só aceita o código com ele), o IP da TV na rede de

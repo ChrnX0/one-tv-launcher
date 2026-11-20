@@ -35,7 +35,7 @@ object Avisos {
     const val MAX_INSCRICOES = 8
     private const val INTERVALO_MIN_MS = 10 * 60_000L
     /** "sub" do VAPID: endereço público do projeto (o serviço de push usa para contato). Nada pessoal. */
-    private const val CONTATO = "https://github.com/ChrnX0/one-tv-launcher"
+    private const val CONTATO = "https://github.com/ChrnX0/sofaly"
 
     enum class Tipo(val rotulo: String, val padrao: Boolean, val semLimite: Boolean = false) {
         LEMBRETE("Lembretes da grade", true, semLimite = true),

@@ -24,6 +24,8 @@ CP="$CACHE/junit-4.13.2.jar:$CACHE/hamcrest-core-1.3.jar:$CACHE/json-20240303.ja
 # teste -> arquivos de produção que ele usa (acrescente aqui quando um teste novo for puro)
 declare -A FONTES=(
   [FimDoVideoTest]="FimDoVideo"
+  [AppStorageTest]="AppStorageRules MenuApp AppIdentity"
+  [MenuAppTest]="MenuApp AppIdentity"
   [BarraIlhaTest]="BarraIlha CruzLogica"
   [PainelHttpTest]="PainelHttp PainelSeguranca JsonSeguro"
   [PainelSegurancaTest]="PainelSeguranca PainelHttp JsonSeguro"
@@ -73,6 +75,7 @@ declare -A FONTES=(
   [SofyMotionTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [SofyStringsTest]="SofyMotion SofyPolicy ObserverCore ObserverBaseline NaoPerturbe"
   [OnDemandTest]="OnDemand"
+  [StorageModeRulesTest]="StorageModeRules"
 )
 
 falhou=0

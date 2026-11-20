@@ -9,7 +9,7 @@ import org.json.JSONObject
  * Spotify para Ouvir"). Ordem de quem decide:
  *  1. jogo (JogosTv.ehJogo, que já respeita a escolha feita na tela Jogos) -> Jogar;
  *  2. a escolha manual ("Mover para…" no segurar OK) -> a categoria escolhida;
- *  3. automático: o tipo que o app declara à loja (ApplicationInfo.category: vídeo, áudio) ou a lista de conhecidos
+ *  3. automático: a categoria da ficha do pacote (AppShelf, 20/11/2026), o tipo que o app declara à loja (ApplicationInfo.category: vídeo, áudio) ou a lista de conhecidos
  *     abaixo (muitos apps de TV não declaram nada) -> Assistir/Ouvir;
  *  4. o resto -> Aplicativos.
  * Mover para Jogar ou tirar de Jogar passa pela escolha dos Jogos ([Jogos.escolher]): um lugar só decide o que é jogo.
@@ -36,7 +36,8 @@ object CategoriaApps {
     )
 
     /** Categoria automática (sem escolha manual) de um app que não é jogo. */
-    fun automatica(pacote: String, categoriaAndroid: Int): CruzLogica.Categoria = when {
+    fun automatica(pacote: String, categoriaAndroid: Int, ficha: String? = null): CruzLogica.Categoria = when {
+        AppShelf.Shelf.of(ficha) != null -> AppShelf.Shelf.of(ficha)!!.world.takeIf { it != CruzLogica.Categoria.JOGAR } ?: CruzLogica.Categoria.APLICATIVOS
         pacote in VIDEO -> CruzLogica.Categoria.ASSISTIR
         pacote in AUDIO -> CruzLogica.Categoria.OUVIR
         categoriaAndroid == ApplicationInfo.CATEGORY_VIDEO -> CruzLogica.Categoria.ASSISTIR
@@ -45,10 +46,10 @@ object CategoriaApps {
     }
 
     /** Onde o app aparece na cruz. [escolha] = o id da categoria escolhida à mão, ou null (automático). */
-    fun destino(pacote: String, categoriaAndroid: Int, ehJogo: Boolean, escolha: String?): CruzLogica.Categoria {
+    fun destino(pacote: String, categoriaAndroid: Int, ehJogo: Boolean, escolha: String?, ficha: String? = null): CruzLogica.Categoria {
         if (ehJogo) return CruzLogica.Categoria.JOGAR
         val manual = escolha?.let { e -> DESTINOS.firstOrNull { it.id == e && it != CruzLogica.Categoria.JOGAR } }
-        return manual ?: automatica(pacote, categoriaAndroid)
+        return manual ?: automatica(pacote, categoriaAndroid, ficha)
     }
 
     fun deJson(t: String?): Map<String, String> = runCatching {
@@ -70,14 +71,14 @@ object CategoriaApps {
      * Move [pacote] para [destino]. Jogar (e sair de Jogar) muda a escolha dos Jogos; o resto fica aqui. Mover de volta
      * para onde o automático já poria apaga a escolha (o app volta a seguir o automático).
      */
-    fun escolher(ctx: Context, pacote: String, destino: CruzLogica.Categoria, categoriaAndroid: Int, eraJogo: Boolean) {
+    fun escolher(ctx: Context, pacote: String, destino: CruzLogica.Categoria, categoriaAndroid: Int, eraJogo: Boolean, ficha: String? = null) {
         val m = escolhas(ctx).toMutableMap()
         if (destino == CruzLogica.Categoria.JOGAR) {
             m.remove(pacote)
             JogosTv.escolher(ctx, pacote, Jogos.Grupo.TV.name)
         } else {
             if (eraJogo) JogosTv.escolher(ctx, pacote, Jogos.FORA)
-            if (automatica(pacote, categoriaAndroid) == destino) m.remove(pacote) else m[pacote] = destino.id
+            if (automatica(pacote, categoriaAndroid, ficha) == destino) m.remove(pacote) else m[pacote] = destino.id
         }
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(CHAVE, paraJson(m)).apply()
     }

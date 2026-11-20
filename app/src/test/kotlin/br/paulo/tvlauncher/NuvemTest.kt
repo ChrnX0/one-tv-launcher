@@ -96,7 +96,7 @@ class NuvemTest {
         assertEquals("${"ab".repeat(16)}_192.168.0.20_8095", e)
         val u = Nuvem.paginaBox("cid123", e)
         assertTrue(u.startsWith("https://account.box.com/api/oauth2/authorize?client_id=cid123&response_type=code"))
-        assertTrue(u.contains("redirect_uri=https%3A%2F%2Fchrnx0.github.io%2Fone-tv-launcher%2Fvolta.html"))
+        assertTrue(u.contains("redirect_uri=https%3A%2F%2Fchrnx0.github.io%2Fsofaly%2Fvolta.html"))
         assertTrue(u.endsWith("&state=$e"))
         assertTrue(Nuvem.credencialBoxValida("abcdefghijklmnopqrstuvwxyz012345"))
         assertFalse(Nuvem.credencialBoxValida("abc def"))

@@ -222,6 +222,7 @@ const PAGINAS = {
   inicio: { acorda: ['inicio'] },
   controle: { acorda: ['controle'] },
   natv: { acorda: [] },
+  tudo: { acorda: [] },   // celular: Na TV + Configurações numa tela (navigation.js)
   apps: { grupo: 'natv', acorda: ['apps'] },
   loja: { grupo: 'natv', acorda: ['extras'] },
   arquivos: { grupo: 'natv', acorda: ['arquivos'] },
@@ -270,7 +271,7 @@ function mudarAba(nome, historico = true) {
   const ancora = ANCORAS[nome];
   if (ancora) nome = ancora[0];
   nome = APELIDOS[nome] || nome;
-  if (paginasDoPapel.length && !paginasDoPapel.includes(nome)) nome = paginasDoPapel[0];
+  if (paginasDoPapel.length && !paginasDoPapel.includes(nome) && nome !== 'tudo') nome = paginasDoPapel[0];
   if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
   paginaAtual = nome;
   const secao = PAGINAS[nome].grupo || nome;
@@ -396,6 +397,14 @@ async function tvEmUso() {
 
 // ---------- aplicativos ----------
 
+/** As prateleiras (ids de AppShelf.Shelf, na ordem da TV) e o nome de cada uma. */
+const PRATELEIRAS = new Map([
+  ['entertainment', 'Filmes e séries'], ['video', 'Vídeos'], ['sports', 'Esportes'], ['kids', 'Infantil'],
+  ['music_audio', 'Música e áudio'], ['news', 'Notícias'], ['games', 'Jogos'], ['education', 'Educação'],
+  ['health_fitness', 'Saúde e exercício'], ['lifestyle', 'Estilo de vida'], ['tools', 'Ferramentas'],
+  ['system', 'Sistema'], ['other', 'Outros'],
+]);
+
 let usoHoje = {};
 async function carregarApps() {
   mostrar($('statusApps'), 'Carregando…');
@@ -439,8 +448,19 @@ function desenharApps() {
   mostrar($('statusApps'), filtrados.length ? '' : 'Nenhum app.');
   const sistema = apps.filter((a) => a.sistema).length;
   $('contagemApps').textContent = `${filtrados.length} de ${apps.length} apps na TV (${apps.length - sistema} instalados por você, ${sistema} do sistema)`;
-  for (const a of filtrados) lista.appendChild(linhaApp(a));
+  // Sem busca: em prateleiras, na mesma ordem e com os mesmos nomes da tela Todos os apps da TV (AppShelf, 20/11/2026).
+  if (termo) { for (const a of filtrados) lista.appendChild(linhaApp(a)); return; }
+  for (const [id, nome] of PRATELEIRAS) {
+    const doGrupo = filtrados.filter((a) => (PRATELEIRAS.has(a.categoria) ? a.categoria : 'other') === id);
+    if (!doGrupo.length) continue;
+    const t = document.createElement('h3');
+    t.className = 'titulo-prateleira';
+    t.textContent = nome;
+    lista.appendChild(t);
+    for (const a of doGrupo) lista.appendChild(linhaApp(a));
+  }
 }
+
 
 function linhaApp(a) {
   const linha = document.createElement('div');
@@ -1518,7 +1538,7 @@ function desenharAcesso(a) {
 // ---------- erros do launcher -> issue no GitHub (ErrosFiltrados.kt, 11/11/2026) ----------
 // A TV não guarda token do GitHub: o link abre a página de issue nova com o texto pronto, e quem envia é a pessoa.
 
-const REPO_ISSUES = 'https://github.com/ChrnX0/one-tv-launcher/issues/new';
+const REPO_ISSUES = 'https://github.com/ChrnX0/sofaly/issues/new';
 const MAX_URL_ISSUE = 7000;   // o GitHub recusa endereços muito longos; corta erros inteiros, nunca no meio
 
 /** Texto da issue a partir da resposta de /api/extras/erros. Só campos já filtrados na TV. */

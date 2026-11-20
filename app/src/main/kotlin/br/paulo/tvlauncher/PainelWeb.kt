@@ -773,6 +773,11 @@ object PainelWeb {
                 if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
                 ?.let { return json(it.first, it.second) }
         }
+        if (req.caminho == "/api/storage" || req.caminho.startsWith("/api/storage/")) {   // 20/11/2026: PainelStorage.kt
+            PainelStorage.rotear(app, req.metodo, req.caminho.removePrefix("/api/storage"),
+                if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
+                ?.let { return json(it.first, it.second) }
+        }
         if (req.caminho.startsWith("/api/extras/")) {   // ideias de 10/11/2026: PainelExtras.kt
             if (req.caminho == "/api/extras/video" && req.metodo == "GET")
                 return Resposta(200, null, ByteArray(0), fluxo = { PainelExtras.video(app, it) })
@@ -1114,11 +1119,13 @@ object PainelWeb {
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
+        "/navigation.js" to ("navigation.js" to "text/javascript; charset=utf-8"),   // índice da página e aba Tudo
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
         "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
         "/addons.js" to ("addons.js" to "text/javascript; charset=utf-8"),   // addons no formato do Stremio (16/11/2026)
+        "/storage.js" to ("storage.js" to "text/javascript; charset=utf-8"),   // pen drive e armazenamento (20/11/2026)
         "/jsqr.js" to ("jsqr.js" to "text/javascript; charset=utf-8"),   // leitor de QR (jsQR 1.4.0, Apache 2.0) para o celular sem BarcodeDetector
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"

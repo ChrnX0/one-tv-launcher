@@ -62,7 +62,8 @@
     <string name="grv_reserva">Cartella di rete</string>
     <string name="grv_reserva_explica">Dove registrare quando non c’è una chiavetta USB collegata (una cartella Windows o NAS da “In rete”)</string>
     <string name="grv_nenhuma">Nessuna</string>
-    <string name="grv_sem_smb">Aggiungi prima una cartella Windows/NAS (SMB) in In rete.</string>
+    <string name="grv_onde_pergunta">Registrare dove?</string>
+    <string name="grv_sem_smb">Aggiungi prima una cartella di rete (Windows/NAS, FTP o SFTP) in Rete.</string>
     <string name="grv_amanha">Domani</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">guarda</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Non cambiare</string>
     <string name="lb_troca_marcada">Cambierà da solo</string>
     <string name="lb_troca_marcada_det">Su %1$s alle %2$s (se la TV è accesa)</string>
+    <string name="grv_nao_copiou">Copia su %1$s non riuscita</string>
+    <string name="grv_copiada">Registrazione copiata su %1$s</string>
+    <string name="grv_partes_copiadas">%1$d parte/i copiata/e</string>
+    <string name="grv_copiando">Copia della registrazione su %1$s…</string>
+    <string name="grv_nuvem">Copia nel cloud</string>
+    <string name="grv_nuvem_explica">Quando la registrazione finisce, una copia va al tuo account cloud</string>
+    <string name="grv_na_fila">%1$d in coda</string>
+    <string name="grv_apagar_depois">Elimina qui dopo la copia</string>
+    <string name="grv_apagar_depois_explica">Libera la chiavetta o la cartella quando la copia nel cloud è completa</string>
+    <string name="grv_sem_nuvem">Accedi a OneDrive, Dropbox o Box in Rete, o collega Google Drive in Backup automatico.</string>
+    <string name="grv_memoria_tv">Memoria della TV</string>
 </resources>

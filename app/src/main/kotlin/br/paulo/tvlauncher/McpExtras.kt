@@ -25,7 +25,7 @@ object McpExtras {
             "responder perguntas sobre o que está passando. Vídeo de apps com DRM sai preto na foto, mas os textos vêm. " +
             "A TV avisa na tela que foi vista. Só funciona com a opção 'Ver a tela pelo Claude' ligada em Extras."),
         ferramenta("erros_recentes", "Erros recentes do launcher da TV (tipo, onde no código, versão), sem dados pessoais. " +
-            "Para diagnosticar e propor correção no repositório ChrnX0/one-tv-launcher.",
+            "Para diagnosticar e propor correção no repositório ChrnX0/sofaly.",
             JSONObject().put("quantos", JSONObject().put("type", "integer").put("minimum", 1).put("maximum", 20))),
         ferramenta("casa_listar", "Luzes, tomadas, ventiladores, cortinas, ar-condicionado, cenas, scripts, câmeras e sensores " +
             "(temperatura, umidade, portas, movimento, água, fumaça) do Home Assistant da casa, com o estado. Sensores só se leem."),

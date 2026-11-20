@@ -57,6 +57,8 @@ object Gravacoes {
      * conexões, o mesmo arquivo, e o fim da primeira soltava as travas da segunda).
      */
     internal val iniciando = java.util.concurrent.atomic.AtomicBoolean(false)
+    /** Copiando gravações para a nuvem (RecordingCloudCopy): o serviço fica de pé até terminar. */
+    internal val copiando = java.util.concurrent.atomic.AtomicBoolean(false)
     fun ocupado() = atual != null || iniciando.get()
     private val ouvintes = ArrayList<() -> Unit>()
     private val principal = Handler(Looper.getMainLooper())
@@ -73,9 +75,10 @@ object Gravacoes {
     // ---------------------------------------------------------------- comandos (qualquer tela)
 
     /** "Gravar agora": até [fim] (o fim do programa + folga, ou 1 h / 2 h). */
-    fun gravarAgora(ctx: Context, c: Canal, programa: String, fim: Long) {
+    fun gravarAgora(ctx: Context, c: Canal, programa: String, fim: Long, destino: String = "") {
         val i = Intent(ctx, GravacaoServico::class.java).setAction(GravacaoServico.ACAO_AGORA)
             .putExtra("canal", c.id).putExtra("nome", c.nome).putExtra("programa", programa).putExtra("fim", fim)
+            .putExtra("destino", destino)
         iniciar(ctx, i)
     }
 
@@ -102,10 +105,10 @@ object Gravacoes {
     }
 
     /** Agenda; devolve as que conflitam (aí não agenda). Lista cheia: devolve null. */
-    fun agendar(ctx: Context, c: Canal, p: Programa, semanal: Boolean): List<GravacaoRegras.Agendada>? = synchronized(this) {
+    fun agendar(ctx: Context, c: Canal, p: Programa, semanal: Boolean, destino: String = ""): List<GravacaoRegras.Agendada>? = synchronized(this) {
         val lista = agendadas(ctx)
         if (lista.size >= GravacaoRegras.MAX_AGENDADAS) return null
-        val nova = GravacaoRegras.Agendada(UUID.randomUUID().toString(), c.id, c.nome, p.titulo, p.inicio, p.fim, semanal)
+        val nova = GravacaoRegras.Agendada(UUID.randomUUID().toString(), c.id, c.nome, p.titulo, p.inicio, p.fim, semanal, destino)
         val conflito = GravacaoRegras.conflitos(nova, lista)
         if (conflito.isNotEmpty()) return conflito
         salvar(ctx, lista + nova)
@@ -150,6 +153,9 @@ object Gravacoes {
         GravacaoRegras.gravandoAgora(lista, agora)?.let { a ->
             if (!ocupado()) iniciar(app, Intent(app, GravacaoServico::class.java).setAction(GravacaoServico.ACAO_AGENDADA).putExtra("id", a.id))
         }
+        // Cópias para a nuvem que ficaram para depois (a TV desligou no meio, a internet caiu): tenta de novo.
+        if (!ocupado() && !copiando.get() && runCatching { RecordingCloudCopy.fila(app).isNotEmpty() }.getOrDefault(false))
+            iniciar(app, Intent(app, GravacaoServico::class.java).setAction(GravacaoServico.ACAO_COPIAR))
         val prox = GravacaoRegras.proximaAComecar(lista, agora)
         if (prox == null) { am.cancel(pendente(app)); return }
         try { am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, prox.comecaEm, pendente(app)) }
@@ -190,13 +196,14 @@ class GravacaoServico : Service() {
         const val ACAO_AGORA = "br.paulo.tvlauncher.gravacao.AGORA"
         const val ACAO_AGENDADA = "br.paulo.tvlauncher.gravacao.AGENDADA"
         const val ACAO_PARAR = "br.paulo.tvlauncher.gravacao.PARAR"
+        const val ACAO_COPIAR = "br.paulo.tvlauncher.gravacao.COPIAR"
         private const val TAG = "TvLauncher.Gravacao"
         private const val CANAL_NOTIF = "gravacao"
         private const val ID_NOTIF = 4701
     }
 
-    private var trava: PowerManager.WakeLock? = null
-    private var wifi: WifiManager.WifiLock? = null
+    @Volatile private var trava: PowerManager.WakeLock? = null
+    @Volatile private var wifi: WifiManager.WifiLock? = null
 
     override fun onBind(i: Intent?): IBinder? = null
 
@@ -206,11 +213,12 @@ class GravacaoServico : Service() {
         when (i?.action) {
             ACAO_PARAR -> { Gravacoes.parar(this); if (Gravacoes.atual == null) encerrar() }
             ACAO_AGORA -> comecar(i.getStringExtra("canal").orEmpty(), i.getStringExtra("nome").orEmpty(),
-                i.getStringExtra("programa").orEmpty(), i.getLongExtra("fim", 0L), null)
+                i.getStringExtra("programa").orEmpty(), i.getLongExtra("fim", 0L), null, i.getStringExtra("destino").orEmpty())
             ACAO_AGENDADA -> {
                 val a = Gravacoes.agendadas(this).firstOrNull { it.id == i.getStringExtra("id") }
-                if (a == null) { if (!Gravacoes.ocupado()) encerrar() } else comecar(a.canal, a.canalNome, a.programa, a.terminaEm, a.id)
+                if (a == null) { if (!Gravacoes.ocupado()) encerrar() } else comecar(a.canal, a.canalNome, a.programa, a.terminaEm, a.id, a.destino)
             }
+            ACAO_COPIAR -> copiarParaNuvem()
             else -> if (!Gravacoes.ocupado()) encerrar()
         }
         // Um pedido que não começou nada (outro canal, já começando) deixava "Preparando" por cima da gravação em curso.
@@ -231,7 +239,7 @@ class GravacaoServico : Service() {
         stopSelf()
     }
 
-    private fun comecar(canalId: String, nome: String, programa: String, fim: Long, agendadaId: String?) {
+    private fun comecar(canalId: String, nome: String, programa: String, fim: Long, agendadaId: String?, destinoId: String) {
         val ja = Gravacoes.atual
         if (ja != null) {
             // Já grava: o mesmo canal só estica o fim; outro canal fica de fora (1 conexão).
@@ -244,7 +252,7 @@ class GravacaoServico : Service() {
         val app = applicationContext
         Fundo.rodar("gravacao") { try {
             val canal = PlayerCarga.canaisDoCache(app).firstOrNull { it.id == canalId }
-            val destino = runCatching { GravacaoDestino.abrir(app) }.getOrNull()
+            val destino = runCatching { GravacaoDestino.abrir(app, destinoId) }.getOrNull()
             if (canal == null || destino == null) {
                 val motivo = getString(if (canal == null) R.string.grv_sem_canal else R.string.grv_sem_destino)
                 Log.w(TAG, "não gravei $nome: $motivo")
@@ -267,6 +275,7 @@ class GravacaoServico : Service() {
         val app = applicationContext
         val inicio = System.currentTimeMillis()
         val s = Gravacoes.Sessao(c.id, nome.ifEmpty { c.nome }, programa, inicio, fim, agendadaId, destino.nome)
+        val nomes = ArrayList<String>()   // as partes gravadas (para a cópia na nuvem)
         Gravacoes.atual = s
         Gravacoes.iniciando.set(false)   // daqui em diante quem barra uma segunda gravação é o [atual]
         Gravacoes.escreverEstado(app, s)
@@ -276,7 +285,11 @@ class GravacaoServico : Service() {
         Log.i(TAG, "começou: ${s.canalNome} até ${Gravacoes.hora(fim)} em ${destino.nome}")
         val g = Gravador(
             abrirCanal = { GravacaoCanal.abrir(c.url, c.agenteUsuario).also { s.canal = it } },
-            abrirPedaco = { parte -> destino.abrir(GravacaoRegras.nomeArquivo(inicio, s.canalNome, programa.ifEmpty { null }, parte)) },
+            abrirPedaco = { parte ->
+                val n = GravacaoRegras.nomeArquivo(inicio, s.canalNome, programa.ifEmpty { null }, parte)
+                nomes += n
+                destino.abrir(n)
+            },
             livre = { destino.livre() },
             relogio = { System.currentTimeMillis() },
             fimMs = Long.MAX_VALUE,   // o fim pode esticar: o laço abaixo confere s.fim
@@ -316,10 +329,33 @@ class GravacaoServico : Service() {
         }
         if (texto != null) Avisos.enviar(app, Avisos.Tipo.GRAVACAO, getString(R.string.grv_parou, s.canalNome), texto)
         else if (porHorario) Avisos.enviar(app, Avisos.Tipo.GRAVACAO, getString(R.string.grv_terminou, s.canalNome), programa.ifEmpty { s.canalNome })
+        if (r.bytes > 0) runCatching { RecordingCloudCopy.enfileirar(app, destino.id, nomes) }
+        copiarAgora()   // já nesta thread de fundo: a gravação acabou
         Handler(Looper.getMainLooper()).post { encerrar() }
     }
 
+    /** ACAO_COPIAR (fila que ficou de antes): numa thread de fundo, e o serviço encerra no fim. */
+    private fun copiarParaNuvem() {
+        if (Gravacoes.copiando.get()) return
+        Fundo.rodar("gravacao-nuvem") { copiarAgora(); Handler(Looper.getMainLooper()).post { encerrar() } }
+    }
+
+    /** Copia a fila para a nuvem (bloqueia). Uma gravação nova que comece tem prioridade: a cópia para entre as partes. */
+    private fun copiarAgora() {
+        if (!Gravacoes.copiando.compareAndSet(false, true)) return
+        try {
+            if (runCatching { RecordingCloudCopy.fila(this) }.getOrDefault(emptyList()).isEmpty()) return
+            travar()
+            RecordingCloudCopy.processar(this, parar = { Gravacoes.atual != null || Gravacoes.iniciando.get() }) { nuvem ->
+                Handler(Looper.getMainLooper()).post { if (Gravacoes.atual == null) mostrarNotificacao(getString(R.string.grv_copiando, nuvem)) }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "cópia para a nuvem parou: ${e.javaClass.simpleName}")
+        } finally { Gravacoes.copiando.set(false) }
+    }
+
     private fun travar() {
+        if (trava != null) return   // já presa (a cópia para a nuvem logo depois da gravação usa a mesma)
         runCatching {
             trava = getSystemService(PowerManager::class.java)?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "onetv:gravacao")
                 ?.apply { setReferenceCounted(false); acquire(13 * 60 * 60_000L) }
@@ -332,7 +368,7 @@ class GravacaoServico : Service() {
     }
 
     private fun encerrar() {
-        if (Gravacoes.ocupado()) return
+        if (Gravacoes.ocupado() || Gravacoes.copiando.get()) return
         runCatching { trava?.release() }; runCatching { wifi?.release() }
         trava = null; wifi = null
         if (Build.VERSION.SDK_INT >= 24) stopForeground(STOP_FOREGROUND_REMOVE) else @Suppress("DEPRECATION") stopForeground(true)

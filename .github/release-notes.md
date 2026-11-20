@@ -1,6 +1,6 @@
 **One TV Launcher 1.0** · build {BUILD} · commit {COMMIT}
 
-A fast, ad-free home screen for Google TV and Android TV. See the [README](https://github.com/ChrnX0/one-tv-launcher#readme) for the full tour.
+A fast, ad-free home screen for Google TV and Android TV. See the [README](https://github.com/ChrnX0/sofaly#readme) for the full tour.
 
 ### Download
 

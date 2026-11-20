@@ -62,7 +62,8 @@
     <string name="grv_reserva">ネットワークフォルダ</string>
     <string name="grv_reserva_explica">USB メモリが接続されていないときの録画先（ネットワークにある Windows/NAS のフォルダ）</string>
     <string name="grv_nenhuma">なし</string>
-    <string name="grv_sem_smb">先にネットワークで Windows/NAS（SMB）のフォルダを追加してください。</string>
+    <string name="grv_onde_pergunta">どこに録画しますか？</string>
+    <string name="grv_sem_smb">先に「ネットワーク」でネットワークフォルダ（Windows/NAS、FTP、SFTP）を追加してください。</string>
     <string name="grv_amanha">明日</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">見る</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">切り替えない</string>
     <string name="lb_troca_marcada">自動で切り替えます</string>
     <string name="lb_troca_marcada_det">%2$s に %1$s へ（TV がオンの場合）</string>
+    <string name="grv_nao_copiou">%1$s にコピーできませんでした</string>
+    <string name="grv_copiada">録画を %1$s にコピーしました</string>
+    <string name="grv_partes_copiadas">%1$d 個のパートをコピーしました</string>
+    <string name="grv_copiando">録画を %1$s にコピー中…</string>
+    <string name="grv_nuvem">クラウドにコピー</string>
+    <string name="grv_nuvem_explica">録画が終わるとクラウドのアカウントにコピーします</string>
+    <string name="grv_na_fila">待機中 %1$d</string>
+    <string name="grv_apagar_depois">コピー後にここから削除</string>
+    <string name="grv_apagar_depois_explica">クラウドへのコピーが終わったら USB やフォルダを空けます</string>
+    <string name="grv_sem_nuvem">「ネットワーク」で OneDrive・Dropbox・Box にログインするか、「自動バックアップ」で Google Drive を接続してください。</string>
+    <string name="grv_memoria_tv">テレビのストレージ</string>
 </resources>

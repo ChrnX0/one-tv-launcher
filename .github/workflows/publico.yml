@@ -4,7 +4,7 @@
 # login das nuvens, privacidade e termos) e issues. Este workflow copia para lá só o que é público:
 #   site/, comunidade/, docs/screenshots/, tudo de publico/ (Pages, modelos de issue, SECURITY.md) e um README
 #   gerado do README daqui sem as partes de código (compilar, por dentro, contribuir, licença).
-# Precisa de: variável REPO_PUBLICO (ex.: ChrnX0/one-tv-launcher) e segredo PUBLICO_TOKEN (token fine-grained só
+# Precisa de: variável REPO_PUBLICO (ex.: ChrnX0/sofaly) e segredo PUBLICO_TOKEN (token fine-grained só
 # daquele repo, com Contents e Workflows em leitura e escrita). Sem a variável, não faz nada.
 name: Repo publico
 

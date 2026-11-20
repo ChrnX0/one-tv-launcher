@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">फ़िल्में और सीरीज़</string>
+    <string name="aa_shelf_video">वीडियो</string>
+    <string name="aa_shelf_sports">खेल</string>
+    <string name="aa_shelf_kids">बच्चे</string>
+    <string name="aa_shelf_music_audio">संगीत और ऑडियो</string>
+    <string name="aa_shelf_news">समाचार</string>
+    <string name="aa_shelf_games">गेम</string>
+    <string name="aa_shelf_education">शिक्षा</string>
+    <string name="aa_shelf_health_fitness">सेहत और फ़िटनेस</string>
+    <string name="aa_shelf_lifestyle">लाइफ़स्टाइल</string>
+    <string name="aa_shelf_tools">टूल</string>
+    <string name="aa_shelf_system">सिस्टम</string>
+    <string name="aa_shelf_other">अन्य</string>
+    <string name="aa_frozen">फ़्रीज़ किए गए</string>
+    <string name="aa_hidden">छिपे हुए</string>
+    <string name="aa_badge_frozen">फ़्रीज़</string>
+    <string name="aa_badge_hidden">छिपा</string>
+    <string name="aa_lock">छिपे हुए (%1$d)</string>
+    <string name="aa_count_hidden">छिपे: %1$d</string>
+    <string name="aa_count_frozen">फ़्रीज़: %1$d</string>
+    <string name="aa_pin_title">छिपे ऐप देखने के लिए PIN</string>
+    <string name="aa_used_today">आज खोला गया</string>
+    <string name="aa_used_days">आख़िरी बार %1$d दिन पहले खोला</string>
+    <string name="aa_used_never">यहाँ से अभी तक नहीं खोला गया</string>
+    <string name="aa_size">%1$s जगह लेता है</string>
+    <string name="aa_risk_safe">इसके कार्ड के अनुसार सुरक्षित</string>
+    <string name="aa_risk_care">इसके कार्ड के अनुसार सावधानी से</string>
+    <string name="aa_risk_essential">टीवी के लिए ज़रूरी: फ़्रीज़ न करें</string>
+    <string name="aa_tip_idle">%1$d दिन से नहीं खोला। फ़्रीज़ करने से मेमोरी खाली होती है और इसे वापस किया जा सकता है।</string>
+    <string name="aa_hint_app">OK खोलता है · ले जाने, छिपाने, फ़्रीज़ या अनइंस्टॉल के लिए OK दबाए रखें</string>
+    <string name="aa_hint_frozen">OK अनफ़्रीज़ करके खोलता है</string>
+    <string name="aa_hint_lock">OK PIN माँगता है और छिपे ऐप यहीं दिखाता है</string>
+    <string name="aa_open">खोलें</string>
+    <string name="aa_freeze">फ़्रीज़ करें</string>
+    <string name="aa_freezing">%1$s फ़्रीज़ हो रहा है…</string>
+    <string name="aa_frozen_done">%1$s फ़्रीज़ हो गया। 10 मिनट में टीवी जाँचेगा कि सब ठीक चल रहा है, और कुछ रुका तो वापस कर देगा।</string>
+    <string name="aa_freeze_failed">%1$s फ़्रीज़ नहीं हो सका: %2$s</string>
+    <string name="aa_unfreeze_open">अनफ़्रीज़ करके खोलें</string>
+    <string name="aa_unfreeze_refreeze">खोलें और लौटने पर फिर फ़्रीज़ करें</string>
+    <string name="aa_unfreezing">%1$s अनफ़्रीज़ हो रहा है…</string>
+    <string name="aa_unfreeze_failed">%1$s अनफ़्रीज़ नहीं हो सका: %2$s</string>
+    <string name="aa_move_auto">अपने-आप</string>
+</resources>

@@ -135,7 +135,7 @@ class IdeiasDozeTest {
     @Test fun vapidAssinaturaConfere() {
         val par = parP256()
         val aut = WebPush.autorizacao("https://fcm.googleapis.com/fcm/send/abc", WebPush.cru(par.public), 1_000L,
-            "https://github.com/ChrnX0/one-tv-launcher") { dado ->
+            "https://github.com/ChrnX0/sofaly") { dado ->
             Signature.getInstance("SHA256withECDSA").apply { initSign(par.private); update(dado) }.sign()
         }
         val m = Regex("""^vapid t=([^.]+)\.([^.]+)\.([^,]+), k=(.+)$""").find(aut)

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela "Todos os apps" em prateleiras (AllAppsScreen, AppShelf), 20/11/2026. -->
+<resources>
+    <string name="aa_shelf_entertainment">映画・ドラマ</string>
+    <string name="aa_shelf_video">動画</string>
+    <string name="aa_shelf_sports">スポーツ</string>
+    <string name="aa_shelf_kids">キッズ</string>
+    <string name="aa_shelf_music_audio">音楽・オーディオ</string>
+    <string name="aa_shelf_news">ニュース</string>
+    <string name="aa_shelf_games">ゲーム</string>
+    <string name="aa_shelf_education">教育</string>
+    <string name="aa_shelf_health_fitness">健康・フィットネス</string>
+    <string name="aa_shelf_lifestyle">ライフスタイル</string>
+    <string name="aa_shelf_tools">ツール</string>
+    <string name="aa_shelf_system">システム</string>
+    <string name="aa_shelf_other">その他</string>
+    <string name="aa_frozen">凍結中</string>
+    <string name="aa_hidden">非表示</string>
+    <string name="aa_badge_frozen">凍結</string>
+    <string name="aa_badge_hidden">非表示</string>
+    <string name="aa_lock">非表示 (%1$d)</string>
+    <string name="aa_count_hidden">非表示: %1$d</string>
+    <string name="aa_count_frozen">凍結: %1$d</string>
+    <string name="aa_pin_title">非表示のアプリを見るための PIN</string>
+    <string name="aa_used_today">今日開いた</string>
+    <string name="aa_used_days">最後に開いたのは %1$d 日前</string>
+    <string name="aa_used_never">ここからはまだ開いていません</string>
+    <string name="aa_size">使用量 %1$s</string>
+    <string name="aa_risk_safe">カードでは安全</string>
+    <string name="aa_risk_care">カードでは注意が必要</string>
+    <string name="aa_risk_essential">テレビに必須: 凍結しないでください</string>
+    <string name="aa_tip_idle">%1$d 日間開いていません。凍結するとメモリが空き、元に戻せます。</string>
+    <string name="aa_hint_app">OK で開く · OK 長押しで移動・非表示・凍結・アンインストール</string>
+    <string name="aa_hint_frozen">OK で凍結を解除して開く</string>
+    <string name="aa_hint_lock">OK で PIN を入力し、非表示のアプリをここに表示</string>
+    <string name="aa_open">開く</string>
+    <string name="aa_freeze">凍結</string>
+    <string name="aa_freezing">%1$s を凍結中…</string>
+    <string name="aa_frozen_done">%1$s を凍結しました。10 分後にテレビが正常か確認し、何か止まっていれば元に戻します。</string>
+    <string name="aa_freeze_failed">%1$s を凍結できません: %2$s</string>
+    <string name="aa_unfreeze_open">凍結を解除して開く</string>
+    <string name="aa_unfreeze_refreeze">開いて、戻ったら再び凍結</string>
+    <string name="aa_unfreezing">%1$s の凍結を解除中…</string>
+    <string name="aa_unfreeze_failed">%1$s の凍結を解除できません: %2$s</string>
+    <string name="aa_move_auto">自動</string>
+</resources>

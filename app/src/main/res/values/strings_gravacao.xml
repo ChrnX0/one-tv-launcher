@@ -62,7 +62,8 @@
     <string name="grv_reserva">Network folder</string>
     <string name="grv_reserva_explica">Where to record when no USB drive is plugged in (a Windows or NAS folder from “On the network”)</string>
     <string name="grv_nenhuma">None</string>
-    <string name="grv_sem_smb">Add a Windows/NAS (SMB) folder in On the network first.</string>
+    <string name="grv_onde_pergunta">Record where?</string>
+    <string name="grv_sem_smb">Add a network folder (Windows/NAS, FTP or SFTP) in On the network first.</string>
     <string name="grv_amanha">Tomorrow</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">watch</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Don\'t switch</string>
     <string name="lb_troca_marcada">Will switch on its own</string>
     <string name="lb_troca_marcada_det">To %1$s at %2$s (if the TV is on)</string>
+    <string name="grv_nao_copiou">Couldn\'t copy to %1$s</string>
+    <string name="grv_copiada">Recording copied to %1$s</string>
+    <string name="grv_partes_copiadas">%1$d part(s) copied</string>
+    <string name="grv_copiando">Copying the recording to %1$s…</string>
+    <string name="grv_nuvem">Copy to the cloud</string>
+    <string name="grv_nuvem_explica">When a recording ends, a copy goes to your cloud account</string>
+    <string name="grv_na_fila">%1$d waiting</string>
+    <string name="grv_apagar_depois">Delete here after copying</string>
+    <string name="grv_apagar_depois_explica">Frees the USB drive or folder once the cloud copy is complete</string>
+    <string name="grv_sem_nuvem">Sign in to OneDrive, Dropbox or Box in On the network, or connect Google Drive in Automatic backup.</string>
+    <string name="grv_memoria_tv">TV storage</string>
 </resources>

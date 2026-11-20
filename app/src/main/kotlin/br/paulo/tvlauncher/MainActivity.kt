@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.format.Formatter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -343,6 +344,19 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         homeNaFrente = true
+        recongelarPendentes()   // "congelar de novo ao voltar" (Todos os apps, 20/11/2026)
+        // Pen drive com apps foi tirado (AppStorage): diz quais sumiram até ele voltar.
+        AppStorage.ausentes(this).takeIf { it.isNotEmpty() }?.let { f ->
+            mostrarAviso(getString(R.string.st_sumiram, f.joinToString(", ")))
+        }
+        // Memória quase cheia e pen drive como memória da TV: a Sofy sugere o maior app para mover (1x por dia).
+        Fundo.rodar("StorageAdvice") {
+            val s = runCatching { StorageMode.sugestao(applicationContext) }.getOrNull() ?: return@rodar
+            runOnUiThread {
+                if (!isDestroyed) mostrarAviso(getString(R.string.st_sugestao, s.first,
+                    android.text.format.Formatter.formatShortFileSize(this, s.second)))
+            }
+        }
         SonsCruz.naFrente = true
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)
@@ -415,9 +429,11 @@ class MainActivity : Activity() {
             if (foto != null) ui.post { if (!isDestroyed) fotoPerfil.setImageBitmap(foto) }
             runCatching { Despertador.agendar(this) }   // garante o proximo alarme agendado
             runCatching { Rotinas.agendar(this) }       // idem para as rotinas por horário
-            if (fichasHome == null) fichasHome = runCatching {   // frase do destaque dos apps (ideia 13): fora da tela
-                FrasesApps.ler(ComunidadeApps.fichasJuntas(this))   // ideia 70: APK + comunidade
-            }.getOrDefault(emptyMap())
+            if (fichasHome == null || catsFicha == null) {   // frase do destaque dos apps (ideia 13): fora da tela
+                val json = runCatching { ComunidadeApps.fichasJuntas(this) }.getOrNull()   // ideia 70: APK + comunidade
+                fichasHome = runCatching { FrasesApps.ler(json ?: "{}") }.getOrDefault(emptyMap())
+                catsFicha = AppShelf.sheetCategories(json)   // AppShelf (20/11/2026): categoria da Play pela ficha
+            }
             ComunidadeApps.talvezAtualizar(this)   // ideia 70: no máximo 1x por semana, numa thread
         }
         BackupAutomatico.talvezGravar(this)   // cópia diária das configurações (numa thread; no máximo 1x por dia)
@@ -1205,6 +1221,10 @@ class MainActivity : Activity() {
         const val ALTURA_CONTINUAR = 112    // título + cards do tamanho dos apps (63 dp) + folga do card focado
         /** As fichas de fichas-apps.json para a frase do destaque (ideia 13). Lidas uma vez, na filaApps; null até lá. */
         @Volatile var fichasHome: Map<String, FrasesApps.Ficha>? = null
+        const val CARTAO_TRANCA = "aa:lock"            // o cartão "N escondidos · PIN" (nenhum pacote tem esse nome)
+        const val COR_CONGELADOS = 0xFF9CC8E8.toInt()  // gelo
+        const val COR_ESCONDIDOS = 0xFF9A9AA6.toInt()  // neutro: não é mundo nenhum
+        const val DIAS_PARADO = 60                      // dica do Observador: sem abrir há 60 dias
     }
 
     /** Todos os apps de TV instalados, sem ordem e sem tirar os ocultos (quem organiza é montarEntradas). */
@@ -2601,8 +2621,13 @@ class MainActivity : Activity() {
         if (pastaToken == TOKEN_OCULTOS || (pastaToken == null && entrada is Entrada.App)) {
             titulo = nomeDe(token) + if (PainelApps.eSistema(this, token)) getString(R.string.home_app_sistema) else ""
             val sobDemanda = when { OnDemandTv.marked(this, token) -> true; OnDemandTv.eligible(this, token) -> false; else -> null }
-            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda)
+            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda,
+                AppStorage.opcaoMenu(this, token), PainelPermissoes.arquivosBloqueados(this, token))
+            AppStorage.atualizarEmFundo(this)   // pen drive entrou/saiu: o próximo menu já sabe
             for (a in acoes) opcoes += when (a) {
+                MenuApp.Acao.INSTALAR_EXTERNO -> Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(token, true) }
+                MenuApp.Acao.INSTALAR_DISPOSITIVO -> Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(token, false) }
+                MenuApp.Acao.LIBERAR_ARQUIVOS -> Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(token) }
                 MenuApp.Acao.SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda)) { mudarSobDemanda(token, true) }
                 MenuApp.Acao.TIRAR_SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda_tirar)) { mudarSobDemanda(token, false) }
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
@@ -2660,6 +2685,54 @@ class MainActivity : Activity() {
     }
 
     private fun mostrarAviso(texto: String) = AvisoTv.rapido(this, "Apps", texto)
+
+    /**
+     * Leva o app para o pen drive adotado ou de volta para a TV (AppStorage.kt). O Android fecha o app enquanto copia;
+     * 1 GB leva ~1,5 min num pen drive comum. Dá para desfazer pelo mesmo menu, então não pede confirmação.
+     */
+    /** RetroArch e afins: libera ler pen drives e arquivos (PainelPermissoes.liberarArquivos), pelo shell, fora da tela. */
+    private fun liberarArquivos(pacote: String) {
+        val nome = nomeDe(pacote)
+        Fundo.rodar("Arquivos") {
+            val motivo = PainelPermissoes.liberarArquivos(this, pacote)
+            runOnUiThread {
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                mostrarAviso(if (motivo == null) getString(R.string.home_arquivos_liberado, nome)
+                    else getString(R.string.home_arquivos_falhou, nome, motivo))
+            }
+        }
+    }
+
+    private fun mudarArmazenamento(pacote: String, paraExterno: Boolean, confirmado: Boolean = false) {
+        val nome = nomeDe(pacote)
+        if (!confirmado) {
+            // App grande: aviso antes (o que derrubou a Sala em 20/11/2026). Pesar o app lê o disco: fora da tela.
+            Fundo.rodar("AppStorage") {
+                val a = StorageMode.appMovel(this, pacote)
+                runOnUiThread {
+                    if (isFinishing || isDestroyed) return@runOnUiThread
+                    if (a?.arriscado == true) StorageActivity.avisoGrande(this, nome, Formatter.formatShortFileSize(this, a.bytes)) {
+                        mudarArmazenamento(pacote, paraExterno, confirmado = true)
+                    } else mudarArmazenamento(pacote, paraExterno, confirmado = true)
+                }
+            }
+            return
+        }
+        mostrarAviso(getString(R.string.home_instalando_lugar, nome))
+        Fundo.rodar("AppStorage") {
+            val motivo = AppStorage.mover(this, pacote, paraExterno)
+            runOnUiThread {
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                mostrarAviso(when {
+                    motivo == null && paraExterno -> getString(R.string.home_instalado_externo, nome)
+                    motivo == null -> getString(R.string.home_instalado_dispositivo, nome)
+                    motivo == "sem_adotado" -> getString(R.string.home_instalar_lugar_falhou, nome, getString(R.string.home_instalar_lugar_sem_pendrive))
+                    motivo == "shell" -> getString(R.string.home_instalar_lugar_falhou, nome, getString(R.string.home_instalar_lugar_sem_shell))
+                    else -> getString(R.string.home_instalar_lugar_falhou, nome, motivo)
+                })
+            }
+        }
+    }
 
     /** Depois de mostrar/ocultar: fecha a pasta aberta, relê tudo e leva o foco para [foco] (ou perto de onde estava). */
     private fun atualizarAposMudanca(foco: String?) {
@@ -3472,7 +3545,7 @@ class MainActivity : Activity() {
             else -> {}
         }
         val escolhasCat = CategoriaApps.escolhas(this)
-        val porDestino = porPacote.keys.groupBy { CategoriaApps.destino(it, this@MainActivity.categoria(it), false, escolhasCat[it]) }
+        val porDestino = porPacote.keys.groupBy { CategoriaApps.destino(it, this@MainActivity.categoria(it), false, escolhasCat[it], catsFicha?.get(it)) }
         val frequencia = frequenciaApps()
         val fixados = fixadosCruz()
         fun appsDe(k: CruzLogica.Categoria): List<HomeCruz.Item> =
@@ -3743,7 +3816,7 @@ class MainActivity : Activity() {
                 ?.getActiveSessions(android.content.ComponentName(this, OuvinteNotificacoes::class.java))
                 ?.firstOrNull { it.packageName == pacote }
         }.getOrNull()
-        val musica = CategoriaApps.destino(pacote, categoria(pacote), false, CategoriaApps.escolhas(this)[pacote]) == CruzLogica.Categoria.OUVIR
+        val musica = CategoriaApps.destino(pacote, categoria(pacote), false, CategoriaApps.escolhas(this)[pacote], catsFicha?.get(pacote)) == CruzLogica.Categoria.OUVIR
         if (sessao != null && musica) { runCatching { sessao.transportControls.play() }.onSuccess { return } }
         val pi = sessao?.sessionActivity
         if (pi != null) {
@@ -3791,7 +3864,7 @@ class MainActivity : Activity() {
     /** "Mover para…": Assistir, Ouvir, Jogar (com a Central ligada) ou Aplicativos; a atual vem marcada. */
     private fun moverAppCruz(pacote: String) {
         val eraJogo = JogosTv.ehJogo(this, pacote)
-        val atual = CategoriaApps.destino(pacote, categoria(pacote), eraJogo && JogosTv.cardLigado(this), CategoriaApps.escolhas(this)[pacote])
+        val atual = CategoriaApps.destino(pacote, categoria(pacote), eraJogo && JogosTv.cardLigado(this), CategoriaApps.escolhas(this)[pacote], catsFicha?.get(pacote))
         val destinos = CategoriaApps.DESTINOS.filter { it != CruzLogica.Categoria.JOGAR || JogosTv.cardLigado(this) }
         val nomes = destinos.map { k -> getString(when (k) {
             CruzLogica.Categoria.ASSISTIR -> R.string.cruz_assistir
@@ -3802,7 +3875,10 @@ class MainActivity : Activity() {
         menuAberto = Estilo.lista(this, getString(R.string.cruz_mover_titulo, nomeDe(pacote)), nomes) { i ->
             val k = destinos[i]
             if (k == atual) return@lista
-            CategoriaApps.escolher(this, pacote, k, categoria(pacote), eraJogo)
+            CategoriaApps.escolher(this, pacote, k, categoria(pacote), eraJogo, catsFicha?.get(pacote))
+            // A prateleira escolhida à mão em Todos os apps que fica em outro mundo deixa de valer: o mundo novo manda.
+            val prat = prateleirasManuais().toMutableMap()
+            if (AppShelf.Shelf.of(prat[pacote])?.let { it.world != k } == true) { prat.remove(pacote); prefsApps().edit().putString("shelves", AppShelf.toJson(prat)).apply() }
             getSharedPreferences(PREFS_CRUZ, MODE_PRIVATE).edit().putString(k.id, "app:$pacote").apply()   // a coluna nova abre nele
             atualizarAposMudanca(null)
         }
@@ -3973,29 +4049,337 @@ class MainActivity : Activity() {
         return if (escondidos == 0) getString(R.string.cruz_apps_n, naGrade) else getString(R.string.cruz_apps_ocultos, naGrade, escondidos)
     }
 
+    // ---------------------------------------------------------------- "Todos os apps" (proposta C, 20/11/2026)
+    // A tela em prateleiras (AllAppsScreen) substitui a grade antiga, que segue montada e escondida (ela ainda serve
+    // à HOME antiga, só por adb). Liga com: AppShelf (categoria da Play pela ficha), CategoriaApps (mundo da cruz),
+    // Organizacao.ocultos (Escondidos, com PIN), PainelApps.ocultar (Congelados) e a prova do Observador (ObserverTv).
+
+    private var telaTodos: AllAppsScreen? = null
+    /** A categoria de cada ficha no padrão da Play (AppShelf.sheetCats): a cruz, esta tela e o painel usam. */
+    private var catsFicha: Map<String, String>?
+        get() = AppShelf.sheetCats
+        set(v) { AppShelf.sheetCats = v }
+    /** Os escondidos aparecem nesta abertura da tela (o PIN foi certo). Fechar a tela tranca de novo. */
+    private var escondidosLiberados = false
+    /** O que custa disco/IPC, lido fora da tela a cada abertura: categoria das fichas, apps de sistema e congelados. */
+    private class DadosTodos(val sistema: Set<String>, val congelados: List<Item>)
+    @Volatile private var dadosTodos: DadosTodos? = null
+    private val bannersTodos = java.util.concurrent.ConcurrentHashMap<String, Drawable>()
+
     private fun abrirTodos() {
         val c = cruz ?: return
         todosAbertos = true
-        recolherBarra(false, animar = false)   // ▲ na 1ª fileira vai à barra: ela precisa estar visível (o ouvinte sai cedo aqui)
+        escondidosLiberados = false
         c.visibility = View.GONE
-        rotuloApps?.visibility = View.VISIBLE
-        contaTodos?.text = contaApps()
-        veuTodos?.visibility = View.VISIBLE
-        rolagem.visibility = View.VISIBLE
-        rolagem.scrollTo(0, 0)
-        // Sem nenhum app na grade, o foco não pode ficar sem dono: vai à bolinha do perfil, 1º da barra.
-        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() ?: bolinhaPerfil?.requestFocus() }
+        val tela = telaTodos ?: AllAppsScreen(this, hostTodos).also { t ->
+            telaTodos = t
+            (raizCruz ?: c.parent as? FrameLayout)?.addView(t, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        }
+        tela.visibility = View.VISIBLE
+        tela.bringToFront()
+        if (dadosTodos != null) montarTodos(null)   // mostra já com o que sabia; os dados novos redesenham em seguida
+        lerDadosTodos(null)
     }
 
     private fun fecharTodos() {
         val c = cruz ?: return
         if (modoMover) cancelarMover()
         todosAbertos = false
-        rolagem.visibility = View.GONE
-        rotuloApps?.visibility = View.GONE
-        veuTodos?.visibility = View.GONE
+        escondidosLiberados = false
+        telaTodos?.visibility = View.GONE
         c.visibility = View.VISIBLE
         c.requestFocus()
+    }
+
+    private fun lerDadosTodos(foco: String?) {
+        Fundo.rodar("TodosApps") {
+            val pm = packageManager
+            if (catsFicha == null) catsFicha = runCatching { AppShelf.sheetCategories(ComunidadeApps.fichasJuntas(this)) }.getOrDefault(emptyMap())
+            val sistema = instalados.filter { PainelApps.eSistema(this, it.pacote) }.map { it.pacote }.toSet()
+            val congelados = runCatching { appsCongelados(pm) }.getOrDefault(emptyList())
+            ui.post {
+                if (isDestroyed) return@post
+                dadosTodos = DadosTodos(sistema, congelados)
+                if (todosAbertos) montarTodos(foco ?: (currentFocus?.tag as? AllAppsScreen.Card)?.pkg)
+            }
+        }
+    }
+
+    /** Apps de TV congelados (ocultos pelo dono ou desativados pelo shell): só os que têm tela de abrir. */
+    private fun appsCongelados(pm: android.content.pm.PackageManager): List<Item> {
+        val flags = android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS
+        val saida = ArrayList<Item>()
+        for (ai in pm.getInstalledApplications(flags)) {
+            val p = ai.packageName
+            if (p == packageName || !PrivilegioDO.estaOculto(this, p)) continue
+            val tela = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER).setPackage(p)
+            if (pm.queryIntentActivities(tela, flags).isEmpty()) continue
+            val icone = runCatching { DesenhoHome.iconeRedondo(resources, ai.loadIcon(pm)) }.getOrNull() ?: continue
+            saida += Item(p, ai.loadLabel(pm).toString(), icone)
+        }
+        return saida.sortedBy { it.nome.lowercase() }
+    }
+
+    /** Monta as prateleiras com o que está na memória (rápido, na thread da tela). */
+    private fun montarTodos(foco: String?) {
+        val tela = telaTodos ?: return
+        val dados = dadosTodos ?: DadosTodos(emptySet(), emptyList())
+        val visita = ModoVisita.ativo(this)
+        val daVisita = if (visita) ModoVisita.apps(this) else emptySet()
+        val ocultos = Organizacao.ocultos(this)
+        val apps = instalados.filter { it.pacote !in daVisita }
+        val visiveis = apps.filter { it.pacote !in ocultos }
+        val escondidos = if (visita) emptyList() else apps.filter { it.pacote in ocultos }
+        val freq = frequenciaApps()
+        val porPacote = (apps + dados.congelados).associateBy { it.pacote }
+        val entradas = visiveis.map { AppShelf.Entry(it.pacote, it.nome, prateleira(it.pacote, dados), freq[it.pacote] ?: 0.0) }
+        val (fileiras, unica) = AppShelf.rows(entradas)
+        val secoes = ArrayList<AllAppsScreen.Section>()
+        fun card(p: String, k: AllAppsScreen.Kind) = porPacote[p]?.let { AllAppsScreen.Card(p, it.nome, k, it.icone) }
+        for (f in fileiras) secoes += AllAppsScreen.Section(if (unica) null else nomePrateleira(f.shelf), corPrateleira(f.shelf),
+            f.pkgs.mapNotNull { card(it, AllAppsScreen.Kind.APP) })
+        if (dados.congelados.isNotEmpty() && !visita) secoes += AllAppsScreen.Section(getString(R.string.aa_frozen), COR_CONGELADOS,
+            dados.congelados.map { AllAppsScreen.Card(it.pacote, it.nome, AllAppsScreen.Kind.FROZEN, it.icone) })
+        if (escondidos.isNotEmpty()) secoes += AllAppsScreen.Section(getString(R.string.aa_hidden), COR_ESCONDIDOS,
+            if (escondidosLiberados) escondidos.sortedBy { it.nome.lowercase() }.map { AllAppsScreen.Card(it.pacote, it.nome, AllAppsScreen.Kind.HIDDEN, it.icone) }
+            else listOf(AllAppsScreen.Card(CARTAO_TRANCA, getString(R.string.aa_lock, escondidos.size), AllAppsScreen.Kind.LOCK, null)))
+        val conta = buildString {
+            append(getString(R.string.cruz_apps_n, visiveis.size))
+            if (escondidos.isNotEmpty()) append(" · ").append(getString(R.string.aa_count_hidden, escondidos.size))
+            if (dados.congelados.isNotEmpty() && !visita) append(" · ").append(getString(R.string.aa_count_frozen, dados.congelados.size))
+        }
+        tela.show(conta, secoes, foco)
+        if (secoes.all { it.cards.isEmpty() }) bolinhaPerfil?.requestFocus()   // nada na tela: o foco não fica sem dono
+    }
+
+    private fun prateleira(p: String, dados: DadosTodos): AppShelf.Shelf {
+        val mundo = CategoriaApps.escolhas(this)[p]?.let { id -> CategoriaApps.DESTINOS.firstOrNull { it.id == id } }
+        return AppShelf.decide(p, prateleirasManuais()[p], JogosTv.ehJogo(this, p), catsFicha?.get(p), categoria(p), p in dados.sistema, mundo)
+    }
+
+    private fun prateleirasManuais(): Map<String, String> = AppShelf.fromJson(prefsApps().getString("shelves", null))
+
+    private fun nomePrateleira(s: AppShelf.Shelf): String = getString(when (s) {
+        AppShelf.Shelf.ENTERTAINMENT -> R.string.aa_shelf_entertainment
+        AppShelf.Shelf.VIDEO -> R.string.aa_shelf_video
+        AppShelf.Shelf.SPORTS -> R.string.aa_shelf_sports
+        AppShelf.Shelf.KIDS -> R.string.aa_shelf_kids
+        AppShelf.Shelf.MUSIC_AUDIO -> R.string.aa_shelf_music_audio
+        AppShelf.Shelf.NEWS -> R.string.aa_shelf_news
+        AppShelf.Shelf.GAMES -> R.string.aa_shelf_games
+        AppShelf.Shelf.EDUCATION -> R.string.aa_shelf_education
+        AppShelf.Shelf.HEALTH_FITNESS -> R.string.aa_shelf_health_fitness
+        AppShelf.Shelf.LIFESTYLE -> R.string.aa_shelf_lifestyle
+        AppShelf.Shelf.TOOLS -> R.string.aa_shelf_tools
+        AppShelf.Shelf.SYSTEM -> R.string.aa_shelf_system
+        AppShelf.Shelf.OTHER -> R.string.aa_shelf_other
+    })
+
+    /** A cor do mundo da cruz em que a prateleira mora (decisão 3 da crítica de 19/11: cor fixa por mundo). */
+    private fun corPrateleira(s: AppShelf.Shelf): Int = if (s == AppShelf.Shelf.SYSTEM) COR_ESCONDIDOS else when (s.world) {
+        CruzLogica.Categoria.ASSISTIR -> DesignTokens.WORLD_WATCH
+        CruzLogica.Categoria.OUVIR -> DesignTokens.WORLD_LISTEN
+        CruzLogica.Categoria.JOGAR -> DesignTokens.WORLD_PLAY
+        else -> DesignTokens.WORLD_APPS
+    }
+
+    private val hostTodos = object : AllAppsScreen.Host {
+        override fun open(card: AllAppsScreen.Card) = when (card.kind) {
+            AllAppsScreen.Kind.LOCK -> liberarEscondidos()
+            AllAppsScreen.Kind.FROZEN -> abrirCongelado(card)
+            else -> abrir(card.pkg)
+        }
+
+        override fun hold(card: AllAppsScreen.Card) = when (card.kind) {
+            AllAppsScreen.Kind.LOCK -> liberarEscondidos()
+            AllAppsScreen.Kind.FROZEN -> abrirCongelado(card)
+            else -> menuTodos(card)
+        }
+
+        override fun focused(card: AllAppsScreen.Card) {
+            if (card.kind == AllAppsScreen.Kind.LOCK) {
+                telaTodos?.showInfo(card, AllAppsScreen.Info(card.name, emptyList(), null, getString(R.string.aa_hint_lock)))
+                return
+            }
+            Fundo.rodar("TodosInfo") {
+                val info = runCatching { infoTodos(card) }.getOrNull() ?: return@rodar
+                ui.post { if (!isDestroyed) telaTodos?.showInfo(card, info) }
+            }
+        }
+
+        override fun loadBanner(card: AllAppsScreen.Card, done: (Drawable?) -> Unit) {
+            bannersTodos[card.pkg]?.let { done(it); return }
+            capas[card.pkg]?.first?.let { b -> android.graphics.drawable.BitmapDrawable(resources, b).also { bannersTodos[card.pkg] = it; done(it) }; return }
+            Fundo.rodar("TodosBanner") {
+                val d = runCatching { bannerTodos(card.pkg) }.getOrNull()
+                if (d != null) bannersTodos[card.pkg] = d
+                ui.post { if (!isDestroyed) done(d) }
+            }
+        }
+    }
+
+    /** Banner de TV de um app, também de um congelado (o Android só mostra esses com as flags abaixo). Fora da tela. */
+    private fun bannerTodos(p: String): Drawable? {
+        val pm = packageManager
+        val flags = android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS
+        val ai = pm.getApplicationInfo(p, flags)
+        val tela = pm.queryIntentActivities(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER).setPackage(p), flags)
+            .firstOrNull()?.activityInfo
+        val b = tela?.loadBanner(pm) ?: pm.getApplicationBanner(ai) ?: return null
+        return runCatching { android.graphics.drawable.BitmapDrawable(resources, CapaFoco.bitmapReduzido(b)) }.getOrNull()
+    }
+
+    /** O painel do app em foco: o que ele é (ficha), quando abriu, quanto ocupa, o risco e a dica do Observador. */
+    private fun infoTodos(card: AllAppsScreen.Card): AllAppsScreen.Info {
+        val p = card.pkg
+        val agora = System.currentTimeMillis()
+        val linhas = ArrayList<String>()
+        val portugues = resources.configuration.locales[0].language == "pt"
+        fichasHome?.get(p)?.let { f -> (if (portugues) f.pt else f.en)?.let { linhas += it } }
+        val ultimo = maxOf(ultimoUso[p] ?: 0L, lerFrequencia(prefsApps().getString("f:$p", null)).second)
+        val dias = if (ultimo > 0) ((agora - ultimo) / 86_400_000L).toInt() else -1
+        if (card.kind != AllAppsScreen.Kind.FROZEN) linhas += when {
+            dias < 0 -> getString(R.string.aa_used_never)
+            dias == 0 -> getString(R.string.aa_used_today)
+            else -> getString(R.string.aa_used_days, dias)
+        }
+        PainelControle.espaco(this, p)?.let { e ->
+            val total = e.optLong("app") + e.optLong("dados") + e.optLong("cache")
+            if (total > 0) linhas += getString(R.string.aa_size, android.text.format.Formatter.formatShortFileSize(this, total))
+        }
+        val risco = PainelApps.risco(this, p)
+        when (risco) {
+            "seguro" -> linhas += getString(R.string.aa_risk_safe)
+            "cuidado" -> linhas += getString(R.string.aa_risk_care)
+            "essencial" -> linhas += getString(R.string.aa_risk_essential)
+        }
+        // Dica (Observador): app seguro, instalado há mais de 60 dias, sem abrir há 60 dias. Congelar dá para desfazer.
+        val instalado = runCatching { packageManager.getPackageInfo(p, 0).firstInstallTime }.getOrDefault(agora)
+        val parado = if (ultimo > 0) dias else ((agora - instalado) / 86_400_000L).toInt()
+        val dica = if (card.kind == AllAppsScreen.Kind.APP && risco == "seguro" && podeCongelar() &&
+            agora - instalado > DIAS_PARADO * 86_400_000L && parado >= DIAS_PARADO) getString(R.string.aa_tip_idle, parado) else null
+        val ajuda = getString(if (card.kind == AllAppsScreen.Kind.FROZEN) R.string.aa_hint_frozen else R.string.aa_hint_app)
+        return AllAppsScreen.Info(card.name, linhas, dica, ajuda)
+    }
+
+    private fun podeCongelar() = PlayPolicy.allowed(PlayPolicy.Power.FREEZE_APPS, BuildConfig.PLAY)
+
+    /** PIN do painel quando existe um (o mesmo que administra a TV; o das crianças não vale). Sem PIN, segue direto. */
+    private fun comPinDoDono(titulo: String, acao: () -> Unit) {
+        if (!PainelArmazem.temPin(this)) { acao(); return }
+        PinTv.pedir(this, titulo, familia = false) { certo ->
+            if (certo) acao() else AvisoTv.rapido(this, titulo, getString(R.string.trava_home_errado), 4)
+        }
+    }
+
+    private fun liberarEscondidos() = comPinDoDono(getString(R.string.aa_pin_title)) {
+        escondidosLiberados = true
+        val primeiro = Organizacao.ocultos(this).mapNotNull { p -> instalados.firstOrNull { it.pacote == p } }.minByOrNull { it.nome.lowercase() }
+        montarTodos(primeiro?.pacote)
+    }
+
+    private fun menuTodos(card: AllAppsScreen.Card) {
+        if (TravaHome.precisaPin(this)) { TravaHome.comPin(this) { menuTodos(card) }; return }
+        val p = card.pkg
+        val opcoes = mutableListOf(Opcao(getString(R.string.aa_open)) { abrir(p) })
+        opcoes += Opcao(getString(R.string.cruz_mover)) { moverPrateleira(p) }
+        opcoes += if (card.kind == AllAppsScreen.Kind.HIDDEN) Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, p); atualizarAposMudanca(null); montarTodos(p) }
+        else Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, p); atualizarAposMudanca(null); montarTodos(null); avisarOculto() }
+        if (podeCongelar() && !EntradasTv.eh(p)) opcoes += Opcao(getString(R.string.aa_freeze)) { congelarTodos(p) }
+        opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(p) }
+        val desinstala = PainelApps.podeDesinstalar(this, p)
+        if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { comPinDoDono(getString(R.string.home_desinstalar)) { confirmarDesinstalar(p) } }
+        val titulo = nomeDe(p) + if (PainelApps.eSistema(this, p)) getString(R.string.home_app_sistema) else ""
+        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }, separarUltimo = desinstala) { i -> opcoes[i].acao() }
+    }
+
+    /** "Mover para…" nas prateleiras: grava a prateleira e leva o mundo da cruz junto (um lugar só decide). */
+    private fun moverPrateleira(p: String) {
+        val dados = dadosTodos ?: DadosTodos(emptySet(), emptyList())
+        val atual = prateleira(p, dados)
+        val manual = prateleirasManuais()[p]
+        val destinos = AppShelf.Shelf.entries.filter { it != AppShelf.Shelf.GAMES || JogosTv.cardLigado(this) || JogosTv.ehJogo(this, p) }
+        val nomes = listOf<CharSequence>(getString(R.string.aa_move_auto) + if (manual == null) getString(R.string.pp_ativo) else "") +
+            destinos.map { s -> nomePrateleira(s) + if (manual != null && s == atual) getString(R.string.pp_ativo) else "" }
+        menuAberto = Estilo.lista(this, getString(R.string.cruz_mover_titulo, nomeDe(p)), nomes) { i ->
+            val m = prateleirasManuais().toMutableMap()
+            val eraJogo = JogosTv.ehJogo(this, p)
+            if (i == 0) {
+                m.remove(p)
+                // Automático também apaga o mundo escolhido à mão na cruz (volta tudo a seguir a ficha).
+                if (!eraJogo) CategoriaApps.escolher(this, p, CategoriaApps.automatica(p, categoria(p), catsFicha?.get(p)), categoria(p), false, catsFicha?.get(p))
+            } else {
+                val s = destinos[i - 1]
+                m[p] = s.id
+                CategoriaApps.escolher(this, p, s.world, categoria(p), eraJogo, catsFicha?.get(p))
+            }
+            prefsApps().edit().putString("shelves", AppShelf.toJson(m)).apply()
+            atualizarAposMudanca(null)
+            montarTodos(p)
+        }
+    }
+
+    /** Congela pela tela: PIN se a ficha não diz "seguro"; o Observador guarda as conferências de antes e confere em 10 min. */
+    private fun congelarTodos(p: String) {
+        val nome = nomeDe(p)
+        Fundo.rodar("TodosRisco") {
+            val risco = PainelApps.risco(this, p) ?: "sem informação"
+            ui.post {
+                if (isDestroyed) return@post
+                val fazer = {
+                    mostrarAviso(getString(R.string.aa_freezing, nome))
+                    Fundo.rodar("Congelar") {
+                        val antes = runCatching { ObserverTv.beforeFreeze(this) }.getOrNull()
+                        val motivo = PainelApps.ocultar(this, p, true)
+                        if (motivo == null && antes != null) runCatching { ObserverTv.startTrial(this, p, antes) }
+                        Log.i("TvLauncher.Apps", "congelar $p pela tela Todos os apps => ${motivo ?: "ok"}")
+                        ui.post {
+                            if (isDestroyed) return@post
+                            mostrarAviso(if (motivo == null) getString(R.string.aa_frozen_done, nome) else getString(R.string.aa_freeze_failed, nome, motivo))
+                            preencherApps(); lerDadosTodos(null)
+                        }
+                    }
+                }
+                if (MenuApp.ocultarPedePin(risco)) comPinDoDono(getString(R.string.aa_freeze)) { fazer() } else fazer()
+            }
+        }
+    }
+
+    /** Congelado: descongela (com o PIN do dono, como no painel) e abre; pode pedir para congelar de novo na volta. */
+    private fun abrirCongelado(card: AllAppsScreen.Card) {
+        val opcoes = listOf<CharSequence>(getString(R.string.aa_unfreeze_open), getString(R.string.aa_unfreeze_refreeze))
+        menuAberto = Estilo.lista(this, card.name, opcoes) { i ->
+            comPinDoDono(getString(R.string.aa_unfreeze_open)) {
+                mostrarAviso(getString(R.string.aa_unfreezing, card.name))
+                Fundo.rodar("Descongelar") {
+                    val motivo = PainelApps.ocultar(this, card.pkg, false)
+                    Log.i("TvLauncher.Apps", "descongelar ${card.pkg} pela tela Todos os apps => ${motivo ?: "ok"}")
+                    ui.post {
+                        if (isDestroyed) return@post
+                        if (motivo != null) { mostrarAviso(getString(R.string.aa_unfreeze_failed, card.name, motivo)); return@post }
+                        if (i == 1) prefsApps().edit().putStringSet("recongelar", (prefsApps().getStringSet("recongelar", null).orEmpty() + card.pkg)).apply()
+                        preencherApps(); lerDadosTodos(card.pkg)
+                        abrir(card.pkg)
+                    }
+                }
+            }
+        }
+    }
+
+    /** Volta à HOME: congela de novo o que foi aberto com "congelar de novo ao voltar" (com a prova do Observador). */
+    private fun recongelarPendentes() {
+        val pendentes = prefsApps().getStringSet("recongelar", null).orEmpty()
+        if (pendentes.isEmpty()) return
+        prefsApps().edit().remove("recongelar").apply()
+        Fundo.rodar("Recongelar") {
+            for (p in pendentes) {
+                val antes = runCatching { ObserverTv.beforeFreeze(this) }.getOrNull()
+                val motivo = PainelApps.ocultar(this, p, true)
+                if (motivo == null && antes != null) runCatching { ObserverTv.startTrial(this, p, antes) }
+                Log.i("TvLauncher.Apps", "congelar de novo $p na volta => ${motivo ?: "ok"}")
+            }
+            ui.post { if (!isDestroyed) { preencherApps(); if (todosAbertos) lerDadosTodos(null) } }
+        }
     }
 
     /** Segurar OK num app da cruz: as opções de hoje que fazem sentido fora da grade (ocultar, desinstalar). */
@@ -4010,6 +4394,14 @@ class MainActivity : Activity() {
         opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
         opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(pacote) }
         opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
+        when (AppStorage.opcaoMenu(this, pacote)) {
+            true -> opcoes += Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(pacote, true) }
+            false -> opcoes += Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(pacote, false) }
+            null -> {}
+        }
+        if (PainelPermissoes.arquivosBloqueados(this, pacote))
+            opcoes += Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(pacote) }
+        AppStorage.atualizarEmFundo(this)
         val desinstala = PainelApps.podeDesinstalar(this, pacote)
         if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
         val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""
@@ -4029,6 +4421,7 @@ class MainActivity : Activity() {
         if (!modoMover) {
             // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
             if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
+            if (todosAbertos && telaTodos?.key(event) == true) return true   // OK curto abre, OK segurado = opções
             if (centralAoSegurarCima(event)) return true
             if (tratarSegurar(event, currentFocus)) return true
             if (trocarDaFrente(event)) return true

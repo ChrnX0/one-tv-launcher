@@ -30,9 +30,9 @@ class AjudaSiteTest {
     }
 
     @Test fun linkDoQr() {
-        assertEquals("https://chrnx0.github.io/one-tv-launcher/help.html?l=pt&t=familia", AjudaQr.link("pt", "familia"))
-        assertEquals("https://chrnx0.github.io/one-tv-launcher/help.html?l=pt-PT&t=tv", AjudaQr.link("pt-PT", "tv"))
-        assertEquals("https://chrnx0.github.io/one-tv-launcher/help.html?l=id&t=tv", AjudaQr.link("in", "tv"))
+        assertEquals("https://chrnx0.github.io/sofaly/help.html?l=pt&t=familia", AjudaQr.link("pt", "familia"))
+        assertEquals("https://chrnx0.github.io/sofaly/help.html?l=pt-PT&t=tv", AjudaQr.link("pt-PT", "tv"))
+        assertEquals("https://chrnx0.github.io/sofaly/help.html?l=id&t=tv", AjudaQr.link("in", "tv"))
         assertEquals("inicio", AjudaQr.topicoDaAba(0))
         assertEquals(null, AjudaQr.topicoDaAba(7))   // a própria aba Ajuda
     }
