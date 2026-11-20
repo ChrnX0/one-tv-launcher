@@ -54,9 +54,36 @@ class CapaCartao(ctx: Context, private val raioPx: Float) : ImageView(ctx) {
         if (!semLayout) super.requestLayout()
     }
 
+    /**
+     * Capa gerada (estudo global 20/11/2026, ideia 8). Por quê: título sem pôster virava um retângulo cinza (visto na Sala,
+     * em Desenhos). Para quê: a grade continua bonita e se lê pelo nome, que já aparece por cima. Como: um degradê de uma
+     * das cores dos mundos da cruz (escolhida pelo título, então o mesmo título tem sempre a mesma cor) para a Noite.
+     * Quem usa passa o título em [semente]; sem semente, fica o cinza de espera de antes.
+     */
+    var semente: String? = null
+        set(v) { if (field != v) { field = v; gerada = null; invalidate() } }
+    private var gerada: GradientDrawable? = null
+
     // O cinza de espera é desenhado aqui (e não como fundo) para trocar de estado sem pedir layout.
     override fun onDraw(c: Canvas) {
         if (drawable != null) { super.onDraw(c); return }
-        espera?.let { it.setBounds(0, 0, width, height); it.draw(c) }
+        val s = semente
+        val d = if (s.isNullOrBlank()) espera else gerada ?: GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(escurecer(corDe(s)), DesignTokens.NIGHT)).apply { cornerRadius = raioPx }.also { gerada = it }
+        d?.let { it.setBounds(0, 0, width, height); it.draw(c) }
+    }
+
+    companion object {
+        private val CORES = intArrayOf(DesignTokens.WORLD_CONTINUE, DesignTokens.WORLD_WATCH, DesignTokens.WORLD_LISTEN,
+            DesignTokens.WORLD_PLAY, DesignTokens.WORLD_APPS, DesignTokens.WORLD_NETWORK)
+
+        /** A cor do título: sempre a mesma para o mesmo nome (sem maiúsculas e espaços contarem). */
+        fun corDe(titulo: String): Int = CORES[Math.floorMod(titulo.lowercase().filter { it.isLetterOrDigit() }.hashCode(), CORES.size)]
+
+        /** 45% da cor: o nome em creme por cima continua lendo bem (a capa é fundo, não destaque). */
+        fun escurecer(cor: Int): Int {
+            fun c(sh: Int) = ((cor shr sh and 0xFF) * 0.45f).toInt()
+            return (0xFF shl 24) or (c(16) shl 16) or (c(8) shl 8) or c(0)
+        }
     }
 }

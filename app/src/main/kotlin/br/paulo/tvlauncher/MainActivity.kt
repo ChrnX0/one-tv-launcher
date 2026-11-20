@@ -530,7 +530,7 @@ class MainActivity : Activity() {
                 for (fmt in listOf(R.string.fmt_data_dia, R.string.fmt_data_mes)) addView(RelogioTela(this@MainActivity, data = true).apply {
                     format12Hour = getString(fmt)
                     format24Hour = getString(fmt)
-                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, Estilo.Leitura.DICA)
                     maxLines = 1
                     setTextColor(textoClaro)
                     typeface = fonteUi
@@ -553,9 +553,9 @@ class MainActivity : Activity() {
         }
         txtTemp = texto(15f, Color.WHITE, fonteUi).apply { includeFontPadding = false; text = "…" }
         // Máxima e mínima não aparecem mais na HOME (estão na tela do clima); os campos ficam para o código que os preenche.
-        txtMax = texto(12f, textoClaro).apply { visibility = View.GONE }
-        txtMin = texto(12f, textoClaro).apply { visibility = View.GONE }
-        txtChuva = texto(12.5f, textoClaro).apply {
+        txtMax = texto(Estilo.Leitura.DICA, textoClaro).apply { visibility = View.GONE }
+        txtMin = texto(Estilo.Leitura.DICA, textoClaro).apply { visibility = View.GONE }
+        txtChuva = texto(Estilo.Leitura.DICA, textoClaro).apply {
             includeFontPadding = false
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
@@ -564,7 +564,7 @@ class MainActivity : Activity() {
         linhaChuva = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            addView(texto(12.5f, textoClaro).apply { text = " · "; includeFontPadding = false })
+            addView(texto(Estilo.Leitura.DICA, textoClaro).apply { text = " · "; includeFontPadding = false })
             addView(txtChuva)
             // Sem texto de chuva, o " · " ficava solto ("… ·" na pílula do clima; crítica de design 19/11/2026).
             visibility = View.GONE
@@ -578,7 +578,7 @@ class MainActivity : Activity() {
         }
 
         // Pílula do despertador: o próximo toque ("⏰ amanhã 6:30"). Some se não houver alarme (ver atualizarPilulaAlarme).
-        txtAlarme = texto(12.5f, textoClaro).apply { includeFontPadding = false }
+        txtAlarme = texto(Estilo.Leitura.DICA, textoClaro).apply { includeFontPadding = false }
         pilulaAlarme = pilula(IconeLinha(IconeLinha.Tipo.DESPERTADOR), vidro = false).apply {
             addView(txtAlarme)
             setOnClickListener { startActivity(Intent(this@MainActivity, AlarmesActivity::class.java)) }
@@ -617,7 +617,7 @@ class MainActivity : Activity() {
             addView(voz, LinearLayout.LayoutParams(alturaPilula, alturaPilula))
         }
         // Cotação do dia (HomeCards, 18/11/2026): na mesma cápsula do clima, depois dele. OK mostra todas as escolhidas.
-        txtCotacao = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
+        txtCotacao = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
         pilulaCotacao = pilula(vidro = false).apply {
             visibility = View.GONE
             addView(txtCotacao)
@@ -640,11 +640,11 @@ class MainActivity : Activity() {
             clipToOutline = true
         }
         barrasTocando = BarrasSom(this)
-        val corSub = 0xB3F4F1EC.toInt()
-        txtTocandoTitulo = texto(12.5f, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
+        val corSub = 0xB3FFF3E6.toInt()
+        txtTocandoTitulo = texto(Estilo.Leitura.DICA, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(220)
         }
-        txtTocandoSub = texto(12.5f, corSub).apply {
+        txtTocandoSub = texto(Estilo.Leitura.DICA, corSub).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(130)
         }
         pilulaTocando = pilula(vidro = false).apply {
@@ -652,7 +652,7 @@ class MainActivity : Activity() {
             addView(capaTocando, LinearLayout.LayoutParams(dp(22), dp(22)).apply { marginEnd = dp(8) })
             addView(barrasTocando, LinearLayout.LayoutParams(dp(11), dp(12)).apply { marginEnd = dp(8) })
             addView(txtTocandoTitulo)
-            addView(texto(12.5f, corSub).apply { text = " · "; includeFontPadding = false })
+            addView(texto(Estilo.Leitura.DICA, corSub).apply { text = " · "; includeFontPadding = false })
             addView(txtTocandoSub)
             setOnClickListener {
                 barrasTocando.tocando = !barrasTocando.tocando   // resposta na hora; o aviso da sessão confirma
@@ -718,7 +718,7 @@ class MainActivity : Activity() {
 
         // Timer (05/11/2026): mais uma pílula na mesma linha, depois do despertador. OK nela cancela. Some sem timer
         // (ver tarefaTimer).
-        txtTimer = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        txtTimer = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
         pilulaTimer = pilula(IconeApp(IconeApp.Tipo.TIMER), vidro = false).apply {
             visibility = View.GONE
             addView(txtTimer)
@@ -733,7 +733,7 @@ class MainActivity : Activity() {
 
         // Lista de TV perto de vencer (11/11/2026, visto no 1 Play): "Playon vence em 3 dias". OK abre a área Conta.
         // Some quando nenhuma lista vence nos próximos 7 dias (ver atualizarPilulaVencimento).
-        txtVencimento = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        txtVencimento = texto(Estilo.Leitura.DICA, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
         pilulaVencimento = pilula(vidro = false).apply {
             visibility = View.GONE
             addView(txtVencimento)
@@ -741,7 +741,7 @@ class MainActivity : Activity() {
         }
         avisos.addView(pilulaVencimento, lpPilula())
         // Ideia 12: o próximo jogo do "Meu time" (24 h) na mesma cápsula, sem fileira nova. OK abre a busca ("Hoje na TV").
-        txtJogo = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        txtJogo = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
         pilulaJogo = pilula(IconeApp(IconeApp.Tipo.TV), vidro = false).apply {
             visibility = View.GONE
             addView(txtJogo)
@@ -749,7 +749,7 @@ class MainActivity : Activity() {
         }
         avisos.addView(pilulaJogo, lpPilula())
         // Ideia 93: "🎂 Hoje é aniversário de tia Rosa · 80 anos" (véspera e dia, lista do painel). OK mostra todos num aviso.
-        txtAniversario = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        txtAniversario = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
         pilulaAniversario = pilula(vidro = false).apply {
             visibility = View.GONE
             addView(txtAniversario)
@@ -760,7 +760,7 @@ class MainActivity : Activity() {
         }
         avisos.addView(pilulaAniversario, lpPilula())
         // Cartões próprios (HomeCards, 18/11/2026): lembrete da casa no dia e contagem regressiva na última semana.
-        txtLembreteCasa = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        txtLembreteCasa = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
         pilulaLembreteCasa = pilula(IconeLinha(IconeLinha.Tipo.RECADO), vidro = false).apply {
             visibility = View.GONE
             addView(txtLembreteCasa)
@@ -769,7 +769,7 @@ class MainActivity : Activity() {
             }
         }
         avisos.addView(pilulaLembreteCasa, lpPilula())
-        txtContagem = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        txtContagem = texto(Estilo.Leitura.DICA, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
         pilulaContagem = pilula(IconeLinha(IconeLinha.Tipo.CALENDARIO), vidro = false).apply {
             visibility = View.GONE
             addView(txtContagem)
@@ -777,7 +777,7 @@ class MainActivity : Activity() {
         avisos.addView(pilulaContagem, lpPilula())
         // Ideia 88: "Sem internet · Funcionam: pendrive, Na rede, Gravações". Primeira da cápsula (é o que mais importa
         // quando aparece). OK abre o Diagnóstico, que explica a queda em uma frase. Ver avaliarSemInternet.
-        txtSemInternet = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        txtSemInternet = texto(Estilo.Leitura.DICA, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
         pilulaSemInternet = pilula(IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO), vidro = false).apply {
             visibility = View.GONE
             addView(txtSemInternet)
@@ -785,7 +785,7 @@ class MainActivity : Activity() {
         }
         avisos.addView(pilulaSemInternet, 0, lpPilula())
         // Status do seu serviço (HomeCards): só aparece quando um endereço cadastrado para de responder. OK mostra todos.
-        txtServico = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        txtServico = texto(Estilo.Leitura.DICA, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
         pilulaServico = pilula(IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO), vidro = false).apply {
             visibility = View.GONE
             addView(txtServico)
@@ -808,7 +808,7 @@ class MainActivity : Activity() {
         // ("Filmes · você parou em 34%"), linha 2 = nota, gênero, ano, duração, quanto falta (ou "● AO VIVO 13:30 – 14:15"),
         // e 2 linhas de sinopse. Apps e Na rede: só a linha 1, como antes. Ancorado por baixo (Gravity.BOTTOM numa caixa
         // que termina em TOPO_DESTAQUE): com ou sem sinopse, ele nunca encosta em "ASSISTIR".
-        txtDestaqueRotulo = texto(11f, CORAL, fonteUi).apply {
+        txtDestaqueRotulo = texto(Estilo.Leitura.DICA, CORAL, fonteUi).apply {
             letterSpacing = 0.08f
             typeface = Typeface.create(fonteUi, Typeface.BOLD)
             includeFontPadding = false
@@ -903,7 +903,7 @@ class MainActivity : Activity() {
             veuTodos = View(this).apply {
                 visibility = View.GONE
                 background = android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(0xB30E1020.toInt(), 0x990E1020.toInt(), 0xD90E1020.toInt()))
+                    intArrayOf(0xB3121528.toInt(), 0x99121528.toInt(), 0xD9121528.toInt()))
             }
             raiz.addView(veuTodos, 0, FrameLayout.LayoutParams(MATCH, MATCH))
             val forte = Fontes.nunito(800)
@@ -1159,7 +1159,7 @@ class MainActivity : Activity() {
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
         const val ILHA_VERMELHO = 0xFFFF5A4F.toInt()   // ponto e "gravando" da Ilha (alerta)
-        const val ILHA_PONTO_CALMO = 0x99F4F1EC.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
+        const val ILHA_PONTO_CALMO = 0x99FFF3E6.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
@@ -2122,7 +2122,7 @@ class MainActivity : Activity() {
                 maxLines = if (aoVivo) 3 else 1
                 ellipsize = TextUtils.TruncateAt.END
                 setPaddingRelative(dp(8), dp(3), dp(8), dp(3))
-                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0E1020.toInt()) }
+                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF121528.toInt()) }
             }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
                 setMargins(dp(8), dp(8), dp(8), dp(8))
             })
@@ -3086,7 +3086,7 @@ class MainActivity : Activity() {
             setPaddingRelative(dp(10), 0, 0, 0)
         }
         ilhaTrilho = trilho
-        val contador = texto(12f, textoClaro, fonteUi).apply {
+        val contador = texto(Estilo.Leitura.DICA, textoClaro, fonteUi).apply {
             includeFontPadding = false; visibility = View.GONE
             background = GradientDrawable().apply { cornerRadius = dp(9).toFloat(); setStroke(dp(1), 0x40FFFFFF) }
             setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
@@ -3207,7 +3207,7 @@ class MainActivity : Activity() {
             }
             box.addView(ImageView(this).apply { setImageDrawable(ic) }, LinearLayout.LayoutParams(dp(15), dp(15)).apply { marginStart = dp(6) })
         }
-        if (t.resto > 0) box.addView(texto(12f, textoClaro, fonteUi).apply { text = "+${t.resto}"; includeFontPadding = false },
+        if (t.resto > 0) box.addView(texto(Estilo.Leitura.DICA, textoClaro, fonteUi).apply { text = "+${t.resto}"; includeFontPadding = false },
             LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(6) })
         box.visibility = if (t.mostrar.isEmpty()) View.GONE else View.VISIBLE
     }

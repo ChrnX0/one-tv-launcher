@@ -898,4 +898,12 @@
     <string name="pm_atraso_audio">Atraso do áudio</string>
     <string name="pm_quadros">Seguir a cadência do filme</string>
     <string name="pm_qualidade">Qualidade</string>
+    <string name="pv_sem_titulo">Sem previsão agora</string>
+    <string name="bu_voz_grupo">Falar</string>
+    <string name="bu_falar">Fale o que você procura</string>
+    <string name="bu_falar_det">Mais rápido que digitar com o controle</string>
+    <string name="bu_recentes">Buscas recentes</string>
+    <string name="bu_recente_det">Buscar de novo</string>
+    <string name="aviso_alarme_tocou_titulo">O despertador tocou na TV</string>
+    <string name="aviso_alarme_tocou_texto">Começou a tocar às %1$s.</string>
 </resources>

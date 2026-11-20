@@ -308,7 +308,7 @@ class ColunaCategorias(
         linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
         // Selo do serviço (listas de fora): fundo claro, letra escura, pequeno.
         val etiqueta = TextView(act).apply {
-            textSize = 11f * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
+            textSize = Estilo.Leitura.DICA * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_ETIQUETA) }
             visibility = View.GONE
         }
@@ -317,7 +317,7 @@ class ColunaCategorias(
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
         val novos = TextView(act).apply {
-            textSize = 11.5f; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
+            textSize = Estilo.Leitura.DICA; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(COR_NOVOS) }
         }
         linha.addView(novos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })
@@ -428,7 +428,7 @@ class ColunaCategorias(
         const val COR_NOVOS = 0xFF5FD3B0.toInt()   // o verde-água dos ícones no esboço
         const val COR_ETIQUETA = 0xFFCFD6E0.toInt()   // selo das listas de fora: cinza claro (cores de marca ficam fora)
         // Ícones em repouso no tom do texto secundário (era verde-água): a cor fica só para a escolhida, como na cruz.
-        const val COR_ICONE = 0xB3F4F1EC.toInt()
+        const val COR_ICONE = 0xB3FFF3E6.toInt()
         // Os trechos da coluna, de cima para baixo (▲▼ anda nesta ordem).
         const val PARADA_TITULO = 0
         const val PARADA_LISTAS = 2

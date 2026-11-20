@@ -74,7 +74,7 @@ class ProtetorTela : DreamService() {
         val relogio = TextClock(this).apply {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 128f)
-            setTextColor(0xFFE8EEEA.toInt())   // cor sólida até o degradê entrar, no 1º layout
+            setTextColor(DesignTokens.CREAM)   // cor sólida até o degradê entrar, no 1º layout
             typeface = fonteRelogio
             includeFontPadding = false
             gravity = Gravity.CENTER
@@ -87,7 +87,7 @@ class ProtetorTela : DreamService() {
         relogio.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             if (relogio.width > 0) {
                 relogio.paint.shader = LinearGradient(0f, 0f, relogio.width.toFloat(), 0f,
-                    intArrayOf(0xFF9FD8FF.toInt(), 0xFFE8EEEA.toInt(), 0xFFFFC98A.toInt()), null, Shader.TileMode.CLAMP)
+                    intArrayOf(0xFF9FD8FF.toInt(), DesignTokens.CREAM, 0xFFFFC98A.toInt()), null, Shader.TileMode.CLAMP)
                 relogio.invalidate()
             }
         }
@@ -96,7 +96,7 @@ class ProtetorTela : DreamService() {
         coluna.addView(TextClock(this).apply {
             format12Hour = getString(R.string.fmt_data_longa); format24Hour = getString(R.string.fmt_data_longa)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-            setTextColor(0x99E8EEEA.toInt())
+            setTextColor(0x99FFF3E6.toInt())
             typeface = fonteMedia
             gravity = Gravity.CENTER
         }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(6) })
@@ -111,7 +111,7 @@ class ProtetorTela : DreamService() {
         fotos = (FotosProtetor.listar(this) + FotosRede.listar(this)).shuffled()
         setContentView(FrameLayout(this).apply {
             background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(0xFF0E1317.toInt(), 0xFF0A0D10.toInt(), 0xFF07090B.toInt()))
+                intArrayOf(DesignTokens.NIGHT, DesignTokens.NIGHT_DEEP, 0xFF07090B.toInt()))
             if (fotos.isNotEmpty()) {
                 for (v in camadas) addView(v.apply { scaleType = ImageView.ScaleType.CENTER_CROP; alpha = 0f }, FrameLayout.LayoutParams(-1, -1))
                 addView(View(this@ProtetorTela).apply {
@@ -135,7 +135,7 @@ class ProtetorTela : DreamService() {
     private fun montarGaleria() {
         isScreenBright = true
         fotos = (FotosProtetor.listar(this) + FotosRede.listar(this)).shuffled()
-        val raiz = FrameLayout(this).apply { setBackgroundColor(0xFF15140F.toInt()) }
+        val raiz = FrameLayout(this).apply { setBackgroundColor(DesignTokens.NIGHT_DEEP) }   // tokens (estudo global 20/11): o Noite da marca, mais fundo
         // O fundo segue o TEMA da HOME (dono, 10 e 11/11/2026): Galeria = a pintura do dia; Escuro = o MESMO protetor,
         // só trocando a pintura pelo wallpaper escuro da HOME (sem mudar mais nada do estilo). Fotos do painel valem nos dois.
         val tema = Tema.atual(this)
@@ -250,7 +250,7 @@ class ProtetorTela : DreamService() {
                 addView(TextView(this@ProtetorTela).apply {
                     text = "$temp°" + if (chovendo) getString(R.string.pt_chovendo) else ""
                     setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-                    setTextColor(0x99E8EEEA.toInt())
+                    setTextColor(0x99FFF3E6.toInt())
                     typeface = fonteLeve
                 })
             }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
@@ -287,12 +287,12 @@ class ProtetorTela : DreamService() {
             }
             addView(TextView(this@ProtetorTela).apply { text = emoji; setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f); gravity = Gravity.CENTER })
             addView(TextView(this@ProtetorTela).apply {
-                text = valor; setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setTextColor(0xE6E8EEEA.toInt())
+                text = valor; setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setTextColor(0xE6FFF3E6.toInt())
                 typeface = fonteMedia; gravity = Gravity.CENTER; maxLines = 2; setPaddingRelative(0, dp(6), 0, 0)
                 setLineSpacing(0f, 0.95f)   // nascer/pôr em 2 linhas; o quadrado tem altura fixa, então não desalinha os outros
             })
             addView(TextView(this@ProtetorTela).apply {
-                text = rotulo.uppercase(); setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f); setTextColor(0x80E8EEEA.toInt())
+                text = rotulo.uppercase(); setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f); setTextColor(0x99FFF3E6.toInt())
                 letterSpacing = 0.06f; gravity = Gravity.CENTER; maxLines = 2; setPaddingRelative(dp(8), dp(3), dp(8), 0)   // nome da fase da lua pode ser longo
             })
         }

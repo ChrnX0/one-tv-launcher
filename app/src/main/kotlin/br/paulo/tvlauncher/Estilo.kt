@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.PathInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -38,7 +39,7 @@ object Estilo {
     // Formato 0xAARRGGBB: os dois primeiros dígitos são a opacidade (FF = sólido, 00 = invisível).
 
     /** Fundo de toda tela sem imagem atrás (era o fundo mais usado no código antigo). */
-    const val FUNDO = 0xFF0E1020.toInt()
+    const val FUNDO = DesignTokens.NIGHT
     /** Superfície de card/linha em tela lisa: branco a 6%. */
     const val SUPERFICIE = 0x0FFFFFFF
     /** Superfície um nível acima (linha focada sem virar pílula, chip ativo): branco a 12%. */
@@ -46,26 +47,26 @@ object Estilo {
     /** Fio de borda das superfícies: branco a 8%. */
     val BORDA: Int get() = if (altoContraste) 0x8CFFFFFF.toInt() else 0x14FFFFFF
     /** Vidro (sobre imagem): tinta escura translúcida + fio claro. Igual à pílula da HOME que o dono aprovou. */
-    const val VIDRO_TINTA = 0x8C0E1020.toInt()
+    const val VIDRO_TINTA = 0x8C121528.toInt()
     const val VIDRO_BORDA = 0x38FFFFFF
 
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
-    const val TEXTO = 0xFFF4F1EC.toInt()
-    val TEXTO_2: Int get() = if (altoContraste) 0xFFF4F1EC.toInt() else 0xB3F4F1EC.toInt()
-    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x86F4F1EC.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
+    const val TEXTO = DesignTokens.CREAM
+    val TEXTO_2: Int get() = if (altoContraste) 0xFFFFF3E6.toInt() else 0xB3FFF3E6.toInt()
+    val TEXTO_3: Int get() = if (altoContraste) 0xD9FFF3E6.toInt() else 0x86FFF3E6.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
     /** Texto em cima do foco branco (linha de lista focada). */
-    const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
-    val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA60E1020.toInt()
+    const val TEXTO_NO_FOCO = DesignTokens.NIGHT
+    val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA6121528.toInt()
 
     /** O ÚNICO acento: "ligado", valor escolhido, progresso. Foco NÃO usa acento: foco é branco. */
-    val ACENTO: Int get() = if (altoContraste) 0xFFFF9A3C.toInt() else 0xFFFF6A2B.toInt()
+    val ACENTO: Int get() = if (altoContraste) DesignTokens.ORANGE_HIGH else DesignTokens.ORANGE
     /** Acento legível sobre o foco branco. */
-    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else 0xFFCE3D00.toInt()
+    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else DesignTokens.ORANGE_ON_LIGHT
     /** Semânticas: atenção (chuva, vencimento) e erro/ao vivo. Não contam como acento. */
-    const val ATENCAO = 0xFFF5B544.toInt()
-    val ERRO: Int get() = if (altoContraste) 0xFFFF8F70.toInt() else 0xFFFF5252.toInt()
+    const val ATENCAO = DesignTokens.ATTENTION
+    val ERRO: Int get() = if (altoContraste) 0xFFFFA08C.toInt() else DesignTokens.ERROR
     /** Foco: branco. A TV é vista a 3 m; o foco tem que ser a coisa mais óbvia da tela. */
-    const val FOCO = 0xFFFFFFFF.toInt()
+    const val FOCO = DesignTokens.FOCUS
 
     // ------------------------------------------------------------------ tipografia (5 papéis, Nunito)
 
@@ -78,7 +79,7 @@ object Estilo {
         /** Linhas, cards, botões. */
         CORPO(18f, 500, 1),        // era 16 (18/11/2026: ler a 3 m, pensando em idosos; a cruz usa 22-32)
         /** Explicação, metadado. */
-        LEGENDA(15f, 400, 2),      // era 13
+        LEGENDA(17f, 400, 2),      // era 13, depois 15 (estudo global 20/11: explicações das listas se leem do sofá)
         /** Nome de grupo ("PRÓXIMOS 9 DIAS"). */
         SECAO(15f, 600, 3, caixaAlta = true, espaco = 0.14f);   // era 13 (pente fino 19/11/2026: nada menor que 15 sp a 3 m)
 
@@ -135,9 +136,9 @@ object Estilo {
     // ------------------------------------------------------------------ forma, espaço, movimento
 
     /** Só 3 raios: chip pequeno, card/painel e pílula (botão, foco de lista, avisos). */
-    const val RAIO_PEQUENO = 8
-    const val RAIO = 16
-    const val RAIO_PILULA = 999
+    const val RAIO_PEQUENO = DesignTokens.RADIUS_SMALL
+    const val RAIO = DesignTokens.RADIUS_MEDIUM
+    const val RAIO_PILULA = DesignTokens.RADIUS_PILL
 
     /** Grade de 8 dp. */
     const val E1 = 8
@@ -148,10 +149,11 @@ object Estilo {
     const val MARGEM_LATERAL = 48
     const val MARGEM_VERTICAL = 27
 
-    /** Só 2 tempos: foco (140 ms) e entrar/sair (220 ms), sempre desacelerando. */
-    const val FOCO_MS = 140L
-    const val TRANSICAO_MS = 220L
-    private val desacelera = DecelerateInterpolator()
+    /** Só 2 tempos, os mesmos do painel e do celular (design/tokens.json, escala do transitions.dev): foco 150 ms (o controle
+     *  tem que parecer instantâneo) e entrar/sair 250 ms, sempre com a curva smooth-out (começa rápido, pousa macio). */
+    const val FOCO_MS = DesignTokens.MS_QUICK
+    const val TRANSICAO_MS = DesignTokens.MS_FAST
+    private val desacelera = DesignTokens.EASE_OUT.let { PathInterpolator(it[0], it[1], it[2], it[3]) }
 
     /** Quanto cresce o que ganha foco: card 8%, linha de lista 2%. */
     const val ESCALA_CARD = 1.08f
@@ -378,6 +380,10 @@ object Estilo {
      * tamanho, cor e espaço. Antes havia 4 desenhos diferentes.
      */
     fun barraDicas(ctx: Context, vararg dicas: Pair<String, String>): ViewGroup = LinhaQuebravel(ctx, dp(ctx, 20), dp(ctx, 8)).apply {
+        // Estudo global 20/11 (ideia 5): a barra de dicas ocupava a tela para sempre (Paulo já tinha tirado a de Filmes).
+        // Por quê: depois de aprender as teclas, a dica é só ruído. Para quê: a tela fica com o que importa. Como: cada
+        // tela mostra as dicas nas DICAS_VEZES primeiras aberturas e depois some (a ajuda continua em Configurações > Ajuda).
+        if (!dicaAindaAjuda(ctx)) visibility = View.GONE
         for ((tecla, acao) in dicas) addView(LinearLayout(ctx).apply {
             // tecla + ação juntas: numa linha que não cabe, a dupla quebra inteira (nunca a tecla de um lado e a ação do outro)
             orientation = LinearLayout.HORIZONTAL
@@ -399,6 +405,19 @@ object Estilo {
      * Dicas escritas numa frase só ("OK abrir · segure OK: mais opções · VOLTAR categorias") viram a [barraDicas] padrão:
      * cada trecho separado por " · " vira tecla + ação (antes do ":" é a tecla; sem ":", a primeira palavra).
      */
+    /** Quantas vezes cada tela mostra as dicas antes de sumir. */
+    const val DICAS_VEZES = 3
+    private val dicasContadas = java.util.WeakHashMap<Context, Boolean>()
+
+    /** Conta uma abertura por tela (o mesmo Context redesenhando não conta de novo). Testes de tela: sempre mostram. */
+    fun dicaAindaAjuda(ctx: Context): Boolean {
+        val tela = ctx.javaClass.name
+        val p = ctx.getSharedPreferences("dicas_vistas", Context.MODE_PRIVATE)
+        val vistas = p.getInt(tela, 0)
+        if (dicasContadas.put(ctx, true) == null) p.edit().putInt(tela, vistas + 1).apply()
+        return vistas < DICAS_VEZES
+    }
+
     fun dicasDeTexto(ctx: Context, frase: String): ViewGroup = barraDicas(ctx, *paresDeDicas(frase).toTypedArray())
 
     /** A parte pura de [dicasDeTexto] (testável sem Android). */
@@ -417,16 +436,29 @@ object Estilo {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             setPaddingRelative(dp(ctx, E6), dp(ctx, E6), dp(ctx, E6), dp(ctx, E6))
-            if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone); alpha = 0.6f },
-                LinearLayout.LayoutParams(dp(ctx, 48), dp(ctx, 48)).apply { bottomMargin = dp(ctx, E2) })
-            addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 22f; gravity = Gravity.CENTER })
+            // Estudo global 20/11 (ideia 6): o mascote fala nos erros e vazios. Por quê: um erro era uma frase solta no
+            // canto e parecia que a TV tinha quebrado. Para quê: a pessoa vê que o Sofaly sabe o que houve e mostra a saída.
+            // Como: a TV-sofá (o mesmo desenho do logo) em cima; o ícone do assunto, quando há, fica pequeno ao lado dela.
+            addView(LinearLayout(ctx).apply {
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                addView(ImageView(ctx).apply { setImageDrawable(SofalySymbol()); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO },
+                    LinearLayout.LayoutParams(dp(ctx, 96), dp(ctx, 90)))
+                if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone); alpha = 0.7f },
+                    LinearLayout.LayoutParams(dp(ctx, 36), dp(ctx, 36)).apply { marginStart = dp(ctx, E1) })
+            // MATCH_PARENT de propósito: se esta linha tivesse largura fixa, o LinearLayout "largura do conteúdo" igualaria
+            // os textos (que são MATCH_PARENT) à largura do mascote, e o título ficava cortado em 96 dp.
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(ctx, E2) })
+            addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 26f; gravity = Gravity.CENTER })
             addView(texto(ctx, Papel.LEGENDA, texto).apply {
-                gravity = Gravity.CENTER; textSize = 15f; maxWidth = dp(ctx, 440)
+                gravity = Gravity.CENTER; maxWidth = dp(ctx, 520); textSize = Papel.CORPO.sp   // 18 sp: recado do sofá
                 setLineSpacing(0f, 1.25f); setPaddingRelative(0, dp(ctx, E1 + 2), 0, dp(ctx, E3))
-            })
+            // Largura do conteúdo: assim o maxWidth (linha curta, fácil de ler a 3 m) vale; em MATCH_PARENT ele é ignorado.
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            clipChildren = false; clipToPadding = false   // o botão cresce no foco: sem isso a borda de baixo saía cortada
             if (botoes.isNotEmpty()) addView(LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER
+                clipChildren = false; clipToPadding = false
                 botoes.forEachIndexed { i, b ->
                     addView(b, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                         .apply { if (i > 0) marginStart = dp(ctx, E2) })

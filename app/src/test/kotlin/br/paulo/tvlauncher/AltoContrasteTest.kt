@@ -38,7 +38,7 @@ class AltoContrasteTest {
 
     @Test fun desligadoNadaMuda() {
         Estilo.altoContraste = false
-        assertTrue(Estilo.TEXTO_3 == 0x86F4F1EC.toInt() && Estilo.ACENTO == 0xFFFF6A2B.toInt() && Estilo.ERRO == 0xFFFF5252.toInt())
+        assertTrue(Estilo.TEXTO_3 == 0x86FFF3E6.toInt() && Estilo.ACENTO == 0xFFFF6A2B.toInt() && Estilo.ERRO == 0xFFFF5252.toInt())
     }
 
     @Test fun papelSegueOTema() {

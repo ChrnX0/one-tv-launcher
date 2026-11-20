@@ -87,7 +87,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         const val CARTAO_CAPA = 120
         const val CARTAO_TEXTO = 296     // largura do texto à esquerda da capa
         const val FONTE_CARTAO_TITULO = 21f
-        const val FONTE_CARTAO = 16f
+        const val FONTE_CARTAO = 18f
         const val FONTE_TITULO = 32f     // nome da tela ("Rádio"); era 26 e perdia para o rótulo laranja (crítica 19/11/2026)
         const val ONDA_MS = HomeCruz.ONDA_MS
         const val ONDA_MAX_MS = HomeCruz.ONDA_MAX_MS
@@ -164,10 +164,10 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         addView(arte, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         // Véus: escurece a arte em cima e embaixo, e mais à esquerda (o texto da coluna fica sempre legível).
         addView(View(ctx).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0x660E1020, 0x220E1020, 0xAA0E1020.toInt()))
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0x66121528, 0x22121528, 0xAA121528.toInt()))
         }, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(View(ctx).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0xCC0E1020.toInt(), 0x990E1020.toInt(), 0x000E1020))
+            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0xCC121528.toInt(), 0x99121528.toInt(), 0x00121528))
         }, LayoutParams(dpi(600), LayoutParams.MATCH_PARENT))
 
         titulo = TextView(ctx).apply {
@@ -198,7 +198,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
 
         // ---- cartão "Tocando agora": texto à esquerda, capa grande à direita
         cartaoRotulo = TextView(ctx).apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f); setTextColor(Estilo.ACENTO); typeface = fonteForte
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setTextColor(Estilo.ACENTO); typeface = fonteForte
             letterSpacing = 0.14f; includeFontPadding = false; maxLines = 1
         }
         cartaoTitulo = TextView(ctx).apply {

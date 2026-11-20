@@ -312,7 +312,7 @@ class VodActivity : Activity() {
             textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setPaddingRelative(dp(22), dp(12), dp(22), dp(12))
-            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(2), coral) }
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(2), coral) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
         // Ideia 6: a segunda legenda fica em cima (a primeira continua embaixo), com o mesmo estilo.
@@ -334,7 +334,7 @@ class VodActivity : Activity() {
             .apply { setMargins(dp(32), 0, 0, dp(176)) })
         // Ideia 8: quadro técnico, em cima à esquerda.
         infoTec = TextView(this).apply {
-            textSize = 13f; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
+            textSize = Estilo.Leitura.DICA; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
             setPaddingRelative(dp(14), dp(10), dp(14), dp(10)); background = vidro(12)
         }
         raiz.addView(infoTec, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(32), dp(28), 0, 0) })
@@ -1497,7 +1497,7 @@ class VodActivity : Activity() {
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         }
         linha.addView(titulo, LinearLayout.LayoutParams(0, -2, 1f))
-        tempo = TextView(this).apply { textSize = 14f; setTextColor(suave) }
+        tempo = TextView(this).apply { textSize = Estilo.Leitura.DICA; setTextColor(suave) }
         linha.addView(tempo)
         barra.addView(linha)
         progresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
@@ -1558,7 +1558,7 @@ class VodActivity : Activity() {
     private fun esconderAviso() { aviso.visibility = View.GONE }
 
     private fun vidro(raio: Int) = GradientDrawable().apply {
-        cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
+        cornerRadius = dp(raio).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()

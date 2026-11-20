@@ -912,6 +912,7 @@ object PainelWeb {
             "/api/arquivos/pasta" -> if (req.metodo == "POST") return criarPasta(req, ip)
             "/api/arquivos/apagar" -> if (req.metodo == "POST") return apagarArquivo(req, token, ip)
             "/api/arquivos/mover" -> if (req.metodo == "POST") return moverArquivo(req, ip)
+            "/api/arquivos/tocar" -> if (req.metodo == "POST") return tocarArquivo(req, ip)
             "/api/tela/foto" -> if (req.metodo == "GET") return fotoTela()
             "/api/tela/tecla" -> if (req.metodo == "POST") return tecla(req)
             "/api/tela/texto" -> if (req.metodo == "POST") return texto(req, ip)
@@ -1152,6 +1153,11 @@ object PainelWeb {
             o.put("aparelho", Settings.Global.getString(app.contentResolver, "device_name") ?: "TV")
             o.put("naTela", PainelApps.naTela(app))
             o.put("elevada", sessoes.elevada(token))
+            // Alto contraste da TV vale também no painel (e no app do celular, que mostra o painel): estudo global, ideia 3.
+            o.put("altoContraste", AltoContraste.ligado(app))
+            // Ideia 15 (estudo global 20/11): o teclado da TV está aberto? O controle do celular (app) pergunta isto a cada
+            // poucos segundos e, quando é true, abre o próprio teclado: digitar senha e busca no celular, não com a cruz.
+            o.put("pedeTexto", TecladoCelular.tecladoNaTela())
             val papel = sessoes.papel(token) ?: PapeisPainel.Papel.DONO
             o.put("papel", papel.chave).put("paginas", JSONArray(PapeisPainel.paginas(papel)))
         }
@@ -1908,6 +1914,26 @@ object PainelWeb {
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
         PainelArquivos.criarPasta(o.optString("pasta"), o.optString("nome"))
         PainelArmazem.registrar(app, ip, "nova pasta ${o.optString("nome").take(80)}", "ok")
+        return json(200, JSONObject().put("ok", true))
+    }
+
+    /**
+     * Ideia 17 (estudo global 20/11): toca na TV um vídeo ou música que está nos arquivos dela (o painel manda logo
+     * depois de enviar o que a pessoa arrastou). Por quê: mostrar o vídeo da viagem era copiar para a TV e procurar o
+     * arquivo com a cruz. Como: só arquivo de vídeo/áudio da lista de prévia, aberto no nosso player (VodActivity),
+     * pelo mesmo caminho file:///storage/ que a TV já aceita para pendrive (Pastas.arquivoLocalPermitido).
+     */
+    private fun tocarArquivo(req: Requisicao, ip: String): Resposta {
+        semAcesso()?.let { return it }
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val f = PainelArquivos.paraBaixar(o.optString("caminho"))
+        val tipo = PainelHttp.tipoPrevia(f.name) ?: return erro(415, "esse tipo de arquivo não toca na TV")
+        if (!tipo.startsWith("video/") && !tipo.startsWith("audio/")) return erro(415, "só vídeo ou música tocam na TV; foto vai como recado")
+        val url = android.net.Uri.fromFile(f).toString()
+        if (!Pastas.arquivoLocalPermitido(url)) return erro(403, "esse lugar não pode ser tocado")
+        AutoDesligar.atividade()
+        VodActivity.abrirUrlEm(app, url, f.nameWithoutExtension, 0L)
+        PainelArmazem.registrar(app, ip, "tocar na TV ${f.name.take(80)}", "ok")
         return json(200, JSONObject().put("ok", true))
     }
 

@@ -132,7 +132,7 @@ class JogosActivity : Activity() {
             for (j in lista) if (j.pacote !in ja) novos[j.pacote] = lerVisual(j.pacote)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem
+                visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem; carregou = true
                 if (escolhido == null) escolhido = ordenada.firstOrNull()   // a 1ª prateleira abre no jogado por último
                 montar()
             }
@@ -157,8 +157,14 @@ class JogosActivity : Activity() {
         cruz.tocando(cartaoSemana())
     }
 
+    /** A lista real já chegou? Antes disso a 1ª prateleira mostra "Carregando…" (estudo global 20/11): montar com a lista
+     *  vazia mostrava "Para começar" e trocava para "Jogados por último" na cara da pessoa. */
+    private var carregou = false
+
     private fun prateleiraJogos(): CruzOuvir.Prateleira {
         val itens = ArrayList<CruzOuvir.Item>()
+        if (!carregou) return CruzOuvir.Prateleira(P_JOGOS, getString(R.string.jogos_recentes), IconeOuvir.Tipo.CONTROLE,
+            listOf(CruzOuvir.Item("carregando", getString(R.string.pp_carregando), "", icone = IconeOuvir.Tipo.CONTROLE, cor = COR_JOGAR)))
         val pronta = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
         for (j in jogos) {
             val v = visuais[j.pacote]
@@ -570,7 +576,7 @@ class JogosActivity : Activity() {
         private const val P_OPCOES = "opcoes"
         /** O violeta do Jogar na cruz ([IconeCruz.corLinha]). */
         private const val COR_JOGAR = 0xFF8E92FA.toInt()
-        private val CORES_JOGADOR = intArrayOf(Estilo.ACENTO, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
+        private val CORES_JOGADOR = intArrayOf(DesignTokens.WORLD_PLAY, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
         // Avatares: tons claros, nenhum rosado (o dono detesta rosa).
         private val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
     }

@@ -4,6 +4,10 @@
     <!-- Leitor de QR (ZXing). A câmera só abre quando a pessoa toca em "Ler o QR da TV". -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- Controle na notificação e na tela bloqueada (estudo global 20/11, ideia 16). Pedida só ao abrir o controle. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Vibração em cada tecla do controle nativo (ideia 14). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:label="@string/cel_nome"
@@ -24,6 +28,16 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <!-- Controle nativo (estudo global 20/11, ideia 14): abre direto ao tocar numa TV pareada pelo QR. -->
+        <activity android:name=".ControleActivity" android:exported="false" android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- Botões da notificação (ideia 16): não exportado, só o próprio app manda. -->
+        <receiver android:name=".TeclaRecebedor" android:exported="false" />
+        <!-- Bloco "Controle da TV" nas Configurações rápidas (ideia 16). Exportado só para o sistema (permissão BIND). -->
+        <service android:name=".ControleBloco" android:exported="true" android:icon="@drawable/ic_controle"
+            android:label="@string/cel_bloco" android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
         <activity android:name=".PainelActivity" android:exported="false"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode" />
     </application>

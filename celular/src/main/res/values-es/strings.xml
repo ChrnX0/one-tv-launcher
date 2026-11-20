@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">p. ej.: Playa, Casa de mamá</string>
     <string name="cel_baixado">Guardado en Descargas: %1$s</string>
     <string name="cel_baixar_falhou">No se pudo guardar el archivo. Inténtalo de nuevo.</string>
+    <string name="cel_painel_completo">Panel completo</string>
+    <string name="cel_ctrl_dica">Desliza para moverte, toca para OK</string>
+    <string name="cel_ctrl_area">Desliza o toca aquí</string>
+    <string name="cel_ctrl_digite">Escribe aquí y envía a la TV</string>
+    <string name="cel_ctrl_voltar">Atrás</string>
+    <string name="cel_ctrl_inicio">Inicio</string>
+    <string name="cel_ctrl_play">Reproducir/pausar</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Silencio</string>
+    <string name="cel_ctrl_sem_tv">La TV no respondió. ¿Está encendida y en la misma red?</string>
+    <string name="cel_ctrl_recusou">La TV no pudo hacerlo ahora.</string>
+    <string name="cel_ctrl_entrar">Entra una vez con el PIN de la TV en el panel; luego el control funciona.</string>
+    <string name="cel_notif_canal">Control de la TV</string>
+    <string name="cel_notif_texto">Pausa y volumen sin abrir la app</string>
+    <string name="cel_bloco">Control de la TV</string>
 </resources>

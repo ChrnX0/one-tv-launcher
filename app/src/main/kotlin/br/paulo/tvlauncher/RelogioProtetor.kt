@@ -161,5 +161,5 @@ class RelogioProtetor(ctx: Context, private val estilo: String, private val fato
 
     private fun dp(v: Float) = (v * resources.displayMetrics.density + 0.5f).toInt()
 
-    private companion object { const val COR_MARCA = 0xFFFF6A2B.toInt() }
+    private companion object { const val COR_MARCA = DesignTokens.ORANGE }
 }

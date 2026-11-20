@@ -217,7 +217,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         // Véu escuro atrás da coluna (contraste com qualquer tema ou foto): da esquerda até depois do texto, some antes
         // das categorias da direita. Uma camada só, parada.
         addView(View(ctx).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0xCC0E1020.toInt(), 0x990E1020.toInt(), 0x000E1020))
+            background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0xCC121528.toInt(), 0x99121528.toInt(), 0x00121528))
         }, LayoutParams(dpi(600), LayoutParams.MATCH_PARENT))
         rotulo = TextView(ctx).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_ROTULO)
@@ -506,7 +506,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             }.measureText(n) > dpi(TEXTO_MAX) }
         detalhe.animate().cancel()
         if (linhas.isEmpty() && s == null && nomeInteiro == null) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
-        // 1ª linha: a situação, com o rótulo em laranja ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
+        // 1ª linha: a situação, com o rótulo em negrito (laranja é só marca, foco e progresso; estudo global 20/11) ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
         val texto = android.text.SpannableStringBuilder().apply {
             if (nomeInteiro != null) {
                 append(nomeInteiro, android.text.style.ForegroundColorSpan(Estilo.TEXTO), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -514,7 +514,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             }
             if (s != null) {
                 val ini = length
-                append(s.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                append(s.rotulo, android.text.style.ForegroundColorSpan(Estilo.TEXTO), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), ini, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 append("  ").append(s.texto)
                 if (linhas.isNotEmpty()) append("\n")

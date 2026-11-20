@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">e.g. Beach house, Mom\'s</string>
     <string name="cel_baixado">Saved to Downloads: %1$s</string>
     <string name="cel_baixar_falhou">Couldn\'t save the file. Try again.</string>
+    <string name="cel_painel_completo">Full panel</string>
+    <string name="cel_ctrl_dica">Swipe to move, tap for OK</string>
+    <string name="cel_ctrl_area">Swipe or tap here</string>
+    <string name="cel_ctrl_digite">Type here and send to the TV</string>
+    <string name="cel_ctrl_voltar">Back</string>
+    <string name="cel_ctrl_inicio">Home</string>
+    <string name="cel_ctrl_play">Play/pause</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Mute</string>
+    <string name="cel_ctrl_sem_tv">The TV didn\'t answer. Is it on and on the same network?</string>
+    <string name="cel_ctrl_recusou">The TV couldn\'t do that now.</string>
+    <string name="cel_ctrl_entrar">Sign in once with the TV PIN in the panel; then the remote works.</string>
+    <string name="cel_notif_canal">TV remote</string>
+    <string name="cel_notif_texto">Pause and volume without opening the app</string>
+    <string name="cel_bloco">TV remote</string>
 </resources>

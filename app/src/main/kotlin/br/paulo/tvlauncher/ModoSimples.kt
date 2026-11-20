@@ -135,7 +135,7 @@ class ModoSimplesActivity : Activity() {
         }
         // Sair: linha discreta no fim, com o PIN do painel.
         grade.addView(Estilo.linhaTexto(this, getString(R.string.ms_voltar)).apply {
-            textSize = 14f
+            textSize = Estilo.Papel.CORPO.sp   // Modo simples é para quem lê com dificuldade: nada menor que o corpo
             setOnClickListener {
                 val sair = { Extras.definir(this@ModoSimplesActivity, Extras.Chave.MODO_SIMPLES, false); finish() }
                 if (PainelArmazem.temPin(this@ModoSimplesActivity)) PinTv.pedir(this@ModoSimplesActivity, getString(R.string.player_pin_titulo), familia = true) { certo -> if (certo) sair() }

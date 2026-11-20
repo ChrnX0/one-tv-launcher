@@ -34,7 +34,7 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
     companion object {
         /** A cor de cada ícone (a cruz faz o mesmo em [IconeCruz.corLinha]). */
         fun cor(t: Tipo): Int = when (t) {
-            Tipo.TOCANDO, Tipo.PAUSAR, Tipo.CONTINUAR -> 0xFFFF7A45   // o laranja da marca: o que está tocando
+            Tipo.TOCANDO, Tipo.PAUSAR, Tipo.CONTINUAR -> DesignTokens.WORLD_LISTEN.toLong() and 0xFFFFFFFFL   // a cor do mundo Ouvir (laranja fica para marca/foco/progresso)
             Tipo.VOLTAR, Tipo.AVANCAR -> 0xFF8FB4F0                   // azul acinzentado
             Tipo.VELOCIDADE -> 0xFFE6C46A                             // dourado
             Tipo.SILENCIO -> 0xFF9CD27E                               // verde-folha

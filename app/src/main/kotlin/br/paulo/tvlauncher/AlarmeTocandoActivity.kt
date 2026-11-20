@@ -93,6 +93,10 @@ class AlarmeTocandoActivity : Activity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         id = intent.getIntExtra(Despertador.EXTRA_ID, 0)
         timer = intent.getBooleanExtra(EXTRA_TIMER, false)
+        // Ideia 15 (estudo global 20/11): avisa no celular de quem cuida, se o aviso estiver ligado no painel (desligado de fábrica).
+        if (!timer && savedInstanceState == null) Avisos.enviar(applicationContext, Avisos.Tipo.ALARME_TOCOU,
+            getString(R.string.aviso_alarme_tocou_titulo), getString(R.string.aviso_alarme_tocou_texto,
+                java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())))
         // savedInstanceState != null = a MESMA tela sendo recriada (mudança de configuração quando a TV liga pelo HDMI-CEC,
         // ou o Android refazendo a tela): o toque já foi conferido e marcado na 1ª vez, e precisa continuar tocando.
         if (!timer && savedInstanceState == null) {

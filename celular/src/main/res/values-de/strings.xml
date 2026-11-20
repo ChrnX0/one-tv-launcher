@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">z. B. Strandhaus, Bei Mama</string>
     <string name="cel_baixado">In Downloads gespeichert: %1$s</string>
     <string name="cel_baixar_falhou">Die Datei konnte nicht gespeichert werden. Versuch es noch einmal.</string>
+    <string name="cel_painel_completo">Ganzes Panel</string>
+    <string name="cel_ctrl_dica">Wischen zum Bewegen, tippen für OK</string>
+    <string name="cel_ctrl_area">Hier wischen oder tippen</string>
+    <string name="cel_ctrl_digite">Hier tippen und an den Fernseher senden</string>
+    <string name="cel_ctrl_voltar">Zurück</string>
+    <string name="cel_ctrl_inicio">Start</string>
+    <string name="cel_ctrl_play">Abspielen/Pause</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">Stumm</string>
+    <string name="cel_ctrl_sem_tv">Der Fernseher antwortet nicht. Ist er an und im selben Netz?</string>
+    <string name="cel_ctrl_recusou">Der Fernseher konnte das gerade nicht.</string>
+    <string name="cel_ctrl_entrar">Einmal mit der PIN des Fernsehers im Panel anmelden; dann geht die Fernbedienung.</string>
+    <string name="cel_notif_canal">Fernbedienung</string>
+    <string name="cel_notif_texto">Pause und Lautstärke, ohne die App zu öffnen</string>
+    <string name="cel_bloco">Fernbedienung</string>
 </resources>

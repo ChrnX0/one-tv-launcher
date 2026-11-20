@@ -123,6 +123,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
 
     // ------------------------------------------------------------------ objeto (120 x 100)
 
+    // Laranja da marca nos desenhos dos ícones: vem do token (design/tokens.json), não de um número solto.
+    private val LARANJA: Long = DesignTokens.ORANGE.toLong() and 0xFFFFFFFFL
     private fun cor(v: Long) = v.toInt()
     private fun vert(a: Long, b: Long, y0: Float, y1: Float) { cheio.shader = LinearGradient(0f, y0, 0f, y1, cor(a), cor(b), Shader.TileMode.CLAMP) }
     private fun solido(v: Long, alfa: Float = 1f) { cheio.shader = null; cheio.color = cor(v); cheio.alpha = (alfa * 255).toInt() }
@@ -161,7 +163,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         cheio.shader = LinearGradient(20f, 28f, 84f, 76f, cor(0xFF3B6EA8), cor(0xFFE0874A), Shader.TileMode.CLAMP); rr(c, 20f, 28f, 64f, 48f, 8f)
         solido(0xFFFFFFFF, .1f); rr(c, 20f, 28f, 64f, 14f, 7f)
         play(c, 45f, 41f, 22f, 18f)
-        solido(0xFFFF6A2B); c.drawCircle(96f, 38f, 4.5f, cheio)
+        solido(LARANJA); c.drawCircle(96f, 38f, 4.5f, cheio)
         solido(0xFF6B707C); c.drawCircle(96f, 52f, 4.5f, cheio); rr(c, 89f, 62f, 14f, 3f, 1.5f); rr(c, 89f, 69f, 14f, 3f, 1.5f)
         linha(c, 0xFF3A3E48, 5f, 30f, 85f, 24f, 95f, 90f, 85f, 96f, 95f)
     }
@@ -174,7 +176,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         solido(0xFFFFFFFF, .13f)
         p.reset(); p.moveTo(30f, 32f); p.lineTo(90f, 32f); p.cubicTo(100f, 32f, 106f, 38f, 109f, 46f); p.lineTo(11f, 46f); p.cubicTo(14f, 38f, 20f, 32f, 30f, 32f); p.close(); c.drawPath(p, cheio)
         solido(0xFF1E2150); rr(c, 28f, 44f, 8f, 24f, 1f); rr(c, 20f, 52f, 24f, 8f, 1f)
-        solido(0xFFFF6A2B); c.drawCircle(86f, 46f, 5f, cheio)
+        solido(LARANJA); c.drawCircle(86f, 46f, 5f, cheio)
         solido(0xFFFFD166); c.drawCircle(96f, 56f, 5f, cheio)
         solido(0xFF7DD3C0); c.drawCircle(76f, 56f, 5f, cheio)
         solido(0xFFE8ECFF); c.drawCircle(86f, 66f, 5f, cheio)
@@ -192,7 +194,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     private fun continuar(c: Canvas) {
         solido(0xFF2A2420); c.drawCircle(60f, 50f, 40f, cheio)
         traco.shader = null; traco.strokeWidth = 7f; traco.color = cor(0xFF3A322D); c.drawCircle(60f, 50f, 40f, traco)
-        traco.color = cor(0xFFFF6A2B); r.set(20f, 10f, 100f, 90f); c.drawArc(r, -90f, 223f, false, traco)   // 62% assistido
+        traco.color = cor(LARANJA); r.set(20f, 10f, 100f, 90f); c.drawArc(r, -90f, 223f, false, traco)   // 62% assistido
         vert(0xFFFF8A55, 0xFFD4501B, 23f, 77f); c.drawCircle(60f, 50f, 27f, cheio)
         play(c, 54f, 38f, 24f, 19f)
     }
@@ -202,7 +204,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         solido(0xFF4A5060); rr(c, 12f, 26f, 82f, 60f, 11f)
         vert(0xFF1F7480, 0xFF0D2B32, 33f, 79f); rr(c, 19f, 33f, 68f, 46f, 7f)
         play(c, 46f, 45f, 22f, 18f)
-        solido(0xFFFF6A2B); rr(c, 70f, 74f, 40f, 20f, 10f)
+        solido(LARANJA); rr(c, 70f, 74f, 40f, 20f, 10f)
         solido(0xFF1A0D06); for (i in 0..2) c.drawCircle(80f + i * 10f, 84f, 2.6f, cheio)   // "…" no lugar de "T1 E4" (sem texto no desenho)
     }
 
@@ -223,7 +225,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         vert(0xFFE0B85A, 0xFFB98A2E, 18f, 90f); p.reset()
         p.moveTo(14f, 90f); p.lineTo(14f, 26f); p.quadTo(14f, 18f, 22f, 18f); p.lineTo(46f, 18f); p.lineTo(54f, 28f)
         p.lineTo(98f, 28f); p.quadTo(106f, 28f, 106f, 36f); p.lineTo(106f, 90f); p.close(); c.drawPath(p, cheio)
-        solido(0xFFF4F1EC); rr(c, 28f, 30f, 64f, 40f, 4f)
+        solido(0xFFFFF3E6); rr(c, 28f, 30f, 64f, 40f, 4f)
         solido(0xFFC9C4BC); rr(c, 36f, 40f, 40f, 4f, 2f); rr(c, 36f, 50f, 30f, 4f, 2f)
         vert(0xFFF6D27A, 0xFFD9A441, 44f, 92f); rr(c, 10f, 44f, 100f, 48f, 8f)
         solido(0xFFFFFFFF, .18f); rr(c, 10f, 44f, 100f, 10f, 5f)
@@ -246,7 +248,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         traco.pathEffect = android.graphics.DashPathEffect(floatArrayOf(3f, 3f), 0f); c.drawCircle(38f, 62f, 14f, traco); traco.pathEffect = null
         solido(0xFF6A4430); c.drawCircle(38f, 62f, 6f, cheio)
         solido(0xFFF3E1C4); rr(c, 68f, 44f, 32f, 17f, 3f)
-        solido(0xFFFF6A2B); rr(c, 81f, 46f, 2.5f, 13f, 0f)
+        solido(LARANJA); rr(c, 81f, 46f, 2.5f, 13f, 0f)
         solido(0xFF3A2418); c.drawCircle(76f, 76f, 6.5f, cheio); c.drawCircle(93f, 76f, 6.5f, cheio)
     }
 
@@ -256,7 +258,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         traco.shader = null; traco.color = cor(0xFF5A606C); traco.strokeWidth = 6f
         r.set(32f, 14f, 88f, 70f); c.drawArc(r, 0f, 180f, false, traco)
         traco.strokeWidth = 7f; c.drawLine(60f, 70f, 60f, 84f, traco); c.drawLine(42f, 90f, 78f, 90f, traco)
-        solido(0xFFFF6A2B); c.drawCircle(92f, 18f, 6f, cheio)
+        solido(LARANJA); c.drawCircle(92f, 18f, 6f, cheio)
     }
 
     private fun sofa(c: Canvas) {
@@ -612,25 +614,25 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
          * itens ficam na mesma família; dentro da coluna, cada item tem o seu tom.
          */
         fun corLinha(t: Tipo): Int = when (t) {
-            Tipo.CONTINUAR -> 0xFFF2B84B      // âmbar
-            Tipo.ASSISTIR, Tipo.TV -> 0xFFFF7A45   // o laranja da marca
-            Tipo.SERIES -> 0xFFF59E5B         // laranja claro
-            Tipo.FILMES -> 0xFFE6C46A         // dourado
-            Tipo.REDE -> 0xFF6FC3B2           // verde-água
-            Tipo.ADDONS, Tipo.PLUGIN -> 0xFF8FB4F0   // azul acinzentado
-            Tipo.OUVIR, Tipo.RADIO -> 0xFF45C2B1   // turquesa
-            Tipo.PODCASTS -> 0xFF7FB2FF       // azul
-            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> 0xFF8E92FA   // violeta-azulado
-            Tipo.SOFA -> 0xFFA9B0FF
-            Tipo.APLICATIVOS, Tipo.TODOS_APPS -> 0xFF9CD27E   // verde-folha
-            Tipo.DORMIR -> 0xFFB9C6E4         // luar
-        }.toInt()
+            Tipo.CONTINUAR -> DesignTokens.WORLD_CONTINUE      // âmbar
+            Tipo.ASSISTIR, Tipo.TV -> DesignTokens.WORLD_WATCH   // a família quente da marca
+            Tipo.SERIES -> 0xFFF59E5B.toInt()         // laranja claro
+            Tipo.FILMES -> 0xFFE6C46A.toInt()         // dourado
+            Tipo.REDE -> DesignTokens.WORLD_NETWORK           // verde-água
+            Tipo.ADDONS, Tipo.PLUGIN -> 0xFF8FB4F0.toInt()   // azul acinzentado
+            Tipo.OUVIR, Tipo.RADIO -> DesignTokens.WORLD_LISTEN   // turquesa
+            Tipo.PODCASTS -> 0xFF7FB2FF.toInt()       // azul
+            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> DesignTokens.WORLD_PLAY   // violeta-azulado
+            Tipo.SOFA -> 0xFFA9B0FF.toInt()
+            Tipo.APLICATIVOS, Tipo.TODOS_APPS -> DesignTokens.WORLD_APPS   // verde-folha
+            Tipo.DORMIR -> 0xFFB9C6E4.toInt()         // luar
+        }
 
         /** A cor clara do traço (Símbolo/Duotom), também nos ícones de app do pacote embutido. */
-        const val COR_TRACO = 0xFFF4F1EC.toInt()
-        private const val COR_CLARA = 0xFFF4F1EC.toInt()
+        const val COR_TRACO = 0xFFFFF3E6.toInt()
+        private const val COR_CLARA = 0xFFFFF3E6.toInt()
         /** Linha: o item escolhido acende na cor da marca (vermelho-laranja; nada rosado). */
-        const val COR_ACESA = 0xFFFF6A2B.toInt()
+        val COR_ACESA: Int get() = br.paulo.tvlauncher.Estilo.ACENTO   // segue o alto contraste (estudo global 20/11)
         /** Linha: traço de 1,25 no quadro de 24 (o Símbolo usa 1,5). */
         const val TRACO_FINO = 1.25f
         /** A TV-sofá desenhada menor que o quadro: a barra do programa embaixo do ícone não pode encostar (Paulo, 18/11/2026). */

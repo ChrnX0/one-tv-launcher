@@ -22,4 +22,20 @@
     <string name="cel_casa_dica">مثال: بيت الشاطئ، بيت أمي</string>
     <string name="cel_baixado">حُفظ في التنزيلات: %1$s</string>
     <string name="cel_baixar_falhou">تعذّر حفظ الملف. حاول مرة أخرى.</string>
+    <string name="cel_painel_completo">اللوحة الكاملة</string>
+    <string name="cel_ctrl_dica">اسحب للتنقل، والمس للموافقة</string>
+    <string name="cel_ctrl_area">اسحب أو المس هنا</string>
+    <string name="cel_ctrl_digite">اكتب هنا وأرسل إلى التلفاز</string>
+    <string name="cel_ctrl_voltar">رجوع</string>
+    <string name="cel_ctrl_inicio">الرئيسية</string>
+    <string name="cel_ctrl_play">تشغيل/إيقاف مؤقت</string>
+    <string name="cel_ctrl_vol_menos">Vol −</string>
+    <string name="cel_ctrl_vol_mais">Vol +</string>
+    <string name="cel_ctrl_mudo">كتم</string>
+    <string name="cel_ctrl_sem_tv">لم يرد التلفاز. هل هو مشغّل وعلى الشبكة نفسها؟</string>
+    <string name="cel_ctrl_recusou">لم يتمكن التلفاز من فعل ذلك الآن.</string>
+    <string name="cel_ctrl_entrar">ادخل مرة واحدة برمز PIN للتلفاز في اللوحة؛ بعدها يعمل جهاز التحكم.</string>
+    <string name="cel_notif_canal">جهاز تحكم التلفاز</string>
+    <string name="cel_notif_texto">إيقاف مؤقت وصوت دون فتح التطبيق</string>
+    <string name="cel_bloco">جهاز تحكم التلفاز</string>
 </resources>

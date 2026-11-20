@@ -2352,7 +2352,7 @@ class ConfigLauncherActivity : Activity() {
         /** Interruptor: ligado = acento (no foco, acento escuro); desligado = trilho apagado. */
         private fun pintarChave(sim: Boolean) {
             trilho?.background = Estilo.fundo(context,
-                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x330E1020; else -> 0x33FFFFFF },
+                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x33121528; else -> 0x33FFFFFF },
                 Estilo.RAIO_PILULA)
             bolinha?.background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL

@@ -147,6 +147,7 @@ async function atualizarEstado() {
   const e = await chamar('GET', '/api/estado');
   if (!e.logado) { mostrarEntrar(); return; }
   ultimoEstado = e;
+  aplicarContraste(e.altoContraste);
   aplicarPapel(e);
   $('nomeAparelho').textContent = e.aparelho;
   document.title = e.aparelho;
@@ -1167,6 +1168,8 @@ function desenharConfig(r) {
   tema.replaceChildren(...r.temas.map((t) => { const o = document.createElement('option'); o.value = t.valor; o.textContent = t.nome; return o; }));
   tema.value = r.tema;
   $('cfgTamanho').value = String(r.tamanhoTexto);
+  $('cfgAltoContraste').checked = !!r.altoContraste;
+  aplicarContraste(r.altoContraste);
   $('cfgPilhas').checked = r.pilhas;
   $('cfgChuva').checked = r.avisoChuva;
   $('cfgTemperatura').checked = r.avisoTemperatura !== false;
@@ -1188,6 +1191,8 @@ function desenharConfig(r) {
   $('btnApagarPinFamilia').hidden = !r.pinFamilia;
   $('cfgLiberarTudo').checked = r.confirmacoes.liberarTudo;
   const lista = $('cfgConfirmacoes');
+  // Ideia 13 (estudo global): a lista é redesenhada a cada troca; sem isto o foco caía no começo da página.
+  const focoAntes = lista.contains(document.activeElement) ? document.activeElement.getAttribute('aria-label') : null;
   lista.replaceChildren();
   for (const a of r.confirmacoes.acoes) {
     const linha = document.createElement('div');
@@ -1203,6 +1208,7 @@ function desenharConfig(r) {
     sel.addEventListener('change', () => gravarConfig({ campo: 'confirmacao', acao: a.chave, valor: sel.value }, `${a.titulo}: ${sel.options[sel.selectedIndex].textContent}.`));
     linha.append(nome, sel);
     lista.appendChild(linha);
+    if (focoAntes && focoAntes === a.titulo) sel.focus();
   }
 }
 
@@ -1227,6 +1233,7 @@ async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
 }
 
 $('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', valor: e.target.value }, 'Tema trocado.'));
+$('cfgAltoContraste').addEventListener('change', (e) => gravarConfig({ campo: 'altoContraste', valor: e.target.checked }, e.target.checked ? 'Alto contraste ligado.' : 'Alto contraste desligado.'));
 $('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
 $('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
 $('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
@@ -1466,7 +1473,7 @@ function desenharNumeros(s, caixa = $('numerosSaude')) {
   // Ideia 41: tendência do espaço livre (uma medida por dia).
   if (n(s.discoDiasAteEncher)) item('o armazenamento enche, nesse ritmo', s.discoDiasAteEncher < 14 ? `em ${s.discoDiasAteEncher} dias` : `em ~${Math.round(s.discoDiasAteEncher / 7)} semanas`, s.discoDiasAteEncher <= 21);
   else if (n(s.discoMedidas) && s.discoTotal) item('espaço livre, tendência', s.discoMedidas < 5 ? 'medindo…' : 'estável', false);
-  if (!caixa.children.length) item('números', '—', false);
+  if (!caixa.children.length) item('ainda medindo', '…', false);
 }
 
 /** Nome de cada passo da manutenção da noite (ManutencaoNoturna.kt) e do resultado, em português simples. */
@@ -2363,6 +2370,15 @@ function desenharArquivos(r) {
     info.append(nome, det);
     const acoes = document.createElement('div');
     acoes.className = 'acoes';
+    if (tp === 'video' || tp === 'audio') {
+      const ver = document.createElement('button');
+      ver.type = 'button'; ver.className = 'botao-secundario'; ver.textContent = 'Ver na TV';
+      ver.addEventListener('click', async () => {
+        try { await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(pastaAtual, it.nome) }); aviso('Tocando na TV.', 'ok'); }
+        catch (e) { aviso(textoErro(e), 'erro'); }
+      });
+      acoes.appendChild(ver);
+    }
     if (!it.pasta) {
       // Link comum: o navegador baixa direto da TV (com barra de progresso dele), sem passar o arquivo pela memória.
       const a = document.createElement('a');
@@ -2428,6 +2444,44 @@ $('abaArquivos').addEventListener('drop', (ev) => {
   if (arquivos.length < ev.dataTransfer.files.length) aviso('Pastas não são enviadas: arraste os arquivos de dentro delas.', 'erro');
   enviarArquivos(arquivos);
 });
+
+// Ideia 17 (estudo global 20/11): arrastar um vídeo, música ou foto para o Controle e ver na TV num gesto.
+// Por quê: mostrar o vídeo da viagem era copiar para a TV e procurar o arquivo com a cruz. Como: foto vai como recado
+// com foto (a mesma rota do cartão Foto); vídeo e música vão para a pasta Movies da TV e tocam no player do Sofaly.
+const PASTA_NA_TV = 'Movies';
+$('abaControle').addEventListener('dragover', (ev) => {
+  if (![...(ev.dataTransfer?.types || [])].includes('Files')) return;
+  ev.preventDefault();
+  $('abaControle').dataset.soltar = 'Solte para ver na TV';
+  $('abaControle').classList.add('soltando');
+});
+$('abaControle').addEventListener('dragleave', (ev) => { if (ev.target === $('abaControle')) $('abaControle').classList.remove('soltando'); });
+$('abaControle').addEventListener('drop', async (ev) => {
+  $('abaControle').classList.remove('soltando');
+  const f = ev.dataTransfer?.files?.[0];
+  if (!f) return;
+  ev.preventDefault();
+  await verNaTv(f);
+});
+
+async function verNaTv(f) {
+  const tipo = tipoDoArquivo(f.name);   // arquivos.js
+  try {
+    if (tipo === 'imagem') {
+      aviso('Mandando a foto…');
+      await chamar('POST', '/api/extras/recado-foto', { imagem: await reduzir(f), texto: '' });   // extras.js
+      aviso('A foto está na tela da TV.', 'ok');
+    } else if (tipo === 'video' || tipo === 'audio') {
+      try { await chamar('POST', '/api/arquivos/pasta', { pasta: '', nome: PASTA_NA_TV }); } catch (e) { /* já existe */ }
+      const url = '/api/arquivos/enviar?pasta=' + encodeURIComponent(PASTA_NA_TV) + '&nome=' + encodeURIComponent(f.name) + '&substituir=1';
+      await enviarComProgresso(url, f, (p) => aviso(`Mandando ${f.name}: ${Math.round(p * 100)}%`));
+      await chamar('POST', '/api/arquivos/tocar', { caminho: juntar(PASTA_NA_TV, f.name) });
+      aviso('Tocando na TV.', 'ok');
+    } else {
+      aviso('Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.', 'erro');
+    }
+  } catch (e) { aviso(textoErro(e), 'erro'); }
+}
 
 async function enviarArquivos(arquivos) {
   if (!arquivos.length) return;
@@ -2619,6 +2673,30 @@ $('btnClimaAuto').addEventListener('click', async () => {
     $('cepClima').value = ''; $('numeroClima').value = ''; $('cidadeClima').value = '';
     mostrar($('statusControle'), 'Endereço apagado: a TV se acha só pelo Wi-Fi ou pela internet.');
   } catch (e) { mostrar($('statusControle'), textoErro(e)); }
+});
+
+// ---------- Alto contraste (estudo global 20/11/2026, ideia 3) ----------
+// Por quê: só a TV tinha. Para quê: quem enxerga pouco liga uma vez (na TV ou aqui) e vale em tudo. Como: a chave
+// da TV vem no /api/estado; o "mais contraste" do aparelho (prefers-contrast) também liga, pelo CSS.
+function aplicarContraste(ligado) {
+  if (ligado) document.documentElement.dataset.contraste = 'alto';
+  else delete document.documentElement.dataset.contraste;
+}
+
+// ---------- Abas do Controle (ideia 11): uma coisa de cada vez embaixo do controle ----------
+document.querySelectorAll('.abas-controle [role=tab]').forEach((aba) => {
+  aba.addEventListener('click', () => {
+    document.querySelectorAll('.abas-controle [role=tab]').forEach((b) => {
+      const ativa = b === aba;
+      b.setAttribute('aria-selected', String(ativa));
+      $(b.dataset.painel).hidden = !ativa;
+    });
+  });
+});
+// Seletor de foto com a cara do painel: o nome do arquivo escolhido aparece ao lado do botão.
+$('fotoExtras').addEventListener('change', (e) => {
+  const f = e.target.files[0];
+  $('nomeFotoExtras').textContent = f ? f.name : 'Nenhuma foto escolhida';
 });
 
 $('btnReiniciarTv').addEventListener('click', async () => {

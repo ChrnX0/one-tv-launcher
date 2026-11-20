@@ -203,7 +203,7 @@
           <input id="campoComando" type="text" maxlength="200" enterkeyhint="send" placeholder="coloca na Globo, abre o YouTube…" aria-label="O que a TV deve fazer">
           <button type="submit" class="botao-secundario">Pedir</button>
         </form>
-        <p class="aviso-curto">Sem IA: entende frases curtas (canal, app, aviso em minutos, desligar). Dá para ditar pelo microfone do teclado.</p>
+        <p class="aviso-curto">Entende pedidos curtos: um canal, um app, um aviso em minutos ou desligar. Dá para ditar pelo microfone do teclado.</p>
         <p id="statusComando" class="aviso" hidden></p>
         <ul id="exemplosComando" hidden></ul>
       </div>
@@ -223,6 +223,8 @@
 
     <section id="abaControle" class="painel-aba" hidden>
       <h1 class="titulo-pagina">Controle</h1>
+      <!-- Ideia 17 (estudo global 20/11): só no computador (ponteiro fino), onde dá para arrastar arquivos. -->
+      <p class="aviso so-ponteiro-fino">Arraste um vídeo, música ou foto para esta página e veja na TV.</p>
       <!-- Pedido de ajuda do Cuidar de longe (cuidar.js): só aparece nas 24 h depois de um pedido -->
       <div id="ajudaCuidar" class="cartao" hidden>
         <h2 id="tituloAjudaCuidar">Pedido de ajuda</h2>
@@ -258,8 +260,20 @@
           <button data-tecla="voltar">Voltar</button><button data-tecla="inicio">Início</button><button data-tecla="menu">Menu</button>
           <button data-tecla="retroceder" aria-label="Retroceder"><svg class="i" aria-hidden="true"><use href="#i-retroceder"/></svg></button><button data-tecla="play" aria-label="Tocar ou pausar"><svg class="i" aria-hidden="true"><use href="#i-tocar"/></svg></button><button data-tecla="avancar" aria-label="Avançar"><svg class="i" aria-hidden="true"><use href="#i-avancar"/></svg></button>
           <button data-tecla="volume-">Vol −</button><button data-tecla="volume+">Vol +</button><button data-tecla="mudo">Mudo</button>
-          <button data-tecla="ligar">Acordar</button><button data-tecla="apagar">Dormir</button><button id="btnReiniciarTv" class="botao-perigo">Reiniciar TV</button>
+          <button data-tecla="ligar">Acordar</button><button data-tecla="apagar">Dormir</button>
         </div>
+        <p id="statusControle" class="aviso" hidden></p>
+      </div>
+      <!-- Estudo global 20/11/2026 (ideia 11): por quê, a página tinha 4 telas de altura e a cruz sumia ao rolar; para quê,
+           controlar sem procurar; como, o controle fica em cima e o resto vira abas, uma de cada vez. -->
+      <div class="abas-controle" role="tablist" aria-label="Mais do controle">
+        <button type="button" role="tab" data-painel="pcTeclado" aria-selected="true">Teclado</button>
+        <button type="button" role="tab" data-painel="cartaoRecado" aria-selected="false">Recado</button>
+        <button type="button" role="tab" data-painel="cartaoRecadoComFoto" aria-selected="false">Foto</button>
+        <button type="button" role="tab" data-painel="cartaoTocandoAgora" aria-selected="false">Tocando</button>
+      </div>
+      <div id="pcTeclado" class="cartao" role="tabpanel">
+        <h2>Digitar na TV</h2>
         <form id="formTexto" class="form-pasta" autocomplete="off">
           <input id="campoTexto" type="text" maxlength="100" placeholder="Digitar na TV" aria-label="Texto para digitar na TV">
           <button type="submit" class="botao-secundario">Enviar</button>
@@ -267,32 +281,32 @@
           <label class="marcar ao-vivo-rotulo"><input id="aoVivo" type="checkbox"> ao vivo</label>
         </form>
         <p class="aviso-curto">Voltar e Início respondem na hora; as outras teclas levam cerca de 1 s.</p>
-        <p id="statusControle" class="aviso" hidden></p>
       </div>
-      <div id="cartaoRecado" class="cartao">
+      <div id="cartaoRecado" class="cartao" role="tabpanel" hidden>
         <h2>Recado na TV</h2>
         <form id="formRecado" class="recado" autocomplete="off">
-                  <label for="campoRecado"><strong>Recado na TV</strong> — aparece por cima de qualquer app</label>
+                  <label for="campoRecado">Aparece por cima de qualquer app</label>
                   <textarea id="campoRecado" maxlength="200" rows="2" placeholder="Ex.: O jantar está pronto!"></textarea>
                   <div class="recado-opcoes">
                     <select id="duracaoRecado" aria-label="Quanto tempo fica na tela">
                       <option value="30">30 s na tela</option><option value="60" selected>1 min na tela</option><option value="300">5 min na tela</option>
                     </select>
                     <label><input id="somRecado" type="checkbox" checked> com bipe</label>
-                    <button type="submit">Mandar recado</button>
+                    <button type="submit" class="botao-primario">Mandar recado</button>
                   </div>
                 </form>
       </div>
-      <div id="cartaoRecadoComFoto" class="cartao">
+      <div id="cartaoRecadoComFoto" class="cartao" role="tabpanel" hidden>
         <h2>Recado com foto</h2>
         <form id="formFotoExtras">
-          <input id="fotoExtras" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Foto">
+          <label class="escolher-arquivo"><input id="fotoExtras" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Foto">
+            <span class="botao-secundario">Escolher foto</span><span id="nomeFotoExtras" class="aviso-curto">Nenhuma foto escolhida</span></label>
           <input id="textoFotoExtras" type="text" maxlength="200" placeholder="Texto (opcional)" aria-label="Texto">
           <button type="submit" class="botao-primario">Mostrar na TV</button>
         </form>
         <p id="statusFotoExtras" class="aviso" hidden></p>
       </div>
-      <div id="cartaoTocandoAgora" class="cartao">
+      <div id="cartaoTocandoAgora" class="cartao" role="tabpanel" hidden>
         <h2>Tocando agora</h2>
         <p id="tocandoExtras" class="aviso">Ligue a chave "Tocando agora" para ver o que está tocando.</p>
         <div class="barra-acoes">
@@ -301,6 +315,10 @@
           <button type="button" class="botao-secundario" data-tocando="proxima" aria-label="Próxima">⏭</button>
           <button type="button" class="botao-secundario" id="btnTocando">Atualizar</button>
         </div>
+      </div>
+      <div class="acoes-perigo">
+        <button id="btnReiniciarTv" type="button" class="botao-perigo">Reiniciar TV</button>
+        <span class="aviso-curto">Reinicia a TV inteira: a tela apaga e volta sozinha.</span>
       </div>
     </section>
 
@@ -404,6 +422,7 @@
         <p class="aviso">Tema: <select id="cfgTema" aria-label="Tema"></select></p>
         <p class="aviso">Tamanho do texto: <select id="cfgTamanho" aria-label="Tamanho do texto">
           <option value="100">Normal</option><option value="110">Grande</option><option value="120">Maior</option></select></p>
+        <label><input id="cfgAltoContraste" type="checkbox"> Alto contraste (letras e bordas mais fortes, na TV e aqui)</label>
         <label><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
         <label><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
         <label><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>

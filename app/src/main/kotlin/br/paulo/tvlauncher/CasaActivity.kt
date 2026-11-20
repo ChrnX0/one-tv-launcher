@@ -540,7 +540,7 @@ class CasaActivity : Activity() {
             circulo.background = Estilo.fundo(this@CasaActivity, when {
                 ligado && foco -> Estilo.ACENTO_NO_FOCO
                 ligado -> Estilo.ACENTO
-                foco -> 0x140E1020
+                foco -> 0x14121528
                 else -> Estilo.SUPERFICIE_ALTA
             }, Estilo.RAIO_PILULA)
             icone.definirCor(when {
@@ -569,7 +569,7 @@ class CasaActivity : Activity() {
         private val tinta = Paint(Paint.ANTI_ALIAS_FLAG)
         override fun onDraw(c: Canvas) {
             val w = width.toFloat(); val h = height.toFloat(); val r = h / 2
-            tinta.color = if (foco) 0x220E1020 else 0x26FFFFFF
+            tinta.color = if (foco) 0x22121528 else 0x26FFFFFF
             c.drawRoundRect(0f, 0f, w, h, r, r, tinta)
             val p = (pct ?: 0).coerceIn(0, 100)
             if (p > 0) {

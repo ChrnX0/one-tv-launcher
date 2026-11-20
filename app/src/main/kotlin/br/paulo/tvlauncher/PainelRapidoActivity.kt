@@ -117,7 +117,7 @@ class PainelRapidoActivity : Activity() {
         /** Fundo do painel: azul-ardósia escuro e opaco, como o do Google (e próximo do FUNDO do launcher). */
         private const val FUNDO_PAINEL = 0xFF151C25.toInt()
         /** Ícone de tile desligado: o texto do sistema a 85%. */
-        private const val ICONE_APAGADO = 0xD9F4F1EC.toInt()
+        private const val ICONE_APAGADO = 0xD9FFF3E6.toInt()
     }
 
     /** Um tile: a casca focável, o ícone, o nome e o detalhe (some quando vazio). [ligado] pinta ícone e detalhe de acento. */
