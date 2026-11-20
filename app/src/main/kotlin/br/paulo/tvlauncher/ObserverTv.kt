@@ -213,6 +213,20 @@ object ObserverTv {
             ObserverCore.readLog(p.getString("log", null), agora), agora)
     }
 
+    /** Inventário dos pacotes contra as fichas (vigia de pacotes, parte 1). Lê o PackageManager: fora da thread da tela. */
+    fun packages(ctx: Context): ObserverPackages.Inventory {
+        val pm = ctx.packageManager
+        @Suppress("DEPRECATION")
+        val apps = pm.getInstalledApplications(android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS)
+        val lista = apps.map { a ->
+            ObserverPackages.Pkg(a.packageName, (a.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0, !a.enabled)
+        }
+        val fichas = runCatching { org.json.JSONObject(ComunidadeApps.fichasJuntas(ctx)) }.getOrDefault(org.json.JSONObject())
+        // Versão da Play: sem QUERY_ALL_PACKAGES o Android filtra a lista; o inventário diz que está incompleto.
+        val completo = ctx.checkSelfPermission(android.Manifest.permission.QUERY_ALL_PACKAGES) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        return ObserverPackages.inventory(lista, fichas, completo)
+    }
+
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 
     /** Os recados que valem agora, do mais novo ao mais velho. Quem mostra escolhe a frase pelo [ObserverCore.Note.kind]. */
@@ -253,6 +267,7 @@ object ObserverTv {
             .put("signals", sinais).put("now", agoraJson)
             .put("notes", ObserverCore.toJson(notes(ctx)))
             .put("morning", runCatching { morning(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
+            .put("packages", runCatching { packages(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
             .put("log_total", log.length()).put("log", logNovo)
     }
 
@@ -275,6 +290,10 @@ object ObserverTv {
             "noite de ${java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.ROOT).format(m.night.at)} contra ${m.compared} anteriores; " +
             m.items.joinToString("; ") { "${it.signal.name} ${it.tonight} (normal ${it.usual}) ${it.change}" } +
             "; achados 24 h: ${m.events24h.ifEmpty { null } ?: "nenhum"}")
+        runCatching { packages(ctx) }.getOrNull()?.let { inv ->
+            appendLine("pacotes${if (inv.complete) "" else " (só os visíveis: versão sem QUERY_ALL_PACKAGES)"}: ${inv.total} (${inv.system} de sistema, ${inv.frozen.size} congelados); por risco ${inv.byRisk}; " +
+                "sem ficha ${inv.unknown.size}" + inv.unknown.take(20).joinToString("") { "\n  ? ${it.name}${if (it.system) " (sistema)" else ""}" })
+        }
         val n = notes(ctx)
         appendLine("recados na fila: ${n.size}" + n.joinToString("") { "\n  ${it.kind} ${it.severity}${if (it.seen) " (visto)" else ""}" })
         val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
