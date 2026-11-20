@@ -29,6 +29,20 @@ interface PastaArquivos : AutoCloseable {
 }
 
 /** O pendrive/disco USB (ou outra pasta do aparelho): arquivo comum, com o acesso a todos os arquivos. */
+/**
+ * Pasta em que se pode GRAVAR (20/11/2026: a gravação da TV ao vivo em qualquer pasta do "Na rede", não só SMB).
+ * Caminhos como em [PastaArquivos] (relativos à conta, com "/").
+ */
+interface PastaGravavel {
+    /** Cria a pasta e as de cima que faltarem (já existir não é erro). */
+    fun criarPastas(caminho: String)
+    /** Cria (ou sobrescreve) o arquivo. Fechar o fluxo termina o envio. */
+    fun escrever(caminho: String): java.io.OutputStream
+    fun apagar(caminho: String)
+    /** Espaço livre em bytes; [Long.MAX_VALUE] quando o servidor não diz (FTP). */
+    fun livre(caminho: String): Long = Long.MAX_VALUE
+}
+
 class PastaLocal(private val raiz: File) : PastaArquivos {
     private fun arquivo(caminho: String): File {
         require(Pastas.caminhoValido(caminho)) { "caminho inválido" }
@@ -61,6 +75,13 @@ object Pastas {
     val TIPOS = setOf(ContaMidia.SMB, ContaMidia.FTP, ContaMidia.FTPS, ContaMidia.SFTP, ContaMidia.NFS, ContaMidia.ONEDRIVE, ContaMidia.DROPBOX, ContaMidia.BOX, ContaMidia.GDRIVE)
 
     fun ehPasta(c: ContaMidia) = c.tipo in TIPOS
+
+    /**
+     * As que a gravação usa. NFS fica de fora por enquanto (o nosso cliente NFS só lê). As nuvens também: gravar ao vivo
+     * nelas depende da internet de envio da casa; a gravação vai para o pendrive/rede e é COPIADA para a nuvem depois.
+     */
+    val GRAVAVEIS = setOf(ContaMidia.SMB, ContaMidia.FTP, ContaMidia.FTPS, ContaMidia.SFTP)
+    fun gravavel(c: ContaMidia) = c.tipo in GRAVAVEIS
 
     fun abrir(c: ContaMidia): PastaArquivos = when (c.tipo) {
         ContaMidia.SMB -> Smb.Pasta(Smb.abrir(c))

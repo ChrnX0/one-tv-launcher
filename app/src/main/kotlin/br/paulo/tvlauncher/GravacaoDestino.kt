@@ -5,18 +5,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
-import com.hierynomus.msdtyp.AccessMask
-import com.hierynomus.mssmb2.SMB2CreateDisposition
-import com.hierynomus.mssmb2.SMB2ShareAccess
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.util.EnumSet
 
 /**
  * Onde a gravação vai parar (14/11/2026, decisão do dono): o pendrive ou disco no hub USB; sem ele ligado, uma pasta
- * da rede (SMB) que o dono escolheu. A memória da TV nunca (1,8 GB livres; uma hora de canal ocupa até 3,6 GB).
+ * da rede que o dono escolheu. 20/11/2026: a pessoa escolhe o lugar na hora de gravar ([opcoes]), entre os pendrives e
+ * todas as pastas do "Na rede" que aceitam gravação (SMB, FTP/FTPS, SFTP). A memória da TV nunca (1,8 GB livres; uma hora de canal ocupa até 3,6 GB).
  * Tudo dentro da pasta "OneTV-gravacoes".
  */
 object GravacaoDestino {
@@ -26,8 +23,10 @@ object GravacaoDestino {
     class Item(val nome: String, val tamanho: Long, val modificado: Long)
 
     interface Destino : AutoCloseable {
-        /** Para a tela: "Pendrive SanDisk" ou o nome da conta SMB. */
+        /** Para a tela: "Pendrive SanDisk" ou o nome da conta. */
         val nome: String
+        /** O id de [Opcao] deste lugar (para apagar ou tocar depois no lugar certo). */
+        val id: String
         fun livre(): Long
         fun abrir(arquivo: String): OutputStream
         fun listar(): List<Item>
@@ -71,24 +70,86 @@ object GravacaoDestino {
         return ctx.getString(R.string.grv_pendrive_cheio, pequeno.getDescription(ctx))
     }
 
+    /** Um lugar onde dá para gravar agora: [id] = "usb:<pasta do volume>" ou "conta:<id da conta do Na rede>". */
+    class Opcao(val id: String, val nome: String)
+
+    private const val CHAVE_ULTIMO = "ultimo"   // o lugar escolhido da última vez (vem marcado na pergunta)
+
+    fun ultimo(ctx: Context): String = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(CHAVE_ULTIMO, "").orEmpty()
+
+    /** Lembra a escolha; sendo uma pasta da rede, ela vira também a reserva para quando não há pendrive. */
+    fun lembrar(ctx: Context, id: String) {
+        val e = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(CHAVE_ULTIMO, id)
+        if (id.startsWith(CONTA)) e.putString(CHAVE_REDE, id.removePrefix(CONTA))
+        e.apply()
+    }
+
+    private const val USB = "usb:"
+    private const val CONTA = "conta:"
+
     /**
-     * O destino de agora: pendrive se houver, senão a pasta da rede escolhida. null = nenhum (a tela pede para ligar um
-     * pendrive ou escolher a pasta). Abre conexão (SMB): chamar fora da thread da tela e fechar depois.
+     * Todos os lugares de agora (20/11/2026, pedido do dono: escolher na hora de gravar): cada pendrive/disco ligado com
+     * espaço e cada pasta do "Na rede" em que dá para gravar (Pastas.GRAVAVEIS). Lê as contas do disco: fora da tela.
      */
-    fun abrir(ctx: Context): Destino? {
+    fun opcoes(ctx: Context): List<Opcao> {
+        val usb = if (Build.VERSION.SDK_INT < 30) emptyList() else runCatching {
+            ctx.getSystemService(StorageManager::class.java)?.storageVolumes.orEmpty()
+                .filter { it.isRemovable && it.state == Environment.MEDIA_MOUNTED && it.directory != null }
+                .filter { runCatching { it.directory!!.usableSpace }.getOrDefault(0L) >= MINIMO_LIVRE }
+                .map { Opcao(USB + it.directory!!.absolutePath, it.getDescription(ctx)) }
+        }.getOrDefault(emptyList())
+        val rede = MidiaArmazem.contas(ctx).filter { Pastas.gravavel(it) }.map { Opcao(CONTA + it.id, it.nome) }
+        return GravacaoRegras.ordenarOpcoes(usb + rede, ultimo(ctx)) { it.id }
+    }
+
+    /**
+     * Abre o lugar [id] escolhido; sem [id] (ou se ele sumiu: pendrive tirado, conta apagada), o automático de antes:
+     * pendrive se houver, senão a pasta da rede de reserva. null = nenhum. Abre conexão: fora da tela, e fechar depois.
+     */
+    fun abrir(ctx: Context, id: String? = null): Destino? {
+        if (!id.isNullOrEmpty()) runCatching { abrirEscolhido(ctx, id) }.getOrNull()?.let { return it }
         pendrive(ctx)?.let { (nome, raiz) ->
-            if (PainelArquivos.garantirAcesso(ctx.applicationContext)) return Local(nome, File(raiz, GravacaoRegras.PASTA))
+            if (PainelArquivos.garantirAcesso(ctx.applicationContext)) return Local(nome, File(raiz, GravacaoRegras.PASTA), USB + raiz.absolutePath)
         }
-        val id = pastaRede(ctx).ifEmpty { return null }
-        val conta = MidiaArmazem.conta(ctx, id)?.takeIf { it.tipo == ContaMidia.SMB } ?: return null
+        val conta = pastaRede(ctx).ifEmpty { return null }.let { MidiaArmazem.conta(ctx, it) }?.takeIf { Pastas.gravavel(it) } ?: return null
         return Rede(conta)
+    }
+
+    private fun abrirEscolhido(ctx: Context, id: String): Destino? = when {
+        id.startsWith(USB) -> {
+            val raiz = File(id.removePrefix(USB))
+            val vol = if (Build.VERSION.SDK_INT < 30) null else ctx.getSystemService(StorageManager::class.java)?.storageVolumes
+                ?.firstOrNull { it.state == Environment.MEDIA_MOUNTED && it.directory?.absolutePath == raiz.absolutePath }
+            if (vol != null && PainelArquivos.garantirAcesso(ctx.applicationContext)) Local(vol.getDescription(ctx), File(raiz, GravacaoRegras.PASTA), id) else null
+        }
+        id.startsWith(CONTA) -> MidiaArmazem.conta(ctx, id.removePrefix(CONTA))?.takeIf { Pastas.gravavel(it) }?.let { Rede(it) }
+        else -> null
+    }
+
+    /**
+     * "Gravar onde?" (20/11/2026): lê os lugares fora da tela e, com dois ou mais, pergunta numa lista com o da última vez
+     * marcado. Um só: segue com ele sem perguntar. Nenhum: [semLugar] (a tela diz o motivo). [aoEscolher] recebe a
+     * [Opcao] na thread da tela; null = nenhum lugar agora (agendar ainda pode, e o automático decide na hora).
+     */
+    fun perguntar(ctx: Context, aoEscolher: (Opcao?) -> Unit) {
+        val app = ctx.applicationContext
+        val tela = android.os.Handler(android.os.Looper.getMainLooper())
+        Fundo.rodar("gravacao-onde") {
+            val l = runCatching { opcoes(app) }.getOrDefault(emptyList())
+            tela.post {
+                if (!GravacaoRegras.perguntarOnde(l.size)) { aoEscolher(l.firstOrNull()); return@post }
+                Estilo.lista(ctx, ctx.getString(R.string.grv_onde_pergunta), l.map { it.nome }, listOf(0)) { i ->
+                    lembrar(app, l[i].id); aoEscolher(l[i])
+                }
+            }
+        }
     }
 
     /** Descrição sem abrir conexão (para a linha "Onde grava" da tela). */
     fun descricao(ctx: Context): String? = pendrive(ctx)?.first
         ?: pastaRede(ctx).takeIf { it.isNotEmpty() }?.let { id -> MidiaArmazem.conta(ctx, id)?.nome }
 
-    private class Local(override val nome: String, private val dir: File) : Destino {
+    private class Local(override val nome: String, private val dir: File, override val id: String) : Destino {
         private fun arquivo(n: String): File {
             require(n.isNotEmpty() && '/' !in n && n != "." && n != "..") { "nome inválido" }
             return File(dir, n)
@@ -105,34 +166,28 @@ object GravacaoDestino {
         override fun close() {}
     }
 
+    /** Uma pasta do "Na rede" (SMB, FTP/FTPS ou SFTP), tudo dentro de "OneTV-gravacoes". */
     private class Rede(private val c: ContaMidia) : Destino {
-        private val a = Smb.abrir(c)
-        private val base = MidiaContas.juntar(Smb.inicio(c), GravacaoRegras.PASTA)
-        private fun win(n: String) = (if (n.isEmpty()) base else "$base/$n").replace('/', '\\')
+        private val p = Pastas.abrir(c)
+        private val g = p as? PastaGravavel ?: run { runCatching { p.close() }; throw IOException("não grava em ${c.tipo}") }
+        private val base = MidiaContas.juntar(Pastas.inicio(c), GravacaoRegras.PASTA)
+        private var pastaCriada = false
+        private fun caminho(n: String): String {
+            require(n.isNotEmpty() && '/' !in n && '\\' !in n && n != "." && n != "..") { "nome inválido" }
+            return MidiaContas.juntar(base, n)
+        }
         override val nome get() = c.nome
-        override fun livre(): Long = runCatching { a.pasta.shareInformation.freeSpace }.getOrDefault(Long.MAX_VALUE)
-        override fun abrir(arquivo: String): OutputStream {
-            require('/' !in arquivo && '\\' !in arquivo && arquivo.isNotEmpty()) { "nome inválido" }
-            var caminho = ""
-            for (parte in base.split('/').filter { it.isNotEmpty() }) {
-                caminho = MidiaContas.juntar(caminho, parte)
-                val w = caminho.replace('/', '\\')
-                if (!a.pasta.folderExists(w)) a.pasta.mkdir(w)
-            }
-            val f = a.pasta.openFile(win(arquivo), EnumSet.of(AccessMask.GENERIC_WRITE), null, SMB2ShareAccess.ALL,
-                SMB2CreateDisposition.FILE_OVERWRITE_IF, null)
-            val s = f.outputStream
-            return object : java.io.FilterOutputStream(s.buffered(256 * 1024)) {
-                override fun write(b: ByteArray, off: Int, len: Int) = out.write(b, off, len)
-                override fun close() { runCatching { super.close() }; runCatching { f.close() } }
-            }
+        override val id get() = CONTA + c.id
+        override fun livre(): Long = runCatching { g.livre(base) }.getOrDefault(Long.MAX_VALUE)
+        override fun abrir(arquivo: String): java.io.OutputStream {
+            if (!pastaCriada) { g.criarPastas(base); pastaCriada = true }
+            return g.escrever(caminho(arquivo))
         }
         override fun listar(): List<Item> = runCatching {
-            a.pasta.list(win("")).filter { it.fileName.endsWith(GravacaoRegras.EXTENSAO) }
-                .map { Item(it.fileName, it.endOfFile, it.lastWriteTime.toEpochMillis()) }
+            p.listar(base).filter { !it.pasta && it.nome.endsWith(GravacaoRegras.EXTENSAO) }.map { Item(it.nome, it.tamanho, 0L) }
         }.getOrDefault(emptyList())
-        override fun apagar(arquivo: String) { runCatching { a.pasta.rm(win(arquivo)) } }
-        override fun uri(arquivo: String): String = Pastas.uri(c, MidiaContas.juntar(base, arquivo))
-        override fun close() = a.close()
+        override fun apagar(arquivo: String) { runCatching { g.apagar(caminho(arquivo)) } }
+        override fun uri(arquivo: String): String = Pastas.uri(c, caminho(arquivo))
+        override fun close() = p.close()
     }
 }

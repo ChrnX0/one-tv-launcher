@@ -62,7 +62,8 @@
     <string name="grv_reserva">नेटवर्क फ़ोल्डर</string>
     <string name="grv_reserva_explica">USB ड्राइव न लगी हो तो कहाँ रिकॉर्ड करें (नेटवर्क का Windows/NAS फ़ोल्डर)</string>
     <string name="grv_nenhuma">कोई नहीं</string>
-    <string name="grv_sem_smb">पहले नेटवर्क में Windows/NAS (SMB) फ़ोल्डर जोड़ें।</string>
+    <string name="grv_onde_pergunta">कहाँ रिकॉर्ड करें?</string>
+    <string name="grv_sem_smb">पहले नेटवर्क में एक नेटवर्क फ़ोल्डर (Windows/NAS, FTP या SFTP) जोड़ें।</string>
     <string name="grv_amanha">कल</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">देखें</string>

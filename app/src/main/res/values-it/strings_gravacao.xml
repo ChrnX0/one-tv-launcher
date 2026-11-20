@@ -62,7 +62,8 @@
     <string name="grv_reserva">Cartella di rete</string>
     <string name="grv_reserva_explica">Dove registrare quando non c’è una chiavetta USB collegata (una cartella Windows o NAS da “In rete”)</string>
     <string name="grv_nenhuma">Nessuna</string>
-    <string name="grv_sem_smb">Aggiungi prima una cartella Windows/NAS (SMB) in In rete.</string>
+    <string name="grv_onde_pergunta">Registrare dove?</string>
+    <string name="grv_sem_smb">Aggiungi prima una cartella di rete (Windows/NAS, FTP o SFTP) in Rete.</string>
     <string name="grv_amanha">Domani</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">guarda</string>

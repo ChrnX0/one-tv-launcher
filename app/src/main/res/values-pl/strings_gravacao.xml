@@ -62,7 +62,8 @@
     <string name="grv_reserva">Folder sieciowy</string>
     <string name="grv_reserva_explica">Gdzie nagrywać, gdy nie jest podłączony pendrive (folder Windows lub NAS z „W sieci”)</string>
     <string name="grv_nenhuma">Brak</string>
-    <string name="grv_sem_smb">Najpierw dodaj folder Windows/NAS (SMB) w W sieci.</string>
+    <string name="grv_onde_pergunta">Gdzie nagrać?</string>
+    <string name="grv_sem_smb">Najpierw dodaj folder sieciowy (Windows/NAS, FTP lub SFTP) w Sieci.</string>
     <string name="grv_amanha">Jutro</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">oglądaj</string>

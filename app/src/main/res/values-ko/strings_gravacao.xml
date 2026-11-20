@@ -62,7 +62,8 @@
     <string name="grv_reserva">네트워크 폴더</string>
     <string name="grv_reserva_explica">USB 드라이브가 연결되지 않았을 때 녹화할 곳(네트워크의 Windows/NAS 폴더)</string>
     <string name="grv_nenhuma">없음</string>
-    <string name="grv_sem_smb">먼저 네트워크에서 Windows/NAS(SMB) 폴더를 추가하세요.</string>
+    <string name="grv_onde_pergunta">어디에 녹화할까요?</string>
+    <string name="grv_sem_smb">먼저 네트워크에서 네트워크 폴더(Windows/NAS, FTP 또는 SFTP)를 추가하세요.</string>
     <string name="grv_amanha">내일</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">보기</string>

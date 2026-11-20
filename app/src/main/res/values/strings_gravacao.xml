@@ -62,7 +62,8 @@
     <string name="grv_reserva">Network folder</string>
     <string name="grv_reserva_explica">Where to record when no USB drive is plugged in (a Windows or NAS folder from “On the network”)</string>
     <string name="grv_nenhuma">None</string>
-    <string name="grv_sem_smb">Add a Windows/NAS (SMB) folder in On the network first.</string>
+    <string name="grv_onde_pergunta">Record where?</string>
+    <string name="grv_sem_smb">Add a network folder (Windows/NAS, FTP or SFTP) in On the network first.</string>
     <string name="grv_amanha">Tomorrow</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">watch</string>

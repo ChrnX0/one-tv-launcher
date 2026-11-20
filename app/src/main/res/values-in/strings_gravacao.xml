@@ -62,7 +62,8 @@
     <string name="grv_reserva">Folder jaringan</string>
     <string name="grv_reserva_explica">Tempat merekam saat tidak ada flashdisk (folder Windows atau NAS dari “Di jaringan”)</string>
     <string name="grv_nenhuma">Tidak ada</string>
-    <string name="grv_sem_smb">Tambahkan folder Windows/NAS (SMB) di Di jaringan dulu.</string>
+    <string name="grv_onde_pergunta">Rekam di mana?</string>
+    <string name="grv_sem_smb">Tambahkan dulu folder jaringan (Windows/NAS, FTP, atau SFTP) di Jaringan.</string>
     <string name="grv_amanha">Besok</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">tonton</string>

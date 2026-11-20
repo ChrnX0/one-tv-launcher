@@ -62,7 +62,8 @@
     <string name="grv_reserva">Ağ klasörü</string>
     <string name="grv_reserva_explica">USB bellek takılı değilken nereye kaydedilecek (“Ağda” bölümünden bir Windows veya NAS klasörü)</string>
     <string name="grv_nenhuma">Yok</string>
-    <string name="grv_sem_smb">Önce Ağda’ya bir Windows/NAS (SMB) klasörü ekleyin.</string>
+    <string name="grv_onde_pergunta">Nereye kaydedilsin?</string>
+    <string name="grv_sem_smb">Önce Ağ bölümüne bir ağ klasörü (Windows/NAS, FTP veya SFTP) ekleyin.</string>
     <string name="grv_amanha">Yarın</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">izle</string>

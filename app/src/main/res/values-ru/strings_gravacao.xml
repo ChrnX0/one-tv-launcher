@@ -62,7 +62,8 @@
     <string name="grv_reserva">Сетевая папка</string>
     <string name="grv_reserva_explica">Куда записывать, если флешка не подключена (папка Windows/NAS из раздела «В сети»)</string>
     <string name="grv_nenhuma">Нет</string>
-    <string name="grv_sem_smb">Сначала добавьте папку Windows/NAS (SMB) в разделе «В сети».</string>
+    <string name="grv_onde_pergunta">Куда записать?</string>
+    <string name="grv_sem_smb">Сначала добавьте сетевую папку (Windows/NAS, FTP или SFTP) в разделе «Сеть».</string>
     <string name="grv_amanha">Завтра</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">смотреть</string>

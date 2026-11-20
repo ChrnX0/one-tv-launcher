@@ -62,7 +62,8 @@
     <string name="grv_reserva">مجلد الشبكة</string>
     <string name="grv_reserva_explica">مكان التسجيل عند عدم توصيل ذاكرة USB (مجلد Windows/NAS من على الشبكة)</string>
     <string name="grv_nenhuma">لا شيء</string>
-    <string name="grv_sem_smb">أضف مجلد Windows/NAS (SMB) في على الشبكة أولًا.</string>
+    <string name="grv_onde_pergunta">أين يتم التسجيل؟</string>
+    <string name="grv_sem_smb">أضف أولاً مجلد شبكة (Windows/NAS أو FTP أو SFTP) في الشبكة.</string>
     <string name="grv_amanha">غدًا</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">شاهد</string>

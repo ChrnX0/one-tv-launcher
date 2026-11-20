@@ -62,7 +62,8 @@
     <string name="grv_reserva">网络文件夹</string>
     <string name="grv_reserva_explica">未插入 U 盘时的录制位置（来自“网络”的 Windows/NAS 文件夹）</string>
     <string name="grv_nenhuma">无</string>
-    <string name="grv_sem_smb">请先在“网络”中添加 Windows/NAS（SMB）文件夹。</string>
+    <string name="grv_onde_pergunta">录制到哪里？</string>
+    <string name="grv_sem_smb">请先在“网络”中添加网络文件夹（Windows/NAS、FTP 或 SFTP）。</string>
     <string name="grv_amanha">明天</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">观看</string>

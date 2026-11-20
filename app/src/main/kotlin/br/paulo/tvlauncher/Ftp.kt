@@ -74,8 +74,41 @@ object Ftp {
         return f.trustManagers.filterIsInstance<X509TrustManager>().first()
     }
 
-    private class Pasta(private val c: ContaMidia) : PastaArquivos {
+    private class Pasta(private val c: ContaMidia) : PastaArquivos, PastaGravavel {
         private val cli = conectar(c)
+
+        override fun criarPastas(caminho: String) {
+            var atual = ""
+            for (parte in caminho.split('/').filter { it.isNotEmpty() }) {
+                atual = "$atual/$parte"
+                // MKD numa pasta que já existe responde 550: não é erro; quem falha de verdade é o envio logo depois.
+                cli.makeDirectory(atual)
+            }
+        }
+
+        override fun escrever(caminho: String): java.io.OutputStream {
+            // Conexão própria, como a leitura: o FTP só transfere um arquivo por vez em cada conexão.
+            val outra = conectar(c)
+            try {
+                val s = outra.storeFileStream(absoluto(caminho)) ?: throw IOException("ftp não criou o arquivo: ${outra.replyCode}")
+                return object : java.io.FilterOutputStream(s.buffered(256 * 1024)) {
+                    override fun write(b: ByteArray, off: Int, len: Int) = out.write(b, off, len)
+                    override fun close() {
+                        try {
+                            super.close()
+                            if (!outra.completePendingCommand()) throw IOException("ftp não confirmou o envio: ${outra.replyCode}")
+                        } finally { runCatching { outra.disconnect() } }
+                    }
+                }
+            } catch (e: Exception) {
+                runCatching { outra.disconnect() }
+                throw e
+            }
+        }
+
+        override fun apagar(caminho: String) {
+            if (!cli.deleteFile(absoluto(caminho))) throw IOException("ftp não apagou: ${cli.replyCode}")
+        }
 
         override fun listar(caminho: String): List<PastaArquivos.Item> {
             val dir = absoluto(caminho)

@@ -62,7 +62,8 @@
     <string name="grv_reserva">ネットワークフォルダ</string>
     <string name="grv_reserva_explica">USB メモリが接続されていないときの録画先（ネットワークにある Windows/NAS のフォルダ）</string>
     <string name="grv_nenhuma">なし</string>
-    <string name="grv_sem_smb">先にネットワークで Windows/NAS（SMB）のフォルダを追加してください。</string>
+    <string name="grv_onde_pergunta">どこに録画しますか？</string>
+    <string name="grv_sem_smb">先に「ネットワーク」でネットワークフォルダ（Windows/NAS、FTP、SFTP）を追加してください。</string>
     <string name="grv_amanha">明日</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">見る</string>

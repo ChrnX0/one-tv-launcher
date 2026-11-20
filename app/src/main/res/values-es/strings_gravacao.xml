@@ -62,7 +62,8 @@
     <string name="grv_reserva">Carpeta de red</string>
     <string name="grv_reserva_explica">Dónde grabar cuando no hay memoria USB conectada (una carpeta de Windows o NAS de “En la red”)</string>
     <string name="grv_nenhuma">Ninguna</string>
-    <string name="grv_sem_smb">Agrega primero una carpeta de Windows/NAS (SMB) en En la red.</string>
+    <string name="grv_onde_pergunta">¿Grabar dónde?</string>
+    <string name="grv_sem_smb">Primero agrega una carpeta de red (Windows/NAS, FTP o SFTP) en Red.</string>
     <string name="grv_amanha">Mañana</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">ver</string>

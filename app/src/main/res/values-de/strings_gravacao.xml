@@ -62,7 +62,8 @@
     <string name="grv_reserva">Netzwerkordner</string>
     <string name="grv_reserva_explica">Wo aufgenommen wird, wenn kein USB-Stick steckt (ein Windows- oder NAS-Ordner aus „Netzwerk“)</string>
     <string name="grv_nenhuma">Keiner</string>
-    <string name="grv_sem_smb">Füge zuerst einen Windows-/NAS-Ordner (SMB) in Netzwerk hinzu.</string>
+    <string name="grv_onde_pergunta">Wo aufnehmen?</string>
+    <string name="grv_sem_smb">Füge zuerst einen Netzwerkordner (Windows/NAS, FTP oder SFTP) unter Netzwerk hinzu.</string>
     <string name="grv_amanha">Morgen</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">ansehen</string>

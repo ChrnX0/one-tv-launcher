@@ -99,6 +99,8 @@ object GravacaoRegras {
         val inicio: Long,           // horário do guia, sem folga
         val fim: Long,
         val semanal: Boolean = false,
+        /** Onde gravar (GravacaoDestino.Opcao.id); "" = o automático (pendrive, senão a pasta da rede de reserva). */
+        val destino: String = "",
     ) {
         val comecaEm get() = inicio - FOLGA_ANTES_MS
         val terminaEm get() = fim + FOLGA_DEPOIS_MS
@@ -127,7 +129,7 @@ object GravacaoRegras {
 
     fun paraJson(lista: List<Agendada>): String = JSONArray().apply {
         lista.forEach { put(JSONObject().put("id", it.id).put("canal", it.canal).put("canalNome", it.canalNome).put("programa", it.programa)
-            .put("inicio", it.inicio).put("fim", it.fim).put("semanal", it.semanal)) }
+            .put("inicio", it.inicio).put("fim", it.fim).put("semanal", it.semanal).put("destino", it.destino)) }
     }.toString()
 
     fun deJson(texto: String?): List<Agendada> {
@@ -135,7 +137,16 @@ object GravacaoRegras {
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             Agendada(o.optString("id"), o.optString("canal"), o.optString("canalNome"), o.optString("programa"),
-                o.optLong("inicio"), o.optLong("fim"), o.optBoolean("semanal")).takeIf { valida(it) }
+                o.optLong("inicio"), o.optLong("fim"), o.optBoolean("semanal"), o.optString("destino")).takeIf { valida(it) }
         }.take(MAX_AGENDADAS)
     }
+
+    /** A pergunta "Gravar onde?" com o lugar da última vez em primeiro (os outros na ordem de sempre: pendrives, rede). */
+    fun <T> ordenarOpcoes(opcoes: List<T>, ultimo: String, id: (T) -> String): List<T> {
+        val i = opcoes.indexOfFirst { id(it) == ultimo }
+        return if (i <= 0) opcoes else listOf(opcoes[i]) + opcoes.filterIndexed { k, _ -> k != i }
+    }
+
+    /** Só pergunta quando há escolha de verdade. */
+    fun perguntarOnde(quantas: Int) = quantas >= 2
 }
