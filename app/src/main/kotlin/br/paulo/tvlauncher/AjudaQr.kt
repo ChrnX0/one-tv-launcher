@@ -8,7 +8,7 @@ import android.content.Context
  * Puro, menos [link] com Context.
  */
 object AjudaQr {
-    const val PAGINA = "https://chrnx0.github.io/one-tv-launcher/help.html"
+    const val PAGINA = "https://chrnx0.github.io/sofaly/help.html"
 
     /** [idioma]: tag curta do idioma da TV ("pt", "pt-PT", "in"...). O site usa "id" para indonésio. */
     fun link(idioma: String, topico: String): String {

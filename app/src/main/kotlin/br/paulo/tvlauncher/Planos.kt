@@ -15,7 +15,7 @@ import android.content.Context
 object Planos {
     /** Liga a cobrança: só no build da Play. Fora dele, todo aparelho é tratado como Ultra (nada muda para a Sala). */
     val VENDA_ATIVA: Boolean get() = BuildConfig.PLAY
-    const val PAGINA = "https://chrnx0.github.io/one-tv-launcher/plans.html"
+    const val PAGINA = "https://chrnx0.github.io/sofaly/plans.html"
 
     enum class Plano { BASICO, PRO, ULTRA }
 

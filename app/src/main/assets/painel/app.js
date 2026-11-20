@@ -1538,7 +1538,7 @@ function desenharAcesso(a) {
 // ---------- erros do launcher -> issue no GitHub (ErrosFiltrados.kt, 11/11/2026) ----------
 // A TV não guarda token do GitHub: o link abre a página de issue nova com o texto pronto, e quem envia é a pessoa.
 
-const REPO_ISSUES = 'https://github.com/ChrnX0/one-tv-launcher/issues/new';
+const REPO_ISSUES = 'https://github.com/ChrnX0/sofaly/issues/new';
 const MAX_URL_ISSUE = 7000;   // o GitHub recusa endereços muito longos; corta erros inteiros, nunca no meio
 
 /** Texto da issue a partir da resposta de /api/extras/erros. Só campos já filtrados na TV. */

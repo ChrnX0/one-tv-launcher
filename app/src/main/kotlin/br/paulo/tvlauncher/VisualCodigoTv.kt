@@ -4,7 +4,7 @@ import android.content.Context
 
 /** A parte do Android do [VisualCodigo]: lê o visual desta TV e aplica um recebido. */
 object VisualCodigoTv {
-    const val PAGINA = "https://chrnx0.github.io/one-tv-launcher/visual.html#"
+    const val PAGINA = "https://chrnx0.github.io/sofaly/visual.html#"
 
     fun atual(ctx: Context) = VisualCodigo.Visual(
         tema = Tema.atual(ctx).name, texto = TamanhoTexto.atual(ctx), icones = PacoteIcones.escolhido(ctx),

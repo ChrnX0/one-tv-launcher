@@ -48,7 +48,7 @@ code{font-size:.9em;word-break:break-all}
 <p><code>adb shell am broadcast -n tv.sofaly.launcher/br.paulo.tvlauncher.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o compat</code></p>
 <p data-t="como2">The report holds only the model, the system version and the measurements: no serial number, account, network or name.</p>
 </details>
-<p class="data"><span data-t="atualizado">Updated</span> <span id="data"></span> · <a href="https://github.com/ChrnX0/one-tv-launcher/issues" data-t="pedir">Ask for a device</a></p>
+<p class="data"><span data-t="atualizado">Updated</span> <span id="data"></span> · <a href="https://github.com/ChrnX0/sofaly/issues" data-t="pedir">Ask for a device</a></p>
 </main>
 <script>
 const T = {
@@ -131,7 +131,7 @@ function desenhar() {
 }
 // Números de leveza (degrau 2): o tamanho dos APKs vem do Release mais recente, sem nada digitado à mão.
 let tamanhos = "";
-fetch("https://api.github.com/repos/ChrnX0/one-tv-launcher/releases/latest").then(r => r.json()).then(r => {
+fetch("https://api.github.com/repos/ChrnX0/sofaly/releases/latest").then(r => r.json()).then(r => {
   const mb = n => { const a = (r.assets || []).find(x => x.name === n); return a ? (a.size / 1048576).toFixed(1) + " MB" : null; };
   const p = [mb("sofaly-launcher.apk") && "32-bit " + mb("sofaly-launcher.apk"), mb("sofaly-launcher-arm64.apk") && "64-bit " + mb("sofaly-launcher-arm64.apk")].filter(Boolean);
   if (p.length) { tamanhos = p.join(" · ") + " (v" + String(r.tag_name).replace(/^v/, "") + ")"; desenhar(); }

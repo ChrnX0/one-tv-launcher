@@ -29,7 +29,7 @@ import java.util.TimeZone
 object ClimaMet {
     private const val TAG = "TvLauncher.Met"
     /** Exigência dos termos: nome do app e um contato. Sem dado pessoal: o site do projeto. */
-    const val AGENTE = "Sofaly/1.0 (+https://chrnx0.github.io/one-tv-launcher/)"
+    const val AGENTE = "Sofaly/1.0 (+https://chrnx0.github.io/sofaly/)"
 
     // ---------------------------------------------------------------- rede (com cache, como os termos pedem)
 
