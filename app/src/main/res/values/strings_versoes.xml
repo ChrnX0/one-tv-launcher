@@ -17,6 +17,15 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Your phone becomes a remote: in the Sofaly phone app, tap the TV to swipe, tap and type; volume and ⏯ also in the notification and the quick settings tile</item>
+        <item>Alarm rang on the TV: the phone with the panel installed gets a notice</item>
+        <item>In the panel on a computer, drag a video, song or photo onto the page and watch it on the TV</item>
+        <item>A screensaver that follows the day: in the morning it shows the day\'s summary, at night it gets softer and late at night it turns dark and warm, without the logo</item>
+        <item>Search: you can speak instead of typing, and your last searches come first</item>
+        <item>Empty screens show the mascot, what happened and what to do; a film with no poster gets its own colour instead of grey</item>
+        <item>Remote hints at the bottom go away after you have seen them 3 times on each screen</item>
+        <item>Text of at least 15 in the top bar and badges; the podcast player reads the focused button aloud</item>
+        <item>Panel: 48 px buttons on phones, the chosen filter marked with the orange bar, stronger contrast for faint text</item>
         <item>An update installed while the TV sleeps is now optimised that same night (before, the new version ran slower all the next day, until the screen turned off again)</item>
         <item>Movies and Series open faster: joining the dubbed and subtitled copies of each title now takes a fraction of the time (on big lists it kept the TV busy for over a minute after opening)</item>
         <item>Home screen: moving along the cross is lighter, because the faded items no longer need an extra drawing pass on every frame</item>
@@ -52,6 +61,12 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>descanso_hora</item>
+        <item>busca_voz</item>
+        <item>estado_vazio</item>
+        <item>dicas_somem</item>
+        <item>celular_controle</item>
+        <item>arrastar_ver</item>
         <item>filmes_rapido</item>
         <item>cruz_leve</item>
         <item>menu_player</item>
@@ -80,6 +95,12 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Screensaver by the hour</item>
+        <item>Speak to search</item>
+        <item>Empty screen</item>
+        <item>Hints that go away</item>
+        <item>Phone remote</item>
+        <item>Drag and watch</item>
         <item>Movies open fast</item>
         <item>Smooth home screen</item>
         <item>Player menu</item>
@@ -108,6 +129,12 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Let the screensaver come up at night: does it get softer, and late at night dark and without the logo?</item>
+        <item>Open Search: is the first item Speak, with your past searches right below it?</item>
+        <item>Open the Forecast without internet: does the sofa show up with a title, the explanation and Try again?</item>
+        <item>Open Radio four times: on the fourth, is the hints strip at the bottom gone?</item>
+        <item>In the Sofaly phone app, tap the TV: does the remote open, does swiping move the focus on the TV and does volume work from the notification?</item>
+        <item>In the panel on a computer, drag a video onto the Control tab: does it start playing on the TV?</item>
         <item>Open Movies, then Series: do the posters show in a few seconds, and does moving through them stay smooth in the first minute (no long pauses)?</item>
         <item>On the home screen, move left and right along the cross a few times: do the items glide without stutter, and do the faded neighbours look the same as before?</item>
         <item>In a movie, does ▼ show a short menu (Audio, Subtitles, Picture and sound, More options) with the current value on the right, and does BACK inside a list go back to the one above?</item>

@@ -31,6 +31,8 @@ object BackupCompleto {
     internal val PREFS_EXTRAS = listOf("player", "painel_seguro", "mcp_seguro", "unifi_seguro", "tunel_seguro",
         "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "aviso_temperatura", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
+        "dicas_vistas",   // 20/11/2026: quem já aprendeu as teclas não precisa rever as dicas na TV nova
+        "busca_recentes",   // 20/11/2026: as últimas buscas da pessoa (6 no máximo) viajam junto
         "agenda_perfis",   // agenda da família (degrau 2, 16/11/2026): perfil troca sozinho no horário
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
@@ -54,6 +56,7 @@ object BackupCompleto {
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "fichas",   // 19/11/2026: só a marca "buscas antigas já liberadas" do cache de fichas desta TV
+        "convite_simkl",   // 20/11/2026: só a conta de convites do dia (zera sozinha)
         "abertura_pronta",   // rodada 15: só cache das marcações do IntroDB (refaz sozinho)
         "painel_papeis",   // elevação 18.1: convites (família/convidado) não viajam: restaurar não pode reabrir acesso revogado
         "mudar_tv",   // elevação 19.7: a fila dos apps que faltam é desta TV, depois de receber de outra

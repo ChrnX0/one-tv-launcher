@@ -73,6 +73,8 @@ class ControleBloco : TileService() {
         qsTile?.apply { label = getString(R.string.cel_bloco); state = android.service.quicksettings.Tile.STATE_INACTIVE; updateTile() }
     }
 
+    // O lint não enxerga o "if SDK >= 34": no 14+ já usamos o PendingIntent; o Intent só roda no Android 10 a 13.
+    @android.annotation.SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
         val i = Intent(this, ControleActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (Build.VERSION.SDK_INT >= 34) startActivityAndCollapse(PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_IMMUTABLE))
