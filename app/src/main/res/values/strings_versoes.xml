@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>An update installed while the TV sleeps is now optimised that same night (before, the new version ran slower all the next day, until the screen turned off again)</item>
         <item>Movies and Series open faster: joining the dubbed and subtitled copies of each title now takes a fraction of the time (on big lists it kept the TV busy for over a minute after opening)</item>
         <item>Home screen: moving along the cross is lighter, because the faded items no longer need an extra drawing pass on every frame</item>
         <item>Reading the focused item aloud (Extras): closed screens no longer stay stuck in memory</item>

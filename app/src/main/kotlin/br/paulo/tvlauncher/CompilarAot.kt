@@ -60,6 +60,11 @@ object CompilarAot {
         }, IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_OFF); addAction(Intent.ACTION_DREAMING_STARTED); addAction(Intent.ACTION_DREAMING_STOPPED)
         })
+        // 20/11/2026 (rodada de desempenho): a atualização costuma ser instalada com a tela já apagada, e aí o processo
+        // novo nasce sem nunca receber o "apagou" — a versão nova ficava em `verify` (sem compilar) o dia seguinte inteiro,
+        // até a tela apagar de novo (visto na Sala: v465338 instalada às 00:46 com a TV dormindo). Nasceu com a tela
+        // apagada: segue o mesmo caminho do apagar (espera 1 min, confere de novo, compila, reinicia sem ninguém vendo).
+        if (!telaAcesa(app)) talvezCompilar(app)
     }
 
     /** Compilada no protetor e ainda não reiniciada: reinicia agora que a tela apagou. Devolve true se cuidou disso. */
