@@ -74,10 +74,9 @@ async function carregarInicio() {
   $('inicioNaTela').textContent = (ultimoEstado && ultimoEstado.naTela) || '…';
   miniaturaInicio();
 
-  // Saúde: só os números rápidos (a lista de memória fica na aba Saúde).
-  chamar('GET', '/api/saude?rapido=1')
-    .then((s) => desenharNumeros(s, $('inicioSaude')))
-    .catch((e) => { $('inicioSaude').replaceChildren(Object.assign(document.createElement('p'), { className: 'aviso', textContent: textoErro(e) })); });
+  // Estudo do painel (20/11/2026, PR 3): a Sofy fala só se tem recado; "Como a TV está" virou a linha "Controle total".
+  carregarFaixaSofy();
+  carregarPoderes();
 
   // Uso de hoje: os 5 apps com mais minutos, com uma barra proporcional ao primeiro.
   try {
@@ -85,7 +84,7 @@ async function carregarInicio() {
     const top = Object.entries(u).filter(([p]) => p !== 'br.paulo.tvlauncher').sort((a, b) => b[1] - a[1]).slice(0, 5);
     const caixa = $('inicioUso');
     caixa.replaceChildren();
-    if (!top.length) { caixa.appendChild(Object.assign(document.createElement('p'), { className: 'aviso', textContent: 'Nenhum app usado hoje.' })); return; }
+    if (!top.length) { listaVazia(caixa, 'Nenhum app usado hoje.'); return; }
     const maior = top[0][1];
     for (const [pacote, min] of top) {
       const linha = document.createElement('div');
@@ -109,6 +108,102 @@ async function carregarInicio() {
     $('inicioUso').replaceChildren(Object.assign(document.createElement('p'), { className: 'aviso', textContent: textoErro(e) }));
   }
 }
+
+// ---------- Início: faixa da Sofy, Controle total e listas vazias (estudo do painel 20/11/2026, PR 3) ----------
+
+/** Recado mais novo da Sofy que ainda vale (não venceu). As frases vêm prontas da TV, na língua deste navegador. */
+async function carregarFaixaSofy() {
+  const faixa = $('faixaSofy');
+  if (!faixa) return;
+  let o;
+  try { o = await chamar('GET', '/api/observer?lang=' + encodeURIComponent(document.documentElement.lang || 'pt')); }
+  catch (_) { faixa.hidden = true; return; }   // versão sem o Observador: a Início fica calma
+  const agora = Date.now();
+  const recado = (o.notes || []).find((n) => n.title && (!n.expiresAt || n.expiresAt > agora));
+  faixa.hidden = !recado;
+  if (!recado) return;
+  $('faixaSofyTitulo').textContent = recado.title;
+  $('faixaSofyTexto').textContent = recado.text || '';
+  const lugar = $('faixaSofyRosto');
+  if (typeof Sofy === 'undefined') { lugar.hidden = true; return; }
+  try {
+    await Sofy.carregar();
+    const expr = recado.severity === 'CRITICAL' ? 'SURPRISED' : recado.severity === 'WARNING' ? 'WORRIED' : 'ATTENTIVE';
+    let svg = lugar.querySelector('svg');
+    if (!svg) { svg = Sofy.criar(expr, { tamanho: 48 }); svg.setAttribute('aria-hidden', 'true'); lugar.appendChild(svg); Sofy.tocar(svg, expr); }
+    else if (svg._sofy.expr !== expr) Sofy.tocar(svg, expr);
+  } catch (_) { lugar.hidden = true; }
+}
+
+/** Os 3 poderes da TV (Dono, Shell e Acessibilidade). Cada um diz o que para sem ele, em linguagem de casa. */
+const PODERES_TV = [
+  { chave: 'teclas', nome: 'Acessibilidade', passo: 'teclas',
+    sem: 'A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.' },
+  { chave: 'shell', nome: 'Shell', passo: 'parear',
+    sem: 'O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.' },
+  { chave: 'dono', nome: 'Dono do aparelho', passo: null,
+    sem: 'A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.' },
+];
+
+let passoReligar = null;
+async function carregarPoderes() {
+  const linha = $('linhaPoderes');
+  if (!linha) return;
+  let e;
+  try {
+    const r = await fetch('/api/primeira/poderes', { headers: { 'X-Painel': '1' }, credentials: 'same-origin', cache: 'no-store' });
+    if (!r.ok) throw new Error(String(r.status));
+    e = await r.json();
+  } catch (_) { linha.hidden = true; return; }
+  const faltam = PODERES_TV.filter((p) => !e[p.chave]);
+  // "Caiu" é acessibilidade ou shell (ligam e caem sozinhos, por atualização ou reinício). Sem dono é escolha da casa:
+  // fica na linha calma, sem alerta.
+  const caiu = faltam.filter((p) => p.chave !== 'dono');
+  linha.hidden = false;
+  linha.classList.toggle('alerta', caiu.length > 0);
+  $('poderesResumo').textContent = faltam.length ? 'Controle total: parcial' : 'Controle total: ativo';
+  $('poderesQuais').replaceChildren();
+  for (const p of PODERES_TV) {
+    const s = document.createElement('span');
+    s.className = 'poder' + (e[p.chave] ? ' ligado' : '');
+    s.textContent = p.nome;
+    $('poderesQuais').appendChild(s);
+  }
+  const explica = $('poderesExplica');
+  explica.hidden = !faltam.length;
+  explica.textContent = faltam.length ? (caiu[0] || faltam[0]).sem : '';
+  passoReligar = caiu.find((p) => p.passo)?.passo || null;
+  $('btnReligarPoder').hidden = !passoReligar;
+}
+$('btnReligarPoder')?.addEventListener('click', async () => {
+  if (!passoReligar) return;
+  try { await chamar('POST', '/api/primeira/poderes', { passo: passoReligar }); aviso('Abriu na TV. Use o controle.', 'ok'); }
+  catch (e) { aviso(textoErro(e), 'erro'); }
+});
+
+/**
+ * Lista vazia com a Sofy: o rosto calmo e uma frase do que fazer. Só quando não há outro rosto dela na tela
+ * (regra 9: a Sofy aparece uma vez por tela).
+ */
+function listaVazia(caixa, texto) {
+  const p = Object.assign(document.createElement('p'), { className: 'aviso', textContent: texto });
+  const temSofy = [...document.querySelectorAll('.painel-aba:not([hidden]) .sofy-rosto')].some((r) => r.closest('[hidden]') === null && r.querySelector('svg'));
+  if (typeof Sofy === 'undefined' || temSofy) { caixa.replaceChildren(p); return; }
+  const vazio = document.createElement('div');
+  vazio.className = 'vazio-sofy';
+  const rosto = document.createElement('span');
+  rosto.className = 'sofy-rosto'; rosto.setAttribute('aria-hidden', 'true');
+  vazio.append(rosto, p);
+  caixa.replaceChildren(vazio);
+  Sofy.carregar().then(() => { const svg = Sofy.criar('SLEEPING', { tamanho: 40 }); svg.setAttribute('aria-hidden', 'true'); rosto.appendChild(svg); })
+    .catch(() => rosto.remove());
+}
+
+// Portas e links que levam a um bloco de outra página ("tvfilmes.cartaoRadios"): mesma ida da busca (irPara).
+document.addEventListener('click', (ev) => {
+  const b = ev.target.closest('[data-ir]');
+  if (b && !$('telaPainel').hidden) { ev.preventDefault(); irPara(b.dataset.ir); }
+});
 
 document.addEventListener('aba', (ev) => { if (ev.detail === 'inicio') carregarInicio(); });
 // A abertura do painel já mostrou o Início antes deste arquivo carregar? Carrega agora.

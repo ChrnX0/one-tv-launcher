@@ -66,6 +66,28 @@ object SofyTv {
         p.edit().putString("shown", shown.joinToString(",")).apply()
     }
 
+    /**
+     * Painel (estudo do painel 20/11/2026, faixa da Sofy na Início): põe "title" e "text" em cada recado de [report]
+     * (o JSON do [ObserverTv.reportJson]), na língua [lang] do navegador ("en", "pt"...). Língua inválida ou ausente =
+     * a da TV. Recado sem frase fica sem os campos (o painel não mostra).
+     */
+    fun resolveNotes(ctx: Context, report: JSONObject, lang: String?) {
+        val notes = report.optJSONArray("notes") ?: return
+        val app = ctx.applicationContext
+        val c = lang?.takeIf { it.matches(Regex("[a-z]{2}")) }?.let { l ->
+            val conf = android.content.res.Configuration(app.resources.configuration)
+            conf.setLocale(java.util.Locale.forLanguageTag(l))
+            runCatching { app.createConfigurationContext(conf) }.getOrNull()
+        } ?: app
+        for (i in 0 until notes.length()) {
+            val n = notes.optJSONObject(i) ?: continue
+            val a = n.optJSONArray("args")
+            val args = if (a == null) emptyList() else List(a.length()) { a.optString(it) }
+            texto(c, n.optString("titleKey"), args)?.let { n.put("title", it) }
+            texto(c, n.optString("textKey"), args)?.let { n.put("text", it) }
+        }
+    }
+
     /** A frase pelo nome do recurso (observer_<tipo>_title/_text), com os números do recado; null = ainda não existe. */
     private fun texto(app: Context, key: String, args: List<String>): String? {
         @Suppress("DiscouragedApi")

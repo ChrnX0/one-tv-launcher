@@ -862,7 +862,8 @@ object PainelWeb {
             "/api/saude" -> if (req.metodo == "GET") return json(200, PainelSaude.estado(app, req.consulta["rapido"] != "1")
                 .put("acesso", SaudeAcesso.json(app)))
             // Observador (ObserverTv, 20/11/2026): leituras, o que o juiz vê agora, recados e registro. Só leitura.
-            "/api/observer" -> if (req.metodo == "GET") return json(200, ObserverTv.reportJson(app, 20))
+            // ?lang=xx (20/11/2026): os recados da Sofy já com a frase na língua do navegador, para a faixa da Início.
+            "/api/observer" -> if (req.metodo == "GET") return json(200, ObserverTv.reportJson(app, 20).also { SofyTv.resolveNotes(app, it, req.consulta["lang"]) })
             // Sofy (20/11/2026): os movimentos (mesma fonte da TV, SofyMotion) e a chave "Sofy fala". O POST só liga/desliga a voz.
             "/api/sofy" -> when (req.metodo) {
                 "GET" -> return json(200, SofyMotion.toJson().put("voice_on", SofyVoice.voiceOn(app)).put("screen_reader", SofyVoice.screenReaderOn(app)))
