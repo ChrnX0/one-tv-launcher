@@ -86,6 +86,9 @@ object PainelControle {
         "apagar_letra" to 67, "entrar" to 66,
     )
 
+    /** Teclas de volume que vão direto para a LG pela rede quando ela está pareada ([VolumeLg]). */
+    private val teclaLg = mapOf("volume+" to LgNetcast.TECLA_SUBIR, "volume-" to LgNetcast.TECLA_DESCER, "mudo" to LgNetcast.TECLA_MUDO)
+
     /**
      * Aperta uma tecla. Devolve null se deu certo, ou o motivo. [pelaIa] = pedido do Claude pelo MCP: na versão da Play
      * a IA não usa a acessibilidade (PlayPolicy), então VOLTAR vai pelo shell e INÍCIO abre a nossa tela por Intent.
@@ -104,6 +107,10 @@ object PainelControle {
         // VOLTAR e INÍCIO pela acessibilidade: imediatos e sem shell.
         if (servico != null && nome == "voltar") return if (servico.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)) null else "o Android recusou"
         if (servico != null && nome == "inicio") return if (servico.performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)) null else "o Android recusou"
+        // Volume com a LG pareada pela rede (ideia 49): a saída HDMI tem volume fixo e esta LG ignora o volume por CEC,
+        // então `input keyevent 24` não mudava nada (debug 20/11/2026). Sem resposta da LG, tenta a tecla como antes.
+        // Quem chama já está fora da thread da tela (painel e MCP); VolumeLg espera a rede.
+        teclaLg[nome]?.let { lg -> if (VolumeLg.configurado(ctx) && VolumeLg.tecla(ctx, lg)) return null }
         return shell(ctx, "input keyevent $codigo")
     }
 
