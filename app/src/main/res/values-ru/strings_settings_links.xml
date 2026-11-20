@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Configurações da TV iguais ao painel (PR 6 do estudo do painel, 20/11/2026): índice da aba e "Conversa com". -->
+<resources>
+    <string name="cfg_related_label">Связано с</string>
+    <string name="cfg_index_label">На этой странице</string>
+</resources>

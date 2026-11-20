@@ -1,6 +1,6 @@
 {
  "ar\/ajuda": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -9,7 +9,7 @@
   "semNome": []
  },
  "ar\/ajuda-ac": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -27,7 +27,7 @@
   "semNome": []
  },
  "ar\/boas-vindas": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -36,7 +36,7 @@
   "semNome": []
  },
  "ar\/busca": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -45,7 +45,7 @@
   "semNome": []
  },
  "ar\/configuracoes": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -54,6 +54,24 @@
   "semNome": []
  },
  "ar\/configuracoes-ac": {
+  "menorSp": 17,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "ar\/configuracoes-familia": {
+  "menorSp": 15,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "ar\/configuracoes-remoto": {
   "menorSp": 15,
   "foco": true,
   "cortes": [],
@@ -63,7 +81,7 @@
   "semNome": []
  },
  "ar\/despertador": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -81,7 +99,7 @@
   "semNome": []
  },
  "ar\/entrar-celular": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -153,7 +171,7 @@
   "semNome": []
  },
  "ar\/home-leve": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -162,7 +180,7 @@
   "semNome": []
  },
  "ar\/home-recua": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -180,7 +198,7 @@
   "semNome": []
  },
  "ar\/home-vidro": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -225,7 +243,7 @@
   "semNome": []
  },
  "ar\/planos": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -270,7 +288,7 @@
   "semNome": []
  },
  "en\/ajuda": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -279,7 +297,7 @@
   "semNome": []
  },
  "en\/ajuda-ac": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -297,7 +315,7 @@
   "semNome": []
  },
  "en\/boas-vindas": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -306,7 +324,7 @@
   "semNome": []
  },
  "en\/busca": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -315,7 +333,7 @@
   "semNome": []
  },
  "en\/configuracoes": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -324,6 +342,24 @@
   "semNome": []
  },
  "en\/configuracoes-ac": {
+  "menorSp": 17,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/configuracoes-familia": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/configuracoes-remoto": {
   "menorSp": 15,
   "foco": true,
   "cortes": [],
@@ -333,7 +369,7 @@
   "semNome": []
  },
  "en\/despertador": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -351,7 +387,7 @@
   "semNome": []
  },
  "en\/entrar-celular": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -423,7 +459,7 @@
   "semNome": []
  },
  "en\/home-leve": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -432,7 +468,7 @@
   "semNome": []
  },
  "en\/home-recua": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -450,7 +486,7 @@
   "semNome": []
  },
  "en\/home-vidro": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -459,7 +495,7 @@
   "semNome": []
  },
  "en\/jogos": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -495,7 +531,7 @@
   "semNome": []
  },
  "en\/planos": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -540,7 +576,7 @@
   "semNome": []
  },
  "pt\/ajuda": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -549,7 +585,7 @@
   "semNome": []
  },
  "pt\/ajuda-ac": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -567,7 +603,7 @@
   "semNome": []
  },
  "pt\/boas-vindas": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -576,7 +612,7 @@
   "semNome": []
  },
  "pt\/busca": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -585,7 +621,7 @@
   "semNome": []
  },
  "pt\/configuracoes": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -594,6 +630,24 @@
   "semNome": []
  },
  "pt\/configuracoes-ac": {
+  "menorSp": 17,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/configuracoes-familia": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/configuracoes-remoto": {
   "menorSp": 15,
   "foco": true,
   "cortes": [],
@@ -603,7 +657,7 @@
   "semNome": []
  },
  "pt\/despertador": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -621,7 +675,7 @@
   "semNome": []
  },
  "pt\/entrar-celular": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -693,7 +747,7 @@
   "semNome": []
  },
  "pt\/home-leve": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -702,7 +756,7 @@
   "semNome": []
  },
  "pt\/home-recua": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -720,7 +774,7 @@
   "semNome": []
  },
  "pt\/home-vidro": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -729,7 +783,7 @@
   "semNome": []
  },
  "pt\/jogos": {
-  "menorSp": 15,
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -765,7 +819,7 @@
   "semNome": []
  },
  "pt\/planos": {
-  "menorSp": 15,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],

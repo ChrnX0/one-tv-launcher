@@ -303,7 +303,10 @@ class ConfigLauncherActivity : Activity() {
         val aba = abas[i]
         conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { textSize = 24f; setPaddingRelative(dp(8), dp(4), 0, 0) })   // menor que o título da tela (crítica 19/11/2026)
         conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
+        secoesDaAba.clear()
         aba.montar(conteudo)
+        montarConversas(i)
+        montarIndice()
         // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
         AjudaQr.topicoDaAba(i)?.let { id ->
             val n = Manual.TOPICOS.indexOf(id)
@@ -370,6 +373,13 @@ class ConfigLauncherActivity : Activity() {
             else Estilo.barraDicas(this, "▲▼" to getString(R.string.cl_dica_escolher), "OK" to getString(R.string.cl_dica_mudar), "◀ " + getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_voltar)))
     }
 
+    /** ◀ numa pílula do índice/"Conversa com" que tem outra pílula daquele lado: anda entre elas (não volta ao menu). */
+    private fun irmaNaLinha(foco: View, tecla: Int): Boolean {
+        val linha = foco.parent as? WrapRow ?: return false
+        val prox = foco.focusSearch(if (tecla == KeyEvent.KEYCODE_DPAD_LEFT) View.FOCUS_LEFT else View.FOCUS_RIGHT)
+        return prox != null && prox.parent === linha
+    }
+
     private var engoliuVoltar = false   // o VOLTAR que só levou o foco ao menu não pode fechar a tela ao soltar
 
     /** ◀ nas opções volta ao menu; ▶ no menu entra nas opções; ▲▼ não escapam de um lado para o outro. */
@@ -381,7 +391,7 @@ class ConfigLauncherActivity : Activity() {
             val noConteudo = foco != null && foco.dentroDe(conteudo)
             val noMenu = foco != null && foco.dentroDe(menu)
             when (Rtl.tecla(e.keyCode, window.decorView)) {   // 16.8: no árabe o menu fica à direita
-                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo && foco !is android.widget.EditText) { voltarAoMenu(); return true }
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo && foco !is android.widget.EditText && !irmaNaLinha(foco!!, e.keyCode)) { voltarAoMenu(); return true }
                 KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; voltarAoMenu(); return true }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) {
                     if (foco === itemBusca) { if (abaMontada != BUSCA) mostrarBusca(); campoBusca?.requestFocus() } else entrarNoConteudo()
@@ -2271,7 +2281,99 @@ class ConfigLauncherActivity : Activity() {
             LinearLayout.LayoutParams(0, WRAP, 1f))
     }
 
-    private fun secao(c: LinearLayout, titulo: String) = c.addView(Estilo.secao(this, titulo).apply { setPaddingRelative(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) })
+    private fun secao(c: LinearLayout, titulo: String) {
+        val v = Estilo.secao(this, titulo).apply { setPaddingRelative(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) }
+        c.addView(v)
+        if (c === conteudo && indexando < 0) secoesDaAba += titulo to v   // para o índice e o "Conversa com"
+    }
+
+    // ================================================================ índice e "Conversa com" (iguais ao painel web)
+    // PR 6 do estudo "painel com a identidade Sofaly" (20/11/2026): as Configurações da TV com a mesma leitura do painel.
+    // O ponto colorido da área já está no menu (PR 1); aqui entram o índice ("Nesta página") no alto das abas longas e,
+    // no fim de um grupo, as pílulas "Conversa com" que levam ao grupo que mexe na mesma coisa (regra 3: porta, não sala).
+
+    /** Os grupos (cabeçalhos de seção) da aba montada agora, na ordem da tela. */
+    private val secoesDaAba = ArrayList<Pair<String, TextView>>()
+
+    /**
+     * Grupos que conversam (aba, título da seção). O primeiro de cada lista aponta para os outros, e cada outro aponta de
+     * volta para o primeiro, como a tabela RELACOES do painel (shortcuts.js). Só pares conferidos no código:
+     * o painel abre pelo QR do "Pelo celular"; as Confirmações valem para o Claude pela internet e para o empréstimo.
+     */
+    private val relacoes: List<List<Pair<Int, Int>>> = listOf(
+        listOf(ABA_REMOTO to R.string.cl_painel_navegador, 4 to R.string.cfg2_sec_celular),
+        listOf(2 to R.string.cfg2_sec_visitas, 2 to R.string.hos_titulo),
+        listOf(ABA_AVANCADO to R.string.cl_sec_confirmacoes, ABA_AVANCADO to R.string.emp_secao, ABA_REMOTO to R.string.cl_claude_internet),
+    )
+
+    private fun relacionados(aba: Int, titulo: String): List<Pair<Int, String>> {
+        val r = LinkedHashSet<Pair<Int, String>>()
+        for (g in relacoes) {
+            val l = g.map { (a, res) -> a to getString(res) }
+            val k = l.indexOf(aba to titulo)
+            if (k == 0) r += l.drop(1) else if (k > 0) r += l[0]
+        }
+        return r.toList()
+    }
+
+    /** No fim de cada grupo com parentes: "Conversa com" e uma pílula por grupo (com o nome da aba, se for outra). */
+    private fun montarConversas(aba: Int) {
+        for (n in secoesDaAba.indices.reversed()) {
+            val (titulo, cabeca) = secoesDaAba[n]
+            val alvos = relacionados(aba, titulo)
+            if (alvos.isEmpty()) continue
+            val fim = secoesDaAba.getOrNull(n + 1)?.let { conteudo.indexOfChild(it.second) } ?: conteudo.childCount
+            if (conteudo.indexOfChild(cabeca) < 0 || fim < 0) continue
+            val bloco = blocoDePilulas(getString(R.string.cfg_related_label), alvos.map { (a, t) ->
+                (if (a == aba) t else t + " · " + abas[a].titulo) to { irParaSecao(a, t) }
+            })
+            conteudo.addView(bloco, fim, LinearLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(4); bottomMargin = dp(8) })
+        }
+    }
+
+    /** Aba com 3 grupos ou mais: o índice "Nesta página" logo abaixo da explicação. OK leva ao grupo. */
+    private fun montarIndice() {
+        if (secoesDaAba.size < 3) return
+        val bloco = blocoDePilulas(getString(R.string.cfg_index_label), secoesDaAba.map { (t, cabeca) -> t to { focarSecao(cabeca) } })
+        conteudo.addView(bloco, 2, LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(8) })
+    }
+
+    private fun blocoDePilulas(rotulo: String, itens: List<Pair<String, () -> Unit>>): LinearLayout = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        clipChildren = false; clipToPadding = false
+        addView(Estilo.texto(context, Estilo.Papel.LEGENDA, rotulo).apply { setPaddingRelative(dp(8), 0, 0, dp(6)) })
+        val linha = WrapRow(context, dp(10), dp(10)).apply { clipChildren = false; clipToPadding = false; setPaddingRelative(dp(4), 0, dp(4), 0) }
+        for ((texto, ir) in itens) linha.addView(Estilo.pilula(context).apply {
+            addView(Estilo.texto(context, Estilo.Papel.CORPO, texto).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+            setOnClickListener { ir() }
+            val foco = onFocusChangeListener
+            setOnFocusChangeListener { v, f -> foco?.onFocusChange(v, f); if (f) mostrarDica(noMenu = false) }
+        })
+        addView(linha, LinearLayout.LayoutParams(MATCH, WRAP))
+    }
+
+    /** Foco na primeira opção depois do cabeçalho [cabeca], rolando até o grupo aparecer inteiro no alto. */
+    private fun focarSecao(cabeca: View) {
+        val k = conteudo.indexOfChild(cabeca)
+        if (k < 0) return
+        val alvo = (k + 1 until conteudo.childCount).firstNotNullOfOrNull { primeiroFocavel(conteudo.getChildAt(it)) }
+        alvo?.requestFocus()
+        rolagem.post { rolagem.smoothScrollTo(0, (cabeca.top - dp(8)).coerceAtLeast(0)) }
+    }
+
+    /** Abre a aba [aba] (se for outra) e leva ao grupo [titulo]; sem o grupo (escondido nesta versão), fica no alto da aba. */
+    private fun irParaSecao(aba: Int, titulo: String) {
+        if (aba != abaMontada) {
+            abaAtual = aba
+            mostrarAba(aba)
+            mostrarAbasDoUso()
+            itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = false, escolhido = j == abaAtual) }
+        }
+        conteudo.post {
+            val cabeca = secoesDaAba.firstOrNull { it.first == titulo }?.second
+            if (cabeca != null) focarSecao(cabeca) else primeiroFocavel(conteudo)?.requestFocus()
+        }
+    }
 
     private fun lp() = LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(8) }
 
