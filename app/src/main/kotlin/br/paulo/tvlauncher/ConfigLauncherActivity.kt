@@ -1695,6 +1695,11 @@ class ConfigLauncherActivity : Activity() {
             startActivity(Intent(this, BackupNoturnoActivity::class.java))
         }, lp())
 
+        // Pen drive e armazenamento (20/11/2026, StorageActivity): comum, misto ou memória da TV, e quais apps vão para ele.
+        c.addView(linha(getString(R.string.st_titulo), getString(R.string.st_linha_det), seta = true) {
+            startActivity(Intent(this, StorageActivity::class.java))
+        }, lp())
+
         // Uso local das funções (ideia 67): o que é usado e o que ninguém abre. Fica só na TV.
         c.addView(linha(getString(R.string.l51_uso_titulo), getString(R.string.l51_uso_det), seta = true) {
             UsoLocal.mostrar(this)
