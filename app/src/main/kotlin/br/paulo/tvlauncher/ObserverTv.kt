@@ -197,11 +197,20 @@ object ObserverTv {
             val log = ObserverCore.appendLog(p.getString("log", null),
                 ObserverCore.logEntry(agora, "night", null, null, "${quietStart(app)}h", snap), agora)
             val e = p.edit().putString("log", log)
+                .putString("nights", ObserverMorning.appendNight(p.getString("nights", null), ObserverMorning.nightOf(agora, snap)))
             base?.let { e.putString("baseline", it.toJson().toString()) }
             habit?.let { e.putString("habit", it.toJson().toString()) }
             e.apply()
         }
         Log.i(TAG, "sonda da madrugada: ${snap.mapValues { it.value.value }}")
+    }
+
+    /** O relatório da manhã (fase 2d): a noite de hoje contra a mediana das anteriores, e os achados das últimas 24 h. */
+    fun morning(ctx: Context): ObserverMorning.Report {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val agora = System.currentTimeMillis()
+        return ObserverMorning.report(ObserverMorning.readNights(p.getString("nights", null)),
+            ObserverCore.readLog(p.getString("log", null), agora), agora)
     }
 
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
@@ -243,6 +252,7 @@ object ObserverTv {
             .put("quiet_start_hour", runCatching { quietStart(ctx) }.getOrDefault(ObserverHabit.DEFAULT_HOUR))
             .put("signals", sinais).put("now", agoraJson)
             .put("notes", ObserverCore.toJson(notes(ctx)))
+            .put("morning", runCatching { morning(ctx).toJson() }.getOrNull() ?: org.json.JSONObject.NULL)
             .put("log_total", log.length()).put("log", logNovo)
     }
 
@@ -260,6 +270,11 @@ object ObserverTv {
         val (hw, hd) = hours(agora)
         val f = ObserverCore.judge(snap, agora, base, hw, hd)
         appendLine("agora: " + if (f.isEmpty()) "tudo normal" else f.joinToString("; ") { "${it.kind} [${it.severity}] ${it.why}" })
+        val m = morning(ctx)
+        appendLine("manhã: " + if (m.night == null) "sem sonda nas últimas 20 h" else
+            "noite de ${java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.ROOT).format(m.night.at)} contra ${m.compared} anteriores; " +
+            m.items.joinToString("; ") { "${it.signal.name} ${it.tonight} (normal ${it.usual}) ${it.change}" } +
+            "; achados 24 h: ${m.events24h.ifEmpty { null } ?: "nenhum"}")
         val n = notes(ctx)
         appendLine("recados na fila: ${n.size}" + n.joinToString("") { "\n  ${it.kind} ${it.severity}${if (it.seen) " (visto)" else ""}" })
         val log = ObserverCore.readLog(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", null), agora)
