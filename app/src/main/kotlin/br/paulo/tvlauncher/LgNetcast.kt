@@ -119,6 +119,21 @@ object LgNetcast {
     const val RAMPA_MIN_LG_SEG = 90   // Paulo, 19/11: 60 s ainda pareceu rápido
     fun rampaLg(rampaSeg: Int): Int = maxOf(rampaSeg, RAMPA_MIN_LG_SEG)
 
+    /**
+     * Quando a rampa do SOM do app começa a contar. Teste de 20/11/2026: a LG estava desligada, o CEC a acordou só 52 s
+     * depois do alarme e ela voltou no volume da véspera (11); o som do app já estava em ~40% da rampa, então tocou alto até
+     * a nossa rampa da LG baixar para 5. Agora o som do app fica no mínimo enquanto a LG não está pronta ([lgProntaMs] = 0)
+     * e começa a subir junto com a rampa dela. [lgProntaMs] null = a LG não é controlada (rampa normal desde [inicioMs]).
+     * Se a LG nunca ficar pronta, desiste depois de [ESPERA_LG_APP_MS] e sobe a partir daí.
+     */
+    fun inicioRampaApp(inicioMs: Long, lgProntaMs: Long?, agoraMs: Long): Long = when {
+        lgProntaMs == null -> inicioMs
+        lgProntaMs > 0 -> maxOf(inicioMs, lgProntaMs)
+        agoraMs - inicioMs >= ESPERA_LG_APP_MS -> inicioMs + ESPERA_LG_APP_MS
+        else -> agoraMs   // ainda esperando: x = 0, som no mínimo
+    }
+    const val ESPERA_LG_APP_MS = 130_000L   // um pouco mais que a espera da LG em VolumeLg.subirAlarme (120 s)
+
     /** Onde a subida começa: [INICIO_ALARME], ou já o [alvo] se ele for menor. */
     fun inicioRampaAlarme(alvo: Int): Int = minOf(INICIO_ALARME, alvo)
 

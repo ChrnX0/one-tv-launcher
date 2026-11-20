@@ -158,9 +158,16 @@ object VolumeLg {
      */
     fun subirAlarme(ctx: Context, alvo: Int, rampaSeg: Int, m: Mudanca, esperaMs: Long = 120_000) {
         val fim = SystemClock.elapsedRealtime() + esperaMs
-        val inicio: Int
         val ate = LgNetcast.alvoFixoAlarme(alvo)
         val rampa = LgNetcast.rampaLg(rampaSeg)
+        try { esperarLg(ctx, ate, rampa, m, fim) } finally { if (m.prontaEm == 0L) m.prontaEm = System.currentTimeMillis() }
+        val inicio = m.definido ?: return
+        if (m.cancelado) return
+        subirAte(ctx, inicio, ate, rampa, m)
+    }
+
+    /** Espera a LG responder (consultando a cada [ESPERA_LG_PASSO_MS]) e a põe no começo da rampa. Marca [Mudanca.prontaEm]. */
+    private fun esperarLg(ctx: Context, ate: Int, rampa: Int, m: Mudanca, fim: Long) {
         while (true) {
             if (m.cancelado) return
             val comecou = synchronized(trava) {
@@ -170,13 +177,18 @@ object VolumeLg {
                 if (v.mudo && apertar(ctx, LgNetcast.TECLA_MUDO, 1)) m.tirouMudo = true
                 m.original = v.nivel
                 m.definido = ajustar(ctx, LgNetcast.inicioRampaAlarme(ate), soDescer = false)
+                m.prontaEm = System.currentTimeMillis()
                 Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido}, sobe até $ate em ${rampa}s${if (m.tirouMudo) " (tirou do mudo)" else ""}")
                 true
             }
-            if (comecou) { inicio = m.definido ?: return; break }
-            if (SystemClock.elapsedRealtime() > fim) { Log.i(TAG, "alarme: a LG não respondeu em ${esperaMs / 1000}s"); return }
-            SystemClock.sleep(5000)
+            if (comecou) return
+            if (SystemClock.elapsedRealtime() > fim) { Log.i(TAG, "alarme: a LG não respondeu a tempo"); return }
+            // 1 s (era 5 s): a LG volta no volume da véspera e toca nele até a gente baixar; quanto antes, menor o susto.
+            SystemClock.sleep(ESPERA_LG_PASSO_MS)
         }
+    }
+
+    private fun subirAte(ctx: Context, inicio: Int, ate: Int, rampa: Int, m: Mudanca) {
         val passo = LgNetcast.intervaloRampaMs(rampa, inicio, ate)
         var esperado = inicio
         while (esperado < ate && !m.cancelado) {
@@ -215,7 +227,11 @@ object VolumeLg {
         @Volatile var definido: Int? = null
         @Volatile var tirouMudo = false
         @Volatile var cancelado = false
+        /** Hora (relógio) em que a LG entrou no começo da rampa ou em que desistimos dela; 0 = ainda esperando. */
+        @Volatile var prontaEm = 0L
     }
+
+    private const val ESPERA_LG_PASSO_MS = 1000L
 
     // ---------- conversa com a TV (chamar com a trava) ----------
 

@@ -179,7 +179,10 @@ class AlarmeTocandoActivity : Activity() {
     // Rampa: o volume vai de 5% a 100% em [segRampa] segundos, em passos de 1 s (curva ao quadrado: o ouvido percebe o
     // volume em escala logarítmica, então linear soaria "pulando" no começo). Vale para o som e para o canal.
     private fun volumeRampa(): Float = if (segRampa <= 0) 1f else {
-        val x = ((System.currentTimeMillis() - inicioRampa) / (segRampa * 1000f)).coerceIn(0f, 1f)
+        val agora = System.currentTimeMillis()
+        // Com a LG controlada, o som só começa a subir quando ela está pronta (ver LgNetcast.inicioRampaApp).
+        val base = LgNetcast.inicioRampaApp(inicioRampa, volume?.lg?.prontaEm, agora)
+        val x = ((agora - base) / (segRampa * 1000f)).coerceIn(0f, 1f)
         0.05f + 0.95f * x * x
     }
 

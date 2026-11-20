@@ -159,4 +159,16 @@ class LgNetcastTest {
         assertFalse(LgNetcast.desligarAoApagar(30_000L, 5_000L))    // o timer acabou de desligar
         assertTrue(LgNetcast.desligarAoApagar(70_000L, 5_000L))
     }
+
+    @Test fun somDoAppEsperaALgFicarPronta() {
+        val ini = 1_000_000L
+        // Sem LG controlada: rampa normal.
+        assertEquals(ini, LgNetcast.inicioRampaApp(ini, null, ini + 50_000))
+        // LG ainda acordando (teste de 20/11: 52 s): a rampa não anda, o som fica no mínimo.
+        assertEquals(ini + 50_000, LgNetcast.inicioRampaApp(ini, 0L, ini + 50_000))
+        // LG pronta aos 52 s: a rampa do som conta a partir dali.
+        assertEquals(ini + 52_000, LgNetcast.inicioRampaApp(ini, ini + 52_000, ini + 60_000))
+        // A LG nunca respondeu: desiste e sobe a partir do limite, sem pular para o volume cheio.
+        assertEquals(ini + LgNetcast.ESPERA_LG_APP_MS, LgNetcast.inicioRampaApp(ini, 0L, ini + 200_000))
+    }
 }
