@@ -263,7 +263,7 @@ class VodActivity : Activity() {
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
-    private val coral = 0xFFFF5A4E.toInt()
+    private val coral = Estilo.ACENTO   // era 0xFF5A4E, um vermelho-rosado fora da marca (B9, 20/11/2026)
 
     private lateinit var video: SurfaceView
     /**
@@ -279,6 +279,7 @@ class VodActivity : Activity() {
     private lateinit var titulo: TextView
     private val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
     private lateinit var tempo: TextView
+    private lateinit var estadoBarra: TextView
     private lateinit var progresso: ProgressBar
     private lateinit var aviso: TextView
 
@@ -341,7 +342,7 @@ class VodActivity : Activity() {
             textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setPaddingRelative(dp(22), dp(12), dp(22), dp(12))
-            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(2), coral) }
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(2), papel) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
         // Ideia 6: a segunda legenda fica em cima (a primeira continua embaixo), com o mesmo estilo.
@@ -1647,25 +1648,11 @@ class VodActivity : Activity() {
     // ---------------------------------------------------------------- barra de baixo
 
     private fun montarBarra(t: String): View {
-        barra = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; background = vidro(18); setPaddingRelative(dp(20), dp(16), dp(20), dp(14))
-        }
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-        titulo = TextView(this).apply {
-            text = t; textSize = 20f; typeface = Fontes.nunito(500); setTextColor(papel)
-            maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-        }
-        linha.addView(titulo, LinearLayout.LayoutParams(0, -2, 1f))
-        tempo = TextView(this).apply { textSize = Estilo.Leitura.DICA; setTextColor(suave) }
-        linha.addView(tempo)
-        barra.addView(linha)
-        progresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 1000; progressTintList = ColorStateList.valueOf(coral)
-            progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA); secondaryProgressTintList = ColorStateList.valueOf(0x66FFFFFF)
-        }
-        barra.addView(progresso, LinearLayout.LayoutParams(-1, dp(5)).apply { topMargin = dp(12) })
-        barra.addView(TextView(this).apply { text = getString(R.string.vod_teclas); textSize = Estilo.Leitura.DICA; setTextColor(suave) },
-            LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
+        // B9: a mesma peça da TV ao vivo (PlayerBar). Título em cima, tempo e "termina às" embaixo dele, PAUSADO à direita.
+        val b = PlayerBar.montar(this, getString(R.string.vod_teclas))
+        barra = b.raiz; titulo = b.titulo; tempo = b.detalhe; estadoBarra = b.estado; progresso = b.progresso
+        titulo.text = t
+        estadoBarra.setTextColor(Estilo.ATENCAO)
         return barra
     }
 
@@ -1701,11 +1688,14 @@ class VodActivity : Activity() {
         val p = player ?: return
         val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 }
         val pos = avanco.alvo.takeIf { it >= 0 } ?: p.currentPosition   // segurando ◀ ▶: mostra para onde vai
-        val pausa = if (p.isPlaying) "" else "⏸  "
+        // Pausado: o selo da TV ao vivo ("⏸ PAUSADO · OK continua"), à direita, em vez do ⏸ solto no começo do tempo.
+        val pausado = !p.isPlaying && p.playbackState == Player.STATE_READY
+        estadoBarra.visibility = if (pausado) View.VISIBLE else View.GONE
+        if (pausado) estadoBarra.setText(R.string.pausa_selo)
         // "termina às 22:40" (como Plex e Apple TV; proposta C, etapa 1): na velocidade atual, no formato 12/24 h da TV.
         val fim = dur?.let { EpisodeSegments.terminaEm(System.currentTimeMillis(), pos, it, p.playbackParameters.speed) }
         val termina = fim?.let { "   ·   " + getString(R.string.seg_termina, android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(it))) }.orEmpty()
-        tempo.text = pausa + (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos)) + termina
+        tempo.text = (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos)) + termina
         progresso.progress = dur?.let { (pos * 1000 / it).toInt() } ?: 0
         progresso.secondaryProgress = dur?.let { (p.bufferedPosition * 1000 / it).toInt() } ?: 0
     }

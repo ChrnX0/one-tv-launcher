@@ -771,43 +771,28 @@ class PlayerActivity : Activity() {
     // ---------------------------------------------------------------- faixa de informação (embaixo)
 
     private fun montarInfo(): View {
-        info = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            background = vidro(Estilo.RAIO)
-            setPaddingRelative(dp(24), dp(16), dp(24), dp(16))
-            visibility = View.GONE
-        }
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        // B9 (20/11/2026): a mesma peça dos filmes e séries (PlayerBar). Aqui entram número e logo do canal no começo da
+        // linha e, à direita, "● AO VIVO" (vermelho, como na HOME) e "faltam X min · hora".
+        val b = PlayerBar.montar(this, getString(R.string.player_teclas))
+        info = b.raiz.apply { visibility = View.GONE }
+        val linha = b.linha
         infoNumero = TextView(this).apply {
             textSize = 22f; typeface = Fontes.nunito(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
             background = Estilo.fundo(context, ambar, Estilo.RAIO_PEQUENO)
             // Largura conforme o número: canal 1655 quebrava em "165 / 5" na caixa fixa de 48 dp (visto na Sala, 14/11/2026).
             maxLines = 1; minWidth = dp(48); setPaddingRelative(dp(8), 0, dp(8), 0)
         }
-        linha.addView(infoNumero, LinearLayout.LayoutParams(-2, dp(44)).apply { marginEnd = dp(14) })
+        linha.addView(infoNumero, 0, LinearLayout.LayoutParams(-2, dp(44)).apply { marginEnd = dp(14) })
         infoLogo = android.widget.ImageView(this).apply { scaleType = android.widget.ImageView.ScaleType.FIT_CENTER; visibility = View.GONE }
-        linha.addView(infoLogo, LinearLayout.LayoutParams(dp(64), dp(44)).apply { marginEnd = dp(14) })
-        val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        infoTitulo = Estilo.texto(this, Estilo.Papel.TITULO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        infoLinha = TextView(this).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        textos.addView(infoTitulo); textos.addView(infoLinha)
-        linha.addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
-        // "● AO VIVO" em texto vermelho (o mesmo da HOME), sem a etiqueta colorida; ao lado, "faltam X min · hora".
-        vivo = Estilo.texto(this, Estilo.Papel.SECAO, "● " + getString(R.string.player_ao_vivo)).apply { setTextColor(Estilo.ERRO) }
-        linha.addView(vivo, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(10) })
+        linha.addView(infoLogo, 1, LinearLayout.LayoutParams(dp(64), dp(44)).apply { marginEnd = dp(14) })
+        infoTitulo = b.titulo
+        infoLinha = b.detalhe
+        vivo = b.estado.apply { text = "● " + getString(R.string.player_ao_vivo); setTextColor(Estilo.ERRO); visibility = View.VISIBLE }
+        (vivo.layoutParams as LinearLayout.LayoutParams).marginEnd = dp(10)
         infoHora = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = Estilo.Leitura.ITEM_DETALHE }
         linha.addView(infoHora)
-        info.addView(linha)
-        infoProgresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 1000
-            progressTintList = ColorStateList.valueOf(Estilo.ACENTO)   // quanto do programa passou: a cor da barra da cruz
-            progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-        }
-        info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
-        infoTeclas = TextView(this).apply {
-            text = getString(R.string.player_teclas); textSize = Estilo.Leitura.DICA; setTextColor(Estilo.TEXTO_3)
-        }
-        info.addView(infoTeclas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
+        infoProgresso = b.progresso
+        infoTeclas = b.teclas
         return info
     }
 
