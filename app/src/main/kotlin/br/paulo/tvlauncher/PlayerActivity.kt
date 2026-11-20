@@ -805,7 +805,7 @@ class PlayerActivity : Activity() {
         }
         info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
         infoTeclas = TextView(this).apply {
-            text = getString(R.string.player_teclas); textSize = 14f; setTextColor(Estilo.TEXTO_3)
+            text = getString(R.string.player_teclas); textSize = Estilo.Leitura.DICA; setTextColor(Estilo.TEXTO_3)
         }
         info.addView(infoTeclas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
         return info

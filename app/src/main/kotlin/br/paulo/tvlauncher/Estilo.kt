@@ -440,20 +440,25 @@ object Estilo {
             // canto e parecia que a TV tinha quebrado. Para quê: a pessoa vê que o Sofaly sabe o que houve e mostra a saída.
             // Como: a TV-sofá (o mesmo desenho do logo) em cima; o ícone do assunto, quando há, fica pequeno ao lado dela.
             addView(LinearLayout(ctx).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
                 addView(ImageView(ctx).apply { setImageDrawable(SofalySymbol()); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO },
                     LinearLayout.LayoutParams(dp(ctx, 96), dp(ctx, 90)))
                 if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone); alpha = 0.7f },
                     LinearLayout.LayoutParams(dp(ctx, 36), dp(ctx, 36)).apply { marginStart = dp(ctx, E1) })
-            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(ctx, E2) })
+            // MATCH_PARENT de propósito: se esta linha tivesse largura fixa, o LinearLayout "largura do conteúdo" igualaria
+            // os textos (que são MATCH_PARENT) à largura do mascote, e o título ficava cortado em 96 dp.
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(ctx, E2) })
             addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 26f; gravity = Gravity.CENTER })
             addView(texto(ctx, Papel.LEGENDA, texto).apply {
                 gravity = Gravity.CENTER; maxWidth = dp(ctx, 520); textSize = Papel.CORPO.sp   // 18 sp: recado do sofá
                 setLineSpacing(0f, 1.25f); setPaddingRelative(0, dp(ctx, E1 + 2), 0, dp(ctx, E3))
-            })
+            // Largura do conteúdo: assim o maxWidth (linha curta, fácil de ler a 3 m) vale; em MATCH_PARENT ele é ignorado.
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            clipChildren = false; clipToPadding = false   // o botão cresce no foco: sem isso a borda de baixo saía cortada
             if (botoes.isNotEmpty()) addView(LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER
+                clipChildren = false; clipToPadding = false
                 botoes.forEachIndexed { i, b ->
                     addView(b, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                         .apply { if (i > 0) marginStart = dp(ctx, E2) })

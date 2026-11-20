@@ -308,7 +308,7 @@ class ColunaCategorias(
         linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
         // Selo do serviço (listas de fora): fundo claro, letra escura, pequeno.
         val etiqueta = TextView(act).apply {
-            textSize = 11f * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
+            textSize = Estilo.Leitura.DICA * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_ETIQUETA) }
             visibility = View.GONE
         }
@@ -317,7 +317,7 @@ class ColunaCategorias(
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
         val novos = TextView(act).apply {
-            textSize = 11.5f; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
+            textSize = Estilo.Leitura.DICA; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(COR_NOVOS) }
         }
         linha.addView(novos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })

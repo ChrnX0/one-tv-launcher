@@ -334,7 +334,7 @@ class VodActivity : Activity() {
             .apply { setMargins(dp(32), 0, 0, dp(176)) })
         // Ideia 8: quadro técnico, em cima à esquerda.
         infoTec = TextView(this).apply {
-            textSize = 13f; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
+            textSize = Estilo.Leitura.DICA; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
             setPaddingRelative(dp(14), dp(10), dp(14), dp(10)); background = vidro(12)
         }
         raiz.addView(infoTec, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(32), dp(28), 0, 0) })
@@ -1481,7 +1481,7 @@ class VodActivity : Activity() {
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         }
         linha.addView(titulo, LinearLayout.LayoutParams(0, -2, 1f))
-        tempo = TextView(this).apply { textSize = 14f; setTextColor(suave) }
+        tempo = TextView(this).apply { textSize = Estilo.Leitura.DICA; setTextColor(suave) }
         linha.addView(tempo)
         barra.addView(linha)
         progresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {

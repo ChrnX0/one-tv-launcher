@@ -23,7 +23,7 @@ import android.view.View
  */
 object SofalyLogo {
     /** Cores da marca: laranja do sofá (fundo escuro), o mesmo mais escuro (fundo claro), creme do texto e o miolo da tela. */
-    const val ORANGE = 0xFFFF6A2B.toInt()
+    const val ORANGE = DesignTokens.ORANGE   // uma fonte só: design/tokens.json
     const val CREAM = 0xFFFFF3E6.toInt()
     const val SCREEN = 0xFF1C2140.toInt()
 
