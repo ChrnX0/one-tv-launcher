@@ -33,6 +33,7 @@
   --t-world-apps: #9cd27e;
   --t-world-continue: #f2b84b;
   --t-world-network: #6fc3b2;
+  --t-area-home: #7ab8f5;
   --t-font-title: "Nunito";
   --t-font-text: "Manrope";
   --t-radius-small: 8px;
@@ -80,6 +81,12 @@
   --alerta: #ffd27a;
   --alerta-fundo: rgba(255, 210, 122, .12);
   --selecao: rgba(255, 106, 43, .32);
+  /* Cor quer dizer ÁREA (estudo do painel 20/11/2026, regra 10): só no ícone, nunca no texto ou no fundo. Cada cor diz
+     que parte da casa a página mexe, igual nas Configurações da TV. Mesma luminosidade dos mundos da cruz; ícone >= 3:1. */
+  --area-assistir: var(--t-world-watch);   /* TV, filmes e rádio */
+  --area-apps: var(--t-world-apps);        /* Apps, Instalar apps, Tela inicial (é ela que arruma os apps na cruz) */
+  --area-conectado: var(--t-world-network);/* Arquivos, Acesso remoto, Casa: o que fala com outro aparelho */
+  --area-casa: var(--t-area-home);         /* Família, Tela e energia: a rotina da casa */
   --vidro-topo: rgba(18, 21, 40, .72);
   --vidro-barra: rgba(28, 31, 52, .92);
   --veu: rgba(6, 7, 16, .66);                    /* atrás de janela */
@@ -129,6 +136,10 @@
     --alerta: #8a5a00;
     --alerta-fundo: rgba(138, 90, 0, .1);
     --selecao: rgba(206, 61, 0, .22);
+    --area-assistir: #e04a0b;
+    --area-apps: #589735;
+    --area-conectado: #3f9785;
+    --area-casa: #298def;
     --vidro-topo: rgba(255, 248, 240, .82);
     --vidro-barra: rgba(255, 255, 255, .94);
     --veu: rgba(14, 16, 32, .45);
@@ -175,7 +186,7 @@ svg.i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor;
 .aviso-curto { color: var(--texto-fraco); margin: 4px 0 0; font-size: 15px; }
 .erro { color: var(--perigo); margin: 8px 0; }
 .aviso-ok { color: var(--ok); margin: 8px 0; }
-.rotulo { margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-fraco); }
+.rotulo { margin: 0; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-fraco); }
 .quebra { overflow-wrap: anywhere; }
 .passo-texto { white-space: pre-line; }   /* passo do Claude: o texto vem com \n e a CSP não deixa style inline */
 .link { background: none; border: none; padding: 0; color: var(--texto); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--borda-forte); cursor: pointer; font: inherit; font-size: 17px;
@@ -229,7 +240,7 @@ input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--acento); c
 
 /* ---------------------------------------------------------------- cartões */
 .cartao {
-  background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio);
+  background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio);   /* sem borda: a TV separa por luz e espaço (estudo 20/11) */
   padding: 24px; margin-bottom: 16px; box-shadow: var(--sombra-leve);
 }
 .cartao > h2:first-child { margin-bottom: 16px; }
@@ -244,7 +255,7 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .entrar { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px; }
 .cartao-entrar {
   width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; text-align: center;
-  background: var(--superficie); border: 1px solid var(--borda); border-radius: 24px; padding: 32px 28px;
+  background: var(--superficie); border: 1px solid transparent; border-radius: 24px; padding: 32px 28px;
   box-shadow: var(--sombra); backdrop-filter: blur(20px);
 }
 .cartao-entrar .logo-entrar { width: 64px; height: 64px; border-radius: 18px; margin: 0 auto 4px; display: block; }
@@ -340,7 +351,8 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
   .aba.sub { min-height: 40px; padding-left: 24px; font-size: 15px; font-weight: 600; color: var(--texto-fraco); }
   .aba.sub .ic svg.i { width: 18px; height: 18px; }
   .aba:not(.sub) ~ .aba:not(.sub) { margin-top: 8px; }
-  .aba .ic { width: 22px; height: 22px; background: none !important; border-radius: 0; color: inherit !important; }
+  .aba .ic { width: 22px; height: 22px; background: none !important; border-radius: 0; color: inherit; }
+  .aba.ativa .ic { color: inherit !important; }   /* na pílula branca o ícone fica escuro, como o texto */
   .aba:hover { background: var(--superficie2); color: var(--texto); }
   .aba.ativa { background: var(--foco); color: var(--foco-texto); font-weight: 600; }
   .conteudo { padding-bottom: 40px; }
@@ -392,19 +404,19 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .sofy-linha .aviso-curto { margin: 4px 0 0; }
 .sofy-rosto { flex: none; line-height: 0; }
 .sofy-rosto svg { overflow: visible; display: block; }
-.numero { background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); padding: 12px 16px;
+.numero { background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio-pequeno); padding: 12px 16px;
   display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .numero strong { font-size: 20px; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .numero span { color: var(--texto-fraco); font-size: 15px; }
 .numero.ruim strong { color: var(--perigo); }
 
 /* "Mais" (celular) */
-.titulo-grupo { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-fraco); margin: 24px 4px 12px; }
+.titulo-grupo { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-fraco); margin: 24px 4px 12px; }
 .titulo-grupo:first-child { margin-top: 4px; }
 .blocos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .bloco {
   display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-height: 96px; padding: 16px;
-  background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio); color: var(--texto);
+  background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio); color: var(--texto);
   font: inherit; font-size: 15px; font-weight: 600; text-align: left; cursor: pointer; transition: background-color var(--t-ms-quick);
 }
 .bloco:active { background: var(--superficie2); }
@@ -419,7 +431,7 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .lista-apps > .titulo-prateleira:first-child { margin-top: 4px; }
 
 /* Uma lista = um cartão com linhas separadas por um fio (e não um cartão por linha) */
-.lista-apps, .lista-registro { display: flex; flex-direction: column; background: var(--superficie); border: 1px solid var(--borda);
+.lista-apps, .lista-registro { display: flex; flex-direction: column; background: var(--superficie); border: 1px solid transparent;
   border-radius: var(--raio); overflow: hidden; }
 .lista-apps:empty, .lista-registro:empty { display: none; }
 .linha-app, .linha-registro {
@@ -434,7 +446,7 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .linha-app .pacote { font-size: 15px; color: var(--texto-apagado); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .linha-app .selos { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
 .linha-app .selos:empty { display: none; }
-.selo { font-size: 13px; font-weight: 700; padding: 2px 12px; border-radius: var(--pilula); background: var(--superficie2); color: var(--texto-fraco); }
+.selo { font-size: 14px; font-weight: 700; padding: 2px 12px; border-radius: var(--pilula); background: var(--superficie2); color: var(--texto-fraco); }
 .selo.oculto { color: var(--alerta); background: var(--alerta-fundo); }
 .selo.risco-essencial { color: var(--perigo); background: var(--perigo-fundo); }
 .selo.risco-cuidado { color: var(--alerta); background: var(--alerta-fundo); }
@@ -499,10 +511,10 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
   background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); padding: 12px 16px; }
 .linha-perm .info { display: flex; flex-direction: column; min-width: 0; }
 .linha-perm .nome { font-size: 17px; font-weight: 600; }
-.linha-perm .pacote { font-size: 13px; color: var(--texto-fraco); overflow: hidden; text-overflow: ellipsis; }
+.linha-perm .pacote { font-size: 14px; color: var(--texto-fraco); overflow: hidden; text-overflow: ellipsis; }
 .estado-sim { color: var(--ok); font-size: 15px; font-weight: 600; white-space: nowrap; }
 .estado-nao { color: var(--texto-fraco); font-size: 15px; white-space: nowrap; }
-.ficha { background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); padding: 16px 16px; margin-bottom: 8px; }
+.ficha { background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio-pequeno); padding: 16px 16px; margin-bottom: 8px; }
 .ficha p { margin: 8px 0; }
 .ficha ul { margin: 4px 0 4px 20px; padding: 0; font-size: 15px; }
 .acoes-app { justify-content: flex-start; flex-wrap: wrap; margin-bottom: 8px; }
@@ -526,7 +538,7 @@ dialog.busca::backdrop { background: var(--veu); backdrop-filter: blur(6px); }
 #resultadosBusca .nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 #resultadosBusca .tipo { font-size: 15px; color: var(--texto-fraco); flex: none; }
 .dica-busca { margin: 0; padding: 12px 16px; border-top: 1px solid var(--borda); font-size: 15px; color: var(--texto-fraco); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.busca-detalhes { flex: none; padding: 4px 12px; font-size: 13px; border-radius: var(--pilula); border: 1px solid var(--borda);
+.busca-detalhes { flex: none; padding: 4px 12px; font-size: 14px; border-radius: var(--pilula); border: 1px solid var(--borda);
   background: var(--superficie2); color: inherit; cursor: pointer; font-family: inherit; }
 @media (max-width: 600px) { dialog.busca { margin-top: 12px; } .dica-busca { display: none; } }
 
@@ -546,7 +558,7 @@ dialog.previa[open] { display: flex; flex-direction: column; }
 .previa-conteudo audio { width: min(520px, 90%); }
 .previa-conteudo .aviso { padding: 24px; text-align: center; }
 .previa-texto { align-self: stretch; width: 100%; margin: 0; padding: 16px; background: var(--fundo); color: var(--texto);
-  font: 13px/1.5 ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; overflow: auto; }
+  font: 14px/1.5 ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; overflow: auto; }
 dialog.organizar { width: min(520px, calc(100vw - 24px)); }
 #formOrganizar { display: flex; flex-direction: column; gap: 8px; padding: 24px; }
 #formOrganizar h2 { margin: 0 0 8px; font-size: 17px; }
@@ -624,7 +636,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 #formTexto.ao-vivo #campoTexto { border-color: var(--acento); }
 .ao-vivo-rotulo { white-space: nowrap; }
 .controle-extra { margin-top: 16px; }
-.controle-extra > .recado, .controle-extra > .cartao { width: 100%; max-width: 560px; background: var(--superficie); border: 1px solid var(--borda);
+.controle-extra > .recado, .controle-extra > .cartao { width: 100%; max-width: 560px; background: var(--superficie); border: 1px solid transparent;
   border-radius: var(--raio); padding: 20px; margin: 0; }
 .controle-extra > .cartao { text-align: left; }
 
@@ -651,7 +663,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 
 /* ---------------------------------------------------------------- outras abas */
 .grade-fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.foto { margin: 0; background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); overflow: hidden; }
+.foto { margin: 0; background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio-pequeno); overflow: hidden; }
 .foto img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--superficie2); }
 .foto figcaption { padding: 8px 12px; font-size: 15px; color: var(--texto-fraco); overflow-wrap: anywhere; }
 /* Foto do perfil (FotoPerfil.kt): uma linha por conta, com a bolinha redonda igual à da TV. */
@@ -665,7 +677,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 
 .periodo.ativo { background: var(--foco); color: var(--foco-texto); border-color: transparent; }
 .resumo-rede { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.bloco-rede { background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+.bloco-rede { background: var(--superficie); border: 1px solid transparent; border-radius: var(--raio-pequeno); padding: 16px; display: flex; flex-direction: column; gap: 4px; }
 .bloco-rede strong { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
 .bloco-rede span { font-size: 15px; color: var(--texto-fraco); }
 .bloco-rede.ruim strong { color: var(--perigo); }
@@ -677,7 +689,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 .form-roteador { display: grid; gap: 8px; max-width: 460px; }
 .form-roteador label { font-size: 17px; color: var(--texto-fraco); margin-top: 4px; }
 .form-roteador .botao-primario { justify-self: start; margin-top: 8px; }
-.impressao { font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; white-space: pre-line; }
+.impressao { font-family: ui-monospace, monospace; font-size: 14px; word-break: break-all; white-space: pre-line; }
 .dicas { margin: 8px 0 0 20px; padding: 0; }
 .dicas li { margin-bottom: 8px; }
 #formClima { margin-top: 12px; }
@@ -755,7 +767,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 .cena-acao { box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px;
   align-items: start; padding: 12px; border: 1px solid var(--borda); border-radius: 14px; background: var(--superficie2); }
 .cena-num { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--superficie2);
-  font-weight: 600; font-size: 13px; margin-top: 8px; }
+  font-weight: 600; font-size: 14px; margin-top: 8px; }
 .cena-campos { display: flex; flex-wrap: wrap; gap: 8px; }
 .cena-campos > * { flex: 1 1 160px; min-width: 0; }
 .cena-campos input[type=number], .cena-campos input[type=time] {
@@ -768,7 +780,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 .cena-mover button { min-width: 36px; padding: 0; }
 .cena-linha { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .cena-resumo { padding: 12px 12px; border-radius: 12px; background: var(--superficie2); font-size: 15px; }
-.cena-resumo b { display: block; margin-bottom: 4px; font-size: 13px; color: var(--texto-fraco); font-weight: 600;
+.cena-resumo b { display: block; margin-bottom: 4px; font-size: 14px; color: var(--texto-fraco); font-weight: 600;
   text-transform: uppercase; letter-spacing: .04em; }
 .cena-json { color: var(--texto-fraco); font-size: 15px; }
 .cena-json textarea { width: 100%; box-sizing: border-box; margin-top: 8px; }
@@ -832,7 +844,7 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
 .titulo-grupo { font-size: 15px; letter-spacing: .08em; }
 
 /* Listas de páginas ("Na TV" e "Configurações"): uma linha grande por página, como o menu das Configurações da TV */
-.lista-hub { display: flex; flex-direction: column; background: var(--superficie); border: 1px solid var(--borda);
+.lista-hub { display: flex; flex-direction: column; background: var(--superficie); border: 1px solid transparent;
   border-radius: var(--raio); overflow: hidden; box-shadow: var(--sombra-leve); }
 .linha-hub { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 76px; padding: 16px 20px; text-align: left;
   background: none; border: none; border-bottom: 1px solid var(--borda); color: var(--texto); font: inherit; cursor: pointer;
@@ -851,8 +863,8 @@ input[type=file] { font-size: 17px; }  /* < 16px o iPhone dá zoom ao tocar */
   /* No computador as listas viram duas colunas de cartões (as páginas também estão na coluna da esquerda). */
   .lista-hub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; background: none; border: none;
     box-shadow: none; overflow: visible; }
-  .linha-hub { border: 1px solid var(--borda); border-radius: var(--raio); background: var(--superficie); box-shadow: var(--sombra-leve); }
-  .linha-hub:last-child { border-bottom: 1px solid var(--borda); }
+  .linha-hub { border: 1px solid transparent; border-radius: var(--raio); background: var(--superficie); box-shadow: var(--sombra-leve); }
+  .linha-hub:last-child { border-bottom: 1px solid transparent; }
   .linha-hub:hover { border-color: var(--borda-forte); background: var(--superficie); }
 }
 
@@ -900,11 +912,12 @@ h1, h2, .titulo-pagina, .marca h1 { font-weight: 900; }
 .titulo-pagina { font-size: 34px; letter-spacing: -.02em; line-height: 1.1; }
 /* Rótulo de seção: caixa alta espaçada, como o SECAO das telas da TV */
 .painel-aba > h2, .titulo-grupo, .rotulo, .cena-resumo b {
-  font-family: var(--letra-titulo); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--texto-fraco); }
+  font-family: var(--letra-titulo); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--texto-fraco); }
 .painel-aba > h2 { margin: 24px 4px 12px; }
 
-/* Cartões: superfície translúcida, fio claro, raio 16 */
-.cartao { background: var(--superficie); border-color: var(--borda); border-radius: var(--raio); }
+/* Cartões: superfície translúcida, raio 16, SEM fio (estudo do painel 20/11/2026: a caixa com borda em tudo era a
+   "cara de sempre" que o Paulo recusou no site; a TV separa por luz e espaço). A borda transparente fica para o realce do QR. */
+.cartao { background: var(--superficie); border-color: transparent; border-radius: var(--raio); }
 .cartao > h2:first-child { font-size: 20px; }
 .lista-hub, .lista-apps, .lista-registro { border-radius: var(--raio); }
 
@@ -952,7 +965,7 @@ textarea { border-radius: var(--raio); border-color: transparent; }
 }
 
 /* Início: o "Agora na TV" é o cartaz da página, com a tela ao vivo em cima no celular */
-.heroi { background: var(--superficie); border-color: var(--borda); box-shadow: var(--sombra); position: relative; overflow: hidden; }
+.heroi { background: var(--superficie); border-color: transparent; box-shadow: var(--sombra); position: relative; overflow: hidden; }
 .heroi::after { content: ""; position: absolute; left: 14px; top: 14px; width: 54px; height: 54px; pointer-events: none;
   border-left: 4px solid rgba(255, 255, 255, .28); border-top: 4px solid rgba(255, 255, 255, .28); border-top-left-radius: 54px; opacity: 0; }
 .heroi:has(.miniatura img:not([hidden]))::after { opacity: 1; }
@@ -969,14 +982,14 @@ textarea { border-radius: var(--raio); border-color: transparent; }
 .rapido button span { font-weight: 700; }
 
 /* Linhas das listas de páginas e das chaves: ícone redondo, nome forte, interruptor laranja */
-.lista-hub { background: var(--superficie); border-color: var(--borda); box-shadow: none; }
+.lista-hub { background: var(--superficie); border-color: transparent; box-shadow: none; }
 .linha-hub { min-height: 68px; padding: 12px 16px; gap: 16px; }
 .linha-hub .ic { width: 42px; height: 42px; border-radius: 50%; }
 .linha-hub .ic svg.i { width: 21px; height: 21px; }
 .linha-hub .t { font-size: 17px; font-weight: 800; }
 .linha-hub .s { font-size: 15px; font-weight: 600; }
 @media (min-width: 900px) {
-  .linha-hub { background: var(--superficie); border-color: var(--borda); box-shadow: none; }
+  .linha-hub { background: var(--superficie); border-color: transparent; box-shadow: none; }
   .linha-hub:hover { background: var(--superficie2); border-color: var(--borda-forte); }
 }
 .linha-chave .nome-chave { font-weight: 800; }
@@ -999,7 +1012,7 @@ textarea { border-radius: var(--raio); border-color: transparent; }
 .tela-barra { background: var(--flutuante); border-top-color: transparent; }
 
 /* Números, blocos e fichas no mesmo vidro */
-.numero, .bloco, .bloco-rede, .ficha, .linha-perm, .foto { background: var(--superficie); border-color: var(--borda); }
+.numero, .bloco, .bloco-rede, .ficha, .linha-perm, .foto { background: var(--superficie); border-color: transparent; }
 .bloco .ic { border-radius: 50%; background: var(--superficie2); color: var(--texto); }
 .voltar-pagina { color: var(--texto-fraco); }
 .voltar-pagina:hover { background: var(--superficie2); color: var(--texto); }
@@ -1114,3 +1127,13 @@ button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--
 .toast-barra { flex-basis: 100%; height: 6px; border-radius: var(--pilula); background: var(--superficie-hover); overflow: hidden; }
 .toast-barra > span { display: block; height: 100%; width: 0; background: var(--acento); transition: width var(--t-ms-fast) linear; }
 @media (prefers-reduced-motion: reduce) { .toast-barra > span { transition: none; } }
+
+/* ---------------------------------------------------------------- cor por área (estudo do painel 20/11/2026, regra 10)
+   Porquê: a barra lateral e as listas eram todas cinza; na TV cada mundo tem cor. Para quê: achar a área pelo olho, igual
+   na TV, no painel e no site. Como: só o ícone ganha cor (texto e fundo não mudam, o contraste do texto continua o mesmo);
+   no máximo 4 cores de área + 2 só dos mundos; Sistema, Avançado e Configurações ficam neutros de propósito (técnico). */
+:is(.aba, .linha-hub)[data-aba="tvfilmes"] .ic { color: var(--area-assistir); }
+:is(.aba, .linha-hub):is([data-aba="apps"], [data-aba="loja"], [data-aba="telainicial"]) .ic { color: var(--area-apps); }
+:is(.aba, .linha-hub):is([data-aba="arquivos"], [data-aba="remoto"], [data-aba="casa"]) .ic { color: var(--area-conectado); }
+:is(.aba, .linha-hub):is([data-aba="familia"], [data-aba="energia"]) .ic { color: var(--area-casa); }
+.aba.ativa .ic { color: inherit; }

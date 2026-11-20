@@ -71,23 +71,25 @@ class ConfigLauncherActivity : Activity() {
     private val fonteMedia = Fontes.nunito(500)
 
     /** Uma aba do menu: título, explicação curta (aparece no alto do conteúdo) e quem monta o conteúdo. */
-    private class Aba(val titulo: String, val explica: String, val montar: (LinearLayout) -> Unit)
+    /** [area] = cor da área (estudo do painel 20/11/2026, regra "cor quer dizer área"): a mesma do ícone da página no
+     *  painel web, num ponto antes do nome. null = neutra de propósito (Sistema, Ajuda, Avançado: técnico). */
+    private class Aba(val titulo: String, val explica: String, val area: Int?, val montar: (LinearLayout) -> Unit)
 
     private val abas: List<Aba> by lazy {
         // 14/11/2026 (pedido do dono: "complexo demais"): abas por assunto, na ordem do uso do dia a dia; o técnico
         // (rede, permissões, shell, limpeza de fábrica, confirmações) foi para "Avançado", a última. Antes: 8 abas
         // por origem do código (Conta, Controle parental, Aparência, Tela e energia, Visitas, Rede, Remoto, Sistema).
         listOf(
-            Aba(getString(R.string.cfg2_aba_inicio), getString(R.string.cfg2_aba_inicio_det), this::abaAparencia),
-            Aba(getString(R.string.cl_aba_conta), getString(R.string.cl_aba_conta_det), this::abaConta),   // ABA_CONTA
-            Aba(getString(R.string.cfg2_aba_familia), getString(R.string.cfg2_aba_familia_det), this::abaFamilia),
-            Aba(getString(R.string.cl_aba_energia), getString(R.string.cl_aba_energia_det), this::abaEnergia),
-            Aba(getString(R.string.cfg2_aba_casa), getString(R.string.cfg2_aba_casa_det), this::abaCasa),
-            Aba(getString(R.string.cl_aba_remoto), getString(R.string.cl_aba_remoto_det), this::abaRemoto),
-            Aba(getString(R.string.cl_aba_sistema), getString(R.string.cfg2_aba_sistema_det), this::abaSistema),
+            Aba(getString(R.string.cfg2_aba_inicio), getString(R.string.cfg2_aba_inicio_det), DesignTokens.WORLD_APPS, this::abaAparencia),
+            Aba(getString(R.string.cl_aba_conta), getString(R.string.cl_aba_conta_det), DesignTokens.WORLD_WATCH, this::abaConta),   // ABA_CONTA
+            Aba(getString(R.string.cfg2_aba_familia), getString(R.string.cfg2_aba_familia_det), DesignTokens.AREA_HOME, this::abaFamilia),
+            Aba(getString(R.string.cl_aba_energia), getString(R.string.cl_aba_energia_det), DesignTokens.AREA_HOME, this::abaEnergia),
+            Aba(getString(R.string.cfg2_aba_casa), getString(R.string.cfg2_aba_casa_det), DesignTokens.WORLD_NETWORK, this::abaCasa),
+            Aba(getString(R.string.cl_aba_remoto), getString(R.string.cl_aba_remoto_det), DesignTokens.WORLD_NETWORK, this::abaRemoto),
+            Aba(getString(R.string.cl_aba_sistema), getString(R.string.cfg2_aba_sistema_det), null, this::abaSistema),
             // Ajuda (14/11/2026, pedido do dono): o manual de tudo o que o launcher faz, antes do Avançado.
-            Aba(getString(R.string.aj_aba), getString(R.string.aj_aba_det), this::abaAjuda),
-            Aba(getString(R.string.cfg2_aba_avancado), getString(R.string.cfg2_aba_avancado_det), this::abaAvancado),   // ABA_AVANCADO
+            Aba(getString(R.string.aj_aba), getString(R.string.aj_aba_det), null, this::abaAjuda),
+            Aba(getString(R.string.cfg2_aba_avancado), getString(R.string.cfg2_aba_avancado_det), null, this::abaAvancado),   // ABA_AVANCADO
         )
     }
 
@@ -256,6 +258,14 @@ class ConfigLauncherActivity : Activity() {
         setPaddingRelative(dp(20), dp(11), dp(20), dp(11))
         maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         isFocusable = true; isClickable = true
+        // Ponto da cor da área (o mesmo do ícone no painel web). Aba neutra leva um ponto transparente do mesmo
+        // tamanho, para todos os nomes começarem na mesma coluna.
+        val ponto = dp(10)
+        setCompoundDrawablesRelative(GradientDrawable().apply {
+            shape = GradientDrawable.OVAL; setColor(aba.area ?: android.graphics.Color.TRANSPARENT); setSize(ponto, ponto)
+            setBounds(0, 0, ponto, ponto)
+        }, null, null, null)
+        compoundDrawablePadding = dp(12)
         pintarItemMenu(this, foco = false, escolhido = i == abaAtual)
         setOnFocusChangeListener { v, temFoco ->
             if (temFoco && abaAtual != i) {
