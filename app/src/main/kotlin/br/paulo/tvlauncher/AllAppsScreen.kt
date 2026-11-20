@@ -55,9 +55,10 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
     private val conta: TextView
     private val coluna = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
     private val rolagem = ScrollView(ctx).apply {
-        // Corta no próprio limite (o vão de 12/40 dp do padding deixa o cartão crescer no foco): sem isso as fileiras roladas
-        // para cima desenhavam por cima do título.
-        isVerticalScrollBarEnabled = false; clipChildren = true; clipToPadding = false; isSmoothScrollingEnabled = true
+        isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isSmoothScrollingEnabled = true
+        // Borda que esmaece: a rolagem para antes do fim (o cartão em foco da última fileira ficava cortado embaixo) e a
+        // fileira que sai por cima some suave em vez de cortar seca.
+        isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))
         setPadding(0, dp(12), 0, dp(40))
         addView(coluna)
     }
@@ -71,11 +72,15 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
 
     init {
         isFocusable = false
-        clipChildren = false
-        // Véu Noite sobre o fundo da casa. Quase opaco: com 80% a ilha recolhida da barra de cima (hora, "feriado hoje")
+        // Esta tela corta cada filho no limite dele: a rolagem (que deixa 8 dp de folga à esquerda e 12 dp em cima para o
+        // cartão crescer no foco) não desenha por cima do título nem por baixo do painel da direita. Dentro dela nada corta.
+        // Visto na Sala 20/11/2026: com tudo sem corte, a 4ª coluna ia para baixo do painel e as fileiras roladas cobriam o
+        // título; cortando na fileira (HorizontalScrollView) o cartão em foco perdia a borda.
+        clipChildren = true
+        // Véu Noite sobre o fundo da casa. Opaco em cima: com 80% a ilha recolhida da barra de cima (hora, "feriado hoje")
         // aparecia por trás do título (visto na Sala, 20/11/2026).
         background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(0xFA121528.toInt(), 0xF0121528.toInt(), 0xF5121528.toInt()))
+            intArrayOf(0xFF121528.toInt(), 0xF0121528.toInt(), 0xF5121528.toInt()))
         val margem = dp(Grade.MARGEM)
         val titulo = TextView(ctx).apply {
             text = ctx.getString(R.string.cruz_todos_apps).uppercase(); letterSpacing = 0.16f; includeFontPadding = false
@@ -129,9 +134,8 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
                 if (alvo == null && c.pkg == focus) alvo = v
             }
             coluna.addView(HorizontalScrollView(context).apply {
-                // clipChildren = true: a fileira não passa por baixo do painel da direita (o 4º cartão aparecia atrás dele na
-                // Sala, 20/11/2026). O padding de 8 dp com clipToPadding = false deixa espaço para o cartão crescer no foco.
-                isHorizontalScrollBarEnabled = false; clipChildren = true; clipToPadding = false
+                isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
+                isHorizontalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))   // o 5º cartão esmaece antes do painel
                 setPadding(dp(8), dp(8), dp(8), dp(8))
                 addView(linha)
             }, LinearLayout.LayoutParams(MATCH, WRAP))
@@ -233,6 +237,8 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
             if (tem) {
                 emFoco = c
                 painelBanner.setImageDrawable(img.drawable)
+                // Sem imagem (cartão "Escondidos", app sem banner): o painel não guarda um buraco vazio em cima do nome.
+                painelBanner.visibility = if (img.drawable == null) GONE else VISIBLE
                 painelNome.text = c.name; painelLinhas.removeAllViews(); painelDica.visibility = GONE
                 host.focused(c)
             }
