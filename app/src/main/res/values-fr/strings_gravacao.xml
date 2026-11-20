@@ -77,4 +77,14 @@
     <string name="lb_nao_trocar">Ne pas changer</string>
     <string name="lb_troca_marcada">Changera tout seul</string>
     <string name="lb_troca_marcada_det">Vers %1$s à %2$s (si la TV est allumée)</string>
+    <string name="grv_nao_copiou">Copie vers %1$s impossible</string>
+    <string name="grv_copiada">Enregistrement copié vers %1$s</string>
+    <string name="grv_partes_copiadas">%1$d partie(s) copiée(s)</string>
+    <string name="grv_copiando">Copie de l’enregistrement vers %1$s…</string>
+    <string name="grv_nuvem">Copier dans le cloud</string>
+    <string name="grv_nuvem_explica">À la fin de l’enregistrement, une copie part vers votre compte cloud</string>
+    <string name="grv_na_fila">%1$d en attente</string>
+    <string name="grv_apagar_depois">Supprimer ici après la copie</string>
+    <string name="grv_apagar_depois_explica">Libère la clé USB ou le dossier une fois la copie cloud terminée</string>
+    <string name="grv_sem_nuvem">Connectez OneDrive, Dropbox ou Box dans Réseau, ou Google Drive dans Sauvegarde automatique.</string>
 </resources>

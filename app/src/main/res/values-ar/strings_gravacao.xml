@@ -77,4 +77,14 @@
     <string name="lb_nao_trocar">لا تبدّل</string>
     <string name="lb_troca_marcada">سيبدّل وحده</string>
     <string name="lb_troca_marcada_det">إلى %1$s الساعة %2$s (إذا كان التلفزيون يعمل)</string>
+    <string name="grv_nao_copiou">تعذّر النسخ إلى %1$s</string>
+    <string name="grv_copiada">تم نسخ التسجيل إلى %1$s</string>
+    <string name="grv_partes_copiadas">تم نسخ %1$d جزء</string>
+    <string name="grv_copiando">جارٍ نسخ التسجيل إلى %1$s…</string>
+    <string name="grv_nuvem">النسخ إلى السحابة</string>
+    <string name="grv_nuvem_explica">عند انتهاء التسجيل تُرسل نسخة إلى حسابك السحابي</string>
+    <string name="grv_na_fila">%1$d في الانتظار</string>
+    <string name="grv_apagar_depois">الحذف من هنا بعد النسخ</string>
+    <string name="grv_apagar_depois_explica">يُفرغ الذاكرة أو المجلد عند اكتمال النسخة السحابية</string>
+    <string name="grv_sem_nuvem">سجّل الدخول إلى OneDrive أو Dropbox أو Box في الشبكة، أو اربط Google Drive في النسخ الاحتياطي التلقائي.</string>
 </resources>

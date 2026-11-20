@@ -77,4 +77,14 @@
     <string name="lb_nao_trocar">Não trocar</string>
     <string name="lb_troca_marcada">Vai trocar sozinho</string>
     <string name="lb_troca_marcada_det">Para %1$s às %2$s (se a TV estiver ligada)</string>
+    <string name="grv_nao_copiou">Não copiei para %1$s</string>
+    <string name="grv_copiada">Gravação copiada para %1$s</string>
+    <string name="grv_partes_copiadas">%1$d parte(s) copiada(s)</string>
+    <string name="grv_copiando">A copiar a gravação para %1$s…</string>
+    <string name="grv_nuvem">Copiar para a nuvem</string>
+    <string name="grv_nuvem_explica">Quando a gravação termina, uma cópia vai para a sua conta na nuvem</string>
+    <string name="grv_na_fila">%1$d na fila</string>
+    <string name="grv_apagar_depois">Apagar daqui depois de copiar</string>
+    <string name="grv_apagar_depois_explica">Liberta a pen ou a pasta quando a cópia na nuvem termina</string>
+    <string name="grv_sem_nuvem">Entre no OneDrive, Dropbox ou Box em Rede, ou ligue o Google Drive em Cópia automática.</string>
 </resources>

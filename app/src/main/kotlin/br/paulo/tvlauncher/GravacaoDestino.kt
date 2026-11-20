@@ -33,6 +33,9 @@ object GravacaoDestino {
         fun apagar(arquivo: String)
         /** O endereço que o player abre (file:// ou smb://). */
         fun uri(arquivo: String): String
+        /** Para copiar à nuvem depois (RecordingCloudCopy). */
+        fun ler(arquivo: String): java.io.InputStream
+        fun tamanho(arquivo: String): Long
     }
 
     fun pastaRede(ctx: Context): String = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(CHAVE_REDE, "").orEmpty()
@@ -163,6 +166,8 @@ object GravacaoDestino {
             ?.map { Item(it.name, it.length(), it.lastModified()) }.orEmpty()
         override fun apagar(arquivo: String) { arquivo(arquivo).delete() }
         override fun uri(arquivo: String): String = Uri.fromFile(arquivo(arquivo)).toString()
+        override fun ler(arquivo: String): java.io.InputStream = java.io.FileInputStream(arquivo(arquivo))
+        override fun tamanho(arquivo: String): Long = arquivo(arquivo).let { if (it.isFile) it.length() else throw IOException("sumiu") }
         override fun close() {}
     }
 
@@ -188,6 +193,8 @@ object GravacaoDestino {
         }.getOrDefault(emptyList())
         override fun apagar(arquivo: String) { runCatching { g.apagar(caminho(arquivo)) } }
         override fun uri(arquivo: String): String = Pastas.uri(c, caminho(arquivo))
+        override fun ler(arquivo: String): java.io.InputStream = p.ler(caminho(arquivo), 0)
+        override fun tamanho(arquivo: String): Long = p.tamanho(caminho(arquivo))
         override fun close() = p.close()
     }
 }

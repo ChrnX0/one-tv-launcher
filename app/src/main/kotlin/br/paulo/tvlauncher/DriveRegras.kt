@@ -29,7 +29,7 @@ object DriveRegras {
     fun aspas(s: String): String = "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
     /** A nossa pasta (só as que o launcher criou aparecem, por causa do drive.file). */
-    fun consultaPasta(): String = "name = ${aspas(PASTA)} and mimeType = ${aspas(TIPO_PASTA)} and trashed = false"
+    fun consultaPasta(nome: String = PASTA): String = "name = ${aspas(nome)} and mimeType = ${aspas(TIPO_PASTA)} and trashed = false"
 
     /** As cópias dentro da pasta. */
     fun consultaCopias(pastaId: String): String = "${aspas(pastaId)} in parents and trashed = false"

@@ -43,6 +43,9 @@ class GravacoesActivity : Activity() {
 
     override fun onDestroy() { Gravacoes.esquecer(mudou); super.onDestroy() }
 
+    private var nomeNuvem: String? = null
+    private var copiasNaFila = 0
+
     private class Gravada(val partes: List<String>, val inicio: Long?, val titulo: String, val bytes: Long, val destino: String, val onde: String)
 
     /** Lê o destino (SMB = rede) fora da thread da tela e redesenha. */
@@ -74,7 +77,9 @@ class GravacoesActivity : Activity() {
             gravadas = todas.sortedByDescending { it.inicio ?: 0L }
             val variosLugares = gravadas.map { it.destino }.distinct().size > 1
             if (!variosLugares) gravadas = gravadas.map { Gravada(it.partes, it.inicio, it.titulo, it.bytes, it.destino, "") }
-            runOnUiThread { if (!isDestroyed) { uris = mapa; montar(ag, gravadas, nomeDestino, livre) } }
+            val nuvem = runCatching { RecordingCloudCopy.nomeDoAlvo(app, RecordingCloudCopy.alvo(app)) }.getOrNull()
+            val naFila = runCatching { RecordingCloudCopy.fila(app).size }.getOrDefault(0)
+            runOnUiThread { if (!isDestroyed) { uris = mapa; nomeNuvem = nuvem; copiasNaFila = naFila; montar(ag, gravadas, nomeDestino, livre) } }
         }
     }
 
@@ -114,6 +119,17 @@ class GravacoesActivity : Activity() {
         val reserva = GravacaoDestino.pastaRede(this).takeIf { it.isNotEmpty() }?.let { id -> MidiaArmazem.conta(this, id)?.nome }
         linha("reserva", getString(R.string.grv_reserva), getString(R.string.grv_reserva_explica), reserva ?: getString(R.string.grv_nenhuma),
             ok = { escolherReserva() }, segurar = null)
+        // 20/11/2026: cópia para a nuvem ao terminar (Drive, OneDrive, Dropbox, Box).
+        val explicaNuvem = getString(R.string.grv_nuvem_explica) +
+            if (copiasNaFila > 0) " · " + getString(R.string.grv_na_fila, copiasNaFila) else ""
+        linha("nuvem", getString(R.string.grv_nuvem), explicaNuvem, nomeNuvem ?: getString(R.string.grv_nenhuma),
+            ok = { escolherNuvem() }, segurar = null)
+        if (nomeNuvem != null) {
+            val apagar = RecordingCloudCopy.apagarDepois(this)
+            linha("nuvem_apagar", getString(R.string.grv_apagar_depois), getString(R.string.grv_apagar_depois_explica),
+                getString(if (apagar) R.string.rot_ligada else R.string.rot_desligada),
+                ok = { RecordingCloudCopy.definirApagar(this, !apagar); carregar() }, segurar = null)
+        }
         val alvo = (0 until coluna.childCount).map { coluna.getChildAt(it) }.firstOrNull { it.tag != null && it.tag == focoAntes }
             ?: (0 until coluna.childCount).map { coluna.getChildAt(it) }.firstOrNull { it.isFocusable }
         alvo?.requestFocus()
@@ -157,6 +173,25 @@ class GravacoesActivity : Activity() {
         Estilo.lista(this, getString(R.string.grv_reserva), itens, listOf(marcada)) { i ->
             GravacaoDestino.escolherPastaRede(this, if (i == 0) "" else contas[i - 1].id)
             carregar()
+        }
+    }
+
+    /** A nuvem que recebe a cópia de cada gravação (ou nenhuma). */
+    private fun escolherNuvem() {
+        val app = applicationContext
+        Fundo.rodar("gravacoes") {
+            val alvos = runCatching { RecordingCloudCopy.alvos(app) }.getOrDefault(emptyList())
+            val atual = RecordingCloudCopy.alvo(app)
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                if (alvos.isEmpty()) { AvisoTv.rapido(this, getString(R.string.grv_nuvem), getString(R.string.grv_sem_nuvem), 10); return@runOnUiThread }
+                val itens = listOf(getString(R.string.grv_nenhuma)) + alvos.map { it.nome }
+                val marcada = alvos.indexOfFirst { it.id == atual }.let { if (it < 0) 0 else it + 1 }
+                Estilo.lista(this, getString(R.string.grv_nuvem), itens, listOf(marcada)) { i ->
+                    RecordingCloudCopy.definir(this, if (i == 0) "" else alvos[i - 1].id)
+                    carregar()
+                }
+            }
         }
     }
 

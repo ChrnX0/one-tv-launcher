@@ -77,4 +77,14 @@
     <string name="lb_nao_trocar">No cambiar</string>
     <string name="lb_troca_marcada">Cambiará solo</string>
     <string name="lb_troca_marcada_det">A %1$s a las %2$s (si la TV está encendida)</string>
+    <string name="grv_nao_copiou">No se copió a %1$s</string>
+    <string name="grv_copiada">Grabación copiada a %1$s</string>
+    <string name="grv_partes_copiadas">%1$d parte(s) copiada(s)</string>
+    <string name="grv_copiando">Copiando la grabación a %1$s…</string>
+    <string name="grv_nuvem">Copiar a la nube</string>
+    <string name="grv_nuvem_explica">Al terminar la grabación, se envía una copia a tu cuenta en la nube</string>
+    <string name="grv_na_fila">%1$d en cola</string>
+    <string name="grv_apagar_depois">Borrar aquí después de copiar</string>
+    <string name="grv_apagar_depois_explica">Libera el pendrive o la carpeta cuando termina la copia en la nube</string>
+    <string name="grv_sem_nuvem">Inicia sesión en OneDrive, Dropbox o Box en Red, o conecta Google Drive en Copia automática.</string>
 </resources>

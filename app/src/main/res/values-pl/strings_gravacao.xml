@@ -77,4 +77,14 @@
     <string name="lb_nao_trocar">Nie przełączaj</string>
     <string name="lb_troca_marcada">Przełączy się sam</string>
     <string name="lb_troca_marcada_det">Na %1$s o %2$s (jeśli telewizor jest włączony)</string>
+    <string name="grv_nao_copiou">Nie skopiowano do %1$s</string>
+    <string name="grv_copiada">Nagranie skopiowane do %1$s</string>
+    <string name="grv_partes_copiadas">Skopiowane części: %1$d</string>
+    <string name="grv_copiando">Kopiuję nagranie do %1$s…</string>
+    <string name="grv_nuvem">Kopiuj do chmury</string>
+    <string name="grv_nuvem_explica">Po zakończeniu nagrania kopia trafia na Twoje konto w chmurze</string>
+    <string name="grv_na_fila">W kolejce: %1$d</string>
+    <string name="grv_apagar_depois">Usuń tutaj po skopiowaniu</string>
+    <string name="grv_apagar_depois_explica">Zwalnia pendrive lub folder, gdy kopia w chmurze jest gotowa</string>
+    <string name="grv_sem_nuvem">Zaloguj się do OneDrive, Dropbox lub Box w Sieci albo połącz Google Drive w Automatycznej kopii.</string>
 </resources>
