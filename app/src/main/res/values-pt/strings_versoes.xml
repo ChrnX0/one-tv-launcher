@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Uma atualização instalada com a TV dormindo agora é otimizada na mesma noite (antes a versão nova rodava mais lenta o dia seguinte inteiro, até a tela apagar de novo)</item>
         <item>Filmes e Séries abrem mais rápido: juntar as cópias dublada e legendada de cada título agora leva uma fração do tempo (em listas grandes isso deixava a TV ocupada por mais de um minuto depois de abrir)</item>
         <item>Tela inicial: andar pela cruz ficou mais leve, porque os itens apagados não precisam mais de uma passada extra de desenho a cada quadro</item>
         <item>Ler em voz alta o item em foco (Extras): as telas fechadas não ficam mais presas na memória</item>
