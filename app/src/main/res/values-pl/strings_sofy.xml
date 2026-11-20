@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Zostało tylko %1$s MB. Zapis może się nie udać.</string>
     <string name="observer_freeze_undone_title">Cofnęłam zamrożenie</string>
     <string name="observer_freeze_undone_text">%1$s była zamrożona i %2$s przestało działać, więc ją odmroziłam.</string>
-    <string name="observer_check_voice">wyszukiwanie głosowe</string>
-    <string name="observer_check_play_store">Sklep Play</string>
-    <string name="observer_check_settings">Ustawienia</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">internet</string>
 </resources>

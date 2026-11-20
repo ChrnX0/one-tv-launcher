@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Restam só %1$s MB. Guardar pode falhar.</string>
     <string name="observer_freeze_undone_title">Desfiz um congelamento</string>
     <string name="observer_freeze_undone_text">%1$s estava congelado e %2$s deixou de funcionar, por isso descongelei.</string>
-    <string name="observer_check_voice">a pesquisa por voz</string>
-    <string name="observer_check_play_store">a Play Store</string>
-    <string name="observer_check_settings">as Definições</string>
-    <string name="observer_check_cast">o Cast</string>
-    <string name="observer_check_internet">a internet</string>
 </resources>

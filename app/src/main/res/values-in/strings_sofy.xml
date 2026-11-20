@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Hanya tersisa %1$s MB. Penyimpanan bisa gagal.</string>
     <string name="observer_freeze_undone_title">Saya membatalkan pembekuan</string>
     <string name="observer_freeze_undone_text">%1$s dibekukan dan %2$s berhenti bekerja, jadi saya mencairkannya.</string>
-    <string name="observer_check_voice">penelusuran suara</string>
-    <string name="observer_check_play_store">Play Store</string>
-    <string name="observer_check_settings">Setelan</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">internet</string>
 </resources>

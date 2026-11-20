@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">%1$s MB만 남았어요. 저장이 실패할 수 있어요.</string>
     <string name="observer_freeze_undone_title">정지를 되돌렸습니다</string>
     <string name="observer_freeze_undone_text">%1$s을(를) 정지했더니 %2$s이(가) 작동하지 않아 다시 켰습니다.</string>
-    <string name="observer_check_voice">음성 검색</string>
-    <string name="observer_check_play_store">Play 스토어</string>
-    <string name="observer_check_settings">설정</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">인터넷</string>
 </resources>

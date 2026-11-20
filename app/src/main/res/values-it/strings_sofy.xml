@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Restano solo %1$s MB. Il salvataggio può non riuscire.</string>
     <string name="observer_freeze_undone_title">Ho annullato un congelamento</string>
     <string name="observer_freeze_undone_text">%1$s era congelata e %2$s ha smesso di funzionare, così l\'ho scongelata.</string>
-    <string name="observer_check_voice">la ricerca vocale</string>
-    <string name="observer_check_play_store">il Play Store</string>
-    <string name="observer_check_settings">le Impostazioni</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">internet</string>
 </resources>

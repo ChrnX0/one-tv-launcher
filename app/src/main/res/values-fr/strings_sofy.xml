@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Il reste %1$s Mo. L\'enregistrement peut échouer.</string>
     <string name="observer_freeze_undone_title">J\'ai annulé un gel</string>
     <string name="observer_freeze_undone_text">%1$s était gelée et %2$s ne marchait plus, alors je l\'ai dégelée.</string>
-    <string name="observer_check_voice">la recherche vocale</string>
-    <string name="observer_check_play_store">le Play Store</string>
-    <string name="observer_check_settings">les Paramètres</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">Internet</string>
 </resources>

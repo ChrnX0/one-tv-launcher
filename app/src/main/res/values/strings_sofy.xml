@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">Only %1$s MB left. Saving may fail.</string>
     <string name="observer_freeze_undone_title">I undid a freeze</string>
     <string name="observer_freeze_undone_text">%1$s was frozen and %2$s stopped working, so I unfroze it.</string>
-    <string name="observer_check_voice">voice search</string>
-    <string name="observer_check_play_store">the Play Store</string>
-    <string name="observer_check_settings">Settings</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">the internet</string>
 </resources>

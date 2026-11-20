@@ -17,9 +17,4 @@
     <string name="observer_low_disk_text">تبقّى %1$s ميغابايت فقط. قد يفشل الحفظ.</string>
     <string name="observer_freeze_undone_title">ألغيت تجميدًا</string>
     <string name="observer_freeze_undone_text">كان %1$s مجمّدًا وتوقف %2$s عن العمل، فألغيت التجميد.</string>
-    <string name="observer_check_voice">البحث الصوتي</string>
-    <string name="observer_check_play_store">متجر Play</string>
-    <string name="observer_check_settings">الإعدادات</string>
-    <string name="observer_check_cast">Cast</string>
-    <string name="observer_check_internet">الإنترنت</string>
 </resources>
