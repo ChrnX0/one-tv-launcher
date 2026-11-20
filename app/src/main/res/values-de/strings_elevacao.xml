@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Keine Abstürze oder Hänger in %1$d Tagen</string>
     <string name="elv_reserva">%1$s ist ausgefallen. Stattdessen läuft %2$s.</string>
     <string name="elv_zap_solte">Loslassen zum Ansehen</string>
-    <string name="elv_leg_estilo">Untertitelstil: %1$s</string>
     <string name="elv_leg_padrao">Standard</string>
     <string name="elv_leg_contraste">hoher Kontrast</string>
     <string name="elv_leg_amarela">gelb</string>
-    <string name="elv_leg_posicao">Untertitelposition: %1$s</string>
     <string name="elv_leg_embaixo">unten</string>
     <string name="elv_leg_em_cima">oben</string>
     <string name="elv_bf_fazer">Ausführen</string>

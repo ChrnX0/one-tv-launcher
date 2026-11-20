@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Nessun arresto o blocco in %1$d giorni</string>
     <string name="elv_reserva">%1$s non va. Al suo posto %2$s.</string>
     <string name="elv_zap_solte">Rilascia per guardare</string>
-    <string name="elv_leg_estilo">Stile dei sottotitoli: %1$s</string>
     <string name="elv_leg_padrao">standard</string>
     <string name="elv_leg_contraste">alto contrasto</string>
     <string name="elv_leg_amarela">gialli</string>
-    <string name="elv_leg_posicao">Posizione dei sottotitoli: %1$s</string>
     <string name="elv_leg_embaixo">in basso</string>
     <string name="elv_leg_em_cima">in alto</string>
     <string name="elv_bf_fazer">Fai</string>

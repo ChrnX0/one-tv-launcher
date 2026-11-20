@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">अब भी देख रहे हैं?</string>
     <string name="vod_ainda_assistindo_texto">किसी के रिमोट छुए बिना कुछ एपिसोड चल चुके हैं, इसलिए अगला आपका इंतज़ार कर रहा है।</string>
     <string name="vod_desligar_ao_fim">यह ख़त्म होने पर TV बंद करें</string>
-    <string name="vod_desligar_ao_fim_ligado">यह ख़त्म होने पर TV बंद होगा</string>
-    <string name="vod_desligar_ao_fim_desligado">यह ख़त्म होने पर TV चालू रहेगा</string>
-    <string name="vod_legenda_tamanho_opcao">सबटाइटल आकार: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">सबटाइटल आकार</string>
     <string-array name="vod_legenda_tamanhos">
         <item>छोटा</item>

@@ -27,16 +27,10 @@
     <string name="onde_grupo">Ailleurs (JustWatch)</string>
     <string name="legenda_auto_pronta">Sous-titres téléchargés automatiquement (faits pour ce fichier) · ▼ pour changer</string>
     <string name="legenda_auto_pronta_nome">Sous-titres téléchargés automatiquement · ▼ pour changer ou ajuster le décalage</string>
-    <string name="legenda_auto_opcao">Télécharger les sous-titres automatiquement</string>
-    <string name="legenda_auto_ligada">Les sous-titres manquants seront téléchargés</string>
-    <string name="legenda_auto_desligada">Sous-titres automatiques désactivés</string>
     <string name="legenda_trad_rotulo">Traduction automatique</string>
     <string name="legenda_trad_traduzindo">Pas de sous-titres dans votre langue : traduction des anglais sur la TV…</string>
     <string name="legenda_trad_parcial">Sous-titres traduits sur la TV (traduction automatique). Le reste continue d’être traduit.</string>
     <string name="legenda_trad_pronta">Traduction des sous-titres terminée</string>
-    <string name="legenda_trad_opcao">Traduire les sous-titres sur la TV s’ils manquent</string>
-    <string name="legenda_trad_ligada">Les sous-titres manquants seront traduits sur la TV</string>
-    <string name="legenda_trad_desligada">Les sous-titres ne seront plus traduits</string>
     <string name="series_sinopse_mais">Résumé complet</string>
     <string name="series_sinopse_menos">Résumé plus court</string>
     <string name="series_continuar_curto">▶  Reprendre %1$s</string>

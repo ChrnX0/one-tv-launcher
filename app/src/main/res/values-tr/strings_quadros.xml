@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">Filmler kendi kare hızında (24 Hz)</string>
     <string name="quadros_det">Film oynarken TV 24 Hz’e geçer, böylece kamera hareketlerinde görüntü takılmaz. Başta ekran 1–2 sn kararır. Canlı TV için kullanılmaz.</string>
-    <string name="quadros_ligado">Film kare hızı açık: sonraki videodan itibaren geçerli</string>
-    <string name="quadros_desligado">Film kare hızı kapalı</string>
 </resources>

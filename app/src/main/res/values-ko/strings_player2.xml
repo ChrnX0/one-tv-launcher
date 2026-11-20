@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">아직 보고 계세요?</string>
     <string name="vod_ainda_assistindo_texto">아무도 리모컨을 만지지 않은 채 여러 에피소드가 재생되어 다음 에피소드가 기다리고 있습니다.</string>
     <string name="vod_desligar_ao_fim">끝나면 TV 끄기</string>
-    <string name="vod_desligar_ao_fim_ligado">끝나면 TV가 꺼집니다</string>
-    <string name="vod_desligar_ao_fim_desligado">끝나도 TV가 켜져 있습니다</string>
-    <string name="vod_legenda_tamanho_opcao">자막 크기: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">자막 크기</string>
     <string-array name="vod_legenda_tamanhos">
         <item>작게</item>

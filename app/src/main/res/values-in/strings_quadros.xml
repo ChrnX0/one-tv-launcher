@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">Film dengan frame rate aslinya (24 Hz)</string>
     <string name="quadros_det">TV beralih ke 24 Hz selama film diputar, agar gambar tidak tersendat saat kamera bergerak. Layar menjadi hitam 1 sampai 2 dtk di awal. Tidak dipakai untuk TV langsung.</string>
-    <string name="quadros_ligado">Frame rate film aktif: berlaku mulai video berikutnya</string>
-    <string name="quadros_desligado">Frame rate film nonaktif</string>
 </resources>

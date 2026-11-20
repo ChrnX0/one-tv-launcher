@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">¿Sigues mirando?</string>
     <string name="vod_ainda_assistindo_texto">Se reprodujeron varios episodios sin que nadie tocara el control, así que el siguiente te espera.</string>
     <string name="vod_desligar_ao_fim">Apagar la TV cuando termine</string>
-    <string name="vod_desligar_ao_fim_ligado">La TV se apaga cuando termine</string>
-    <string name="vod_desligar_ao_fim_desligado">La TV sigue encendida cuando termine</string>
-    <string name="vod_legenda_tamanho_opcao">Tamaño de subtítulos: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Tamaño de subtítulos</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Pequeño</item>

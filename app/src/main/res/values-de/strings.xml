@@ -717,12 +717,10 @@ AS\\Filme).</string>
     <string name="tvv_hoje">Heute</string>
     <string name="tvv_ontem">Gestern</string>
     <string name="imagem_titulo">Seitenverhältnis</string>
-    <string name="imagem_opcao">Seitenverhältnis: %1$s</string>
     <string name="imagem_ajustar">An Bildschirm anpassen</string>
     <string name="imagem_esticar">Strecken</string>
     <string name="imagem_zoom">Zoom (schneidet die Ränder ab)</string>
     <string name="velocidade_titulo">Geschwindigkeit</string>
-    <string name="velocidade_opcao">Geschwindigkeit: %1$s</string>
     <string name="trailer">Trailer</string>
     <string name="trailer_sem_app">Keine App gefunden, um den Trailer zu öffnen.</string>
     <string name="series_visto_ate_aqui">Bis %1$s als gesehen markieren</string>
@@ -748,7 +746,6 @@ AS\\Filme).</string>
     <string name="legenda_surdos">für Hörgeschädigte</string>
     <string name="legenda_bate">passt zu dieser Datei</string>
     <string name="lista_dica_escolher">auswählen</string>
-    <string name="legenda_atraso_opcao">Untertitelverzögerung: %1$s</string>
     <string name="legenda_atraso_titulo">Untertitelverzögerung (+ = Text erscheint später)</string>
     <string name="legenda_atraso_zero">Keine Verzögerung</string>
     <string name="legenda_conta_titulo">Online-Untertitel</string>
@@ -783,7 +780,6 @@ AS\\Filme).</string>
     <string name="vod_dialogo_opcao">Lautere Dialoge</string>
     <string name="vod_dialogo_ligado">Lautere Dialoge an</string>
     <string name="vod_dialogo_desligado">Lautere Dialoge aus</string>
-    <string name="vod_atraso_audio_opcao">Tonverzögerung: %1$s</string>
     <string name="vod_atraso_audio_titulo">Tonverzögerung (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Keine</string>
@@ -842,5 +838,24 @@ AS\\Filme).</string>
         <item>W</item>
         <item>NW</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · weiter ab hier</string>
+    <string name="lista_dica_voltar">zurück</string>
+    <string name="pm_ligado">Ein</string>
+    <string name="pm_desligado">Aus</string>
+    <string name="pm_imagem_som">Bild und Ton</string>
+    <string name="pm_mais">Weitere Optionen</string>
+    <string name="pm_versao_legendada">Mit Untertiteln ansehen</string>
+    <string name="pm_versao_dublada">Synchronfassung ansehen</string>
+    <string name="pm_versao_info">Geht ab hier weiter</string>
+    <string name="pm_leg_ajustes">Untertitel-Einstellungen</string>
+    <string name="pm_leg_tamanho">Größe</string>
+    <string name="pm_leg_estilo">Stil</string>
+    <string name="pm_leg_posicao">Position</string>
+    <string name="pm_leg_atraso">Verzögerung</string>
+    <string name="pm_leg_auto">Einen laden, wenn keiner da ist</string>
+    <string name="pm_leg_traduzir">Auf dem TV übersetzen, wenn keiner da ist</string>
+    <string name="pm_velocidade">Tempo</string>
+    <string name="pm_proporcao">Bildgröße</string>
+    <string name="pm_atraso_audio">Tonverzögerung</string>
+    <string name="pm_quadros">Bildrate des Films nutzen</string>
+    <string name="pm_qualidade">Qualität</string>
 </resources>

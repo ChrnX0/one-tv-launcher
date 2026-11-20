@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">영화를 원래 프레임 레이트로(24Hz)</string>
     <string name="quadros_det">영화를 재생하는 동안 TV가 24Hz로 전환되어 카메라가 움직일 때 화면이 끊기지 않습니다. 시작할 때 화면이 1~2초 동안 검게 됩니다. 실시간 TV에는 사용하지 않습니다.</string>
-    <string name="quadros_ligado">영화 프레임 레이트 켜짐: 다음 동영상부터 적용</string>
-    <string name="quadros_desligado">영화 프레임 레이트 꺼짐</string>
 </resources>

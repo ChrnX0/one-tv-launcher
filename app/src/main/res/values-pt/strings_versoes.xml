@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Player (filmes, séries, arquivos e TV ao vivo): o menu do ▼ ficou simples. A primeira tela tem Áudio, Legenda, Assistir dublado/legendado, Imagem e som e Mais opções; o valor de agora aparece à direita, › abre a próxima lista, ✓ só marca o que está escolhido e VOLTAR volta à lista de cima</item>
         <item>Novo nome do app na TV (tv.sofaly.launcher): ajustes, add-ons, plugins e o painel passam sozinhos, sem reset</item>
         <item>Um sistema de cores: o laranja só marca a marca, o foco e o progresso; texto secundário em branco suave; cada mundo tem a sua cor e o seu desenho em todos os estilos da barra</item>
         <item>Filmes e Séries ganham o mesmo fundo azul da tela inicial; “Na rede” virou “Do computador”, com ícone de pasta</item>
@@ -42,6 +43,7 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Menu do player</item>
         <item>Tudo no lugar</item>
         <item>Sistema de cores</item>
         <item>Do computador</item>
@@ -67,6 +69,7 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Num filme, o ▼ mostra um menu curto (Áudio, Legenda, Imagem e som, Mais opções) com o valor de agora à direita, e VOLTAR dentro de uma lista volta para a de cima?</item>
         <item>Depois da troca para o novo nome do app, a tela inicial, os add-ons, os plugins, os perfis e o PIN do painel continuam como antes?</item>
         <item>Na tela inicial e nas Configurações, o laranja aparece só no foco e na marca, com os valores em branco suave (não laranja)?</item>
         <item>Em Filmes, o fundo é azul como o da tela inicial, e o antigo “Na rede” agora diz “Do computador” com uma pasta?</item>

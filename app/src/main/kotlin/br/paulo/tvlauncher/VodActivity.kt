@@ -553,11 +553,11 @@ class VodActivity : Activity() {
         return "${relogio(c.inicioMs)} · " + (c.titulo ?: getString(R.string.vod_capitulo_n, i + 1))
     }
 
-    private fun escolherCapitulo() {
+    private fun escolherCapitulo(voltar: (() -> Unit)? = null) {
         val p = player ?: return
         val atual = capitulos.indexOfLast { it.inicioMs <= p.currentPosition }
         Estilo.lista(this, getString(R.string.vod_capitulos_titulo), capitulos.indices.map { rotuloCapitulo(it) },
-            listOfNotNull(atual.takeIf { it >= 0 })) { i -> p.seekTo(capitulos[i].inicioMs); mostrarBarra() }
+            listOfNotNull(atual.takeIf { it >= 0 }), aoVoltar = voltar) { i -> p.seekTo(capitulos[i].inicioMs); mostrarBarra() }
     }
 
     private fun mostrarSegunda(cg: CueGroup) {
@@ -567,7 +567,15 @@ class VodActivity : Activity() {
     }
 
     /** Segunda legenda: as faixas de texto (menos a que já está embaixo e as ASS) ou "Desligada". */
-    private fun escolherSegunda() {
+    /** Nome da segunda legenda ligada, ou "Desligada". */
+    private fun nomeSegunda(): String {
+        val id = segunda.id ?: return getString(R.string.vod_segunda_desligada)
+        val p = player ?: return getString(R.string.vod_segunda_desligada)
+        for (g in p.currentTracks.groups) for (i in 0 until g.length) g.getTrackFormat(i).takeIf { it.id == id }?.let { return nomeFaixa(it) }
+        return getString(R.string.vod_segunda_desligada)
+    }
+
+    private fun escolherSegunda(voltar: (() -> Unit)? = null) {
         val p = player ?: return
         val faixas = ArrayList<Pair<String, String>>()   // id, rótulo
         for (grupo in p.currentTracks.groups) {
@@ -580,7 +588,7 @@ class VodActivity : Activity() {
         }
         val rotulos = listOf(getString(R.string.vod_segunda_desligada)) + faixas.map { it.second }
         val marcada = faixas.indexOfFirst { it.first == segunda.id }.let { if (it < 0) 0 else it + 1 }
-        Estilo.lista(this, getString(R.string.vod_segunda_titulo), rotulos, listOf(marcada)) { i ->
+        Estilo.lista(this, getString(R.string.vod_segunda_titulo), rotulos, listOf(marcada), aoVoltar = voltar) { i ->
             segunda.id = if (i == 0) null else faixas[i - 1].first
             if (segunda.id == null) legenda2.visibility = View.GONE
             seletor?.atualizar()
@@ -610,11 +618,11 @@ class VodActivity : Activity() {
     private fun rotuloAtrasoAudio(ms: Int) = if (ms == 0) getString(R.string.vod_atraso_audio_zero)
         else getString(if (ms > 0) R.string.vod_atraso_audio_mais else R.string.vod_atraso_audio_menos, kotlin.math.abs(ms))
 
-    private fun escolherAtrasoAudio() {
+    private fun escolherAtrasoAudio(voltar: (() -> Unit)? = null) {
         val v = RenderizadoresPlayer.ATRASOS
         val atual = EfeitosSom.atrasoMs(this)
         val titulo = getString(R.string.vod_atraso_audio_titulo, EfeitosSom.caixaBluetooth(this) ?: getString(R.string.vod_atraso_audio_tv))
-        Estilo.lista(this, titulo, v.map { rotuloAtrasoAudio(it) }, listOf(v.indexOf(atual).coerceAtLeast(0))) { i ->
+        Estilo.lista(this, titulo, v.map { rotuloAtrasoAudio(it) }, listOf(v.indexOf(atual).coerceAtLeast(0)), aoVoltar = voltar) { i ->
             if (v[i] == atual) return@lista
             EfeitosSom.gravarAtraso(this, v[i])
             refazerPlayer()
@@ -895,134 +903,202 @@ class VodActivity : Activity() {
         return super.onKeyUp(keyCode, event)
     }
 
-    /** Áudio e legenda: lista as faixas que o arquivo tem (dublado, legendado, etc.). */
+    /**
+     * ▼ do player: Áudio e legenda (20/11/2026, "bonito, mas complicado de usar"). A lista de cima tem poucos itens, cada
+     * um dizendo à direita o valor de agora; o resto fica uma lista abaixo. Regras do ✓ e das chaves em [PlayerMenu].
+     */
     private fun escolherFaixas() {
-        val p = player ?: return
-        data class Opcao(val rotulo: String, val marcada: Boolean = false, val aplicar: () -> Unit)
-        val opcoes = ArrayList<Opcao>()
-        val semLegenda = getString(R.string.vod_sem_legenda)
+        player ?: return
+        PlayerMenu.abrir(this, getString(R.string.vod_faixas)) {
+            val itens = ArrayList<PlayerMenu.Item>()
+            itens += PlayerMenu.abre(getString(R.string.vod_audio), faixaEscolhida(C.TRACK_TYPE_AUDIO) ?: "") { menuAudio() }
+            itens += PlayerMenu.abre(getString(R.string.vod_legenda), faixaEscolhida(C.TRACK_TYPE_TEXT) ?: getString(R.string.vod_segunda_desligada)) { menuLegenda() }
+            itemVersao()?.let { itens += it }
+            itens += PlayerMenu.abre(getString(R.string.pm_imagem_som), null) { menuImagemSom() }
+            itens += PlayerMenu.abre(getString(R.string.pm_mais), null) { menuMais() }
+            itens
+        }
+    }
+
+    /** Nome da faixa de áudio ou de legenda que está tocando (null = nenhuma). */
+    private fun faixaEscolhida(tipo: Int): String? {
+        val p = player ?: return null
+        for (g in p.currentTracks.groups) {
+            if (g.type != tipo) continue
+            for (i in 0 until g.length) if (g.isTrackSelected(i)) return nomeFaixa(g.getTrackFormat(i))
+        }
+        return null
+    }
+
+    /** A outra versão do filme ou do episódio (dublada/legendada): é outro arquivo, troca no mesmo ponto (18/11/2026). */
+    private fun itemVersao(): PlayerMenu.Item? = outraVersao()?.let { (v, _) ->
+        PlayerMenu.acao(getString(if (v == Idioma.Versao.LEGENDADA) R.string.pm_versao_legendada else R.string.pm_versao_dublada),
+            getString(R.string.pm_versao_info)) { trocarVersao() }
+    }
+
+    /** Faixas de um tipo, uma por linha, com o ✓ na que está tocando. */
+    private fun faixas(tipo: Int, aoEscolher: (androidx.media3.common.Format, androidx.media3.common.TrackGroup, Int) -> Unit): List<PlayerMenu.Item> {
+        val p = player ?: return emptyList()
+        val itens = ArrayList<PlayerMenu.Item>()
         for (grupo in p.currentTracks.groups) {
-            val tipo = grupo.type
-            if (tipo != C.TRACK_TYPE_AUDIO && tipo != C.TRACK_TYPE_TEXT) continue
+            if (grupo.type != tipo) continue
             for (i in 0 until grupo.length) {
                 if (!grupo.isTrackSupported(i)) continue
-                val f = grupo.getTrackFormat(i)
-                val nome = nomeFaixa(f)
-                val prefixo = getString(if (tipo == C.TRACK_TYPE_AUDIO) R.string.vod_audio else R.string.vod_legenda)
-                val g = grupo.mediaTrackGroup; val indice = i
-                opcoes += Opcao("$prefixo: $nome", grupo.isTrackSelected(i)) {
-                    // Trocar o áudio na mão vira a escolha deste filme (ou da série toda): da próxima vez já abre assim.
-                    if (tipo == C.TRACK_TYPE_AUDIO) Idioma.prefDaEscolha(IdiomaPlayer.faixa(f), idiomaTv)?.let { pref ->
-                        prefIdioma = pref
-                        Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
-                    }
-                    if (tipo == C.TRACK_TYPE_TEXT && f.id != null && f.id == segunda.id) { segunda.id = null; legenda2.visibility = View.GONE; seletor?.atualizar() }
-                    if (tipo == C.TRACK_TYPE_TEXT) Idioma.normalizar(f.language)?.let { l -> lembrarSerie { it.copy(legenda = l) } }
-                    p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-                        .setTrackTypeDisabled(tipo, false)
-                        .setOverrideForType(TrackSelectionOverride(g, indice)).build()
+                val f = grupo.getTrackFormat(i); val g = grupo.mediaTrackGroup; val indice = i
+                itens += PlayerMenu.escolha(nomeFaixa(f), grupo.isTrackSelected(i)) { aoEscolher(f, g, indice) }
+            }
+        }
+        return itens
+    }
+
+    private fun usarFaixa(tipo: Int, g: androidx.media3.common.TrackGroup, indice: Int) {
+        val p = player ?: return
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+            .setTrackTypeDisabled(tipo, false)
+            .setOverrideForType(TrackSelectionOverride(g, indice)).build()
+    }
+
+    private fun menuAudio(): Unit = PlayerMenu.abrir(this, getString(R.string.vod_audio), voltar = { escolherFaixas() }) {
+        faixas(C.TRACK_TYPE_AUDIO) { f, g, i ->
+            // Trocar o áudio na mão vira a escolha deste filme (ou da série toda): da próxima vez já abre assim.
+            Idioma.prefDaEscolha(IdiomaPlayer.faixa(f), idiomaTv)?.let { pref ->
+                prefIdioma = pref
+                Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
+            }
+            usarFaixa(C.TRACK_TYPE_AUDIO, g, i)
+        } + listOfNotNull(itemVersao())
+    }
+
+    private fun menuLegenda(): Unit = PlayerMenu.abrir(this, getString(R.string.vod_legenda), voltar = { escolherFaixas() }) {
+        val p = player
+        val itens = ArrayList<PlayerMenu.Item>()
+        // Passada na TV (12/11): sem legenda ligada, nada da lista aparecia marcado na parte da legenda.
+        val comLegenda = legendaArquivo != null || p?.currentTracks?.groups?.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected } == true
+        itens += PlayerMenu.escolha(getString(R.string.vod_segunda_desligada), !comLegenda) { desligarLegenda() }
+        itens += faixas(C.TRACK_TYPE_TEXT) { f, g, i ->
+            if (f.id != null && f.id == segunda.id) { segunda.id = null; legenda2.visibility = View.GONE; seletor?.atualizar() }
+            Idioma.normalizar(f.language)?.let { l -> lembrarSerie { it.copy(legenda = l) } }
+            usarFaixa(C.TRACK_TYPE_TEXT, g, i)
+        }
+        // Legenda da internet (OpenSubtitles, com a conta do dono).
+        itens += PlayerMenu.acao(getString(R.string.legenda_buscar)) { buscarLegenda() }
+        itens += PlayerMenu.abre(getString(R.string.pm_leg_ajustes), null) { menuAjustesLegenda() }
+        itens
+    }
+
+    private fun desligarLegenda() {
+        val p = player ?: return
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+        lembrarSerie { it.copy(legenda = "") }
+        // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
+        // automática" fica, então ela não é baixada de novo sozinha; "Buscar legenda" continua trazendo outra.
+        if (legendaArquivo != null) {
+            val k = chave
+            legendaArquivo = null; legendaTraduzida = false
+            Fundo.rodar { LegendaBaixar.apagar(this, k) }
+        }
+    }
+
+    private fun estiloLegenda() =
+        EstiloLegenda.de(EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA))
+
+    private fun rotuloPosicao() =
+        getString(if (EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_ALTO)) R.string.elv_leg_em_cima else R.string.elv_leg_embaixo)
+
+    /** Como a legenda aparece e de onde vem quando falta (vale para todos os vídeos). */
+    private fun menuAjustesLegenda() {
+        val voltar = { menuAjustesLegenda() }
+        PlayerMenu.abrir(this, getString(R.string.pm_leg_ajustes), voltar = { menuLegenda() }) {
+            val p = player
+            val prefs = getSharedPreferences("player", MODE_PRIVATE)
+            val itens = ArrayList<PlayerMenu.Item>()
+            itens += PlayerMenu.abre(getString(R.string.pm_leg_tamanho), rotuloTamanho(tamLegendaSp)) { escolherTamanhoLegenda(voltar) }
+            // Elevação 6.5: três estilos prontos (as mesmas duas chaves de antes); cada OK passa para o próximo.
+            itens += PlayerMenu.Item(getString(R.string.pm_leg_estilo), PlayerMenu.Tipo.CHAVE, nomeEstiloLegenda(estiloLegenda())) {
+                val novo = EstiloLegenda.proximo(estiloLegenda())
+                EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_FUNDO, novo.fundoPreto)
+                EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_AMARELA, novo.amarela)
+                pintarLegenda()
+            }
+            itens += PlayerMenu.Item(getString(R.string.pm_leg_posicao), PlayerMenu.Tipo.CHAVE, rotuloPosicao()) {
+                EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_ALTO); pintarLegenda()
+            }
+            if (legendaArquivo != null)
+                itens += PlayerMenu.abre(getString(R.string.pm_leg_atraso), rotuloAtraso(atrasoLegenda)) { escolherAtraso(voltar) }
+            // Ideia 6: segunda legenda (em cima). Só aparece se houver outra faixa de texto para mostrar.
+            if (p != null && p.currentTracks.groups.any { g -> (0 until g.length).any { SegundaLegenda.aceita(g.getTrackFormat(it)) } })
+                itens += PlayerMenu.abre(getString(R.string.vod_segunda_opcao), nomeSegunda()) { escolherSegunda(voltar) }
+            val auto = prefs.getBoolean(LEGENDA_AUTO, true)
+            itens += PlayerMenu.chave(this, getString(R.string.pm_leg_auto), auto) {
+                prefs.edit().putBoolean(LEGENDA_AUTO, !auto).apply()
+            }
+            if (LegendaTraduzida.suporta(idiomaTv)) {
+                val trad = prefs.getBoolean(LEGENDA_TRADUZIR, true)
+                itens += PlayerMenu.chave(this, getString(R.string.pm_leg_traduzir), trad) {
+                    prefs.edit().putBoolean(LEGENDA_TRADUZIR, !trad).apply()
+                    if (trad) pararTraducao.set(true)
                 }
             }
+            itens
         }
-        // A outra versão do filme ou do episódio (dublada/legendada): é outro arquivo, troca no mesmo ponto (18/11/2026).
-        outraVersao()?.let { (v, _) ->
-            val r = if (v == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
-            opcoes += Opcao(getString(R.string.vod_trocar_versao, getString(r))) { trocarVersao() }
-        }
-        // Passada na TV (12/11): sem legenda ligada, nada da lista aparecia marcado na parte da legenda.
-        val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
-        opcoes += Opcao(semLegenda, marcada = !comLegenda) {
-            p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
-            lembrarSerie { it.copy(legenda = "") }
-            // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
-            // automática" fica, então ela não é baixada de novo sozinha; "Buscar legenda" continua trazendo outra.
-            if (legendaArquivo != null) {
-                val k = chave
-                legendaArquivo = null; legendaTraduzida = false
-                Fundo.rodar { LegendaBaixar.apagar(this, k) }
+    }
+
+    /** Velocidade, imagem e os ajustes de som (para quem ouve pior, caixas de som, Bluetooth). */
+    private fun menuImagemSom() {
+        val voltar = { menuImagemSom() }
+        PlayerMenu.abrir(this, getString(R.string.pm_imagem_som), voltar = { escolherFaixas() }) {
+            val p = player
+            val itens = ArrayList<PlayerMenu.Item>()
+            // 11/11/2026 (visto no 1 Play): velocidade e proporção da imagem, no mesmo ▼ para não criar outra tecla
+            if (p != null) itens += PlayerMenu.abre(getString(R.string.pm_velocidade), PlayerImagem.rotuloVelocidade(p.playbackParameters.speed)) { escolherVelocidade(voltar) }
+            itens += PlayerMenu.abre(getString(R.string.pm_proporcao), PlayerImagem.rotulo(this, modoImagem)) { escolherImagem(voltar) }
+            // Para quem enxerga e ouve pior (14/11/2026): valem para todos os vídeos e canais.
+            if (EfeitosSom.disponivel()) {
+                itens += PlayerMenu.chave(this, getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
+                itens += PlayerMenu.chave(this, getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
             }
-        }
-        // Legenda da internet (OpenSubtitles, com a conta do dono) e, se já tem uma baixada, o ajuste de atraso.
-        opcoes += Opcao(getString(R.string.legenda_buscar)) { buscarLegenda() }
-        val auto = getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)
-        opcoes += Opcao(getString(R.string.legenda_auto_opcao), marcada = auto) {
-            getSharedPreferences("player", MODE_PRIVATE).edit().putBoolean(LEGENDA_AUTO, !auto).apply()
-            avisoBreve(getString(if (auto) R.string.legenda_auto_desligada else R.string.legenda_auto_ligada))
-        }
-        if (LegendaTraduzida.suporta(idiomaTv)) {
-            val trad = getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)
-            opcoes += Opcao(getString(R.string.legenda_trad_opcao), marcada = trad) {
-                getSharedPreferences("player", MODE_PRIVATE).edit().putBoolean(LEGENDA_TRADUZIR, !trad).apply()
-                if (trad) pararTraducao.set(true)
-                avisoBreve(getString(if (trad) R.string.legenda_trad_desligada else R.string.legenda_trad_ligada))
+            // Ideia 2: diálogo mais alto (5.1/7.1 tocando em 2 caixas). Ideia 4: atraso do áudio, um por saída de som.
+            if (FfNativo.disponivel) itens += PlayerMenu.chave(this, getString(R.string.vod_dialogo_opcao), EfeitosSom.dialogoAlto(this)) { alternarDialogo() }
+            itens += PlayerMenu.abre(getString(R.string.pm_atraso_audio), rotuloAtrasoAudio(EfeitosSom.atrasoMs(this))) { escolherAtrasoAudio(voltar) }
+            itens += PlayerMenu.chave(this, getString(R.string.pm_quadros), TaxaQuadros.ligada(this)) {
+                val ligou = TaxaQuadros.alternar(this)
+                if (ligou) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { TaxaQuadros.aplicar(this, it) } else TaxaQuadros.soltar(this)
             }
+            itens += PlayerMenu.abre(getString(R.string.fone_menu), getString(if (SomNoFone.ligado) R.string.pm_ligado else R.string.pm_desligado)) { SomNoFone.janela(this) }
+            itens
         }
-        if (legendaArquivo != null) opcoes += Opcao(getString(R.string.legenda_atraso_opcao, rotuloAtraso(atrasoLegenda))) { escolherAtraso() }
-        // 11/11/2026 (visto no 1 Play): velocidade e proporção da imagem, no mesmo menu do ▼ para não criar outra tecla
-        opcoes += Opcao(getString(R.string.velocidade_opcao, PlayerImagem.rotuloVelocidade(p.playbackParameters.speed))) { escolherVelocidade() }
-        opcoes += Opcao(getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem))) { escolherImagem() }
-        // Ideias 21 e 19: tamanho da legenda (vale para todos os vídeos) e desligar a TV quando este vídeo acabar.
-        opcoes += Opcao(getString(R.string.vod_legenda_tamanho_opcao, rotuloTamanho(tamLegendaSp))) { escolherTamanhoLegenda() }
-        // Ideia 6: segunda legenda (em cima). Só aparece se houver outra faixa de texto para mostrar.
-        if (p.currentTracks.groups.any { g -> (0 until g.length).any { SegundaLegenda.aceita(g.getTrackFormat(it)) } })
-            opcoes += Opcao(getString(R.string.vod_segunda_opcao), marcada = segunda.id != null) { escolherSegunda() }
+    }
+
+    /** O que não é áudio, legenda nem imagem: capítulos, elenco, abertura, desligar no fim, outras TVs. */
+    private fun menuMais(): Unit = PlayerMenu.abrir(this, getString(R.string.pm_mais), voltar = { escolherFaixas() }) {
+        val p = player
+        val itens = ArrayList<PlayerMenu.Item>()
         // Ideia 5: capítulos do arquivo (MKV, MP4, WMV). ⏭ ⏮ do controle também pulam entre eles.
-        if (capitulos.size >= 2) opcoes += Opcao(getString(R.string.vod_capitulos_opcao, capitulos.size)) { escolherCapitulo() }
-        // Para quem enxerga e ouve pior (14/11/2026): ligar/desligar, vale para todos os vídeos e canais.
-        // Elevação 6.5: três estilos prontos (as mesmas duas chaves de antes) e a posição, um OK por vez.
-        val estiloLeg = EstiloLegenda.de(EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA))
-        opcoes += Opcao(getString(R.string.elv_leg_estilo, nomeEstiloLegenda(estiloLeg))) {
-            val novo = EstiloLegenda.proximo(estiloLeg)
-            EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_FUNDO, novo.fundoPreto)
-            EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_AMARELA, novo.amarela)
-            pintarLegenda(); avisoBreve(getString(R.string.elv_leg_estilo, nomeEstiloLegenda(novo)))
-        }
-        val emCima = EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_ALTO)
-        opcoes += Opcao(getString(R.string.elv_leg_posicao, getString(if (emCima) R.string.elv_leg_em_cima else R.string.elv_leg_embaixo))) {
-            val agora = EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_ALTO); pintarLegenda()
-            avisoBreve(getString(R.string.elv_leg_posicao, getString(if (agora) R.string.elv_leg_em_cima else R.string.elv_leg_embaixo)))
-        }
-        if (EfeitosSom.disponivel()) {
-            opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
-            opcoes += Opcao(getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
-        }
-        // Ideia 2: diálogo mais alto (5.1/7.1 tocando em 2 caixas). Ideia 4: atraso do áudio, um por saída de som.
-        if (FfNativo.disponivel) opcoes += Opcao(getString(R.string.vod_dialogo_opcao), EfeitosSom.dialogoAlto(this)) { alternarDialogo() }
-        opcoes += Opcao(getString(R.string.vod_atraso_audio_opcao, rotuloAtrasoAudio(EfeitosSom.atrasoMs(this)))) { escolherAtrasoAudio() }
-        // Ideia 8: informações técnicas por cima do vídeo.
-        opcoes += Opcao(getString(R.string.vod_info_opcao), EfeitosSom.ligado(this, InfoTecnica.PREF)) { alternarInfo() }
-        opcoes += Opcao(getString(R.string.quadros_opcao), TaxaQuadros.ligada(this)) {
-            val ligou = TaxaQuadros.alternar(this)
-            if (ligou) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { TaxaQuadros.aplicar(this, it) } else TaxaQuadros.soltar(this)
-            avisoBreve(getString(if (ligou) R.string.quadros_ligado else R.string.quadros_desligado))
-        }
-        opcoes += Opcao(getString(R.string.vod_desligar_ao_fim), marcada = desligarAoFim) {
-            desligarAoFim = !desligarAoFim
-            avisoBreve(getString(if (desligarAoFim) R.string.vod_desligar_ao_fim_ligado else R.string.vod_desligar_ao_fim_desligado))
-        }
+        if (capitulos.size >= 2) itens += PlayerMenu.abre(getString(R.string.vod_capitulos_opcao, capitulos.size), null) { escolherCapitulo({ menuMais() }) }
         // Ideia 84 "Quem é esse ator?": o elenco por cima do vídeo (pausa; volta com VOLTAR).
-        buscaLegenda().tmdb?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
-            opcoes += Opcao(getString(R.string.elenco_opcao_player)) {
+        if (p != null) buscaLegenda().tmdb?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+            itens += PlayerMenu.acao(getString(R.string.elenco_opcao_player)) {
                 p.pause(); ElencoActivity.abrir(this, id, serie, intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
             }
         }
+        itens += PlayerMenu.chave(this, getString(R.string.vod_desligar_ao_fim), desligarAoFim) { desligarAoFim = !desligarAoFim }
+        // Ideia 8: informações técnicas por cima do vídeo.
+        itens += PlayerMenu.chave(this, getString(R.string.vod_info_opcao), EfeitosSom.ligado(this, InfoTecnica.PREF)) { alternarInfo() }
         // Ideia 24: marcar a abertura da série (vale para os próximos episódios). Só em episódio com a chave da série.
-        if (serie) {
+        if (serie && p != null) {
             val agora = relogio(p.currentPosition)
-            opcoes += Opcao(getString(R.string.abertura_marcar_inicio, agora)) { marcarAbertura(inicio = true) }
-            opcoes += Opcao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
-            if (abertura != null) opcoes += Opcao(getString(R.string.abertura_apagar)) { apagarAbertura() }
+            itens += PlayerMenu.acao(getString(R.string.abertura_marcar_inicio, agora)) { marcarAbertura(inicio = true) }
+            itens += PlayerMenu.acao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
+            if (abertura != null) itens += PlayerMenu.acao(getString(R.string.abertura_apagar)) { apagarAbertura() }
         }
-        opcoes += Opcao(getString(R.string.fone_menu), SomNoFone.ligado) { SomNoFone.janela(this) }
-        if (EntreTvs.ligado(this)) {
+        if (EntreTvs.ligado(this) && p != null) {
             val titulo = intent.getStringExtra(EXTRA_TITULO).orEmpty()
-            opcoes += Opcao(getString(R.string.junto_menu)) { junto?.menu(titulo, JuntoTvsProvider.tvs(this)) }
-            opcoes += Opcao(getString(R.string.cont_menu)) {
+            itens += PlayerMenu.acao(getString(R.string.junto_menu)) { junto?.menu(titulo, JuntoTvsProvider.tvs(this)) }
+            itens += PlayerMenu.acao(getString(R.string.cont_menu)) {
                 junto?.enviarPara(titulo, JuntoTvsProvider.tvs(this), p.currentPosition, intent.getStringExtra(EXTRA_URL))
             }
         }
-        Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
-            opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
+        itens
     }
 
     // ---------------------------------------------------------------- outra versão (dublada/legendada)
@@ -1309,9 +1385,9 @@ class VodActivity : Activity() {
     }
 
     /** "Atraso" positivo: a fala aparece depois (para legenda adiantada em relação à voz). */
-    private fun escolherAtraso() {
+    private fun escolherAtraso(voltar: (() -> Unit)? = null) {
         val atual = ATRASOS.indexOfFirst { it == atrasoLegenda }
-        Estilo.lista(this, getString(R.string.legenda_atraso_titulo), ATRASOS.map { rotuloAtraso(it) }, listOf(atual)) { i ->
+        Estilo.lista(this, getString(R.string.legenda_atraso_titulo), ATRASOS.map { rotuloAtraso(it) }, listOf(atual), aoVoltar = voltar) { i ->
             val ms = ATRASOS[i]; val k = chave
             Fundo.rodar {
                 val f = LegendaBaixar.ajustar(this, k, ms)
@@ -1322,11 +1398,11 @@ class VodActivity : Activity() {
         }
     }
 
-    private fun escolherVelocidade() {
+    private fun escolherVelocidade(voltar: (() -> Unit)? = null) {
         val p = player ?: return
         val v = PlayerImagem.VELOCIDADES
         Estilo.lista(this, getString(R.string.velocidade_titulo), v.map { PlayerImagem.rotuloVelocidade(it) },
-            listOf(v.indexOfFirst { it == p.playbackParameters.speed })) { i -> p.setPlaybackSpeed(v[i]); lembrarSerie { it.copy(velocidade = v[i]) } }
+            listOf(v.indexOfFirst { it == p.playbackParameters.speed }), aoVoltar = voltar) { i -> p.setPlaybackSpeed(v[i]); lembrarSerie { it.copy(velocidade = v[i]) } }
     }
 
     /** Cores da legenda conforme as chaves (PlayerAcessivel.legenda): padrão = branca com fundo leve, como antes. */
@@ -1375,17 +1451,17 @@ class VodActivity : Activity() {
         return resources.getStringArray(R.array.vod_legenda_tamanhos)[i]
     }
 
-    private fun escolherTamanhoLegenda() {
+    private fun escolherTamanhoLegenda(voltar: (() -> Unit)? = null) {
         val t = FimDoVideo.TAMANHOS_LEGENDA
         val atual = t.indexOf(tamLegendaSp)
         Estilo.lista(this, getString(R.string.vod_legenda_tamanho_titulo), resources.getStringArray(R.array.vod_legenda_tamanhos).toList(),
-            listOf(atual)) { i ->
+            listOf(atual), aoVoltar = voltar) { i ->
             tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat(); legenda2.textSize = t[i].toFloat(); assAjustes.escala(FimDoVideo.escalaAss(t[i]))
             getSharedPreferences("player", MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
         }
     }
 
-    private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem) { m ->
+    private fun escolherImagem(voltar: (() -> Unit)? = null) = PlayerImagem.escolher(this, modoImagem, voltar) { m ->
         modoImagem = m
         tamanhoVideo?.let { t -> PlayerImagem.aplicar(video, modoImagem, t.width, t.height, t.pixelWidthHeightRatio) }
     }

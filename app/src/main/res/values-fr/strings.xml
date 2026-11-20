@@ -717,12 +717,10 @@ AS\\Films).</string>
     <string name="tvv_hoje">Aujourd’hui</string>
     <string name="tvv_ontem">Hier</string>
     <string name="imagem_titulo">Format d’image</string>
-    <string name="imagem_opcao">Format d’image : %1$s</string>
     <string name="imagem_ajustar">Adapter à l’écran</string>
     <string name="imagem_esticar">Étirer</string>
     <string name="imagem_zoom">Zoom (rogne les bords)</string>
     <string name="velocidade_titulo">Vitesse</string>
-    <string name="velocidade_opcao">Vitesse : %1$s</string>
     <string name="trailer">Bande-annonce</string>
     <string name="trailer_sem_app">Aucune app trouvée pour ouvrir la bande-annonce.</string>
     <string name="series_visto_ate_aqui">Marquer comme vu jusqu’à %1$s</string>
@@ -748,7 +746,6 @@ AS\\Films).</string>
     <string name="legenda_surdos">malentendants</string>
     <string name="legenda_bate">fait pour ce fichier</string>
     <string name="lista_dica_escolher">choisir</string>
-    <string name="legenda_atraso_opcao">Décalage des sous-titres : %1$s</string>
     <string name="legenda_atraso_titulo">Décalage des sous-titres (+ = texte plus tard)</string>
     <string name="legenda_atraso_zero">Aucun décalage</string>
     <string name="legenda_conta_titulo">Sous-titres en ligne</string>
@@ -783,7 +780,6 @@ AS\\Films).</string>
     <string name="vod_dialogo_opcao">Dialogues plus forts</string>
     <string name="vod_dialogo_ligado">Dialogues plus forts activés</string>
     <string name="vod_dialogo_desligado">Dialogues plus forts désactivés</string>
-    <string name="vod_atraso_audio_opcao">Décalage audio : %1$s</string>
     <string name="vod_atraso_audio_titulo">Décalage audio (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Aucun</string>
@@ -842,5 +838,24 @@ AS\\Films).</string>
         <item>O</item>
         <item>NO</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · reprend ici</string>
+    <string name="lista_dica_voltar">retour</string>
+    <string name="pm_ligado">Activé</string>
+    <string name="pm_desligado">Désactivé</string>
+    <string name="pm_imagem_som">Image et son</string>
+    <string name="pm_mais">Plus d\'options</string>
+    <string name="pm_versao_legendada">Regarder en VOST</string>
+    <string name="pm_versao_dublada">Regarder en VF</string>
+    <string name="pm_versao_info">Reprend à ce point</string>
+    <string name="pm_leg_ajustes">Réglages des sous-titres</string>
+    <string name="pm_leg_tamanho">Taille</string>
+    <string name="pm_leg_estilo">Style</string>
+    <string name="pm_leg_posicao">Position</string>
+    <string name="pm_leg_atraso">Décalage</string>
+    <string name="pm_leg_auto">En télécharger un s\'il manque</string>
+    <string name="pm_leg_traduzir">Traduire sur la TV s\'il manque</string>
+    <string name="pm_velocidade">Vitesse</string>
+    <string name="pm_proporcao">Taille de l\'image</string>
+    <string name="pm_atraso_audio">Décalage du son</string>
+    <string name="pm_quadros">Suivre la cadence du film</string>
+    <string name="pm_qualidade">Qualité</string>
 </resources>

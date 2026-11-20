@@ -39,11 +39,9 @@
     <string name="elv_sem_quedas">Nenhuma queda ou travada em %1$d dias</string>
     <string name="elv_reserva">%1$s caiu. Tocando %2$s no lugar.</string>
     <string name="elv_zap_solte">Solte para assistir</string>
-    <string name="elv_leg_estilo">Estilo da legenda: %1$s</string>
     <string name="elv_leg_padrao">padrão</string>
     <string name="elv_leg_contraste">alto contraste</string>
     <string name="elv_leg_amarela">amarela</string>
-    <string name="elv_leg_posicao">Posição da legenda: %1$s</string>
     <string name="elv_leg_embaixo">embaixo</string>
     <string name="elv_leg_em_cima">em cima</string>
     <!-- 3.11 busca que faz -->

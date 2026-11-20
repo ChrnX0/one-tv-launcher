@@ -717,12 +717,10 @@ AS\\Peliculas).</string>
     <string name="tvv_hoje">Hoy</string>
     <string name="tvv_ontem">Ayer</string>
     <string name="imagem_titulo">Formato de imagen</string>
-    <string name="imagem_opcao">Formato de imagen: %1$s</string>
     <string name="imagem_ajustar">Ajustar a la pantalla</string>
     <string name="imagem_esticar">Estirar</string>
     <string name="imagem_zoom">Zoom (recorta los bordes)</string>
     <string name="velocidade_titulo">Velocidad</string>
-    <string name="velocidade_opcao">Velocidad: %1$s</string>
     <string name="trailer">Tráiler</string>
     <string name="trailer_sem_app">No se encontró ninguna app para abrir el tráiler.</string>
     <string name="series_visto_ate_aqui">Marcar como visto hasta %1$s</string>
@@ -748,7 +746,6 @@ AS\\Peliculas).</string>
     <string name="legenda_surdos">para sordos</string>
     <string name="legenda_bate">hecha para este archivo</string>
     <string name="lista_dica_escolher">elegir</string>
-    <string name="legenda_atraso_opcao">Retraso de subtítulos: %1$s</string>
     <string name="legenda_atraso_titulo">Retraso de subtítulos (+ = el texto aparece después)</string>
     <string name="legenda_atraso_zero">Sin retraso</string>
     <string name="legenda_conta_titulo">Subtítulos en internet</string>
@@ -783,7 +780,6 @@ AS\\Peliculas).</string>
     <string name="vod_dialogo_opcao">Diálogos más fuertes</string>
     <string name="vod_dialogo_ligado">Diálogos más fuertes activados</string>
     <string name="vod_dialogo_desligado">Diálogos más fuertes desactivados</string>
-    <string name="vod_atraso_audio_opcao">Retraso de audio: %1$s</string>
     <string name="vod_atraso_audio_titulo">Retraso de audio (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Ninguno</string>
@@ -845,5 +841,24 @@ AS\\Peliculas).</string>
         <item>O</item>
         <item>NO</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · sigue desde aquí</string>
+    <string name="lista_dica_voltar">volver</string>
+    <string name="pm_ligado">Activado</string>
+    <string name="pm_desligado">Desactivado</string>
+    <string name="pm_imagem_som">Imagen y sonido</string>
+    <string name="pm_mais">Más opciones</string>
+    <string name="pm_versao_legendada">Ver subtitulado</string>
+    <string name="pm_versao_dublada">Ver doblado</string>
+    <string name="pm_versao_info">Sigue desde este punto</string>
+    <string name="pm_leg_ajustes">Ajustes de subtítulos</string>
+    <string name="pm_leg_tamanho">Tamaño</string>
+    <string name="pm_leg_estilo">Estilo</string>
+    <string name="pm_leg_posicao">Posición</string>
+    <string name="pm_leg_atraso">Retraso</string>
+    <string name="pm_leg_auto">Descargar uno si falta</string>
+    <string name="pm_leg_traduzir">Traducir en la TV si falta</string>
+    <string name="pm_velocidade">Velocidad</string>
+    <string name="pm_proporcao">Tamaño de imagen</string>
+    <string name="pm_atraso_audio">Retraso del audio</string>
+    <string name="pm_quadros">Seguir la cadencia de la película</string>
+    <string name="pm_qualidade">Calidad</string>
 </resources>

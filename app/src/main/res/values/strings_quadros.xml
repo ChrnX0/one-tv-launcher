@@ -3,6 +3,4 @@
     <!-- Idea 86 (14/11/2026, TaxaQuadros.kt): movies at their own frame rate. -->
     <string name="quadros_opcao">Movies at their own frame rate (24 Hz)</string>
     <string name="quadros_det">The TV switches to 24 Hz while the movie plays, so the picture does not judder in camera moves. The screen goes black for 1 to 2 s at the start. Not used for live TV.</string>
-    <string name="quadros_ligado">Movie frame rate on: applies from the next video</string>
-    <string name="quadros_desligado">Movie frame rate off</string>
 </resources>

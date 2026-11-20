@@ -717,12 +717,10 @@ AS\\Filmy).</string>
     <string name="tvv_hoje">Dziś</string>
     <string name="tvv_ontem">Wczoraj</string>
     <string name="imagem_titulo">Proporcje obrazu</string>
-    <string name="imagem_opcao">Proporcje obrazu: %1$s</string>
     <string name="imagem_ajustar">Dopasuj do ekranu</string>
     <string name="imagem_esticar">Rozciągnij</string>
     <string name="imagem_zoom">Powiększ (przycina krawędzie)</string>
     <string name="velocidade_titulo">Szybkość</string>
-    <string name="velocidade_opcao">Szybkość: %1$s</string>
     <string name="trailer">Zwiastun</string>
     <string name="trailer_sem_app">Nie znaleziono aplikacji do otwarcia zwiastuna.</string>
     <string name="series_visto_ate_aqui">Oznacz jako obejrzane do %1$s</string>
@@ -748,7 +746,6 @@ AS\\Filmy).</string>
     <string name="legenda_surdos">dla niesłyszących</string>
     <string name="legenda_bate">do tego pliku</string>
     <string name="lista_dica_escolher">wybierz</string>
-    <string name="legenda_atraso_opcao">Opóźnienie napisów: %1$s</string>
     <string name="legenda_atraso_titulo">Opóźnienie napisów (+ = tekst pojawia się później)</string>
     <string name="legenda_atraso_zero">Bez opóźnienia</string>
     <string name="legenda_conta_titulo">Napisy online</string>
@@ -783,7 +780,6 @@ AS\\Filmy).</string>
     <string name="vod_dialogo_opcao">Głośniejsze dialogi</string>
     <string name="vod_dialogo_ligado">Głośniejsze dialogi wł.</string>
     <string name="vod_dialogo_desligado">Głośniejsze dialogi wył.</string>
-    <string name="vod_atraso_audio_opcao">Opóźnienie dźwięku: %1$s</string>
     <string name="vod_atraso_audio_titulo">Opóźnienie dźwięku (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Brak</string>
@@ -848,5 +844,24 @@ AS\\Filmy).</string>
         <item>W</item>
         <item>NW</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · od tego miejsca</string>
+    <string name="lista_dica_voltar">wstecz</string>
+    <string name="pm_ligado">Wł.</string>
+    <string name="pm_desligado">Wył.</string>
+    <string name="pm_imagem_som">Obraz i dźwięk</string>
+    <string name="pm_mais">Więcej opcji</string>
+    <string name="pm_versao_legendada">Oglądaj z napisami</string>
+    <string name="pm_versao_dublada">Oglądaj z dubbingiem</string>
+    <string name="pm_versao_info">Od tego miejsca</string>
+    <string name="pm_leg_ajustes">Ustawienia napisów</string>
+    <string name="pm_leg_tamanho">Rozmiar</string>
+    <string name="pm_leg_estilo">Styl</string>
+    <string name="pm_leg_posicao">Położenie</string>
+    <string name="pm_leg_atraso">Opóźnienie</string>
+    <string name="pm_leg_auto">Pobierz, gdy brak</string>
+    <string name="pm_leg_traduzir">Tłumacz na TV, gdy brak</string>
+    <string name="pm_velocidade">Prędkość</string>
+    <string name="pm_proporcao">Rozmiar obrazu</string>
+    <string name="pm_atraso_audio">Opóźnienie dźwięku</string>
+    <string name="pm_quadros">Klatki jak w filmie</string>
+    <string name="pm_qualidade">Jakość</string>
 </resources>

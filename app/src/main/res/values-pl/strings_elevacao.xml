@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Żadnej awarii ani zawieszenia w %1$d dni</string>
     <string name="elv_reserva">%1$s nie działa. Zamiast tego %2$s.</string>
     <string name="elv_zap_solte">Puść, aby oglądać</string>
-    <string name="elv_leg_estilo">Styl napisów: %1$s</string>
     <string name="elv_leg_padrao">standardowy</string>
     <string name="elv_leg_contraste">wysoki kontrast</string>
     <string name="elv_leg_amarela">żółty</string>
-    <string name="elv_leg_posicao">Położenie napisów: %1$s</string>
     <string name="elv_leg_embaixo">na dole</string>
     <string name="elv_leg_em_cima">na górze</string>
     <string name="elv_bf_fazer">Zrób</string>

@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">Film alla loro frequenza di fotogrammi (24 Hz)</string>
     <string name="quadros_det">La TV passa a 24 Hz mentre il film è in riproduzione, così l’immagine non scatta nei movimenti di camera. All’inizio lo schermo diventa nero per 1–2 s. Non si usa per la TV in diretta.</string>
-    <string name="quadros_ligado">Frequenza dei film attiva: vale dal prossimo video</string>
-    <string name="quadros_desligado">Frequenza dei film disattiva</string>
 </resources>

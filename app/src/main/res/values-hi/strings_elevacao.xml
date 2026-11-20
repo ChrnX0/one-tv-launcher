@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">%1$d दिनों में कोई क्रैश या अटकना नहीं</string>
     <string name="elv_reserva">%1$s बंद हो गया। उसकी जगह %2$s चल रहा है।</string>
     <string name="elv_zap_solte">देखने के लिए छोड़ें</string>
-    <string name="elv_leg_estilo">सबटाइटल शैली: %1$s</string>
     <string name="elv_leg_padrao">सामान्य</string>
     <string name="elv_leg_contraste">हाई कंट्रास्ट</string>
     <string name="elv_leg_amarela">पीला</string>
-    <string name="elv_leg_posicao">सबटाइटल की जगह: %1$s</string>
     <string name="elv_leg_embaixo">नीचे</string>
     <string name="elv_leg_em_cima">ऊपर</string>
     <string name="elv_bf_fazer">करें</string>

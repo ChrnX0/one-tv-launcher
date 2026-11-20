@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Aucun plantage ni blocage en %1$d jours</string>
     <string name="elv_reserva">%1$s ne marche plus. %2$s à la place.</string>
     <string name="elv_zap_solte">Relâchez pour regarder</string>
-    <string name="elv_leg_estilo">Style des sous-titres : %1$s</string>
     <string name="elv_leg_padrao">standard</string>
     <string name="elv_leg_contraste">contraste élevé</string>
     <string name="elv_leg_amarela">jaune</string>
-    <string name="elv_leg_posicao">Position des sous-titres : %1$s</string>
     <string name="elv_leg_embaixo">en bas</string>
     <string name="elv_leg_em_cima">en haut</string>
     <string name="elv_bf_fazer">Faire</string>

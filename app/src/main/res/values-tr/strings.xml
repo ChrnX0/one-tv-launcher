@@ -717,12 +717,10 @@ AS\\Filmler).</string>
     <string name="tvv_hoje">Bugün</string>
     <string name="tvv_ontem">Dün</string>
     <string name="imagem_titulo">En boy oranı</string>
-    <string name="imagem_opcao">En boy oranı: %1$s</string>
     <string name="imagem_ajustar">Ekrana sığdır</string>
     <string name="imagem_esticar">Uzat</string>
     <string name="imagem_zoom">Yakınlaştır (kenarları kırpar)</string>
     <string name="velocidade_titulo">Hız</string>
-    <string name="velocidade_opcao">Hız: %1$s</string>
     <string name="trailer">Fragman</string>
     <string name="trailer_sem_app">Fragmanı açacak uygulama bulunamadı.</string>
     <string name="series_visto_ate_aqui">%1$s bölümüne kadar izlendi olarak işaretle</string>
@@ -748,7 +746,6 @@ AS\\Filmler).</string>
     <string name="legenda_surdos">işitme engelli</string>
     <string name="legenda_bate">bu dosya için</string>
     <string name="lista_dica_escolher">seç</string>
-    <string name="legenda_atraso_opcao">Altyazı gecikmesi: %1$s</string>
     <string name="legenda_atraso_titulo">Altyazı gecikmesi (+ = metin daha geç görünür)</string>
     <string name="legenda_atraso_zero">Gecikme yok</string>
     <string name="legenda_conta_titulo">Çevrimiçi altyazılar</string>
@@ -783,7 +780,6 @@ AS\\Filmler).</string>
     <string name="vod_dialogo_opcao">Daha yüksek diyalog</string>
     <string name="vod_dialogo_ligado">Daha yüksek diyalog açık</string>
     <string name="vod_dialogo_desligado">Daha yüksek diyalog kapalı</string>
-    <string name="vod_atraso_audio_opcao">Ses gecikmesi: %1$s</string>
     <string name="vod_atraso_audio_titulo">Ses gecikmesi (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Yok</string>
@@ -842,5 +838,24 @@ AS\\Filmler).</string>
         <item>B</item>
         <item>KB</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · buradan devam</string>
+    <string name="lista_dica_voltar">geri</string>
+    <string name="pm_ligado">Açık</string>
+    <string name="pm_desligado">Kapalı</string>
+    <string name="pm_imagem_som">Görüntü ve ses</string>
+    <string name="pm_mais">Diğer seçenekler</string>
+    <string name="pm_versao_legendada">Altyazılı izle</string>
+    <string name="pm_versao_dublada">Dublajlı izle</string>
+    <string name="pm_versao_info">Bu noktadan devam eder</string>
+    <string name="pm_leg_ajustes">Altyazı ayarları</string>
+    <string name="pm_leg_tamanho">Boyut</string>
+    <string name="pm_leg_estilo">Stil</string>
+    <string name="pm_leg_posicao">Konum</string>
+    <string name="pm_leg_atraso">Gecikme</string>
+    <string name="pm_leg_auto">Yoksa bir tane indir</string>
+    <string name="pm_leg_traduzir">Yoksa TV\'de çevir</string>
+    <string name="pm_velocidade">Hız</string>
+    <string name="pm_proporcao">Görüntü boyutu</string>
+    <string name="pm_atraso_audio">Ses gecikmesi</string>
+    <string name="pm_quadros">Filmin kare hızına uy</string>
+    <string name="pm_qualidade">Kalite</string>
 </resources>

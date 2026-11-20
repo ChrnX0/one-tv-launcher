@@ -631,6 +631,7 @@ object Estilo {
     fun lista(ctx: Context, titulo: CharSequence, itens: List<CharSequence>, marcadas: Collection<Int> = emptyList(),
               aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, focoNaMarcada: Boolean = true,
               focoInicial: Int? = null, entrar: Boolean = true, separarUltimo: Boolean = false,
+              aoVoltar: (() -> Unit)? = null, valores: List<CharSequence?> = emptyList(),
               aoEscolher: (Int) -> Unit): android.app.Dialog {
         val d = android.app.Dialog(ctx)
         val rtl = ctx.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -665,7 +666,7 @@ object Estilo {
             isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, 56))
             addView(linhas)
         }
-        class Linha(val raiz: LinearLayout, val ponto: View, val nome: TextView)
+        class Linha(val raiz: LinearLayout, val ponto: View, val nome: TextView, val valor: TextView? = null)
         val vistas = ArrayList<Linha>()
         var atual = -1
         fun arrumar(focada: Int, animar: Boolean) {
@@ -676,11 +677,12 @@ object Estilo {
                 val ponto = if (dist == 0) 1f else 0f
                 if (animar) {
                     l.nome.animate().alpha(alfa).scaleX(escala).scaleY(escala).setDuration(LISTA_FOCO_MS).setInterpolator(suave).start()
+                    l.valor?.animate()?.alpha(alfa)?.setDuration(LISTA_FOCO_MS)?.setInterpolator(suave)?.start()
                     // o ponto "acende": cresce de 40% e aparece
                     if (dist == 0) { l.ponto.scaleX = 0.4f; l.ponto.scaleY = 0.4f }
                     l.ponto.animate().alpha(ponto).scaleX(1f).scaleY(1f).setDuration(LISTA_FOCO_MS).setInterpolator(suave).start()
                 } else {
-                    l.nome.alpha = alfa; l.nome.scaleX = escala; l.nome.scaleY = escala; l.ponto.alpha = ponto
+                    l.nome.alpha = alfa; l.nome.scaleX = escala; l.nome.scaleY = escala; l.ponto.alpha = ponto; l.valor?.alpha = alfa
                 }
             }
         }
@@ -699,6 +701,15 @@ object Estilo {
                 addOnLayoutChangeListener { v, l, t, r, _, _, _, _, _ -> v.pivotX = if (rtl) (r - l).toFloat() else 0f; v.pivotY = dp(ctx, 14).toFloat() }
                 alpha = LISTA_ALFA_LONGE; scaleX = LISTA_ESCALA; scaleY = LISTA_ESCALA
             }
+            // [valores]: o valor de agora à direita, na mesma linha (menu do player, 20/11/2026: "Legenda   Desligada ›",
+            // como na Apple TV). Numa linha com ✓ ele não aparece: o ✓ já diz tudo.
+            val valorV = valores.getOrNull(i)?.takeIf { it.isNotBlank() && i !in marcadas }?.let { v ->
+                TextView(ctx).apply {
+                    text = v; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_VALOR); typeface = fonte(600); setTextColor(HomeCruz.COR_SUB)
+                    includeFontPadding = false; maxLines = 1; maxWidth = dp(ctx, 190)
+                    setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
+                }
+            }
             val raiz = LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 // em cima: com 2-3 linhas, o ponto e o ✓ ficam na altura da 1ª (como na cruz), não no meio
@@ -706,9 +717,11 @@ object Estilo {
                 minimumHeight = dp(ctx, 50)
                 setPaddingRelative(0, dp(ctx, 10), 0, dp(ctx, 10))
                 isFocusable = true; isClickable = true
-                contentDescription = rotulo.toString().trim() + if (i in marcadas) " ✓" else ""
+                contentDescription = rotulo.toString().trim() + (valorV?.let { " · " + it.text } ?: "") + if (i in marcadas) " ✓" else ""
                 addView(ponto, LinearLayout.LayoutParams(dp(ctx, HomeCruz.PONTO), dp(ctx, HomeCruz.PONTO)).apply { marginEnd = dp(ctx, 14); topMargin = dp(ctx, 11) })
                 addView(nome, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+                if (valorV != null) addView(valorV, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    .apply { marginStart = dp(ctx, E2); topMargin = dp(ctx, 1) })
                 if (i in marcadas) addView(TextView(ctx).apply {
                     text = "✓"; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_MARCA); typeface = forte; setTextColor(ACENTO)
                     includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
@@ -724,7 +737,7 @@ object Estilo {
                     rolagem.post { rolagem.smoothScrollTo(0, (v.top + v.height / 2 - rolagem.height / 2).coerceAtLeast(0)) }
                 }
             }
-            vistas += Linha(raiz, ponto, nome)
+            vistas += Linha(raiz, ponto, nome, valorV)
             // [separarUltimo]: a ação destrutiva (Desinstalar) fica afastada das comuns, por último (crítica 19/11/2026).
             linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply {
                 if (i > 0) topMargin = dp(ctx, if (separarUltimo && i == itens.size - 1) 22 else 2)
@@ -733,7 +746,9 @@ object Estilo {
         // Dicas logo embaixo da lista, no mesmo desenho das do Rádio/Podcasts (tecla numa pílula + o que ela faz).
         // Dicas logo embaixo da lista: a mesma barra de todo o sistema.
         val dicas = barraDicas(ctx, ctx.getString(R.string.grv_dica_ok) to ctx.getString(R.string.lista_dica_escolher),
-            ctx.getString(R.string.rede_tecla_voltar) to ctx.getString(R.string.fp_fechar).lowercase())
+            // [aoVoltar]: sublista (menu do player, 20/11/2026): VOLTAR volta à lista de cima em vez de fechar tudo.
+            ctx.getString(R.string.rede_tecla_voltar) to (if (aoVoltar != null) ctx.getString(R.string.lista_dica_voltar)
+                else ctx.getString(R.string.fp_fechar)).lowercase())
         val recuo = dp(ctx, HomeCruz.PONTO + 14)   // textos do cabeçalho alinhados com o texto das linhas, não com o ponto
         val painel = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -791,6 +806,8 @@ object Estilo {
             dicas.animate().alpha(1f).setStartDelay(LISTA_ENTRAR_MS / 2).setDuration(LISTA_ENTRAR_MS).start()
         }
         if (aoFechar != null) d.setOnDismissListener { aoFechar() }
+        // só a tecla VOLTAR cancela; escolher um item fecha sem cancelar
+        if (aoVoltar != null) d.setOnCancelListener { aoVoltar() }
         d.show()
         return d
     }
@@ -815,6 +832,7 @@ object Estilo {
     const val LISTA_FONTE_POSICAO = 17f
     /** A 2ª linha de um rótulo [comInfo]: 18 sp, o texto padrão do Google para TV (o mesmo da linha de baixo da cruz). */
     const val LISTA_FONTE_INFO = 18f
+    const val LISTA_FONTE_VALOR = 20f
     /** Vizinhos: 24 sp viram ~20 sp na tela (a escada da cruz é 0,6; aqui a lista é de ler, então encolhe menos). */
     const val LISTA_ESCALA = 0.85f
     const val LISTA_ALFA_LONGE = 0.5f

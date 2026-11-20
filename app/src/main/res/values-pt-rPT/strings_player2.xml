@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Ainda está a assistir?</string>
     <string name="vod_ainda_assistindo_texto">Alguns episódios tocaram sem ninguém mexer no comando, então o próximo espera por si.</string>
     <string name="vod_desligar_ao_fim">Desligar a TV quando este acabar</string>
-    <string name="vod_desligar_ao_fim_ligado">A TV desliga quando este acabar</string>
-    <string name="vod_desligar_ao_fim_desligado">A TV fica ligada quando este acabar</string>
-    <string name="vod_legenda_tamanho_opcao">Tamanho da legenda: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Tamanho da legenda</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Pequena</item>

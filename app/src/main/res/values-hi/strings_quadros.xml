@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">फ़िल्में अपनी फ़्रेम दर पर (24 Hz)</string>
     <string name="quadros_det">फ़िल्म चलते समय TV 24 Hz पर जाता है, ताकि कैमरा चलने पर तस्वीर झटके न खाए। शुरुआत में स्क्रीन 1 से 2 s काली होती है। लाइव TV के लिए नहीं।</string>
-    <string name="quadros_ligado">फ़िल्म फ़्रेम दर चालू: अगले वीडियो से लागू</string>
-    <string name="quadros_desligado">फ़िल्म फ़्रेम दर बंद</string>
 </resources>

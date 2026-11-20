@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Tanpa crash atau macet dalam %1$d hari</string>
     <string name="elv_reserva">%1$s mati. Memutar %2$s sebagai gantinya.</string>
     <string name="elv_zap_solte">Lepaskan untuk menonton</string>
-    <string name="elv_leg_estilo">Gaya subtitle: %1$s</string>
     <string name="elv_leg_padrao">standar</string>
     <string name="elv_leg_contraste">kontras tinggi</string>
     <string name="elv_leg_amarela">kuning</string>
-    <string name="elv_leg_posicao">Posisi subtitle: %1$s</string>
     <string name="elv_leg_embaixo">bawah</string>
     <string name="elv_leg_em_cima">atas</string>
     <string name="elv_bf_fazer">Lakukan</string>

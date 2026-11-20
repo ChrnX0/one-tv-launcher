@@ -40,11 +40,24 @@ import java.io.File
 class PlayerListasTelaTest {
     private val problemas = mutableListOf<String>()
 
+    // Menu do ▼ desde 20/11/2026 (PlayerMenu): poucos itens; à direita o valor de agora e "›" quando abre outra lista;
+    // ✓ só na escolha que está valendo.
     @Test fun audioELegenda() = desenhar("lista-audio-legenda", "Áudio e legenda", listOf(
-        "Áudio: inglês", "Versão dublada · continua daqui", "Sem legenda", "Legenda: português (internet)",
-        "Buscar legenda na internet", "Segunda legenda", "Tamanho da legenda", "Atraso da legenda", "Atraso do áudio: 0 ms",
-        "Velocidade: 1×", "Informações técnicas", "Ajustar quadros por segundo", "Desligar a TV no fim", "Som no fone",
-    ), marcadas = listOf(0, 3, 11), focoNaMarcada = false)
+        "Áudio", "Legenda", Estilo.comInfo("Assistir legendado", "Continua deste ponto"), "Imagem e som", "Mais opções",
+    ), focoNaMarcada = false, valores = listOf("Português ›", "Desligada ›", null, "›", "›"))
+
+    @Test fun legenda() = desenhar("lista-legenda", "Legenda", listOf(
+        "Desligada", "Português", "Inglês", "Português · Forçada", "Buscar legenda na internet", "Ajustes da legenda",
+    ), marcadas = listOf(1), valores = listOf(null, null, null, null, null, "›"))
+
+    @Test fun ajustesDaLegenda() = desenhar("lista-ajustes-legenda", "Ajustes da legenda", listOf(
+        "Tamanho", "Estilo", "Posição", "Atraso", "Segunda legenda (em cima)", "Baixar uma quando faltar", "Traduzir na TV quando faltar",
+    ), focoNaMarcada = false, valores = listOf("Normal ›", "padrão", "embaixo", "Sem atraso ›", "Desligada ›", "Ligado", "Ligado"))
+
+    @Test fun imagemESom() = desenhar("lista-imagem-som", "Imagem e som", listOf(
+        "Velocidade", "Tamanho da imagem", "Volume parecido entre canais", "Voz mais clara", "Diálogo mais alto",
+        "Atraso do áudio", "Seguir a cadência do filme", "Som no fone (celular)",
+    ), focoNaMarcada = false, valores = listOf("Normal ›", "Ajustar à tela ›", "Ligado", "Ligado", "Desligado", "Nenhum ›", "Ligado", "Desligado ›"))
 
     // Como a TV mostra desde 18/11/2026: nome do lançamento em cima, idioma e downloads embaixo (Estilo.comInfo).
     @Test fun legendasDaInternet() = desenhar("lista-legendas-internet", "Legendas para \"Duna\"", listOf(
@@ -68,11 +81,11 @@ class PlayerListasTelaTest {
     ), marcadas = listOf(2))
 
     private fun desenhar(arquivo: String, titulo: String, itens: List<CharSequence>, marcadas: List<Int> = emptyList(),
-                         rodape: String? = null, focoNaMarcada: Boolean = true) {
+                         rodape: String? = null, focoNaMarcada: Boolean = true, valores: List<CharSequence?> = emptyList()) {
         // TV não tem toque: fora do "modo toque", requestFocus funciona como no aparelho (no Robolectric o padrão é toque).
         androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
-        val d = Estilo.lista(a, titulo, itens, marcadas, rodape = rodape, focoNaMarcada = focoNaMarcada) {}
+        val d = Estilo.lista(a, titulo, itens, marcadas, rodape = rodape, focoNaMarcada = focoNaMarcada, valores = valores) {}
         // O "mostrar" (setOnShowListener, que põe o foco) chega por mensagem: deixa a fila andar antes da foto.
         org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
         val dm = a.resources.displayMetrics

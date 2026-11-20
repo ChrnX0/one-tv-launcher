@@ -51,9 +51,9 @@ object PlayerImagem {
      * Pergunta a proporção (Ajustar, Esticar, Zoom), grava e devolve a escolhida. Uma lista só para a TV ao vivo e para
      * filmes/séries (antes eram duas cópias), no cartão do sistema de design (Estilo.lista).
      */
-    fun escolher(ctx: Context, atual: Modo, aoEscolher: (Modo) -> Unit) {
+    fun escolher(ctx: Context, atual: Modo, voltar: (() -> Unit)? = null, aoEscolher: (Modo) -> Unit) {
         val modos = Modo.values()
-        Estilo.lista(ctx, ctx.getString(R.string.imagem_titulo), modos.map { rotulo(ctx, it) }, listOf(modos.indexOf(atual))) { i ->
+        Estilo.lista(ctx, ctx.getString(R.string.imagem_titulo), modos.map { rotulo(ctx, it) }, listOf(modos.indexOf(atual)), aoVoltar = voltar) { i ->
             definirModo(ctx, modos[i])
             aoEscolher(modos[i])
         }

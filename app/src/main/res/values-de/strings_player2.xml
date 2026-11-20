@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Schaust du noch?</string>
     <string name="vod_ainda_assistindo_texto">Einige Folgen liefen, ohne dass jemand die Fernbedienung berührt hat, also wartet die nächste auf dich.</string>
     <string name="vod_desligar_ao_fim">Fernseher ausschalten, wenn das endet</string>
-    <string name="vod_desligar_ao_fim_ligado">Der Fernseher schaltet sich aus, wenn das endet</string>
-    <string name="vod_desligar_ao_fim_desligado">Der Fernseher bleibt an, wenn das endet</string>
-    <string name="vod_legenda_tamanho_opcao">Untertitelgröße: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Untertitelgröße</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Klein</item>

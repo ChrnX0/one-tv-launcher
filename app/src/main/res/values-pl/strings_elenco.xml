@@ -27,16 +27,10 @@
     <string name="onde_grupo">Gdzie indziej (JustWatch)</string>
     <string name="legenda_auto_pronta">Napisy pobrane automatycznie (zrobione dla tego pliku) · ▼, by zmienić</string>
     <string name="legenda_auto_pronta_nome">Napisy pobrane automatycznie · ▼, by zmienić lub dostosować opóźnienie</string>
-    <string name="legenda_auto_opcao">Pobieraj napisy automatycznie</string>
-    <string name="legenda_auto_ligada">Napisy będą pobierane, gdy ich brakuje</string>
-    <string name="legenda_auto_desligada">Automatyczne napisy wyłączone</string>
     <string name="legenda_trad_rotulo">Tłumaczenie automatyczne</string>
     <string name="legenda_trad_traduzindo">Brak napisów w Twoim języku: tłumaczenie angielskich na telewizorze…</string>
     <string name="legenda_trad_parcial">Napisy przetłumaczone na telewizorze (tłumaczenie automatyczne). Reszta wciąż się tłumaczy.</string>
     <string name="legenda_trad_pronta">Tłumaczenie napisów zakończone</string>
-    <string name="legenda_trad_opcao">Tłumacz napisy na telewizorze, gdy ich brakuje</string>
-    <string name="legenda_trad_ligada">Napisy będą tłumaczone na telewizorze, gdy ich brakuje</string>
-    <string name="legenda_trad_desligada">Napisy nie będą już tłumaczone</string>
     <string name="series_sinopse_mais">Pełny opis</string>
     <string name="series_sinopse_menos">Krótszy opis</string>
     <string name="series_continuar_curto">▶  Kontynuuj %1$s</string>

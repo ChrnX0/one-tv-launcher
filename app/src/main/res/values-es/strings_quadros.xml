@@ -3,6 +3,4 @@
 <resources>
     <string name="quadros_opcao">Películas a su propia frecuencia (24 Hz)</string>
     <string name="quadros_det">La TV cambia a 24 Hz mientras se reproduce la película, para que la imagen no tiemble en los movimientos de cámara. La pantalla queda negra de 1 a 2 s al inicio. No se usa en la TV en vivo.</string>
-    <string name="quadros_ligado">Frecuencia de película activada: vale desde el próximo video</string>
-    <string name="quadros_desligado">Frecuencia de película desactivada</string>
 </resources>

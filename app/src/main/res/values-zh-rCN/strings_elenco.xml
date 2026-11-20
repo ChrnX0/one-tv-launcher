@@ -27,16 +27,10 @@
     <string name="onde_grupo">其他平台（JustWatch）</string>
     <string name="legenda_auto_pronta">已自动下载字幕（为此文件制作）· 按 ▼ 更改</string>
     <string name="legenda_auto_pronta_nome">已自动下载字幕 · 按 ▼ 更改或调整延迟</string>
-    <string name="legenda_auto_opcao">自动下载字幕</string>
-    <string name="legenda_auto_ligada">缺少字幕时将自动下载</string>
-    <string name="legenda_auto_desligada">自动字幕已关闭</string>
     <string name="legenda_trad_rotulo">自动翻译</string>
     <string name="legenda_trad_traduzindo">没有你的语言的字幕：正在电视上翻译英文字幕…</string>
     <string name="legenda_trad_parcial">字幕已在电视上翻译（自动翻译）。其余部分继续翻译中。</string>
     <string name="legenda_trad_pronta">字幕翻译完成</string>
-    <string name="legenda_trad_opcao">缺少字幕时在电视上翻译</string>
-    <string name="legenda_trad_ligada">缺少字幕时将在电视上翻译</string>
-    <string name="legenda_trad_desligada">将不再翻译字幕</string>
     <string name="series_sinopse_mais">完整简介</string>
     <string name="series_sinopse_menos">简短简介</string>
     <string name="series_continuar_curto">▶  继续 %1$s</string>

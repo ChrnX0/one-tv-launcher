@@ -717,12 +717,10 @@ AS\\Movies).</string>
     <string name="tvv_hoje">اليوم</string>
     <string name="tvv_ontem">أمس</string>
     <string name="imagem_titulo">نسبة العرض إلى الارتفاع</string>
-    <string name="imagem_opcao">نسبة العرض إلى الارتفاع: %1$s</string>
     <string name="imagem_ajustar">ملاءمة الشاشة</string>
     <string name="imagem_esticar">تمديد</string>
     <string name="imagem_zoom">تكبير (يقص الحواف)</string>
     <string name="velocidade_titulo">السرعة</string>
-    <string name="velocidade_opcao">السرعة: %1$s</string>
     <string name="trailer">الإعلان التشويقي</string>
     <string name="trailer_sem_app">لم يُعثر على تطبيق لفتح الإعلان التشويقي.</string>
     <string name="series_visto_ate_aqui">وضع علامة مشاهدة حتى %1$s</string>
@@ -748,7 +746,6 @@ AS\\Movies).</string>
     <string name="legenda_surdos">لضعاف السمع</string>
     <string name="legenda_bate">مصممة لهذا الملف</string>
     <string name="lista_dica_escolher">اختيار</string>
-    <string name="legenda_atraso_opcao">تأخير الترجمة: %1$s</string>
     <string name="legenda_atraso_titulo">تأخير الترجمة (+ = يظهر النص لاحقًا)</string>
     <string name="legenda_atraso_zero">بلا تأخير</string>
     <string name="legenda_conta_titulo">ترجمات على الإنترنت</string>
@@ -783,7 +780,6 @@ AS\\Movies).</string>
     <string name="vod_dialogo_opcao">حوار أعلى صوتًا</string>
     <string name="vod_dialogo_ligado">الحوار الأعلى مفعّل</string>
     <string name="vod_dialogo_desligado">الحوار الأعلى متوقف</string>
-    <string name="vod_atraso_audio_opcao">تأخير الصوت: %1$s</string>
     <string name="vod_atraso_audio_titulo">تأخير الصوت (%1$s)</string>
     <string name="vod_atraso_audio_tv">التلفزيون</string>
     <string name="vod_atraso_audio_zero">لا شيء</string>
@@ -854,5 +850,24 @@ AS\\Movies).</string>
         <item>غ</item>
         <item>شغ</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · يكمل من هنا</string>
+    <string name="lista_dica_voltar">رجوع</string>
+    <string name="pm_ligado">تشغيل</string>
+    <string name="pm_desligado">إيقاف</string>
+    <string name="pm_imagem_som">الصورة والصوت</string>
+    <string name="pm_mais">خيارات أخرى</string>
+    <string name="pm_versao_legendada">مشاهدة مترجم</string>
+    <string name="pm_versao_dublada">مشاهدة مدبلج</string>
+    <string name="pm_versao_info">يتابع من هذه النقطة</string>
+    <string name="pm_leg_ajustes">إعدادات الترجمة</string>
+    <string name="pm_leg_tamanho">الحجم</string>
+    <string name="pm_leg_estilo">النمط</string>
+    <string name="pm_leg_posicao">الموضع</string>
+    <string name="pm_leg_atraso">التأخير</string>
+    <string name="pm_leg_auto">تنزيل ترجمة عند غيابها</string>
+    <string name="pm_leg_traduzir">الترجمة على التلفاز عند غيابها</string>
+    <string name="pm_velocidade">السرعة</string>
+    <string name="pm_proporcao">حجم الصورة</string>
+    <string name="pm_atraso_audio">تأخير الصوت</string>
+    <string name="pm_quadros">مطابقة معدل إطارات الفيلم</string>
+    <string name="pm_qualidade">الجودة</string>
 </resources>

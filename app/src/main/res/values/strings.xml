@@ -791,12 +791,10 @@
     <string name="tvv_hoje">Today</string>
     <string name="tvv_ontem">Yesterday</string>
     <string name="imagem_titulo">Aspect ratio</string>
-    <string name="imagem_opcao">Aspect ratio: %1$s</string>
     <string name="imagem_ajustar">Fit to screen</string>
     <string name="imagem_esticar">Stretch</string>
     <string name="imagem_zoom">Zoom (crops the edges)</string>
     <string name="velocidade_titulo">Speed</string>
-    <string name="velocidade_opcao">Speed: %1$s</string>
     <string name="trailer">Trailer</string>
     <string name="trailer_sem_app">No app found to open the trailer.</string>
     <string name="series_visto_ate_aqui">Mark as watched up to %1$s</string>
@@ -824,7 +822,6 @@
     <string name="legenda_surdos">hearing impaired</string>
     <string name="legenda_bate">made for this file</string>
     <string name="lista_dica_escolher">choose</string>
-    <string name="legenda_atraso_opcao">Subtitle delay: %1$s</string>
     <string name="legenda_atraso_titulo">Subtitle delay (+ = text shows later)</string>
     <string name="legenda_atraso_zero">No delay</string>
     <string name="legenda_conta_titulo">Online subtitles</string>
@@ -862,7 +859,6 @@
     <string name="vod_dialogo_opcao">Louder dialogue</string>
     <string name="vod_dialogo_ligado">Louder dialogue on</string>
     <string name="vod_dialogo_desligado">Louder dialogue off</string>
-    <string name="vod_atraso_audio_opcao">Audio delay: %1$s</string>
     <string name="vod_atraso_audio_titulo">Audio delay (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">None</string>
@@ -880,5 +876,24 @@
     <string name="info_qps">fps</string>
     <string name="info_mono">mono</string>
     <string name="info_estereo">stereo</string>
-    <string name="vod_trocar_versao">%1$s · continues from here</string>
+    <string name="lista_dica_voltar">back</string>
+    <string name="pm_ligado">On</string>
+    <string name="pm_desligado">Off</string>
+    <string name="pm_imagem_som">Picture and sound</string>
+    <string name="pm_mais">More options</string>
+    <string name="pm_versao_legendada">Watch subtitled</string>
+    <string name="pm_versao_dublada">Watch dubbed</string>
+    <string name="pm_versao_info">Continues from this point</string>
+    <string name="pm_leg_ajustes">Subtitle settings</string>
+    <string name="pm_leg_tamanho">Size</string>
+    <string name="pm_leg_estilo">Style</string>
+    <string name="pm_leg_posicao">Position</string>
+    <string name="pm_leg_atraso">Delay</string>
+    <string name="pm_leg_auto">Download one when missing</string>
+    <string name="pm_leg_traduzir">Translate on the TV when missing</string>
+    <string name="pm_velocidade">Speed</string>
+    <string name="pm_proporcao">Picture size</string>
+    <string name="pm_atraso_audio">Audio delay</string>
+    <string name="pm_quadros">Match the film\'s frame rate</string>
+    <string name="pm_qualidade">Quality</string>
 </resources>

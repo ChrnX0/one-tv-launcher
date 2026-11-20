@@ -27,16 +27,10 @@
     <string name="onde_grupo">他の配信先（JustWatch）</string>
     <string name="legenda_auto_pronta">字幕を自動でダウンロードしました（このファイル用）· ▼ で変更</string>
     <string name="legenda_auto_pronta_nome">字幕を自動でダウンロードしました · ▼ で変更または遅延を調整</string>
-    <string name="legenda_auto_opcao">字幕を自動でダウンロード</string>
-    <string name="legenda_auto_ligada">字幕がないときはダウンロードします</string>
-    <string name="legenda_auto_desligada">自動字幕をオフにしました</string>
     <string name="legenda_trad_rotulo">自動翻訳</string>
     <string name="legenda_trad_traduzindo">お使いの言語の字幕がありません: 英語の字幕を TV で翻訳しています…</string>
     <string name="legenda_trad_parcial">字幕を TV で翻訳しました（自動翻訳）。残りも翻訳を続けています。</string>
     <string name="legenda_trad_pronta">字幕の翻訳が完了しました</string>
-    <string name="legenda_trad_opcao">字幕がないときは TV で翻訳する</string>
-    <string name="legenda_trad_ligada">字幕がないときは TV で翻訳します</string>
-    <string name="legenda_trad_desligada">字幕を翻訳しなくなります</string>
     <string name="series_sinopse_mais">あらすじ全文</string>
     <string name="series_sinopse_menos">あらすじを短く</string>
     <string name="series_continuar_curto">▶  %1$s の続きを見る</string>

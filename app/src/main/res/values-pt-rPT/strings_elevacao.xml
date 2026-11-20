@@ -37,11 +37,9 @@
     <string name="elv_sem_quedas">Nenhuma queda ou travada em %1$d dias</string>
     <string name="elv_reserva">%1$s falhou. A reproduzir %2$s em vez disso.</string>
     <string name="elv_zap_solte">Largue para ver</string>
-    <string name="elv_leg_estilo">Estilo da legenda: %1$s</string>
     <string name="elv_leg_padrao">padrão</string>
     <string name="elv_leg_contraste">alto contraste</string>
     <string name="elv_leg_amarela">amarela</string>
-    <string name="elv_leg_posicao">Posição da legenda: %1$s</string>
     <string name="elv_leg_embaixo">em baixo</string>
     <string name="elv_leg_em_cima">em cima</string>
     <string name="elv_bf_fazer">Fazer</string>

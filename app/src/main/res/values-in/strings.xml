@@ -717,12 +717,10 @@ AS\\Film).</string>
     <string name="tvv_hoje">Hari ini</string>
     <string name="tvv_ontem">Kemarin</string>
     <string name="imagem_titulo">Rasio aspek</string>
-    <string name="imagem_opcao">Rasio aspek: %1$s</string>
     <string name="imagem_ajustar">Sesuaikan layar</string>
     <string name="imagem_esticar">Regangkan</string>
     <string name="imagem_zoom">Zoom (memotong tepi)</string>
     <string name="velocidade_titulo">Kecepatan</string>
-    <string name="velocidade_opcao">Kecepatan: %1$s</string>
     <string name="trailer">Trailer</string>
     <string name="trailer_sem_app">Tidak ada aplikasi untuk membuka trailer.</string>
     <string name="series_visto_ate_aqui">Tandai ditonton sampai %1$s</string>
@@ -748,7 +746,6 @@ AS\\Film).</string>
     <string name="legenda_surdos">tunarungu</string>
     <string name="legenda_bate">dibuat untuk file ini</string>
     <string name="lista_dica_escolher">pilih</string>
-    <string name="legenda_atraso_opcao">Jeda subtitle: %1$s</string>
     <string name="legenda_atraso_titulo">Jeda subtitle (+ = teks muncul lebih lambat)</string>
     <string name="legenda_atraso_zero">Tanpa jeda</string>
     <string name="legenda_conta_titulo">Subtitle online</string>
@@ -783,7 +780,6 @@ AS\\Film).</string>
     <string name="vod_dialogo_opcao">Dialog lebih keras</string>
     <string name="vod_dialogo_ligado">Dialog lebih keras aktif</string>
     <string name="vod_dialogo_desligado">Dialog lebih keras nonaktif</string>
-    <string name="vod_atraso_audio_opcao">Jeda audio: %1$s</string>
     <string name="vod_atraso_audio_titulo">Jeda audio (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Tidak ada</string>
@@ -839,5 +835,24 @@ AS\\Film).</string>
         <item>B</item>
         <item>BL</item>
     </string-array>
-    <string name="vod_trocar_versao">%1$s · lanjut dari sini</string>
+    <string name="lista_dica_voltar">kembali</string>
+    <string name="pm_ligado">Aktif</string>
+    <string name="pm_desligado">Nonaktif</string>
+    <string name="pm_imagem_som">Gambar dan suara</string>
+    <string name="pm_mais">Opsi lainnya</string>
+    <string name="pm_versao_legendada">Tonton bersubtitle</string>
+    <string name="pm_versao_dublada">Tonton sulih suara</string>
+    <string name="pm_versao_info">Lanjut dari titik ini</string>
+    <string name="pm_leg_ajustes">Setelan subtitle</string>
+    <string name="pm_leg_tamanho">Ukuran</string>
+    <string name="pm_leg_estilo">Gaya</string>
+    <string name="pm_leg_posicao">Posisi</string>
+    <string name="pm_leg_atraso">Jeda</string>
+    <string name="pm_leg_auto">Unduh satu jika tidak ada</string>
+    <string name="pm_leg_traduzir">Terjemahkan di TV jika tidak ada</string>
+    <string name="pm_velocidade">Kecepatan</string>
+    <string name="pm_proporcao">Ukuran gambar</string>
+    <string name="pm_atraso_audio">Jeda audio</string>
+    <string name="pm_quadros">Ikuti frame rate film</string>
+    <string name="pm_qualidade">Kualitas</string>
 </resources>

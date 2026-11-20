@@ -9,9 +9,6 @@
     <string name="vod_ainda_assistindo">Hâlâ izliyor musunuz?</string>
     <string name="vod_ainda_assistindo_texto">Kumandaya kimse dokunmadan birkaç bölüm oynatıldı, bu yüzden sonraki sizi bekliyor.</string>
     <string name="vod_desligar_ao_fim">Bu bitince TV’yi kapat</string>
-    <string name="vod_desligar_ao_fim_ligado">Bu bitince TV kapanacak</string>
-    <string name="vod_desligar_ao_fim_desligado">Bu bitince TV açık kalacak</string>
-    <string name="vod_legenda_tamanho_opcao">Altyazı boyutu: %1$s</string>
     <string name="vod_legenda_tamanho_titulo">Altyazı boyutu</string>
     <string-array name="vod_legenda_tamanhos">
         <item>Küçük</item>
