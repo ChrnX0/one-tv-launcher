@@ -196,7 +196,8 @@ def page_home(L):
 </div></section>
 {dev}<section class="sec" id="planos"><div class="wrap duo"><h2><small>Planos</small>{e(h['plans_title'])}</h2><div><p>{e(h['plans_text'])}</p><p class="mini">Os preços saem quando o app chegar à Google Play.</p></div></div></section>
 <section class="sec" id="duvidas"><div class="wrap duo"><h2><small>Dúvidas</small>Perguntas de sofá</h2><div class="faq">{faq}</div></div></section>
-<section class="sec fim"><div class="wrap"><h2>{e(h['final_title'])}</h2><p>{e(h['final_text'])}</p><div class="ctabox">{B.LOGO.replace('class="logo-mark"', 'class="logo-mark espera"').replace('var(--logo-screen)', '#241913')}<span class="cta">{e(C['ui']['cta_get'])}</span></div></div></section>
+<section class="sec fim" id="instalar"><div class="wrap"><h2>{e(h['final_title'])}</h2><p>{e(h['final_text'])}</p><div class="ctabox">{B.LOGO.replace('class="logo-mark"', 'class="logo-mark espera"').replace('var(--logo-screen)', '#241913')}<span class="cta">{e(C['ui']['cta_get'])}</span></div>
+<div class="dl rv"><p><span>No app Downloader da TV, digite o código</span> <b class="code">6566820</b></p><p class="ou"><span>Ou baixe o APK em</span> <a href="https://sofaly.tv/download">sofaly.tv/download</a></p></div></div></section>
 '''
     a = s.index('<section class="sec"><div class="wrap">\n <div class="duo">')
     b = s.index("</section>", a) + len("</section>")
@@ -335,7 +336,7 @@ ATTR = re.compile(r'\b(alt|title|aria-label|placeholder)="([^"]*)"')
 JSSTR = re.compile(r'"((?:[^"\\\n]|\\.)*)"|\'((?:[^\'\\\n]|\\.)*)\'')
 SKIP = re.compile(r"^[\s\d:·.,/+()%×\-–—▲▼◀▶›→←•]*$")
 SAME = {"Sofaly", "Netflix", "YouTube", "Pro", "Ultra", "sofa", "ly", "GeForce NOW", "Steam Link", "Moonlight", "PS Remote Play",
-        "OK", "Links", "IntersectionObserver", "xMidYMid meet", "Coming soon"}
+        "OK", "Links", "IntersectionObserver", "xMidYMid meet", "Coming soon", "sofaly.tv/download"}
 SAME |= {json.loads(p.read_text())["label"] for p in (WEB / "content").glob("*.json")}   # language names stay as they are
 
 

@@ -335,6 +335,13 @@ html{scroll-behavior:smooth}
 @media (max-width:900px){.lang select{max-width:9.5em}}
 /* Clock digits keep their order on right-to-left pages. */
 .clock{direction:ltr;unicode-bidi:isolate}
+
+/* Install line under the final CTA: the Downloader code, big enough to read from the sofa. */
+.dl{margin:28px auto 0;max-width:640px;text-align:center}
+.dl p{margin:0;font-size:19px;color:var(--mut)}
+.dl .code{display:block;width:fit-content;margin:12px auto 0;padding:8px 18px;border-radius:14px;background:#2A1D14;border:1px solid #4A3424;color:#FF8A55;font-size:clamp(30px,4vw,40px);letter-spacing:4px;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.dl .ou{margin-top:14px;font-size:17px}
+.dl a{color:#FF8A55;font-weight:700;direction:ltr;unicode-bidi:isolate}
 @media (prefers-reduced-motion:reduce){.ant{animation:none}}
 </style>
 </head>
@@ -510,7 +517,8 @@ html{scroll-behavior:smooth}
 </div></section>
 <section class="sec" id="planos"><div class="wrap duo"><h2><small>方案</small>免费开始，按需升级。</h2><div><p>Basic 就已包含完整主屏幕、播放器、收听、游戏、闹钟和屏保。Pro 和 Ultra 增加手机、家居和家人功能。</p><p class="mini">价格将在应用上架 Google Play 时公布。</p></div></div></section>
 <section class="sec" id="duvidas"><div class="wrap duo"><h2><small>常见问题</small>沙发上的问题</h2><div class="faq"><details><summary>我的电视能用吗？</summary><div class="sp">支持 Google TV 和 Android TV，例如 Chromecast with Google TV、搭载 Google TV 的电视和 Android TV 盒子。兼容性页面列出了已测试的设备。</div></details><details><summary>安装需要电脑吗？</summary><div class="sp">不需要。在电视上直接从 Google Play 安装，用遥控器按步骤操作即可。</div></details><details><summary>我的应用还在吗？</summary><div class="sp">都在。Sofaly 只替换主屏幕：Netflix、YouTube、Prime Video 等照常打开，麦克风按钮仍然是 Google 助理。</div></details><details><summary>有广告吗？</summary><div class="sp">没有，免费方案也没有。Sofaly 不卖广告，也不追踪你看什么。</div></details><details><summary>带频道或电影吗？</summary><div class="sp">不带。Sofaly 整理的是你已有的东西：你的应用、你的文件，以及公开的电台和播客。</div></details><details><summary>想换回 Google 主屏幕怎么办？</summary><div class="sp">在电视设置里重新选择 Google 主屏幕即可。你的任何数据都不会被删除。</div></details></div></div></section>
-<section class="sec fim"><div class="wrap"><h2>让电视重新变简单。</h2><p>安装，按下 HOME，全家都能看懂。</p><div class="ctabox"><svg class="logo-mark espera" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="#241913" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span class="cta">即将登陆 Google Play</span></div></div></section>
+<section class="sec fim" id="instalar"><div class="wrap"><h2>让电视重新变简单。</h2><p>安装，按下 HOME，全家都能看懂。</p><div class="ctabox"><svg class="logo-mark espera" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="#241913" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span class="cta">即将登陆 Google Play</span></div>
+<div class="dl rv"><p><span>在电视的 Downloader 应用里输入代码</span> <b class="code">6566820</b></p><p class="ou"><span>或从这里下载 APK</span> <a href="https://sofaly.tv/download">sofaly.tv/download</a></p></div></div></section>
 
 
 
