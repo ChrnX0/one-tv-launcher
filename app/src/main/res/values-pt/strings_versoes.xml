@@ -14,6 +14,11 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Painel web com a cara da Sofaly: cada área tem a sua cor no ícone, a Início mostra os recados da Sofy, o que está na TV agora e os mundos como portas, e nada sumiu</item>
+        <item>Painel: a estrela em qualquer bloco ou chave põe em “Seus atalhos” na Início, “Conversa com” liga os blocos parentes, e uma mudança oferece Desfazer</item>
+        <item>Painel: aba Sofy nova (recados de hoje, o porquê, Desfazer para app congelado) e Apps com as prateleiras Congelados e Escondidos (Escondidos pede o PIN)</item>
+        <item>Configurações da TV iguais ao painel: abas longas têm o índice “Nesta página” no alto, e as pílulas “Conversa com” levam ao grupo parente</item>
+        <item>Despertador: quando a LG acorda ainda no volume alto de ontem, o alarme não começa mais alto</item>
         <item>Séries: “Próximo episódio” aparece quando começam os créditos, “Pular resumo” funciona como o “Pular abertura”, a barra diz a hora em que o vídeo termina e ⏮ (ou ▼ › Legenda) repete os últimos 10 s com legenda</item>
         <item>Volume da TV LG pelo painel e pelo assistente: as teclas de volume e mudo agora mudam o som de verdade (iam para a saída HDMI, que fica travada no máximo)</item>
         <item>Celular vira controle: no app Sofaly do celular, toque na TV para deslizar, tocar e digitar; volume e ⏯ também na notificação e no bloco de atalhos</item>
@@ -63,6 +68,10 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Painel com a Sofaly</item>
+        <item>Atalhos do painel</item>
+        <item>Aba Sofy</item>
+        <item>Índice dos ajustes</item>
         <item>Próximo episódio nos créditos</item>
         <item>Descanso pela hora</item>
         <item>Falar na busca</item>
@@ -101,6 +110,10 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Abra o painel no computador: a Início mostra a faixa da Sofy, “Agora na TV” e as portas coloridas, e todo bloco antigo continua na barra lateral?</item>
+        <item>No painel, toque na estrela de um bloco: ele aparece em “Seus atalhos” na Início, e mudar uma chave oferece Desfazer?</item>
+        <item>No painel, abra a aba Sofy: os recados de hoje aparecem com “Ver onde”, e os Apps mostram as prateleiras Congelados e Escondidos (Escondidos pede o PIN)?</item>
+        <item>Nas Configurações da TV › Acesso remoto, “Nesta página” mostra os grupos no alto, e OK num deles leva até ele?</item>
         <item>Num episódio de série, quando os créditos começaram, apareceu “Próximo episódio” e o OK começou o próximo?</item>
         <item>Deixe o descanso aparecer à noite: a tela fica mais suave e, de madrugada, escura e sem o logo?</item>
         <item>Abra a Busca: o primeiro item é Falar, e as buscas que você fez aparecem logo embaixo?</item>
