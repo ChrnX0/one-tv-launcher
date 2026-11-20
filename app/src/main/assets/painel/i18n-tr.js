@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"TV'de oynatılıyor.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Bu dosya türü TV'de açılmaz. Video, müzik ve fotoğraf açılır.",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","Gönderiliyor: $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "yeni TV reddetti: $1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "yeni TV reddetti ($1)"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "gönderim hazırlanamadı ($1)"],

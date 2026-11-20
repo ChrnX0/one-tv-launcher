@@ -245,6 +245,15 @@ class VodActivity : Activity() {
     private val coral = 0xFFFF5A4E.toInt()
 
     private lateinit var video: SurfaceView
+    /**
+     * Vídeo girado (teste do Paulo, 20/11/2026): vídeo de celular gravado em pé vem 1920x1080 com "girar 90°" no arquivo.
+     * Na SurfaceView do Chromecast o quadro vai para a camada de vídeo do chip (Amlogic), que não gira: o som tocava e a
+     * imagem não aparecia. Só nesse caso o vídeo passa para uma TextureView (a GPU desenha o quadro já girado). Os outros
+     * vídeos ficam na SurfaceView, que é mais leve e a única que mostra HDR.
+     */
+    private var textura: android.view.TextureView? = null
+    /** A vista que mostra o vídeo agora (a TextureView quando o vídeo é girado). */
+    private fun areaVideo(): View = textura ?: video
     private lateinit var barra: LinearLayout
     private lateinit var titulo: TextView
     private val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
@@ -284,12 +293,9 @@ class VodActivity : Activity() {
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
-        legendaImg = LegendaImagem.Vista(this) { android.graphics.Rect(video.left, video.top, video.right, video.bottom) }
+        legendaImg = LegendaImagem.Vista(this) { areaVideo().let { v -> android.graphics.Rect(v.left, v.top, v.right, v.bottom) } }
         raiz.addView(legendaImg, 1, FrameLayout.LayoutParams(-1, -1))
-        video.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->   // trocou Ajustar/Zoom
-            assAjustes.area(v.width, v.height)
-            legendaImg.invalidate()
-        }
+        video.addOnLayoutChangeListener(mudouArea)
         // Legenda (11/11/2026): sem o media3-ui ninguém desenhava as falas, e a legenda escolhida no ▼ não aparecia.
         // Texto branco com contorno escuro, embaixo e centrado; acima da barra quando ela aparece.
         legenda = TextView(this).apply {
@@ -458,7 +464,7 @@ class VodActivity : Activity() {
             .setTrackSelector(sel).setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.addAnalyticsListener(analise)
         if (podeSondar && sondaUrl != u) sondar(u, dados)
-        p.setVideoSurfaceView(video)
+        textura?.let { p.setVideoTextureView(it) } ?: p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
         efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
         // Dublado: já pede o áudio no idioma da TV (ideia 25; "pt" na TV em português). Original: o áudio e a legenda são
@@ -629,12 +635,34 @@ class VodActivity : Activity() {
         }
     }
 
+    private val mudouArea = View.OnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->   // trocou Ajustar/Zoom
+        assAjustes.area(v.width, v.height)
+        legendaImg.invalidate()
+    }
+
+    /** Ver [textura]: põe uma TextureView no lugar da SurfaceView e passa o player para ela. */
+    private fun usarTextura() {
+        if (textura != null) return
+        val raiz = video.parent as? FrameLayout ?: return
+        val t = android.view.TextureView(this)
+        raiz.addView(t, raiz.indexOfChild(video), FrameLayout.LayoutParams(video.layoutParams as FrameLayout.LayoutParams))
+        t.addOnLayoutChangeListener(mudouArea)
+        textura = t
+        player?.setVideoTextureView(t)
+        video.visibility = View.GONE
+        tamanhoVideo?.let { v -> PlayerImagem.aplicar(t, modoImagem, v.width, v.height, v.pixelWidthHeightRatio) }
+    }
+
     // ---------------------------------------------------------------- ideia 8: quadro técnico
 
     private val analise = object : androidx.media3.exoplayer.analytics.AnalyticsListener {
         override fun onVideoDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodVideo = nome }
         override fun onAudioDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodAudio = nome }
         override fun onDroppedVideoFrames(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, n: Int, ms: Long) { perdidos += n }
+        override fun onVideoInputFormatChanged(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, f: androidx.media3.common.Format,
+                                               r: androidx.media3.exoplayer.DecoderReuseEvaluation?) {
+            if (f.rotationDegrees != 0) usarTextura()
+        }
     }
 
     private val tiqueInfo: Runnable = object : Runnable {
@@ -782,7 +810,7 @@ class VodActivity : Activity() {
         override fun onVideoSizeChanged(t: androidx.media3.common.VideoSize) {
             assAjustes.video(t.width, t.height)
             tamanhoVideo = t
-            PlayerImagem.aplicar(video, modoImagem, t.width, t.height, t.pixelWidthHeightRatio)
+            PlayerImagem.aplicar(areaVideo(), modoImagem, t.width, t.height, t.pixelWidthHeightRatio)
         }
 
         override fun onTracksChanged(faixas: Tracks) {
@@ -1479,7 +1507,7 @@ class VodActivity : Activity() {
 
     private fun escolherImagem(voltar: (() -> Unit)? = null) = PlayerImagem.escolher(this, modoImagem, voltar) { m ->
         modoImagem = m
-        tamanhoVideo?.let { t -> PlayerImagem.aplicar(video, modoImagem, t.width, t.height, t.pixelWidthHeightRatio) }
+        tamanhoVideo?.let { t -> PlayerImagem.aplicar(areaVideo(), modoImagem, t.width, t.height, t.pixelWidthHeightRatio) }
     }
 
     private var modoImagem = PlayerImagem.Modo.AJUSTAR

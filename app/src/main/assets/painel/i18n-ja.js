@@ -1399,6 +1399,7 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"テレビで再生中。",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"この種類のファイルはテレビで開けません。動画、音楽、写真は開けます。",
 },P:[
+["^Mandando\\ (.+?)\\ ·\\ (.+?)%$","送信中 $1 · $2%"],
 ["^a\\ TV\\ nova\\ recusou:\\ (.+?)$", "新しいテレビが拒否しました：$1"],
 ["^a\\ TV\\ nova\\ recusou\\ \\((\\d+)\\)$", "新しいテレビが拒否しました（$1）"],
 ["^não\\ deu\\ para\\ montar\\ o\\ envio\\ \\((.+?)\\)$", "送信を準備できませんでした（$1）"],

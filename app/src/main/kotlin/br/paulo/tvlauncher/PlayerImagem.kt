@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.content.Context
-import android.view.SurfaceView
 import android.widget.FrameLayout
 
 /**
@@ -9,7 +8,7 @@ import android.widget.FrameLayout
  *
  * Antes o vídeo ocupava a tela inteira sempre: um canal 4:3 ficava esticado. Agora o padrão é "Ajustar" (barras
  * pretas quando o formato não bate), e o usuário escolhe "Esticar" ou "Zoom" (corta as bordas e enche a tela).
- * A conta do tamanho é pura (tamanho()), testada em PlayerImagemTest; aplicar() só põe o tamanho na SurfaceView.
+ * A conta do tamanho é pura (tamanho()), testada em PlayerImagemTest; aplicar() só põe o tamanho na vista do vídeo.
  */
 object PlayerImagem {
     enum class Modo { AJUSTAR, ESTICAR, ZOOM }
@@ -59,8 +58,8 @@ object PlayerImagem {
         }
     }
 
-    /** Põe o tamanho na SurfaceView (que está num FrameLayout em tela cheia, centrada). */
-    fun aplicar(video: SurfaceView, modo: Modo, videoL: Int, videoA: Int, proporcaoPixel: Float) {
+    /** Põe o tamanho na vista do vídeo (SurfaceView ou TextureView, num FrameLayout em tela cheia, centrada). */
+    fun aplicar(video: android.view.View, modo: Modo, videoL: Int, videoA: Int, proporcaoPixel: Float) {
         val pai = video.parent as? android.view.View ?: return
         // Antes do 1º layout o pai mede 0x0 e o vídeo ficaria 0x0 (invisível) até o próximo tamanho: espera o layout.
         if (pai.width <= 0 || pai.height <= 0) { pai.post { if (pai.width > 0) aplicar(video, modo, videoL, videoA, proporcaoPixel) }; return }
