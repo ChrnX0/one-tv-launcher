@@ -179,29 +179,50 @@
 
     <main class="conteudo">
     <section id="abaInicio" class="painel-aba">
+      <!-- Início (estudo do painel 20/11/2026, PR 3): o que acontece, o que a TV pode e as portas da cruz. Nada saiu:
+           "Como a TV está" mora em Sistema (a linha "Controle total" leva lá) e o Controle rápido entrou no "Agora na TV". -->
+      <!-- Faixa da Sofy: só aparece quando ela tem um recado (regra 9: a Sofy uma vez por tela, só onde fala). -->
+      <div id="faixaSofy" class="faixa-sofy" role="status" hidden>
+        <span id="faixaSofyRosto" class="sofy-rosto" aria-hidden="true"></span>
+        <p class="faixa-texto"><strong id="faixaSofyTitulo"></strong> <span id="faixaSofyTexto"></span></p>
+        <button type="button" class="link" data-ir="sistema.cartaoObservador">Ver o porquê →</button>
+      </div>
+      <!-- Controle total: uma linha calma quando está tudo ligado; vira alerta quando um poder cai (regra 7). -->
+      <div id="linhaPoderes" class="linha-poderes" hidden>
+        <p class="poderes-titulo"><span class="ponto" aria-hidden="true"></span><strong id="poderesResumo"></strong> <span id="poderesQuais" class="poderes-quais"></span></p>
+        <p id="poderesExplica" class="aviso-curto" hidden></p>
+        <div class="botoes-linha">
+          <button id="btnReligarPoder" type="button" class="botao-primario" hidden>Religar na TV</button>
+          <button type="button" class="link" data-ir="sistema.cartaoComoATVEsta">Ver detalhes →</button>
+        </div>
+      </div>
       <div class="cartao heroi">
         <button type="button" class="miniatura" data-aba="controle" aria-label="Abrir o controle e a tela ao vivo"><img id="inicioMiniatura" alt="" hidden></button>
         <div class="heroi-texto">
           <p class="rotulo">Agora na TV</p>
           <p id="inicioNaTela" class="grande">…</p>
+          <div class="botoes-linha">
+            <button class="botao-secundario" data-tecla="ligar">Acordar</button>
+            <button class="botao-secundario" data-tecla="apagar">Dormir</button>
+          </div>
         </div>
-        <div class="botoes-linha">
-          <button class="botao-secundario" data-tecla="ligar">Acordar</button>
-          <button class="botao-secundario" data-tecla="apagar">Dormir</button>
-        </div>
-      </div>
-      <div class="cartao">
-        <h2>Controle rápido</h2>
         <div class="rapido">
-          <button data-tecla="voltar"><svg class="i" aria-hidden="true"><use href="#i-voltar"/></svg><span>Voltar</span></button>
-          <button data-tecla="inicio"><svg class="i" aria-hidden="true"><use href="#i-inicio"/></svg><span>Início</span></button>
           <button data-tecla="play"><svg class="i" aria-hidden="true"><use href="#i-tocar"/></svg><span>Tocar/pausar</span></button>
           <button data-tecla="volume-"><svg class="i" aria-hidden="true"><use href="#i-vol-menos"/></svg><span>Vol −</span></button>
           <button data-tecla="volume+"><svg class="i" aria-hidden="true"><use href="#i-vol-mais"/></svg><span>Vol +</span></button>
           <button data-tecla="mudo"><svg class="i" aria-hidden="true"><use href="#i-mudo"/></svg><span>Mudo</span></button>
+          <button data-tecla="voltar"><svg class="i" aria-hidden="true"><use href="#i-voltar"/></svg><span>Voltar</span></button>
+          <button data-tecla="inicio"><svg class="i" aria-hidden="true"><use href="#i-inicio"/></svg><span>Início</span></button>
         </div>
         <button type="button" class="link" data-aba="controle">Abrir o controle completo e a tela ao vivo →</button>
       </div>
+      <!-- Os mundos da cruz como PORTAS (regra 3): levam à página que já existe, não copiam ajuste. Cor = a do mundo. -->
+      <nav class="portas" aria-label="Mundos da cruz">
+        <button type="button" class="porta" data-aba="tvfilmes" style="--cor: var(--t-world-watch)"><span class="ponto" aria-hidden="true"></span><span class="t">Assistir</span><span class="s">TV e filmes</span></button>
+        <button type="button" class="porta" data-ir="tvfilmes.cartaoRadios" style="--cor: var(--t-world-listen)"><span class="ponto" aria-hidden="true"></span><span class="t">Ouvir</span><span class="s">Rádios e podcasts</span></button>
+        <button type="button" class="porta" data-aba="apps" style="--cor: var(--t-world-play)"><span class="ponto" aria-hidden="true"></span><span class="t">Jogar</span><span class="s">Jogos</span></button>
+        <button type="button" class="porta" data-aba="apps" style="--cor: var(--t-world-apps)"><span class="ponto" aria-hidden="true"></span><span class="t">Apps</span><span class="s">Todos os apps</span></button>
+      </nav>
       <div class="cartao">
         <h2>Pedir à TV</h2>
         <form id="formComando" class="form-pasta" autocomplete="off">
@@ -212,17 +233,10 @@
         <p id="statusComando" class="aviso" hidden></p>
         <ul id="exemplosComando" hidden></ul>
       </div>
-      <div class="grade-inicio">
-        <div class="cartao">
-          <h2>Como a TV está</h2>
-          <div id="inicioSaude" class="numeros-saude compacto"><p class="aviso">Lendo…</p></div>
-          <button type="button" class="link" data-aba="sistema">Ver detalhes →</button>
-        </div>
-        <div class="cartao">
-          <h2>Mais usados hoje</h2>
-          <div id="inicioUso" class="lista-uso"><p class="aviso">Lendo…</p></div>
-          <button type="button" class="link" data-aba="apps">Todos os apps →</button>
-        </div>
+      <div class="cartao">
+        <h2>Mais usados hoje</h2>
+        <div id="inicioUso" class="lista-uso"><p class="aviso">Lendo…</p></div>
+        <button type="button" class="link" data-aba="apps">Todos os apps →</button>
       </div>
     </section>
 

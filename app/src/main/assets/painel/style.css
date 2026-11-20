@@ -78,6 +78,8 @@
   --perigo-borda: rgba(255, 138, 128, .4);
   --ok: #7fd6c2;
   --ok-fundo: rgba(127, 214, 194, .16);
+  --atencao: #ffc266;                             /* âmbar = atenção (regra 10: vermelho é erro); só no alerta da Início */
+  --atencao-fundo: rgba(255, 194, 102, .12);
   --alerta: #ffd27a;
   --alerta-fundo: rgba(255, 210, 122, .12);
   --selecao: rgba(255, 106, 43, .32);
@@ -133,6 +135,8 @@
     --perigo-borda: rgba(179, 38, 30, .4);
     --ok: #1f7a66;
     --ok-fundo: rgba(31, 122, 102, .12);
+    --atencao: #8a5a00;
+    --atencao-fundo: rgba(138, 90, 0, .10);
     --alerta: #8a5a00;
     --alerta-fundo: rgba(138, 90, 0, .1);
     --selecao: rgba(206, 61, 0, .22);
@@ -1182,3 +1186,53 @@ button.botao-secundario[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--
 .campo-busca-tudo:hover { color: var(--texto); }
 .grupos-tudo .titulo-grupo { margin: 24px 4px 12px; }
 .grupos-tudo .titulo-grupo:first-child { margin-top: 0; }
+
+/* ---------------------------------------------------------------- Início (estudo do painel 20/11/2026, PR 3) */
+/* Faixa da Sofy: o único rosto dela na tela; frase grande, e o link para o lugar que explica. */
+.faixa-sofy { display: flex; align-items: center; gap: 16px; margin: 0 0 16px; padding: 16px 20px; border-radius: var(--raio);
+  background: var(--superficie); }
+.faixa-sofy .faixa-texto { flex: 1; min-width: 0; margin: 0; font-size: 17px; line-height: 1.4; }
+.faixa-sofy .faixa-texto strong { font-weight: 800; }
+.faixa-sofy .link { flex: none; }
+@media (max-width: 599px) { .faixa-sofy { flex-wrap: wrap; } .faixa-sofy .link { flex-basis: 100%; } }
+
+/* Controle total: linha calma; com um poder caído vira alerta âmbar, com o botão que conserta. */
+.linha-poderes { margin: 0 0 16px; padding: 12px 20px; border-radius: var(--raio); }
+.linha-poderes .poderes-titulo { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin: 0; font-size: 15px; }
+.linha-poderes .ponto { width: 10px; height: 10px; border-radius: 50%; background: var(--ok); flex: none; }
+.linha-poderes .poderes-quais { display: inline-flex; flex-wrap: wrap; gap: 4px 12px; color: var(--texto-fraco); }
+.linha-poderes .poder::before { content: "○ "; }
+.linha-poderes .poder.ligado::before { content: "● "; color: var(--ok); }
+.linha-poderes .botoes-linha { display: none; }
+.linha-poderes:has(.poder:not(.ligado)) .botoes-linha { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+.linha-poderes > .aviso-curto { margin: 8px 0 0; }
+.linha-poderes.alerta { padding: 20px; background: var(--atencao-fundo); box-shadow: inset 4px 0 0 var(--atencao); }
+.linha-poderes.alerta .ponto { background: var(--atencao); }
+.linha-poderes.alerta .poderes-titulo { font-size: 20px; }
+.linha-poderes.alerta .poderes-titulo strong { font-family: var(--letra-titulo); font-weight: 900; }
+.linha-poderes.alerta > .aviso-curto { font-size: 17px; color: var(--texto); }
+
+/* Agora na TV: miniatura 16:9, o que está passando e os controles numa linha só (o antigo Controle rápido). */
+.heroi { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px 24px; }
+.heroi .rapido { grid-column: 1 / -1; margin: 0; }
+.heroi > .link { grid-column: 1 / -1; justify-self: start; }
+.heroi-texto .botoes-linha { margin-top: 16px; }
+.heroi:has(.miniatura img[hidden]) { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 599px) { .heroi { grid-template-columns: minmax(0, 1fr); } .heroi .miniatura img { width: 100%; } }
+
+/* Portas da cruz: um mundo por porta, o ponto na cor do mundo (a mesma da TV), nome grande e para onde leva. */
+.portas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+@media (max-width: 699px) { .portas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.porta { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 12px; min-height: 80px; padding: 16px 20px;
+  border: none; border-radius: var(--raio); background: var(--superficie); color: var(--texto); font: inherit; text-align: left; cursor: pointer;
+  transition: background-color var(--t-ms-quick), transform var(--t-ms-quick); }
+.porta:hover { background: var(--superficie2); }
+.porta:active { transform: scale(.98); }
+.porta .ponto { grid-row: span 2; width: 12px; height: 12px; border-radius: 50%; background: var(--cor); box-shadow: 0 0 0 4px color-mix(in srgb, var(--cor) 22%, transparent); }
+.porta .t { font-family: var(--letra-titulo); font-size: 20px; font-weight: 900; line-height: 1.2; }
+.porta .s { font-size: 15px; color: var(--texto-fraco); }
+@media (prefers-reduced-motion: reduce) { .porta { transition: none; } .porta:active { transform: none; } }
+
+/* Lista vazia com a Sofy dormindo e a frase do que fazer. */
+.vazio-sofy { display: flex; align-items: center; gap: 12px; }
+.vazio-sofy .aviso { margin: 0; }
