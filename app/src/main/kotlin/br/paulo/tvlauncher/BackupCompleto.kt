@@ -33,6 +33,7 @@ object BackupCompleto {
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
         "dicas_vistas",   // 20/11/2026: quem já aprendeu as teclas não precisa rever as dicas na TV nova
         "busca_recentes",   // 20/11/2026: as últimas buscas da pessoa (6 no máximo) viajam junto
+        "sofy",   // Sofy (20/11/2026): a chave "Sofy fala" e os tipos de fala que a pessoa calou viajam junto
         "agenda_perfis",   // agenda da família (degrau 2, 16/11/2026): perfil troca sozinho no horário
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
