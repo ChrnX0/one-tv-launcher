@@ -1,6 +1,6 @@
-# Contributing to One TV Launcher
+# Contributing to Sofaly
 
-Thanks for wanting to help! Bug reports and ideas are welcome. One TV Launcher is proprietary software (see
+Thanks for wanting to help! Bug reports and ideas are welcome. Sofaly is proprietary software (see
 [LICENSE](LICENSE)), so pull requests and code contributions aren't accepted.
 
 ## Reporting a bug
@@ -16,7 +16,7 @@ The web panel can prepare the report for you: *Health → Report on GitHub* open
 recent errors (personal data filtered out). You read and edit it before sending; nothing is sent without you.
 
 > [!WARNING]
-> Never paste PINs, passwords, IPTV credentials, Tailscale keys or Home Assistant tokens in an issue. If you found a
+> Never paste PINs, passwords, Tailscale keys or Home Assistant tokens in an issue. If you found a
 > security problem, follow [SECURITY.md](SECURITY.md) instead of opening a public issue.
 
 ## Suggesting a feature
@@ -26,4 +26,4 @@ project favors things that are fast, work with the remote alone and don't need a
 
 ## License
 
-By sending an issue or idea, you agree that the author may use it in One TV Launcher, with no obligation or payment.
+By sending an issue or idea, you agree that the author may use it in Sofaly, with no obligation or payment.

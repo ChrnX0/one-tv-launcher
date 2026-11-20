@@ -1,0 +1,85 @@
+<!doctype html>
+<!-- Source of the README pictures (banner, map, social preview). Rendered to PNG by scripts/readme-images.js.
+     Why HTML: the wordmark is built exactly like SofalyWordmark.kt ("s", the TV-sofa as the "o", "fa", "ly" in orange,
+     Nunito 600) and the screens are the website's own renders, so the GitHub page can never drift from the brand.
+     Colors come from design/tokens.json (night, cream, orange). -->
+<html lang="en">
+<meta charset="utf-8">
+<style>
+@font-face{font-family:Nunito;font-weight:600;src:url(../../app/src/main/res/font/nunito_600.ttf)}
+@font-face{font-family:Nunito;font-weight:800;src:url(../../app/src/main/res/font/nunito_800.ttf)}
+:root{--night:#121528;--deep:#0B0D18;--cream:#FFF3E6;--orange:#FF6A2B;--mute:#B7B3CC;--screen:#1C2140}
+*{box-sizing:border-box}
+body{margin:0;background:var(--deep);font-family:Nunito,sans-serif;color:var(--cream)}
+.scene{position:relative;overflow:hidden;display:none;background:radial-gradient(110% 120% at 18% 0%,#22264A 0,var(--night) 45%,var(--deep) 100%)}
+.scene.on{display:block}
+/* Wordmark, same proportions as SofalyWordmark.kt */
+.wm{font-weight:600;letter-spacing:-.02em;line-height:1;white-space:nowrap;display:inline-flex;align-items:baseline}
+.wm svg{height:.847em;width:.855em;margin:0 .008em 0 .058em;position:relative;top:.022em;align-self:baseline}
+.wm i{font-style:normal;color:var(--orange)}
+.tv{border-radius:22px;padding:14px;background:#0A0C16;box-shadow:0 0 0 2px #2A2F55,0 30px 80px #000a,0 0 120px #FF6A2B22}
+.tv img{display:block;width:100%;border-radius:10px}
+/* banner 1600x760 */
+#banner{width:1600px;height:760px}
+#banner .wm{position:absolute;left:96px;top:190px;font-size:150px}
+#banner .tag{position:absolute;left:100px;top:385px;font:800 46px/1.15 Nunito;max-width:560px}
+#banner .sub{position:absolute;left:100px;top:510px;font:600 27px/1.45 Nunito;color:var(--mute);max-width:540px}
+#banner .tv{position:absolute;right:70px;top:110px;width:860px}
+/* map 1600x900 */
+#map{width:1600px;height:900px}
+#map svg.lines{position:absolute;inset:0}
+.node{position:absolute;text-align:center;transform:translate(-50%,-50%)}
+.node .t{font:800 30px Nunito;margin-top:12px}
+.node .d{font:600 20px/1.35 Nunito;color:var(--mute);margin-top:4px;white-space:nowrap}
+.node .tv{padding:9px;border-radius:14px}
+.pill{display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border-radius:999px;background:var(--screen);border:3px solid var(--orange);font:800 30px Nunito}
+.pill svg{width:34px;height:34px}
+.lab{position:absolute;font:600 19px Nunito;color:#E7C9B6;background:var(--night);padding:3px 12px;border-radius:999px;transform:translate(-50%,-50%);white-space:nowrap}
+/* social 1280x640 */
+#social{width:1280px;height:640px}
+#social .wm{position:absolute;left:50%;top:205px;transform:translateX(-50%);font-size:190px}
+#social .tag{position:absolute;left:0;right:0;top:430px;text-align:center;font:800 44px Nunito}
+#social .url{position:absolute;left:0;right:0;top:505px;text-align:center;font:600 28px Nunito;color:var(--orange)}
+</style>
+<body>
+<template id="sym"><svg viewBox="3.5 -10 113 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="#1C2140" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg></template>
+
+<section class="scene" id="banner">
+  <div class="wm">s<span class="o"></span>fa<i>ly</i></div>
+  <div class="tag">Your TV, simple again.</div>
+  <div class="sub">An ad-free home for Google TV and Android TV, with the panel, the phone and the screensaver working as one.</div>
+  <div class="tv"><img src="../../website/assets/home/tela-en-home.webp" alt=""></div>
+</section>
+
+<section class="scene" id="map">
+  <svg class="lines" width="1600" height="900" viewBox="0 0 1600 900">
+    <g stroke="#FF6A2B" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14" fill="none" opacity=".75">
+      <path d="M590 300 C 520 260 470 230 445 215"/>
+      <path d="M1010 300 C 1080 260 1130 230 1165 205"/>
+      <path d="M590 500 C 520 560 470 610 420 650"/>
+      <path d="M1010 500 C 1080 560 1130 610 1165 660"/>
+      <path d="M420 862 H 1180 C 1260 862 1320 840 1340 800"/>
+    </g>
+  </svg>
+  <div class="node" style="left:800px;top:430px"><div class="tv" style="width:440px"><img src="../../website/assets/home/tela-en-home.webp" alt=""></div><div class="t">The TV home</div><div class="d">The cross: Watch, Listen, Play, Apps</div></div>
+  <div class="node" style="left:260px;top:215px"><div class="tv" style="width:330px"><img src="../../website/assets/home/painel-en-pc.webp" alt=""></div><div class="t">Web panel</div><div class="d">Every TV setting from the computer,<br>with the live screen</div></div>
+  <div class="node" style="left:1340px;top:200px"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="#FFF3E6" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M9 3h6"/></svg>Screensaver</span><div class="d">The same weather, photos<br>and family board as the TV</div></div>
+  <div class="node" style="left:260px;top:690px"><div class="tv" style="width:110px;padding:6px;border-radius:16px"><img src="../../website/assets/home/painel-en-cel.webp" alt=""></div><div class="t">Phone</div><div class="d">Remote, volume keys, Share to TV,<br>alarm notices</div></div>
+  <div class="node" style="left:1340px;top:690px"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="#FFF3E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18z"/></svg>api.sofaly.tv</span><div class="d">Podcasts, add-ons, HTTPS for the panel.<br>No account; it carries what it cannot read.</div></div>
+  <div class="lab" style="left:800px;top:862px">the server pairs the phone with the TV by code and holds messages while the TV is off</div>
+</section>
+
+<section class="scene" id="social">
+  <div class="wm">s<span class="o"></span>fa<i>ly</i></div>
+  <div class="tag">Your TV, simple again.</div>
+  <div class="url">sofaly.tv</div>
+</section>
+
+<script>
+const sym = document.getElementById('sym').innerHTML;
+document.querySelectorAll('.wm .o').forEach(o => o.outerHTML = sym);
+const s = document.getElementById(location.hash.slice(1) || 'banner');
+s.classList.add('on');
+</script>
+</body>
+</html>
