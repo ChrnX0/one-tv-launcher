@@ -54,10 +54,14 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
 
     private val conta: TextView
     private val coluna = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
-    private val rolagem = ScrollView(ctx).apply {
+    // A "borda que esmaece" fica ligada só pela folga que ela dá: com ela o ScrollView para o cartão em foco 32 dp antes da
+    // borda (sem isso o da última fileira ficava cortado embaixo). O desenho dela fica desligado (força 0): com os cartões
+    // crescendo para fora da rolagem, o esmaecido virava uma faixa escura no meio da fileira (visto na Sala, 20/11/2026).
+    private val rolagem = object : ScrollView(ctx) {
+        override fun getTopFadingEdgeStrength() = 0f
+        override fun getBottomFadingEdgeStrength() = 0f
+    }.apply {
         isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isSmoothScrollingEnabled = true
-        // Borda que esmaece: a rolagem para antes do fim (o cartão em foco da última fileira ficava cortado embaixo) e a
-        // fileira que sai por cima some suave em vez de cortar seca.
         isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))
         setPadding(0, dp(12), 0, dp(40))
         addView(coluna)
