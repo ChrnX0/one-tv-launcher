@@ -596,7 +596,14 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             // o texto de baixo começa embaixo do nome (alinhado com ele, não com o ponto)
             addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(8); marginStart = dpi(PONTO + 10) })
         }
-        val raiz = LinearLayout(context).apply {
+        // Sem "sobreposição" (20/11/2026): com transparência < 1 (os vizinhos apagados da coluna, 0,6 a 0,9) o Android
+        // desenhava o item inteiro numa camada à parte e depois a colava, a CADA quadro em que algo se mexia na cruz
+        // (medido na Sala: ~1,5 camadas de 940 x 340 px por quadro, "alpha caused saveLayer"). O ícone e os textos ficam
+        // lado a lado, então aplicar a transparência em cada desenho dá o mesmo resultado; a única diferença é a sombra
+        // do texto aparecer sob a letra transparente, sobre o véu escuro (~1% de brilho, invisível).
+        val raiz = object : LinearLayout(context) {
+            override fun hasOverlappingRendering() = false
+        }.apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.TOP
             clipChildren = false

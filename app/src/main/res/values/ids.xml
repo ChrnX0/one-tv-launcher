@@ -6,4 +6,6 @@
     <item name="tag_capa_atalho" type="id" />
     <!-- Abertura com a logo (SplashOverlay): marca a camada que já está saindo. -->
     <item name="brand_splash_leaving" type="id" />
+    <!-- VozFoco.kt: o ouvinte de foco fica preso na própria tela, não numa lista global (que segurava a tela fechada). -->
+    <item name="voice_focus_listener" type="id" />
 </resources>

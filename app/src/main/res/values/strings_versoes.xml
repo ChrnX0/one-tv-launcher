@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series open faster: joining the dubbed and subtitled copies of each title now takes a fraction of the time (on big lists it kept the TV busy for over a minute after opening)</item>
+        <item>Home screen: moving along the cross is lighter, because the faded items no longer need an extra drawing pass on every frame</item>
+        <item>Reading the focused item aloud (Extras): closed screens no longer stay stuck in memory</item>
         <item>Player (movies, series, files and live TV): the ▼ menu is simpler. The first screen has Audio, Subtitles, Watch dubbed/subtitled, Picture and sound, More options; the current value shows on the right, › opens the next list, ✓ only marks what is chosen, and BACK goes to the list above</item>
         <item>Movies and Series: no more key hints along the bottom, so the posters get the space; the poster shows only the progress bar (the time left is in the box at the top), and labels never take two lines</item>
         <item>Settings: turning on high contrast (or changing the text size or a ready-made look) keeps the focus on the same option, and changing an option no longer shows the “Undo” notice that took the focus away (undo stays in System › Recent changes)</item>
@@ -48,6 +51,8 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>filmes_rapido</item>
+        <item>cruz_leve</item>
         <item>menu_player</item>
         <item>pacote_novo</item>
         <item>cores_sistema</item>
@@ -74,6 +79,8 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Movies open fast</item>
+        <item>Smooth home screen</item>
         <item>Player menu</item>
         <item>Everything still there</item>
         <item>Colour system</item>
@@ -100,6 +107,8 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Open Movies, then Series: do the posters show in a few seconds, and does moving through them stay smooth in the first minute (no long pauses)?</item>
+        <item>On the home screen, move left and right along the cross a few times: do the items glide without stutter, and do the faded neighbours look the same as before?</item>
         <item>In a movie, does ▼ show a short menu (Audio, Subtitles, Picture and sound, More options) with the current value on the right, and does BACK inside a list go back to the one above?</item>
         <item>After the move to the new app name, are your home screen, add-ons, plugins, profiles and the panel PIN the same as before?</item>
         <item>On the home screen and in Settings, is orange only on the focus and the logo, with values in soft white (not orange)?</item>

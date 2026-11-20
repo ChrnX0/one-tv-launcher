@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Filmes e Séries abrem mais rápido: juntar as cópias dublada e legendada de cada título agora leva uma fração do tempo (em listas grandes isso deixava a TV ocupada por mais de um minuto depois de abrir)</item>
+        <item>Tela inicial: andar pela cruz ficou mais leve, porque os itens apagados não precisam mais de uma passada extra de desenho a cada quadro</item>
+        <item>Ler em voz alta o item em foco (Extras): as telas fechadas não ficam mais presas na memória</item>
         <item>Player (filmes, séries, arquivos e TV ao vivo): o menu do ▼ ficou simples. A primeira tela tem Áudio, Legenda, Assistir dublado/legendado, Imagem e som e Mais opções; o valor de agora aparece à direita, › abre a próxima lista, ✓ só marca o que está escolhido e VOLTAR volta à lista de cima</item>
         <item>Filmes e Séries: sem a faixa de dicas embaixo, os pôsteres ganham o espaço; no pôster fica só a barra de progresso (o tempo que falta aparece na caixa de cima), e nenhum selo ocupa duas linhas</item>
         <item>Configurações: ligar o alto contraste (ou trocar o tamanho do texto ou o visual pronto) mantém o foco na mesma opção, e trocar uma opção não mostra mais o aviso “Desfazer” que tirava o foco (desfazer continua em Sistema › Mudanças recentes)</item>
@@ -45,6 +48,8 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Filmes abrem rápido</item>
+        <item>Tela inicial leve</item>
         <item>Menu do player</item>
         <item>Tudo no lugar</item>
         <item>Sistema de cores</item>
@@ -71,6 +76,8 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Abra Filmes e depois Séries: os pôsteres aparecem em poucos segundos, e andar por eles continua liso no primeiro minuto (sem pausas longas)?</item>
+        <item>Na tela inicial, ande para os lados pela cruz algumas vezes: os itens deslizam sem engasgar, e os vizinhos apagados estão iguais a antes?</item>
         <item>Num filme, o ▼ mostra um menu curto (Áudio, Legenda, Imagem e som, Mais opções) com o valor de agora à direita, e VOLTAR dentro de uma lista volta para a de cima?</item>
         <item>Depois da troca para o novo nome do app, a tela inicial, os add-ons, os plugins, os perfis e o PIN do painel continuam como antes?</item>
         <item>Na tela inicial e nas Configurações, o laranja aparece só no foco e na marca, com os valores em branco suave (não laranja)?</item>
