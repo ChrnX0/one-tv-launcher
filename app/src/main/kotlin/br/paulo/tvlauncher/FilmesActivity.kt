@@ -189,10 +189,15 @@ class FilmesActivity : Activity() {
         carregar()
     }
 
+    /** A tela vazia (sem lista de TV) está à mostra: ao voltar das Configurações, recarrega. */
+    private var vazioMostrado = false
+
     override fun onResume() {
         super.onResume()
         // Perfis de verdade (ideia 11): os interesses na memória são do perfil de antes; gravar com eles misturaria os dois.
         if (Perfil.chaveDados(this) != perfilCarregado) { recreate(); return }
+        // Voltou de "Adicionar lista" (tela vazia): a lista nova só aparece recarregando a tela inteira.
+        if (vazioMostrado) { recreate(); return }
         // Voltou da VodActivity: a posição mudou ("continuar" e os botões da ficha).
         indoAoVideo = false
         val lista = todos
@@ -289,6 +294,7 @@ class FilmesActivity : Activity() {
                 ultimaSalva = ultima
                 if (f.isEmpty()) {
                     aviso.visibility = View.GONE
+                    vazioMostrado = true
                     val vazio = vazioDoCatalogo(this, getString(R.string.filmes_vazio))
                     (aviso.parent as FrameLayout).addView(vazio, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
                     vazio.getFocusables(View.FOCUS_DOWN).firstOrNull()?.requestFocus()   // o botão "Adicionar lista" já vem focado
