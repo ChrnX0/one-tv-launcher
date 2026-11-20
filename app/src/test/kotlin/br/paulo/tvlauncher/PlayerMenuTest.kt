@@ -39,4 +39,21 @@ class PlayerMenuTest {
         assertEquals(null, PlayerMenu.valorNaLinha(PlayerMenu.escolha("Português", true, nada)))
         assertEquals(null, PlayerMenu.valorNaLinha(PlayerMenu.acao("Assistir legendado", "Continua deste ponto", nada)))
     }
+
+    @Test fun valorComMaiuscula() {
+        assertEquals("Português ›", PlayerMenu.valorNaLinha(PlayerMenu.abre("Áudio", "português", nada)))
+        assertEquals("Alto contraste", PlayerMenu.valorNaLinha(PlayerMenu.Item("Estilo", PlayerMenu.Tipo.CHAVE, "alto contraste", acao = nada)))
+    }
+
+    @Test fun voltarCaiNoItemDeOndeSaiu() {
+        val itens = listOf(PlayerMenu.abre("Áudio", "Português", nada), PlayerMenu.abre("Legenda", "Desligada", nada))
+        PlayerMenu.escolheu("Menu", itens[1])
+        assertEquals(null, PlayerMenu.focoAoAbrir("Legenda", itens, null))   // outra lista não usa o retorno
+        assertEquals(1, PlayerMenu.focoAoAbrir("Menu", itens, null))
+        assertEquals(null, PlayerMenu.focoAoAbrir("Menu", itens, null))      // usado uma vez só
+        PlayerMenu.escolheu("Menu", itens[1]); PlayerMenu.escolheu("Legenda", PlayerMenu.escolha("Desligada", true, nada))
+        assertEquals(null, PlayerMenu.focoAoAbrir("Menu", itens, null))      // escolha que fecha esquece o caminho
+        PlayerMenu.escolheu("Menu", itens[1])
+        assertEquals(0, PlayerMenu.focoAoAbrir("Menu", itens, 0))            // foco pedido vence
+    }
 }

@@ -771,7 +771,8 @@ object Estilo {
             background = GradientDrawable(if (rtl) GradientDrawable.Orientation.RIGHT_LEFT else GradientDrawable.Orientation.LEFT_RIGHT,
                 // 19/11/2026 (crítica de design): ainda vazava; agora fica quase opaco já do meio da tela para a direita.
                 intArrayOf(0x00000000, 0x40000000, 0xE6080A10.toInt(), 0xF5080A10.toInt(), 0xF5080A10.toInt()))
-            addView(painel, FrameLayout.LayoutParams(dp(ctx, LISTA_LARGURA), ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END))
+            // com valores à direita o painel alarga: na TV (20/11/2026) "Volume parecido entre canais" quebrava em 2 linhas
+            addView(painel, FrameLayout.LayoutParams(dp(ctx, if (valores.any { !it.isNullOrBlank() }) LISTA_LARGURA_VALORES else LISTA_LARGURA), ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END))
         }
         d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         d.setContentView(raiz)
@@ -828,6 +829,7 @@ object Estilo {
 
     /** Medidas da [lista] (dp/sp numa tela de 960 x 540). */
     const val LISTA_LARGURA = 470
+    const val LISTA_LARGURA_VALORES = 580
     const val LISTA_FONTE = 24f
     const val LISTA_FONTE_POSICAO = 17f
     /** A 2ª linha de um rótulo [comInfo]: 18 sp, o texto padrão do Google para TV (o mesmo da linha de baixo da cruz). */
