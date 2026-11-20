@@ -1,5 +1,6 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"nesta versão os apps são instalados pela Play Store":"此版本中的应用通过 Play 商店安装",
 "Próximo jogo do seu time no item TV da tela inicial":"在主屏幕的电视项中显示你的球队下一场比赛",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"在天气旁显示汇率（Frankfurter，免费）",
 "Contagem regressiva no alto da tela inicial (últimos 7 dias)":"在主屏幕顶部显示倒计时（最后 7 天）",

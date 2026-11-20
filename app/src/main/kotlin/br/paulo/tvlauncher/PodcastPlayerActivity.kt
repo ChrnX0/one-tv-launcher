@@ -262,7 +262,7 @@ class PodcastPlayerActivity : Activity() {
         }
         info.text = listOfNotNull(
             e.ep.dataMs.takeIf { it > 0 }?.let { java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(Date(it)) },
-            e.ep.temporada.takeIf { it > 0 && e.ep.numero > 0 }?.let { "T$it E${e.ep.numero}" },
+            e.ep.temporada.takeIf { it > 0 && e.ep.numero > 0 }?.let { getString(R.string.pod_temp_ep, it, e.ep.numero) },
             e.ep.duracaoS.takeIf { it > 0 }?.let { getString(R.string.pod_minutos, maxOf(1, (it + 59) / 60)) },
         ).joinToString(" · ")
         val endereco = e.capaPodcast.ifEmpty { e.ep.capa }
@@ -432,15 +432,24 @@ class PodcastPlayerActivity : Activity() {
         when (val c = v.getChildAt(i)) { is TextView -> c.text.toString(); is android.view.ViewGroup -> textoDe(c); else -> "" }
     }.trim()
 
+    /** Teclas que esta tela usa; o resto (volume, mudo, botão B do controle de jogo...) segue para o sistema. */
+    private val teclasDaTela = setOf(KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_UP,
+        KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER,
+        KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+        KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_BACK)
+
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
-        if (e.action != KeyEvent.ACTION_DOWN) {
-            return if (e.keyCode == KeyEvent.KEYCODE_BACK) super.dispatchKeyEvent(e) else true
-        }
+        // Antes engolia TODAS as teclas: o volume do controle não fazia nada nesta tela (debug 20/11/2026).
+        if (e.keyCode !in teclasDaTela) return super.dispatchKeyEvent(e)
+        if (e.action != KeyEvent.ACTION_DOWN) return if (e.keyCode == KeyEvent.KEYCODE_BACK) super.dispatchKeyEvent(e) else true
         val s = OuvirServico.instancia
         when (e.keyCode) {
             KeyEvent.KEYCODE_MEDIA_REWIND -> { s?.pular(-OuvirServico.VOLTAR_MS); atualizarTempo(); return true }
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { s?.pular(OuvirServico.AVANCAR_MS); atualizarTempo(); return true }
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> { s?.alternar(); return true }
+            // ▶ e ⏸ separados (controle da LG pelo HDMI) fazem o que dizem; só a tecla ⏯ alterna.
+            KeyEvent.KEYCODE_MEDIA_PLAY -> { if (e.repeatCount == 0) s?.continuar(); return true }
+            KeyEvent.KEYCODE_MEDIA_PAUSE -> { if (e.repeatCount == 0) s?.pausar(); return true }
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> { if (e.repeatCount == 0) s?.alternar(); return true }
             KeyEvent.KEYCODE_BACK -> {
                 if (andar == ANDAR_SEGUIR || andar == ANDAR_BARRA) { andar = ANDAR_BOTOES; desenharFoco(true); return true }
                 return super.dispatchKeyEvent(e)
@@ -457,7 +466,7 @@ class PodcastPlayerActivity : Activity() {
                     sv.irPara(PodcastPlayerLogic.andar(sv.posicaoMs, d * vezes, sv.duracaoMs)); atualizarTempo()
                 }
                 KeyEvent.KEYCODE_DPAD_DOWN -> { andar = ANDAR_BOTOES; desenharFoco(true) }
-                else -> if (ok) s?.alternar()
+                else -> if (ok && e.repeatCount == 0) s?.alternar()   // segurar OK não liga/desliga sem parar
             }
             ANDAR_BOTOES -> when (e.keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> if (botao > 0) { botao--; desenharFoco(true) }

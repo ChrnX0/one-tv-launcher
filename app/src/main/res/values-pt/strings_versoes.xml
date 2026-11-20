@@ -23,6 +23,9 @@
         <item>As dicas do rodapé somem depois de vistas 3 vezes em cada tela (você já aprendeu)</item>
         <item>Letras de pelo menos 15 na barra de cima e nos selos; o player de podcast lê em voz alta o botão em foco</item>
         <item>Painel: botões de 48 px no celular, filtro escolhido com a barra laranja e mais contraste no texto fraco</item>
+        <item>Podcasts e rádio: segurar OK não pausa e volta sozinho, as teclas PLAY e PAUSA fazem só o que dizem, e o volume do controle funciona dentro do player de podcast</item>
+        <item>Filmes e Séries: trocar entre dublado e legendado continua do ponto onde você estava; títulos sem sinopse não mostram mais a palavra “null”</item>
+        <item>Casa (HA): a TV só conversa com o Home Assistant que ela já conhece; o timer de dormir do podcast não desliga mais a rádio</item>
         <item>Uma atualização instalada com a TV dormindo agora é otimizada na mesma noite (antes a versão nova rodava mais lenta o dia seguinte inteiro, até a tela apagar de novo)</item>
         <item>Filmes e Séries abrem mais rápido: juntar as cópias dublada e legendada de cada título agora leva uma fração do tempo (em listas grandes isso deixava a TV ocupada por mais de um minuto depois de abrir)</item>
         <item>Tela inicial: andar pela cruz ficou mais leve, porque os itens apagados não precisam mais de uma passada extra de desenho a cada quadro</item>
@@ -64,6 +67,9 @@
         <item>Dicas que somem</item>
         <item>Celular controle</item>
         <item>Arrastar e ver</item>
+        <item>Teclas do podcast</item>
+        <item>Trocar a versão</item>
+        <item>Despertador: subida</item>
         <item>Filmes abrem rápido</item>
         <item>Tela inicial leve</item>
         <item>Menu do player</item>
@@ -98,6 +104,9 @@
         <item>Abra o Rádio quatro vezes: na quarta, a faixa de dicas do rodapé não aparece mais?</item>
         <item>No app Sofaly do celular, toque na TV: abre o controle, deslizar move o foco na TV e o volume funciona pela notificação?</item>
         <item>No painel no computador, arraste um vídeo para a aba Controle: ele começa a tocar na TV?</item>
+        <item>Num podcast tocando, segure OK por 2 segundos: o player continua tocando (não fica pausando e voltando), e o volume do controle muda o som?</item>
+        <item>Num filme com as duas versões, assista um pouco e troque para a outra pelo ▼: a outra versão começa do mesmo ponto?</item>
+        <item>Ao editar um despertador, as opções de subida do som dizem “Sobe em 1 min e meio” e “Sobe em 2 min” (nenhuma diz “1 min”)?</item>
         <item>Abra Filmes e depois Séries: os pôsteres aparecem em poucos segundos, e andar por eles continua liso no primeiro minuto (sem pausas longas)?</item>
         <item>Na tela inicial, ande para os lados pela cruz algumas vezes: os itens deslizam sem engasgar, e os vizinhos apagados estão iguais a antes?</item>
         <item>Num filme, o ▼ mostra um menu curto (Áudio, Legenda, Imagem e som, Mais opções) com o valor de agora à direita, e VOLTAR dentro de uma lista volta para a de cima?</item>

@@ -111,8 +111,11 @@ class IconPickerActivity : Activity() {
             val pronto = cache.get(chave)
             img.setImageDrawable(pronto)
             if (pronto == null) leitor.execute {
+                // A célula já mostra outro ícone (a grade rolou): pula. Sem isto, rolando rápido, a fila de uma thread
+                // desenhava centenas de ícones que já saíram da tela antes dos que estão nela.
+                if (img.tag != chave) return@execute
                 val d = (if (nome == null) runCatching { packageManager.getApplicationIcon(intent.getStringExtra(EXTRA_APP)!!) }.getOrNull()
-                    else PacoteIcones.desenho(this@IconPickerActivity, pacote, nome)) ?: return@execute
+                    else PacoteIcones.desenho(this@IconPickerActivity, pacote, nome, guardar = false)) ?: return@execute
                 cache.put(chave, d)
                 img.post { if (img.tag == chave) img.setImageDrawable(d) }
             }

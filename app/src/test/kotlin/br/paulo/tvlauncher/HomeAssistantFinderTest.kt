@@ -26,4 +26,15 @@ class HomeAssistantFinderTest {
         assertFalse(HomeAssistantFinder.aceitouChave(401, "401: Unauthorized"))
         assertEquals("http://192.168.1.236:8123", HomeAssistantFinder.endereco("192.168.1.236", 8123))
     }
+
+    @Test fun chaveSoVaiAoMesmoHomeAssistant() {
+        assertTrue(HomeAssistantFinder.anuncioAceito(null, "abc"))          // 1ª procura: qualquer anúncio
+        assertTrue(HomeAssistantFinder.anuncioAceito("abc", "abc"))
+        assertFalse(HomeAssistantFinder.anuncioAceito("abc", "outro"))      // aparelho falso com outro uuid
+        assertFalse(HomeAssistantFinder.anuncioAceito("abc", null))          // anúncio sem uuid
+        assertTrue(HomeAssistantFinder.podeVarrer(null))
+        assertFalse(HomeAssistantFinder.podeVarrer("abc"))                   // HA conhecido: sem varredura às cegas
+        assertFalse(HomeAssistantFinder.hostAceito("127.0.0.1"))
+        assertTrue(HomeAssistantFinder.hostAceito("192.168.1.20"))
+    }
 }

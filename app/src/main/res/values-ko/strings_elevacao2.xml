@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">켜짐</string>
     <string name="elv_cat_desligado">꺼짐</string>
     <string name="elv_cat_ep">%1$s · 시즌%2$d %3$d화</string>
+    <string name="pod_temp_ep">시즌%1$d %2$d화</string>
     <string name="elv_cat_so_ep">%1$s · %2$d화</string>
     <string name="elv_cat_temporada">%1$s · 시즌 %2$d</string>
     <string name="elv_cat_filme_ano">%1$s (%2$d)</string>

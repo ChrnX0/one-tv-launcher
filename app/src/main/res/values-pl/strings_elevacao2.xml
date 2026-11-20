@@ -12,6 +12,7 @@
     <string name="elv_cat_ligado">Wł.</string>
     <string name="elv_cat_desligado">Wył.</string>
     <string name="elv_cat_ep">%1$s · S%2$d O%3$d</string>
+    <string name="pod_temp_ep">S%1$d O%2$d</string>
     <string name="elv_cat_so_ep">%1$s · Odcinek %2$d</string>
     <string name="elv_cat_temporada">%1$s · Sezon %2$d</string>
     <string name="elv_cat_filme_ano">%1$s (%2$d)</string>

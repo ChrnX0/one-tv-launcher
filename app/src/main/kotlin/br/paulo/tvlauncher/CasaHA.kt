@@ -383,6 +383,9 @@ object CasaHA {
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
     fun endereco(ctx: Context): String? = prefs(ctx).getString("endereco", null)
+    /** `uuid` do anúncio mDNS do Home Assistant que já aceitou a chave (HomeAssistantFinder só manda a chave a ele). */
+    fun uuidHa(ctx: Context): String? = prefs(ctx).getString("ha_uuid", null)
+    fun guardarUuidHa(ctx: Context, uuid: String) { prefs(ctx).edit().putString("ha_uuid", uuid.take(64)).apply() }
     fun configurado(ctx: Context) = endereco(ctx) != null && prefs(ctx).contains("token_cifrado")
     fun texto(ctx: Context, chave: String): String = prefs(ctx).getString(chave, "") ?: ""
 
@@ -392,7 +395,7 @@ object CasaHA {
         if (!tokenValido(token)) return txt(R.string.casa_err_token)
         return try {
             val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, chave())
-            prefs(ctx).edit().putString("endereco", e)
+            prefs(ctx).edit().putString("endereco", e).remove("ha_uuid")   // outra chave pode ser de outro HA
                 .putString("token_cifrado", Base64.encodeToString(c.doFinal(token.trim().toByteArray()), Base64.NO_WRAP))
                 .putString("token_iv", Base64.encodeToString(c.iv, Base64.NO_WRAP)).commit()
             null

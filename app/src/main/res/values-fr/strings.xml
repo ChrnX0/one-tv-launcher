@@ -286,7 +286,7 @@
     <string name="som_classico">Classique</string>
     <string name="som_sino">Cloche</string>
     <string name="som_direto">Volume maximal</string>
-    <string name="som_rampa1">Monte en 1 min</string>
+    <string name="som_rampa1">Monte en 1½ min</string>
     <string name="som_rampa2">Monte en 2 min</string>
     <string name="vel_resultado">Internet : %1$.0f Mbit/s (%2$.0f Mo téléchargés en %3$.1f s)</string>
     <string name="vel_falhou">Échec du test (pas d’internet ou serveur indisponible)</string>

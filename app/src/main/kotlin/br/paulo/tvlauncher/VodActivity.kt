@@ -831,7 +831,11 @@ class VodActivity : Activity() {
     }
 
     /** Grava onde parou. Terminou = posição igual à duração (sai do "continuar assistindo"). */
+    /** Saiu pela troca de versão: a posição MUDOU de arquivo (ver [trocarVersao]); o onStop não grava de volta. */
+    private var saiuPelaTroca = false
+
     private fun salvar(terminou: Boolean = false) {
+        if (saiuPelaTroca) return
         val p = player ?: return
         val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
         val ms = if (terminou) dur else p.currentPosition
@@ -1115,11 +1119,23 @@ class VodActivity : Activity() {
         val (v, altId) = outraVersao() ?: return
         val p = player ?: return
         val pos = p.currentPosition
-        salvar()
+        // A posição vai junto para a outra versão e sai desta (debug 20/11/2026): antes ficava nas duas, a grade e o
+        // Continuar mostravam o mesmo filme duas vezes e retomar pela versão velha voltava ao ponto antigo.
         val altFonte = intent.getStringExtra(EXTRA_ALT_FONTE).orEmpty()
         val tipo = intent.getStringExtra(EXTRA_TIPO) ?: TIPO_FILME
+        val chaveVelha = chave
+        if (chave(tipo, altFonte, altId) != chaveVelha) {
+            saiuPelaTroca = true
+            val nova = Posicao(pos, p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L, System.currentTimeMillis())
+            val chaveNova = chave(tipo, altFonte, altId)
+            Fundo.rodar("trocar-versao-posicao") {
+                PlayerArmazem.definirPosicao(this, chaveVelha, null)
+                if (pos > 0) PlayerArmazem.definirPosicao(this, chaveNova, nova)
+            }
+        } else salvar()
         val pref = if (v == Idioma.Versao.LEGENDADA) Idioma.Pref.ORIGINAL else Idioma.Pref.DUBLADO
-        val chaves = listOf(chaveIdioma, chave(tipo, altFonte, altId)).distinct()
+        // Episódio: só a chave da série (uma por episódio trocado enchia o limite de 500 e expulsava escolhas reais).
+        val chaves = if (tipo == TIPO_EPISODIO) listOf(chaveIdioma) else listOf(chaveIdioma, chave(tipo, altFonte, altId)).distinct()
         Fundo.rodar("trocar-versao") { chaves.forEach { IdiomaPlayer.lembrar(this, it, pref) } }
         val atual = intent.getStringExtra(EXTRA_LEG_VERSAO)?.let { n -> Idioma.Versao.entries.firstOrNull { it.name == n } } ?: Idioma.Versao.DESCONHECIDA
         val nova = Intent(intent)

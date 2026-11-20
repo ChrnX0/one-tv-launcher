@@ -21,7 +21,9 @@ object PlayPolicy {
     val AI_ACCESSIBILITY_TOOLS = setOf("elementos_na_tela", "tocar_elemento")
 
     /** Tudo o que o MCP não oferece na versão da Play: as de acessibilidade e as que mexem em outros apps (PR 2). */
-    val PLAY_REMOVED_MCP_TOOLS = AI_ACCESSIBILITY_TOOLS + setOf("instalar_apk")
+    // executar_shell (20/11/2026, debug): comando livre como `adb shell` deixa a IA fazer `pm install`/`pm disable-user`,
+    // justamente o que INSTALL_APK e FREEZE_APPS tiram da Play. As ferramentas prontas continuam.
+    val PLAY_REMOVED_MCP_TOOLS = AI_ACCESSIBILITY_TOOLS + setOf("instalar_apk", "executar_shell")
 
     /** A ferramenta do MCP existe nesta versão? */
     fun mcpToolAllowed(name: String, play: Boolean): Boolean = !play || name !in PLAY_REMOVED_MCP_TOOLS

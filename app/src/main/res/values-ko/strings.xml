@@ -286,7 +286,7 @@
     <string name="som_classico">클래식</string>
     <string name="som_sino">벨</string>
     <string name="som_direto">최대 볼륨</string>
-    <string name="som_rampa1">1분에 걸쳐 커짐</string>
+    <string name="som_rampa1">1.5분에 걸쳐 커짐</string>
     <string name="som_rampa2">2분에 걸쳐 커짐</string>
     <string name="vel_resultado">인터넷: %1$.0f Mbps(%3$.1f초 동안 %2$.0f MB 다운로드)</string>
     <string name="vel_falhou">테스트 실패(인터넷 없음 또는 서버 장애)</string>

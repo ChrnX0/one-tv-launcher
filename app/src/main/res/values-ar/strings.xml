@@ -286,7 +286,7 @@
     <string name="som_classico">كلاسيكي</string>
     <string name="som_sino">جرس</string>
     <string name="som_direto">صوت كامل</string>
-    <string name="som_rampa1">يرتفع خلال دقيقة</string>
+    <string name="som_rampa1">يرتفع خلال دقيقة ونصف</string>
     <string name="som_rampa2">يرتفع خلال دقيقتين</string>
     <string name="vel_resultado">الإنترنت: %1$.0f ميغابت/ث (نزّل %2$.0f ميغابايت في %3$.1f ث)</string>
     <string name="vel_falhou">فشل الاختبار (لا إنترنت أو الخادم متوقف)</string>

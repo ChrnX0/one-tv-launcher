@@ -286,7 +286,7 @@
     <string name="som_classico">Klasik</string>
     <string name="som_sino">Zil</string>
     <string name="som_direto">Tam ses</string>
-    <string name="som_rampa1">1 dakikada yükselir</string>
+    <string name="som_rampa1">1½ dakikada yükselir</string>
     <string name="som_rampa2">2 dakikada yükselir</string>
     <string name="vel_resultado">İnternet: %1$.0f Mbps (%3$.1f sn’de %2$.0f MB indirildi)</string>
     <string name="vel_falhou">Test başarısız (internet yok veya sunucu kapalı)</string>

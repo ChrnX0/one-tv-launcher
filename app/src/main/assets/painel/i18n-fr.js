@@ -1,5 +1,6 @@
 // Painel em fr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"nesta versão os apps são instalados pela Play Store":"dans cette version, les applis s'installent depuis le Play Store",
 "Próximo jogo do seu time no item TV da tela inicial":"Prochain match de votre équipe sur l'élément TV de l'écran d'accueil",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"Taux de change à côté de la météo (Frankfurter, gratuit)",
 "Contagem regressiva no alto da tela inicial (últimos 7 dias)":"Compte à rebours en haut de l'écran d'accueil (7 derniers jours)",

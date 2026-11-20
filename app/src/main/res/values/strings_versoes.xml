@@ -26,6 +26,9 @@
         <item>Remote hints at the bottom go away after you have seen them 3 times on each screen</item>
         <item>Text of at least 15 in the top bar and badges; the podcast player reads the focused button aloud</item>
         <item>Panel: 48 px buttons on phones, the chosen filter marked with the orange bar, stronger contrast for faint text</item>
+        <item>Podcasts and radio: holding OK no longer pauses and resumes on its own, the PLAY and PAUSE keys do only what they say, and the remote\'s volume works inside the podcast player</item>
+        <item>Movies and Series: switching between dubbed and subtitled continues from where you were; titles without a synopsis no longer show the word “null”</item>
+        <item>Home (HA): the TV only talks to the Home Assistant it already knows; the podcast sleep timer no longer turns the radio off</item>
         <item>An update installed while the TV sleeps is now optimised that same night (before, the new version ran slower all the next day, until the screen turned off again)</item>
         <item>Movies and Series open faster: joining the dubbed and subtitled copies of each title now takes a fraction of the time (on big lists it kept the TV busy for over a minute after opening)</item>
         <item>Home screen: moving along the cross is lighter, because the faded items no longer need an extra drawing pass on every frame</item>
@@ -67,6 +70,9 @@
         <item>dicas_somem</item>
         <item>celular_controle</item>
         <item>arrastar_ver</item>
+        <item>podcast_teclas</item>
+        <item>trocar_versao</item>
+        <item>alarme_subida</item>
         <item>filmes_rapido</item>
         <item>cruz_leve</item>
         <item>menu_player</item>
@@ -101,6 +107,9 @@
         <item>Hints that go away</item>
         <item>Phone remote</item>
         <item>Drag and watch</item>
+        <item>Podcast keys</item>
+        <item>Switch version</item>
+        <item>Alarm: rise</item>
         <item>Movies open fast</item>
         <item>Smooth home screen</item>
         <item>Player menu</item>
@@ -135,6 +144,9 @@
         <item>Open Radio four times: on the fourth, is the hints strip at the bottom gone?</item>
         <item>In the Sofaly phone app, tap the TV: does the remote open, does swiping move the focus on the TV and does volume work from the notification?</item>
         <item>In the panel on a computer, drag a video onto the Control tab: does it start playing on the TV?</item>
+        <item>With a podcast playing, hold OK for 2 seconds: does it keep playing (no pausing and resuming), and does the remote\'s volume change the sound?</item>
+        <item>In a movie with both versions, watch a bit and switch to the other through ▼: does the other version start from the same point?</item>
+        <item>When editing an alarm, do the sound rise options say “Rises over 1½ min” and “Rises over 2 min” (none says “1 min”)?</item>
         <item>Open Movies, then Series: do the posters show in a few seconds, and does moving through them stay smooth in the first minute (no long pauses)?</item>
         <item>On the home screen, move left and right along the cross a few times: do the items glide without stutter, and do the faded neighbours look the same as before?</item>
         <item>In a movie, does ▼ show a short menu (Audio, Subtitles, Picture and sound, More options) with the current value on the right, and does BACK inside a list go back to the one above?</item>

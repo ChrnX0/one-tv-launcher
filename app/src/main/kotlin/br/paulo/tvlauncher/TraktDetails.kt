@@ -58,7 +58,7 @@ object TraktDetails {
         val ids = o.optJSONObject("ids") ?: return null
         val trakt = ids.optInt("trakt").takeIf { it > 0 } ?: return null
         val tmdb = ids.optInt("tmdb").takeIf { it > 0 } ?: return null   // sem id do TMDB não se casa com o resto do app
-        return Achado(trakt, tmdb, o.optString("title"), o.optString("original_title"), o.optInt("year").takeIf { it in 1880..2100 }, pontos)
+        return Achado(trakt, tmdb, txt(o, "title"), txt(o, "original_title"), o.optInt("year").takeIf { it in 1880..2100 }, pontos)
     }
 
     /** Para o [InfoExterna.escolher], que já sabe casar nome + ano (a popularidade é a nota da busca do Trakt). */
@@ -68,15 +68,22 @@ object TraktDetails {
     fun lerPorTmdb(json: String, serie: Boolean): JSONObject? =
         runCatching { JSONArray(json).optJSONObject(0)?.optJSONObject(tipo(serie)) }.getOrNull()
 
+    /**
+     * Texto do campo, "" se faltar OU vier null. No Android, optString de um `null` do JSON devolve a palavra "null"
+     * (o org.json dos testes devolve ""): o Trakt manda "overview": null nas traduções e a ficha mostrava "null" (20/11/2026).
+     */
+    internal fun txt(o: JSONObject?, campo: String): String =
+        if (o == null || o.isNull(campo)) "" else o.optString(campo)
+
     fun traktDe(o: JSONObject?): Int? = o?.optJSONObject("ids")?.optInt("trakt")?.takeIf { it > 0 }
 
     /** A tradução do país da TV, senão a primeira da língua com texto. (título, sinopse); null se nenhuma serve. */
     fun lerTraducao(json: String, pais: String): Pair<String, String>? = runCatching {
         val a = JSONArray(json)
         val l = (0 until a.length()).mapNotNull { a.optJSONObject(it) }
-        val boa = l.filter { it.optString("overview").isNotBlank() || it.optString("title").isNotBlank() }
-        val t = boa.firstOrNull { it.optString("country").equals(pais, true) } ?: boa.firstOrNull() ?: return@runCatching null
-        t.optString("title").trim() to t.optString("overview").trim()
+        val boa = l.filter { txt(it, "overview").isNotBlank() || txt(it, "title").isNotBlank() }
+        val t = boa.firstOrNull { txt(it, "country").equals(pais, true) } ?: boa.firstOrNull() ?: return@runCatching null
+        txt(t, "title").trim() to txt(t, "overview").trim()
     }.getOrNull()
 
     /** Chave do vídeo do YouTube no endereço do trailer do Trakt; vazio se não for YouTube. */
@@ -90,12 +97,12 @@ object TraktDetails {
     fun lerPessoas(json: String): Pair<List<String>, String> = runCatching {
         val o = JSONObject(json)
         val elenco = o.optJSONArray("cast")?.let { c ->
-            (0 until c.length()).mapNotNull { c.optJSONObject(it)?.optJSONObject("person")?.optString("name")?.takeIf { n -> n.isNotBlank() } }
+            (0 until c.length()).mapNotNull { c.optJSONObject(it)?.optJSONObject("person")?.let { txt(it, "name") }?.takeIf { n -> n.isNotBlank() } }
         }.orEmpty().distinct().take(6)
         val diretor = o.optJSONObject("crew")?.optJSONArray("directing")?.let { d ->
             (0 until d.length()).mapNotNull { d.optJSONObject(it) }.filter { p ->
-                p.optString("job") == "Director" || p.optJSONArray("jobs")?.let { j -> (0 until j.length()).any { j.optString(it) == "Director" } } == true
-            }.mapNotNull { it.optJSONObject("person")?.optString("name")?.takeIf { n -> n.isNotBlank() } }
+                txt(p, "job") == "Director" || p.optJSONArray("jobs")?.let { j -> (0 until j.length()).any { j.optString(it) == "Director" } } == true
+            }.mapNotNull { it.optJSONObject("person")?.let { pe -> txt(pe, "name") }?.takeIf { n -> n.isNotBlank() } }
         }.orEmpty().distinct().take(2).joinToString(", ")
         elenco to diretor
     }.getOrDefault(emptyList<String>() to "")
@@ -104,7 +111,7 @@ object TraktDetails {
     fun lerProximo(json: String, fuso: TimeZone = TimeZone.getDefault()): InfoExterna.ProximoEp? = runCatching {
         if (json.isBlank()) return null
         val o = JSONObject(json)
-        val quando = o.optString("first_aired").takeIf { it.isNotBlank() } ?: return null
+        val quando = txt(o, "first_aired").takeIf { it.isNotBlank() } ?: return null
         val utc = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
         val ms = utc.parse(quando.take(19))?.time ?: return null
         val dia = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = fuso }.format(java.util.Date(ms))
@@ -118,7 +125,7 @@ object TraktDetails {
     fun idade(json: String, serie: Boolean): Int? {
         val a = runCatching { JSONArray(json) }.getOrNull() ?: return null
         val o = a.optJSONObject(0)?.optJSONObject(tipo(serie)) ?: return Classificacao.SEM
-        return o.optString("certification").takeIf { it.isNotBlank() }?.let { Classificacao.idadeEua(it) } ?: Classificacao.SEM
+        return txt(o, "certification").takeIf { it.isNotBlank() }?.let { Classificacao.idadeEua(it) } ?: Classificacao.SEM
     }
 
     /** Quantas temporadas (sem a 0, de especiais). */
@@ -136,19 +143,19 @@ object TraktDetails {
      */
     fun detalhe(tmdb: Int, item: JSONObject, serie: Boolean, traducao: Pair<String, String>?, pessoas: Pair<List<String>, String>,
                 proximo: InfoExterna.ProximoEp?, temporadas: Int): InfoExterna.Detalhe {
-        val imdb = item.optJSONObject("ids")?.optString("imdb").orEmpty().takeIf { InfoExterna.idImdbValido(it) }.orEmpty()
-        val sinopse = traducao?.second?.takeIf { it.isNotBlank() } ?: item.optString("overview").trim()
+        val imdb = txt(item.optJSONObject("ids"), "imdb").takeIf { InfoExterna.idImdbValido(it) }.orEmpty()
+        val sinopse = traducao?.second?.takeIf { it.isNotBlank() } ?: txt(item, "overview").trim()
         return InfoExterna.Detalhe(tmdb, imdb, sinopse.take(1500), pessoas.first, emptyList(), null, proximo,
-            noAr = serie && (noAr(item.optString("status")) || proximo != null),
-            trailer = trailer(item.optString("trailer")), diretor = if (serie) "" else pessoas.second,
+            noAr = serie && (noAr(txt(item, "status")) || proximo != null),
+            trailer = trailer(txt(item, "trailer")), diretor = if (serie) "" else pessoas.second,
             poster = "", temporadas = if (serie) temporadas else 0)
     }
 
     /** (título, resumo) do episódio: a tradução quando houver, senão o original. Null sem resumo. */
     fun lerEpisodio(json: String, traducao: Pair<String, String>?): Pair<String, String>? = runCatching {
         val o = JSONObject(json)
-        val resumo = traducao?.second?.takeIf { it.isNotBlank() } ?: o.optString("overview").trim()
-        if (resumo.isEmpty()) null else (traducao?.first?.takeIf { it.isNotBlank() } ?: o.optString("title").trim()) to resumo.take(900)
+        val resumo = traducao?.second?.takeIf { it.isNotBlank() } ?: txt(o, "overview").trim()
+        if (resumo.isEmpty()) null else (traducao?.first?.takeIf { it.isNotBlank() } ?: txt(o, "title").trim()) to resumo.take(900)
     }.getOrNull()
 
     /**

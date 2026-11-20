@@ -1,5 +1,6 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"nesta versão os apps são instalados pela Play Store":"bu sürümde uygulamalar Play Store'dan yüklenir",
 "Próximo jogo do seu time no item TV da tela inicial":"Ana ekrandaki TV öğesinde takımınızın sıradaki maçı",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"Hava durumunun yanında döviz kurları (Frankfurter, ücretsiz)",
 "Contagem regressiva no alto da tela inicial (últimos 7 dias)":"Ana ekranın üstünde geri sayım (son 7 gün)",

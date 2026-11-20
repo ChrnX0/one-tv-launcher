@@ -286,7 +286,7 @@
     <string name="som_classico">Классический</string>
     <string name="som_sino">Колокол</string>
     <string name="som_direto">Полная громкость</string>
-    <string name="som_rampa1">Нарастает за 1 мин</string>
+    <string name="som_rampa1">Нарастает за 1½ мин</string>
     <string name="som_rampa2">Нарастает за 2 мин</string>
     <string name="vel_resultado">Интернет: %1$.0f Мбит/с (%2$.0f МБ за %3$.1f с)</string>
     <string name="vel_falhou">Проверка не удалась (нет интернета или сервер недоступен)</string>

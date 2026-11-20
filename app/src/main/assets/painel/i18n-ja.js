@@ -1,5 +1,6 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"nesta versão os apps são instalados pela Play Store":"このバージョンではアプリは Play ストアからインストールします",
 "Próximo jogo do seu time no item TV da tela inicial":"ホーム画面のテレビ項目にあなたのチームの次の試合",
 "Cotação do dia ao lado do clima (Frankfurter, grátis)":"天気の横に為替レート（Frankfurter、無料）",
 "Contagem regressiva no alto da tela inicial (últimos 7 dias)":"ホーム画面の上にカウントダウン（最後の7日間）",

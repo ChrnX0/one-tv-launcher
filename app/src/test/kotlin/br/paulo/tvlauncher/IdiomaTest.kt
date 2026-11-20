@@ -250,4 +250,16 @@ class IdiomaTest {
         // "Legião" começa com "Leg" mas não é marca.
         assertEquals("Legião Urbana", Idioma.semMarca("Legião Urbana"))
     }
+
+    @Test fun semMarcaComAnoSoDeUmLadoNaoViraPar() {
+        val antigo = F("O Rei Leão", "Filmes", null)
+        val novo = F("O Rei Leão [L]", "Filmes", 2019)
+        val lista = listOf(antigo, novo)
+        val ind = Idioma.indice(lista, { it.nome }, { it.grupo })
+        assertNull(Idioma.outraVersao(novo, ind, { it.nome }, { it.grupo }, { it.ano }))
+        assertNull(Idioma.outraVersao(antigo, ind, { it.nome }, { it.grupo }, { it.ano }))
+        val dub = F("O Rei Leão", "Filmes", 2019)
+        val ind2 = Idioma.indice(listOf(dub, novo), { it.nome }, { it.grupo })
+        assertSame(dub, Idioma.outraVersao(novo, ind2, { it.nome }, { it.grupo }, { it.ano }))
+    }
 }

@@ -2835,10 +2835,12 @@ class MainActivity : Activity() {
         c.detalheEmCima = barraCruz == LayoutHome.BarraCruz.RELOGIO
         c.aoMudar = { _, item -> arteDoItem(item) }
         c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
-        c.aoSubirTopo = {
+        c.aoSubirTopo = { repeticao ->
             // Só o ▲ que SAI da cruz para a barra arma a Central (▲ entre itens da cruz continua repetindo normalmente).
             // Visto na Sala (v464530): o foco só sai da cruz DEPOIS do dispatchKeyEvent, então o aviso vem daqui.
-            if (barraCruz == LayoutHome.BarraCruz.ILHA) ilhaCimaDaCruz = true
+            // E só um ▲ NOVO no 1º item (repetição 0): segurar ▲ para subir a coluna chegava ao topo e abria a Central
+            // sem querer (debug 20/11/2026).
+            if (barraCruz == LayoutHome.BarraCruz.ILHA && repeticao == 0) ilhaCimaDaCruz = true
             ui.post { bolinhaPerfil?.requestFocus() }   // ▲ no 1º item: o perfil, 1º da barra
         }
         c.aoPasso = { t -> deslizarArte(t) }
