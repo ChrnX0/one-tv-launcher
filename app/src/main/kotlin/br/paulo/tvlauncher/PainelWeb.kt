@@ -1119,6 +1119,7 @@ object PainelWeb {
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
+        "/navigation.js" to ("navigation.js" to "text/javascript; charset=utf-8"),   // índice da página e aba Tudo
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital

@@ -1,5 +1,10 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"الكل",
+"páginas":"صفحات",
+"ajustes":"إعدادات",
+"Nesta página":"في هذه الصفحة",
+"Buscar qualquer ajuste…":"ابحث عن أي إعداد…",
 "Vídeos":"فيديو",
 "Esportes":"رياضة",
 "Infantil":"أطفال",

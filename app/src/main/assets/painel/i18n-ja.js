@@ -1,5 +1,10 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"すべて",
+"páginas":"ページ",
+"ajustes":"設定",
+"Nesta página":"このページ",
+"Buscar qualquer ajuste…":"設定を検索…",
 "Vídeos":"動画",
 "Esportes":"スポーツ",
 "Infantil":"キッズ",

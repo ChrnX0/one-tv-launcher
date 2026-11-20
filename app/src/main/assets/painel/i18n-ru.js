@@ -1,5 +1,10 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Tudo":"Всё",
+"páginas":"страниц",
+"ajustes":"настроек",
+"Nesta página":"На этой странице",
+"Buscar qualquer ajuste…":"Искать любую настройку…",
 "Vídeos":"Видео",
 "Esportes":"Спорт",
 "Infantil":"Детям",
