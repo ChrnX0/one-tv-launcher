@@ -1236,6 +1236,8 @@ class FilmesActivity : Activity() {
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
                 tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo))) { i ->
+            // Zero tela preta: abre sobre a cena do filme (ou o pôster) com o ano e o nome, não sobre o preto.
+            VodActivity.comCortina(i, cenas.firstOrNull() ?: capa.ifEmpty { null }, f.ano?.toString().orEmpty(), Vod.nomeLimpo(f.nome))
             // A outra versão (dublada/legendada) vai junto: o ▼ do player troca no mesmo ponto (18/11/2026).
             outraVersao(f)?.let { o -> VodActivity.comOutraVersao(i, o.fonteId, o.id, o.extensao, Vod.nomeLimpo(o.nome), Idioma.versaoComPar(o.nome, o.grupo, f.nome, f.grupo)) } ?: i
         }

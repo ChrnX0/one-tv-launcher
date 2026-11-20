@@ -110,6 +110,14 @@ class VodActivity : Activity() {
          * principal); ausente = não há próximo episódio, 0 = só oferece, sem começar sozinho.
          */
         const val EXTRA_PROXIMO_CONTAGEM = "proximo_contagem"
+        /** Cortina de abertura (zero tela preta, 20/11/2026): imagem e linha de cima enquanto o primeiro quadro não chega. */
+        const val EXTRA_CORTINA_IMAGEM = "cortina_imagem"
+        const val EXTRA_CORTINA_LINHA = "cortina_linha"
+        const val EXTRA_CORTINA_TITULO = "cortina_titulo"
+
+        /** Põe a cortina de abertura no pedido (imagem pode faltar: aí só o título sobre o fundo). */
+        fun comCortina(i: Intent, imagem: String?, linha: String, titulo: String): Intent =
+            i.putExtra(EXTRA_CORTINA_IMAGEM, imagem).putExtra(EXTRA_CORTINA_LINHA, linha).putExtra(EXTRA_CORTINA_TITULO, titulo)
         private const val SALVAR_MS = 15_000L
         private const val ESCONDER_MS = 4_000L
 
@@ -224,6 +232,7 @@ class VodActivity : Activity() {
     // Cabeçalhos extras do pedido (WebDAV: a senha vai no cabeçalho, nunca no endereço).
     private var cabecalhos: Map<String, String> = emptyMap()
     private lateinit var capaAudio: TextView
+    private var cortina: View? = null
     // Ideia 19: tecla apertada neste vídeo, e "desligar quando este acabar" (vale só para este vídeo, nada fica salvo).
     private var apertouTecla = false
     private var desligarAoFim = false
@@ -318,13 +327,21 @@ class VodActivity : Activity() {
         video = SurfaceView(this)
         modoImagem = PlayerImagem.modo(this)
         raiz.addView(video, FrameLayout.LayoutParams(-1, -1, Gravity.CENTER))
+        // Zero tela preta (estudo A, 20/11/2026): até o primeiro quadro, a cena do episódio (ou só o título) em vez do
+        // preto com "Carregando". Fica por baixo da barra e dos avisos; some com um esmaecer curto quando o vídeo aparece.
+        cortina = CortinaVideo.montar(this, intent.getStringExtra(EXTRA_CORTINA_IMAGEM), intent.getStringExtra(EXTRA_CORTINA_LINHA),
+            intent.getStringExtra(EXTRA_CORTINA_TITULO) ?: intent.getStringExtra(EXTRA_TITULO).orEmpty())
+        raiz.addView(cortina, FrameLayout.LayoutParams(-1, -1))
         raiz.addView(montarBarra(intent.getStringExtra(EXTRA_TITULO).orEmpty()),
             FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(32), 0, dp(32), dp(26)) })
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
             setPaddingRelative(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.vod_carregando)
+            if (cortina != null) visibility = View.GONE   // a cortina já diz que está abrindo
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
+        // Zero tela preta (estudo A, 20/11/2026): até o primeiro quadro, a cena do episódio (ou só o título) em vez do
+        // preto com "Carregando". Some com um esmaecer curto quando o vídeo aparece.
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
         legendaImg = LegendaImagem.Vista(this) { areaVideo().let { v -> android.graphics.Rect(v.left, v.top, v.right, v.bottom) } }
         raiz.addView(legendaImg, 1, FrameLayout.LayoutParams(-1, -1))
@@ -797,6 +814,7 @@ class VodActivity : Activity() {
         }
         override fun onRenderedFirstFrame() {
             medida.primeiroQuadro(android.os.SystemClock.elapsedRealtime())?.let { MedidasTv.anotar(this@VodActivity, Placar.Chave.VOD, it) }
+            tirarCortina()
         }
         override fun onCues(cues: CueGroup) {
             legendaImg.mostrar(cues.cues)
@@ -815,7 +833,7 @@ class VodActivity : Activity() {
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> { medida.carregando(player?.playWhenReady == true); mostrarAviso(getString(R.string.vod_carregando)) }
+                Player.STATE_BUFFERING -> { medida.carregando(player?.playWhenReady == true); if (cortina == null) mostrarAviso(getString(R.string.vod_carregando)) }
                 Player.STATE_ENDED -> terminar(proximoJa = false)
                 else -> {}
             }
@@ -833,7 +851,7 @@ class VodActivity : Activity() {
             // Ideia 20: erro de rede tenta de novo no mesmo ponto (2, 4 e 8 s), como a TV ao vivo; o resto mostra a mensagem.
             val p = player ?: return
             val espera = FimDoVideo.esperaAntes(tentativas + 1, FimDoVideo.erroDeRede(erro.errorCode))
-            if (espera == null) { mostrarAviso(getString(R.string.vod_erro)); return }
+            if (espera == null) { tirarCortina(); mostrarAviso(getString(R.string.vod_erro)); return }
             tentativas++
             mostrarAviso(getString(R.string.vod_tentando, tentativas, FimDoVideo.TENTATIVAS))
             val pos = p.currentPosition
@@ -859,6 +877,7 @@ class VodActivity : Activity() {
             if (faixas.groups.isNotEmpty()) {
                 val soAudio = faixas.groups.none { it.type == C.TRACK_TYPE_VIDEO }
                 capaAudio.visibility = if (soAudio) View.VISIBLE else View.GONE
+                if (soAudio) tirarCortina()   // música: não vai haver primeiro quadro
             }
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
@@ -1767,6 +1786,7 @@ class VodActivity : Activity() {
     }
 
     private fun mostrarAviso(t: String) { aviso.text = t; aviso.visibility = View.VISIBLE }
+    private fun tirarCortina() { cortina?.let { CortinaVideo.tirar(it) }; cortina = null }
     private fun esconderAviso() { aviso.visibility = View.GONE }
 
     private fun vidro(raio: Int) = GradientDrawable().apply {

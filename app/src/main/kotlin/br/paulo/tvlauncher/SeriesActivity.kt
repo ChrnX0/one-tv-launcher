@@ -1260,6 +1260,9 @@ class SeriesActivity : Activity() {
                 tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = if (naOutra) vOutra else vEsta)) { i ->
             // Proposta C, etapa 1: com episódio seguinte, o player oferece "Próximo episódio" já nos créditos.
             if (temProximo) i.putExtra(VodActivity.EXTRA_PROXIMO_CONTAGEM, contagem)
+            // Zero tela preta: abre sobre a cena da série com "Série · T1 E2" e o nome do episódio, não sobre o preto.
+            VodActivity.comCortina(i, cenas.firstOrNull() ?: capa, "${Vod.nomeLimpo(s.nome)} · T${ep.temporada} E${ep.numero}",
+                Series.tituloCurto(s.nome, ep.titulo))
             when {
                 epOutra == null -> i
                 naOutra -> VodActivity.comOutraVersao(i, s.fonteId, ep.id, ep.extensao, titulo, vEsta)
