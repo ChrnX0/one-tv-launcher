@@ -933,4 +933,5 @@ AS\\Peliculas).</string>
     <string name="st_voltar_comum">Volver a memoria USB normal (las apps vuelven a la TV)</string>
     <string name="st_trazendo">Devolviendo %1$s a la TV…</string>
     <string name="st_sumiram">La memoria USB salió: %1$s quedan ocultas hasta que vuelva.</string>
+    <string name="st_sugestao">Memoria de la TV casi llena. Lleva %1$s (%2$s) a la memoria USB: mantén OK en la app.</string>
 </resources>

@@ -930,4 +930,5 @@ AS\\Film).</string>
     <string name="st_voltar_comum">Tornare chiavetta normale (le app tornano sulla TV)</string>
     <string name="st_trazendo">%1$s torna sulla TV…</string>
     <string name="st_sumiram">Chiavetta scollegata: %1$s restano nascoste finché non torna.</string>
+    <string name="st_sugestao">Memoria della TV quasi piena. Sposta %1$s (%2$s) sulla chiavetta: tieni premuto OK sull\'app.</string>
 </resources>

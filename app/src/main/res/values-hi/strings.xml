@@ -930,4 +930,5 @@ AS\\Movies)।</string>
     <string name="st_voltar_comum">फिर सामान्य USB ड्राइव (ऐप्स टीवी पर लौटेंगे)</string>
     <string name="st_trazendo">%1$s टीवी पर वापस आ रहा है…</string>
     <string name="st_sumiram">USB ड्राइव निकाली गई: %1$s उसके लौटने तक छिपे हैं।</string>
+    <string name="st_sugestao">टीवी स्टोरेज लगभग भर गया है। %1$s (%2$s) को USB ड्राइव पर ले जाएं: ऐप पर OK दबाए रखें।</string>
 </resources>

@@ -930,4 +930,5 @@ AS\\Films).</string>
     <string name="st_voltar_comum">Revenir en clé USB normale (les apps reviennent sur la TV)</string>
     <string name="st_trazendo">Retour de %1$s sur la TV…</string>
     <string name="st_sumiram">La clé USB est retirée : %1$s sont masquées jusqu\'à son retour.</string>
+    <string name="st_sugestao">Mémoire de la TV presque pleine. Mettez %1$s (%2$s) sur la clé USB : maintenez OK sur l\'app.</string>
 </resources>

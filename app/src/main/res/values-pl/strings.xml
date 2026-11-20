@@ -936,4 +936,5 @@ AS\\Filmy).</string>
     <string name="st_voltar_comum">Wróć do zwykłego pendrive\'a (aplikacje wracają do telewizora)</string>
     <string name="st_trazendo">Przywracanie %1$s do telewizora…</string>
     <string name="st_sumiram">Pendrive odłączony: %1$s są ukryte, dopóki nie wróci.</string>
+    <string name="st_sugestao">Pamięć telewizora prawie pełna. Przenieś %1$s (%2$s) na pendrive: przytrzymaj OK na aplikacji.</string>
 </resources>

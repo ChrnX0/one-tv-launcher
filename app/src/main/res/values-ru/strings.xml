@@ -936,4 +936,5 @@ AS\\Фильмы).</string>
     <string name="st_voltar_comum">Снова обычная флешка (приложения вернутся на ТВ)</string>
     <string name="st_trazendo">Возвращаем %1$s на ТВ…</string>
     <string name="st_sumiram">Флешка отключена: %1$s скрыты, пока она не вернётся.</string>
+    <string name="st_sugestao">Память ТВ почти заполнена. Перенесите %1$s (%2$s) на флешку: удерживайте OK на приложении.</string>
 </resources>

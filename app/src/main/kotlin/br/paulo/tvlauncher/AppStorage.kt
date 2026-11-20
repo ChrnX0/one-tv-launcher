@@ -56,6 +56,12 @@ object AppStorage {
         val saida = GuardiaoShizuku.comando(ctx, "sm list-volumes private", 10_000) ?: return uuidGuardado(ctx)
         val uuid = AppStorageRules.adotados(saida).firstOrNull()
         guardarUuid(ctx, uuid)
+        // Apps que já estão no pen drive (movidos por aqui, pelo shell ou pelas Configurações do Android) entram na lista
+        // do aviso "o pen drive saiu", com o nome guardado enquanto o Android ainda o conhece.
+        runCatching {
+            ctx.packageManager.getInstalledApplications(0).filter { it.storageUuid != StorageManager.UUID_DEFAULT }
+                .forEach { lembrar(ctx, it.packageName, fora = true) }
+        }
         return uuid
     }
 

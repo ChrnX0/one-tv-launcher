@@ -137,4 +137,21 @@ object StorageMode {
         }
         return out
     }
+
+    /**
+     * Sofy, memória quase cheia (proposta C): com menos de 1 GB livre na TV e um pen drive já como memória da TV, sugere
+     * o maior app que ainda está na TV. Uma vez por dia, no máximo. Roda fora da thread da tela. null = nada a dizer.
+     */
+    fun sugestao(ctx: Context): Pair<String, Long>? {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val agora = System.currentTimeMillis()
+        if (agora - p.getLong(CHAVE_SUGESTAO, 0L) < 24 * 3600_000L) return null
+        val livre = statfs(Environment.getDataDirectory().absolutePath)?.second ?: return null
+        if (livre >= 1024L * 1024 * 1024) return null
+        if (ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("adopted_uuid", null) == null) return null
+        val maior = appsMoveis(ctx).firstOrNull { !it.noExterno && it.bytes >= 100L * 1024 * 1024 } ?: return null
+        p.edit().putLong(CHAVE_SUGESTAO, agora).apply()
+        return maior.nome to maior.bytes
+    }
+    private const val CHAVE_SUGESTAO = "advice_at"
 }

@@ -970,4 +970,5 @@
     <string name="st_voltar_comum">Voltar a ser pen drive comum (os apps voltam para a TV)</string>
     <string name="st_trazendo">Trazendo %1$s de volta para a TV…</string>
     <string name="st_sumiram">O pen drive saiu: %1$s ficam escondidos até ele voltar.</string>
+    <string name="st_sugestao">Memória da TV quase cheia. Leve %1$s (%2$s) para o pen drive: segure OK no app.</string>
 </resources>

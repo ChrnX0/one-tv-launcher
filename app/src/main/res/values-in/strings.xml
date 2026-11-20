@@ -927,4 +927,5 @@ AS\\Film).</string>
     <string name="st_voltar_comum">Kembali jadi flashdisk biasa (aplikasi kembali ke TV)</string>
     <string name="st_trazendo">Mengembalikan %1$s ke TV…</string>
     <string name="st_sumiram">Flashdisk dicabut: %1$s tersembunyi sampai dicolok lagi.</string>
+    <string name="st_sugestao">Penyimpanan TV hampir penuh. Pindahkan %1$s (%2$s) ke flashdisk: tahan OK pada aplikasi.</string>
 </resources>

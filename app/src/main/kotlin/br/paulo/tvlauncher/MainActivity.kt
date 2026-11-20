@@ -348,6 +348,14 @@ class MainActivity : Activity() {
         AppStorage.ausentes(this).takeIf { it.isNotEmpty() }?.let { f ->
             mostrarAviso(getString(R.string.st_sumiram, f.joinToString(", ")))
         }
+        // Memória quase cheia e pen drive como memória da TV: a Sofy sugere o maior app para mover (1x por dia).
+        Fundo.rodar("StorageAdvice") {
+            val s = runCatching { StorageMode.sugestao(applicationContext) }.getOrNull() ?: return@rodar
+            runOnUiThread {
+                if (!isDestroyed) mostrarAviso(getString(R.string.st_sugestao, s.first,
+                    android.text.format.Formatter.formatShortFileSize(this, s.second)))
+            }
+        }
         SonsCruz.naFrente = true
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)

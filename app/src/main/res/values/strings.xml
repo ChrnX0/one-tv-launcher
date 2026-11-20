@@ -968,4 +968,5 @@
     <string name="st_voltar_comum">Back to a regular USB drive (apps come back to the TV)</string>
     <string name="st_trazendo">Bringing %1$s back to the TV…</string>
     <string name="st_sumiram">The USB drive is out: %1$s are hidden until it\'s back.</string>
+    <string name="st_sugestao">TV storage is almost full. Move %1$s (%2$s) to the USB drive: hold OK on the app.</string>
 </resources>

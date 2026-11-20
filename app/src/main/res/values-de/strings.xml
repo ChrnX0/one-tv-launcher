@@ -930,4 +930,5 @@ AS\\Filme).</string>
     <string name="st_voltar_comum">Wieder normaler USB-Stick (Apps kommen auf den Fernseher zurück)</string>
     <string name="st_trazendo">%1$s kommt zurück auf den Fernseher…</string>
     <string name="st_sumiram">USB-Stick entfernt: %1$s sind ausgeblendet, bis er zurück ist.</string>
+    <string name="st_sugestao">TV-Speicher fast voll. Verschiebe %1$s (%2$s) auf den USB-Stick: OK auf der App gedrückt halten.</string>
 </resources>

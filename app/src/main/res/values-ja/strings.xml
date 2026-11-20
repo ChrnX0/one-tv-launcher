@@ -927,4 +927,5 @@ AS\\Movies）。</string>
     <string name="st_voltar_comum">通常の USB メモリに戻す（アプリは TV に戻ります）</string>
     <string name="st_trazendo">%1$s を TV に戻しています…</string>
     <string name="st_sumiram">USB メモリが外れました: 戻すまで %1$s は表示されません。</string>
+    <string name="st_sugestao">TV のストレージがほぼいっぱいです。%1$s（%2$s）を USB メモリに移しましょう: アプリで OK を長押し。</string>
 </resources>

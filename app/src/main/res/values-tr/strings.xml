@@ -930,4 +930,5 @@ AS\\Filmler).</string>
     <string name="st_voltar_comum">Normal USB belleğe dön (uygulamalar TV\'ye döner)</string>
     <string name="st_trazendo">%1$s TV\'ye geri alınıyor…</string>
     <string name="st_sumiram">USB bellek çıkarıldı: %1$s geri takılana kadar gizli.</string>
+    <string name="st_sugestao">TV belleği neredeyse dolu. %1$s (%2$s) uygulamasını USB belleğe taşıyın: uygulamada OK\'a basılı tutun.</string>
 </resources>

@@ -930,4 +930,5 @@ AS\\Filmes).</string>
     <string name="st_voltar_comum">Voltar a pen USB normal (as apps voltam para a TV)</string>
     <string name="st_trazendo">A trazer %1$s de volta para a TV…</string>
     <string name="st_sumiram">A pen USB saiu: %1$s ficam escondidas até ela voltar.</string>
+    <string name="st_sugestao">Memória da TV quase cheia. Leve %1$s (%2$s) para a pen USB: mantenha OK na app.</string>
 </resources>
