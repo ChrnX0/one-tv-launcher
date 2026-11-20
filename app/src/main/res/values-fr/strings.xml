@@ -742,6 +742,7 @@ AS\\Films).</string>
     <string name="legenda_buscar">Chercher des sous-titres en ligne</string>
     <string name="legenda_procurando">Recherche de sous-titres…</string>
     <string name="legenda_baixando">Téléchargement des sous-titres…</string>
+    <string name="legenda_acertada">Sous-titres calés sur les dialogues · %1$s</string>
     <string name="legenda_pronta">Sous-titres prêts</string>
     <string name="legenda_nenhuma">Aucun sous-titre dans la langue de la TV pour cette vidéo</string>
     <string name="legenda_erro">Impossible de chercher des sous-titres</string>

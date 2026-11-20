@@ -23,6 +23,8 @@ object SubtitleSync {
     const val MIN_FALA_MS = 60_000L
     const val MIN_CONFIANCA = 4.0
     const val MIN_MUDANCA_MS = 300L
+    /** Quanto do que foi ouvido entra em cada conta (os 20 min mais recentes). */
+    const val JANELA_ANALISE_MS = 20 * 60_000L
 
     data class Fala(val inicioMs: Long, val fimMs: Long)
     data class Resultado(val atrasoMs: Long, val confianca: Double)
@@ -60,6 +62,31 @@ object SubtitleSync {
         if (confianca < MIN_CONFIANCA) return null
         return Resultado((melhor - folga) * PASSO_MS, confianca)
     }
+
+    /**
+     * Onde há fala, a partir da energia de cada janela (dB, em [SpeechTap]; NaN = janela não ouvida). Limiar relativo ao
+     * próprio filme: o piso (percentil [PISO_PERCENTIL] das janelas ouvidas) mais [ACIMA_DO_PISO_DB]. Assim serve para
+     * filme baixo e filme alto; música e explosão às vezes passam por fala, e a conta de [ajustar] aguenta esse ruído.
+     */
+    fun marcarFala(energiaDb: FloatArray): BooleanArray {
+        val ouvidas = energiaDb.filter { !it.isNaN() }.sorted()
+        if (ouvidas.isEmpty()) return BooleanArray(energiaDb.size)
+        val limiar = ouvidas[(ouvidas.size * PISO_PERCENTIL).toInt().coerceIn(0, ouvidas.size - 1)] + ACIMA_DO_PISO_DB
+        return BooleanArray(energiaDb.size) { !energiaDb[it].isNaN() && energiaDb[it] >= limiar }
+    }
+    const val PISO_PERCENTIL = 0.2
+    const val ACIMA_DO_PISO_DB = 8f
+
+    private val reLinha = Regex("""(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})""")
+
+    /** Os intervalos das falas de um .srt (o texto não importa, só quando cada uma aparece e some). */
+    fun falasDoSrt(srt: String): List<Fala> = reLinha.findAll(srt).mapNotNull { m ->
+        val g = m.groupValues
+        fun ms(h: String, mi: String, s: String, f: String) =
+            h.toLong() * 3_600_000 + mi.toLong() * 60_000 + s.toLong() * 1000 + f.padEnd(3, '0').take(3).toLong()
+        val a = ms(g[1], g[2], g[3], g[4]); val b = ms(g[5], g[6], g[7], g[8])
+        if (b > a) Fala(a, b) else null
+    }.toList()
 
     /** Vale aplicar? Só com confiança e se mudar o bastante para alguém notar. */
     fun aplicar(r: Resultado?): Boolean = r != null && kotlin.math.abs(r.atrasoMs) >= MIN_MUDANCA_MS

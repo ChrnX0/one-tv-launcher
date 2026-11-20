@@ -820,6 +820,7 @@
     <string name="legenda_buscar">Buscar legenda na internet</string>
     <string name="legenda_procurando">Procurando legenda…</string>
     <string name="legenda_baixando">Baixando legenda…</string>
+    <string name="legenda_acertada">Legenda acertada pela fala · %1$s</string>
     <string name="legenda_pronta">Legenda pronta</string>
     <string name="legenda_nenhuma">Nenhuma legenda em português para este vídeo</string>
     <string name="legenda_erro">Não consegui buscar a legenda</string>

@@ -742,6 +742,7 @@ AS\\Filme).</string>
     <string name="legenda_buscar">Untertitel online suchen</string>
     <string name="legenda_procurando">Untertitel werden gesucht …</string>
     <string name="legenda_baixando">Untertitel werden heruntergeladen …</string>
+    <string name="legenda_acertada">Untertitel an die Sprache angepasst · %1$s</string>
     <string name="legenda_pronta">Untertitel bereit</string>
     <string name="legenda_nenhuma">Keine Untertitel in der Sprache des Fernsehers für dieses Video</string>
     <string name="legenda_erro">Suche nach Untertiteln nicht möglich</string>

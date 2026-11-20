@@ -818,6 +818,7 @@
     <string name="legenda_buscar">Find subtitles online</string>
     <string name="legenda_procurando">Looking for subtitles…</string>
     <string name="legenda_baixando">Downloading subtitles…</string>
+    <string name="legenda_acertada">Subtitles matched to the speech · %1$s</string>
     <string name="legenda_pronta">Subtitles ready</string>
     <string name="legenda_nenhuma">No subtitles in the TV’s language for this video</string>
     <string name="legenda_erro">Could not search for subtitles</string>

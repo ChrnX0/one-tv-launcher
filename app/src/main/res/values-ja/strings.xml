@@ -742,6 +742,7 @@ AS\\Movies）。</string>
     <string name="legenda_buscar">オンラインで字幕を探す</string>
     <string name="legenda_procurando">字幕を探しています…</string>
     <string name="legenda_baixando">字幕をダウンロード中…</string>
+    <string name="legenda_acertada">字幕をせりふに合わせました · %1$s</string>
     <string name="legenda_pronta">字幕の準備ができました</string>
     <string name="legenda_nenhuma">この動画には TV の言語の字幕がありません</string>
     <string name="legenda_erro">字幕を検索できませんでした</string>

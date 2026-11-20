@@ -742,6 +742,7 @@ AS\\Фильмы).</string>
     <string name="legenda_buscar">Найти субтитры в интернете</string>
     <string name="legenda_procurando">Поиск субтитров…</string>
     <string name="legenda_baixando">Загрузка субтитров…</string>
+    <string name="legenda_acertada">Субтитры подогнаны под речь · %1$s</string>
     <string name="legenda_pronta">Субтитры готовы</string>
     <string name="legenda_nenhuma">Для этого видео нет субтитров на языке ТВ</string>
     <string name="legenda_erro">Не удалось найти субтитры</string>

@@ -742,6 +742,7 @@ AS\\Filmler).</string>
     <string name="legenda_buscar">Çevrimiçi altyazı bul</string>
     <string name="legenda_procurando">Altyazı aranıyor…</string>
     <string name="legenda_baixando">Altyazı indiriliyor…</string>
+    <string name="legenda_acertada">Altyazı konuşmaya göre ayarlandı · %1$s</string>
     <string name="legenda_pronta">Altyazı hazır</string>
     <string name="legenda_nenhuma">Bu video için TV dilinde altyazı yok</string>
     <string name="legenda_erro">Altyazı aranamadı</string>

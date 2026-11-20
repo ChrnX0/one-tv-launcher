@@ -77,4 +77,28 @@ class SubtitleSyncTest {
         val r = SubtitleSync.ajustar(ouvidoTodo.copyOfRange(desde, ouvidoTodo.size), 300_000L, deslocar(reais, -1_200))!!
         perto(1_200L, r)
     }
+
+    @Test fun leAsFalasDoSrt() {
+        val srt = "1\n00:00:01,500 --> 00:00:03,000\nOi\n\n2\n01:02:03.4 --> 01:02:05,000\nTchau\n\n3\n00:00:09,000 --> 00:00:08,000\nquebrada\n"
+        assertEquals(listOf(SubtitleSync.Fala(1_500, 3_000), SubtitleSync.Fala(3_723_400, 3_725_000)), SubtitleSync.falasDoSrt(srt))
+    }
+
+    @Test fun marcaFalaAcimaDoPiso() {
+        // Ambiente a -50 dB, fala a -30 dB, janelas não ouvidas (NaN) nunca são fala.
+        val e = FloatArray(100) { if (it % 4 == 0) -30f else -50f }.also { it[1] = Float.NaN }
+        val f = SubtitleSync.marcarFala(e)
+        assertTrue(f[0]); assertFalse(f[1]); assertFalse(f[2]); assertTrue(f[96])
+        assertEquals(25, f.count { it })
+    }
+
+    @Test fun doSomAteOAjuste() {
+        // O caminho todo: energia por janela -> fala -> ajuste, com a legenda 3 s adiantada.
+        val reais = falasReais()
+        val r = Random(5)
+        val e = FloatArray(6_000) { i ->
+            val t = i * SubtitleSync.PASSO_MS
+            (if (reais.any { t >= it.inicioMs && t < it.fimMs }) -28f else -48f) + (r.nextFloat() - 0.5f) * 10f
+        }
+        perto(3_000L, SubtitleSync.ajustar(SubtitleSync.marcarFala(e), 0, deslocar(reais, -3_000))!!)
+    }
 }

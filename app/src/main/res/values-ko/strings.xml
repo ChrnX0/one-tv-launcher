@@ -742,6 +742,7 @@ AS\\Movies).</string>
     <string name="legenda_buscar">온라인에서 자막 찾기</string>
     <string name="legenda_procurando">자막 찾는 중…</string>
     <string name="legenda_baixando">자막 다운로드 중…</string>
+    <string name="legenda_acertada">자막을 대사에 맞췄어요 · %1$s</string>
     <string name="legenda_pronta">자막 준비됨</string>
     <string name="legenda_nenhuma">이 동영상에는 TV 언어 자막이 없습니다</string>
     <string name="legenda_erro">자막을 검색할 수 없습니다</string>

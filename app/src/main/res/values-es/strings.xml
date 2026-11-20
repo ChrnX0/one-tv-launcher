@@ -742,6 +742,7 @@ AS\\Peliculas).</string>
     <string name="legenda_buscar">Buscar subtítulos en internet</string>
     <string name="legenda_procurando">Buscando subtítulos…</string>
     <string name="legenda_baixando">Descargando subtítulos…</string>
+    <string name="legenda_acertada">Subtítulos ajustados a las voces · %1$s</string>
     <string name="legenda_pronta">Subtítulos listos</string>
     <string name="legenda_nenhuma">No hay subtítulos en el idioma de la TV para este video</string>
     <string name="legenda_erro">No se pudieron buscar subtítulos</string>

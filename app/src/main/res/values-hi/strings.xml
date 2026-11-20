@@ -742,6 +742,7 @@ AS\\Movies)।</string>
     <string name="legenda_buscar">ऑनलाइन सबटाइटल खोजें</string>
     <string name="legenda_procurando">सबटाइटल खोजे जा रहे हैं…</string>
     <string name="legenda_baixando">सबटाइटल डाउनलोड हो रहे हैं…</string>
+    <string name="legenda_acertada">सबटाइटल आवाज़ से मिला दिए गए · %1$s</string>
     <string name="legenda_pronta">सबटाइटल तैयार</string>
     <string name="legenda_nenhuma">इस वीडियो के लिए TV की भाषा में सबटाइटल नहीं</string>
     <string name="legenda_erro">सबटाइटल खोजे नहीं जा सके</string>
