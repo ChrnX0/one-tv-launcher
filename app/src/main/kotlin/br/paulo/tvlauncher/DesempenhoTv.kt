@@ -33,21 +33,21 @@ object DesempenhoTv {
     @Volatile var limiteMs = MovimentoAdaptativo.limiteQuadroMs(60f)
     @Volatile private var contarDesde = 0L
     private var rodada = 0
-    /** Quadros por rodada da Sofy: ~10 s de HOME animando a 60 quadros por segundo. */
-    private const val SOFY_RODADA = 600
+    /** Quadros por rodada do Observador: ~10 s de HOME animando a 60 quadros por segundo. */
+    private const val OBS_RODADA = 600
     private var lentos = 0
 
-    // ---- Sofy: a mesma contagem, sempre (o juiz do movimento acima só conta enquanto pode descer um degrau).
-    private var sofyQuadros = 0
-    private var sofyLentos = 0
+    // ---- Observador: a mesma contagem, sempre (o juiz do movimento acima só conta enquanto pode descer um degrau).
+    private var obsQuadros = 0
+    private var obsLentos = 0
 
     private fun julgar(ms: Double) {
         if (SystemClock.uptimeMillis() < contarDesde) return   // montar a tela não conta
-        sofyQuadros++
-        if (ms > limiteMs) sofyLentos++
-        if (sofyQuadros >= SOFY_RODADA) {
-            SofyTv.publish(SofyCore.Signal.SLOW_FRAMES_PCT, sofyLentos * 100L / sofyQuadros)
-            sofyQuadros = 0; sofyLentos = 0
+        obsQuadros++
+        if (ms > limiteMs) obsLentos++
+        if (obsQuadros >= OBS_RODADA) {
+            ObserverTv.publish(ObserverCore.Signal.SLOW_FRAMES_PCT, obsLentos * 100L / obsQuadros)
+            obsQuadros = 0; obsLentos = 0
         }
         val acao = aoPesado ?: return
         rodada++

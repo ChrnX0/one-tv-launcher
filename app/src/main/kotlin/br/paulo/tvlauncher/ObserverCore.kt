@@ -4,18 +4,18 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /**
- * Sofy, o observador do launcher (fase 1, "o maestro", 20/11/2026). Estudo e decisões do Paulo:
- * https://claude.ai/artifact/Khqu2ek1rtuWut1zYqb1op (nome "Sofy" e poder total de fábrica decididos em 20/11).
+ * O Observador do launcher (nome técnico Observer; nome público em decisão) (fase 1, "o maestro", 20/11/2026). Estudo e decisões do Paulo:
+ * https://claude.ai/artifact/Khqu2ek1rtuWut1zYqb1op (poder total de fábrica decidido em 20/11).
  *
  * Porquê: o launcher já tinha ~30 vigias (rede, memória, quadros, quedas, shell...), cada uma com o próprio relógio e o
  * próprio juiz, sem saber umas das outras. Para quê: uma visão só da TV, cada decisão com o porquê registrado, e uma
- * fila de recados que o rosto da Sofy (o mascote) vai mostrar. Como: os sensores que já existem PUBLICAM aqui; nenhum
- * relógio novo (o juiz roda quando chega um sinal), nada de Android neste arquivo (SofyCoreTest na JVM).
+ * fila de recados que o rosto do Observador (o mascote) vai mostrar. Como: os sensores que já existem PUBLICAM aqui; nenhum
+ * relógio novo (o juiz roda quando chega um sinal), nada de Android neste arquivo (ObserverCoreTest na JVM).
  *
  * Nesta fase ela só observa e registra (nenhuma ação). A política de degraus já existe e é testada, para a fase 3.
- * A parte do Android é o SofyTv.
+ * A parte do Android é o ObserverTv.
  */
-object SofyCore {
+object ObserverCore {
 
     // ---------------------------------------------------------------- sinais e caixa-preta
 
@@ -159,43 +159,88 @@ object SofyCore {
     /** Põe [entry] na frente; corta acima de [LOG_MAX] linhas ou de [LOG_DAYS] dias. Texto estragado = começa vazio. */
     fun appendLog(stored: String?, entry: JSONObject, now: Long): String = prepend(stored, entry, LOG_MAX) { now - it.optLong("at") <= LOG_DAYS * 86_400_000L }
 
-    // ---------------------------------------------------------------- recados (a saída que o rosto da Sofy vai usar)
+    // ---------------------------------------------------------------- recados (a saída que o rosto do Observador vai usar)
 
     /**
-     * Um recado para a pessoa. Guarda o TIPO e os números, nunca o texto: quem mostra (a fase do rosto) escolhe a
-     * frase no idioma da TV e a expressão do mascote. [expiresAt]: recado vencido não aparece mais.
+     * Um recado para a pessoa (contrato combinado com a thread do rosto, 20/11/2026). Guarda chaves e números, nunca a
+     * frase pronta: quem mostra escolhe o texto no idioma da TV (14 línguas), a expressão do mascote, SE e ONDE aparece
+     * (não perturbe, teto por hora/dia, resumo da manhã). Recado de pessoa, alarme, campainha e alerta oficial NÃO
+     * passam por aqui.
+     *  - [step]: o que o Observador fez (muda o tom da fala);
+     *  - [state]: em andamento / feito / falhou (muda a expressão: trabalhando → feliz ou preocupada);
+     *  - [titleKey]/[textKey] + [args]: nomes de string ("observer_<kind>_title"/"_text"); o porquê vai nos [args];
+     *  - [undoKey]: como desfazer (nome de string), ou null = nada a desfazer;
+     *  - [typeKey]: o tipo da fala, para a regra "ignorada 2 vezes seguidas = cala esse tipo 7 dias".
+     * As strings em si entram junto com o rosto; até lá ninguém mostra a fila (só o adb e o MCP leem).
      */
-    data class Note(val id: String, val at: Long, val kind: Kind, val severity: Severity, val expiresAt: Long, val seen: Boolean = false)
+    data class Note(
+        val id: String, val at: Long, val kind: Kind, val severity: Severity,
+        val step: Step, val state: State,
+        val titleKey: String, val textKey: String, val args: List<String>,
+        val undoKey: String?, val typeKey: String,
+        val expiresAt: Long, val seen: Boolean = false,
+    )
+
+    enum class Step { OBSERVED, SUGGESTS, ACTED_REVERSIBLE, ACTED_FELT, QUESTION, FAILED }
+    enum class State { IN_PROGRESS, DONE, FAILED }
 
     const val NOTES_MAX = 20
     const val NOTE_TTL_MS = 6 * 3_600_000L
 
-    fun noteFor(f: Finding, at: Long): Note = Note("${f.kind.name}-$at", at, f.kind, f.severity, at + NOTE_TTL_MS)
+    /** Fase 1: o Observador só observa, então todo recado é OBSERVED + DONE, sem desfazer. */
+    fun noteFor(f: Finding, at: Long, args: List<String> = emptyList()): Note {
+        val base = "observer_" + f.kind.name.lowercase()
+        return Note("${f.kind.name}-$at", at, f.kind, f.severity, Step.OBSERVED, State.DONE,
+            base + "_title", base + "_text", args, null, f.kind.name.lowercase(), at + NOTE_TTL_MS)
+    }
+
+    /** O número que a frase do recado mostra (ex.: "só 90 MB livres"): o valor do sinal que gerou o achado. */
+    fun argsFor(kind: Kind, snapshot: Map<Signal, Reading>): List<String> {
+        val s = when (kind) {
+            Kind.NO_INTERNET -> null
+            Kind.SLOW_INTERNET -> Signal.LATENCY_MS
+            Kind.WEAK_WIFI -> Signal.WIFI_DBM
+            Kind.LOW_MEMORY -> Signal.MEMORY_AVAILABLE_MB
+            Kind.MEMORY_PRESSURE -> Signal.MEMORY_PRESSURE
+            Kind.SLOW_HOME -> Signal.SLOW_FRAMES_PCT
+            Kind.LOW_DISK -> Signal.DISK_FREE_MB
+        } ?: return emptyList()
+        return listOfNotNull(snapshot[s]?.value?.toString())
+    }
 
     /** Recado de um tipo que já está na fila e não foi visto não entra de novo (sem repetir a mesma coisa). */
     fun enqueue(stored: String?, n: Note, now: Long): String {
         val atuais = readNotes(stored, now)
-        if (atuais.any { it.kind == n.kind && !it.seen }) return toJson(atuais).toString()
+        if (atuais.any { it.typeKey == n.typeKey && !it.seen }) return toJson(atuais).toString()
         return toJson((listOf(n) + atuais).take(NOTES_MAX)).toString()
     }
 
-    /** Os que valem agora, do mais novo ao mais velho. */
+    /** Os que valem agora, do mais novo ao mais velho. Linha estragada ou de versão desconhecida é pulada. */
     fun readNotes(stored: String?, now: Long): List<Note> {
         val arr = try { JSONArray(stored ?: "[]") } catch (_: Exception) { JSONArray() }
         return (0 until arr.length()).mapNotNull { i ->
             val o = arr.optJSONObject(i) ?: return@mapNotNull null
-            val kind = runCatching { Kind.valueOf(o.getString("kind")) }.getOrNull() ?: return@mapNotNull null
-            val sev = runCatching { Severity.valueOf(o.getString("severity")) }.getOrNull() ?: return@mapNotNull null
-            Note(o.optString("id"), o.optLong("at"), kind, sev, o.optLong("expiresAt"), o.optBoolean("seen"))
+            runCatching {
+                val args = o.optJSONArray("args")
+                Note(o.getString("id"), o.getLong("at"), Kind.valueOf(o.getString("kind")), Severity.valueOf(o.getString("severity")),
+                    Step.valueOf(o.getString("step")), State.valueOf(o.getString("state")),
+                    o.getString("titleKey"), o.getString("textKey"),
+                    if (args == null) emptyList() else (0 until args.length()).map { args.getString(it) },
+                    if (o.isNull("undoKey")) null else o.optString("undoKey"), o.getString("typeKey"),
+                    o.getLong("expiresAt"), o.optBoolean("seen"))
+            }.getOrNull()
         }.filter { it.expiresAt > now }
     }
 
     fun markSeen(stored: String?, id: String, now: Long): String =
         toJson(readNotes(stored, now).map { if (it.id == id) it.copy(seen = true) else it }).toString()
 
-    private fun toJson(notes: List<Note>) = JSONArray().apply {
+    fun toJson(notes: List<Note>) = JSONArray().apply {
         for (n in notes) put(JSONObject().put("id", n.id).put("at", n.at).put("kind", n.kind.name)
-            .put("severity", n.severity.name).put("expiresAt", n.expiresAt).put("seen", n.seen))
+            .put("severity", n.severity.name).put("step", n.step.name).put("state", n.state.name)
+            .put("titleKey", n.titleKey).put("textKey", n.textKey).put("args", JSONArray(n.args))
+            .put("undoKey", n.undoKey ?: JSONObject.NULL).put("typeKey", n.typeKey)
+            .put("expiresAt", n.expiresAt).put("seen", n.seen))
     }
 
     private fun prepend(stored: String?, entry: JSONObject, max: Int, keep: (JSONObject) -> Boolean): String {

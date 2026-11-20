@@ -20,7 +20,7 @@ class LauncherApp : Application() {
      */
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        SofyTv.publish(SofyCore.Signal.MEMORY_PRESSURE, level.toLong())   // a Sofy anota o aperto (só no processo principal)
+        ObserverTv.publish(ObserverCore.Signal.MEMORY_PRESSURE, level.toLong())   // o Observador anota o aperto (só no processo principal)
         if (Memoria.soltarCaches(level)) {
             PlayerLogos.soltarMemoria()
             android.util.Log.i("TvLauncher.Memoria", "onTrimMemory($level): caches soltos")
@@ -69,7 +69,7 @@ class LauncherApp : Application() {
             // Versão nova ainda sem AOT: compila quando a tela apagar (CompilarAot.kt). Só registra um receiver.
             CompilarAot.iniciar(this)
             CobrancaPlay.atualizar(this)   // build da Play: confere com a loja o plano comprado (no-op no APK do site)
-            SofyTv.start(this)   // Sofy, o observador (SofyCore.kt): só neste processo os sensores publicam
+            ObserverTv.start(this)   // Observador (ObserverCore.kt): só neste processo os sensores publicam
             CompatibilidadeTv.vigiar(this)   // mede o "acordar" do relatório de compatibilidade (CompatibilidadeTv.kt)
             // Ideias de 12/11/2026: lembretes reagendados (atualizar o app apaga os alarmes), aviso no celular de versão
             // nova e de erro novo, e a guarda de desempenho (anota a versão para comparar os quadros com a anterior).
