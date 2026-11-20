@@ -63,7 +63,7 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
     }.apply {
         isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isSmoothScrollingEnabled = true
         isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))
-        setPadding(0, dp(12), 0, dp(64))
+        setPaddingRelative(0, dp(12), 0, dp(64))
         addView(coluna)
     }
     private val painelBanner = ImageView(ctx).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
@@ -105,7 +105,7 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
         painelAjuda.apply { setTextColor(Estilo.TEXTO_2); typeface = medio; sp(this, 16f) }
         addView(LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(20), dp(20), dp(20), dp(20))
+            setPaddingRelative(dp(20), dp(20), dp(20), dp(20))
             background = GradientDrawable().apply { cornerRadius = dp(DesignTokens.RADIUS_MEDIUM).toFloat(); setColor(0x8C000000.toInt()) }
             addView(painelBanner, LinearLayout.LayoutParams(MATCH, dp(126)))
             addView(painelNome, LinearLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(14) })
@@ -140,7 +140,7 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
             coluna.addView(HorizontalScrollView(context).apply {
                 isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
                 isHorizontalFadingEdgeEnabled = true; setFadingEdgeLength(dp(32))   // o 5º cartão esmaece antes do painel
-                setPadding(dp(8), dp(8), dp(8), dp(8))
+                setPaddingRelative(dp(8), dp(8), dp(8), dp(8))
                 addView(linha)
             }, LinearLayout.LayoutParams(MATCH, WRAP))
         }
@@ -204,7 +204,7 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
         val img = ImageView(context).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
         val nome = TextView(context).apply {
             text = c.name; setTextColor(Estilo.TEXTO); typeface = forte; sp(this, 16f); gravity = Gravity.CENTER
-            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(8), 0, dp(8), 0)
+            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(dp(8), 0, dp(8), 0)
         }
         moldura.addView(img, LayoutParams(MATCH, MATCH))
         moldura.addView(nome, LayoutParams(MATCH, MATCH))
@@ -214,20 +214,20 @@ class AllAppsScreen(ctx: Context, private val host: Host) : FrameLayout(ctx) {
             // Sem banner (ainda, ou o app não tem): o ícone no meio de cima e o nome embaixo.
             c.icon?.let { ic ->
                 img.scaleType = ImageView.ScaleType.FIT_CENTER
-                img.setPadding(dp(46), dp(14), dp(46), dp(36))
+                img.setPaddingRelative(dp(46), dp(14), dp(46), dp(36))
                 img.setImageDrawable(ic.constantState?.newDrawable(resources)?.mutate() ?: ic)
-                nome.gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM; nome.setPadding(dp(8), 0, dp(8), dp(8)); nome.maxLines = 1
+                nome.gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM; nome.setPaddingRelative(dp(8), 0, dp(8), dp(8)); nome.maxLines = 1
             }
             host.loadBanner(c) { b ->
                 if (b == null) return@loadBanner
-                img.scaleType = ImageView.ScaleType.FIT_XY; img.setPadding(0, 0, 0, 0); img.setImageDrawable(b)
+                img.scaleType = ImageView.ScaleType.FIT_XY; img.setPaddingRelative(0, 0, 0, 0); img.setImageDrawable(b)
                 nome.visibility = GONE
             }
         }
         selo(c)?.let { t ->
             moldura.addView(TextView(context).apply {
                 text = t; setTextColor(Estilo.TEXTO); typeface = forte; sp(this, 13f)
-                setPadding(dp(8), dp(2), dp(8), dp(2))
+                setPaddingRelative(dp(8), dp(2), dp(8), dp(2))
                 background = GradientDrawable().apply { cornerRadius = dp(99).toFloat(); setColor(0xCC000000.toInt()) }
             }, LayoutParams(WRAP, WRAP).apply { gravity = Gravity.TOP or Gravity.END; topMargin = dp(6); marginEnd = dp(6) })
         }
