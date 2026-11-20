@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * O juiz roda numa thread do Fundo depois de cada publicação (no máximo uma por vez, [MIN_JUDGE_GAP_MS] entre elas).
  * Só o que MUDA (apareceu/sumiu) vai ao registro "observer", ao Diário da TV e à fila de recados.
  * Só no processo principal ([start]); no ":player" e nos outros, publicar não faz nada.
- * Prefs "observer": fora do backup (BackupConfig.ARQUIVOS), porque o estado de uma TV não diz nada sobre outra.
- * adb: `EXTRAS --es o observer`.
+ * Prefs "observer": fora do backup (BackupCompleto.FORA_DE_PROPOSITO), porque o estado de uma TV não diz nada sobre outra.
+ * adb: `EXTRAS --es o observer`; MCP: ferramenta `observer` ([reportJson]).
  */
 object ObserverTv {
     private const val TAG = "TvLauncher.Observer"
@@ -107,7 +107,31 @@ object ObserverTv {
         p.edit().putString("notes", ObserverCore.markSeen(p.getString("notes", null), id, System.currentTimeMillis())).apply()
     }
 
-    // ---------------------------------------------------------------- adb
+    // ---------------------------------------------------------------- adb e MCP
+
+    /**
+     * O mesmo retrato do [report], em JSON, para a ferramenta MCP `observer`: sinais (valor, unidade, idade), o que o
+     * juiz vê agora, recados na fila e as [logMax] linhas mais novas do registro. Só leitura.
+     */
+    fun reportJson(ctx: Context, logMax: Int = 30): org.json.JSONObject {
+        val agora = System.currentTimeMillis()
+        val snap = blackBox.snapshot()
+        val sinais = org.json.JSONObject()
+        for ((s, r) in snap.entries.sortedBy { it.key.ordinal })
+            sinais.put(s.name, org.json.JSONObject().put("value", r.value).put("unit", s.unit)
+                .put("age_s", (agora - r.at) / 1000).put("in_black_box", blackBox.series(s).size))
+        val agoraJson = org.json.JSONArray()
+        for (f in ObserverCore.judge(snap, agora))
+            agoraJson.put(org.json.JSONObject().put("kind", f.kind.name).put("severity", f.severity.name).put("why", f.why))
+        val log = try { org.json.JSONArray(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("log", "[]")) } catch (_: Exception) { org.json.JSONArray() }
+        val logNovo = org.json.JSONArray()
+        for (i in 0 until minOf(logMax, log.length())) logNovo.put(log.get(i))
+        return org.json.JSONObject()
+            .put("phase", 1).put("acts", false).put("running", app != null)
+            .put("signals", sinais).put("now", agoraJson)
+            .put("notes", ObserverCore.toJson(notes(ctx)))
+            .put("log_total", log.length()).put("log", logNovo)
+    }
 
     fun report(ctx: Context): String = buildString {
         val agora = System.currentTimeMillis()

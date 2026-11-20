@@ -39,6 +39,7 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
         "clima" -> clima().toString()
         "diagnostico_rede" -> diagnostico().toString()
         "historico_rede" -> HistoricoRede.json(app, argumentos.optInt("horas", 24).coerceIn(1, 168)).toString()
+        "observer" -> ObserverTv.reportJson(app, argumentos.optInt("lines", 30).coerceIn(1, 300)).toString()
         "aparelhos_rede" -> aparelhos().toString()
         "aparelhos_tailscale" -> if (!TunelTailscale.redeLigada(app)) throw McpProtocolo.ErroFerramenta("a opção Rede Tailscale está desligada nas Configurações da TV")
             else TunelTailscale.pares ?: throw McpProtocolo.ErroFerramenta("a lista ainda não chegou (o túnel manda a cada minuto)")
@@ -154,6 +155,8 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
             .put(ferramenta("diagnostico_rede", "Wi-Fi, internet, DNS e VPN da TV agora, com um veredito e a resposta em uma frase (causa provável)."))
             .put(ferramenta("historico_rede", "Histórico de rede da TV (quedas, latência, DNS, sinal) nas últimas N horas.",
                 JSONObject().put("horas", JSONObject().put("type", "integer").put("minimum", 1).put("maximum", 168))))
+            .put(ferramenta("observer", "O Observador da TV: últimas leituras (memória, aperto de memória, internet, latência, Wi-Fi, quadros lentos da tela inicial, disco), o que ele julga fora do normal agora e por quê, recados na fila e o registro do que apareceu e voltou ao normal (mais novo primeiro). Fase 1: só observa, não age.",
+                JSONObject().put("lines", JSONObject().put("type", "integer").put("minimum", 1).put("maximum", 300))))
             .put(ferramenta("aparelhos_rede", "Aparelhos conectados no roteador UniFi da casa (nome, IP, tipo)."))
             .put(ferramenta("aparelhos_tailscale", "Aparelhos da conta Tailscale do dono (nome, sistema, online). Só com a opção Rede Tailscale ligada na TV."))
             .put(ferramenta("apps", "Apps que a tela inicial mostra (pacote -> nome). Só estes podem ser abertos."))

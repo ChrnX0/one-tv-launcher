@@ -67,6 +67,7 @@ object BackupCompleto {
         "ceu",   // cache do TLE da Estação Espacial (protetor com tempo): renovado a cada 12 h, de outro aparelho não vale
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "qualidade_tv",   // TV ao vivo: banda, travadas e resolução real medidas NESTA rede e neste aparelho (QualidadeTv)
+        "observer",   // Observador (20/11/2026): leituras, registro e recados DESTA TV; de outro aparelho não dizem nada
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
         "cobranca",   // plano comprado (CobrancaPlay): vem sempre da Play, nunca de um backup (restaurar não pode virar Ultra)
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
