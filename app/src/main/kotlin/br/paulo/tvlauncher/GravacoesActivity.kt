@@ -43,7 +43,10 @@ class GravacoesActivity : Activity() {
 
     override fun onDestroy() { Gravacoes.esquecer(mudou); super.onDestroy() }
 
-    private class Gravada(val partes: List<String>, val inicio: Long?, val titulo: String, val bytes: Long)
+    private var nomeNuvem: String? = null
+    private var copiasNaFila = 0
+
+    private class Gravada(val partes: List<String>, val inicio: Long?, val titulo: String, val bytes: Long, val destino: String, val onde: String)
 
     /** Lê o destino (SMB = rede) fora da thread da tela e redesenha. */
     private fun carregar() {
@@ -54,20 +57,29 @@ class GravacoesActivity : Activity() {
             var nomeDestino: String? = null
             var gravadas = emptyList<Gravada>()
             val mapa = HashMap<String, String>()
+            // O lugar de agora (o da última escolha, senão o automático) vai no subtítulo com o espaço livre.
             runCatching {
-                GravacaoDestino.abrir(app)?.use { d ->
-                    nomeDestino = d.nome
-                    livre = d.livre()
+                GravacaoDestino.abrir(app, GravacaoDestino.ultimo(app))?.use { d -> nomeDestino = d.nome; livre = d.livre() }
+            }
+            // 20/11/2026: as gravações podem estar em vários lugares (cada uma onde a pessoa escolheu): lista todos.
+            val todas = ArrayList<Gravada>()
+            for (o in runCatching { GravacaoDestino.opcoes(app) }.getOrDefault(emptyList())) runCatching {
+                GravacaoDestino.abrir(app, o.id)?.takeIf { it.id == o.id }?.use { d ->
                     val itens = d.listar()
                     val tam = itens.associate { it.nome to it.tamanho }
-                    gravadas = GravacaoRegras.agrupar(itens.map { it.nome }).map { partes ->
-                        partes.forEach { mapa[it] = d.uri(it) }
+                    GravacaoRegras.agrupar(itens.map { it.nome }).forEach { partes ->
+                        partes.forEach { mapa["${d.id}|$it"] = d.uri(it) }
                         val (ini, tit) = GravacaoRegras.lerNome(partes.first())
-                        Gravada(partes, ini, tit, partes.sumOf { tam[it] ?: 0L })
+                        todas += Gravada(partes, ini, tit, partes.sumOf { tam[it] ?: 0L }, d.id, d.nome)
                     }
                 }
             }
-            runOnUiThread { if (!isDestroyed) { uris = mapa; montar(ag, gravadas, nomeDestino, livre) } }
+            gravadas = todas.sortedByDescending { it.inicio ?: 0L }
+            val variosLugares = gravadas.map { it.destino }.distinct().size > 1
+            if (!variosLugares) gravadas = gravadas.map { Gravada(it.partes, it.inicio, it.titulo, it.bytes, it.destino, "") }
+            val nuvem = runCatching { RecordingCloudCopy.nomeDoAlvo(app, RecordingCloudCopy.alvo(app)) }.getOrNull()
+            val naFila = runCatching { RecordingCloudCopy.fila(app).size }.getOrDefault(0)
+            runOnUiThread { if (!isDestroyed) { uris = mapa; nomeNuvem = nuvem; copiasNaFila = naFila; montar(ag, gravadas, nomeDestino, livre) } }
         }
     }
 
@@ -98,14 +110,26 @@ class GravacoesActivity : Activity() {
             getString(if (destino == null) R.string.grv_vazio_sem_destino else R.string.grv_vazio)).apply { setPaddingRelative(0, Estilo.dp(this@GravacoesActivity, 8), 0, 0) })
         for (g in gravadas) {
             val partes = if (g.partes.size > 1) " · " + getString(R.string.grv_partes, g.partes.size) else ""
-            linha("gr:" + g.partes.first(), g.titulo, listOfNotNull(g.inicio?.let { "${dia(it)} ${Gravacoes.hora(it)}" }, gb(g.bytes)).joinToString(" · ") + partes,
-                null, ok = { tocar(g.partes, 0) },
+            linha("gr:" + g.destino + "|" + g.partes.first(), g.titulo,
+                listOfNotNull(g.inicio?.let { "${dia(it)} ${Gravacoes.hora(it)}" }, gb(g.bytes), g.onde.ifEmpty { null }).joinToString(" · ") + partes,
+                null, ok = { tocar(g.partes.map { "${g.destino}|$it" }, 0) },
                 segurar = { confirmar(getString(R.string.grv_apagar_pergunta, g.titulo), getString(R.string.grv_apagar)) { apagar(g) } })
         }
         coluna.addView(Estilo.secao(this, getString(R.string.grv_reserva_secao)))
         val reserva = GravacaoDestino.pastaRede(this).takeIf { it.isNotEmpty() }?.let { id -> MidiaArmazem.conta(this, id)?.nome }
         linha("reserva", getString(R.string.grv_reserva), getString(R.string.grv_reserva_explica), reserva ?: getString(R.string.grv_nenhuma),
             ok = { escolherReserva() }, segurar = null)
+        // 20/11/2026: cópia para a nuvem ao terminar (Drive, OneDrive, Dropbox, Box).
+        val explicaNuvem = getString(R.string.grv_nuvem_explica) +
+            if (copiasNaFila > 0) " · " + getString(R.string.grv_na_fila, copiasNaFila) else ""
+        linha("nuvem", getString(R.string.grv_nuvem), explicaNuvem, nomeNuvem ?: getString(R.string.grv_nenhuma),
+            ok = { escolherNuvem() }, segurar = null)
+        if (nomeNuvem != null) {
+            val apagar = RecordingCloudCopy.apagarDepois(this)
+            linha("nuvem_apagar", getString(R.string.grv_apagar_depois), getString(R.string.grv_apagar_depois_explica),
+                getString(if (apagar) R.string.rot_ligada else R.string.rot_desligada),
+                ok = { RecordingCloudCopy.definirApagar(this, !apagar); carregar() }, segurar = null)
+        }
         val alvo = (0 until coluna.childCount).map { coluna.getChildAt(it) }.firstOrNull { it.tag != null && it.tag == focoAntes }
             ?: (0 until coluna.childCount).map { coluna.getChildAt(it) }.firstOrNull { it.isFocusable }
         alvo?.requestFocus()
@@ -134,14 +158,14 @@ class GravacoesActivity : Activity() {
     private fun apagar(g: Gravada) {
         val app = applicationContext
         Fundo.rodar("gravacoes") {
-            runCatching { GravacaoDestino.abrir(app)?.use { d -> g.partes.forEach { d.apagar(it) } } }
+            runCatching { GravacaoDestino.abrir(app, g.destino)?.takeIf { it.id == g.destino }?.use { d -> g.partes.forEach { d.apagar(it) } } }
             runOnUiThread { if (!isDestroyed) carregar() }
         }
     }
 
-    /** Pasta da rede para quando não há pendrive: as contas SMB do "Na rede" (o smbj grava). */
+    /** Pasta da rede para quando não há pendrive: as contas do "Na rede" que aceitam gravação (SMB, FTP, SFTP). */
     private fun escolherReserva() {
-        val contas = MidiaArmazem.contas(this).filter { it.tipo == ContaMidia.SMB }
+        val contas = MidiaArmazem.contas(this).filter { Pastas.gravavel(it) }
         if (contas.isEmpty()) { AvisoTv.rapido(this, getString(R.string.grv_reserva), getString(R.string.grv_sem_smb), 8); return }
         val atual = GravacaoDestino.pastaRede(this)
         val itens = listOf(getString(R.string.grv_nenhuma)) + contas.map { it.nome }
@@ -152,12 +176,31 @@ class GravacoesActivity : Activity() {
         }
     }
 
+    /** A nuvem que recebe a cópia de cada gravação (ou nenhuma). */
+    private fun escolherNuvem() {
+        val app = applicationContext
+        Fundo.rodar("gravacoes") {
+            val alvos = runCatching { RecordingCloudCopy.alvos(app) }.getOrDefault(emptyList())
+            val atual = RecordingCloudCopy.alvo(app)
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                if (alvos.isEmpty()) { AvisoTv.rapido(this, getString(R.string.grv_nuvem), getString(R.string.grv_sem_nuvem), 10); return@runOnUiThread }
+                val itens = listOf(getString(R.string.grv_nenhuma)) + alvos.map { it.nome }
+                val marcada = alvos.indexOfFirst { it.id == atual }.let { if (it < 0) 0 else it + 1 }
+                Estilo.lista(this, getString(R.string.grv_nuvem), itens, listOf(marcada)) { i ->
+                    RecordingCloudCopy.definir(this, if (i == 0) "" else alvos[i - 1].id)
+                    carregar()
+                }
+            }
+        }
+    }
+
     // ---------------------------------------------------------------- assistir (partes em sequência)
 
     private fun tocar(partes: List<String>, i: Int) {
         val uri = uris[partes.getOrNull(i) ?: return] ?: return
         tocando = partes; parteTocando = i
-        val (_, titulo) = GravacaoRegras.lerNome(partes.first())
+        val (_, titulo) = GravacaoRegras.lerNome(partes.first().substringAfter('|'))
         VodActivity.abrirUrlComResultado(this, CODIGO_TOCAR, uri,
             titulo + if (partes.size > 1) " (${getString(R.string.grv_parte, i + 1, partes.size)})" else "")
     }

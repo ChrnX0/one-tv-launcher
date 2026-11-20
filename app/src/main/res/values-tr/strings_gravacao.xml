@@ -62,7 +62,8 @@
     <string name="grv_reserva">Ağ klasörü</string>
     <string name="grv_reserva_explica">USB bellek takılı değilken nereye kaydedilecek (“Ağda” bölümünden bir Windows veya NAS klasörü)</string>
     <string name="grv_nenhuma">Yok</string>
-    <string name="grv_sem_smb">Önce Ağda’ya bir Windows/NAS (SMB) klasörü ekleyin.</string>
+    <string name="grv_onde_pergunta">Nereye kaydedilsin?</string>
+    <string name="grv_sem_smb">Önce Ağ bölümüne bir ağ klasörü (Windows/NAS, FTP veya SFTP) ekleyin.</string>
     <string name="grv_amanha">Yarın</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">izle</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Geçme</string>
     <string name="lb_troca_marcada">Kendiliğinden geçecek</string>
     <string name="lb_troca_marcada_det">%2$s’de %1$s kanalına (TV açıksa)</string>
+    <string name="grv_nao_copiou">%1$s konumuna kopyalanamadı</string>
+    <string name="grv_copiada">Kayıt %1$s konumuna kopyalandı</string>
+    <string name="grv_partes_copiadas">%1$d parça kopyalandı</string>
+    <string name="grv_copiando">Kayıt %1$s konumuna kopyalanıyor…</string>
+    <string name="grv_nuvem">Buluta kopyala</string>
+    <string name="grv_nuvem_explica">Kayıt bitince bir kopyası bulut hesabınıza gider</string>
+    <string name="grv_na_fila">Sırada %1$d</string>
+    <string name="grv_apagar_depois">Kopyaladıktan sonra burada sil</string>
+    <string name="grv_apagar_depois_explica">Bulut kopyası bitince USB belleği veya klasörü boşaltır</string>
+    <string name="grv_sem_nuvem">Ağ bölümünde OneDrive, Dropbox veya Box\'a giriş yapın ya da Otomatik yedeklemede Google Drive\'ı bağlayın.</string>
+    <string name="grv_memoria_tv">TV belleği</string>
 </resources>

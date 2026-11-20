@@ -239,4 +239,25 @@ class GravacaoTest {
         assertTrue(GravacaoCanal.ehHls("http://s/live/1", "application/vnd.apple.mpegurl"))
         assertFalse(GravacaoCanal.ehHls("http://s/live/1.ts", "video/mp2t"))
     }
+
+    // ---------------------------------------------------------------- "Gravar onde?" (20/11/2026)
+
+    @Test fun lugarDaUltimaVezVemPrimeiro() {
+        val l = listOf("usb:/a", "conta:1", "conta:2")
+        assertEquals(listOf("conta:2", "usb:/a", "conta:1"), GravacaoRegras.ordenarOpcoes(l, "conta:2") { it })
+        assertEquals(l, GravacaoRegras.ordenarOpcoes(l, "usb:/a") { it })
+        assertEquals(l, GravacaoRegras.ordenarOpcoes(l, "sumiu") { it })   // pendrive tirado: ordem de sempre
+    }
+
+    @Test fun soPerguntaComEscolha() {
+        assertFalse(GravacaoRegras.perguntarOnde(0)); assertFalse(GravacaoRegras.perguntarOnde(1)); assertTrue(GravacaoRegras.perguntarOnde(2))
+    }
+
+    @Test fun agendadaGuardaOLugar() {
+        val a = GravacaoRegras.Agendada("x", "c1", "Canal", "Jornal", 10_000_000L, 13_600_000L, false, "conta:9")
+        assertEquals("conta:9", GravacaoRegras.deJson(GravacaoRegras.paraJson(listOf(a))).single().destino)
+        // Agendada de antes (sem o campo): lugar automático.
+        val velha = """[{"id":"y","canal":"c1","canalNome":"Canal","programa":"P","inicio":10000000,"fim":13600000,"semanal":false}]"""
+        assertEquals("", GravacaoRegras.deJson(velha).single().destino)
+    }
 }

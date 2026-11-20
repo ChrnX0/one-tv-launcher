@@ -62,7 +62,8 @@
     <string name="grv_reserva">网络文件夹</string>
     <string name="grv_reserva_explica">未插入 U 盘时的录制位置（来自“网络”的 Windows/NAS 文件夹）</string>
     <string name="grv_nenhuma">无</string>
-    <string name="grv_sem_smb">请先在“网络”中添加 Windows/NAS（SMB）文件夹。</string>
+    <string name="grv_onde_pergunta">录制到哪里？</string>
+    <string name="grv_sem_smb">请先在“网络”中添加网络文件夹（Windows/NAS、FTP 或 SFTP）。</string>
     <string name="grv_amanha">明天</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">观看</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">不切换</string>
     <string name="lb_troca_marcada">将自动切换</string>
     <string name="lb_troca_marcada_det">%2$s 切换到 %1$s（如果电视开着）</string>
+    <string name="grv_nao_copiou">无法复制到 %1$s</string>
+    <string name="grv_copiada">录像已复制到 %1$s</string>
+    <string name="grv_partes_copiadas">已复制 %1$d 个部分</string>
+    <string name="grv_copiando">正在将录像复制到 %1$s…</string>
+    <string name="grv_nuvem">复制到云端</string>
+    <string name="grv_nuvem_explica">录像结束后，副本会发送到你的云端账号</string>
+    <string name="grv_na_fila">排队中 %1$d</string>
+    <string name="grv_apagar_depois">复制后从这里删除</string>
+    <string name="grv_apagar_depois_explica">云端副本完成后释放 U 盘或文件夹空间</string>
+    <string name="grv_sem_nuvem">请在“网络”中登录 OneDrive、Dropbox 或 Box，或在“自动备份”中连接 Google Drive。</string>
+    <string name="grv_memoria_tv">电视存储空间</string>
 </resources>

@@ -64,7 +64,30 @@ object Smb {
     fun lerTudo(c: ContaMidia, caminho: String, max: Int = 30 * 1024 * 1024): ByteArray = Pastas.lerTudo(c, caminho, max)
 
     /** A pasta compartilhada no molde comum (PastaArquivos.kt): listar e ler com posição. */
-    class Pasta(private val a: Aberta) : PastaArquivos {
+    class Pasta(private val a: Aberta) : PastaArquivos, PastaGravavel {
+        private fun win(caminho: String) = caminho.trim('/').replace('/', '\\')
+
+        override fun criarPastas(caminho: String) {
+            var c = ""
+            for (parte in caminho.split('/').filter { it.isNotEmpty() }) {
+                c = if (c.isEmpty()) parte else "$c/$parte"
+                if (!a.pasta.folderExists(win(c))) a.pasta.mkdir(win(c))
+            }
+        }
+
+        override fun escrever(caminho: String): java.io.OutputStream {
+            val f = a.pasta.openFile(win(caminho), EnumSet.of(AccessMask.GENERIC_WRITE), null, SMB2ShareAccess.ALL,
+                SMB2CreateDisposition.FILE_OVERWRITE_IF, null)
+            return object : java.io.FilterOutputStream(f.outputStream.buffered(256 * 1024)) {
+                override fun write(b: ByteArray, off: Int, len: Int) = out.write(b, off, len)
+                override fun close() { runCatching { super.close() }; runCatching { f.close() } }
+            }
+        }
+
+        override fun apagar(caminho: String) = a.pasta.rm(win(caminho))
+
+        override fun livre(caminho: String): Long = runCatching { a.pasta.shareInformation.freeSpace }.getOrDefault(Long.MAX_VALUE)
+
         override fun listar(caminho: String): List<PastaArquivos.Item> = a.pasta.list(caminho.replace('/', '\\'))
             .filter { !EnumWithValue.EnumUtils.isSet(it.fileAttributes, FileAttributes.FILE_ATTRIBUTE_HIDDEN) }
             .map { PastaArquivos.Item(it.fileName, EnumWithValue.EnumUtils.isSet(it.fileAttributes, FileAttributes.FILE_ATTRIBUTE_DIRECTORY), it.endOfFile) }

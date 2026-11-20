@@ -1004,13 +1004,19 @@ class PlayerActivity : Activity() {
     }
 
     private fun gravar(c: Canal, programa: String, fim: Long) {
-        if (GravacaoDestino.descricao(this) == null) {
-            // Diz o motivo de verdade: pendrive em NTFS ou cheio, em vez de só "sem lugar" (15/11/2026)
-            mostrarAvisoBreve(GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino), 10_000); return
+        // 20/11/2026: com mais de um lugar (pendrives, pastas do Na rede), pergunta onde.
+        GravacaoDestino.perguntar(this) { onde ->
+            if (onde == null) {
+                // Diz o motivo de verdade: pendrive em NTFS ou cheio, em vez de só "sem lugar" (15/11/2026)
+                mostrarAvisoBreve(GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino), 10_000)
+            } else if (!isDestroyed) gravarEm(c, programa, fim, onde.id)
         }
+    }
+
+    private fun gravarEm(c: Canal, programa: String, fim: Long, destino: String) {
         pausa.descartar()
         player?.stop()   // solta a conexão: daqui em diante quem baixa o canal é o gravador, e o player lê dele
-        Gravacoes.gravarAgora(this, emCurso(c), programa, fim)   // grava a variante que está tocando
+        Gravacoes.gravarAgora(this, emCurso(c), programa, fim, destino)   // grava a variante que está tocando
         mostrarAviso(getString(R.string.grv_comecando))
         // Não começou (pendrive sem permissão, NAS fora, canal fora do ar): volta ao canal direto e avisa.
         tela.postDelayed({

@@ -61,6 +61,31 @@ class PastasServidoresTest {
         assertTrue(senha.exceptionOrNull() is SecurityException)
     }
 
+    /** 20/11/2026: a gravação da TV ao vivo em FTP, FTPS e SFTP (cria a pasta, grava, lê de volta, apaga). */
+    private fun gravarELer(c: ContaMidia, base: String) {
+        val bytes = java.util.Random(11).let { r -> ByteArray(1_500_000).also { r.nextBytes(it) } }
+        val pasta = MidiaContas.juntar(base, "OneTV-gravacoes/sub")
+        val cam = MidiaContas.juntar(pasta, "2026-11-20 Canal.ts")
+        Pastas.abrir(c).use { p ->
+            val g = p as PastaGravavel
+            g.criarPastas(pasta)
+            g.criarPastas(pasta)   // de novo: já existir não é erro
+            g.escrever(cam).use { o -> bytes.toList().chunked(64 * 1024).forEach { o.write(it.toByteArray()) } }
+            assertEquals(bytes.size.toLong(), p.tamanho(cam))
+            assertArrayEquals(bytes, p.ler(cam, 0).use { it.readBytes() })
+            assertTrue(g.livre(pasta) > 0)
+            g.apagar(cam)
+            assertTrue(p.listar(pasta).none { it.nome == "2026-11-20 Canal.ts" })
+        }
+    }
+
+    @Test fun gravaEmFtpFtpsESftp() {
+        gravarELer(ContaMidia("g1", ContaMidia.FTP, "x", "127.0.0.1:2121", usuario = "grava", senha = "Senh4!"), "")
+        gravarELer(ContaMidia("g2", ContaMidia.FTPS, "x", "localhost:2122", usuario = "grava", senha = "Senh4!"), "")
+        val c = Sftp.conhecer(ContaMidia("g3", ContaMidia.SFTP, "x", "127.0.0.1:2222", usuario = "teste", senha = "Senh4!"))
+        gravarELer(c, c.pasta)
+    }
+
     @Test fun nfsLeEExplicaAPortaAlta() {
         conferir(ContaMidia("n1", ContaMidia.NFS, "x", "127.0.0.1", pasta = "srv/dados"), "")
         // Export com PrivilegedPort=true (o padrão de quase todo NAS): app não usa porta baixa, o servidor recusa.

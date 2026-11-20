@@ -123,7 +123,6 @@ class PlayerGradeView(
         Fundo.rodar("gravacao") {
             val ag = runCatching { Gravacoes.agendada(app, canal.id, p.inicio) }.getOrNull()
             val modo = runCatching { Lembretes.modo(LembretesTv.listar(app), "${canal.id}|${p.inicio}") }.getOrDefault(Lembretes.MODO_NADA)
-            val onde = GravacaoDestino.descricao(app)
             post {
                 if (!aberta) return@post
                 val itens = ArrayList<Pair<String, () -> Unit>>()
@@ -134,18 +133,22 @@ class PlayerGradeView(
                 if (ag != null) itens += app.getString(R.string.grv_cancelar_agendada) to { cancelarGravacao(ag) }
                 else {
                     itens += app.getString(R.string.grv_agendar, Gravacoes.hora(p.inicio - GravacaoRegras.FOLGA_ANTES_MS),
-                        Gravacoes.hora(p.fim + GravacaoRegras.FOLGA_DEPOIS_MS)) to { agendarGravacao(canal, p, false, onde) }
-                    itens += app.getString(R.string.grv_agendar_semana) to { agendarGravacao(canal, p, true, onde) }
+                        Gravacoes.hora(p.fim + GravacaoRegras.FOLGA_DEPOIS_MS)) to { agendarGravacao(canal, p, false) }
+                    itens += app.getString(R.string.grv_agendar_semana) to { agendarGravacao(canal, p, true) }
                 }
                 Estilo.lista(context, "${p.titulo} · ${canal.nome} ${Gravacoes.hora(p.inicio)}", itens.map { it.first }, marcadas) { i -> itens[i].second() }
             }
         }
     }
 
-    private fun agendarGravacao(canal: Canal, p: Programa, semanal: Boolean, onde: String?) {
+    private fun agendarGravacao(canal: Canal, p: Programa, semanal: Boolean) =
+        GravacaoDestino.perguntar(context) { escolha -> agendarGravacao(canal, p, semanal, escolha) }
+
+    private fun agendarGravacao(canal: Canal, p: Programa, semanal: Boolean, escolha: GravacaoDestino.Opcao?) {
         val app = context.applicationContext
+        val onde = escolha?.nome
         Fundo.rodar("gravacao") {
-            val r = runCatching { Gravacoes.agendar(app, canal, p, semanal) }.getOrNull()
+            val r = runCatching { Gravacoes.agendar(app, canal, p, semanal, escolha?.id.orEmpty()) }.getOrNull()
             post {
                 val (titulo, texto) = when {
                     r == null -> app.getString(R.string.grv_nao_agendou) to app.getString(R.string.grv_lista_cheia)

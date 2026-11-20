@@ -62,7 +62,8 @@
     <string name="grv_reserva">Folder jaringan</string>
     <string name="grv_reserva_explica">Tempat merekam saat tidak ada flashdisk (folder Windows atau NAS dari “Di jaringan”)</string>
     <string name="grv_nenhuma">Tidak ada</string>
-    <string name="grv_sem_smb">Tambahkan folder Windows/NAS (SMB) di Di jaringan dulu.</string>
+    <string name="grv_onde_pergunta">Rekam di mana?</string>
+    <string name="grv_sem_smb">Tambahkan dulu folder jaringan (Windows/NAS, FTP, atau SFTP) di Jaringan.</string>
     <string name="grv_amanha">Besok</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">tonton</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Jangan pindah</string>
     <string name="lb_troca_marcada">Akan pindah sendiri</string>
     <string name="lb_troca_marcada_det">Ke %1$s pukul %2$s (jika TV menyala)</string>
+    <string name="grv_nao_copiou">Gagal menyalin ke %1$s</string>
+    <string name="grv_copiada">Rekaman disalin ke %1$s</string>
+    <string name="grv_partes_copiadas">%1$d bagian disalin</string>
+    <string name="grv_copiando">Menyalin rekaman ke %1$s…</string>
+    <string name="grv_nuvem">Salin ke cloud</string>
+    <string name="grv_nuvem_explica">Saat rekaman selesai, salinannya dikirim ke akun cloud Anda</string>
+    <string name="grv_na_fila">%1$d antre</string>
+    <string name="grv_apagar_depois">Hapus di sini setelah disalin</string>
+    <string name="grv_apagar_depois_explica">Mengosongkan flashdisk atau folder setelah salinan cloud selesai</string>
+    <string name="grv_sem_nuvem">Masuk ke OneDrive, Dropbox, atau Box di Jaringan, atau hubungkan Google Drive di Cadangan otomatis.</string>
+    <string name="grv_memoria_tv">Memori TV</string>
 </resources>

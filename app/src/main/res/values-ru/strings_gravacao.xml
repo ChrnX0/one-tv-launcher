@@ -62,7 +62,8 @@
     <string name="grv_reserva">Сетевая папка</string>
     <string name="grv_reserva_explica">Куда записывать, если флешка не подключена (папка Windows/NAS из раздела «В сети»)</string>
     <string name="grv_nenhuma">Нет</string>
-    <string name="grv_sem_smb">Сначала добавьте папку Windows/NAS (SMB) в разделе «В сети».</string>
+    <string name="grv_onde_pergunta">Куда записать?</string>
+    <string name="grv_sem_smb">Сначала добавьте сетевую папку (Windows/NAS, FTP или SFTP) в разделе «Сеть».</string>
     <string name="grv_amanha">Завтра</string>
     <string name="grv_dica_ok">OK</string>
     <string name="grv_dica_assistir">смотреть</string>
@@ -76,4 +77,15 @@
     <string name="lb_nao_trocar">Не переключать</string>
     <string name="lb_troca_marcada">Переключится само</string>
     <string name="lb_troca_marcada_det">На %1$s в %2$s (если ТВ включён)</string>
+    <string name="grv_nao_copiou">Не удалось скопировать в %1$s</string>
+    <string name="grv_copiada">Запись скопирована в %1$s</string>
+    <string name="grv_partes_copiadas">Скопировано частей: %1$d</string>
+    <string name="grv_copiando">Копирую запись в %1$s…</string>
+    <string name="grv_nuvem">Копировать в облако</string>
+    <string name="grv_nuvem_explica">После записи копия отправляется в ваш облачный аккаунт</string>
+    <string name="grv_na_fila">В очереди: %1$d</string>
+    <string name="grv_apagar_depois">Удалять здесь после копирования</string>
+    <string name="grv_apagar_depois_explica">Освобождает флешку или папку, когда копия в облаке готова</string>
+    <string name="grv_sem_nuvem">Войдите в OneDrive, Dropbox или Box в разделе «Сеть» или подключите Google Drive в «Автоматическом резервном копировании».</string>
+    <string name="grv_memoria_tv">Память ТВ</string>
 </resources>
