@@ -109,6 +109,8 @@ object ObserverTv {
         }
         p.edit().putString("log", log).putString("notes", notes).putString("active", active.joinToString(",") { it.name }).apply()
         Log.i(TAG, "apareceu=${change.appeared.map { it.kind }} sumiu=${change.cleared}")
+        // A Sofy (rosto e voz) olha a fila: só o que a regra dela manda mostrar agora aparece (SofyTv/SofyPolicy).
+        if (change.appeared.isNotEmpty()) Fundo.rodar { runCatching { SofyTv.present(ctx) } }   // fora do lock do Observador
     }
 
     // ---------------------------------------------------------------- linha de base (fase 2)

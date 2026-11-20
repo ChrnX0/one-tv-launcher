@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"टीवी पर चल रहा है।",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"यह फ़ाइल टीवी पर नहीं खुलती। वीडियो, संगीत और फ़ोटो खुलते हैं।",
 "Observador":"ऑब्ज़र्वर",
+"Sofy fala em voz alta":"Sofy ज़ोर से बोलती है",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"वह टीवी पर जो दिखाती है उसे पढ़कर सुनाती है। TalkBack चालू हो तो TalkBack पढ़ता है।",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"TV खुद किन चीज़ों पर नज़र रखता है: मेमोरी, इंटरनेट, Wi-Fi, होम स्क्रीन की स्मूदनेस और स्टोरेज। जब कुछ सामान्य से हटता है, तो वह कारण के साथ यहाँ दिखता है। अभी यह सिर्फ़ देखता और नोट करता है।",
 "Tudo normal agora.":"अभी सब सामान्य है।",
 "Nada fora do normal nos últimos 7 dias.":"पिछले 7 दिनों में कुछ भी असामान्य नहीं।",

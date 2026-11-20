@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofy (20/11/2026): frases dos recados do Observador, uma por tipo (ObserverCore.noteFor: observer_<tipo>_title/_text). %1$s = o número do sinal. -->
+<resources>
+    <string name="observer_no_internet_title">Niente internet</string>
+    <string name="observer_no_internet_text">I video possono fermarsi finché non torna.</string>
+    <string name="observer_slow_internet_title">Internet lento</string>
+    <string name="observer_slow_internet_text">Le risposte impiegano %1$s ms. I video possono fermarsi per caricare.</string>
+    <string name="observer_weak_wifi_title">Wi-Fi debole</string>
+    <string name="observer_weak_wifi_text">Il segnale è a %1$s dBm. Un router più vicino alla TV aiuta.</string>
+    <string name="observer_low_memory_title">Memoria quasi piena</string>
+    <string name="observer_low_memory_text">Solo %1$s MB liberi. Le app possono chiudersi e riaprirsi.</string>
+    <string name="observer_memory_pressure_title">La TV è sovraccarica</string>
+    <string name="observer_memory_pressure_text">Android sta chiudendo app per fare spazio.</string>
+    <string name="observer_slow_home_title">Schermata iniziale lenta</string>
+    <string name="observer_slow_home_text">Il %1$s%% dei fotogrammi è arrivato in ritardo.</string>
+    <string name="observer_low_disk_title">Spazio quasi pieno</string>
+    <string name="observer_low_disk_text">Restano solo %1$s MB. Il salvataggio può non riuscire.</string>
+</resources>

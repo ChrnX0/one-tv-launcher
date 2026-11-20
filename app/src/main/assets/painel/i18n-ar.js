@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"يعمل على التلفاز.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"هذا النوع من الملفات لا يفتح على التلفاز. الفيديو والموسيقى والصور تفتح.",
 "Observador":"المراقِب",
+"Sofy fala em voz alta":"Sofy تتحدث بصوت عالٍ",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"تقرأ ما تعرضه على التلفاز. عند تشغيل TalkBack، يقرأ TalkBack.",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"ما يراقبه التلفزيون بنفسه: الذاكرة والإنترنت والواي فاي وسلاسة الشاشة الرئيسية والمساحة. عندما يخرج شيء عن المعتاد يظهر هنا مع السبب. حاليًا يراقب ويدوّن فقط.",
 "Tudo normal agora.":"كل شيء طبيعي الآن.",
 "Nada fora do normal nos últimos 7 dias.":"لا شيء غير طبيعي في آخر 7 أيام.",

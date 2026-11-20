@@ -1399,6 +1399,8 @@ traduzirPainelCom({T:{
 "Tocando na TV.":"Reproduciendo en la TV.",
 "Esse tipo de arquivo não abre na TV. Vídeo, música ou foto, sim.":"Este tipo de archivo no se abre en la TV. Videos, música y fotos, sí.",
 "Observador":"Observador",
+"Sofy fala em voz alta":"Sofy habla en voz alta",
+"Ela lê o que mostra na TV. Com o TalkBack ligado, quem lê é ele.":"Lee lo que muestra en la TV. Con TalkBack activado, lo lee TalkBack.",
 "O que a TV vigia sozinha: memória, internet, Wi-Fi, fluidez da tela inicial e espaço. Quando algo sai do normal, aparece aqui com o motivo. Por enquanto ele só observa e anota.":"Lo que la TV vigila por sí sola: memoria, internet, Wi-Fi, fluidez de la pantalla de inicio y espacio. Cuando algo sale de lo normal, aparece aquí con el motivo. Por ahora solo observa y anota.",
 "Tudo normal agora.":"Todo normal ahora.",
 "Nada fora do normal nos últimos 7 dias.":"Nada fuera de lo normal en los últimos 7 días.",

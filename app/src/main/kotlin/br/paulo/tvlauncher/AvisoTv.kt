@@ -37,6 +37,7 @@ object AvisoTv {
     private const val PREFS = "aviso_tv"
     /** Último aviso mostrado (lido pelo ProtetorGaleria). Fora do backup: é passageiro. */
     const val PREFS_ULTIMO = "aviso_tv_ultimo"
+    private const val SOFY_DP = 44   // a Sofy inteira na pílula (corpo, antenas, braços e o rosto legível a 3 m)
     private const val VALIDADE_PENDENTE_MS = 12 * 60 * 60_000L   // recado de mais de 12 h atrás já não serve
 
     private val principal = Handler(Looper.getMainLooper())
@@ -185,7 +186,10 @@ object AvisoTv {
         // Mesma pílula do topo da HOME (dono, 10/11/2026: "deveria aparecer como uma pílula igual às outras"): 32 dp de
         // altura, ícone de 20 dp, uma linha só: "Chuva · 70% de chance…". O nome do aviso vem claro e forte, como o "27°"
         // da pílula do clima; a mensagem vem logo depois, no mesmo tamanho.
-        val maxTexto = largura - dp(12 + 14 + 20 + 8)
+        // A Sofy (20/11/2026) fala por aqui com o corpo inteiro: 44 dp no lugar do ícone de 20 dp.
+        val sofy = icone as? SofyDrawable
+        val iconeDp = if (sofy != null) SOFY_DP else 20
+        val maxTexto = largura - dp(12 + 14 + iconeDp + 8)
         val linha = android.text.SpannableStringBuilder().apply {
             append(titulo, object : android.text.style.MetricAffectingSpan() {   // TypefaceSpan(Typeface) só existe no Android 9+
                 override fun updateDrawState(tp: android.text.TextPaint) { tp.typeface = Estilo.fonte(600) }
@@ -220,6 +224,7 @@ object AvisoTv {
         val pilula = Estilo.pilula(svc, icone ?: Estilo.fundo(svc, Estilo.ACENTO, Estilo.RAIO_PILULA), focavel = false).apply {
             // sem ícone: um ponto no acento, menor que o ícone (os 20 dp da pílula ficam para ícone de verdade)
             if (icone == null) (getChildAt(0).layoutParams as LinearLayout.LayoutParams).apply { width = dp(8); height = dp(8); marginEnd = dp(10) }
+            if (sofy != null) (getChildAt(0).layoutParams as LinearLayout.LayoutParams).apply { width = dp(SOFY_DP); height = dp(SOFY_DP) }
             if (cartao) {
                 background = Estilo.vidro(svc, Estilo.RAIO)
                 setPaddingRelative(dp(14), dp(12), dp(16), dp(12))
@@ -245,6 +250,7 @@ object AvisoTv {
             Log.w(TAG, "não consegui abrir a janela: $e"); return
         }
         janela = pilula
+        sofy?.start()   // toca o movimento da expressão uma vez (até 2,5 s) e para
         if (som) bipar()
         fecharDepois = Runnable { fechar() }.also { principal.postDelayed(it, segundos * 1000L) }
         Log.i(TAG, "aviso na tela por ${segundos}s: $titulo")
