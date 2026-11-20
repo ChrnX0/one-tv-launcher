@@ -1355,6 +1355,9 @@ class VodActivity : Activity() {
         if (desligarAoFim) Desligamento.apagarTela(applicationContext)
         player?.pause()
         finish()
+        // Próximo episódio já escolhido: sai sem animação, para a ficha da série não aparecer entre os dois (a série
+        // cobre a tela com o mesmo fundo até o próximo player abrir).
+        @Suppress("DEPRECATION") if (proximoJa) overridePendingTransition(0, 0)
     }
 
     /**
