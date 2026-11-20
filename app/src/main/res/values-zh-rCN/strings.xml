@@ -869,4 +869,12 @@ AS\\Movies）。</string>
     <string name="bu_recente_det">再次搜索</string>
     <string name="aviso_alarme_tocou_titulo">电视上的闹钟响了</string>
     <string name="aviso_alarme_tocou_texto">%1$s 开始响铃。</string>
+    <string name="home_instalar_externo">安装到外部存储</string>
+    <string name="home_instalar_dispositivo">安装到本机</string>
+    <string name="home_instalando_lugar">正在移动 %1$s… 完成前会关闭。</string>
+    <string name="home_instalado_externo">%1$s 已在外部存储上。</string>
+    <string name="home_instalado_dispositivo">%1$s 已回到本机。</string>
+    <string name="home_instalar_lugar_falhou">无法移动 %1$s：%2$s</string>
+    <string name="home_instalar_lugar_sem_shell">电视自带的 shell 未启用</string>
+    <string name="home_instalar_lugar_sem_pendrive">没有设为电视存储的 U 盘</string>
 </resources>

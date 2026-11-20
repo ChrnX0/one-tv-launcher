@@ -869,4 +869,12 @@ AS\\Film).</string>
     <string name="bu_recente_det">Cari lagi</string>
     <string name="aviso_alarme_tocou_titulo">Alarm berbunyi di TV</string>
     <string name="aviso_alarme_tocou_texto">Mulai berbunyi pukul %1$s.</string>
+    <string name="home_instalar_externo">Pasang di penyimpanan eksternal</string>
+    <string name="home_instalar_dispositivo">Pasang di perangkat</string>
+    <string name="home_instalando_lugar">Memindahkan %1$s… aplikasi tertutup sampai selesai.</string>
+    <string name="home_instalado_externo">%1$s kini di penyimpanan eksternal.</string>
+    <string name="home_instalado_dispositivo">%1$s kembali ke perangkat.</string>
+    <string name="home_instalar_lugar_falhou">Tidak bisa memindahkan %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">shell bawaan TV tidak aktif</string>
+    <string name="home_instalar_lugar_sem_pendrive">tidak ada flashdisk yang diatur sebagai penyimpanan TV</string>
 </resources>

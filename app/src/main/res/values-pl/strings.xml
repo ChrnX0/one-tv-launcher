@@ -878,4 +878,12 @@ AS\\Filmy).</string>
     <string name="bu_recente_det">Szukaj ponownie</string>
     <string name="aviso_alarme_tocou_titulo">Budzik zadzwonił na telewizorze</string>
     <string name="aviso_alarme_tocou_texto">Zaczął dzwonić o %1$s.</string>
+    <string name="home_instalar_externo">Zainstaluj w pamięci zewnętrznej</string>
+    <string name="home_instalar_dispositivo">Zainstaluj na urządzeniu</string>
+    <string name="home_instalando_lugar">Przenoszenie %1$s… zamknie się do końca.</string>
+    <string name="home_instalado_externo">%1$s jest teraz w pamięci zewnętrznej.</string>
+    <string name="home_instalado_dispositivo">%1$s wróciła na urządzenie.</string>
+    <string name="home_instalar_lugar_falhou">Nie udało się przenieść %1$s: %2$s</string>
+    <string name="home_instalar_lugar_sem_shell">własna powłoka telewizora nie jest aktywna</string>
+    <string name="home_instalar_lugar_sem_pendrive">brak pendrive\'a ustawionego jako pamięć telewizora</string>
 </resources>
