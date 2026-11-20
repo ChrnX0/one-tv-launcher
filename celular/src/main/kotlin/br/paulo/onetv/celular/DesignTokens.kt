@@ -37,6 +37,8 @@ object DesignTokens {
     const val WORLD_CONTINUE = 0xFFF2B84B.toInt()
     /** Do computador: verde-água, o ícone de pasta. */
     const val WORLD_NETWORK = 0xFF6FC3B2.toInt()
+    /** Rotina da casa (painel e Configurações): Família e Tela e energia. Azul calmo, a única cor de área que não é de um mundo da cruz; mesma luminosidade dos mundos. */
+    const val AREA_HOME = 0xFF7AB8F5.toInt()
     /** Arredondada, lê bem do sofá; é a família do logo. */
     const val FONT_TITLE = "Nunito"
     /** Texto corrido no painel e no celular, onde se lê de perto; a TV usa Nunito em tudo (3 m de distância). */
