@@ -222,7 +222,19 @@ class SeriesActivity : Activity() {
         }
     }
 
+    private var ponte: View? = null
+    private val tirarPonte = Runnable { ponte?.let { (it.parent as? ViewGroup)?.removeView(it) }; ponte = null }
+
+    private fun cobrirPonte() {
+        if (ponte != null) return
+        val v = View(this).apply { setBackgroundColor(Estilo.FUNDO) }
+        (window.decorView as? ViewGroup)?.addView(v, ViewGroup.LayoutParams(-1, -1)) ?: return
+        ponte = v
+        tela.postDelayed(tirarPonte, 4_000)   // o próximo não abriu (contagem cancelada, erro): a ficha volta
+    }
+
     override fun onStop() {
+        tela.removeCallbacks(tirarPonte); tirarPonte.run()
         avisoProximo?.dismiss()   // ideia 19: saiu da tela (HOME, protetor) com a contagem andando: nada começa sozinho
         super.onStop()
         if (!indoAoVideo) guardarMarco()
@@ -1276,6 +1288,10 @@ class SeriesActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION") super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != CODIGO_VIDEO) return
+        // Zero tela preta, parte 2 (20/11/2026): o próximo episódio já foi escolhido no player. Sem isto a ficha da série
+        // piscava entre um episódio e o outro; agora um véu escuro cobre a tela já no primeiro quadro desta volta, e a
+        // cortina do próximo episódio entra por cima. Sai sozinho quando o player cobre a tela (onStop) ou em 4 s.
+        if (resultCode == RESULT_OK && data?.getBooleanExtra(VodActivity.RESULTADO_PROXIMO_JA, false) == true) cobrirPonte()
         val s = aberta; val f = fichaAberta; val ep = tocando
         // Posições mudaram: relê e redesenha a ficha (barras e botão principal).
         Fundo.rodar {
