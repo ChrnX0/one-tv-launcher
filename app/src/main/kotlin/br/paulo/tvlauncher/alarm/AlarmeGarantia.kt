@@ -243,6 +243,9 @@ object AlarmeGarantia {
     fun devolverVolume(ctx: Context, v: Volume?, depoisMs: Long = 0) {
         if (v == null) return
         if (depoisMs > 0) {
+            // A subida da LG para JÁ: só a devolução espera o "Bom dia". Antes a rampa seguia subindo enquanto a voz
+            // falava (Sala, 21/11/2026, Paulo: "o volume continuou a subir conforme a voz anunciava o dia").
+            v.lg?.cancelado = true
             val app = ctx.applicationContext
             principal.postDelayed({ devolverVolume(app, v) }, depoisMs)
             return
