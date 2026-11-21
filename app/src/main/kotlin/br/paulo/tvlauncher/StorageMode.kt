@@ -54,12 +54,12 @@ object StorageMode {
         val primario = partes.getOrElse(2) { "" }.trim()
         val tamanhosExpand = StorageModeRules.df(partes.getOrElse(3) { "" })
         val sm = ctx.getSystemService(StorageManager::class.java)
-        val montados = sm.storageVolumes.filter { it.isRemovable && it.state == Environment.MEDIA_MOUNTED && it.directory != null }
+        val montados = sm.storageVolumes.filter { it.isRemovable && it.state == Environment.MEDIA_MOUNTED && it.folder != null }
         val pens = discos.map { d ->
             val dv = StorageModeRules.doDisco(d, vols)
             val pub = dv.firstOrNull { it.tipo == StorageModeRules.Tipo.PUBLICO && it.montado }
             val pri = dv.firstOrNull { it.tipo == StorageModeRules.Tipo.PRIVADO && it.montado }
-            val caminhoPub = pub?.fsUuid?.let { u -> montados.firstOrNull { it.uuid.equals(u, true) }?.directory?.absolutePath }
+            val caminhoPub = pub?.fsUuid?.let { u -> montados.firstOrNull { it.uuid.equals(u, true) }?.folder?.absolutePath }
             val tamPub = caminhoPub?.let { statfs(it)?.first } ?: 0L
             val tamPri = pri?.fsUuid?.let { tamanhosExpand["/mnt/expand/$it"]?.first } ?: 0L
             Pen(d, StorageModeRules.modo(dv), dv, tamPub + tamPri, caminhoPub, pri?.fsUuid,
@@ -161,7 +161,7 @@ object StorageMode {
         val mistos = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getStringSet(CHAVE_MISTOS, emptySet()).orEmpty()
         val out = mutableListOf<Gravavel>()
         for (v in sm.storageVolumes) {
-            val dir = v.directory ?: continue
+            val dir = v.folder ?: continue
             if (v.state != Environment.MEDIA_MOUNTED) continue
             val livres = statfs(dir.absolutePath)?.second ?: continue
             val tipo = when {

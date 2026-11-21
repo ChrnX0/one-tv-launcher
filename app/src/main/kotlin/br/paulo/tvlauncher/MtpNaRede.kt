@@ -51,7 +51,7 @@ object MtpNaRede {
         val saida = arrayListOf(MtpArmazem.interno())   // nome fixo: é o que a Ajuda cita, nos 14 idiomas
         for (v in sm.storageVolumes) {
             if (v.isPrimary || v.state != Environment.MEDIA_MOUNTED) continue
-            val dir = v.directory ?: continue          // a pasta de verdade (/storage/XXXX-XXXX)
+            val dir = v.folder ?: continue          // a pasta de verdade (/storage/XXXX-XXXX)
             val chave = v.uuid ?: dir.name
             val n = synchronized(numeros) { numeros.getOrPut(chave) { numeros.size + 1 } }
             saida.add(MtpArmazem(MtpArmazem.idDoPendrive(n), v.getDescription(app) ?: "USB", chave, true) { dir })
