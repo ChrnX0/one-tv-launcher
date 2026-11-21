@@ -25,4 +25,6 @@
     <string name="tx_nada">Tidak ada yang mengatakan itu di episode ini.</string>
     <string name="ra_ja_tocou">Sudah diputar</string>
     <string name="ra_parecidas">Radio serupa</string>
+    <string name="som_radio">Radio terakhir yang didengar</string>
+    <string name="som_podcast">Episode podcast terbaru</string>
 </resources>

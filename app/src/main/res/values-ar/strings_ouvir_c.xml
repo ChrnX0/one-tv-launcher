@@ -25,4 +25,6 @@
     <string name="tx_nada">لم يقل أحد ذلك في هذه الحلقة.</string>
     <string name="ra_ja_tocou">تم تشغيله</string>
     <string name="ra_parecidas">محطات مشابهة</string>
+    <string name="som_radio">آخر إذاعة استمعت إليها</string>
+    <string name="som_podcast">أحدث حلقة بودكاست</string>
 </resources>

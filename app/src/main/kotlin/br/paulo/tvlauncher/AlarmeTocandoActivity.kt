@@ -18,6 +18,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.alarm.AcordarOuvindo
 import br.paulo.tvlauncher.alarm.AlarmeGarantia
 import br.paulo.tvlauncher.alarm.Despertador
 import br.paulo.tvlauncher.alarm.SomAlarme
@@ -211,6 +212,7 @@ class AlarmeTocandoActivity : Activity() {
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
         if (!timer) volume = AlarmeGarantia.subirVolume(this, segRampa)
         if (alarme?.som == SomAlarme.CANAL) { tocarCanal(); return }
+        if (alarme != null && SomAlarme.deFora(alarme.som)) { tocarOuvir(alarme.som); return }
         tocarArquivo(alarme?.som ?: 0)
     }
 
@@ -247,6 +249,42 @@ class AlarmeTocandoActivity : Activity() {
                 armarRampa()
             }
         }
+    }
+
+    /** Acordar com a rádio ou o podcast ([AcordarOuvindo]): o mesmo caminho do canal, com o endereço escolhido. */
+    private fun tocarOuvir(som: Int) {
+        val app = applicationContext
+        ui.postDelayed(canalNaoAbriu, 20_000)
+        Fundo.rodar("Alarme-ouvir") {
+            val u = AcordarOuvindo.fonte(app, som)
+            runOnUiThread {
+                if (isDestroyed || isFinishing) return@runOnUiThread
+                if (u == null) { trocarParaSom(); return@runOnUiThread }
+                Log.i("TvLauncher.Alarme", "acordando com ${if (som == SomAlarme.RADIO) "a rádio" else "o podcast"}")
+                tocarEndereco(u, Http.USER_AGENT)
+            }
+        }
+    }
+
+    /** Toca só o áudio de [url], sem foco de áudio (nada para disputar às 6 da manhã), na rampa do alarme. */
+    private fun tocarEndereco(url: String, agente: String) {
+        val http = PlayerEngine.data(this, userAgent = agente, readTimeoutMs = 15_000)
+        val item = PlayerEngine.item(url).build()
+        canal = PlayerEngine.build(this, contentType = androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC, audioFocus = false).also { p ->
+            p.addListener(object : androidx.media3.common.Player.Listener {
+                override fun onPlaybackStateChanged(estado: Int) {
+                    if (estado == androidx.media3.common.Player.STATE_READY) ui.removeCallbacks(canalNaoAbriu)
+                }
+                override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                    Log.i("TvLauncher.Alarme", "endereço falhou (${error.errorCodeName}): som suave"); trocarParaSom()
+                }
+            })
+            p.setMediaSource(androidx.media3.exoplayer.source.DefaultMediaSourceFactory(http).createMediaSource(item))
+            p.volume = volumeRampa()
+            p.prepare()
+            p.playWhenReady = true
+        }
+        armarRampa()
     }
 
     /** O canal não abriu (ou não existe): solta o canal e toca o som suave, sem perder a rampa nem o volume garantido. */

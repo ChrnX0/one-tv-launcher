@@ -21,7 +21,13 @@ object SomAlarme {
      * do alarme toca só o áudio do canal, com a mesma rampa; se o canal não abrir em 20 s, cai no som suave.
      */
     const val CANAL = 3
-    val NOMES: List<String> get() = listOf(txt(R.string.som_suave), txt(R.string.som_classico), txt(R.string.som_sino), txt(R.string.som_canal))
+    /** Acordar com a rádio ou o podcast (21/11/2026, [AcordarOuvindo]); a mesma tela, rampa e plano B do canal. */
+    const val RADIO = 4
+    const val PODCAST = 5
+    val NOMES: List<String> get() = listOf(txt(R.string.som_suave), txt(R.string.som_classico), txt(R.string.som_sino), txt(R.string.som_canal),
+        txt(R.string.som_radio), txt(R.string.som_podcast))
+    /** Sons que tocam um endereço (canal, rádio, podcast), não um arquivo do app. */
+    fun deFora(som: Int) = som >= CANAL
     private val ARQUIVOS = listOf("alarmes/suave.wav", "alarmes/classico.wav", "alarmes/sino.wav")
 
     /**
@@ -35,7 +41,7 @@ object SomAlarme {
 
     /** Cria o player em loop, ainda não iniciado (chame start()). null se o arquivo falhar. [CANAL] = o suave (prévia e plano B). */
     fun criar(ctx: Context, som: Int): MediaPlayer? = try {
-        val afd = ctx.assets.openFd(ARQUIVOS[if (som == CANAL) 0 else som.coerceIn(0, ARQUIVOS.size - 1)])
+        val afd = ctx.assets.openFd(ARQUIVOS[if (deFora(som)) 0 else som.coerceIn(0, ARQUIVOS.size - 1)])
         MediaPlayer().apply {
             setAudioAttributes(AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_MEDIA)

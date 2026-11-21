@@ -25,4 +25,6 @@
     <string name="tx_nada">Das wurde in dieser Folge nicht gesagt.</string>
     <string name="ra_ja_tocou">Schon gespielt</string>
     <string name="ra_parecidas">Ähnliche Sender</string>
+    <string name="som_radio">Zuletzt gehörter Sender</string>
+    <string name="som_podcast">Neueste Podcast-Folge</string>
 </resources>

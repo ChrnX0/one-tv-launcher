@@ -25,4 +25,6 @@
     <string name="tx_nada">इस एपिसोड में यह नहीं कहा गया।</string>
     <string name="ra_ja_tocou">पहले बजे गाने</string>
     <string name="ra_parecidas">मिलते-जुलते रेडियो</string>
+    <string name="som_radio">पिछला सुना रेडियो</string>
+    <string name="som_podcast">सबसे नया पॉडकास्ट एपिसोड</string>
 </resources>

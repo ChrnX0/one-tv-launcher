@@ -25,4 +25,6 @@
     <string name="tx_nada">Nobody said that in this episode.</string>
     <string name="ra_ja_tocou">Already played</string>
     <string name="ra_parecidas">Similar stations</string>
+    <string name="som_radio">Last radio station I listened to</string>
+    <string name="som_podcast">Newest podcast episode</string>
 </resources>

@@ -25,4 +25,6 @@
     <string name="tx_nada">本集没有人说过这句话。</string>
     <string name="ra_ja_tocou">已播放</string>
     <string name="ra_parecidas">相似电台</string>
+    <string name="som_radio">上次收听的电台</string>
+    <string name="som_podcast">最新播客单集</string>
 </resources>

@@ -25,4 +25,6 @@
     <string name="tx_nada">Этого не говорили в этом выпуске.</string>
     <string name="ra_ja_tocou">Уже звучало</string>
     <string name="ra_parecidas">Похожие станции</string>
+    <string name="som_radio">Последнее радио</string>
+    <string name="som_podcast">Новейший выпуск подкастов</string>
 </resources>

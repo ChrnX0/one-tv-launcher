@@ -25,4 +25,6 @@
     <string name="tx_nada">Bu bölümde bu söylenmedi.</string>
     <string name="ra_ja_tocou">Çalanlar</string>
     <string name="ra_parecidas">Benzer radyolar</string>
+    <string name="som_radio">Son dinlediğim radyo</string>
+    <string name="som_podcast">En yeni podcast bölümü</string>
 </resources>

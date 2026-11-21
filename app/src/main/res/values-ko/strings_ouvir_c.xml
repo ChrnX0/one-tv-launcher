@@ -25,4 +25,6 @@
     <string name="tx_nada">이 에피소드에서 그 말은 나오지 않았어요.</string>
     <string name="ra_ja_tocou">이미 나온 곡</string>
     <string name="ra_parecidas">비슷한 라디오</string>
+    <string name="som_radio">마지막으로 들은 라디오</string>
+    <string name="som_podcast">최신 팟캐스트 에피소드</string>
 </resources>
