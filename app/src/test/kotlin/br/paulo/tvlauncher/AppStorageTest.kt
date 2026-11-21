@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.AppStorageRules.Destino
+import br.paulo.tvlauncher.home.AppStorageRules
+import br.paulo.tvlauncher.home.AppStorageRules.Destino
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -41,14 +42,6 @@ class AppStorageTest {
         assertNull(AppStorageRules.falha("Success\r\n"))
         assertEquals("shell", AppStorageRules.falha(null))
         assertEquals("Failure [MOVE_FAILED_INSUFFICIENT_STORAGE]", AppStorageRules.falha("Failure [MOVE_FAILED_INSUFFICIENT_STORAGE]\n"))
-    }
-
-    @Test fun menuMostraLugar() {
-        assertTrue(MenuApp.Acao.INSTALAR_EXTERNO in MenuApp.acoes(false, true, null, true))
-        assertTrue(MenuApp.Acao.INSTALAR_DISPOSITIVO in MenuApp.acoes(false, true, null, false))
-        val nada = MenuApp.acoes(false, true, null, null)
-        assertFalse(MenuApp.Acao.INSTALAR_EXTERNO in nada || MenuApp.Acao.INSTALAR_DISPOSITIVO in nada)
-        assertEquals(MenuApp.Acao.DESINSTALAR, MenuApp.acoes(false, true, null, true).last())
     }
 
     @Test fun appGrandePedeAviso() {

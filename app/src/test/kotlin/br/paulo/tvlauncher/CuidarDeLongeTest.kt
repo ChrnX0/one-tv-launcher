@@ -1,18 +1,20 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.CuidarDeLonge.Acao
-import br.paulo.tvlauncher.CuidarDeLonge.Aviso
-import br.paulo.tvlauncher.CuidarDeLonge.Config
-import br.paulo.tvlauncher.CuidarDeLonge.Estado
-import br.paulo.tvlauncher.CuidarDeLonge.Lembrete
+import br.paulo.tvlauncher.family.CuidarDeLonge
+import br.paulo.tvlauncher.family.CuidarDeLonge.Acao
+import br.paulo.tvlauncher.family.CuidarDeLonge.Aviso
+import br.paulo.tvlauncher.family.CuidarDeLonge.Config
+import br.paulo.tvlauncher.family.CuidarDeLonge.Estado
+import br.paulo.tvlauncher.family.CuidarDeLonge.Lembrete
+import br.paulo.tvlauncher.home.Home
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.TimeZone
 
 class CuidarDeLongeTest {
     private val sp = ZoneId.of("America/Sao_Paulo")

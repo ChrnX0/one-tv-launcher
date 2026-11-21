@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.AberturaSerie
+import br.paulo.tvlauncher.player.Capitulos
+import br.paulo.tvlauncher.player.EpisodeSegments
+import br.paulo.tvlauncher.player.mostrarProximo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

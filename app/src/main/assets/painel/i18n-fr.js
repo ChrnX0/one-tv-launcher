@@ -1,5 +1,8 @@
 // Painel em fr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"allumé",
+"desligado":"éteint",
+"sem leitura":"pas de mesure",
 "Recados de hoje":"Messages du jour",
 "Congelados em prova":"Gelées, à l'essai",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"La TV a gelé ces apps et vérifie dans 10 minutes si quelque chose ne marche plus. Si c'est le cas, elle annule ; vous aussi pouvez le faire.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normale",
 "Grande":"Grande",
 "Maior":"Plus grande",
-"Pilhas automáticas (agrupar os apps por tipo)":"Piles automatiques (regrouper les apps par type)",
 "Aviso de chuva por cima de qualquer app":"Alerte pluie par-dessus n'importe quelle app",
 "Unidade de rede":"Lecteur réseau",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"Le stockage de la TV apparaît sur l'ordinateur et le téléphone comme un dossier réseau (WebDAV), avec les mêmes dossiers que l'onglet Fichiers. Mot de passe : le PIN du panneau (n'importe quel nom d'utilisateur, ex. tv). L'appareil doit avoir le certificat de la TV installé (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Cette option demande le PIN du panneau.",
 "Tema trocado.":"Thème changé.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Taille du texte enregistrée (appliquée à l'ouverture de chaque écran).",
-"Pilhas automáticas ligadas.":"Piles automatiques activées.",
-"Pilhas automáticas desligadas.":"Piles automatiques désactivées.",
 "Aviso de chuva ligado.":"Alerte pluie activée.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Films à leur propre fréquence (24 Hz, sans saccades)",
 "Taxa de quadros do filme ligada.":"Fréquence des films adaptée : activé.",

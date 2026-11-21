@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">ТВ и фильмы</string>
     <string name="cl_aba_conta_det">Аккаунт IPTV, сервисы фильмов и сериалов, звук и субтитры</string>
     <string name="cl_aba_parental">Родительский контроль</string>
-    <string name="cl_aba_parental_det">Блокировка каналов PIN-кодом: они исчезают из списка и не воспроизводятся</string>
-    <string name="cl_aba_aparencia">Внешний вид</string>
-    <string name="cl_aba_aparencia_det">Тема, стопки приложений, погода и оповещения на экране</string>
     <string name="cl_aba_energia">Экран и питание</string>
     <string name="cl_aba_energia_det">Заставка и автовыключение</string>
-    <string name="cl_aba_visitas">Гости и расписание</string>
-    <string name="cl_aba_visitas_det">Гостевой режим и запланированные действия</string>
     <string name="cl_aba_rede">Сеть</string>
-    <string name="cl_aba_rede_det">DNS, VPN и скорость интернета</string>
     <string name="cl_aba_remoto">Удалённый доступ</string>
     <string name="cl_aba_remoto_det">Панель в браузере, PIN и Claude через интернет</string>
     <string name="cl_aba_sistema">Система</string>
-    <string name="cl_aba_sistema_det">Диагностика, обновления, приложения и разрешения</string>
     <string name="cl_dica_aba">выбрать вкладку</string>
     <string name="cl_dica_entrar">открыть параметры</string>
     <string name="cl_dica_sair">выйти</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Автообновление лаунчера</string>
     <string name="cl_acao_atualizacao_det">Сам ставит новую версию при выключенном экране. Заблокировано = только уведомляет.</string>
     <string name="cl_tema">Тема</string>
-    <string name="cl_pilhas_det">Группирует отдельные приложения по категориям; ваши стопки остаются</string>
     <string name="cl_clima">Погода</string>
     <string name="cl_end_nenhum">нет · ТВ определяет место по Wi-Fi; адрес используется, когда Wi-Fi не справляется</string>
     <string name="cl_end_clima">Адрес для погоды</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Карточки</string>
     <string name="cl_widget_solto">Без рамки</string>
     <string name="cl_linha_baixo">Виджеты заставки</string>
-    <string name="cl_linha_baixo_det">Стеклянная полоса, карточки или без рамки · OK меняет</string>
     <string name="cl_desligar">Выключать при бездействии</string>
     <string name="cl_desligar_det">Играющее видео считается использованием; предупреждает за 60 с · OK меняет</string>
     <string name="cl_visita_det">Скрывает профиль, календарь и отмеченные ниже приложения</string>
     <string name="cl_apps_visita">Приложения, скрытые в гостевом режиме</string>
     <string name="cl_carregando_apps">Загрузка приложений…</string>
-    <string name="cl_some_visita">скрыто при гостевом режиме</string>
     <string name="cl_vpn_nao_fixa">лаунчер не закрепляет VPN</string>
     <string name="cl_vpn_adguard">приложение AdGuard VPN, всегда включено · OK открывает приложение</string>
     <string name="cl_painel_navegador">Панель в браузере</string>

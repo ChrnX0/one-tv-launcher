@@ -1,5 +1,8 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"вкл.",
+"desligado":"выкл.",
+"sem leitura":"нет данных",
 "Recados de hoje":"Сообщения за сегодня",
 "Congelados em prova":"Заморожены на пробу",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"Телевизор заморозил эти приложения и через 10 минут проверит, не перестало ли что-то работать. Если перестало, он всё вернёт; вы тоже можете.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Обычный",
 "Grande":"Крупный",
 "Maior":"Ещё крупнее",
-"Pilhas automáticas (agrupar os apps por tipo)":"Автоматические стопки (группировать приложения по типу)",
 "Aviso de chuva por cima de qualquer app":"Предупреждение о дожде поверх любого приложения",
 "Unidade de rede":"Сетевой диск",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"Память телевизора появляется на компьютере и телефоне как сетевая папка (WebDAV) с теми же папками, что во вкладке «Файлы». Пароль: PIN панели (подойдёт любое имя пользователя, напр. tv). На устройстве нужен установленный сертификат телевизора (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Этот параметр требует PIN панели.",
 "Tema trocado.":"Тема изменена.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Размер текста сохранён (применяется при открытии каждого экрана).",
-"Pilhas automáticas ligadas.":"Автоматические стопки включены.",
-"Pilhas automáticas desligadas.":"Автоматические стопки выключены.",
 "Aviso de chuva ligado.":"Предупреждение о дожде включено.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Фильмы с родной частотой кадров (24 Гц, без рывков)",
 "Taxa de quadros do filme ligada.":"Подстройка частоты кадров для фильмов включена.",

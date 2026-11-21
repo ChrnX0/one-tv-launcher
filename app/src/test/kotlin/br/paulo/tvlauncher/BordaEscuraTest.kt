@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.BordaEscura
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 

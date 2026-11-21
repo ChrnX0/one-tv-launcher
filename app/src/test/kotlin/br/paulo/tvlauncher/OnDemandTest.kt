@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.OnDemand.Entry
+import br.paulo.tvlauncher.player.OnDemand
+import br.paulo.tvlauncher.player.OnDemand.Entry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,8 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Idioma.Faixa
-import br.paulo.tvlauncher.Idioma.Pref
-import br.paulo.tvlauncher.Idioma.Versao
+import br.paulo.tvlauncher.player.Idioma
+import br.paulo.tvlauncher.player.Idioma.Faixa
+import br.paulo.tvlauncher.player.Idioma.Pref
+import br.paulo.tvlauncher.player.Idioma.Versao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame

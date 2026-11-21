@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QRコードでスマホにフォームが開き、技術情報は入力済みです</string>
     <string name="rel_texto">スマホのカメラをコードに向けてください。何が起きたかを書いて送信します。名前、アカウント、ネットワーク、都市は含まれません。</string>
     <string name="rel_vai_junto">一緒に送られる内容</string>
+    <string name="rel_l_oque">起きたこと</string>
+    <string name="rel_l_versao">バージョン</string>
+    <string name="rel_l_uso">モード</string>
+    <string name="rel_l_quedas">クラッシュ / フリーズ（7日）</string>
+    <string name="rel_l_erro">最後のエラー</string>
 </resources>

@@ -4,30 +4,16 @@
     <string name="descricao_autoriza_shizuku">Launcher remote keys (remappable Netflix/YouTube buttons) and the PC-free pairing window.</string>
     <!-- ConfigLauncherActivity.kt -->
     <string name="cfg_vpn_conectada">connected</string>
-    <string name="cfg_vpn_nenhuma">none</string>
     <string name="cfg_vpn_desconectada">disconnected</string>
-    <string name="cfg_vpn_nao_fixa">" — the launcher does not pin a VPN"</string>
-    <string name="cfg_vpn_adguard">" — AdGuard VPN app, always on · OK opens the app"</string>
     <string name="cfg_titulo">Settings</string>
     <string name="cfg_diag">Diagnose the TV</string>
     <string name="cfg_diag_det">Internet, DNS, VPN and why an app stopped — all at once</string>
-    <string name="cfg_sec_aparencia">Appearance</string>
-    <string name="cfg_tema">Theme: %1$s</string>
     <string name="cfg_tema_det">Switches to the next look</string>
-    <string name="cfg_pilhas">Automatic stacks</string>
-    <string name="cfg_pilhas_on">on: loose apps group by category (video, music, games…) · OK turns off</string>
-    <string name="cfg_pilhas_off">off · OK turns on (the stacks you made stay)</string>
-    <string name="cfg_sec_descanso">Screen saver</string>
     <string name="cfg_nunca">Never</string>
     <string name="cfg_min">%1$d min</string>
-    <string name="cfg_iniciar_apos">Start after: %1$s</string>
-    <string name="cfg_descanso_det">OK changes the idle time before the screen saver</string>
     <string name="cfg_nao_gravou_do">could not save (Device Owner inactive?)</string>
     <string name="cfg_visita">Guest mode</string>
-    <string name="cfg_visita_on">on — profile, calendar and the apps marked below are hidden · OK turns off</string>
-    <string name="cfg_visita_off">off — OK hides the profile, the calendar and the apps marked below</string>
     <string name="cfg_rotinas">Routines</string>
-    <string name="cfg_rotinas_det">Turn on, open an app or turn off the TV at a set time</string>
     <string name="cfg_sec_atualizacao">Updates</string>
     <string name="cfg_atualizar">Check for a new version</string>
     <string name="cfg_atualizar_det">Version %1$s · %2$s · OK checks now</string>
@@ -41,9 +27,6 @@
     <string name="cfg_velocidade">Test internet speed</string>
     <string name="cfg_velocidade_det">Downloads 25 MB and measures</string>
     <string name="cfg_testando">Testing…</string>
-    <string name="cfg_sec_ocultos">Hidden apps</string>
-    <string name="cfg_oculto">hidden — OK shows</string>
-    <string name="cfg_visivel">visible — OK hides</string>
     <string name="cfg_nao_mudou_do">could not change (Device Owner inactive?)</string>
     <string name="cfg_sec_ligado">What is on — %1$s</string>
     <string name="cfg_ligado">on</string>
@@ -57,7 +40,6 @@
     <string name="cfg_parear">Pair without a PC</string>
     <string name="cfg_parear_det">Opens the Android pairing screen with a launcher keypad on top</string>
     <string name="cfg_acess_off">the launcher accessibility service is off</string>
-    <string name="cfg_sec_diagnostico">Diagnostics</string>
     <string name="cfg_versao">Launcher version</string>
     <string name="cfg_desconhecida">unknown</string>
     <string name="cfg_depuracao">Wireless debugging</string>
@@ -68,10 +50,6 @@
     <string name="cfg_erro">error: %1$s</string>
     <string name="cfg_licencas">Licenses and credits</string>
     <string name="cfg_licencas_det">Third-party code, fonts, icons and data used here</string>
-    <string name="cfg_some_visita">hidden in guest mode — OK keeps it</string>
-    <string name="cfg_aparece_visita">shown in guest mode — OK hides it</string>
-    <string name="cfg_permitido">allowed — OK revokes</string>
-    <string name="cfg_sem_acesso">no access — OK allows</string>
     <!-- Recursos.kt -->
     <string name="rec_do_sem">without it: no hiding apps, no pinned HOME or VPN, no screen saver timeout</string>
     <string name="rec_agenda">Calendar</string>
@@ -151,20 +129,13 @@
         <item>Sat</item>
     </string-array>
     <!-- MainActivity.kt -->
-    <string name="home_ocultos">Hidden (%1$d)</string>
     <string name="fmt_data_longa">EEEE, MMMM d</string>
     <string name="home_perfil">Profile</string>
     <string name="home_visita_titulo">Guest mode on</string>
     <string name="home_visita_msg">The profile, calendar and chosen apps are hidden. Leave guest mode?</string>
     <string name="home_continuar">Keep</string>
     <string name="home_sair">Leave</string>
-    <string name="home_qual_sai">Which app leaves the group?</string>
-    <string name="home_ocultos_dica">OK opens  ·  hold OK to show on the home screen  ·  Back closes</string>
-    <string name="home_remover_dica">OK picks the app to remove  ·  Back closes</string>
-    <string name="home_remover_titulo">Remove %1$s from the group?</string>
-    <string name="home_remover_msg">It goes back to being a loose card.</string>
     <string name="comum_cancelar">Cancel</string>
-    <string name="home_remover">Remove</string>
     <string name="home_mostrar">Show on the home screen</string>
     <string name="home_ocultar">Hide from the home screen</string>
     <string name="home_sob_demanda">Freeze when not in use</string>
@@ -172,7 +143,6 @@
     <string name="sob_demanda_ligado">Frozen. It stays here: OK unfreezes and opens it, and it freezes again 2 minutes after you leave.</string>
     <string name="sob_demanda_desligado">Unfrozen. It works as before.</string>
     <string name="sob_demanda_falhou">Could not change it now. Try again in a moment.</string>
-    <string name="home_desinstalar_app">Uninstall %1$s</string>
     <string name="home_desinstalar">Uninstall</string>
     <string name="home_app_sistema"> (system app)</string>
     <string name="home_desinstalar_titulo">Uninstall %1$s?</string>
@@ -181,12 +151,6 @@
     <string name="home_desinstalando">Uninstalling %1$s…</string>
     <string name="home_desinstalado">%1$s was uninstalled.</string>
     <string name="home_desinstalar_falhou">Could not uninstall %1$s: %2$s</string>
-    <string name="home_mover">Move</string>
-    <string name="home_remover_cards">Remove cards from the group</string>
-    <string name="home_mover_pilha">OK adds to the stack  ·  ◀ ▶ keeps moving  ·  Back cancels</string>
-    <string name="home_mover_forma">OK makes a stack  ·  ◀ ▶ keeps moving  ·  Back cancels</string>
-    <string name="home_mover_app">◀ ▶ move · OK confirms · Back cancels · ▲ hide · ▼ automatic order</string>
-    <string name="home_mover_dica">◀ ▶ move · OK confirms · Back cancels · ▼ automatic order</string>
     <string name="home_chovendo">Raining now</string>
     <string name="home_chuva_agora">%1$s - Rain %2$d%% right now</string>
     <string name="home_chuva_em">%1$s - Rain %2$d%% in %3$d h</string>
@@ -218,16 +182,10 @@
     <string name="pp_sem_conta">No Google account</string>
     <string name="pp_ativo">"  ·  active"</string>
     <string name="pp_adicionar">Add profile</string>
-    <string name="pp_launcher_det">Appearance, DNS, diagnostics</string>
-    <string name="pp_sistema">System</string>
-    <string name="pp_sistema_det">Android settings</string>
-    <string name="pp_bt_det">Pair accessory</string>
     <string name="pr_bt_controle">Remote</string>
     <string name="pp_audio">Audio</string>
-    <string name="pp_audio_det">Sound and speakers</string>
     <string name="pp_carregando">Loading…</string>
     <string name="pp_conectar">Connect</string>
-    <string name="pp_conectado">Connected</string>
     <!-- CalendarioActivity.kt -->
     <string name="cal_sem_conta">no Google account</string>
     <string name="cal_dica">◀ ▶ change the month</string>
@@ -337,7 +295,6 @@
     <string name="som_suave">Soft</string>
     <string name="som_classico">Classic</string>
     <string name="som_sino">Bell</string>
-    <string name="som_direto">Full volume</string>
     <string name="som_rampa1">Rises over 1½ min</string>
     <string name="som_rampa2">Rises over 2 min</string>
     <!-- Velocidade.kt -->
@@ -473,21 +430,9 @@
     <string name="cfg_vig_liberar">Safe mode</string>
     <string name="cfg_vig_liberar_det">" · OK turns it back on"</string>
     <!-- Universal player (06/11/2026) -->
-    <string name="home_tv">Live TV</string>
-    <string name="home_tv_continuar">Continue: %1$d · %2$s</string>
-    <string name="home_linha_continuar">WATCH</string>
-    <string name="home_canal">Channel %1$d · %2$s</string>
-    <string name="home_voz">say what you want to watch</string>
     <string name="home_voz_indisponivel">Voice search did not open on this TV</string>
     <string name="home_alarme_hoje">today</string>
     <string name="home_alarme_amanha">tomorrow</string>
-    <string name="home_destaque_ao_vivo">● LIVE · CHANNEL %1$d</string>
-    <string name="home_destaque_tv">● LIVE TV</string>
-    <string name="home_destaque_abrir_tv">OK opens the channels</string>
-    <string name="home_destaque_comecou">started %1$d min ago</string>
-    <string name="home_destaque_termina">ends at %1$s</string>
-    <string name="home_destaque_depois">next: %1$s %2$s</string>
-    <string name="home_destaque_pilha">%1$d apps · ▼ switches the front one</string>
     <string name="player_carregando">Loading channels…</string>
     <string name="player_carregando_canal">Loading channel…</string>
     <string name="vod_carregando">Loading video…</string>
@@ -502,21 +447,16 @@
     <string name="player_cat_busca">Search: %1$s</string>
     <string name="player_acao_buscar">Search</string>
     <string name="player_acao_filtros">Filters</string>
-    <string name="player_acao_filmes">Movies</string>
-    <string name="player_acao_series">Series</string>
     <string name="filmes_titulo">Movies</string>
     <string name="filmes_carregando">Loading movies…</string>
     <string name="filmes_vazio">No movies yet</string>
-    <string name="filmes_cabecalho">%1$s · %2$d MOVIES</string>
     <string name="filmes_continuar">Continue</string>
-    <string name="filmes_ordem">Sort: %1$s</string>
     <string name="filmes_ordem_titulo">Sort by</string>
     <string name="filmes_ordem_recentes">newest in catalog</string>
     <string name="filmes_ordem_nome">name</string>
     <string name="filmes_ordem_nota">rating</string>
     <string name="filmes_ordem_ano">year</string>
     <string name="filmes_busca_dica">Movie name</string>
-    <string name="filmes_continuar_de">▶  Continue from %1$s</string>
     <string name="filmes_do_comeco">From the start</string>
     <string name="filmes_assistir">▶  Watch</string>
     <string name="filmes_ficha_carregando">Loading details…</string>
@@ -528,13 +468,10 @@
     <string name="filmes_interesse_tirou">%1$s removed from watchlist</string>
     <string name="filmes_interesses_cheio">The watchlist already has 500 titles: remove one first.</string>
     <string name="filmes_interesses_vazio">Hold OK for 2 seconds on a poster to add it here (and again to remove it).</string>
-    <string name="vod_grade_teclas">OK open · hold OK: more options · ▶ at the end of a row: letters · BACK categories</string>
-    <string name="filmes_finalizado">Finished</string>
     <string name="filmes_assistido">Watched</string>
     <string name="filmes_selo_leg">SUB</string>
     <string name="vod_sem_conta">This video\'s account no longer exists.</string>
     <string name="vod_erro">Could not play this video. BACK to leave.</string>
-    <string name="vod_sem_legenda">No subtitles</string>
     <string name="vod_faixa">Track</string>
     <string name="vod_audio">Audio</string>
     <string name="vod_legenda">Subtitles</string>
@@ -543,11 +480,9 @@
     <string name="series_titulo">Series</string>
     <string name="series_carregando">Loading series…</string>
     <string name="series_vazio">No series yet</string>
-    <string name="series_cabecalho">%1$s · %2$d SERIES</string>
     <string name="series_ordem_recentes">with a new episode</string>
     <string name="series_busca_dica">Series name</string>
     <string name="series_sem_episodios">The server sent no episodes for this series.</string>
-    <string name="series_continuar">▶  Continue %1$s from %2$s</string>
     <string name="series_assistir">▶  Watch %1$s</string>
     <string name="series_temporada">Season %1$d</string>
     <plurals name="series_temporadas">
@@ -590,7 +525,6 @@
     <string name="cfg_infantil_escolher_det">Apply to Live TV, Movies and Series</string>
     <string name="player_grupo_oculto">%1$s hidden. To see it: Filters, show hidden.</string>
     <string name="player_grupo_mostrado">%1$s is visible again.</string>
-    <string name="player_categorias">CATEGORIES</string>
     <string name="player_canais_de">%1$s · %2$d CHANNELS</string>
     <string name="player_cat_todos">All</string>
     <string name="player_cat_favoritos">Favorites</string>
@@ -599,17 +533,14 @@
     <string name="player_sem_favoritos">No favorites yet. Hold OK for 2 s on a channel to add it here.</string>
     <string name="player_categoria_vazia">No channels in this category.</string>
     <string name="player_sem_guia">No program guide for this channel.</string>
-    <string name="player_horario">%1$s – %2$s · %3$d min left</string>
     <string name="player_depois">LATER</string>
     <string name="player_lista_teclas">OK watch · hold OK 2 s: favorite or remove · hold OK on a category: hide · ◀ categories</string>
     <string name="player_favorito_pos">★ %1$s added to favorites</string>
     <string name="player_favorito_tirou">%1$s removed from favorites</string>
     <string name="player_favoritos_cheio">There are already 500 favorites: remove one first.</string>
     <string name="player_assistindo">watching</string>
-    <string name="home_linha_apps">APPS</string>
     <string name="home_card_tv">TV</string>
     <string name="home_destaque_tv_sub">Live channels</string>
-    <string name="home_destaque_tv_sub_canal">Live channels · last: channel %1$d</string>
     <string name="home_destaque_app">App</string>
     <string name="app_sub_youtube">Videos and channels</string>
     <string name="app_sub_netflix">Movies and shows</string>
@@ -629,9 +560,6 @@
     <string name="fmt_data_mes">MMMM d</string>
     <string name="home_busca">Search</string>
     <string name="home_falar">Talk to Gemini</string>
-    <string name="home_dest_filme">Movies · pick up where you left off</string>
-    <string name="home_dest_filme_ultimo">Movies · the last one you opened</string>
-    <string name="home_dest_serie">Shows · you are on %1$s</string>
     <string name="home_dest_tv">TV · channel %1$d</string>
     <string name="rede_titulo">Network</string>
     <string name="rede_procurando">Looking for media servers on the network…</string>
@@ -720,8 +648,6 @@
     <string name="pg_bom_dia">Good morning</string>
     <string name="pg_boa_tarde">Good afternoon</string>
     <string name="pg_boa_noite">Good evening</string>
-    <string name="pg_umidade">humidity</string>
-    <string name="pg_chuva">rain</string>
     <string name="pg_agora">now</string>
     <string name="pg_ontem">yesterday</string>
     <string name="pg_mais_notif">+%1$d notifications</string>
@@ -740,9 +666,6 @@
     <string name="pw_amanha_frase">Tomorrow %1$d°, %2$s</string>
     <string name="pw_nasce">sunrise %1$s</string>
     <string name="pw_poe">sunset %1$s</string>
-    <string name="cfg_protetor_estilo">Screensaver style</string>
-    <string name="cfg_protetor_galeria">Gallery (painting of the day)</string>
-    <string name="cfg_protetor_classico">Classic (clock and tiles)</string>
     <!-- Painel rápido (PainelRapidoActivity, 11/11/2026) -->
     <string name="pr_notificacoes">Notifications</string>
     <string name="pr_sem_notificacoes">No notifications</string>
@@ -750,10 +673,7 @@
     <string name="pr_perfis">Profiles</string>
     <string name="pr_protetor">Screensaver</string>
     <string name="pr_timer">Timer</string>
-    <string name="pr_timer_desligado">Off</string>
     <string name="pr_timer_as">Until %1$s</string>
-    <string name="pr_acessibilidade">Accessibility</string>
-    <string name="pr_audio_tv">TV over HDMI</string>
     <string name="pr_audio_arc">Receiver (HDMI ARC)</string>
     <string name="pr_dispensar">Dismiss</string>
     <string name="pr_ontem">yesterday</string>
@@ -764,10 +684,7 @@
     <string name="pr_tocando">playing</string>
     <string name="pr_pausado">paused</string>
     <string name="pr_dormir">Sleep</string>
-    <string name="pr_dormir_det">Turns the screen off</string>
-    <string name="pr_protetor_det">Start now</string>
     <string name="pr_despertador">Alarm</string>
-    <string name="pr_despertador_nenhum">None set</string>
     <string name="pr_visita">Guests</string>
     <string name="pr_casa">Home</string>
     <string name="pr_config_tv">TV settings</string>
@@ -778,7 +695,6 @@
     <string name="pr_hoje">Today</string>
     <string name="pr_amanha">Tomorrow</string>
     <string name="pr_ligado">On</string>
-    <string name="pr_desligado">Off</string>
     <string name="pr_limpar_tudo">Clear all</string>
     <!-- Catch-up TV, aspect ratio and speed (11/11/2026) -->
     <string name="tvv_abrir">Catch-up: past programs</string>
@@ -969,7 +885,7 @@
     <string name="st_trazendo">Bringing %1$s back to the TV…</string>
     <string name="st_sumiram">The USB drive is out: %1$s are hidden until it\'s back.</string>
     <string name="st_sugestao">TV storage is almost full. Move %1$s (%2$s) to the USB drive: hold OK on the app.</string>
-    <string name="st_medindo">Measuring the drive\'s speed…</string>
+    <string name="st_medindo">Measuring the drive\'s speed to recommend the best use…</string>
     <string name="st_lento_titulo">Drive too slow</string>
     <string name="st_lento_bloqueado">This drive writes at %1$s MB/s. To become TV storage it needs at least %2$d MB/s: below that apps freeze and the TV may not start. Use it as a regular drive.</string>
     <string name="st_aviso_boot">Keep it plugged in for good: if it fails or is removed, the TV may not start until you unplug it.</string>
@@ -978,4 +894,10 @@
     <string name="home_liberar_arquivos">Let it open USB drives and files</string>
     <string name="home_arquivos_liberado">%1$s can now open USB drives and all files</string>
     <string name="home_arquivos_falhou">Couldn\'t allow %1$s: %2$s</string>
+    <string name="aviso_continuar_titulo">Nothing to continue</string>
+    <string name="aviso_continuar_texto">The invitation to continue from the other TV has expired.</string>
+    <string name="aviso_simples_titulo">Simple mode is off</string>
+    <string name="aviso_simples_texto">The TV is back to the full home screen.</string>
+    <string name="aviso_sync_titulo">No account connected</string>
+    <string name="aviso_sync_texto">There is no %1$s account on this TV. Connect it in Settings › TV and movies.</string>
 </resources>

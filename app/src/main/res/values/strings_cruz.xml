@@ -61,7 +61,6 @@
     <string name="jogos_semana">This week</string>
     <string name="jogos_semana_jogado">played in 7 days</string>
     <string name="jogos_semana_mais">most played</string>
-    <string name="jogos_semana_controles">controllers on</string>
     <string name="jogos_menos_de_1_min">under 1 min</string>
     <string name="jogos_min">%1$d min</string>
     <string name="jogos_h_min">%1$d h %2$d min</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Check that its server is on. The TV tries again by itself every few seconds.</string>
     <string name="cruz_barra_ilha">Island</string>
     <string name="cruz_canto_no_ar">On air</string>
-    <string name="cruz_canto_buscar">Search</string>
-    <string name="cruz_canto_buscar_txt">▲ opens the bar with search</string>
     <string name="cruz_canto_gravando">Recording</string>
     <string name="cruz_canto_tocando">Playing</string>
     <string name="cruz_canto_parou">Stopped at</string>

@@ -1,5 +1,8 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"开",
+"desligado":"关",
+"sem leitura":"无读数",
 "Recados de hoje":"今天的消息",
 "Congelados em prova":"试冻结中",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"电视冻结了这些应用，并会在 10 分钟后检查是否有功能停止工作。如果有，电视会自动撤销；你也可以撤销。",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"正常",
 "Grande":"大",
 "Maior":"更大",
-"Pilhas automáticas (agrupar os apps por tipo)":"自动分组(按类型归类应用)",
 "Aviso de chuva por cima de qualquer app":"在任何应用之上显示降雨提醒",
 "Unidade de rede":"网络驱动器",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"电视的存储在电脑和手机上显示为网络文件夹(WebDAV),文件夹与“文件”标签页相同。密码:面板 PIN(用户名任意,例如 tv)。设备需要安装电视的证书(",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"此选项需要面板 PIN。",
 "Tema trocado.":"主题已更改。",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"文字大小已保存（打开每个界面时生效）。",
-"Pilhas automáticas ligadas.":"自动分组已开启。",
-"Pilhas automáticas desligadas.":"自动分组已关闭。",
 "Aviso de chuva ligado.":"降雨提醒已开启。",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"电影按原始帧率播放（24 Hz，运动不卡顿）",
 "Taxa de quadros do filme ligada.":"电影帧率匹配已开启。",

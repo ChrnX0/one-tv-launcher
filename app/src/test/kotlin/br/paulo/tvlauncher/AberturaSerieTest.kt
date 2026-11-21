@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.AberturaSerie.Marca
+import br.paulo.tvlauncher.player.AberturaSerie
+import br.paulo.tvlauncher.player.AberturaSerie.Marca
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

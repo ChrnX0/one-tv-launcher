@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.weather.CidadesOffline
+import java.io.File
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.util.Locale
 
 /** A lista de cidades de todo build (src/main/assets/cidades.tsv.gz, GeoNames): lê, acha por nome, por CEP e por fuso. */
 class CidadesOfflineTest {

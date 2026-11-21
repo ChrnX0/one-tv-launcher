@@ -3,15 +3,22 @@ package br.paulo.tvlauncher
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.Settings
-import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
+import br.paulo.tvlauncher.family.UsoTv
+import br.paulo.tvlauncher.home.SofalyWordmark
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Recursos
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.PareamentoNaTv
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.SaudeAcesso
+import br.paulo.tvlauncher.privilege.VirarDono
+import br.paulo.tvlauncher.settings.Extras
 
 /**
  * Assistente de primeira abertura (05/11/2026, fila longa do brainstorm). Aparece UMA vez, na primeira HOME de quem
@@ -30,14 +37,14 @@ class BoasVindasActivity : Activity() {
 
         /** Mostra o assistente se for a primeira vez e o launcher não for Device Owner. Barato: uma leitura de prefs. */
         fun talvezMostrar(ctx: Context) {
-            val prefs = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+            val prefs = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
             if (prefs.getBoolean(CHAVE, false)) return
             if (PrivilegioDO.somosDonos(ctx)) { prefs.edit().putBoolean(CHAVE, true).apply(); return }
             ctx.startActivity(Intent(ctx, BoasVindasActivity::class.java))
         }
 
         fun marcarVista(ctx: Context) =
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putBoolean(CHAVE, true).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putBoolean(CHAVE, true).apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,6 +177,4 @@ class BoasVindasActivity : Activity() {
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
-    /** Superfície padrão do sistema de design (Estilo.superficie); o foco é aplicado por Estilo.focarLinha. */
-    private fun vidro(focado: Boolean): GradientDrawable = Estilo.superficie(this, focado)
 }

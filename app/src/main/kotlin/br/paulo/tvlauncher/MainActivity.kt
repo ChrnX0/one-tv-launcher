@@ -10,15 +10,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.format.Formatter
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.text.TextUtils
+import android.text.format.Formatter
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
@@ -26,35 +25,136 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
-import android.widget.ScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextClock
 import android.widget.TextView
-import org.json.JSONArray
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
+import br.paulo.tvlauncher.alarm.Aniversarios
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.backup.BackupAutomatico
+import br.paulo.tvlauncher.backup.MudarDeTv
+import br.paulo.tvlauncher.backup.StorageMode
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.family.Uso
+import br.paulo.tvlauncher.games.Jogos
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.games.TurmaDiscordTv
+import br.paulo.tvlauncher.home.AllAppsScreen
+import br.paulo.tvlauncher.home.AppShelf
+import br.paulo.tvlauncher.home.AppStorage
+import br.paulo.tvlauncher.home.BarraIlha
+import br.paulo.tvlauncher.home.CapaFoco
+import br.paulo.tvlauncher.home.CategoriaApps
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.CustomIcons
+import br.paulo.tvlauncher.home.DesenhoHome
+import br.paulo.tvlauncher.home.EstadoCeu
+import br.paulo.tvlauncher.home.FrasesApps
+import br.paulo.tvlauncher.home.FundoMeuDados
+import br.paulo.tvlauncher.home.FundoVivo
+import br.paulo.tvlauncher.home.Grade
+import br.paulo.tvlauncher.home.HomeCardsTv
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.IconeApp
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.IconeLinha
+import br.paulo.tvlauncher.home.LayoutHome
+import br.paulo.tvlauncher.home.MidiaRecente
+import br.paulo.tvlauncher.home.Organizacao
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.SplashOverlay
+import br.paulo.tvlauncher.home.SplashRules
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.home.abrirCongelado
+import br.paulo.tvlauncher.home.aplicarIlha
+import br.paulo.tvlauncher.home.arteDoItem
+import br.paulo.tvlauncher.home.atualizarCruz
+import br.paulo.tvlauncher.home.atualizarIlha
+import br.paulo.tvlauncher.home.bannerTodos
+import br.paulo.tvlauncher.home.botaoDoEvento
+import br.paulo.tvlauncher.home.crescerIlhaTexto
+import br.paulo.tvlauncher.home.criarFundo
+import br.paulo.tvlauncher.home.deslizarArte
+import br.paulo.tvlauncher.home.entrarAmbiente
+import br.paulo.tvlauncher.home.espelho
+import br.paulo.tvlauncher.home.fecharTodos
+import br.paulo.tvlauncher.home.infoTodos
+import br.paulo.tvlauncher.home.lerFontesIlha
+import br.paulo.tvlauncher.home.liberarEscondidos
+import br.paulo.tvlauncher.home.ligarMovimento
+import br.paulo.tvlauncher.home.menuTodos
+import br.paulo.tvlauncher.home.montarIlha
+import br.paulo.tvlauncher.home.prateleirasManuais
+import br.paulo.tvlauncher.home.prefsApps
+import br.paulo.tvlauncher.home.reagendarAmbiente
+import br.paulo.tvlauncher.home.recongelarPendentes
+import br.paulo.tvlauncher.home.sairAmbiente
+import br.paulo.tvlauncher.home.talvezPerguntarQuemVe
+import br.paulo.tvlauncher.home.teclaDoAmbiente
+import br.paulo.tvlauncher.home.vigiarTela
+import br.paulo.tvlauncher.listen.BarrasSom
+import br.paulo.tvlauncher.listen.OuvirEstado
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.network.AcordarComLg
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.network.Dns
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.network.SemInternet
+import br.paulo.tvlauncher.observer.DesempenhoTv
+import br.paulo.tvlauncher.observer.LevezaTv
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Placar
+import br.paulo.tvlauncher.panel.PainelPermissoes
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.player.BarraTempo
+import br.paulo.tvlauncher.player.ContaIptv
+import br.paulo.tvlauncher.player.GravacaoDestino
+import br.paulo.tvlauncher.player.MidiaArmazem
+import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.Privilegio
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.ShellProprio
+import br.paulo.tvlauncher.screensaver.PluginCartao
+import br.paulo.tvlauncher.screensaver.RelogioTela
+import br.paulo.tvlauncher.screensaver.WallpaperPluginContract
+import br.paulo.tvlauncher.screensaver.WallpaperPlugins
+import br.paulo.tvlauncher.settings.AltoContraste
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.TamanhoTexto
+import br.paulo.tvlauncher.settings.Tema
+import br.paulo.tvlauncher.weather.Astronomia
+import br.paulo.tvlauncher.weather.ClimaFontes
+import br.paulo.tvlauncher.weather.Eclipse
+import br.paulo.tvlauncher.weather.IconeEclipse
+import br.paulo.tvlauncher.weather.IconesClima
+import br.paulo.tvlauncher.weather.LocalClima
+import br.paulo.tvlauncher.weather.Localizacao
 import java.util.Locale
 import java.util.concurrent.Executors
 
 private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
 private const val MATCH = ViewGroup.LayoutParams.MATCH_PARENT
-private const val TOKEN_OCULTOS = "ocultos"   // identifica o card "Ocultos" (nenhum pacote tem esse nome)
-private const val TOKEN_TV = "player:tv"      // o card "TV ao vivo" do player universal (06/11/2026; ":" não existe em pacote)
 
 /** Partes da HOME que o adb pode esconder para medir a GPU (ver HOME_TESTE no ControleShizukuReceiver). Volta tudo ao reiniciar. */
 object TesteHome {
     @Volatile var capa = true
-    @Volatile var destaque = true
-    @Volatile var faixa = true
     @Volatile var fundo = true
     @Volatile var capaAnima = true    // false: a capa troca sem o esmaecer de 260 ms
     @Volatile var capaCamada = true   // false: a capa sem camada de hardware
     @Volatile var aplicar: (() -> Unit)? = null
 }
-private const val ID_PREVIA = "previa"       // id da pilha provisoria mostrada enquanto se arrasta um app para cima de outro
 private const val ICONE_ECLIPSE = "eclipse"  // no lugar de um emoji: sol coberto pela lua (IconeEclipse). So aparece durante um eclipse solar REAL (ver Eclipse.kt e o Config.kt)
 
 /**
@@ -63,50 +163,30 @@ private const val ICONE_ECLIPSE = "eclipse"  // no lugar de um emoji: sol cobert
  */
 class MainActivity : Activity() {
 
-    /** Um app na grade: pacote (identificador), nome e o ícone redondo da linha principal. */
-    private class Item(val pacote: String, val nome: String, val icone: Drawable)
+    /** Um app instalado: pacote (identificador), nome e o ícone redondo. */
+    internal class Item(val pacote: String, val nome: String, val icone: Drawable)
 
-    /**
-     * Um card da linha principal: um app, uma pilha de apps, ou o card "Ocultos" (sempre o ultimo).
-     * [token] identifica o card: o pacote (app), "pilha:<id>" (pilha) ou TOKEN_OCULTOS.
-     * Na pilha, [frente] e a posicao (em [itens]) do app que aparece na frente e que o OK abre.
-     */
-    private sealed class Entrada(val token: String, val nome: String) {
-        class App(val item: Item) : Entrada(item.pacote, item.nome)
-        class Pilha(val id: String, val itens: List<Item>, val frente: Int = 0) :
-            Entrada(Organizacao.tokenDaPilha(id), itens[frente].nome) {
-            val daFrente: Item get() = itens[frente]
-            val titulo: String get() = itens.joinToString(" + ") { it.nome }
-        }
-        class Ocultos(val itens: List<Item>, nome: String) : Entrada(TOKEN_OCULTOS, nome)
-        /** "TV ao vivo" (player universal): sempre o 1º card, só quando há conta de canais cadastrada. Não se move nem empilha. */
-        class Tv(nome: String) : Entrada(TOKEN_TV, nome)
-    }
-
-    private val ui = Handler(Looper.getMainLooper())          // roda código na thread da tela
+    internal val ui = Handler(Looper.getMainLooper())          // roda código na thread da tela
     private val rede = Executors.newSingleThreadExecutor()    // roda chamadas de internet fora da thread da tela
 
     // Paleta: tons frios e quase neutros, para a tela não competir com os banners dos apps.
-    private val textoClaro = 0xFFE8EEEA.toInt()
-    // Nos temas com fundo desenhado (ceu, pintura, mostrador) o cinza escuro sumia: la o "suave" e quase tao claro quanto o claro.
-    private val textoSuave: Int get() = if (tema == Tema.ESCURO) 0xFF93A19A.toInt() else 0xFFCFD9D4.toInt()
+    internal val textoClaro = 0xFFE8EEEA.toInt()
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
     private var desviadaParaSegura = false   // modo de segurança: o onCreate parou cedo (nada foi montado)
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
     private var idiomaMontado = ""     // idioma em que a tela foi montada (locale está em configChanges: não recria sozinha)
-    private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
-    private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
-    private val fonteUi by lazy { Fontes.ui(this, tema) }
+    private var assinaturaLayout = ""  // ajustes da cruz, alto contraste e letra quando a tela foi montada (assinaturaDoLayout)
+    internal val fonteUi by lazy { Fontes.ui(this, tema) }
 
-    private var fundo: View? = null                 // o fundo vivo do tema (céu, pintura, mostrador)
+    internal var fundo: View? = null                 // o fundo vivo do tema (céu, pintura, mostrador)
     @Volatile private var pontoAtual: Localizacao.Ponto? = null
     private var ultimoCodigo = -1
     private var ultimoChovendo = false
 
     private lateinit var txtIcone: TextView   // so para o texto de reserva
     private lateinit var imgIcone: ImageView   // o icone do clima (imagem de assets/clima/)
-    private lateinit var txtTemp: TextView
+    internal lateinit var txtTemp: TextView
     private lateinit var txtChuva: TextView   // a linha informativa embaixo da temperatura: chuva prevista ou a condicao de agora
     private lateinit var linhaChuva: LinearLayout
     private lateinit var txtMax: TextView   // "↑ 32°" ao lado da temperatura
@@ -127,48 +207,33 @@ class MainActivity : Activity() {
     private val ouvinteTimer = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         ui.post { ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer) }
     }
-    private lateinit var txtDica: TextView            // guia de teclas do modo mover (some fora dele)
     private lateinit var fotoPerfil: ImageView        // a bolinha do perfil, no canto superior direito
-    private var bolinhaPerfil: View? = null            // o botão em volta da foto (o que recebe o foco)
+    internal var bolinhaPerfil: View? = null            // o botão em volta da foto (o que recebe o foco)
     // Abriu o popup do perfil: ao voltar de uma tela aberta por ele (Configurações, Wi-Fi...), o foco volta para a bolinha,
     // e não para o 1º app (visto na Sala em 07/11/2026). Apaga quando outra coisa da HOME ganha o foco.
     private var voltarAoPerfil = false
     // Passada na TV (12/11/2026): voltar da previsão (pílula do clima) ou do calendário (data) jogava o foco no 1º app ou no
     // último. Quem abriu uma tela pelo topo recebe o foco de volta, como a bolinha do perfil já fazia.
-    private var topoRaiz: View? = null
+    internal var topoRaiz: View? = null
     private var focoTopo: View? = null
-    private lateinit var linhaApps: ViewGroup   // LinearLayout (fileira) ou GradeApps (grade, LayoutHome)
     // HOME recomendada (06/11/2026): capa de quem está em foco e a linha "Continuar" embaixo dos apps.
-    private lateinit var capa: CapaFoco
+    internal val capaPronta get() = ::capa.isInitialized
+    internal lateinit var capa: CapaFoco
     private lateinit var conteudo: FrameLayout          // tudo menos o fundo e a capa: sobe quando o foco vai para o Continuar
-    private lateinit var caixaContinuar: LinearLayout
-    private lateinit var linhaContinuar: LinearLayout
     // Banner (ou cor) por pacote, lido uma vez e FORA da thread da tela (06/11: ler na hora do foco engasgava a HOME).
     private val capas = java.util.concurrent.ConcurrentHashMap<String, Pair<Bitmap?, IntArray>>()
-    // Capa montada de cada card de Assistir (CapaAtalho), com o endereço da arte usada ("" = ícone grande). Só refaz quando
-    // a arte muda (outro canal, outro filme): baixar e montar a cada volta à HOME seria trabalho jogado fora.
-    private val capasAtalho = java.util.concurrent.ConcurrentHashMap<IconeApp.Tipo, Pair<String, List<Bitmap>>>()
-    @Volatile private var montandoCapas = false
     // Arte do último filme e da última série no fundo (12/11/2026): endereço -> imagem, para não baixar/decodificar de novo
     // a cada volta à HOME. E a ficha curta deles, para o destaque (lidas em preencherContinuar, fora da tela).
     private val arteAtalho = java.util.concurrent.ConcurrentHashMap<IconeApp.Tipo, Pair<String, Bitmap>>()
-    @Volatile private var fichaFilme: PlayerArmazem.FichaHome? = null
-    @Volatile private var fichaSerie: PlayerArmazem.FichaHome? = null
-    @Volatile private var posicoesHome: Map<String, Posicao> = emptyMap()
-    private var capaPedida: String? = null   // o pacote cuja capa a tela espera (se o foco andar, a que chegar atrasada não aparece)
-    private lateinit var rolagem: FrameLayout   // HorizontalScrollView (fileira) ou ScrollView (grade)
-    private var instalados: List<Item> = emptyList()          // todos os apps de TV instalados (inclui os ocultos)
-    private var lista: MutableList<Entrada> = mutableListOf()   // cards da linha principal, na ordem da tela
-    private var modoMover = false
+    @Volatile internal var fichaFilme: PlayerArmazem.FichaHome? = null
+    @Volatile internal var fichaSerie: PlayerArmazem.FichaHome? = null
+    @Volatile internal var posicoesHome: Map<String, Posicao> = emptyMap()
+    internal var capaPedida: String? = null   // o pacote cuja capa a tela espera (se o foco andar, a que chegar atrasada não aparece)
+    internal var instalados: List<Item> = emptyList()          // todos os apps de TV instalados (inclui os ocultos)
+    internal var visiveis: List<Item> = emptyList()            // os que a cruz mostra, em ordem (appsVisiveis)
     private var iconeClima: String? = null        // icone que o CLIMA mandou na ultima busca (o eclipse so o substitui enquanto dura)
     private var ceuCoberto = false                // nuvens ou chuva (codigo > 2): o eclipse nao seria visto, entao fica o icone do clima
     private var eclipseAgora: Eclipse.Estado? = null   // null = nao ha eclipse neste minuto
-    private var tokenMovendo: String? = null   // card que destaca em verde-agua no modo mover (o arrastado, ou a pre-pilha)
-    private var arrastado: Entrada? = null     // card que esta sendo arrastado (a lista [lista] nao muda ate confirmar)
-    private var posMover = 0                   // posicao de teste do arrastado: par = ao lado, impar = em cima de um card
-    private var ignorarProximoUp = false       // true logo apos segurar OK: o "soltar" dessa pressao nao confirma
-    private var ultimoToken: String? = null   // card com foco: a ordem pode mudar, então guardamos o token, não a posição
-    private var indiceFoco = 0                // posição do card com foco: usada quando o token some (ex.: app ocultado)
 
     // Tarefas que se repetem enquanto a tela está visível (e param em onPause, para não gastar rede à toa).
     private val tarefaClima = object : Runnable {
@@ -176,7 +241,7 @@ class MainActivity : Activity() {
             // Clima instantâneo (auditoria 10/11/2026): o salvo já está na tela (mostrarClimaSalvo, no onResume). Só busca
             // se ele tem mais de CLIMA_A_CADA_MIN; senão espera o que falta. Antes buscava a cada volta à HOME.
             val ciclo = Config.CLIMA_A_CADA_MIN * 60_000L
-            val prefs = getSharedPreferences("clima", MODE_PRIVATE)
+            val prefs = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
             val idade = System.currentTimeMillis() - prefs.getLong("em", 0)
             // A linha salva vem pronta no idioma da busca: trocou o idioma, busca já (senão ficava no antigo até o ciclo).
             if (idade in 0 until ciclo && prefs.getString("idioma", null) == idiomaAtual()) { ui.postDelayed(this, ciclo - idade); return }
@@ -203,7 +268,7 @@ class MainActivity : Activity() {
         vigiaRede = object : android.net.ConnectivityManager.NetworkCallback() {
             override fun onAvailable(rede: android.net.Network) {
                 // Clima fresco (< 2 min)? Entao nao precisa; senao, busca agora, fora da fila dos 5 min.
-                val em = getSharedPreferences("clima", MODE_PRIVATE).getLong("em", 0)
+                val em = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).getLong("em", 0)
                 if (System.currentTimeMillis() - em > 2 * 60_000L) ui.post { buscarClima() }
                 ui.post { avaliarSemInternet() }
             }
@@ -215,11 +280,11 @@ class MainActivity : Activity() {
     }
 
     // ---- Ideia 88 (14/11/2026): sem internet, a HOME diz em uma linha o que continua funcionando (SemInternet.kt).
-    private lateinit var pilulaSemInternet: LinearLayout
-    private lateinit var txtSemInternet: TextView
+    internal lateinit var pilulaSemInternet: LinearLayout
+    internal lateinit var txtSemInternet: TextView
     private var semInternetDesde = 0L
     /** Sem internet confirmada (a pílula está à vista): na cruz, o que depende dela diz "Precisa de internet". */
-    private var semInternetCruz = false
+    internal var semInternetCruz = false
     private val tarefaSemInternet = Runnable { avaliarSemInternet() }
 
     /**
@@ -234,6 +299,9 @@ class MainActivity : Activity() {
         return internet to local
     }
 
+    /** Uma pílula do topo vai sumir com o foco nela: o foco vai para a cruz (não pode ficar num texto invisível). */
+    private fun focoPadrao() { cruz?.requestFocus() }
+
     private fun avaliarSemInternet() {
         ui.removeCallbacks(tarefaSemInternet)
         if (isDestroyed || !::pilulaSemInternet.isInitialized) return
@@ -242,7 +310,7 @@ class MainActivity : Activity() {
             semInternetDesde = 0L
             if (semInternetCruz) { semInternetCruz = false; atualizarCruz() }
             if (pilulaSemInternet.visibility != View.GONE) {
-                if (pilulaSemInternet.hasFocus()) linhaApps.requestFocus()
+                if (pilulaSemInternet.hasFocus()) focoPadrao()
                 pilulaSemInternet.visibility = View.GONE
                 atualizarAvisos()
             }
@@ -337,8 +405,7 @@ class MainActivity : Activity() {
     private var pausadaEm = 0L
 
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
-    private fun assinaturaDoLayout() = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|" +
-        "${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
+    private fun assinaturaDoLayout() = "${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
         "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}"
 
     override fun onResume() {
@@ -403,7 +470,6 @@ class MainActivity : Activity() {
         }
         if (voltarAoPerfil) bolinhaPerfil?.requestFocus()
         else if (focoTopo?.isShown == true) focoTopo?.requestFocus()
-        else if (atalhoAberto < 0 && ::linhaContinuar.isInitialized && linhaContinuar.hasFocus()) linhaApps.getChildAt(indiceFoco.coerceAtLeast(0))?.requestFocus()
         mostrarClimaSalvo()   // na hora, antes de qualquer rede
         ui.post(tarefaClima)
         ui.post(tarefaEclipse)
@@ -414,9 +480,9 @@ class MainActivity : Activity() {
         atualizarPilulaJogo()
         atualizarPilulaAniversario()
         atualizarPilulasCartoes(buscar = true)
-        getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
-        getSharedPreferences("despertador", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
-        getSharedPreferences("timer", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
+        getSharedPreferences(Prefs.LAUNCHER, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences(Prefs.DESPERTADOR, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences(Prefs.TIMER, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
@@ -462,20 +528,18 @@ class MainActivity : Activity() {
         ui.removeCallbacks(tarefaTimer)
         ui.removeCallbacks(tarefaTocando)
         vigiaTocando.desligar()
-        getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
-        getSharedPreferences("despertador", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
-        getSharedPreferences("timer", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
+        getSharedPreferences(Prefs.LAUNCHER, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences(Prefs.DESPERTADOR, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences(Prefs.TIMER, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
         pararVigiaRede()
         ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()
-        fecharPasta()
-        if (modoMover) cancelarMover()
     }
 
     /** HOME escondida e memória apertada: solta as capas dos apps (são refeitas na volta, fora da thread da tela). */
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        if (Memoria.soltarCapasDaHome(level, hasWindowFocus())) { capas.clear(); capasAtalho.clear(); arteAtalho.clear() }
+        if (Memoria.soltarCapasDaHome(level, hasWindowFocus())) { capas.clear(); arteAtalho.clear() }
     }
 
     override fun onDestroy() {
@@ -492,8 +556,6 @@ class MainActivity : Activity() {
         super.onNewIntent(intent)
         if (intent?.hasCategory(Intent.CATEGORY_HOME) == true) {
             sairAmbiente(animar = false)
-            ultimoToken = null
-            indiceFoco = 0
             focoTopo = null
             voltarAoPerfil = false   // HOME de novo depois de bolinha > Configurações: o foco vai ao 1º app (home-12)
             // Cruz: HOME vai para Assistir; HOME de novo, para a TV (CruzLogica). Fecha o "Todos os apps".
@@ -510,7 +572,7 @@ class MainActivity : Activity() {
     // ---------------------------------------------------------------- montagem da tela
 
     private fun montarTela(): View {
-        // Laterais em Grade.MARGEM; alturas fixas: topo em TOPO_PALCO, destaque em TOPO_DESTAQUE, apps em LINHA_APPS_HOME.
+        // Laterais em Grade.MARGEM; a barra de cima em TOPO_PALCO e a cruz (montarCruz) no resto da tela.
         val raiz = FrameLayout(this).apply {
             clipChildren = false   // a bolinha e o card focado crescem um pouco alem da propria caixa
             clipToPadding = false
@@ -728,7 +790,7 @@ class MainActivity : Activity() {
                 // despertador + feriado a cotação sumia). Cortado só daqui: a Ilha continua vendo o texto.
                 if (livre < dp(80)) listOf(pilulaContagem, pilulaLembreteCasa, pilulaCotacao)
                     .firstOrNull { it.visibility == View.VISIBLE }
-                    ?.let { p -> p.post { if (p.hasFocus()) linhaApps.requestFocus(); cortadas += p; p.visibility = View.GONE } }
+                    ?.let { p -> p.post { if (p.hasFocus()) focoPadrao(); cortadas += p; p.visibility = View.GONE } }
             }
         }
 
@@ -819,177 +881,13 @@ class MainActivity : Activity() {
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })
         topoRaiz = topo
 
-        // ---- Destaque: o que está em foco, logo acima de "ASSISTIR". Desde 12/11/2026 (dono: "por que não aparecem as
-        // informações como no launcher do Google?") é uma ficha que cresce PARA CIMA: linha 1 = título grande e o que é
-        // ("Filmes · você parou em 34%"), linha 2 = nota, gênero, ano, duração, quanto falta (ou "● AO VIVO 13:30 – 14:15"),
-        // e 2 linhas de sinopse. Apps e Na rede: só a linha 1, como antes. Ancorado por baixo (Gravity.BOTTOM numa caixa
-        // que termina em TOPO_DESTAQUE): com ou sem sinopse, ele nunca encosta em "ASSISTIR".
-        txtDestaqueRotulo = texto(Estilo.Leitura.DICA, CORAL, fonteUi).apply {
-            letterSpacing = 0.08f
-            typeface = Typeface.create(fonteUi, Typeface.BOLD)
-            includeFontPadding = false
-            maxLines = 1
-        }
-        txtDestaqueTitulo = texto(36f, Color.WHITE, fonteUi).apply {
-            typeface = Typeface.create(fonteUi, Typeface.BOLD)
-            includeFontPadding = false
-            letterSpacing = -0.02f
-            maxLines = 1
-            ellipsize = TextUtils.TruncateAt.END
-        }
-        txtDestaqueSub = texto(14f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        txtDestaqueMeta = texto(14f, Color.WHITE, fonteUi).apply { includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        txtDestaqueSinopse = texto(14f, textoClaro, fonteUi).apply {
-            maxLines = 2
-            ellipsize = TextUtils.TruncateAt.END
-            setLineSpacing(0f, 1.2f)
-            maxWidth = dp(560)   // linha longa demais cansa a leitura; 560 dp ~ 70 letras
-        }
-        // Nome grande e a descrição na MESMA linha, alinhados pela base do texto (dono, 12/11 tarde).
-        val linha1 = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            isBaselineAligned = true
-            for (t in listOf(txtDestaqueRotulo, txtDestaqueTitulo, txtDestaqueSub))
-                addView(t, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginEnd = dp(16) })
-            // A descrição é o que encolhe (com "…") quando a linha não cabe.
-            txtDestaqueSub.layoutParams = LinearLayout.LayoutParams(0, WRAP, 1f)
-        }
-        destaque = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            visibility = View.INVISIBLE
-            addView(linha1, LinearLayout.LayoutParams(MATCH, WRAP))
-            addView(txtDestaqueMeta, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(10) })
-            addView(txtDestaqueSinopse, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(8) })
-        }
-        if (tema != Tema.ESCURO) for (t in listOf(txtDestaqueRotulo, txtDestaqueTitulo, txtDestaqueSub, txtDestaqueMeta, txtDestaqueSinopse))
-            t.setShadowLayer(dp(8).toFloat(), 0f, 0f, 0x99000000.toInt())
-        val topoCaixa = TOPO_PALCO + ALTURA_TOPO + 12
-        raiz.addView(FrameLayout(this).apply {
-            clipChildren = false
-            if (emGrade || emCruz) visibility = View.GONE   // grade e cruz: a ficha sai e o Continuar sobe para o lugar dela (LayoutHome)
-            addView(destaque, FrameLayout.LayoutParams(MATCH, WRAP, Gravity.BOTTOM))
-        }, FrameLayout.LayoutParams(dp(Grade.largura(10)), dp(TOPO_DESTAQUE - topoCaixa)).apply {
-            marginStart = dp(Grade.MARGEM)
-            topMargin = dp(topoCaixa)
-        })
-        // Pela troca de foco (e não por quem chama mostrarDestaque): apaga com o foco no topo, volta ao descer.
-        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo -> if (novo != null) posicionarDestaque(novo) }
-
-        // ---- Linha de apps (rola na horizontal). O padding de cima/baixo e a folga para o card focado crescer;
-        // por isso a rolagem comeca FOLGA acima da linha da grade.
-        val folga = 24
-        // Grade (LayoutHome): o Continuar sobe para logo abaixo do topo e a grade começa embaixo dele, até o fim da tela.
-        val topoContinuar = if (emGrade) LayoutHome.TOPO_CONTINUAR_GRADE else TOPO_CONTINUAR
-        val linhaDosApps = when {
-            emCruz -> TOPO_PALCO + ALTURA_TOPO + 60   // "Todos os apps" da cruz: a grade logo abaixo da barra de cima
-            emGrade -> topoContinuar + ALTURA_CONTINUAR + descer + 28
-            else -> LINHA_APPS_HOME + descer
-        }
-        if (gradeDosApps) {
-            linhaApps = GradeApps(this, LayoutHome.colunas(passoCartao, Grade.MARGEM), dp(12))
-            rolagem = ScrollView(this).apply {
-                clipChildren = false
-                clipToPadding = false
-                isVerticalScrollBarEnabled = false
-                isSmoothScrollingEnabled = true
-                setPaddingRelative(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
-                addView(linhaApps)
-            }
-            raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, dp(LayoutHome.TELA_A - linhaDosApps + folga)).apply {
-                topMargin = dp(linhaDosApps - folga)
-            })
-        } else {
-            rolagem = HorizontalScrollView(this).apply {
-                clipChildren = false    // senão a rolagem corta o card focado quando ele cresce
-                isHorizontalScrollBarEnabled = false
-                clipToPadding = false
-                setPaddingRelative(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
-            }
-            linhaApps = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                clipChildren = false
-            }
-            rolagem.addView(linhaApps)
-            raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(linhaDosApps - folga) })
-        }
-        // Título "APPS" em cima da linha, como o "CONTINUAR" (esboço do dono, 06/11 noite).
-        if (emCruz) {
-            // "Todos os apps" da cruz (Paulo, 19/11/2026: no visual da casa e do site): o mesmo cabeçalho das telas Rádio,
-            // Podcasts e Jogos (nome em laranja espaçado + a conta ao lado, em creme) e o véu Noite sobre o fundo.
-            veuTodos = View(this).apply {
-                visibility = View.GONE
-                background = android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(0xB3121528.toInt(), 0x99121528.toInt(), 0xD9121528.toInt()))
-            }
-            raiz.addView(veuTodos, 0, FrameLayout.LayoutParams(MATCH, MATCH))
-            val forte = Fontes.nunito(800)
-            val nome = texto(HomeCruz.FONTE_ROTULO, Estilo.ACENTO, forte).apply {
-                text = getString(R.string.cruz_todos_apps).uppercase(); letterSpacing = 0.16f; includeFontPadding = false
-            }
-            contaTodos = texto(HomeCruz.FONTE_POSICAO, HomeCruz.COR_SUB, Fontes.nunito(600)).apply { includeFontPadding = false }
-            raiz.addView(LinearLayout(this).apply {
-                rotuloApps = this
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM; visibility = View.GONE
-                addView(nome)
-                addView(contaTodos, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(14) })
-            }, FrameLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 36) })
-        } else raiz.addView(texto(12f, textoSuave, fonteUi).apply {
-            rotuloApps = this
-            text = getString(R.string.home_linha_apps)
-            letterSpacing = 0.1f
-            if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
-        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
-
-        // ---- Continuar (HOME recomendada): último canal e apps usados há pouco, em cards 16:9 com o banner do app. Fica
-        // meio escondida na borda de baixo; com o foco nela (▼ num card solto), a tela inteira sobe para mostrá-la.
-        linhaContinuar = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-        caixaContinuar = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            clipChildren = false
-            clipToPadding = false
-            visibility = View.GONE
-            addView(texto(12f, textoSuave, fonteUi).apply {
-                rotuloContinuar = this
-                text = getString(R.string.home_linha_continuar)
-                letterSpacing = 0.1f
-                if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
-            })
-            addView(HorizontalScrollView(this@MainActivity).apply {
-                clipChildren = false
-                clipToPadding = false
-                isHorizontalScrollBarEnabled = false
-                setPaddingRelative(0, dp(10), dp(Grade.MARGEM), dp(16))
-                addView(linhaContinuar)
-            }, LinearLayout.LayoutParams(MATCH, WRAP))
-        }
-        // Altura fixa (passa da borda de baixo de propósito): com WRAP o FrameLayout cortava a linha no fim da tela, e ao
-        // subir aparecia só o topo dos cards e uma faixa vazia embaixo (visto na Sala, 06/11).
-        raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR + descer)).apply {
-            marginStart = dp(Grade.MARGEM)
-            topMargin = dp(topoContinuar)
-        })
-
-        // ---- Guia de teclas do modo mover: uma faixa na parte de baixo, por cima de tudo. Some fora do modo mover.
-        txtDica = texto(15f, corMover).apply {
-            visibility = View.GONE
-            gravity = Gravity.CENTER
-            maxLines = 2
-            maxWidth = dp(1000)
-            setPaddingRelative(dp(22), dp(10), dp(22), dp(10))
-            background = GradientDrawable().apply {
-                cornerRadius = dp(22).toFloat()
-                setColor(0xE60E1311.toInt())
-                setStroke(dp(1), 0x66FF6A2B)
-            }
-        }
-
-        // Sem decoração (arco do sol/lua, etiqueta da obra) na HOME v3: o lugar dela agora é do destaque e dos apps.
+        // Sem decoração (arco do sol/lua, etiqueta da obra): o lugar dela é da cruz.
         val vivo = criarFundo(this, tema, decoracao = false) { bloco -> rede.execute { bloco() } }
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || tema == Tema.PLUGIN || (emCruz && !LayoutHome.arteCruz(this@MainActivity)) }   // Galeria: a obra é o fundo, sem brilho por cima
-        if (emCruz) montarCruz(raiz)
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || tema == Tema.PLUGIN || !LayoutHome.arteCruz(this@MainActivity) }   // Galeria: a obra é o fundo, sem brilho por cima
+        montarCruz(raiz)
         conteudo = raiz
         return FrameLayout(this).apply {
             clipChildren = false   // a tela que sobe (Continuar) desenha o que estava abaixo da borda
@@ -1006,9 +904,6 @@ class MainActivity : Activity() {
             capa.escalaBase = 2f
             capa.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.pivotX = v.width.toFloat(); v.pivotY = 0f }
             addView(raiz, FrameLayout.LayoutParams(MATCH, MATCH))
-            addView(txtDica, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
-                bottomMargin = dp(32)
-            })
         }
     }
 
@@ -1047,25 +942,19 @@ class MainActivity : Activity() {
         }
     }
 
-    private lateinit var txtAlarme: TextView          // "⏰ amanhã 6:30" na pílula do despertador
-    private lateinit var pilulaAlarme: LinearLayout
-    private lateinit var destaque: LinearLayout      // o bloco grande do que está em foco (ver mostrarDestaque)
-    private lateinit var txtDestaqueRotulo: TextView
-    private lateinit var txtDestaqueTitulo: TextView
-    private lateinit var txtDestaqueSub: TextView
-    private lateinit var txtDestaqueMeta: TextView      // ★ 6,6  Thriller · 2023 · 1 h 59 min · faltam 1 h 18 min
-    private lateinit var txtDestaqueSinopse: TextView
-    @Volatile private var gravandoTv: String? = null   // "Globo até 22:05" enquanto grava (Gravacoes.resumoParaHome)
-    private var ultimoTv: PlayerArmazem.Ultimo? = null   // último canal + programas (lido no onResume, em preencherContinuar)
-    private lateinit var txtTimer: TextView   // "4:32" na pílula do timer enquanto um timer corre (ver Timer.kt)
-    private lateinit var pilulaTimer: LinearLayout
+    internal lateinit var txtAlarme: TextView          // "⏰ amanhã 6:30" na pílula do despertador
+    internal lateinit var pilulaAlarme: LinearLayout
+    @Volatile internal var gravandoTv: String? = null   // "Globo até 22:05" enquanto grava (Gravacoes.resumoParaHome)
+    internal var ultimoTv: PlayerArmazem.Ultimo? = null   // último canal + programas (lido no onResume, em preencherContinuar)
+    internal lateinit var txtTimer: TextView   // "4:32" na pílula do timer enquanto um timer corre (ver Timer.kt)
+    internal lateinit var pilulaTimer: LinearLayout
 
     /** Atualiza o "⏱ 4:32" a cada segundo enquanto a HOME está na frente e há timer; some quando não há. */
     private val tarefaTimer = object : Runnable {
         override fun run() {
             val t = Timer.pilula(this@MainActivity)   // o próximo timer, "+N" e o cronômetro (ideia 31)
             if (t == null) {
-                if (pilulaTimer.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar num texto invisível
+                if (pilulaTimer.hasFocus()) focoPadrao()   // o foco não pode ficar num texto invisível
                 pilulaTimer.visibility = View.GONE
                 atualizarAvisos()
                 return
@@ -1080,7 +969,7 @@ class MainActivity : Activity() {
 
 
     /** Redesenha a bolinha: a conta ativa mudou, ou chegou uma foto nova. */
-    private fun atualizarFotoPerfil() {
+    internal fun atualizarFotoPerfil() {
         fotoPerfil.setImageBitmap(avatarDaBolinha())
     }
 
@@ -1089,12 +978,6 @@ class MainActivity : Activity() {
         if (ModoVisita.ativo(this)) Perfil.avatar(this, dp(44), conta = null) else Perfil.avatar(this, dp(44))
 
 
-    /** Contorno branco dos blocos do topo (hora, clima) quando estao com foco. */
-    private fun realceFoco() = GradientDrawable().apply {
-        cornerRadius = dp(16).toFloat()
-        setColor(Estilo.BORDA)
-        setStroke(dp(2), 0xD9FFFFFF.toInt())
-    }
     private var ultimaTemp: Int? = null   // a temperatura mostrada no topo (para a linha "Hoje" da previsao bater com ela)
 
     /** Abre a tela da previsao (ver PrevisaoActivity.kt); leva a temperatura do topo para as duas telas baterem. */
@@ -1103,7 +986,7 @@ class MainActivity : Activity() {
             .putExtra(PrevisaoActivity.EXTRA_TEMP, ultimaTemp ?: Int.MIN_VALUE)
             .putExtra(PrevisaoActivity.EXTRA_CHOVENDO, ultimoChovendo)
             .putExtra(PrevisaoActivity.EXTRA_CODIGO, ultimoCodigo)
-            .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences("clima", MODE_PRIVATE).getInt("umidade", -1)))
+            .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).getInt("umidade", -1)))
     }
 
     /** ▲ que saiu da cruz para a barra (Ilha); se ele for SEGURADO, abre a Central em vez de ficar na barra. */
@@ -1163,11 +1046,11 @@ class MainActivity : Activity() {
     // ---------------------------------------------------------------- apps, pilhas e ocultos
 
     /** pacote -> (APK|activity, Item). Vive enquanto o processo da HOME viver (sobrevive à troca de tema). */
-    private companion object {
+    companion object {
         @Volatile var homeFriaMedida = false   // placar (elevação 2.1): a HOME "fria" é medida uma vez por processo
         /** A abertura com a logo do boot já foi decidida neste processo (recriar a HOME não mostra de novo). */
         @Volatile var splashBootDecidido = false
-        val cacheApps = HashMap<String, Pair<String, Item>>()
+        internal val cacheApps = HashMap<String, Pair<String, Item>>()
         /** Apps cujo ícone veio de um pacote de ícones (ou foi trocado à mão): no modo banner da cruz, o ícone vence o banner. */
         val iconeDePacote: MutableSet<String> = java.util.concurrent.ConcurrentHashMap.newKeySet()
         // Topo C3 (12/11/2026): cápsulas de 52 dp em 24 (até 76). Ordem pedida pelo dono (12/11 tarde): nome do card em foco
@@ -1178,23 +1061,6 @@ class MainActivity : Activity() {
         const val ILHA_PONTO_CALMO = 0x99FFF3E6.toInt()   // ponto da Ilha sem nada a avisar: branco apagado (laranja = foco)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
-        const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
-        const val CORAL = 0xFFFF8A80.toInt()   // a cor do "ao vivo"
-        const val AMARELO_NOTA = 0xFFF5C518.toInt()   // a estrela da nota (o amarelo que todo mundo associa a nota de filme)
-        const val ALTURA_LINHA_APPS = 136   // da linha da grade dos apps até o fim do nome embaixo do disco (com folga)
-        // Linha de apps logo abaixo do destaque (118 + ~90 + folga) e o Continuar embaixo dela: tudo numa tela só.
-        // A faixa de 9 dias saiu em 06/11 (dono: "abrindo o widget do clima essas informações já tem lá dentro").
-        // Arranjo 2 do Palco (escolha do dono, 06/11/2026), com respiro entre os blocos (ele achou o 1º teste colado):
-        // topo 24, apps (discos de 56 dp) em 116, destaque em 232, Continuar em 352 (cards até ~488, sobra ~50 embaixo).
-        // Esboço do dono (06/11 noite, "a home já é parte do player"): topo 24, destaque 100, Continuar 214 (começa com os
-        // cards TV, Séries e Filmes), apps em retângulos 16:9 embaixo, em 404 (até ~467; sobram ~70 dp).
-        const val TOPO_CONTINUAR = 290
-        const val LINHA_APPS_HOME = 429     // o título "APPS" fica 32 dp acima; com 10 dp a menos ele encostava no foco
-        val CORES_SERIES = intArrayOf(0xFF9B7BFF.toInt(), 0xFF4A2C9A.toInt())   // roxo
-        val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
-        val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
-        val CORES_JOGOS = intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())    // âmbar (card Jogos, 14/11/2026)
-        val CORES_OUVIR = intArrayOf(0xFF4A8BFF.toInt(), 0xFF123A7A.toInt())    // azul (card Ouvir, 17/11/2026)
         const val PREFS_CRUZ_APPS = "cruz_apps"   // aberturas por app (meia-vida 7 dias) e fixados no topo de Aplicativos
         const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
         const val CONTINUAR_MAX = 9          // itens do Continuar da cruz (o 10º seria o "Dormir em 30 min")
@@ -1218,7 +1084,6 @@ class MainActivity : Activity() {
             "com.google.android.videos" to R.string.app_sub_google_tv,
             "com.android.tv.settings" to R.string.app_sub_config,
         )
-        const val ALTURA_CONTINUAR = 112    // título + cards do tamanho dos apps (63 dp) + folga do card focado
         /** As fichas de fichas-apps.json para a frase do destaque (ideia 13). Lidas uma vez, na filaApps; null até lá. */
         @Volatile var fichasHome: Map<String, FrasesApps.Ficha>? = null
         const val CARTAO_TRANCA = "aa:lock"            // o cartão "N escondidos · PIN" (nenhum pacote tem esse nome)
@@ -1227,7 +1092,7 @@ class MainActivity : Activity() {
         const val DIAS_PARADO = 60                      // dica do Observador: sem abrir há 60 dias
     }
 
-    /** Todos os apps de TV instalados, sem ordem e sem tirar os ocultos (quem organiza é montarEntradas). */
+    /** Todos os apps de TV instalados, sem ordem e sem tirar os ocultos (quem organiza é appsVisiveis). */
     private fun carregarApps(): List<Item> {
         val pm = packageManager
         // "Quais apps aparecem no menu de uma TV?" = os que declaram a categoria LEANBACK_LAUNCHER.
@@ -1290,77 +1155,26 @@ class MainActivity : Activity() {
         return itens.values.toList()
     }
 
-    /**
-     * Transforma os apps instalados nos cards da linha: ordem (manual primeiro, depois automática),
-     * pilhas (vários apps num card só) e, no fim, o card "Ocultos" se houver algum app oculto.
-     */
     /** Categoria que o app declara (ApplicationInfo.category; -1 = nenhuma). Guardada: não muda enquanto o app existir. */
     private val categorias = java.util.concurrent.ConcurrentHashMap<String, Int>()   // preenchida em carregarApps (home-9)
-    private fun categoria(pacote: String): Int = categorias.getOrPut(pacote) {
+    internal fun categoria(pacote: String): Int = categorias.getOrPut(pacote) {
         try { packageManager.getApplicationInfo(pacote, 0).category } catch (e: Exception) { -1 }
     }
 
-    private fun montarEntradas(todos: List<Item>): MutableList<Entrada> {
+    /**
+     * Os apps que a cruz mostra, na ordem de sempre (manual, fixos, uso recente, Config.ORDEM, nome): sem os ocultos, sem
+     * os do modo visita e, com o card Jogos ligado, sem os jogos (eles moram em Jogar). A cruz reordena por categoria
+     * (CruzLogica.ordenarApps) e usa esta ordem para desempatar.
+     */
+    private fun appsVisiveis(todos: List<Item>): List<Item> {
         val ocultos = Organizacao.ocultos(this)
-        // Modo visita (ModoVisita.kt): os apps escolhidos somem também, e o card "Apps ocultos" não aparece.
-        val naVisita = ModoVisita.ativo(this)
-        val daVisita = if (naVisita) ModoVisita.apps(this) else emptySet()
-        // Card Jogos (14/11/2026): com ele ligado, os apps de jogo moram só nele e saem desta linha.
+        val daVisita = if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet()
         val semJogos = JogosTv.cardLigado(this)
-        val visiveis = todos.filter { it.pacote !in ocultos && it.pacote !in daVisita && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
-        val porPacote = visiveis.associateBy { it.pacote }
-
-        // Pilhas: só valem com 2+ apps instalados e visíveis. Um app nunca fica em duas pilhas.
-        val pilhaDe = HashMap<String, Organizacao.Pilha>()   // pacote -> pilha
-        val membros = HashMap<String, List<Item>>()          // id da pilha -> apps, na ordem da pilha
-        for (pilha in Organizacao.pilhas(this)) {
-            val itens = pilha.apps.mapNotNull { porPacote[it] }.filter { it.pacote !in pilhaDe }
-            if (itens.size < 2) continue
-            membros[pilha.id] = itens
-            for (item in itens) pilhaDe[item.pacote] = pilha
-        }
-
-        // Pilhas AUTOMÁTICAS por categoria (Organizacao.agruparPorCategoria), se ligadas: só os apps que sobraram
-        // soltos. Os FIXOS ficam de fora (têm lugar próprio no começo). A frente é a escolhida com ▲ ou, sem escolha,
-        // o app usado mais recentemente.
-        if (Organizacao.pilhasAutomaticas(this)) {
-            val soltos = visiveis.filter { it.pacote !in pilhaDe && it.pacote !in Config.FIXOS }
-            val grupos = Organizacao.agruparPorCategoria(soltos.map { it.pacote to categoria(it.pacote) }, Organizacao.foraDaAuto(this))
-            val frentes = Organizacao.frentesAuto(this)
-            for ((id, pacotes) in grupos) {
-                val itens = pacotes.mapNotNull { porPacote[it] }
-                val frente = frentes[id]?.takeIf { it in pacotes } ?: pacotes.maxByOrNull { ultimoUso[it] ?: 0L }
-                val pilha = Organizacao.Pilha(id, pacotes.toMutableList(), frente)
-                membros[id] = itens
-                for (item in itens) pilhaDe[item.pacote] = pilha
-            }
-        }
-
-        // Lido fora da tela por preencherApps (queryAndAggregateUsageStats de 14 dias é caro); aqui só se usa o mapa.
-        val usados = ultimoUso
+        val usados = ultimoUso   // lido fora da tela por preencherApps (o UsageStats de 14 dias é caro)
         val manual = Organizacao.ordem(this).withIndex().associate { it.value to it.index }
-        // Os apps de uma pilha usam o token da pilha na ordem manual; a pilha aparece onde está o seu 1º app.
-        fun tokenDe(i: Item): String = pilhaDe[i.pacote]?.token ?: i.pacote
-        val ordenados = visiveis.sortedWith(
-            compareBy<Item>({ manual[tokenDe(it)] ?: Int.MAX_VALUE }, { fixo(it.pacote) }, { -(usados[it.pacote] ?: 0L) }, { posicao(it.pacote) }, { it.nome.lowercase() })
-        )
-
-        val entradas = mutableListOf<Entrada>()
-        val pilhasJaVistas = HashSet<String>()
-        for (item in ordenados) {
-            val pilha = pilhaDe[item.pacote]
-            if (pilha == null) {
-                entradas.add(Entrada.App(item))
-            } else if (pilhasJaVistas.add(pilha.id)) {
-                val itens = membros.getValue(pilha.id)
-                val frente = itens.indexOfFirst { it.pacote == pilha.frente }.coerceAtLeast(0)
-                entradas.add(Entrada.Pilha(pilha.id, itens, frente))
-            }
-        }
-        // 14/11/2026 (pedido do dono): o card "Ocultos (N)" saiu da HOME. Mostrar de volta: Configurações > Tela inicial
-        // > Apps ocultos (AppsEscolhaActivity).
-        // A TV saiu da linha de apps (06/11 noite): agora é o 1º card do Continuar, ao lado de Séries e Filmes.
-        return entradas
+        return todos.filter { it.pacote !in ocultos && it.pacote !in daVisita && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
+            .sortedWith(compareBy<Item>({ manual[it.pacote] ?: Int.MAX_VALUE }, { fixo(it.pacote) }, { -(usados[it.pacote] ?: 0L) },
+                { posicao(it.pacote) }, { it.nome.lowercase() }))
     }
 
     private fun fixo(pacote: String): Int {
@@ -1373,14 +1187,14 @@ class MainActivity : Activity() {
         return if (i >= 0) i else Int.MAX_VALUE
     }
 
-    private fun preencherApps() {
+    internal fun preencherApps() {
         // Carregar os apps (PackageManager + ícone redondo de cada um) roda FORA da thread da tela (04/11/2026: um ANR de
         // 5 s tinha iconeRedondo na pilha da thread principal, no 1º onResume do processo). Só o desenho volta para ela.
         val t0 = android.os.SystemClock.elapsedRealtime()
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
             val doJogos = todos.filter { JogosTv.ehJogo(this, it.pacote) }
-            // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
+            // Uso recente também aqui fora (04/11/2026): antes rodava na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
             // Card Jogos em foco (esboço A, 14/11/2026): o fundo é o banner oficial do jogo usado por último.
             ultimoJogo = Jogos.ultimoUsado(doJogos.map { it.pacote }, uso)?.let { p -> p to doJogos.first { it.pacote == p }.nome }
@@ -1394,8 +1208,8 @@ class MainActivity : Activity() {
                 if (isDestroyed) return@post
                 instalados = todos
                 ultimoUso = uso   // reorganizar() reaproveita este mapa até a próxima volta à HOME
-                lista = montarEntradas(instalados)
-                desenhar()
+                visiveis = appsVisiveis(instalados)
+                atualizarCruz()
                 // Medir para não deixar crescer: a thread da tela também atende as teclas do controle.
                 val desenhou = android.os.SystemClock.elapsedRealtime() - t1
                 android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), desenhar=$desenhou ms")
@@ -1412,144 +1226,21 @@ class MainActivity : Activity() {
     }
     private val filaApps = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "Apps") }
     /** pacote -> último uso (ms), lido por preencherApps na filaApps. Só lido/escrito na thread da tela. */
-    private var ultimoUso: Map<String, Long> = emptyMap()
+    internal var ultimoUso: Map<String, Long> = emptyMap()
 
-    /** Só reorganiza (pilhas, ordem, ocultos) com os apps já carregados: síncrono, quem chama lê a [lista] em seguida. */
-    private fun reorganizar() {
-        lista = montarEntradas(instalados)
-        desenhar()
-    }
-
-    /** Os cards que aparecem agora: a lista normal, ou (no modo mover) a lista com o card arrastado na posição de teste. */
-    private fun listaDaTela(): List<Entrada> = if (modoMover) listaMovendo() else lista
-
-    /** Desenha os cards e devolve o foco ao último card usado. */
-    private fun desenhar() {
-        val cards = listaDaTela()
-        // Reaproveitar os cards (04/11/2026, item 2b). Medido na TV: o desenho refazia todos os cards a cada volta à HOME,
-        // 63-89 ms na thread da tela, mesmo sem nada ter mudado. Se a assinatura (token, nome, ícone e app da frente de
-        // cada card) é a mesma da última vez, a linha fica como está e só o foco volta. No modo mover sempre redesenha
-        // (a ordem de teste muda a cada tecla), e ao sair dele a assinatura zerada força o redesenho.
-        val assinatura = if (modoMover) null else cards.map { assinaturaDe(it) }
-        if (assinatura == null || assinatura != ultimaAssinatura || linhaApps.childCount != cards.size) {
-            linhaApps.removeAllViews()
-            cards.forEach { linhaApps.addView(criarCartao(it)) }
-            prenderBordas()
-            ultimaAssinatura = assinatura
-        }
-        if (emCruz) { atualizarCruz(); if (!todosAbertos) return }
-        if (cards.isEmpty()) return
-        if (atalhoAberto >= 0) return   // voltando de TV/Séries/Filmes: o foco volta para aquele card (desenharContinuar)
-        linhaApps.post {
-            // Foco no Continuar (o TV na abertura): não roubar. A volta de um app já o trouxe para os apps no onResume.
-            if (::linhaContinuar.isInitialized && linhaContinuar.hasFocus()) return@post
-            if (voltarAoPerfil) { bolinhaPerfil?.requestFocus(); return@post }
-            focoTopo?.takeIf { it.isShown }?.let { focoTopo = null; it.requestFocus(); return@post }
-            val achado = cards.indexOfFirst { it.token == ultimoToken }
-            // Se o card sumiu (ex.: app ocultado), o foco fica na mesma posição, que agora é o vizinho.
-            val alvo = if (achado >= 0) achado else indiceFoco.coerceIn(0, cards.lastIndex)
-            linhaApps.getChildAt(alvo)?.requestFocus()
-        }
-    }
-
-    /** O último desenho da linha (ver [desenhar]); null = redesenhar na próxima vez. */
-    private var ultimaAssinatura: List<String>? = null
-
-    /**
-     * O que define a aparência e o comportamento de um card. Os ícones entram pela identidade do objeto: um Item só é
-     * recriado (cacheApps) quando o APK ou a activity do app mudam, e aí o ícone é outro objeto.
-     */
-    private fun assinaturaDe(e: Entrada): String {
-        fun ic(i: Item) = "${i.pacote}@${System.identityHashCode(i)}"
-        return when (e) {
-            is Entrada.App -> "A|${e.nome}|${ic(e.item)}"
-            is Entrada.Pilha -> "P|${e.id}|${e.nome}|${e.frente}|" + e.itens.joinToString(",") { ic(it) }
-            is Entrada.Ocultos -> "O|${e.nome}|" + e.itens.joinToString(",") { ic(it) }
-            is Entrada.Tv -> "T|${e.nome}"
-        }
-    }
-
-    private fun criarCartao(entrada: Entrada): View {
-        val aoFocar = { v: View ->
-            ultimoToken = entrada.token
-            indiceFoco = linhaApps.indexOfChild(v)
-            (rolagem as? HorizontalScrollView)?.let { centralizar(v, it) }   // a grade (ScrollView) rola sozinha até o foco
-            mostrarCapa(entrada)
-        }
-        return when (entrada) {
-            is Entrada.App -> montarCartao(entrada.token, entrada.nome, miniaturaApp(entrada.item), { abrir(entrada.item.pacote) }, aoFocar)
-            // Pilha: o OK abre o app da frente (▲▼ trocam qual é).
-            is Entrada.Pilha -> montarCartao(entrada.token, entrada.nome, miniaturaPilha(entrada.itens, entrada.frente), { abrir(entrada.daFrente.pacote) }, aoFocar)
-            is Entrada.Ocultos -> montarCartao(entrada.token, entrada.nome, miniaturaOcultos(entrada.nome), { abrirPasta(entrada) }, aoFocar)
-            // O último canal fica no card "AO VIVO" da linha Continuar (no disco o nome não cabia: "Continuar: 4 ·…").
-            is Entrada.Tv -> montarCartao(entrada.token, entrada.nome, miniaturaTv(), { abrirTv() }, aoFocar)
-        }
-    }
-
-    /**
-     * Um card: um disco de [Grade.DISCO] dp (o ícone do app, recortado em círculo) e o nome embaixo, centralizado.
-     * O foco aparece como um anel branco no disco (e o disco cresce 12%); o nome fica branco. Serve para a linha principal e
-     * para dentro das pastas. [token] identifica o card (modo de mover e menu), [aoAbrir] roda ao apertar OK.
-     * O card ocupa DISCO + VAO_DISCO de largura: o disco fica no meio e o nome tem espaço para respirar.
-     */
-    private fun montarCartao(token: String, nome: String, miniatura: View, aoAbrir: () -> Unit, aoFocar: (View) -> Unit,
-                             aoDesfocar: ((View) -> Unit)? = null): View {
-        val cartao = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL
-            clipChildren = false
-            isFocusable = true
-            isClickable = true
-            tag = token
-            contentDescription = nome   // a acessibilidade (e o tocar_elemento do MCP) acha o card pelo nome do app
-            setOnClickListener { aoAbrir() }
-            setOnFocusChangeListener { v, temFoco ->
-                estilizar(v, token, temFoco)
-                if (temFoco) aoFocar(v) else aoDesfocar?.invoke(v)
-            }
-        }
-        // filho 0: o disco (o anel de foco é desenhado POR CIMA, no foreground). filho 1: o nome.
-        val moldura = FrameLayout(this).apply {
-            clipChildren = false
-            // o disco fica 6 dp para dentro: o anel de foco é desenhado na borda da moldura, com uma folga, como no Google TV
-            addView(miniatura, FrameLayout.LayoutParams(MATCH, MATCH).apply { setMargins(dp(ANEL), dp(ANEL), dp(ANEL), dp(ANEL)) })
-            foreground = fioFino()
-        }
-        cartao.addView(moldura, LinearLayout.LayoutParams(dp(RET_L + 2 * ANEL), dp(RET_A + 2 * ANEL)))
-        // O nome fica guardado (estilizar e o modo mover usam o filho 1), mas não aparece: o retângulo já mostra a arte do
-        // app, e quem não tem banner mostra o nome dentro (ver retanguloDoApp).
-        cartao.addView(texto(11.5f, textoSuave).apply { text = nome; visibility = View.GONE })
-        cartao.layoutParams = LinearLayout.LayoutParams(dp(RET_L + 2 * ANEL), WRAP).apply { marginEnd = dp(4) }
-        return cartao
+    /** Só reorganiza (ordem, ocultos) com os apps já carregados: síncrono, quem chama lê [visiveis] em seguida. */
+    internal fun reorganizar() {
+        visiveis = appsVisiveis(instalados)
+        atualizarCruz()
     }
 
     // ---------------------------------------------------------------- HOME recomendada: capa do foco e Continuar
-
-    private fun dentro(v: View, pai: View): Boolean {
-        var p: Any? = v
-        while (p is View) { if (p === pai) return true; p = p.parent }
-        return false
-    }
-
-    /** A capa de quem está em foco: banner do app (ou a cor do ícone); a TV ao vivo, coral; o card "Ocultos", nada. */
-    private fun mostrarCapa(entrada: Entrada) {
-        val item = when (entrada) {
-            is Entrada.App -> { mostrarDestaque(null, entrada.nome, subApp(entrada.item.pacote, entrada.nome)); entrada.item }
-            is Entrada.Pilha -> {
-                mostrarDestaque(null, entrada.daFrente.nome, getString(R.string.home_destaque_pilha, entrada.itens.size))
-                entrada.daFrente
-            }
-            is Entrada.Tv -> { destaqueTv(); mostrarCapaAtalho(IconeApp.Tipo.TV); return }
-            is Entrada.Ocultos -> { capaPedida = null; esconderDestaque(); capa.esconder(); return }
-        }
-        mostrarCapaDoApp(item.pacote, item.icone)
-    }
 
     /** Pílula de vidro do topo: o componente padrão do sistema de design (Estilo.pilula), com o foco padrão. */
     private fun pilula(icone: android.graphics.drawable.Drawable? = null, vidro: Boolean = true): LinearLayout =
         Estilo.pilula(this, icone, vidro = vidro)
 
-    private lateinit var pilulaVencimento: LinearLayout
+    internal lateinit var pilulaVencimento: LinearLayout
     private lateinit var avisos: LinearLayout   // 2ª cápsula do topo: despertador, timer e lista vencendo
 
     /** A cápsula dos avisos só aparece com pelo menos um deles (vazia, sobrava uma bolha de vidro sem nada). */
@@ -1557,7 +1248,7 @@ class MainActivity : Activity() {
         val algum = (0 until avisos.childCount).any { avisos.getChildAt(it).visibility == View.VISIBLE }
         avisos.visibility = if (algum) View.VISIBLE else View.GONE
     }
-    private lateinit var txtVencimento: TextView
+    internal lateinit var txtVencimento: TextView
 
     /** Lê o vencimento das listas fora da tela (decifra as contas) e mostra/esconde a pílula. */
     private fun atualizarPilulaVencimento() {
@@ -1568,27 +1259,27 @@ class MainActivity : Activity() {
                     venceAmanha = getString(R.string.ci_vence_amanha), venceEmDias = { d -> getString(R.string.ci_vence_em, d) })) }.getOrNull()
             ui.post {
                 if (isDestroyed) return@post
-                if (texto == null) { if (pilulaVencimento.hasFocus()) linhaApps.requestFocus(); pilulaVencimento.visibility = View.GONE }
+                if (texto == null) { if (pilulaVencimento.hasFocus()) focoPadrao(); pilulaVencimento.visibility = View.GONE }
                 else { txtVencimento.text = texto; pilulaVencimento.visibility = View.VISIBLE }
                 atualizarAvisos()
             }
         }
     }
 
-    private lateinit var txtJogo: TextView
+    internal lateinit var txtJogo: TextView
     // Cartões próprios da tela inicial (HomeCards, 18/11/2026)
     private lateinit var pilulaCotacao: LinearLayout
     private lateinit var txtCotacao: TextView
-    private lateinit var pilulaLembreteCasa: LinearLayout
-    private lateinit var txtLembreteCasa: TextView
-    private lateinit var pilulaContagem: LinearLayout
+    internal lateinit var pilulaLembreteCasa: LinearLayout
+    internal lateinit var txtLembreteCasa: TextView
+    internal lateinit var pilulaContagem: LinearLayout
     /** Cartões tirados da barra aberta por falta de espaço (ver o ajuste da esquerda); a Ilha ainda os mostra. */
-    private val cortadas = mutableSetOf<View>()
-    private lateinit var txtContagem: TextView
-    private lateinit var pilulaServico: LinearLayout
-    private lateinit var txtServico: TextView
+    internal val cortadas = mutableSetOf<View>()
+    internal lateinit var txtContagem: TextView
+    internal lateinit var pilulaServico: LinearLayout
+    internal lateinit var txtServico: TextView
     /** Próximo jogo do "Meu time" para a linha do item TV da cruz (HomeCards, chave CARTAO_PLACAR). */
-    @Volatile private var jogoCruz: String? = null
+    @Volatile internal var jogoCruz: String? = null
 
     /**
      * As pílulas dos cartões próprios: lê o guardado (rápido) e mostra; depois, fora da tela, busca a cotação e testa os
@@ -1611,7 +1302,7 @@ class MainActivity : Activity() {
                 if (isDestroyed) return@post
                 cortadas.clear()   // de novo com todos; o ajuste da barra (esquerda) corta o que não couber
                 fun mostrar(p: LinearLayout, t: TextView, texto: String?) {
-                    if (texto == null) { if (p.hasFocus()) linhaApps.requestFocus(); p.visibility = View.GONE }
+                    if (texto == null) { if (p.hasFocus()) focoPadrao(); p.visibility = View.GONE }
                     else { t.text = texto; p.visibility = View.VISIBLE }
                 }
                 mostrar(pilulaCotacao, txtCotacao, cotacao)
@@ -1624,16 +1315,17 @@ class MainActivity : Activity() {
             }
         }
     }
-    private lateinit var pilulaAniversario: LinearLayout
-    private lateinit var txtAniversario: TextView
-    private lateinit var pilulaJogo: LinearLayout
+    internal lateinit var pilulaAniversario: LinearLayout
+    internal lateinit var txtAniversario: TextView
+    internal lateinit var pilulaJogo: LinearLayout
 
     // ---- Tocando agora (ideia 75)
-    private lateinit var capsulaTocando: LinearLayout
-    private lateinit var pilulaTocando: LinearLayout
+    internal val capsulaPronta get() = ::capsulaTocando.isInitialized
+    internal lateinit var capsulaTocando: LinearLayout
+    internal lateinit var pilulaTocando: LinearLayout
     private lateinit var capaTocando: ImageView
-    private lateinit var barrasTocando: BarrasSom
-    private lateinit var txtTocandoTitulo: TextView
+    internal lateinit var barrasTocando: BarrasSom
+    internal lateinit var txtTocandoTitulo: TextView
     private lateinit var txtTocandoSub: TextView
     private var pacoteTocando: String? = null
     private var tocandoNosso = false   // a pílula é a nossa rádio (OuvirServico), não outro app
@@ -1651,14 +1343,14 @@ class MainActivity : Activity() {
     }
 
     /** O que o NOSSO som toca agora (tipo "radio"/"podcast" -> título): a linha de baixo de Rádio/Podcasts na cruz diz. */
-    private var ouvindoCruz: Pair<String, String>? = null
+    internal var ouvindoCruz: Pair<String, String>? = null
 
     private fun mostrarTocando(p: TocandoAgoraTv.Pilula?, icone: android.graphics.drawable.Drawable?) {
         ui.removeCallbacks(tarefaTocando)
         val ouvindo = p?.takeIf { it.nosso && it.tocando }?.let { it.tipoNosso.ifEmpty { "radio" } to it.titulo }
         if (ouvindo != ouvindoCruz) { ouvindoCruz = ouvindo; atualizarCruz() }
         if (p == null) {
-            if (pilulaTocando.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar numa pílula invisível
+            if (pilulaTocando.hasFocus()) focoPadrao()   // o foco não pode ficar numa pílula invisível
             capsulaTocando.visibility = View.GONE
             barrasTocando.tocando = false
             pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null); tocandoNosso = false
@@ -1687,7 +1379,7 @@ class MainActivity : Activity() {
             val textos = runCatching { Aniversarios.textos(this) }.getOrDefault(emptyList())
             ui.post {
                 if (isDestroyed) return@post
-                if (textos.isEmpty()) { if (pilulaAniversario.hasFocus()) linhaApps.requestFocus(); pilulaAniversario.visibility = View.GONE }
+                if (textos.isEmpty()) { if (pilulaAniversario.hasFocus()) focoPadrao(); pilulaAniversario.visibility = View.GONE }
                 else {
                     txtAniversario.text = "\uD83C\uDF82 " + textos.first() + if (textos.size > 1) "  +${textos.size - 1}" else ""
                     pilulaAniversario.visibility = View.VISIBLE
@@ -1703,7 +1395,7 @@ class MainActivity : Activity() {
             val texto = runCatching { LembretesTv.proximoJogo(this) }.getOrNull()
             ui.post {
                 if (isDestroyed) return@post
-                if (texto == null) { if (pilulaJogo.hasFocus()) linhaApps.requestFocus(); pilulaJogo.visibility = View.GONE }
+                if (texto == null) { if (pilulaJogo.hasFocus()) focoPadrao(); pilulaJogo.visibility = View.GONE }
                 else { txtJogo.text = texto; pilulaJogo.visibility = View.VISIBLE }
                 atualizarAvisos()
             }
@@ -1713,7 +1405,7 @@ class MainActivity : Activity() {
     /** O próximo despertador na pílula: "hoje 18:30", "amanhã 6:30" ou "sáb 7:00". Sem alarme, a pílula some. */
     private fun atualizarPilulaAlarme() {
         val prox = runCatching { Despertador.proximo(this) }.getOrNull()
-        if (prox == null) { alarmeEm = null; if (pilulaAlarme.hasFocus()) linhaApps.requestFocus(); pilulaAlarme.visibility = View.GONE; atualizarAvisos(); return }
+        if (prox == null) { alarmeEm = null; if (pilulaAlarme.hasFocus()) focoPadrao(); pilulaAlarme.visibility = View.GONE; atualizarAvisos(); return }
         val quando = java.util.Calendar.getInstance().apply { timeInMillis = prox.second }
         val hoje = java.util.Calendar.getInstance()
         val dias = ((java.time.LocalDate.of(quando.get(java.util.Calendar.YEAR), quando.get(java.util.Calendar.MONTH) + 1, quando.get(java.util.Calendar.DAY_OF_MONTH)).toEpochDay()) -
@@ -1761,123 +1453,17 @@ class MainActivity : Activity() {
 
     private fun aplicarTeste() {
         capa.visibility = if (TesteHome.capa) View.VISIBLE else View.GONE
-        destaque.visibility = if (TesteHome.destaque) destaque.visibility.takeIf { it != View.GONE } ?: View.INVISIBLE else View.GONE
         fundo?.visibility = if (TesteHome.fundo) View.VISIBLE else View.INVISIBLE
         capa.setLayerType(if (TesteHome.capaCamada) View.LAYER_TYPE_HARDWARE else View.LAYER_TYPE_NONE, null)
     }
 
-    /**
-     * O destaque: [rotulo] (pequeno coral, some se null), [titulo] grande e [sub] na mesma linha (some se null); embaixo,
-     * [meta] (nota, gênero, ano...) e [sinopse], que somem se vazios.
-     */
-    private fun mostrarDestaque(rotulo: String?, titulo: String, sub: String?, meta: CharSequence? = null, sinopse: String? = null) {
-        if (!TesteHome.destaque) return
-        txtDestaqueRotulo.text = rotulo
-        txtDestaqueRotulo.visibility = if (rotulo == null) View.GONE else View.VISIBLE
-        txtDestaqueTitulo.text = titulo
-        txtDestaqueSub.text = sub
-        txtDestaqueSub.visibility = if (sub == null) View.GONE else View.VISIBLE
-        txtDestaqueMeta.text = meta
-        txtDestaqueMeta.visibility = if (meta.isNullOrEmpty()) View.GONE else View.VISIBLE
-        txtDestaqueSinopse.text = sinopse
-        txtDestaqueSinopse.visibility = if (sinopse.isNullOrBlank()) View.GONE else View.VISIBLE
-        if (destaque.visibility != View.VISIBLE) {
-            destaque.alpha = 0f
-            destaque.visibility = View.VISIBLE
-        }
-        destaque.animate().cancel()
-        destaque.animate().alpha(1f).setDuration(200).start()
-    }
-
-    /** Apaga a informação do card com o foco no topo e a traz de volta quando o foco desce. */
-    private fun posicionarDestaque(foco: View) {
-        val pais = generateSequence(foco.parent) { it.parent }
-        // Foco no topo: a legenda apaga (ela fala de um card, e nenhum card está em foco; visto na Sala, 12/11). Não usa
-        // esconderDestaque: o texto continua lá e volta ao descer, mesmo que o card não chame mostrarDestaque de novo.
-        if (foco === topoRaiz || pais.any { it === topoRaiz }) {
-            destaque.animate().cancel()
-            destaque.animate().alpha(0f).setDuration(150).start()
-            return
-        }
-        // Fora do topo: a informação volta (lugar fixo, em cima de "ASSISTIR"; ver TOPO_DESTAQUE).
-        if (destaque.visibility == View.VISIBLE && destaque.alpha < 1f) {
-            destaque.animate().cancel()
-            destaque.animate().alpha(1f).setDuration(200).start()
-        }
-    }
-
-    private fun esconderDestaque() {
-        if (destaque.visibility != View.VISIBLE) return
-        destaque.animate().cancel()
-        destaque.animate().alpha(0f).setDuration(150).withEndAction { destaque.visibility = View.INVISIBLE }.start()
-    }
-
-    /**
-     * Destaque do card TV (12/11/2026, ficha como a do launcher do Google): o programa que passa agora no último canal
-     * (o player abre nele) em letra grande, "TV · canal N", "● AO VIVO 13:30 – 14:15 · faltam 12 min" e a descrição do
-     * guia, se ele trouxer. Sem guia: "TV" e o canal, como antes.
-     */
-    private fun destaqueTv() {
-        val u = ultimoTv
-        // Gravando (14/11/2026): o rótulo em cima do título diz o quê e até quando, seja qual for o último canal.
-        val rotulo = gravandoTv?.let { "● " + getString(R.string.grv_selo_home, it) }
-        if (u == null) { mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub)); return }
-        val agora = System.currentTimeMillis()
-        val p = u.programas.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
-        if (p == null) {
-            mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub_canal, u.numero)); return
-        }
-        val fmt = java.text.SimpleDateFormat("HH:mm", Locale.getDefault())
-        val meta = android.text.SpannableStringBuilder()
-        meta.append("● " + getString(R.string.player_ao_vivo), android.text.style.ForegroundColorSpan(Estilo.ERRO), 0)
-        meta.setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, meta.length, 0)
-        meta.append("   ${fmt.format(java.util.Date(p.inicio))} – ${fmt.format(java.util.Date(p.fim))}")
-        meta.append("  ·  " + BarraTempo.faltam(this, duracaoTexto(((p.fim - agora + 59_999) / 60_000).toInt())))
-        mostrarDestaque(rotulo, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
-    }
-
-    /**
-     * Destaque de Séries e Filmes: o último título aberto (ficha gravada ao tocar), com nota, gênero, ano, duração,
-     * quanto falta e a sinopse. Sem nada aberto ainda: o nome do card e a frase de sempre.
-     */
-    private fun destaqueVod(serie: Boolean) {
-        val f = if (serie) fichaSerie else fichaFilme
-        if (f == null) {
-            mostrarDestaque(null, getString(if (serie) R.string.home_card_series else R.string.home_card_filmes),
-                getString(if (serie) R.string.home_destaque_series else R.string.home_destaque_filmes))
-            return
-        }
-        // Só "continue de onde parou" quando a ficha de Filmes também oferece Continuar (Vod.deveRetomar: 1 min ou mais):
-        // com 20 s vistos a HOME dizia "continue" e a ficha "Assistir" do começo (visto na Sala, 17/11/2026).
-        val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }
-        val sub = when {
-            serie -> getString(R.string.home_dest_serie, epLegivel(f.episodio))
-            pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo
-            else -> getString(R.string.home_dest_filme_ultimo)
-        }
-        val meta = android.text.SpannableStringBuilder()
-        f.nota?.takeIf { it > 0f }?.let {
-            meta.append("★ " + String.format(Locale.getDefault(), "%.1f", it), android.text.style.ForegroundColorSpan(AMARELO_NOTA), 0)
-            meta.setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, meta.length, 0)
-        }
-        val partes = listOfNotNull(
-            f.genero.split(',', '/', '|').firstOrNull()?.trim()?.takeIf { it.isNotEmpty() },
-            f.ano?.toString(),
-            f.duracaoMin?.let { duracaoTexto(it) },
-            pos?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) },
-        )
-        if (partes.isNotEmpty()) { if (meta.isNotEmpty()) meta.append("   "); meta.append(partes.joinToString("  ·  ")) }
-        mostrarDestaque(null, f.titulo, sub, meta, f.sinopse)
-    }
-
-    /** "1 h 59 min", "45 min", "2 h". */
     /** "T1 E2" (como fica gravado) vira "Temporada 1, episódio 2": sigla é jargão (crítica de design 19/11/2026). */
-    private fun epLegivel(e: String): String {
+    internal fun epLegivel(e: String): String {
         val m = Regex("""^T(\d+) ?E(\d+)$""").find(e.trim()) ?: return e
         return getString(R.string.serie_ep_longo, m.groupValues[1].toInt(), m.groupValues[2].toInt())
     }
 
-    private fun duracaoTexto(min: Int): String {
+    internal fun duracaoTexto(min: Int): String {
         val h = min / 60; val m = min % 60
         return when { h == 0 -> "$m min"; m == 0 -> "$h h"; else -> "$h h $m min" }
     }
@@ -1887,7 +1473,7 @@ class MainActivity : Activity() {
      * ([DESCRICAO_APPS]); para app novo, a categoria que ele declara no idioma da TV (ex.: "Vídeo"); sem nada, "App".
      * (Medido: YouTube, Netflix e cia. não declaram categoria, por isso a tabela.)
      */
-    private fun subApp(pacote: String, nome: String): String {
+    internal fun subApp(pacote: String, nome: String): String {
         // Ideia 13 (14/11/2026): entre a frase à mão e a categoria, a ficha do painel (FrasesApps decide).
         val c = categoria(pacote)
         return FrasesApps.escolher(pacote, nome, DESCRICAO_APPS[pacote]?.let { getString(it) }, fichasHome,
@@ -1903,7 +1489,7 @@ class MainActivity : Activity() {
         return (b to cores).also { capas[pacote] = it }
     }
 
-    private fun mostrarCapaDoApp(pacote: String, icone: Drawable?) {
+    internal fun mostrarCapaDoApp(pacote: String, icone: Drawable?) {
         capaPedida = pacote
         val pronta = capas[pacote]
         if (pronta != null) { capa.mostrar(pronta.first, if (pronta.first == null) pronta.second else null); return }
@@ -1914,7 +1500,7 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun preencherContinuar() {
+    internal fun preencherContinuar() {
         filaApps.execute {
             val temTv = PlayerArmazem.temContas(this)
             val ultimo = if (temTv) PlayerArmazem.ultimo(this)?.takeIf { ultimoLiberado(it) }?.let { programasDeAgora(it) } else null
@@ -1937,7 +1523,6 @@ class MainActivity : Activity() {
             // plugin permitido, cartoes() volta na hora; com plugin, cada um tem 2 s de prazo (aqui, fora da tela).
             val novos = PluginsTv.cartoes(this)
             if (novos != cartoesPlugin) { cartoesPlugin = novos; ui.post { if (!isDestroyed) desenharContinuar(temTv, temVod, ultimo) } }
-            montarCapasAtalho()
             carregarArte(IconeApp.Tipo.FILMES, filme)
             carregarArte(IconeApp.Tipo.SERIES, serie)
         }
@@ -1996,52 +1581,16 @@ class MainActivity : Activity() {
         ui.post { if (!isDestroyed && currentFocus?.getTag(R.id.tag_capa_atalho) == tipo) mostrarCapaAtalho(tipo) }
     }
 
-    /**
-     * Monta (fora da tela) o fundo dos quatro cards de Assistir: o ícone grande sobre o degradê da cor do card.
-     * 12/11/2026, dono: "Quero o filmes e séries sem esse negócio da capa e zoom. Deixa como os outros cards mesmo." Saiu a
-     * cena (backdrop) do último título com zoom lento e troca a cada 7 s; Séries e Filmes ficam iguais a TV e Na rede.
-     */
-    private fun montarCapasAtalho() {
-        if (capasAtalho.size == 5) return   // não depende de nada que mude: monta uma vez
-        if (montandoCapas) return
-        montandoCapas = true
-        Fundo.rodar("CapasAtalho") {
-            try {
-                fun montar(tipo: IconeApp.Tipo, cores: IntArray) {
-                    capasAtalho[tipo] = "" to listOf(CapaAtalho.montar(cores, tipo, null))
-                }
-                montar(IconeApp.Tipo.TV, CapaFoco.CORES_TV)
-                montar(IconeApp.Tipo.SERIES, CORES_SERIES)
-                montar(IconeApp.Tipo.FILMES, CORES_FILMES)
-                montar(IconeApp.Tipo.REDE, CORES_REDE)
-                montar(IconeApp.Tipo.JOGOS, CORES_JOGOS)
-                montar(IconeApp.Tipo.OUVIR, CORES_OUVIR)
-                // O card já em foco quando a capa ficou pronta: troca o degradê pelo ícone na hora.
-                ui.post { if (!isDestroyed) (currentFocus?.getTag(R.id.tag_capa_atalho) as? IconeApp.Tipo)?.let { mostrarCapaAtalho(it) } }
-            } finally { montandoCapas = false }
-        }
-    }
-
     /** Fundo de um card de Assistir: o ícone grande, ou o degradê da cor enquanto ele não fica pronto. Parado, sem zoom. */
-    private fun mostrarCapaAtalho(tipo: IconeApp.Tipo) {
+    internal fun mostrarCapaAtalho(tipo: IconeApp.Tipo) {
         capaPedida = null
         // Jogos: o banner (logo oficial) do jogo usado por último, como o de um app em foco. Sem jogo usado, o controle.
         if (tipo == IconeApp.Tipo.JOGOS) ultimoJogo?.first?.let { p -> capas[p]?.first?.let { capa.mostrar(it, null); return } }
         // Séries e Filmes: a arte do último título, grande à direita (12/11/2026). Sem arte, o ícone como os outros.
         arteAtalho[tipo]?.second?.let { capa.mostrar(it, null, arte = true); return }
-        // Na cruz, sem arte não vai o ícone gigante esmaecido atrás do foco (crítica de design 19/11/2026: cruzava o eixo
+        // Sem arte não vai o ícone gigante esmaecido atrás do foco (crítica de design 19/11/2026: cruzava o eixo
         // e encostava no mundo da direita). Fica o fundo limpo.
-        if (LayoutHome.cruz(this)) { capa.esconder(); return }
-        val img = capasAtalho[tipo]?.second?.firstOrNull()
-        val cores = when (tipo) {
-            IconeApp.Tipo.SERIES -> CORES_SERIES
-            IconeApp.Tipo.FILMES -> CORES_FILMES
-            IconeApp.Tipo.REDE -> CORES_REDE
-            IconeApp.Tipo.JOGOS -> CORES_JOGOS
-            IconeApp.Tipo.OUVIR -> CORES_OUVIR
-            else -> CapaFoco.CORES_TV
-        }
-        capa.mostrar(img, if (img == null) cores else null)
+        capa.esconder()
     }
 
     /**
@@ -2058,212 +1607,20 @@ class MainActivity : Activity() {
         return PlayerFiltro.ultimoPodeAparecer(u.id, canais.firstOrNull { it.id == u.id }, ocultas, parental)
     }
 
+    /** O que preencherContinuar leu (TV, Séries/Filmes, último canal) chega à cruz, na thread da tela. */
     private fun desenharContinuar(temTv: Boolean, temVod: Boolean, ultimo: PlayerArmazem.Ultimo?) {
-        if (emCruz) { ultimoTv = ultimo; cruzTemTv = temTv; cruzTemVod = temVod; cruzContinuarLido = true; atualizarCruz(); return }
-        val focoAqui = linhaContinuar.hasFocus()
-        linhaContinuar.removeAllViews()
-        // quadrado = true: os atalhos (TV, Séries, Filmes, Na rede). Desde 12/11/2026 (dono) eles têm o tamanho e o
-        // passo dos apps da linha de baixo (RET_L x RET_A), e cada card fica em cima de um app. O nome ficou para não mexer
-        // em quem chama.
-        fun adicionar(v: View, quadrado: Boolean = false) = linhaContinuar.addView(v,
-            if (quadrado) LinearLayout.LayoutParams(dp(RET_L), dp(RET_A)).apply { marginEnd = dp(2 * ANEL + 4) }
-            else LinearLayout.LayoutParams(dp(Grade.CARD_LARGURA), dp(Grade.CARD_ALTURA)).apply { marginEnd = dp(Grade.VAO) })
-        ultimoTv = ultimo
-        if (currentFocus?.tag == TOKEN_TV) destaqueTv()   // o card da TV já em foco: agora com o programa de agora
-        // Esboço do dono (06/11 noite): "a home já é parte do player". Os 3 primeiros lugares são TV (os canais), Séries e
-        // Filmes (cada um abre só o seu catálogo); depois vem o Continuar de sempre.
-        if (temTv) adicionar(cartaoAtalho(getString(R.string.home_card_tv), IconeApp.Tipo.TV, CapaFoco.CORES_TV,
-            { destaqueTv(); mostrarCapaAtalho(IconeApp.Tipo.TV) }) { abrirTv() }.apply { tag = TOKEN_TV }, quadrado = true)
-        if (temVod) {
-            adicionar(cartaoAtalho(getString(R.string.home_card_series), IconeApp.Tipo.SERIES, CORES_SERIES, {
-                destaqueVod(serie = true)
-                mostrarCapaAtalho(IconeApp.Tipo.SERIES)
-            }) { abrirCatalogo(SeriesActivity::class.java) }, quadrado = true)
-            adicionar(cartaoAtalho(getString(R.string.home_card_filmes), IconeApp.Tipo.FILMES, CORES_FILMES, {
-                destaqueVod(serie = false)
-                mostrarCapaAtalho(IconeApp.Tipo.FILMES)
-            }) { abrirCatalogo(FilmesActivity::class.java) }, quadrado = true)
-        }
-        // Mídias da rede (07/11): sempre presente, logo depois de Filmes. Não depende de conta de TV.
-        adicionar(cartaoAtalho(getString(R.string.home_card_rede), IconeApp.Tipo.REDE, CORES_REDE, {
-            mostrarDestaque(null, getString(R.string.home_card_rede), getString(R.string.home_destaque_rede))
-            mostrarCapaAtalho(IconeApp.Tipo.REDE)
-        }) { abrirCatalogo(MidiaRedeActivity::class.java) }, quadrado = true)   // quadrado também (dono, 07/11)
-        // Ouvir (17/11/2026, Paulo escolheu "cartão próprio"): rádio + podcasts. Com um episódio tocando, abre os podcasts.
-        if (Extras.ligado(this, Extras.Chave.CARD_OUVIR)) adicionar(cartaoAtalho(getString(R.string.home_card_ouvir), IconeApp.Tipo.OUVIR, CORES_OUVIR, {
-            mostrarDestaque(null, getString(R.string.home_card_ouvir), getString(R.string.home_destaque_ouvir))
-            mostrarCapaAtalho(IconeApp.Tipo.OUVIR)
-        }) { abrirCatalogo(if (tocandoNosso && tipoNosso == "podcast") PodcastsActivity::class.java else RadioActivity::class.java) }, quadrado = true)
-        // Jogos (14/11/2026, dono): sempre presente, depois de Na rede; os apps de jogo saem da linha de apps.
-        if (JogosTv.cardLigado(this)) adicionar(cartaoAtalho(getString(R.string.home_card_jogos), IconeApp.Tipo.JOGOS, CORES_JOGOS, {
-            mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
-            mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
-        }) { abrirCatalogo(JogosActivity::class.java) }, quadrado = true)
-        // Addons (16/11/2026, estudo do Stremio): só aparece com pelo menos um addon instalado (painel web ou Configurações).
-        if (AddonsTv.instalados(this).isNotEmpty()) adicionar(cartaoAtalho(getString(R.string.ad_titulo), IconeApp.Tipo.FILMES, CORES_REDE, {
-            mostrarDestaque(null, getString(R.string.ad_titulo), getString(R.string.ad_destaque))
-        }) { abrirCatalogo(AddonsActivity::class.java) }, quadrado = true)
-        // Plugins de terceiros (degrau 3): no fim da linha, no máximo 3, desenhados por NÓS com os dados que o plugin mandou.
-        for (c in cartoesPlugin) adicionar(cartaoPlugin(c), quadrado = true)
-        rotuloContinuar?.text = getString(if (JogosTv.cardLigado(this)) R.string.home_linha_continuar_jogos else R.string.home_linha_continuar)
-        // O card Buscar saiu (12/11/2026, dono): a lupa do topo abre a mesma busca única, e a linha ganha espaço.
-        // O card "AO VIVO · Canal N" saiu (10/11/2026): abria o mesmo player, no mesmo último canal, que o card TV.
-        caixaContinuar.visibility = if (linhaContinuar.childCount > 0) View.VISIBLE else View.GONE
-        prenderEsquerda(linhaContinuar.getChildAt(0))
-        prenderDireita(linhaContinuar.getChildAt(linhaContinuar.childCount - 1))
-        // A HOME abre com o foco no card TV (dono, 06/11 noite: "a home já é parte do player"). Só na abertura: voltando de
-        // um app, o foco fica onde estava.
-        if (focoInicialNaTv) {
-            focoInicialNaTv = false
-            // return: o else-if lá embaixo ("foco no Continuar -> volta aos apps") tirava o foco do TV na hora (visto na Sala).
-            if (temTv && atalhoAberto < 0) { linhaContinuar.getChildAt(0)?.requestFocus(); return }
-        }
-        if (atalhoAberto >= 0) {
-            (linhaContinuar.getChildAt(atalhoAberto) ?: linhaApps.getChildAt(indiceFoco.coerceAtLeast(0)))?.requestFocus()
-            atalhoAberto = -1
-        } else if (focoAqui) linhaContinuar.getChildAt(0)?.requestFocus() ?: linhaApps.requestFocus()
-        // Ao voltar de um app, o foco é da linha de apps (visto na Sala: voltando do player, ele caía no Continuar).
-        else if (linhaContinuar.hasFocus()) linhaApps.getChildAt(indiceFoco.coerceAtLeast(0))?.requestFocus()
+        ultimoTv = ultimo; cruzTemTv = temTv; cruzTemVod = temVod; cruzContinuarLido = true
+        atualizarCruz()
     }
-
-    /** Card 16:9 do Continuar: o banner (ou o ícone no meio, ou o coral da TV), com o nome num selo embaixo. */
-    private fun cartaoContinuar(nome: String, banner: Bitmap?, icone: Drawable?, aoVivo: Boolean, aoFocar: () -> Unit, aoAbrir: () -> Unit): View =
-        FrameLayout(this).apply {
-            isFocusable = true
-            isClickable = true
-            clipToOutline = true
-            outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(v: View, o: Outline) = o.setRoundRect(0, 0, v.width, v.height, dp(10).toFloat())
-            }
-            background = if (aoVivo) GradientDrawable(GradientDrawable.Orientation.TL_BR, CapaFoco.CORES_TV)
-                else ColorDrawable(0xFF1B2029.toInt())
-            when {
-                banner != null -> addView(ImageView(this@MainActivity).apply {
-                    setImageBitmap(banner); scaleType = ImageView.ScaleType.CENTER_CROP
-                }, FrameLayout.LayoutParams(MATCH, MATCH))
-                icone != null -> addView(ImageView(this@MainActivity).apply { setImageDrawable(icone) },
-                    FrameLayout.LayoutParams(dp(56), dp(56), Gravity.CENTER))
-            }
-            addView(TextView(this@MainActivity).apply {
-                text = if (aoVivo) "● " + getString(R.string.player_ao_vivo) + "\n" + nome else nome
-                setTextColor(Color.WHITE)
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, if (aoVivo) 14f else 11f)
-                typeface = fonteUi
-                maxLines = if (aoVivo) 3 else 1
-                ellipsize = TextUtils.TruncateAt.END
-                setPaddingRelative(dp(8), dp(3), dp(8), dp(3))
-                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF121528.toInt()) }
-            }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
-                setMargins(dp(8), dp(8), dp(8), dp(8))
-            })
-            contentDescription = nome   // idem: o MCP acha o card pelo nome
-            setOnClickListener { aoAbrir() }
-            setOnFocusChangeListener { v, temFoco ->
-                v.foreground = if (temFoco) GradientDrawable().apply {
-                    cornerRadius = dp(10).toFloat(); setStroke(dp(3), CorDoFundo.foco(context, Color.WHITE))   // cor do fundo, se ligada
-                } else null
-                val e = if (temFoco) 1.06f else 1f
-                v.animate().scaleX(e).scaleY(e).setDuration(120).start()
-                if (temFoco) aoFocar()
-            }
-        }
-
-    /** Card fixo do começo do Continuar (TV, Séries, Filmes): degradê da cor dele, símbolo e nome grandes embaixo. */
-    /**
-     * Card de atalho do Continuar (TV, Séries, Filmes, Na rede) no sistema de design (10/11/2026): a cor de cada um vira
-     * um matiz escuro (Estilo.matiz), o emoji vira ícone de linha, cantos de 16 dp e o foco padrão dos cards (cresce 8%,
-     * anel de 3 dp; a cor do anel segue a opção "cor do fundo", se ligada).
-     */
-    private fun cartaoAtalho(nome: String, icone: IconeApp.Tipo, cores: IntArray, aoFocar: () -> Unit, aoAbrir: () -> Unit): View =
-        FrameLayout(this).apply {
-            isFocusable = true
-            isClickable = true
-            clipToOutline = true
-            outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(v: View, o: Outline) = o.setRoundRect(0, 0, v.width, v.height, dp(Estilo.RAIO).toFloat())
-            }
-            background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(Estilo.matiz(cores[0], 0.55f), Estilo.matiz(cores[1], 0.45f)))
-            foregroundGravity = Gravity.FILL
-            addView(ImageView(this@MainActivity).apply { setImageDrawable(IconeApp(icone, 0xD9FFFFFF.toInt())) },
-                FrameLayout.LayoutParams(dp(16), dp(16), Gravity.TOP or Gravity.END).apply { setMargins(dp(8), dp(8), dp(10), dp(8)) })
-            addView(TextView(this@MainActivity).apply {
-                text = nome
-                setTextColor(Estilo.TEXTO)
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)   // 15: cabe no card de 112 x 63 dp (o tamanho dos apps)
-                typeface = Estilo.fonte(600)
-                includeFontPadding = false
-                maxLines = 1
-            }, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(12), dp(8), dp(8), dp(10)) })
-            setTag(R.id.tag_capa_atalho, icone)   // montarCapasAtalho: qual capa trocar se este card já estiver em foco
-            setOnClickListener { aoAbrir() }
-            setOnFocusChangeListener { v, temFoco ->
-                v.foreground = if (temFoco) GradientDrawable().apply {
-                    cornerRadius = dp(Estilo.RAIO).toFloat(); setStroke(dp(3), CorDoFundo.foco(context, Estilo.FOCO))   // cor do fundo, se ligada
-                } else null
-                val e = if (temFoco) Estilo.ESCALA_CARD else 1f
-                v.animate().scaleX(e).scaleY(e).translationZ(if (temFoco) dp(8).toFloat() else 0f).setDuration(Estilo.FOCO_MS).start()
-                if (temFoco) aoFocar()
-            }
-        }
 
     /** Cartões dos plugins permitidos (PluginsTv), da última leitura na filaApps. */
-    @Volatile private var cartoesPlugin: List<PluginCartao.Cartao> = emptyList()
-
-    /**
-     * O cartão de um plugin: do tamanho de um app, na cor que o plugin pediu (sempre opaca), com o VALOR grande no meio
-     * (letra grande: "2 x 1", "18°") e o título embaixo. O detalhe vai para o destaque quando o cartão ganha o foco.
-     */
-    private fun cartaoPlugin(c: PluginCartao.Cartao): View = FrameLayout(this).apply {
-        isFocusable = true
-        isClickable = true
-        contentDescription = listOf(c.titulo, c.valor).filter { it.isNotEmpty() }.joinToString(": ")
-        clipToOutline = true
-        outlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(v: View, o: Outline) = o.setRoundRect(0, 0, v.width, v.height, dp(Estilo.RAIO).toFloat())
-        }
-        background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(Estilo.matiz(c.cor, 0.6f), Estilo.matiz(c.cor, 0.4f)))
-        if (c.valor.isNotEmpty()) addView(TextView(this@MainActivity).apply {
-            text = c.valor
-            setTextColor(Estilo.TEXTO)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-            typeface = Estilo.fonte(700)
-            includeFontPadding = false
-            maxLines = 1
-            ellipsize = android.text.TextUtils.TruncateAt.END
-        }, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.TOP or Gravity.START).apply { setMargins(dp(12), dp(10), dp(8), dp(8)) })
-        addView(TextView(this@MainActivity).apply {
-            text = c.titulo
-            setTextColor(Estilo.TEXTO)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-            typeface = Estilo.fonte(600)
-            includeFontPadding = false
-            maxLines = 1
-            ellipsize = android.text.TextUtils.TruncateAt.END
-        }, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(12), dp(8), dp(8), dp(10)) })
-        setOnClickListener { PluginsTv.abrir(this@MainActivity, c) }
-        setOnFocusChangeListener { v, temFoco ->
-            v.foreground = if (temFoco) GradientDrawable().apply {
-                cornerRadius = dp(Estilo.RAIO).toFloat(); setStroke(dp(3), CorDoFundo.foco(context, Estilo.FOCO))
-            } else null
-            val e = if (temFoco) Estilo.ESCALA_CARD else 1f
-            v.animate().scaleX(e).scaleY(e).translationZ(if (temFoco) dp(8).toFloat() else 0f).setDuration(Estilo.FOCO_MS).start()
-            if (temFoco) {
-                mostrarDestaque(null, c.titulo.ifEmpty { c.valor }, c.detalhe.ifEmpty { null })
-                capaPedida = null
-                capa.mostrar(null, intArrayOf(Estilo.matiz(c.cor, 0.6f), Estilo.matiz(c.cor, 0.35f)))
-            }
-        }
-    }
-
-    /** "ASSISTIR" ou "ASSISTIR E JOGAR" (com o card Jogos), em cima da linha dos atalhos. */
-    private var rotuloContinuar: TextView? = null
+    @Volatile internal var cartoesPlugin: List<PluginCartao.Cartao> = emptyList()
 
     /** Quantos apps de jogo a TV tem (lido em preencherApps, fora da tela). */
     @Volatile private var jogosNaTv = 0
     /** pacote e nome do jogo usado por último (UsageStats), ou null. Lido em preencherApps. */
     @Volatile private var ultimoJogo: Pair<String, String>? = null
 
-    /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
     /** Linha de baixo do item "Sofá": a turma do Discord (última vista na tela Jogos) ou os controles ligados. */
     private fun resumoSofa(): String {
         val t = (TurmaDiscordTv.guardado(this) as? TurmaDiscordTv.Estado.Pronta)?.turma
@@ -2276,385 +1633,41 @@ class MainActivity : Activity() {
         return if (controles > 0) resources.getQuantityString(R.plurals.jogos_controles, controles, controles) else getString(R.string.cruz_sofa_sub)
     }
 
-    private fun resumoJogos(): String {
-        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
-        if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
-        val partes = mutableListOf(resources.getQuantityString(R.plurals.jogos_qtd, jogosNaTv, jogosNaTv))
-        ultimoJogo?.second?.let { partes.add(0, getString(R.string.home_jogos_ultimo, it)) }
-        if (controles > 0) partes += resources.getQuantityString(R.plurals.jogos_controles, controles, controles)
-        return partes.joinToString(" · ")
-    }
-
     /** true até o 1º desenho do Continuar nesta abertura da HOME (ver desenharContinuar). */
-    private var focoInicialNaTv = true
+    internal var focoInicialNaTv = true
 
-    /** ◀ e ▶ presos nas bordas: na fileira, o 1º e o último card; na grade, o 1º e o último de cada fileira. */
-    private fun prenderBordas() {
-        val n = linhaApps.childCount
-        if (n == 0) return
-        val cols = (linhaApps as? GradeApps)?.colunas ?: n
-        for (i in 0 until n) {
-            if (i % cols == 0) prenderEsquerda(linhaApps.getChildAt(i))
-            if (i % cols == cols - 1 || i == n - 1) prenderDireita(linhaApps.getChildAt(i))
-        }
-    }
-
-    /** ◀ no 1º card de uma linha não sai dela (antes o foco fugia para o relógio, lá em cima). */
-    private fun prenderEsquerda(v: View?) {
-        if (v == null) return
-        if (v.id == View.NO_ID) v.id = View.generateViewId()
-        v.nextFocusLeftId = v.id
-    }
-
-    /** ▶ no último card de uma linha não sai dela (teste de 15/11/2026: o foco pulava para o relógio, lá em cima). */
-    private fun prenderDireita(v: View?) {
-        if (v == null) return
-        if (v.id == View.NO_ID) v.id = View.generateViewId()
-        v.nextFocusRightId = v.id
-    }
-
-    /** Qual card fixo do Continuar (0 TV, 1 Séries, 2 Filmes) foi aberto: ao voltar, o foco volta nele. -1 = nenhum. */
-    private var atalhoAberto = -1
-
-    /** A busca única roda no processo da HOME (só lê os caches). Ao voltar, o foco volta no card Buscar. */
+    /** A busca única roda no processo da HOME (só lê os caches). */
     private fun abrirBusca() {
-        atalhoAberto = linhaContinuar.indexOfChild(currentFocus)
         try { startActivity(Intent(this, BuscaActivity::class.java)) }
         catch (e: Exception) { android.util.Log.w("TvLauncher.Busca", "não abriu: ${e.javaClass.simpleName}") }
     }
 
     /** Abre só um catálogo do player (Séries ou Filmes), no processo dele; o VOLTAR de lá cai de novo na HOME. */
-    private fun abrirCatalogo(tela: Class<out Activity>) {
-        atalhoAberto = linhaContinuar.indexOfChild(currentFocus)
+    internal fun abrirCatalogo(tela: Class<out Activity>) {
         try { startActivity(Intent(this, tela)) }
         catch (e: Exception) { android.util.Log.w("TvLauncher.Player", "não abriu ${tela.simpleName}: ${e.javaClass.simpleName}") }
     }
 
-    /** O nome embaixo do disco (filho 1 do card, ver [montarCartao]). */
-    private fun nomeDoCartao(card: View): TextView? = (card as? ViewGroup)?.getChildAt(1) as? TextView
-
-    /** O disco da TV ao vivo: coral (a cor do "ao vivo" nos esboços) com "TV" no meio. */
-    private fun miniaturaTv(): View = TextView(this).apply {
-        text = "TV"
-        textSize = 19f   // disco de 56 dp (layout Palco)
-        typeface = Fontes.nunito(600)
-        setTextColor(Color.WHITE)
-        gravity = Gravity.CENTER
-        background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(0xFFFF7A6E.toInt(), 0xFFC0392B.toInt()))
-        DesenhoHome.circular(this)
-    }
-
     /** Abre o player (processo próprio, ver PlayerActivity) no último canal assistido. */
-    private fun abrirTv() {
-        atalhoAberto = linhaContinuar.indexOfChild(currentFocus)
+    internal fun abrirTv() {
         try { startActivity(Intent(this, PlayerActivity::class.java)) }
         catch (e: Exception) { android.util.Log.w("TvLauncher.Player", "não abriu o player: ${e.javaClass.simpleName}") }
     }
 
-    /** O app num retângulo 16:9 (esboço do dono, 06/11 noite). */
-    private fun miniaturaApp(app: Item): View = retanguloDoApp(app)
-
-    /**
-     * Retângulo do app: a arte de banner dele (a mesma da capa, já lida fora da tela em preencherApps). Sem banner, a cor
-     * do ícone com o ícone e o nome dentro.
-     */
-    private fun retanguloDoApp(app: Item): View = FrameLayout(this).apply {
-        val (banner, cores) = capas[app.pacote] ?: (null to intArrayOf(0xFF2B2F3A.toInt(), Estilo.FUNDO))
-        DesenhoHome.arredondar(this, dp(10).toFloat())
-        if (banner != null) {
-            addView(ImageView(this@MainActivity).apply {
-                setImageBitmap(banner); scaleType = ImageView.ScaleType.CENTER_CROP
-            }, FrameLayout.LayoutParams(MATCH, MATCH))
-        } else {
-            background = GradientDrawable(GradientDrawable.Orientation.TL_BR, cores)
-            addView(LinearLayout(this@MainActivity).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-                setPaddingRelative(dp(8), 0, dp(6), 0)
-                addView(ImageView(this@MainActivity).apply { setImageDrawable(DesenhoHome.copia(resources, app.icone)) }, LinearLayout.LayoutParams(dp(30), dp(30)))
-                addView(texto(12f, Color.WHITE, fonteUi).apply {
-                    text = app.nome
-                    maxLines = 2
-                    ellipsize = TextUtils.TruncateAt.END
-                    typeface = Typeface.create(fonteUi, Typeface.BOLD)
-                }, LinearLayout.LayoutParams(0, WRAP, 1f).apply { marginStart = dp(6) })
-            }, FrameLayout.LayoutParams(MATCH, MATCH))
-        }
-    }
-
-    private fun discoDoApp(app: Item): ImageView = ImageView(this).apply {
-        setImageDrawable(DesenhoHome.copia(resources, app.icone))
-        scaleType = ImageView.ScaleType.CENTER_CROP
-        DesenhoHome.circular(this)
-    }
-
-    /**
-     * Pilha: o disco do app da [frente] na frente e até 2 atrás, deslocados para cima e para a direita (como cartas).
-     * Embaixo, o selo "▲▼ 1/3": a pilha tem vários apps e as setas trocam qual fica na frente. O nome é o do app da frente.
-     */
-    private fun miniaturaPilha(itens: List<Item>, frente: Int): View {
-        val camadas = (listOf(itens[frente]) + itens.filterIndexed { i, _ -> i != frente }).take(3)
-        val caixa = FrameLayout(this).apply { clipChildren = false }
-        for (i in camadas.indices.reversed()) {   // de trás para a frente: o último adicionado fica por cima
-            val ret = retanguloDoApp(camadas[i]).apply {
-                alpha = if (i == 0) 1f else 0.7f - 0.25f * (i - 1)   // as de trás mais apagadas
-            }
-            caixa.addView(ret, FrameLayout.LayoutParams(MATCH, MATCH).apply {
-                marginStart = dp(6) * i
-                topMargin = -dp(4) * i
-                marginEnd = -dp(6) * i
-                bottomMargin = dp(4) * i
-            })
-        }
-        caixa.addView(IndicadorPilha(this),
-            FrameLayout.LayoutParams(dp(IndicadorPilha.LARGURA_DP), dp(IndicadorPilha.ALTURA_DP), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
-                bottomMargin = -dp(8)
-            })
-        return caixa
-    }
-
-    private fun miniaturaOcultos(nome: String): View = FrameLayout(this).apply {
-        background = GradientDrawable().apply { cornerRadius = dp(10).toFloat(); setColor(0x26FFFFFF) }
-        addView(texto(12f, Color.WHITE, fonteUi).apply {
-            text = "🙈  $nome"
-            gravity = Gravity.CENTER
-            maxLines = 2
-        }, FrameLayout.LayoutParams(MATCH, MATCH))
-    }
-
-    /**
-     * Rola [barra] so o necessario para o card focado caber entre as margens da grade. Assim os cards ficam sempre
-     * nas colunas: com 4 ou menos nada se mexe; com mais, a fila anda um card por vez.
-     */
-    private fun centralizar(card: View, barra: HorizontalScrollView) {
-        val esquerda = card.left - barra.scrollX
-        val direita = card.right - barra.scrollX
-        val minimo = barra.paddingLeft
-        val maximo = barra.width - barra.paddingRight
-        when {
-            esquerda < minimo -> barra.smoothScrollBy(esquerda - minimo, 0)
-            direita > maximo -> barra.smoothScrollBy(direita - maximo, 0)
-        }
-    }
-
-    // ---------------------------------------------------------------- ▼ numa pilha: trocar o app da frente
-
-    /**
-     * Num card de pilha, ▼ troca o app da frente para o próximo (dá a volta; segurar ▼ não gira a pilha inteira).
-     * ▲ e o resto seguem o caminho normal do foco. Em card solto não faz nada.
-     */
-    private fun trocarDaFrente(event: KeyEvent): Boolean {
-        // 15/11/2026 (teste de todas as funções): ▲ numa pilha trocava o app da frente em vez de subir de fileira; quem
-        // queria ir para TV/Filmes ficava preso, e duas sessões de teste caíram nisso (uma abriu a Netflix sem querer).
-        // Agora ▲ sobe como em qualquer card e só ▼ troca o app da frente: a fileira de apps é a última, ▼ não tinha uso.
-        if (event.keyCode != KeyEvent.KEYCODE_DPAD_DOWN) return false
-        val atual = currentFocus ?: return false
-        val token = atual.tag as? String ?: return false
-        val pilha = lista.firstOrNull { it.token == token } as? Entrada.Pilha ?: return false
-        // Grade (LayoutHome): com uma fileira embaixo, ▼ desce para ela; só troca o app da frente na última fileira.
-        if (gradeDosApps && atual.focusSearch(View.FOCUS_DOWN)?.let { dentro(it, linhaApps) } == true) return false
-        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) girarPilha(pilha, +1)
-        return true
-    }
-
-    /** Troca o app da frente da [pilha] em [passo] (+1 proximo, -1 anterior) e redesenha so aquele card. */
-    private fun girarPilha(pilha: Entrada.Pilha, passo: Int) {
-        val total = pilha.itens.size
-        val novo = (pilha.frente + passo + total) % total   // % da a volta; "+ total" evita numero negativo
-        Organizacao.definirFrente(this, pilha.id, pilha.itens[novo].pacote)
-        val posicao = lista.indexOf(pilha)
-        val nova = Entrada.Pilha(pilha.id, pilha.itens, novo)
-        lista[posicao] = nova
-        // Poe o card novo ANTES de tirar o velho: tirar o card com foco faria o Android jogar o foco para o 1o card.
-        val vista = criarCartao(nova)
-        linhaApps.addView(vista, posicao)
-        vista.requestFocus()
-        linhaApps.removeViewAt(posicao + 1)
-        prenderBordas()   // ◀ no 1º card (de cada fileira, na grade) e ▶ no último não escapam para o topo (home-7)
-        ultimaAssinatura = null   // a linha mudou por fora do desenhar(): o próximo desenho refaz tudo
-    }
-
-    // ---------------------------------------------------------------- pastas (apps ocultos e "remover do grupo")
-
-    private var pasta: Dialog? = null
-    private var pastaToken: String? = null   // qual pasta está aberta: TOKEN_OCULTOS ou "pilha:<id>" (modo remover)
-
-    /**
-     * Abre uma janela por cima da tela inicial, como uma pasta. Voltar fecha.
-     * Com [remover], é a lista dos apps de uma pilha: OK num app pede confirmação para tirá-lo do grupo.
-     */
-    private fun abrirPasta(entrada: Entrada, remover: Boolean = false) {
-        val itens = when (entrada) {
-            is Entrada.Pilha -> entrada.itens
-            is Entrada.Ocultos -> entrada.itens
-            is Entrada.App, is Entrada.Tv -> return
-        }
-        fecharPasta()
-        val linha = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            clipChildren = false
-        }
-        val barra = HorizontalScrollView(this).apply {
-            clipChildren = false
-            clipToPadding = false
-            isHorizontalScrollBarEnabled = false
-            setPaddingRelative(dp(56), dp(24), dp(56), dp(24))
-            addView(linha)
-        }
-        for (app in itens) {
-            linha.addView(montarCartao(app.pacote, app.nome, miniaturaApp(app),
-                {
-                    if (remover && entrada is Entrada.Pilha) confirmarRemocao(app, entrada)
-                    else { fecharPasta(); abrir(app.pacote) }
-                },
-                { v -> centralizar(v, barra) }))
-        }
-        val ehOcultos = entrada is Entrada.Ocultos
-        val conteudo = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER
-            addView(texto(24f, Color.WHITE, fonteLeve).apply {
-                text = if (ehOcultos) getString(R.string.cfg_sec_ocultos) else getString(R.string.home_qual_sai)
-                gravity = Gravity.CENTER
-                maxLines = 1
-                ellipsize = TextUtils.TruncateAt.END
-                setPaddingRelative(dp(56), 0, dp(56), 0)
-            }, LinearLayout.LayoutParams(MATCH, WRAP))
-            addView(barra, LinearLayout.LayoutParams(MATCH, WRAP))
-            addView(texto(13f, textoSuave).apply {
-                text = if (ehOcultos) getString(R.string.home_ocultos_dica)
-                       else getString(R.string.home_remover_dica)
-                gravity = Gravity.CENTER
-            }, LinearLayout.LayoutParams(MATCH, WRAP))
-        }
-        val janela = Dialog(this, android.R.style.Theme_Translucent_NoTitleBar)
-        janela.setContentView(conteudo)
-        janela.window?.apply {
-            setBackgroundDrawable(ColorDrawable(0xF70E1311.toInt()))   // escurece a tela inicial por trás
-            setLayout(MATCH, MATCH)
-        }
-        // A janela tem as próprias teclas: o "segurar OK" (nos ocultos) precisa ser detectado aqui também.
-        janela.setOnKeyListener { _, _, ev -> tratarSegurar(ev, janela.currentFocus) }
-        janela.setOnDismissListener {
-            if (pasta === janela) { pasta = null; pastaToken = null }
-        }
-        pasta = janela
-        pastaToken = entrada.token
-        janela.show()
-        barra.post { linha.getChildAt(0)?.requestFocus() }
-    }
-
-    private fun fecharPasta() {
-        pasta?.dismiss()
-        pasta = null
-        pastaToken = null
-    }
-
-    /** Pergunta antes de tirar [app] da [pilha]. O foco começa em "Cancelar": confirmar exige escolher "Remover". */
-    private fun confirmarRemocao(app: Item, pilha: Entrada.Pilha) {
-        val dialogo = CaixaTv(this)
-            .setTitle(getString(R.string.home_remover_titulo, app.nome))
-            .setMessage(getString(R.string.home_remover_msg))
-            .setNegativeButton(getString(R.string.comum_cancelar), null)
-            .setPositiveButton(getString(R.string.home_remover)) { _, _ ->
-                Organizacao.tirarDaPilha(this, app.pacote)
-                fecharPasta()
-                reorganizar()
-                // Se a pilha ainda existe (ficou com 2+ apps), reabre a lista para tirar mais um; senão ela se desfez.
-                val restante = lista.firstOrNull { it is Entrada.Pilha && it.id == pilha.id }
-                if (restante is Entrada.Pilha) {
-                    ultimoToken = restante.token
-                    abrirPasta(restante, remover = true)
-                } else {
-                    ultimoToken = app.pacote
-                }
-            }
-            .show()
-        dialogo.getButton(AlertDialog.BUTTON_NEGATIVE)?.requestFocus()
-        menuAberto = dialogo
-    }
 
     // ---------------------------------------------------------------- menu (segure OK em uma pilha)
 
-    private class Opcao(val rotulo: String, val acao: () -> Unit)
+    internal class Opcao(val rotulo: String, val acao: () -> Unit)
 
-    private var menuAberto: android.app.Dialog? = null
-    private var engolirUp = false   // true entre o "segurar OK" e o menu fechar: o "soltar" da mesma pressão não pode virar clique
+    internal var menuAberto: android.app.Dialog? = null
 
-    /**
-     * Segurar OK (ou ENTER) num card. Detectamos o "segurar" pelo repeatCount: o Android repete a tecla
-     * enquanto ela está pressionada. O que acontece depende de onde:
-     *  - app solto: menu (Mover, Ocultar da tela inicial, Desinstalar; ver MenuApp);
-     *  - pilha: abre o menu (Mover, Remover cards do grupo);
-     *  - app dentro da pasta "Ocultos": menu com "Mostrar na tela inicial" (e Desinstalar).
-     * Devolve true se o evento foi tratado aqui.
-     */
-    private fun tratarSegurar(event: KeyEvent, focado: View?): Boolean {
-        if (event.keyCode != KeyEvent.KEYCODE_DPAD_CENTER && event.keyCode != KeyEvent.KEYCODE_ENTER) return false
-        if (engolirUp) {   // o menu está abrindo: ignora as repetições e o "soltar" da mesma pressão
-            if (event.action == KeyEvent.ACTION_UP) engolirUp = false
-            return true
-        }
-        val segurado = event.repeatCount >= 1 || (event.flags and KeyEvent.FLAG_LONG_PRESS) != 0
-        if (event.action != KeyEvent.ACTION_DOWN || !segurado) return false
-        val token = focado?.tag as? String ?: return false   // só os cards têm tag
-        if (token == TOKEN_OCULTOS || token == TOKEN_TV) return false   // "Ocultos" e "TV ao vivo" não têm opções
-        val dentroDe = pastaToken
-        if (dentroDe == TOKEN_OCULTOS) {
-            engolirUp = true
-            abrirMenu(token)
-            return true
-        }
-        if (dentroDe != null) return false                    // pasta de "remover do grupo": segurar OK = apertar OK
-        return when (lista.firstOrNull { it.token == token }) {
-            is Entrada.App, is Entrada.Pilha -> { engolirUp = true; abrirMenu(token); true }
-            else -> false
-        }
-    }
-
-    private fun abrirMenu(token: String) {
-        // PIN para mexer na HOME (Extras > PIN_HOME; TravaHome.kt). Acertou: fica liberado por 10 min.
-        if (TravaHome.precisaPin(this)) { TravaHome.comPin(this) { abrirMenu(token) }; return }
-        val entrada = lista.firstOrNull { it.token == token }
-        val titulo: String
-        val opcoes = mutableListOf<Opcao>()
-        if (pastaToken == TOKEN_OCULTOS || (pastaToken == null && entrada is Entrada.App)) {
-            titulo = nomeDe(token) + if (PainelApps.eSistema(this, token)) getString(R.string.home_app_sistema) else ""
-            val sobDemanda = when { OnDemandTv.marked(this, token) -> true; OnDemandTv.eligible(this, token) -> false; else -> null }
-            val acoes = MenuApp.acoes(pastaToken == TOKEN_OCULTOS, PainelApps.podeDesinstalar(this, token), sobDemanda,
-                AppStorage.opcaoMenu(this, token), PainelPermissoes.arquivosBloqueados(this, token))
-            AppStorage.atualizarEmFundo(this)   // pen drive entrou/saiu: o próximo menu já sabe
-            for (a in acoes) opcoes += when (a) {
-                MenuApp.Acao.INSTALAR_EXTERNO -> Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(token, true) }
-                MenuApp.Acao.INSTALAR_DISPOSITIVO -> Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(token, false) }
-                MenuApp.Acao.LIBERAR_ARQUIVOS -> Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(token) }
-                MenuApp.Acao.SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda)) { mudarSobDemanda(token, true) }
-                MenuApp.Acao.TIRAR_SOB_DEMANDA -> Opcao(getString(R.string.home_sob_demanda_tirar)) { mudarSobDemanda(token, false) }
-                MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
-                MenuApp.Acao.MOVER -> Opcao(getString(R.string.home_mover)) { iniciarMover(token, porSegurar = false) }
-                MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null); avisarOculto() }
-                MenuApp.Acao.DESINSTALAR -> Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(token) }
-            }
-        } else if (pastaToken == null && entrada is Entrada.Pilha) {
-            titulo = entrada.titulo
-            opcoes += Opcao(getString(R.string.home_mover)) { iniciarMover(token, porSegurar = false) }
-            opcoes += Opcao(getString(R.string.home_remover_cards)) { abrirPasta(entrada, remover = true) }
-            // Uma linha "Desinstalar <app>" por app da pilha que pode sair (o da frente primeiro). App de fábrica não entra.
-            val pacotes = entrada.itens.map { it.pacote }
-            for (p in MenuApp.desinstalaveisDaPilha(pacotes, entrada.frente) { PainelApps.podeDesinstalar(this, it) })
-                opcoes += Opcao(getString(R.string.home_desinstalar_app, nomeDe(p))) { confirmarDesinstalar(p) }
-        } else {
-            return
-        }
-        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }, aoFechar = { engolirUp = false }) { i -> opcoes[i].acao() }
-    }
 
     /**
      * Pergunta antes de desinstalar (não tem volta: os dados do app somem junto). O foco começa no "Cancelar", para um
      * OK distraído não apagar nada. Quem desinstala é o PainelApps.desinstalar: em silêncio, pelo Device Owner, e
      * esperando o resultado de verdade do Android (fora da thread da tela, porque espera até 60 s).
      */
-    private fun confirmarDesinstalar(pacote: String) {
+    internal fun confirmarDesinstalar(pacote: String) {
         val nome = nomeDe(pacote)
         val dialogo = CaixaTv(this)
             .setTitle(getString(R.string.home_desinstalar_titulo, nome))
@@ -2672,7 +1685,6 @@ class MainActivity : Activity() {
                             mostrarAviso(getString(R.string.home_desinstalado, nome))
                             // Relê os apps do Android: o reorganizar() reusa a lista "instalados" da memória, e o card
                             // do app desinstalado ficava na tela até a próxima volta à HOME (visto na Sala, 05/11/2026).
-                            fecharPasta()
                             preencherApps()
                         } else {
                             mostrarAviso(getString(R.string.home_desinstalar_falhou, nome, motivo))
@@ -2684,14 +1696,14 @@ class MainActivity : Activity() {
         dialogo.getButton(AlertDialog.BUTTON_NEGATIVE)?.requestFocus()
     }
 
-    private fun mostrarAviso(texto: String) = AvisoTv.rapido(this, "Apps", texto)
+    internal fun mostrarAviso(texto: String) = AvisoTv.rapido(this, "Apps", texto)
 
     /**
      * Leva o app para o pen drive adotado ou de volta para a TV (AppStorage.kt). O Android fecha o app enquanto copia;
      * 1 GB leva ~1,5 min num pen drive comum. Dá para desfazer pelo mesmo menu, então não pede confirmação.
      */
     /** RetroArch e afins: libera ler pen drives e arquivos (PainelPermissoes.liberarArquivos), pelo shell, fora da tela. */
-    private fun liberarArquivos(pacote: String) {
+    internal fun liberarArquivos(pacote: String) {
         val nome = nomeDe(pacote)
         Fundo.rodar("Arquivos") {
             val motivo = PainelPermissoes.liberarArquivos(this, pacote)
@@ -2703,7 +1715,7 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun mudarArmazenamento(pacote: String, paraExterno: Boolean, confirmado: Boolean = false) {
+    internal fun mudarArmazenamento(pacote: String, paraExterno: Boolean, confirmado: Boolean = false) {
         val nome = nomeDe(pacote)
         if (!confirmado) {
             // App grande: aviso antes (o que derrubou a Sala em 20/11/2026). Pesar o app lê o disco: fora da tela.
@@ -2735,95 +1747,33 @@ class MainActivity : Activity() {
     }
 
     /** Depois de mostrar/ocultar: fecha a pasta aberta, relê tudo e leva o foco para [foco] (ou perto de onde estava). */
-    private fun atualizarAposMudanca(foco: String?) {
-        fecharPasta()
-        if (foco != null) ultimoToken = foco
+    internal fun atualizarAposMudanca(foco: String?) {
         reorganizar()
-        if (todosAbertos) contaTodos?.text = contaApps()   // ocultou/mostrou um app com a grade aberta: a conta acompanha
     }
 
-    private fun nomeDe(pacote: String): String = instalados.firstOrNull { it.pacote == pacote }?.nome ?: pacote
-
-    // ---------------------------------------------------------------- mover cards (segure OK em um app, ou menu da pilha > Mover)
-
-    private val corMover = Estilo.ACENTO
-
-    /**
-     * Visual de um card: normal (sem contorno), focado (contorno branco no banner, nome branco) ou
-     * "sendo movido" (contorno verde-agua e maior). Funciona com os cards de montarCartao (filho 0 = banner, 1 = nome).
-     */
-    private fun estilizar(card: View, token: String, focado: Boolean) {
-        val movendo = modoMover && token == tokenMovendo
-        val grupo = card as? ViewGroup
-        // Sem anel no foco (o circulo branco ficava pesado sobre o icone): so o disco crescendo 12% e o nome
-        // ficando branco ja mostram onde esta, como no Google TV de referencia. O fio fino continua sempre
-        // (nao so no foco): e o que impede um icone escuro (ex.: Netflix) de sumir no fundo.
-        (grupo?.getChildAt(0))?.foreground = when {
-            movendo -> contorno(corMover, 0x2EFF6A2B, 3)
-            // O anel fica FORA do retângulo, com 2 dp de folga escura: num banner branco (Netflix, YouTube) um anel colado
-            // na borda sumia (visto na Sala, 06/11 noite).
-            focado -> android.graphics.drawable.InsetDrawable(contorno(Color.WHITE, Color.TRANSPARENT, 3), dp(1))
-            else -> fioFino()
-        }
-        (grupo?.getChildAt(1) as? TextView)?.setTextColor(if (focado || movendo) Color.WHITE else textoSuave)
-        // Só o disco cresce (o nome não: crescendo junto, ele encostava no nome do vizinho).
-        val escala = if (movendo) 1.12f else if (focado) 1.08f else 1f
-        // Cartões transparentes (LayoutHome): fora do foco o fundo aparece pelo cartão; o focado fica inteiro.
-        val alfa = if (transparente && !focado && !movendo) LayoutHome.ALFA_TRANSPARENTE else 1f
-        (grupo?.getChildAt(0) ?: card).animate().scaleX(escala).scaleY(escala).alpha(alfa).setDuration(120).start()
-    }
-
-    private val ANEL = 6   // folga (dp) entre o disco e o anel de foco
-    // Retângulo de um app na linha de baixo (16:9, a arte de banner do app): 112x63 de fábrica; LayoutHome muda (15/11/2026).
-    private val tamanhoCartoes by lazy { LayoutHome.tamanho(this) }
-    private val RET_L by lazy { LayoutHome.largura(tamanhoCartoes) }
-    private val RET_A by lazy { LayoutHome.altura(tamanhoCartoes) }
-    /** A linha de apps desce o quanto o cartão cresceu (LayoutHome); 0 no tamanho de fábrica. */
-    private val descer by lazy { LayoutHome.acrescimo(tamanhoCartoes) }
-    private val transparente by lazy { LayoutHome.transparente(this) }
-    private val emGrade by lazy { LayoutHome.grade(this) }
-    /** Tela inicial em cruz (17/11/2026): a única tela inicial; a antiga só volta por adb (LayoutHome.cruz). */
-    private val emCruz by lazy { LayoutHome.cruz(this) }
-    /** Os apps em grade: no modo grade da HOME antiga e no "Todos os apps" da cruz. */
-    private val gradeDosApps get() = emGrade || emCruz
-    /** Passo de um cartão na fila (largura + anel dos dois lados + margem): o mesmo na fileira e na grade. */
-    private val passoCartao get() = RET_L + 2 * ANEL + 4
-
-    /** Fio de 1 dp em volta do disco (não da moldura): ícones escuros (Netflix) não somem no fundo. */
-    private fun fioFino() = android.graphics.drawable.InsetDrawable(contorno(0x33FFFFFF, Color.TRANSPARENT, 1), dp(ANEL))
-
-    /** Anel circular de [espessura] dp (com [preenchimento] por dentro), desenhado por cima do disco. */
-    private fun contorno(cor: Int, preenchimento: Int, espessura: Int): GradientDrawable = GradientDrawable().apply {
-        cornerRadius = dp(10).toFloat()   // retângulo de cantos redondos, como o card (era OVAL no tempo dos discos)
-        setColor(preenchimento)
-        setStroke(dp(espessura), cor)
-    }
+    internal fun nomeDe(pacote: String): String = instalados.firstOrNull { it.pacote == pacote }?.nome ?: pacote
 
     // ---------------------------------------------------------------- tela inicial em cruz (17/11/2026)
-    // A cruz (HomeCruz) é montada com os MESMOS dados da HOME antiga: preencherContinuar (TV, Séries, Filmes, plugins) e
-    // preencherApps (apps em ordem, ocultos, modo visita, Jogos). A grade dos apps continua sendo montada, escondida: é a
-    // tela "Todos os apps" (com mover, ocultar e pilhas de hoje).
+    // A única HOME desde 21/11/2026 (a antiga, em fileira/grade, saiu). Dados: preencherContinuar (TV, Séries, Filmes,
+    // plugins) e preencherApps (apps em ordem, ocultos, modo visita, Jogos). "Todos os apps" é a AllAppsScreen (abaixo).
 
-    private var cruz: HomeCruz? = null
-    private var rotuloApps: View? = null
-    private var contaTodos: TextView? = null   // "Na grade: 8 · ocultos: 5" ao lado de TODOS OS APPS
-    private var veuTodos: View? = null
+    internal var cruz: HomeCruz? = null
     /** "Todos os apps" aberto: a cruz some e a grade dos apps aparece; Voltar ou HOME fecham. */
-    private var todosAbertos = false
+    internal var todosAbertos = false
     /** Entre onResume e onPause: a HOME é o que está na tela (onNewIntent chega ANTES do onResume vindo de um app). */
-    private var homeNaFrente = false
-    private var cruzTemTv = false
-    private var cruzTemVod = false
+    internal var homeNaFrente = false
+    internal var cruzTemTv = false
+    internal var cruzTemVod = false
     /** A 1ª leitura do player chegou (sem ela a cruz montaria sem a TV e pularia de lugar logo depois). */
-    private var cruzContinuarLido = false
+    internal var cruzContinuarLido = false
     private val estiloCruz by lazy { LayoutHome.iconesCruz(this) }
     /** Um desenho por lugar (id): a mesma instância volta a cada atualização (HomeCruz só troca o que mudou). */
     private val iconesCruz = HashMap<String, android.graphics.drawable.Drawable>()
     /** Cópia do ícone de um app para a cruz: um Drawable não pode estar em duas views (o card da grade usa o original). */
     private val iconesAppCruz = java.util.WeakHashMap<Item, android.graphics.drawable.Drawable>()
 
-    private fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, estiloCruz) }
-    private fun icApp(item: Item) = iconesAppCruz.getOrPut(item) {
+    internal fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, estiloCruz) }
+    internal fun icApp(item: Item) = iconesAppCruz.getOrPut(item) {
         iconeCruzApp[item.pacote]?.takeIf { it.first == estiloAppCruz }?.second?.let { android.graphics.drawable.BitmapDrawable(resources, it) }
             ?: item.icone.constantState?.newDrawable(resources) ?: item.icone
     }
@@ -2902,9 +1852,6 @@ class MainActivity : Activity() {
     }
 
     private fun montarCruz(raiz: FrameLayout) {
-        rolagem.visibility = View.GONE
-        rotuloApps?.visibility = View.GONE
-        caixaContinuar.visibility = View.GONE
         val prefs = getSharedPreferences(PREFS_CRUZ, MODE_PRIVATE)
         val c = HomeCruz(this, fonteUi, Typeface.create(fonteUi, Typeface.BOLD))
         c.lembrados = CruzLogica.Categoria.entries.mapNotNull { k -> prefs.getString(k.id, null)?.let { k.id to it } }.toMap()
@@ -2937,10 +1884,10 @@ class MainActivity : Activity() {
 
     // ------------------------------------------------------------------ barra de cima e arte do item, na cruz
 
-    private val barraCruz by lazy { LayoutHome.barraCruz(this) }
-    private var relogioCruz: View? = null       // relógio grande (barra RELOGIO), no canto livre de baixo
+    internal val barraCruz by lazy { LayoutHome.barraCruz(this) }
+    internal var relogioCruz: View? = null       // relógio grande (barra RELOGIO), no canto livre de baixo
     private var tempoCruz: TextView? = null     // "27°" ao lado da hora, com a barra recolhida
-    private var barraRecolhida = false
+    internal var barraRecolhida = false
 
     /**
      * Aplica o estilo da barra de cima escolhido em Configurações (LayoutHome.BarraCruz). Recua e Relógio: com a cruz em
@@ -3007,7 +1954,7 @@ class MainActivity : Activity() {
         recolherBarra(true, animar = false)
     }
 
-    private fun recolherBarra(recolher: Boolean, animar: Boolean = true) {
+    internal fun recolherBarra(recolher: Boolean, animar: Boolean = true) {
         val topo = topoRaiz as? ViewGroup ?: return
         if (recolher == barraRecolhida && animar) return
         barraRecolhida = recolher
@@ -3052,7 +1999,7 @@ class MainActivity : Activity() {
     }
 
     /** Relógio grande da barra RELOGIO: hora, data por extenso e o tempo de agora (espelha a pílula do clima). */
-    private fun montarRelogioCruz(): View = LinearLayout(this).apply {
+    internal fun montarRelogioCruz(): View = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         gravity = Gravity.END
         val sombra = 0x99000000.toInt()
@@ -3084,30 +2031,30 @@ class MainActivity : Activity() {
 
     // ------------------------------------------------------------------ barra Ilha (A+B+D, 18/11/2026; ver BarraIlha)
 
-    private var ilhaPilula: LinearLayout? = null
-    private var ilhaExtra: LinearLayout? = null
-    private var ilhaIcone: ImageView? = null
-    private var ilhaBarras: BarrasSom? = null
-    private var ilhaTexto: TextView? = null
-    private var ilhaTemp: TextView? = null
-    private var ilhaVeu: View? = null
-    private var ilhaEvento: BarraIlha.Evento? = null
-    private var ilhaFila: List<BarraIlha.Evento> = emptyList()
-    private var ilhaPasso = 0
-    private var ilhaPontoView: View? = null
-    private var ilhaTrilho: LinearLayout? = null
-    private var ilhaContador: TextView? = null
-    private var ilhaHora: TextView? = null
+    internal var ilhaPilula: LinearLayout? = null
+    internal var ilhaExtra: LinearLayout? = null
+    internal var ilhaIcone: ImageView? = null
+    internal var ilhaBarras: BarrasSom? = null
+    internal var ilhaTexto: TextView? = null
+    internal var ilhaTemp: TextView? = null
+    internal var ilhaVeu: View? = null
+    internal var ilhaEvento: BarraIlha.Evento? = null
+    internal var ilhaFila: List<BarraIlha.Evento> = emptyList()
+    internal var ilhaPasso = 0
+    internal var ilhaPontoView: View? = null
+    internal var ilhaTrilho: LinearLayout? = null
+    internal var ilhaContador: TextView? = null
+    internal var ilhaHora: TextView? = null
     /** Lidos a cada minuto fora da thread da tela ([tarefaIlhaTique]): (texto, quando começa). */
-    @Volatile private var ilhaLembrete: Pair<String, Long>? = null
-    @Volatile private var ilhaAgenda: Pair<String, Long>? = null
-    @Volatile private var ilhaIndicadores: Set<BarraIlha.Indicador> = emptySet()
-    private var ilhaTrilhoMostrado: BarraIlha.Trilho? = null
+    @Volatile internal var ilhaLembrete: Pair<String, Long>? = null
+    @Volatile internal var ilhaAgenda: Pair<String, Long>? = null
+    @Volatile internal var ilhaIndicadores: Set<BarraIlha.Indicador> = emptySet()
+    internal var ilhaTrilhoMostrado: BarraIlha.Trilho? = null
     /** Ilha que cresce: a faixa de baixo com o evento que chegou e "▲ para abrir"; some em [BarraIlha.CRESCER_MS]. */
-    private var ilhaDica: TextView? = null
-    private val tarefaIlhaEncolhe = Runnable { ilhaDica?.animate()?.alpha(0f)?.translationY(-dp(6).toFloat())?.setDuration(220)?.start() }
+    internal var ilhaDica: TextView? = null
+    internal val tarefaIlhaEncolhe = Runnable { ilhaDica?.animate()?.alpha(0f)?.translationY(-dp(6).toFloat())?.setDuration(220)?.start() }
     /** Rodízio da fila: troca o evento da vez a cada [BarraIlha.RODIZIO_MS], só com a barra recolhida e a HOME na frente. */
-    private val tarefaIlhaGira = object : Runnable {
+    internal val tarefaIlhaGira = object : Runnable {
         override fun run() {
             if (ilhaFila.size < 2 || !homeNaFrente) return
             if (barraRecolhida) { ilhaPasso++; aplicarIlha() }
@@ -3115,7 +2062,7 @@ class MainActivity : Activity() {
         }
     }
     /** A cada minuto: lembrete do guia, agenda de hoje e o trilho de estado (nada disso muda a arrumação da tela sozinho). */
-    private val tarefaIlhaTique = object : Runnable {
+    internal val tarefaIlhaTique = object : Runnable {
         override fun run() {
             if (!homeNaFrente || ilhaPilula == null) return
             filaApps.execute { runCatching { lerFontesIlha() }; ui.post { atualizarIlha() } }
@@ -3130,572 +2077,44 @@ class MainActivity : Activity() {
         }
     }
     /** Quando toca o próximo despertador (ms), para a pílula só mostrá-lo nas últimas 12 h. */
-    private var alarmeEm: Long? = null
-    private val tarefaIlhaAcordou = Runnable {
+    internal var alarmeEm: Long? = null
+    internal val tarefaIlhaAcordou = Runnable {
         if (cruz?.hasFocus() != true) return@Runnable
         recolherBarra(true)
         BarraIlha.resumoChegada(ilhaFila)?.let { crescerIlhaTexto(it, ilhaFila.any { e -> e.atencao }) }   // resumo de chegada
     }
 
-    /**
-     * Monta as duas peças da Ilha: o véu (atrás da barra aberta) e a pílula do centro (ponto laranja, hora, e o que está
-     * acontecendo no sistema). Nenhuma é focável: com ▲ a barra de sempre volta,
-     * com os botões de verdade (pausar, cancelar o timer, abrir o Diagnóstico).
-     */
-    private fun montarIlha(raiz: FrameLayout, topo: ViewGroup) {
-        val veu = View(this).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xC7080910.toInt(), 0x80080910.toInt(), 0x00080910))
-            alpha = 0f
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-        }
-        raiz.addView(veu, raiz.indexOfChild(topo).coerceAtLeast(0), FrameLayout.LayoutParams(MATCH, dp(TOPO_PALCO + ALTURA_TOPO + 90)))
-        ilhaVeu = veu
 
-        val sombra = 0x99000000.toInt()
-        // Ponto calmo em branco apagado (crítica de design 19/11/2026): laranja só no foco; âmbar/vermelho seguem como semáforo.
-        val ponto = View(this).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(ILHA_PONTO_CALMO) } }
-        ilhaPontoView = ponto
-        val hora = RelogioTela(this, data = false).apply {
-            format12Hour = "HH:mm"; format24Hour = "HH:mm"
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-            setTextColor(Color.WHITE)
-            typeface = Typeface.create(fonteUi, Typeface.BOLD)
-            includeFontPadding = false
-        }
-        ilhaHora = hora
-        val temp = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
-        // Trilho de estado (como os ícones de estado da Apple TV): gravando, não perturbe, visita, fone. Sem texto.
-        val trilho = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            visibility = View.GONE
-            setPaddingRelative(dp(10), 0, 0, 0)
-        }
-        ilhaTrilho = trilho
-        val contador = texto(Estilo.Leitura.DICA, textoClaro, fonteUi).apply {
-            includeFontPadding = false; visibility = View.GONE
-            background = GradientDrawable().apply { cornerRadius = dp(9).toFloat(); setStroke(dp(1), 0x40FFFFFF) }
-            setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
-        }
-        ilhaContador = contador
-        fun copiarTemp() { temp.text = txtTemp.text.toString().takeIf { it.isNotBlank() && it != "…" }.orEmpty(); temp.visibility = if (temp.text.isEmpty() || ilhaEvento != null) View.GONE else View.VISIBLE }
-        txtTemp.addTextChangedListener(espelho { copiarTemp() })
-        val icone = ImageView(this).apply { visibility = View.GONE }
-        val barras = BarrasSom(this).apply { visibility = View.GONE }
-        val txt = texto(18f, Estilo.TEXTO, fonteUi).apply {
-            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX)
-        }
-        val extra = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            visibility = View.GONE
-            addView(icone, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginEnd = dp(8) })
-            addView(barras, LinearLayout.LayoutParams(dp(11), dp(12)).apply { marginEnd = dp(8) })
-            addView(txt)
-        }
-        val pilula = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            background = GradientDrawable().apply {
-                cornerRadius = dp(20).toFloat(); setColor(0xC70A0B14.toInt()); setStroke(dp(1), 0x1FFFFFFF)
-            }
-            setPaddingRelative(dp(14), 0, dp(16), 0)
-            // O leitor de tela lê a fila inteira (antes a pílula era invisível para ele e para o MCP).
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
-            addView(ponto, LinearLayout.LayoutParams(dp(8), dp(8)).apply { marginEnd = dp(10) })
-            addView(hora)
-            addView(trilho)
-            addView(temp, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(10) })
-            addView(extra, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(12) })
-            addView(contador, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(10) })
-        }
-        raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
-            topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
-        })
-        val dica = texto(15f, Estilo.TEXTO, fonteUi).apply {
-            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX + 200)
-            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xE60A0B14.toInt()); setStroke(dp(1), 0x26FFFFFF) }
-            setPaddingRelative(dp(16), dp(8), dp(16), dp(8))
-            alpha = 0f
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO   // a pílula já lê a fila inteira
-        }
-        raiz.addView(dica, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
-            topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2 + 46)
-        })
-        ilhaDica = dica
-        ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp
-        copiarTemp()
-        // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
-        // arrumação da tela. Barato: monta um Estado pequeno e só mexe na pílula quando o evento muda.
-        topo.viewTreeObserver.addOnGlobalLayoutListener { atualizarIlha() }
-        atualizarIlha()
-        ui.post(tarefaIlhaTique)
-    }
 
-    /** Fora da thread da tela: o que a Ilha lê de banco/agenda/sistema. Modo visita fecha a agenda (como no "Bom dia"). */
-    private fun lerFontesIlha() {
-        val agora = System.currentTimeMillis()
-        val hm = android.text.format.DateFormat.getTimeFormat(this)
-        ilhaLembrete = runCatching {
-            LembretesTv.listar(this).filter { it.inicio + BarraIlha.LEMBRETE_ATRASO_MS > agora }.minByOrNull { it.inicio }
-                ?.let { "${it.titulo} · ${hm.format(java.util.Date(it.inicio))}" to it.inicio }
-        }.getOrNull()
-        val visita = runCatching { ModoVisita.ativo(this) }.getOrDefault(false)
-        ilhaAgenda = if (visita) null else runCatching {
-            Agenda.eventosDaTv(this, agora - BarraIlha.AGENDA_ATRASO_MS, agora + BarraIlha.AGENDA_JANELA_MS)
-                .filter { !it.diaInteiro && it.inicio + BarraIlha.AGENDA_ATRASO_MS > agora }.minByOrNull { it.inicio }
-                ?.let { "${it.titulo} · ${hm.format(java.util.Date(it.inicio))}" to it.inicio }
-        }.getOrNull()
-        val ind = HashSet<BarraIlha.Indicador>()
-        if (runCatching { Gravacoes.resumoParaHome(this) }.getOrNull() != null) ind += BarraIlha.Indicador.GRAVANDO   // grava no ":player"
-        if (runCatching { NaoPerturbeTv.motivoAgora(this) }.getOrNull() != null) ind += BarraIlha.Indicador.NAO_PERTURBE
-        if (visita) ind += BarraIlha.Indicador.VISITA
-        if (foneLigado()) ind += BarraIlha.Indicador.FONE
-        ilhaIndicadores = ind
-    }
 
-    /** Fone com fio, Bluetooth (A2DP/BLE) ou aparelho auditivo como saída de som agora. */
-    private fun foneLigado(): Boolean = runCatching {
-        val am = getSystemService(android.media.AudioManager::class.java) ?: return false
-        val fones = setOf(android.media.AudioDeviceInfo.TYPE_WIRED_HEADPHONES, android.media.AudioDeviceInfo.TYPE_WIRED_HEADSET,
-            android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP, android.media.AudioDeviceInfo.TYPE_BLE_HEADSET,
-            android.media.AudioDeviceInfo.TYPE_HEARING_AID)
-        am.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS).any { it.type in fones }
-    }.getOrDefault(false)
 
-    /** A pílula da barra aberta que responde ao evento (null = o evento não tem botão próprio). */
-    private fun botaoDoEvento(e: BarraIlha.Evento?): View? = when (e?.tipo) {
-        BarraIlha.Tipo.SEM_INTERNET -> pilulaSemInternet
-        BarraIlha.Tipo.TIMER -> pilulaTimer
-        BarraIlha.Tipo.ALARME -> pilulaAlarme
-        BarraIlha.Tipo.TOCANDO -> pilulaTocando
-        BarraIlha.Tipo.ANIVERSARIO -> pilulaAniversario
-        BarraIlha.Tipo.JOGO -> pilulaJogo
-        BarraIlha.Tipo.VENCIMENTO -> pilulaVencimento
-        BarraIlha.Tipo.SERVICO_FORA -> pilulaServico
-        BarraIlha.Tipo.LEMBRETE_CASA -> pilulaLembreteCasa
-        BarraIlha.Tipo.CONTAGEM -> pilulaContagem
-        else -> null
-    }
 
-    private fun pintarTrilho(t: BarraIlha.Trilho) {
-        val box = ilhaTrilho ?: return
-        if (t == ilhaTrilhoMostrado) return
-        ilhaTrilhoMostrado = t
-        box.removeAllViews()
-        for (i in t.mostrar) {
-            val ic: Drawable = when (i) {
-                BarraIlha.Indicador.GRAVANDO -> IconeLinha(IconeLinha.Tipo.GRAVAR, cor = ILHA_VERMELHO)
-                BarraIlha.Indicador.NAO_PERTURBE -> IconeLinha(IconeLinha.Tipo.LUA, fracaoLua = 0.22, cor = 0xFFD9D5CF.toInt())
-                BarraIlha.Indicador.VISITA -> IconeLinha(IconeLinha.Tipo.PESSOA, cor = 0xFFD9D5CF.toInt())
-                BarraIlha.Indicador.FONE -> IconeLinha(IconeLinha.Tipo.FONE, cor = 0xFFD9D5CF.toInt())
-            }
-            box.addView(ImageView(this).apply { setImageDrawable(ic) }, LinearLayout.LayoutParams(dp(15), dp(15)).apply { marginStart = dp(6) })
-        }
-        if (t.resto > 0) box.addView(texto(Estilo.Leitura.DICA, textoClaro, fonteUi).apply { text = "+${t.resto}"; includeFontPadding = false },
-            LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(6) })
-        box.visibility = if (t.mostrar.isEmpty()) View.GONE else View.VISIBLE
-    }
 
-    private fun atualizarIlha() {
-        val pilula = ilhaPilula ?: return
-        fun TextView.se(p: View) = text?.toString()?.takeIf { p.visibility == View.VISIBLE || p in cortadas }
-        val agora = System.currentTimeMillis()
-        val fila = BarraIlha.fila(BarraIlha.Estado(
-            semInternet = txtSemInternet.se(pilulaSemInternet),
-            campainha = CasaHA.campainhaEm.takeIf { it > 0 }?.let {
-                "${getString(R.string.casa_campainha)} · ${android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(it))}" },
-            campainhaHaMs = CasaHA.campainhaEm.takeIf { it > 0 }?.let { agora - it },
-            timer = txtTimer.se(pilulaTimer),
-            alarme = txtAlarme.se(pilulaAlarme),
-            alarmeFaltaMs = alarmeEm?.let { it - agora },
-            lembrete = ilhaLembrete?.first,
-            lembreteFaltaMs = ilhaLembrete?.let { it.second - agora },
-            tocandoTitulo = txtTocandoTitulo.se(capsulaTocando),
-            tocando = barrasTocando.tocando,
-            agenda = ilhaAgenda?.first,
-            agendaFaltaMs = ilhaAgenda?.let { it.second - agora },
-            aniversario = txtAniversario.se(pilulaAniversario),
-            jogo = txtJogo.se(pilulaJogo),
-            vencimento = txtVencimento.se(pilulaVencimento),
-            servicoFora = txtServico.se(pilulaServico),
-            lembreteCasa = txtLembreteCasa.se(pilulaLembreteCasa),
-            contagem = txtContagem.se(pilulaContagem),
-        ))
-        pintarTrilho(BarraIlha.trilho(ilhaIndicadores))
-        if (fila != ilhaFila && BarraIlha.mesmaEstrutura(ilhaFila, fila)) {
-            // Só o texto mudou (o timer conta a cada segundo): não reinicia o rodízio nem repete o anúncio do TalkBack.
-            ilhaFila = fila
-            BarraIlha.agora = BarraIlha.paraMcp(fila)
-        } else if (fila != ilhaFila) {
-            val novo = BarraIlha.chegou(ilhaFila, fila)
-            ilhaPasso = BarraIlha.passoDepois(novo ?: ilhaEvento, fila)   // o que chegou vai para a tela na hora
-            if (novo != null) crescerIlha(novo)
-            ilhaFila = fila
-            // Sem a hora quando há fila: a descrição só muda quando a fila muda, e a hora nela ficava velha (visto na Sala,
-            // v464530: "11 : 17" às 11:20). O leitor de tela anuncia a fila; a hora ele lê quando a fila está vazia.
-            val desc = if (fila.isEmpty()) ilhaHora?.text?.toString().orEmpty() else BarraIlha.descricao("", fila).removePrefix(". ")
-            pilula.contentDescription = desc
-            BarraIlha.agora = BarraIlha.paraMcp(fila)
-            (ilhaPontoView?.background as? GradientDrawable)?.setColor(when (BarraIlha.ponto(fila)) {
-                BarraIlha.Ponto.ALERTA -> ILHA_VERMELHO
-                BarraIlha.Ponto.ATENCAO -> Estilo.ATENCAO
-                BarraIlha.Ponto.CALMO -> ILHA_PONTO_CALMO
-            })
-            ui.removeCallbacks(tarefaIlhaGira)
-            if (fila.size > 1 && homeNaFrente) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
-        }
-        aplicarIlha()
-    }
 
-    /** Ilha que cresce (como a Dynamic Island): por 5 s, embaixo da pílula, o que chegou e "▲ para abrir". */
-    private fun crescerIlha(e: BarraIlha.Evento) =
-        crescerIlhaTexto(if (botaoDoEvento(e) != null) "${e.texto}  ·  ${getString(R.string.ilha_dica_abrir)}" else e.texto, e.atencao)
 
-    private fun crescerIlhaTexto(texto: String, atencao: Boolean) {
-        val d = ilhaDica ?: return
-        if (!homeNaFrente || !barraRecolhida) return
-        d.text = texto
-        d.setTextColor(if (atencao) Estilo.ATENCAO else Estilo.TEXTO)
-        d.animate().cancel()
-        if (semAnimacoes()) { d.alpha = 1f; d.translationY = 0f }
-        else { d.translationY = -dp(6).toFloat(); d.animate().alpha(1f).translationY(0f).setDuration(260).start() }
-        ui.removeCallbacks(tarefaIlhaEncolhe)
-        ui.postDelayed(tarefaIlhaEncolhe, BarraIlha.CRESCER_MS)
-    }
 
-    /** Mostra o evento da vez (rodízio) na pílula; só mexe nas views quando ele muda. */
-    private fun aplicarIlha() {
-        val pilula = ilhaPilula ?: return
-        val fila = ilhaFila
-        val e = BarraIlha.naVez(fila, ilhaPasso)
-        ilhaContador?.let { c ->
-            val t = BarraIlha.contador(fila, ilhaPasso)
-            if (c.text.toString() != t) c.text = t
-            c.visibility = if (t.isEmpty()) View.GONE else View.VISIBLE
-        }
-        if (e == ilhaEvento) return
-        val mudouTipo = e?.tipo != ilhaEvento?.tipo
-        if (mudouTipo && ::capa.isInitialized && !semAnimacoes()) {
-            android.transition.TransitionManager.beginDelayedTransition(pilula, android.transition.AutoTransition().setDuration(260))
-        }
-        ilhaEvento = e
-        val extra = ilhaExtra ?: return
-        if (e == null) {
-            extra.visibility = View.GONE
-            ilhaBarras?.tocando = false
-        } else {
-            ilhaTexto?.text = e.texto
-            ilhaTexto?.setTextColor(if (e.atencao) Estilo.ATENCAO else Estilo.TEXTO)
-            val ic: Drawable? = when (e.tipo) {
-                BarraIlha.Tipo.SEM_INTERNET -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
-                BarraIlha.Tipo.TIMER -> IconeApp(IconeApp.Tipo.TIMER)
-                BarraIlha.Tipo.ALARME -> IconeLinha(IconeLinha.Tipo.DESPERTADOR)
-                BarraIlha.Tipo.JOGO, BarraIlha.Tipo.LEMBRETE -> IconeApp(IconeApp.Tipo.TV)
-                BarraIlha.Tipo.AGENDA -> IconeLinha(IconeLinha.Tipo.CALENDARIO)
-                BarraIlha.Tipo.SERVICO_FORA -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
-                BarraIlha.Tipo.LEMBRETE_CASA -> IconeLinha(IconeLinha.Tipo.RECADO)
-                BarraIlha.Tipo.CONTAGEM -> IconeLinha(IconeLinha.Tipo.CALENDARIO)
-                else -> null
-            }
-            if (mudouTipo) { ilhaIcone?.setImageDrawable(ic); ilhaIcone?.visibility = if (ic != null) View.VISIBLE else View.GONE }
-            ilhaBarras?.visibility = if (e.tipo == BarraIlha.Tipo.TOCANDO) View.VISIBLE else View.GONE
-            ilhaBarras?.tocando = e.tipo == BarraIlha.Tipo.TOCANDO && e.tocando
-            extra.visibility = View.VISIBLE
-        }
-        ilhaTemp?.visibility = if (e != null || ilhaTemp?.text.isNullOrEmpty()) View.GONE else View.VISIBLE
-    }
-
-    /** Ao acordar a TV (Ilha): a barra fica aberta por 4 s, para quem chega ver tudo, e recolhe se o foco está na cruz. */
-    private fun abrirIlhaAoAcordar() {
-        if (barraCruz != LayoutHome.BarraCruz.ILHA || ilhaPilula == null || !homeNaFrente) return
-        recolherBarra(false)
-        ui.removeCallbacks(tarefaIlhaAcordou)
-        ui.postDelayed(tarefaIlhaAcordou, BarraIlha.ACORDAR_ABERTA_MS)
-    }
 
     // ------------------------------------------------------------------ movimento dos ícones (MovimentoAdaptativo)
 
-    private fun semAnimacoes() =
-        runCatching { android.provider.Settings.Global.getFloat(contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)
 
-    /** Na volta da HOME: o nível que vale (aparelho, rebaixado, forçado pelo adb) e o juiz dos quadros. */
-    private fun ligarMovimento() {
-        val c = cruz ?: return
-        c.nivel = MovimentoAdaptativo.atual(this, semAnimacoes())
-        DesempenhoTv.limiteMs = MovimentoAdaptativo.limiteQuadroMs(runCatching { windowManager.defaultDisplay.refreshRate }.getOrDefault(60f))
-        DesempenhoTv.aoPesado = if (c.nivel > MovimentoAdaptativo.Nivel.ECONOMICO) ({ ui.post { rebaixarMovimento() } }) else null
-    }
 
-    private fun rebaixarMovimento() {
-        val c = cruz ?: return
-        if (!homeNaFrente) return
-        val novo = MovimentoAdaptativo.descer(c.nivel)
-        if (novo == c.nivel) { DesempenhoTv.aoPesado = null; return }
-        Log.i("TvLauncher.Movimento", "quadros lentos demais: ${c.nivel} -> $novo")
-        MovimentoAdaptativo.rebaixar(this, novo)
-        c.nivel = novo
-        if (novo <= MovimentoAdaptativo.Nivel.ECONOMICO) DesempenhoTv.aoPesado = null
-    }
 
-    private fun espelho(acao: () -> Unit) = object : android.text.TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-        override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-        override fun afterTextChanged(s: android.text.Editable?) = acao()
-    }
 
-    /**
-     * Arte do item em foco (LayoutHome.arteCruz): a mesma capa à direita da tela antiga (CapaFoco, meia resolução,
-     * escurecida), agora seguindo o item da cruz. TV, Séries, Filmes, Na rede e Jogos usam a arte do card (Séries e
-     * Filmes: a cena do último título); um app, o banner dele; o resto, o degradê da cor do grupo.
-     */
-    private fun arteDoItem(item: HomeCruz.Item) {
-        // Plugin de fundo que pediu o foco (a arte do item vem dele): nome e pacote do item, nada mais.
-        (fundo as? WallpaperPluginView)?.focar(item.nome, pacoteDoItem(item.id))
-        if (capa.desligada) return
-        val id = item.id
-        when {
-            id == "tv" || id == "c:tv" -> mostrarCapaAtalho(IconeApp.Tipo.TV)
-            id == "series" || id == "c:serie" -> mostrarCapaAtalho(IconeApp.Tipo.SERIES)
-            id == "filmes" || id == "c:filme" -> mostrarCapaAtalho(IconeApp.Tipo.FILMES)
-            id == "rede" -> mostrarCapaAtalho(IconeApp.Tipo.REDE)
-            id == "central" -> mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
-            id.startsWith("app:") -> mostrarCapaDoApp(id.removePrefix("app:"), null)
-            id.startsWith("c:jogo:") -> mostrarCapaDoApp(id.removePrefix("c:jogo:"), null)
-            id.startsWith("c:midia:") -> mostrarCapaDoApp(id.removePrefix("c:midia:"), null)
-            else -> {
-                capaPedida = null
-                val cor = when (cruz?.categoriaAtual()?.cat) {
-                    CruzLogica.Categoria.OUVIR -> 0xFF2C6E68.toInt()
-                    CruzLogica.Categoria.JOGAR -> 0xFF3A3F9E.toInt()
-                    CruzLogica.Categoria.APLICATIVOS -> 0xFF3A3640.toInt()
-                    else -> 0xFF8A4A2A.toInt()
-                }
-                capa.mostrar(null, intArrayOf(Estilo.matiz(cor, 0.6f), Estilo.matiz(cor, 0.35f)))
-            }
-        }
-    }
 
-    /** O pacote por trás de um item da cruz ("app:", "c:jogo:", "c:midia:"), ou null (atalhos nossos). */
-    private fun pacoteDoItem(id: String): String? = when {
-        id.startsWith("app:") -> id.removePrefix("app:")
-        id.startsWith("c:jogo:") -> id.removePrefix("c:jogo:")
-        id.startsWith("c:midia:") -> id.removePrefix("c:midia:")
-        else -> null
-    }
 
-    /**
-     * Linha de baixo do canal de TV na cruz (Paulo, 18/11/2026: "as informações ali são ótimas, usar da melhor maneira"),
-     * uma informação por linha, na ordem em que se lê: o canal; o programa de agora e quanto falta; o próximo e a hora.
-     * [comPrograma] = false quando o programa já é o título do item (Continuar). Sem guia, só o canal.
-     */
-    /** O programa no ar e quanto falta ("SP1 · faltam 58 min"); [comPrograma] = false só o quanto falta. */
-    private fun linhaAgoraTv(agora: Programa?, ms: Long, comPrograma: Boolean): String {
-        val falta = agora?.let { ((it.fim - ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
-        return listOfNotNull(agora?.titulo?.trim()?.takeIf { comPrograma && it.isNotEmpty() }, falta).joinToString(" · ")
-    }
 
-    private fun linhasTvCruz(u: PlayerArmazem.Ultimo, agora: Programa?, ms: Long, comPrograma: Boolean): String {
-        val hora = android.text.format.DateFormat.getTimeFormat(this)
-        val canal = if (u.nome.isBlank()) getString(R.string.home_dest_tv, u.numero) else getString(R.string.cruz_tv_canal, u.numero, u.nome.trim())
-        val linhaAgora = linhaAgoraTv(agora, ms, comPrograma)
-        val depois = u.programas.firstOrNull { it.inicio >= (agora?.fim ?: ms) && it.titulo.isNotBlank() }
-            ?.let { getString(R.string.cruz_tv_depois, hora.format(java.util.Date(it.inicio)), it.titulo.trim()) }
-        return CruzLogica.linhasTv(canal, linhaAgora, depois)
-    }
 
-    /** Refaz a lista da cruz com os dados de agora. Barato: a HomeCruz só recria views quando os ids mudam. */
-    private fun atualizarCruz() {
-        val c = cruz ?: return
-        if (!cruzContinuarLido) return
-        val agora = System.currentTimeMillis()
-        val programa = ultimoTv?.programas?.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
-        fun faltaFilme(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && Vod.deveRetomar(it) }
-            ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
-        // Quanto já foi visto (barra no pé do ícone em Continuar): filme/série pela posição salva; TV, o programa no ar.
-        fun visto(f: PlayerArmazem.FichaHome, serie: Boolean): Float? = posicoesHome[f.chave]
-            ?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }?.let { (it.ms.toFloat() / it.duracao).coerceIn(0f, 1f) }
-        val noAr = programa?.takeIf { it.fim > it.inicio }?.let { ((agora - it.inicio).toFloat() / (it.fim - it.inicio)).coerceIn(0f, 1f) }
-        // Sem internet: Séries, Filmes, Rádio e Podcasts avisam antes do OK (Na rede, TV gravada e pendrive seguem normais).
-        val precisa = if (semInternetCruz) getString(R.string.cruz_precisa_internet) else null
-        // A situação de cada item (1ª linha do canto de baixo à direita), sempre "rótulo + o quê · % · quanto falta" (Paulo, 18/11/2026 14:15
-        // local: "mais inteligente, coerente e lógico"). Gravando vence No ar; Tocando vence Parou em.
-        fun situacaoTv(oQue: String?, tira: String?): CruzLogica.Situacao? =
-            gravandoTv?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_gravando), it, "tv") }
-                ?: programa?.let { p -> CruzLogica.Situacao(getString(R.string.cruz_canto_no_ar),
-                    CruzLogica.andamento(oQue, noAr, linhaAgoraTv(p, agora, comPrograma = false)), "tv", listOfNotNull(tira)) }
-                    ?.takeIf { it.texto.isNotEmpty() }
-        fun situacaoParou(oQue: String?, fracao: Float?, falta: String?, tira: String?, origem: String): CruzLogica.Situacao? =
-            falta?.takeIf { it.isNotBlank() }?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_parou), CruzLogica.andamento(oQue, fracao, it), origem, listOfNotNull(tira)) }
-        fun situacaoTocando(tipo: String): CruzLogica.Situacao? = ouvindoCruz?.takeIf { it.first == tipo && it.second.isNotBlank() }
-            ?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_tocando), it.second, tipo, listOf(getString(R.string.cruz_tocando, it.second))) }
-        fun fracaoPodcast(p: Podcasts.Posicao): Float? = if (p.durMs > 0) (p.ms.toFloat() / p.durMs).coerceIn(0f, 1f) else null
-        val cats = ArrayList<HomeCruz.Categoria>()
-        fun categoria(k: CruzLogica.Categoria, nome: Int, tipo: IconeCruz.Tipo, itens: List<HomeCruz.Item>) {
-            if (itens.isNotEmpty()) cats += HomeCruz.Categoria(k, getString(nome), icCruz("cat:" + k.id, tipo), itens)
-        }
-
-        // Os apps visíveis (os mesmos da grade, pilhas abertas), cada um na categoria dele (CategoriaApps: escolha manual
-        // "Mover para…" > tipo que o app declara > Aplicativos). Os jogos moram em Jogar (jogosNaCruz).
-        val porPacote = LinkedHashMap<String, Item>()
-        for (e in lista) when (e) {
-            is Entrada.App -> porPacote[e.item.pacote] = e.item
-            is Entrada.Pilha -> for (it in e.itens) porPacote[it.pacote] = it
-            else -> {}
-        }
-        val escolhasCat = CategoriaApps.escolhas(this)
-        val porDestino = porPacote.keys.groupBy { CategoriaApps.destino(it, this@MainActivity.categoria(it), false, escolhasCat[it], catsFicha?.get(it)) }
-        val frequencia = frequenciaApps()
-        val fixados = fixadosCruz()
-        fun appsDe(k: CruzLogica.Categoria): List<HomeCruz.Item> =
-            CruzLogica.ordenarApps(porDestino[k].orEmpty(), ultimoUso, frequencia, fixados).map { id -> porPacote.getValue(id).let { app ->
-                HomeCruz.Item("app:$id", app.nome, linhasApp(id, app.nome), icApp(app), { abrir(id) }, opcoes = { menuAppCruz(id) })
-            } }
-
-        // Continuar (18/11/2026, pedido do dono): o canal de TV primeiro (a TV da casa); depois, do mais recente para o mais
-        // antigo, a série, o filme, a última rádio, o podcast pela metade, até 3 jogos e o último de cada app de mídia
-        // (YouTube, Spotify, Netflix…; MidiaRecente). "Dormir em 30 min" no fim, à noite.
-        // O nome de cada item é O QUE ele é (TV, Série, Filme, Rádio, Podcast, Jogo, ou o app), como nas outras categorias;
-        // o título vem embaixo e o resto no canto (Paulo, 19/11/2026 12:30 local: "tem q mostrar o nome do que é… eu gosto
-        // de coerência"). Antes o nome era o título, cortado ("Lei e Ordem: Unid…") e sem dizer o que era.
-        val continuar = ArrayList<HomeCruz.Item>()
-        ultimoTv?.let { u ->
-            continuar += HomeCruz.Item("c:tv", getString(R.string.home_card_tv),
-                CruzLogica.linhas(programa?.titulo, linhasTvCruz(u, programa, agora, comPrograma = false)), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
-                situacao = situacaoTv(null, linhaAgoraTv(programa, agora, comPrograma = false)))
-        }
-        val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
-        if (cruzTemVod) {
-            fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", getString(R.string.continue_series),
-                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), metaFicha(f, serie = true)),
-                icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }, progresso = visto(f, serie = true),
-                situacao = situacaoParou(epLegivel(f.episodio), visto(f, serie = true), faltaSerie(f),
-                    CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), "c:serie")) }
-            fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", getString(R.string.cruz_filme),
-                CruzLogica.linhas(CruzLogica.semMarca(f.titulo), faltaFilme(f), metaFicha(f, serie = false)),
-                icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }, progresso = visto(f, serie = false),
-                situacao = situacaoParou(null, visto(f, serie = false), faltaFilme(f), faltaFilme(f), "c:filme")) }
-        }
-        radioCruz?.let { (r, ouvidaEm) -> recentes += ouvidaEm to HomeCruz.Item("c:radio", getString(R.string.cruz_radio),
-            CruzLogica.linhas(r.nome, quando(ouvidaEm)?.let { getString(R.string.cruz_tocou, it) }),
-            icCruz("c:radio", IconeCruz.Tipo.RADIO), { tocarRadioCruz(r) }, situacao = situacaoTocando("radio")?.takeIf { it.texto.contains(r.nome, true) }) }
-        podcastCruz?.let { p -> recentes += p.em to HomeCruz.Item("c:podcast", getString(R.string.continue_podcast),
-            CruzLogica.linhas(p.titulo, p.podcast, faltaPodcast(p), quando(p.em)?.let { getString(R.string.cruz_tocou, it) }),
-            icCruz("c:podcast", IconeCruz.Tipo.PODCASTS), { retomarPodcastCruz(p) },
-            progresso = fracaoPodcast(p),
-            situacao = situacaoTocando("podcast") ?: situacaoParou(null, fracaoPodcast(p), faltaPodcast(p), faltaPodcast(p), "c:podcast")) }
-        for ((pacote, item) in jogosRecentes()) recentes += (ultimoUso[pacote] ?: 0L) to HomeCruz.Item("c:jogo:$pacote", getString(R.string.cruz_jogo),
-            CruzLogica.linhas(item.nome, quando(ultimoUso[pacote])?.let { getString(R.string.cruz_jogado, it) }), icApp(item), { abrir(pacote) }, opcoes = { menuAppCruz(pacote) })
-        for (m in midiaCruz) {
-            val nomeApp = nomeDe(m.registro.pacote)
-            recentes += m.registro.quando to HomeCruz.Item("c:midia:${m.registro.pacote}", nomeApp,
-                CruzLogica.linhas(m.registro.titulo, m.registro.sub, faltaMidia(m.registro), quando(m.registro.quando)?.let { getString(R.string.cruz_aberto, it) }),
-                m.capa ?: instalados.firstOrNull { it.pacote == m.registro.pacote }?.let { icApp(it) } ?: icCruz("c:midia", IconeCruz.Tipo.CONTINUAR),
-                { abrirMidiaCruz(m.registro.pacote) }, progresso = MidiaRecente.progresso(m.registro),
-                opcoes = { menuMidiaCruz(m.registro.pacote, nomeApp) },
-                situacao = situacaoParou(null, MidiaRecente.progresso(m.registro), faltaMidia(m.registro), faltaMidia(m.registro), "c:midia"))
-        }
-        continuar += CruzLogica.recentes(recentes, CONTINUAR_MAX - continuar.size)
-        itemDormir()?.let { continuar += it }   // onda 3: à noite, "Dormir em 30 min" no fim do Continuar
-        categoria(CruzLogica.Categoria.CONTINUAR, R.string.cruz_continuar, IconeCruz.Tipo.CONTINUAR, continuar)
-
-        // Assistir: os cards de hoje (TV, Séries, Filmes, Na rede, Addons, plugins), cada um só se o recurso existe.
-        val assistir = ArrayList<HomeCruz.Item>()
-        if (cruzTemTv) assistir += HomeCruz.Item("tv", getString(R.string.home_card_tv),
-            (ultimoTv?.let { linhasTvCruz(it, programa, agora, comPrograma = true) } ?: getString(R.string.home_destaque_tv_sub)).split("\n").let { l ->
-                // O jogo do seu time (HomeCards, chave CARTAO_PLACAR) logo depois do canal: as linhas param em 4.
-                CruzLogica.linhas(l.first(), jogoCruz?.let { getString(R.string.hc_seu_time, it) }, *l.drop(1).toTypedArray()) },
-            icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
-            situacao = situacaoTv(programa?.titulo, programa?.let { linhaAgoraTv(it, agora, comPrograma = true) }))
-        if (cruzTemVod) {
-            assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
-                precisa ?: fichaSerie?.let { f -> CruzLogica.linhas(f.titulo, CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), metaFicha(f, serie = true), f.genero) }
-                    ?: getString(R.string.home_destaque_series),
-                icCruz("series", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) },
-                situacao = fichaSerie?.takeIf { precisa == null }?.let { f ->
-                    situacaoParou(epLegivel(f.episodio), visto(f, serie = true), faltaSerie(f), CruzLogica.juntar(epLegivel(f.episodio), faltaSerie(f)), "series") })
-            assistir += HomeCruz.Item("filmes", getString(R.string.home_card_filmes),
-                precisa ?: fichaFilme?.let { f -> CruzLogica.linhas(f.titulo, metaFicha(f, serie = false), f.genero, faltaFilme(f)) }
-                    ?: getString(R.string.home_destaque_filmes),
-                icCruz("filmes", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) },
-                situacao = fichaFilme?.takeIf { precisa == null }?.let { f -> situacaoParou(null, visto(f, serie = false), faltaFilme(f), faltaFilme(f), "filmes") })
-        }
-        val pendrives = pendrivesCruz()
-        assistir += HomeCruz.Item("rede", getString(R.string.home_card_rede),
-            CruzLogica.linhas(getString(R.string.home_destaque_rede), *pendrives.map { getString(R.string.cruz_pendrive, it) }.toTypedArray()),
-            icCruz("rede", IconeCruz.Tipo.REDE), { abrirCatalogo(MidiaRedeActivity::class.java) },
-            situacao = pendrives.takeIf { it.isNotEmpty() }?.let { pd ->
-                CruzLogica.Situacao(getString(R.string.cruz_canto_conectado), pd.joinToString(" · "), "rede", pd.map { getString(R.string.cruz_pendrive, it) }) })
-        if (AddonsTv.instalados(this).isNotEmpty()) assistir += HomeCruz.Item("addons", getString(R.string.ad_titulo),
-            CruzLogica.linhas(getString(R.string.ad_destaque), getString(R.string.cruz_addons_n, AddonsTv.instalados(this).size)), icCruz("addons", IconeCruz.Tipo.ADDONS), { abrirCatalogo(AddonsActivity::class.java) })
-        for ((i, p) in cartoesPlugin.withIndex()) assistir += HomeCruz.Item("plugin:${p.pacote}:$i", p.titulo.ifEmpty { p.valor },
-            if (p.titulo.isEmpty()) p.detalhe else listOf(p.valor, p.detalhe).filter { it.isNotEmpty() }.joinToString(" · "),
-            icCruz("plugin:${p.pacote}:$i", IconeCruz.Tipo.PLUGIN), { PluginsTv.abrir(this, p) })
-        assistir += appsDe(CruzLogica.Categoria.ASSISTIR)   // YouTube, Netflix… (movidos ou pelo tipo do app)
-        categoria(CruzLogica.Categoria.ASSISTIR, R.string.cruz_assistir, IconeCruz.Tipo.ASSISTIR, assistir)
-
-        // Ouvir: as rádios (catálogo mundial, sem conta) e os podcasts (plano Básico, Paulo 17/11/2026).
-        val ouvir = listOf(
-            HomeCruz.Item("radio", getString(R.string.cruz_radio),
-                CruzLogica.linhas(ouvindoCruz?.takeIf { it.first == "radio" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.cruz_radio_sub),
-                    radioCruz?.let { (r, q) -> CruzLogica.juntar(getString(R.string.cruz_por_ultimo, r.nome), quando(q)) }),
-                icCruz("radio", IconeCruz.Tipo.RADIO), {
-                try { startActivity(Intent(this, RadioActivity::class.java)) }
-                catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            }, situacao = situacaoTocando("radio")),
-            HomeCruz.Item("podcasts", getString(R.string.pod_titulo),
-                CruzLogica.linhas(ouvindoCruz?.takeIf { it.first == "podcast" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.ra_podcasts_det),
-                    podcastCruz?.let { p -> CruzLogica.juntar(p.titulo, faltaPodcast(p)) },
-                    assinadosCruz.takeIf { it > 0 }?.let { getString(R.string.cruz_podcasts_n, it) }),
-                icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
-                try { startActivity(Intent(this, PodcastsActivity::class.java)) }
-                catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            }, situacao = situacaoTocando("podcast") ?: podcastCruz?.let { p ->
-                situacaoParou(p.titulo, fracaoPodcast(p), faltaPodcast(p), CruzLogica.juntar(p.titulo, faltaPodcast(p)), "podcasts") })) + appsDe(CruzLogica.Categoria.OUVIR)
-        categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, ouvir)
-
-        // Jogar (18/11/2026, pedido do dono: "Jogos" e "Sofá" abriam a mesma tela): a Central de jogos no topo (o painel com
-        // controles, turma do Discord, rede e recentes) e cada jogo instalado, do jogado por último ao mais antigo.
-        val jogos = ArrayList<HomeCruz.Item>()
-        if (JogosTv.cardLigado(this)) {
-            jogos += HomeCruz.Item("central", getString(R.string.cruz_central), linhasCentral(), icCruz("central", IconeCruz.Tipo.CENTRAL),
-                { abrirCatalogo(JogosActivity::class.java) })
-            val doJogo = jogosNaCruz().associateBy { it.pacote }
-            for (p in CruzLogica.ordenarApps(doJogo.keys.sorted(), ultimoUso, emptyMap(), fixadosCruz())) doJogo.getValue(p).let { app ->
-                jogos += HomeCruz.Item("app:$p", app.nome,
-                    CruzLogica.linhas(subApp(p, app.nome), quando(ultimoUso[p])?.let { getString(R.string.cruz_jogado, it) }),
-                    icApp(app), { abrir(p) }, opcoes = { menuAppCruz(p) })
-            }
-            categoria(CruzLogica.Categoria.JOGAR, R.string.cruz_jogar, IconeCruz.Tipo.JOGAR, jogos)
-        }
-
-        // Aplicativos: os 8 mais usados dos que moram aqui (nem movidos nem automáticos de Assistir/Ouvir) e "Todos os apps".
-        val apps = CruzLogica.appsDaColuna(porDestino[CruzLogica.Categoria.APLICATIVOS].orEmpty(), ultimoUso, frequencia, fixados).map { id ->
-            if (id == CruzLogica.ID_TODOS_APPS) HomeCruz.Item(id, getString(R.string.cruz_todos_apps),
-                CruzLogica.linhas(getString(R.string.cruz_todos_apps_sub), contaApps()),
-                icCruz(id, IconeCruz.Tipo.TODOS_APPS), { abrirTodos() })
-            else porPacote.getValue(id).let { app ->
-                HomeCruz.Item("app:$id", app.nome, linhasApp(id, app.nome), icApp(app), { abrir(id) }, opcoes = { menuAppCruz(id) })
-            }
-        }
-        categoria(CruzLogica.Categoria.APLICATIVOS, R.string.cruz_aplicativos, IconeCruz.Tipo.APLICATIVOS, apps)
-
-        c.definir(cats)
-        if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
-        else if (currentFocus == null && !todosAbertos) c.requestFocus()
-    }
 
     // ------------------------------------------------------------------ Continuar e Jogar da cruz (18/11/2026)
 
     /** Uma entrada de app de mídia no Continuar, com a capa já pronta (lida fora da tela). */
-    private class MidiaCruz(val registro: MidiaRecente.Registro, val capa: Drawable?)
-    @Volatile private var radioCruz: Pair<Radios.Radio, Long>? = null
-    @Volatile private var podcastCruz: Podcasts.Posicao? = null
-    @Volatile private var midiaCruz: List<MidiaCruz> = emptyList()
+    internal class MidiaCruz(val registro: MidiaRecente.Registro, val capa: Drawable?)
+    @Volatile internal var radioCruz: Pair<Radios.Radio, Long>? = null
+    @Volatile internal var podcastCruz: Podcasts.Posicao? = null
+    @Volatile internal var midiaCruz: List<MidiaCruz> = emptyList()
     /** O último título de cada app de mídia (para a linha de baixo do app na cruz) e quantos podcasts você segue. */
     @Volatile private var midiaPorApp: Map<String, MidiaRecente.Registro> = emptyMap()
-    @Volatile private var assinadosCruz = 0
+    @Volatile internal var assinadosCruz = 0
 
     /** Lê, na fila dos apps, o que o Continuar da cruz mostra além de TV/série/filme. */
     private fun lerContinuarCruz() {
@@ -3727,21 +2146,21 @@ class MainActivity : Activity() {
     }
 
     /** Os jogos visíveis na TV (instalados por você ou sempre mostrados), sem os ocultos e os da visita. */
-    private fun jogosNaCruz(): List<Item> {
+    internal fun jogosNaCruz(): List<Item> {
         val ocultos = Organizacao.ocultos(this)
         val daVisita = if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet()
         return instalados.filter { JogosTv.ehJogo(this, it.pacote) && it.pacote !in ocultos && it.pacote !in daVisita }
     }
 
     /** Até [JOGOS_NO_CONTINUAR] jogos já abertos, do mais recente. */
-    private fun jogosRecentes(): List<Pair<String, Item>> =
+    internal fun jogosRecentes(): List<Pair<String, Item>> =
         jogosNaCruz().filter { (ultimoUso[it.pacote] ?: 0L) > 0L }.sortedByDescending { ultimoUso[it.pacote] }
             .take(JOGOS_NO_CONTINUAR).map { it.pacote to it }
 
     // ---- linhas de informação da cruz (dono, 18/11/2026: "a regra da TV em toda a HOME"; CruzLogica.linhas)
 
     /** "há 2 horas", "ontem"… no idioma da TV; null sem data ou no futuro. */
-    private fun quando(ms: Long?): String? {
+    internal fun quando(ms: Long?): String? {
         val agora = System.currentTimeMillis()
         if (ms == null || ms <= 0L || ms > agora + 60_000) return null
         // Menos de 1 min: "agora" (o Android diria "Há 0 minuto"). Senão "há 5 min", abreviado e com minúscula,
@@ -3752,47 +2171,47 @@ class MainActivity : Activity() {
     }
 
     /** Ano · duração (filme) · nota, numa linha. */
-    private fun metaFicha(f: PlayerArmazem.FichaHome, serie: Boolean): String? = CruzLogica.juntar(
+    internal fun metaFicha(f: PlayerArmazem.FichaHome, serie: Boolean): String? = CruzLogica.juntar(
         f.ano?.takeIf { it > 1800 }?.toString(),
         if (serie) null else f.duracaoMin?.takeIf { it > 0 }?.let { duracaoTexto(it) },
         f.nota?.takeIf { it > 0f }?.let { "★ " + String.format(Locale.getDefault(), "%.1f", it) })
 
     /** Quanto falta do episódio parado no meio. */
-    private fun faltaSerie(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && it.ms > 0 && it.ms < it.duracao }
+    internal fun faltaSerie(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && it.ms > 0 && it.ms < it.duracao }
         ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
 
-    private fun faltaMidia(r: MidiaRecente.Registro): String? = r.takeIf { it.durMs > 0 && it.posMs in 1 until it.durMs }
+    internal fun faltaMidia(r: MidiaRecente.Registro): String? = r.takeIf { it.durMs > 0 && it.posMs in 1 until it.durMs }
         ?.let { ((it.durMs - it.posMs) / 60_000).toInt() }?.takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) }
 
     /** Um app na cruz: a frase dele, o que você viu/ouviu por último nele (sessão de mídia) e quando abriu. */
-    private fun linhasApp(pacote: String, nome: String): String = CruzLogica.linhas(subApp(pacote, nome),
+    internal fun linhasApp(pacote: String, nome: String): String = CruzLogica.linhas(subApp(pacote, nome),
         midiaPorApp[pacote]?.let { r -> getString(R.string.cruz_por_ultimo, CruzLogica.juntar(r.titulo, r.sub) ?: r.titulo) },
         quando(ultimoUso[pacote])?.let { getString(R.string.cruz_aberto, it) })
 
     /** Central de jogos: a turma do Discord e os controles ligados, cada um na sua linha. */
-    private fun linhasCentral(): String {
+    internal fun linhasCentral(): String {
         val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
         return CruzLogica.linhas(resumoSofa(), controles.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.jogos_controles, it, it) },
             jogosRecentes().firstOrNull()?.let { (p, it) -> CruzLogica.juntar(getString(R.string.cruz_por_ultimo, it.nome), quando(ultimoUso[p])) })
     }
 
     /** Pendrives/HDs ligados agora (nome do volume). */
-    private fun pendrivesCruz(): List<String> = runCatching {
+    internal fun pendrivesCruz(): List<String> = runCatching {
         (getSystemService(android.content.Context.STORAGE_SERVICE) as android.os.storage.StorageManager).storageVolumes
             .filter { it.isRemovable && it.state == android.os.Environment.MEDIA_MOUNTED }.map { it.getDescription(this) }
     }.getOrDefault(emptyList()).take(2)
 
-    private fun faltaPodcast(p: Podcasts.Posicao): String =
+    internal fun faltaPodcast(p: Podcasts.Posicao): String =
         if (p.durMs > p.ms) ((p.durMs - p.ms) / 60_000).toInt().takeIf { it > 0 }?.let { BarraTempo.faltam(this, duracaoTexto(it)) } ?: ""
         else ""
 
-    private fun tocarRadioCruz(r: Radios.Radio) {
+    internal fun tocarRadioCruz(r: Radios.Radio) {
         if (semInternetCruz) { cruz?.naoAbriu(); return }
         OuvirServico.tocarRadio(this, r)   // toca e fica na HOME; a pílula "Tocando agora" aparece
     }
 
     /** Retoma o episódio de onde parou (o feed já está no cache); sem o feed, abre a tela de Podcasts. */
-    private fun retomarPodcastCruz(p: Podcasts.Posicao) {
+    internal fun retomarPodcastCruz(p: Podcasts.Posicao) {
         Fundo.rodar("podcast-continuar") {
             val ass = runCatching { Podcasts.assinaturas(this).firstOrNull { it.url == p.feed } }.getOrNull()
             val feed = runCatching { Podcasts.feeds(this)[p.feed] }.getOrNull()
@@ -3810,7 +2229,7 @@ class MainActivity : Activity() {
      * App de mídia do Continuar: com a sessão ainda aberta, música volta a tocar sem sair da HOME e vídeo abre o player
      * do app (a "atividade da sessão"); sem sessão, abre o app (a maioria retoma sozinho de onde parou).
      */
-    private fun abrirMidiaCruz(pacote: String) {
+    internal fun abrirMidiaCruz(pacote: String) {
         val sessao = runCatching {
             getSystemService(android.media.session.MediaSessionManager::class.java)
                 ?.getActiveSessions(android.content.ComponentName(this, OuvinteNotificacoes::class.java))
@@ -3831,7 +2250,7 @@ class MainActivity : Activity() {
         abrir(pacote)
     }
 
-    private fun menuMidiaCruz(pacote: String, nomeApp: String) {
+    internal fun menuMidiaCruz(pacote: String, nomeApp: String) {
         val opcoes = listOf(
             Opcao(getString(R.string.cruz_abrir_app, nomeApp)) { abrir(pacote) },
             Opcao(getString(R.string.cruz_tirar_continuar)) {
@@ -3844,7 +2263,7 @@ class MainActivity : Activity() {
      * "Trocar ícone" (18/11/2026): escolhe o pacote (se houver mais de um) e abre a grade dele para este app; "Ícone
      * original" volta ao do app. Pacote de ícones de outro desenvolvedor é do plano Pro.
      */
-    private fun trocarIconeCruz(pacote: String) {
+    internal fun trocarIconeCruz(pacote: String) {
         if (!Planos.permite(this, Planos.Recurso.PLUGINS)) { startActivity(Intent(this, ConhecerProActivity::class.java)); return }
         val pacotes = PacoteIcones.deFora(this)
         val temTroca = CustomIcons.escolha(this, pacote) != null
@@ -3862,7 +2281,7 @@ class MainActivity : Activity() {
     }
 
     /** "Mover para…": Assistir, Ouvir, Jogar (com a Central ligada) ou Aplicativos; a atual vem marcada. */
-    private fun moverAppCruz(pacote: String) {
+    internal fun moverAppCruz(pacote: String) {
         val eraJogo = JogosTv.ehJogo(this, pacote)
         val atual = CategoriaApps.destino(pacote, categoria(pacote), eraJogo && JogosTv.cardLigado(this), CategoriaApps.escolhas(this)[pacote], catsFicha?.get(pacote))
         val destinos = CategoriaApps.DESTINOS.filter { it != CruzLogica.Categoria.JOGAR || JogosTv.cardLigado(this) }
@@ -3886,304 +2305,61 @@ class MainActivity : Activity() {
 
     // ------------------------------------------------------------------ onda 3 (CruzOnda3): ambiente, paralaxe, quem vê
 
-    private var raizCruz: FrameLayout? = null
-    private var ambiente = false
-    private var relogioAmbiente: View? = null
+    internal var raizCruz: FrameLayout? = null
+    internal var ambiente = false
+    internal var relogioAmbiente: View? = null
     /** Tecla que tirou do modo ambiente: o "soltar" dela também é engolido (senão o OK abriria o item). */
-    private var engolirTecla = -1
-    private val tarefaAmbiente = Runnable { entrarAmbiente() }
+    internal var engolirTecla = -1
+    internal val tarefaAmbiente = Runnable { entrarAmbiente() }
 
-    private fun reagendarAmbiente() {
-        ui.removeCallbacks(tarefaAmbiente)
-        if (cruz != null && homeNaFrente && CruzOnda3.ligado(this, CruzOnda3.CHAVE_AMBIENTE)) ui.postDelayed(tarefaAmbiente, CruzOnda3.AMBIENTE_MS)
-    }
 
-    private fun tocandoAgora() = ::capsulaTocando.isInitialized && capsulaTocando.visibility == View.VISIBLE && barrasTocando.tocando
 
-    private fun entrarAmbiente() {
-        val c = cruz ?: return
-        if (ambiente || !homeNaFrente) return
-        if (!CruzOnda3.entraAmbiente(CruzOnda3.ligado(this, CruzOnda3.CHAVE_AMBIENTE), c.hasFocus() || c.isFocused, todosAbertos,
-                menuAberto?.isShowing == true, tocandoAgora())) { reagendarAmbiente(); return }
-        ambiente = true
-        (fundo as? WallpaperPluginView)?.ocioso(true)
-        val d = CruzOnda3.AMBIENTE_FADE_MS
-        c.animate().alpha(0f).setDuration(d).start()
-        topoRaiz?.animate()?.alpha(0f)?.setDuration(d)?.start()
-        relogioCruz?.animate()?.alpha(0f)?.setDuration(d)?.start()
-        // A hora grande no canto livre de baixo (a mesma da barra "Relógio grande"), com a data e o tempo.
-        val r = relogioAmbiente ?: montarRelogioCruz().also { v ->
-            v.alpha = 0f
-            raizCruz?.addView(v, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
-                marginEnd = dp(Grade.MARGEM); bottomMargin = dp(40)
-            })
-            relogioAmbiente = v
-        }
-        r.visibility = View.VISIBLE
-        r.animate().alpha(1f).setDuration(d).start()
-        c.announceForAccessibility(getString(R.string.cruz_ambiente))
-    }
 
-    /** Volta exatamente onde estava (a cruz não mudou de lugar; só a transparência). */
-    private fun sairAmbiente(animar: Boolean = true) {
-        if (!ambiente) return
-        ambiente = false
-        (fundo as? WallpaperPluginView)?.ocioso(false)
-        val d = if (animar) CruzOnda3.VOLTA_MS else 0L
-        cruz?.animate()?.alpha(1f)?.setDuration(d)?.start()
-        topoRaiz?.animate()?.alpha(1f)?.setDuration(d)?.start()
-        relogioCruz?.animate()?.alpha(if (barraRecolhida) 1f else 0.35f)?.setDuration(d)?.start()
-        relogioAmbiente?.animate()?.alpha(0f)?.setDuration(d)?.withEndAction { relogioAmbiente?.visibility = View.GONE }?.start()
-        reagendarAmbiente()
-    }
 
-    /** Antes de tudo no dispatchKeyEvent: no modo ambiente, a 1ª tecla só acorda a cruz (volume passa direto). */
-    private fun teclaDoAmbiente(e: KeyEvent): Boolean {
-        val volume = e.keyCode == KeyEvent.KEYCODE_VOLUME_UP || e.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || e.keyCode == KeyEvent.KEYCODE_VOLUME_MUTE
-        if (ambiente && !volume) {
-            if (e.action == KeyEvent.ACTION_DOWN) { engolirTecla = e.keyCode; sairAmbiente() }
-            return true
-        }
-        if (e.keyCode == engolirTecla && e.action == KeyEvent.ACTION_UP) { engolirTecla = -1; return true }
-        if (e.keyCode == engolirTecla) return true   // repetição da mesma tecla segurada
-        if (e.action == KeyEvent.ACTION_DOWN) reagendarAmbiente()
-        return false
-    }
 
-    /** Paralaxe: a arte anda [CruzOnda3.PARALAXE_DP] para o lado oposto da tecla e volta devagar. */
-    private fun deslizarArte(t: CruzLogica.Tecla) {
-        if (!::capa.isInitialized || capa.desligada || !CruzOnda3.ligado(this, CruzOnda3.CHAVE_PARALAXE)) return
-        if (android.provider.Settings.Global.getFloat(contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f) return
-        val (x, y) = CruzOnda3.paralaxe(t)
-        if (x == 0 && y == 0) return
-        val passo = CruzOnda3.PARALAXE_DP * resources.displayMetrics.density
-        capa.animate().cancel()
-        capa.translationX = x * passo; capa.translationY = y * passo
-        capa.animate().translationX(0f).translationY(0f).setDuration(CruzOnda3.PARALAXE_MS)
-            .setInterpolator(android.view.animation.DecelerateInterpolator(1.6f)).start()
-    }
 
     // ---- "Quem está vendo?" ao ligar a TV
-    private var vigiaTela: android.content.BroadcastReceiver? = null
-    private var apagouEm = 0L
-    private var acendeuEm = 0L
-    private var dormiuMs = 0L
-    private var perguntouNestaVez = true   // começa true: abrir o launcher não é "ligar a TV"
+    internal var vigiaTela: android.content.BroadcastReceiver? = null
+    internal var apagouEm = 0L
+    internal var acendeuEm = 0L
+    internal var dormiuMs = 0L
+    internal var perguntouNestaVez = true   // começa true: abrir o launcher não é "ligar a TV"
     /** Até quando (elapsedRealtime) a logo ainda entra no onResume depois de a tela acender; 0 = nada pendente. */
-    private var splashPendenteAte = 0L
-    private val tarefaQuemVe = Runnable { talvezPerguntarQuemVe() }
+    internal var splashPendenteAte = 0L
+    internal val tarefaQuemVe = Runnable { talvezPerguntarQuemVe() }
 
-    private fun vigiarTela() {
-        if (vigiaTela != null) return
-        val r = object : android.content.BroadcastReceiver() {
-            override fun onReceive(ctx: android.content.Context, i: Intent) {
-                val agora = android.os.SystemClock.elapsedRealtime()
-                when (i.action) {
-                    Intent.ACTION_SCREEN_OFF -> { apagouEm = agora; sairAmbiente(animar = false) }
-                    Intent.ACTION_SCREEN_ON -> {
-                        acendeuEm = agora
-                        dormiuMs = if (apagouEm > 0) agora - apagouEm else 0L
-                        perguntouNestaVez = false
-                        // Logo Sofaly ao acordar a TV (SplashRules): HOME na frente = já; pausada = no onResume dos próximos 3 s.
-                        if (SplashRules.onWake(SplashOverlay.enabled(ctx), dormiuMs, homeInFront = true)) {
-                            if (homeNaFrente) SplashOverlay.show(this@MainActivity) else splashPendenteAte = agora + 3000L
-                        }
-                        abrirIlhaAoAcordar()
-                        if (homeNaFrente) { ui.removeCallbacks(tarefaQuemVe); ui.postDelayed(tarefaQuemVe, 1500) }
-                    }
-                }
-            }
-        }
-        val f = android.content.IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) }
-        runCatching {
-            if (android.os.Build.VERSION.SDK_INT >= 33) registerReceiver(r, f, android.content.Context.RECEIVER_NOT_EXPORTED) else registerReceiver(r, f)
-            vigiaTela = r
-        }
-    }
 
-    private fun talvezPerguntarQuemVe() {
-        if (perguntouNestaVez || !homeNaFrente || isDestroyed) return
-        val desde = android.os.SystemClock.elapsedRealtime() - acendeuEm
-        val contas = Perfil.contas(this)
-        if (!CruzOnda3.perguntaQuemVe(CruzOnda3.ligado(this, CruzOnda3.CHAVE_QUEM), contas.size, dormiuMs, desde, ModoVisita.ativo(this))) {
-            if (desde > CruzOnda3.QUEM_JANELA_MS) perguntouNestaVez = true
-            return
-        }
-        if (menuAberto?.isShowing == true) return
-        perguntouNestaVez = true
-        val ativa = Perfil.ativa(this, contas)
-        val nomes = contas.map { Perfil.nome(this, it) + if (it == ativa) getString(R.string.pp_ativo) else "" }
-        menuAberto = Estilo.lista(this, getString(R.string.cruz_quem_titulo), nomes) { i ->
-            val conta = contas[i]
-            if (conta != ativa) PerfilCriancaTv.trocar(this, ativa, conta) { trocou ->
-                if (trocou && !isDestroyed) { atualizarFotoPerfil(); reorganizar(); preencherContinuar() }
-            }
-        }
-    }
 
     // ---- "Dormir em 30 min" (Continuar, à noite)
 
-    private fun itemDormir(): HomeCruz.Item? {
-        val marcado = Desligamento.marcado(this)
-        val hora = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-        if (!CruzOnda3.mostraDormir(CruzOnda3.ligado(this, CruzOnda3.CHAVE_DORMIR), hora, marcado != null)) return null
-        val ic = icCruz("c:dormir", IconeCruz.Tipo.DORMIR)
-        return if (marcado != null) HomeCruz.Item("c:dormir",
-            getString(R.string.cruz_desliga_as, android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(marcado))),
-            getString(R.string.cruz_dormir_cancelar), ic, { Desligamento.cancelar(this); atualizarCruz() })
-        else HomeCruz.Item("c:dormir", getString(R.string.cruz_dormir), getString(R.string.cruz_dormir_sub), ic, {
-            Desligamento.agendar(this, CruzOnda3.DORMIR_MIN); atualizarCruz()
-        })
-    }
 
-    /**
-     * O que a grade de "Todos os apps" mostra e quantos ficaram escondidos (Paulo, 19/11/2026: "3 apps na grade · 5 ocultos").
-     * Jogos não contam como ocultos: com o cartão Jogos ligado eles moram lá.
-     */
-    private fun contaApps(): String {
-        val ocultos = Organizacao.ocultos(this) + (if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet())
-        val semJogos = JogosTv.cardLigado(this)
-        val apps = instalados.filter { !it.pacote.startsWith("entrada:") && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
-        val escondidos = apps.count { it.pacote in ocultos }
-        val naGrade = apps.size - escondidos
-        return if (escondidos == 0) getString(R.string.cruz_apps_n, naGrade) else getString(R.string.cruz_apps_ocultos, naGrade, escondidos)
-    }
 
     // ---------------------------------------------------------------- "Todos os apps" (proposta C, 20/11/2026)
-    // A tela em prateleiras (AllAppsScreen) substitui a grade antiga, que segue montada e escondida (ela ainda serve
-    // à HOME antiga, só por adb). Liga com: AppShelf (categoria da Play pela ficha), CategoriaApps (mundo da cruz),
+    // A tela em prateleiras (AllAppsScreen). Liga com: AppShelf (categoria da Play pela ficha), CategoriaApps (mundo da cruz),
     // Organizacao.ocultos (Escondidos, com PIN), PainelApps.ocultar (Congelados) e a prova do Observador (ObserverTv).
 
-    private var telaTodos: AllAppsScreen? = null
+    internal var telaTodos: AllAppsScreen? = null
     /** A categoria de cada ficha no padrão da Play (AppShelf.sheetCats): a cruz, esta tela e o painel usam. */
-    private var catsFicha: Map<String, String>?
+    internal var catsFicha: Map<String, String>?
         get() = AppShelf.sheetCats
         set(v) { AppShelf.sheetCats = v }
     /** Os escondidos aparecem nesta abertura da tela (o PIN foi certo). Fechar a tela tranca de novo. */
-    private var escondidosLiberados = false
+    internal var escondidosLiberados = false
     /** O que custa disco/IPC, lido fora da tela a cada abertura: categoria das fichas, apps de sistema e congelados. */
-    private class DadosTodos(val sistema: Set<String>, val congelados: List<Item>)
-    @Volatile private var dadosTodos: DadosTodos? = null
-    private val bannersTodos = java.util.concurrent.ConcurrentHashMap<String, Drawable>()
+    internal class DadosTodos(val sistema: Set<String>, val congelados: List<Item>)
+    @Volatile internal var dadosTodos: DadosTodos? = null
+    internal val bannersTodos = java.util.concurrent.ConcurrentHashMap<String, Drawable>()
 
-    private fun abrirTodos() {
-        val c = cruz ?: return
-        todosAbertos = true
-        escondidosLiberados = false
-        c.visibility = View.GONE
-        val tela = telaTodos ?: AllAppsScreen(this, hostTodos).also { t ->
-            telaTodos = t
-            (raizCruz ?: c.parent as? FrameLayout)?.addView(t, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
-        }
-        tela.visibility = View.VISIBLE
-        tela.bringToFront()
-        if (dadosTodos != null) montarTodos(null)   // mostra já com o que sabia; os dados novos redesenham em seguida
-        lerDadosTodos(null)
-    }
 
-    private fun fecharTodos() {
-        val c = cruz ?: return
-        if (modoMover) cancelarMover()
-        todosAbertos = false
-        escondidosLiberados = false
-        telaTodos?.visibility = View.GONE
-        c.visibility = View.VISIBLE
-        c.requestFocus()
-    }
 
-    private fun lerDadosTodos(foco: String?) {
-        Fundo.rodar("TodosApps") {
-            val pm = packageManager
-            if (catsFicha == null) catsFicha = runCatching { AppShelf.sheetCategories(ComunidadeApps.fichasJuntas(this)) }.getOrDefault(emptyMap())
-            val sistema = instalados.filter { PainelApps.eSistema(this, it.pacote) }.map { it.pacote }.toSet()
-            val congelados = runCatching { appsCongelados(pm) }.getOrDefault(emptyList())
-            ui.post {
-                if (isDestroyed) return@post
-                dadosTodos = DadosTodos(sistema, congelados)
-                if (todosAbertos) montarTodos(foco ?: (currentFocus?.tag as? AllAppsScreen.Card)?.pkg)
-            }
-        }
-    }
 
-    /** Apps de TV congelados (ocultos pelo dono ou desativados pelo shell): só os que têm tela de abrir. */
-    private fun appsCongelados(pm: android.content.pm.PackageManager): List<Item> {
-        val flags = android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS
-        val saida = ArrayList<Item>()
-        for (ai in pm.getInstalledApplications(flags)) {
-            val p = ai.packageName
-            if (p == packageName || !PrivilegioDO.estaOculto(this, p)) continue
-            val tela = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER).setPackage(p)
-            if (pm.queryIntentActivities(tela, flags).isEmpty()) continue
-            val icone = runCatching { DesenhoHome.iconeRedondo(resources, ai.loadIcon(pm)) }.getOrNull() ?: continue
-            saida += Item(p, ai.loadLabel(pm).toString(), icone)
-        }
-        return saida.sortedBy { it.nome.lowercase() }
-    }
 
-    /** Monta as prateleiras com o que está na memória (rápido, na thread da tela). */
-    private fun montarTodos(foco: String?) {
-        val tela = telaTodos ?: return
-        val dados = dadosTodos ?: DadosTodos(emptySet(), emptyList())
-        val visita = ModoVisita.ativo(this)
-        val daVisita = if (visita) ModoVisita.apps(this) else emptySet()
-        val ocultos = Organizacao.ocultos(this)
-        val apps = instalados.filter { it.pacote !in daVisita }
-        val visiveis = apps.filter { it.pacote !in ocultos }
-        val escondidos = if (visita) emptyList() else apps.filter { it.pacote in ocultos }
-        val freq = frequenciaApps()
-        val porPacote = (apps + dados.congelados).associateBy { it.pacote }
-        val entradas = visiveis.map { AppShelf.Entry(it.pacote, it.nome, prateleira(it.pacote, dados), freq[it.pacote] ?: 0.0) }
-        val (fileiras, unica) = AppShelf.rows(entradas)
-        val secoes = ArrayList<AllAppsScreen.Section>()
-        fun card(p: String, k: AllAppsScreen.Kind) = porPacote[p]?.let { AllAppsScreen.Card(p, it.nome, k, it.icone) }
-        for (f in fileiras) secoes += AllAppsScreen.Section(if (unica) null else nomePrateleira(f.shelf), corPrateleira(f.shelf),
-            f.pkgs.mapNotNull { card(it, AllAppsScreen.Kind.APP) })
-        if (dados.congelados.isNotEmpty() && !visita) secoes += AllAppsScreen.Section(getString(R.string.aa_frozen), COR_CONGELADOS,
-            dados.congelados.map { AllAppsScreen.Card(it.pacote, it.nome, AllAppsScreen.Kind.FROZEN, it.icone) })
-        if (escondidos.isNotEmpty()) secoes += AllAppsScreen.Section(getString(R.string.aa_hidden), COR_ESCONDIDOS,
-            if (escondidosLiberados) escondidos.sortedBy { it.nome.lowercase() }.map { AllAppsScreen.Card(it.pacote, it.nome, AllAppsScreen.Kind.HIDDEN, it.icone) }
-            else listOf(AllAppsScreen.Card(CARTAO_TRANCA, getString(R.string.aa_lock, escondidos.size), AllAppsScreen.Kind.LOCK, null)))
-        val conta = buildString {
-            append(getString(R.string.cruz_apps_n, visiveis.size))
-            if (escondidos.isNotEmpty()) append(" · ").append(getString(R.string.aa_count_hidden, escondidos.size))
-            if (dados.congelados.isNotEmpty() && !visita) append(" · ").append(getString(R.string.aa_count_frozen, dados.congelados.size))
-        }
-        tela.show(conta, secoes, foco)
-        if (secoes.all { it.cards.isEmpty() }) bolinhaPerfil?.requestFocus()   // nada na tela: o foco não fica sem dono
-    }
 
-    private fun prateleira(p: String, dados: DadosTodos): AppShelf.Shelf {
-        val mundo = CategoriaApps.escolhas(this)[p]?.let { id -> CategoriaApps.DESTINOS.firstOrNull { it.id == id } }
-        return AppShelf.decide(p, prateleirasManuais()[p], JogosTv.ehJogo(this, p), catsFicha?.get(p), categoria(p), p in dados.sistema, mundo)
-    }
 
-    private fun prateleirasManuais(): Map<String, String> = AppShelf.fromJson(prefsApps().getString("shelves", null))
 
-    private fun nomePrateleira(s: AppShelf.Shelf): String = getString(when (s) {
-        AppShelf.Shelf.ENTERTAINMENT -> R.string.aa_shelf_entertainment
-        AppShelf.Shelf.VIDEO -> R.string.aa_shelf_video
-        AppShelf.Shelf.SPORTS -> R.string.aa_shelf_sports
-        AppShelf.Shelf.KIDS -> R.string.aa_shelf_kids
-        AppShelf.Shelf.MUSIC_AUDIO -> R.string.aa_shelf_music_audio
-        AppShelf.Shelf.NEWS -> R.string.aa_shelf_news
-        AppShelf.Shelf.GAMES -> R.string.aa_shelf_games
-        AppShelf.Shelf.EDUCATION -> R.string.aa_shelf_education
-        AppShelf.Shelf.HEALTH_FITNESS -> R.string.aa_shelf_health_fitness
-        AppShelf.Shelf.LIFESTYLE -> R.string.aa_shelf_lifestyle
-        AppShelf.Shelf.TOOLS -> R.string.aa_shelf_tools
-        AppShelf.Shelf.SYSTEM -> R.string.aa_shelf_system
-        AppShelf.Shelf.OTHER -> R.string.aa_shelf_other
-    })
 
-    /** A cor do mundo da cruz em que a prateleira mora (decisão 3 da crítica de 19/11: cor fixa por mundo). */
-    private fun corPrateleira(s: AppShelf.Shelf): Int = if (s == AppShelf.Shelf.SYSTEM) COR_ESCONDIDOS else when (s.world) {
-        CruzLogica.Categoria.ASSISTIR -> DesignTokens.WORLD_WATCH
-        CruzLogica.Categoria.OUVIR -> DesignTokens.WORLD_LISTEN
-        CruzLogica.Categoria.JOGAR -> DesignTokens.WORLD_PLAY
-        else -> DesignTokens.WORLD_APPS
-    }
 
-    private val hostTodos = object : AllAppsScreen.Host {
+    internal val hostTodos = object : AllAppsScreen.Host {
         override fun open(card: AllAppsScreen.Card) = when (card.kind) {
             AllAppsScreen.Kind.LOCK -> liberarEscondidos()
             AllAppsScreen.Kind.FROZEN -> abrirCongelado(card)
@@ -4218,425 +2394,40 @@ class MainActivity : Activity() {
         }
     }
 
-    /** Banner de TV de um app, também de um congelado (o Android só mostra esses com as flags abaixo). Fora da tela. */
-    private fun bannerTodos(p: String): Drawable? {
-        val pm = packageManager
-        val flags = android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES or android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS
-        val ai = pm.getApplicationInfo(p, flags)
-        val tela = pm.queryIntentActivities(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER).setPackage(p), flags)
-            .firstOrNull()?.activityInfo
-        val b = tela?.loadBanner(pm) ?: pm.getApplicationBanner(ai) ?: return null
-        return runCatching { android.graphics.drawable.BitmapDrawable(resources, CapaFoco.bitmapReduzido(b)) }.getOrNull()
-    }
 
-    /** O painel do app em foco: o que ele é (ficha), quando abriu, quanto ocupa, o risco e a dica do Observador. */
-    private fun infoTodos(card: AllAppsScreen.Card): AllAppsScreen.Info {
-        val p = card.pkg
-        val agora = System.currentTimeMillis()
-        val linhas = ArrayList<String>()
-        val portugues = resources.configuration.locales[0].language == "pt"
-        fichasHome?.get(p)?.let { f -> (if (portugues) f.pt else f.en)?.let { linhas += it } }
-        val ultimo = maxOf(ultimoUso[p] ?: 0L, lerFrequencia(prefsApps().getString("f:$p", null)).second)
-        val dias = if (ultimo > 0) ((agora - ultimo) / 86_400_000L).toInt() else -1
-        if (card.kind != AllAppsScreen.Kind.FROZEN) linhas += when {
-            dias < 0 -> getString(R.string.aa_used_never)
-            dias == 0 -> getString(R.string.aa_used_today)
-            else -> getString(R.string.aa_used_days, dias)
-        }
-        PainelControle.espaco(this, p)?.let { e ->
-            val total = e.optLong("app") + e.optLong("dados") + e.optLong("cache")
-            if (total > 0) linhas += getString(R.string.aa_size, android.text.format.Formatter.formatShortFileSize(this, total))
-        }
-        val risco = PainelApps.risco(this, p)
-        when (risco) {
-            "seguro" -> linhas += getString(R.string.aa_risk_safe)
-            "cuidado" -> linhas += getString(R.string.aa_risk_care)
-            "essencial" -> linhas += getString(R.string.aa_risk_essential)
-        }
-        // Dica (Observador): app seguro, instalado há mais de 60 dias, sem abrir há 60 dias. Congelar dá para desfazer.
-        val instalado = runCatching { packageManager.getPackageInfo(p, 0).firstInstallTime }.getOrDefault(agora)
-        val parado = if (ultimo > 0) dias else ((agora - instalado) / 86_400_000L).toInt()
-        val dica = if (card.kind == AllAppsScreen.Kind.APP && risco == "seguro" && podeCongelar() &&
-            agora - instalado > DIAS_PARADO * 86_400_000L && parado >= DIAS_PARADO) getString(R.string.aa_tip_idle, parado) else null
-        val ajuda = getString(if (card.kind == AllAppsScreen.Kind.FROZEN) R.string.aa_hint_frozen else R.string.aa_hint_app)
-        return AllAppsScreen.Info(card.name, linhas, dica, ajuda)
-    }
 
-    private fun podeCongelar() = PlayPolicy.allowed(PlayPolicy.Power.FREEZE_APPS, BuildConfig.PLAY)
 
-    /** PIN do painel quando existe um (o mesmo que administra a TV; o das crianças não vale). Sem PIN, segue direto. */
-    private fun comPinDoDono(titulo: String, acao: () -> Unit) {
-        if (!PainelArmazem.temPin(this)) { acao(); return }
-        PinTv.pedir(this, titulo, familia = false) { certo ->
-            if (certo) acao() else AvisoTv.rapido(this, titulo, getString(R.string.trava_home_errado), 4)
-        }
-    }
 
-    private fun liberarEscondidos() = comPinDoDono(getString(R.string.aa_pin_title)) {
-        escondidosLiberados = true
-        val primeiro = Organizacao.ocultos(this).mapNotNull { p -> instalados.firstOrNull { it.pacote == p } }.minByOrNull { it.nome.lowercase() }
-        montarTodos(primeiro?.pacote)
-    }
 
-    private fun menuTodos(card: AllAppsScreen.Card) {
-        if (TravaHome.precisaPin(this)) { TravaHome.comPin(this) { menuTodos(card) }; return }
-        val p = card.pkg
-        val opcoes = mutableListOf(Opcao(getString(R.string.aa_open)) { abrir(p) })
-        opcoes += Opcao(getString(R.string.cruz_mover)) { moverPrateleira(p) }
-        opcoes += if (card.kind == AllAppsScreen.Kind.HIDDEN) Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, p); atualizarAposMudanca(null); montarTodos(p) }
-        else Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, p); atualizarAposMudanca(null); montarTodos(null); avisarOculto() }
-        if (podeCongelar() && !EntradasTv.eh(p)) opcoes += Opcao(getString(R.string.aa_freeze)) { congelarTodos(p) }
-        opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(p) }
-        val desinstala = PainelApps.podeDesinstalar(this, p)
-        if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { comPinDoDono(getString(R.string.home_desinstalar)) { confirmarDesinstalar(p) } }
-        val titulo = nomeDe(p) + if (PainelApps.eSistema(this, p)) getString(R.string.home_app_sistema) else ""
-        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }, separarUltimo = desinstala) { i -> opcoes[i].acao() }
-    }
 
-    /** "Mover para…" nas prateleiras: grava a prateleira e leva o mundo da cruz junto (um lugar só decide). */
-    private fun moverPrateleira(p: String) {
-        val dados = dadosTodos ?: DadosTodos(emptySet(), emptyList())
-        val atual = prateleira(p, dados)
-        val manual = prateleirasManuais()[p]
-        val destinos = AppShelf.Shelf.entries.filter { it != AppShelf.Shelf.GAMES || JogosTv.cardLigado(this) || JogosTv.ehJogo(this, p) }
-        val nomes = listOf<CharSequence>(getString(R.string.aa_move_auto) + if (manual == null) getString(R.string.pp_ativo) else "") +
-            destinos.map { s -> nomePrateleira(s) + if (manual != null && s == atual) getString(R.string.pp_ativo) else "" }
-        menuAberto = Estilo.lista(this, getString(R.string.cruz_mover_titulo, nomeDe(p)), nomes) { i ->
-            val m = prateleirasManuais().toMutableMap()
-            val eraJogo = JogosTv.ehJogo(this, p)
-            if (i == 0) {
-                m.remove(p)
-                // Automático também apaga o mundo escolhido à mão na cruz (volta tudo a seguir a ficha).
-                if (!eraJogo) CategoriaApps.escolher(this, p, CategoriaApps.automatica(p, categoria(p), catsFicha?.get(p)), categoria(p), false, catsFicha?.get(p))
-            } else {
-                val s = destinos[i - 1]
-                m[p] = s.id
-                CategoriaApps.escolher(this, p, s.world, categoria(p), eraJogo, catsFicha?.get(p))
-            }
-            prefsApps().edit().putString("shelves", AppShelf.toJson(m)).apply()
-            atualizarAposMudanca(null)
-            montarTodos(p)
-        }
-    }
 
-    /** Congela pela tela: PIN se a ficha não diz "seguro"; o Observador guarda as conferências de antes e confere em 10 min. */
-    private fun congelarTodos(p: String) {
-        val nome = nomeDe(p)
-        Fundo.rodar("TodosRisco") {
-            val risco = PainelApps.risco(this, p) ?: "sem informação"
-            ui.post {
-                if (isDestroyed) return@post
-                val fazer = {
-                    mostrarAviso(getString(R.string.aa_freezing, nome))
-                    Fundo.rodar("Congelar") {
-                        val antes = runCatching { ObserverTv.beforeFreeze(this) }.getOrNull()
-                        val motivo = PainelApps.ocultar(this, p, true)
-                        if (motivo == null && antes != null) runCatching { ObserverTv.startTrial(this, p, antes) }
-                        Log.i("TvLauncher.Apps", "congelar $p pela tela Todos os apps => ${motivo ?: "ok"}")
-                        ui.post {
-                            if (isDestroyed) return@post
-                            mostrarAviso(if (motivo == null) getString(R.string.aa_frozen_done, nome) else getString(R.string.aa_freeze_failed, nome, motivo))
-                            preencherApps(); lerDadosTodos(null)
-                        }
-                    }
-                }
-                if (MenuApp.ocultarPedePin(risco)) comPinDoDono(getString(R.string.aa_freeze)) { fazer() } else fazer()
-            }
-        }
-    }
 
-    /** Congelado: descongela (com o PIN do dono, como no painel) e abre; pode pedir para congelar de novo na volta. */
-    private fun abrirCongelado(card: AllAppsScreen.Card) {
-        val opcoes = listOf<CharSequence>(getString(R.string.aa_unfreeze_open), getString(R.string.aa_unfreeze_refreeze))
-        menuAberto = Estilo.lista(this, card.name, opcoes) { i ->
-            comPinDoDono(getString(R.string.aa_unfreeze_open)) {
-                mostrarAviso(getString(R.string.aa_unfreezing, card.name))
-                Fundo.rodar("Descongelar") {
-                    val motivo = PainelApps.ocultar(this, card.pkg, false)
-                    Log.i("TvLauncher.Apps", "descongelar ${card.pkg} pela tela Todos os apps => ${motivo ?: "ok"}")
-                    ui.post {
-                        if (isDestroyed) return@post
-                        if (motivo != null) { mostrarAviso(getString(R.string.aa_unfreeze_failed, card.name, motivo)); return@post }
-                        if (i == 1) prefsApps().edit().putStringSet("recongelar", (prefsApps().getStringSet("recongelar", null).orEmpty() + card.pkg)).apply()
-                        preencherApps(); lerDadosTodos(card.pkg)
-                        abrir(card.pkg)
-                    }
-                }
-            }
-        }
-    }
 
-    /** Volta à HOME: congela de novo o que foi aberto com "congelar de novo ao voltar" (com a prova do Observador). */
-    private fun recongelarPendentes() {
-        val pendentes = prefsApps().getStringSet("recongelar", null).orEmpty()
-        if (pendentes.isEmpty()) return
-        prefsApps().edit().remove("recongelar").apply()
-        Fundo.rodar("Recongelar") {
-            for (p in pendentes) {
-                val antes = runCatching { ObserverTv.beforeFreeze(this) }.getOrNull()
-                val motivo = PainelApps.ocultar(this, p, true)
-                if (motivo == null && antes != null) runCatching { ObserverTv.startTrial(this, p, antes) }
-                Log.i("TvLauncher.Apps", "congelar de novo $p na volta => ${motivo ?: "ok"}")
-            }
-            ui.post { if (!isDestroyed) { preencherApps(); if (todosAbertos) lerDadosTodos(null) } }
-        }
-    }
 
-    /** Segurar OK num app da cruz: as opções de hoje que fazem sentido fora da grade (ocultar, desinstalar). */
-    private fun menuAppCruz(pacote: String) {
-        if (TravaHome.precisaPin(this)) { TravaHome.comPin(this) { menuAppCruz(pacote) }; return }
-        val fixados = fixadosCruz()
-        val fixado = pacote in fixados
-        val opcoes = mutableListOf(Opcao(getString(if (fixado) R.string.cruz_soltar else R.string.cruz_fixar)) {
-            guardarFixadosCruz(if (fixado) fixados - pacote else fixados + pacote)
-            atualizarAposMudanca(null)
-        })
-        opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
-        opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(pacote) }
-        opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
-        when (AppStorage.opcaoMenu(this, pacote)) {
-            true -> opcoes += Opcao(getString(R.string.home_instalar_externo)) { mudarArmazenamento(pacote, true) }
-            false -> opcoes += Opcao(getString(R.string.home_instalar_dispositivo)) { mudarArmazenamento(pacote, false) }
-            null -> {}
-        }
-        if (PainelPermissoes.arquivosBloqueados(this, pacote))
-            opcoes += Opcao(getString(R.string.home_liberar_arquivos)) { liberarArquivos(pacote) }
-        AppStorage.atualizarEmFundo(this)
-        val desinstala = PainelApps.podeDesinstalar(this, pacote)
-        if (desinstala) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
-        val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""
-        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }, separarUltimo = desinstala) { i -> opcoes[i].acao() }
-    }
 
-    /**
-     * No modo mover: ◀ ▶ andam uma posição, OK confirma, Voltar cancela,
-     * ▲ oculta o app (só card solto) e ▼ volta à ordem automática.
-     * Fora dele: segurar OK (ver tratarSegurar) e ▲▼ numa pilha (ver trocarDaFrente).
-     */
+    /** Teclas da HOME: o ambiente, o "Todos os apps" (Voltar fecha, OK segurado = opções) e ▲ segurado na cruz. */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Tecla durante a abertura com a logo: a logo sai na hora e a tecla segue para a HOME.
         if (event.action == KeyEvent.ACTION_DOWN && SplashOverlay.showing(this)) SplashOverlay.dismiss(this)
         if (teclaDoAmbiente(event)) return true
-        val confirma = event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER
-        if (!modoMover) {
-            // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
-            if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
-            if (todosAbertos && telaTodos?.key(event) == true) return true   // OK curto abre, OK segurado = opções
-            if (centralAoSegurarCima(event)) return true
-            if (tratarSegurar(event, currentFocus)) return true
-            if (trocarDaFrente(event)) return true
-            return super.dispatchKeyEvent(event)
-        }
-        val pressionou = event.action == KeyEvent.ACTION_DOWN
-        val soltou = event.action == KeyEvent.ACTION_UP
-        return when {
-            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_LEFT -> { if (pressionou) moverCartao(-1); true }   // 16.8
-            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_RIGHT -> { if (pressionou) moverCartao(1); true }
-            event.keyCode == KeyEvent.KEYCODE_DPAD_UP -> {
-                if (pressionou && event.repeatCount == 0) ocultarArrastado()
-                true
-            }
-            event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (pressionou && event.repeatCount == 0) restaurarOrdemAutomatica()
-                true
-            }
-            confirma -> {
-                if (soltou) {
-                    // O primeiro "soltar" é o fim do segurar que abriu o modo: ignora.
-                    if (ignorarProximoUp) ignorarProximoUp = false else confirmarMover()
-                }
-                true
-            }
-            event.keyCode == KeyEvent.KEYCODE_BACK -> { if (soltou) cancelarMover(); true }
-            else -> super.dispatchKeyEvent(event)
-        }
+        // Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
+        if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
+        if (todosAbertos && telaTodos?.key(event) == true) return true   // OK curto abre, OK segurado = opções
+        if (centralAoSegurarCima(event)) return true
+        return super.dispatchKeyEvent(event)
     }
 
-    /*
-     * Como o "arrastar" funciona. Os outros cards (sem o arrastado e sem o "Ocultos") ficam parados: m cards.
-     * O arrastado tem 2m+1 posições possíveis, numeradas em posMover:
-     *   par   (2k)   = ao lado: entra na fila antes do card k (só muda a ordem);
-     *   ímpar (2k+1) = em cima do card k: pré-pilha (os dois viram um card só na tela, mas só vira pilha de verdade ao confirmar).
-     * Cada ◀ ▶ anda uma posição. Então para passar por um card são 2 toques: "em cima" e depois "do outro lado".
-     * Se o usuário não confirmar, o card segue andando. Voltar cancela e nada foi gravado: [lista] nunca é alterada.
-     * Uma pilha arrastada só usa as posições pares (não dá para empilhar uma pilha dentro de outra).
-     */
 
-    /** Os cards que ficam parados enquanto o [arrastado] anda. */
-    private fun outrosCards(): List<Entrada> = lista.filter { it !is Entrada.Ocultos && it !is Entrada.Tv && it.token != arrastado?.token }
 
-    /** O card em cima do qual o arrastado está (pré-pilha), ou null se está "ao lado". */
-    private fun alvoDeEmpilhar(): Entrada? = if (posMover % 2 == 1) outrosCards()[posMover / 2] else null
-
-    /** Une um app arrastado a [alvo] (um app solto ou uma pilha) só para mostrar na tela. O que chegou fica na frente. */
-    private fun fundir(alvo: Entrada, app: Entrada.App): Entrada.Pilha = when (alvo) {
-        is Entrada.Pilha -> Entrada.Pilha(alvo.id, alvo.itens + app.item, alvo.itens.size)
-        else -> Entrada.Pilha(ID_PREVIA, listOf((alvo as Entrada.App).item, app.item), 1)
-    }
-
-    /** A fila como aparece agora, com o arrastado na posição [posMover]. */
-    private fun listaMovendo(): List<Entrada> {
-        val movido = arrastado ?: return lista
-        val fila = outrosCards().toMutableList()
-        val alvo = alvoDeEmpilhar()
-        if (alvo == null) fila.add(posMover / 2, movido) else fila[posMover / 2] = fundir(alvo, movido as Entrada.App)
-        lista.lastOrNull { it is Entrada.Ocultos }?.let { fila.add(it) }   // "Ocultos" fica sempre no fim
-        lista.firstOrNull { it is Entrada.Tv }?.let { fila.add(0, it) }    // e a "TV ao vivo", sempre no começo
-        return fila
-    }
-
-    private fun iniciarMover(token: String, porSegurar: Boolean) {
-        val card = lista.firstOrNull { it.token == token } ?: return
-        if (card is Entrada.Ocultos || card is Entrada.Tv) return
-        modoMover = true
-        arrastado = card
-        posMover = 2 * lista.filter { it !is Entrada.Ocultos && it !is Entrada.Tv }.indexOfFirst { it.token == token }   // começa "ao lado", onde estava
-        ignorarProximoUp = porSegurar   // segurando OK, o "soltar" ainda vai chegar e não pode confirmar
-        atualizarMover()
-    }
-
-    private fun moverCartao(delta: Int) {
-        val passo = if (arrastado is Entrada.App) 1 else 2
-        val nova = (posMover + delta * passo).coerceIn(0, 2 * outrosCards().size)
-        if (nova == posMover) return
-        posMover = nova
-        atualizarMover()
-    }
-
-    /** Redesenha com o arrastado na posição nova e leva o foco para o card que o representa. */
-    private fun atualizarMover() {
-        val alvo = alvoDeEmpilhar()
-        tokenMovendo = if (alvo == null) arrastado?.token else fundir(alvo, arrastado as Entrada.App).token
-        ultimoToken = tokenMovendo
-        mostrarDica(true)
-        desenhar()
-    }
-
-    private fun confirmarMover() {
-        val card = arrastado ?: return
-        val alvo = alvoDeEmpilhar()
-        if (alvo != null && card is Entrada.App) {
-            // Congela a ordem de agora (com o arrastado onde estava) e junta: a pilha ocupa o lugar do alvo.
-            Organizacao.salvarOrdem(this, lista.filter { it !is Entrada.Ocultos && it !is Entrada.Tv }.map { it.token })
-            ultimoToken = if (alvo is Entrada.Pilha && alvo.id.startsWith(Organizacao.PREFIXO_AUTO)) {
-                // Soltar em cima de uma pilha automática: ela vira manual, já com o app novo na frente.
-                val token = Organizacao.criarPilha(this, alvo.itens.map { it.pacote } + card.token, card.token)
-                Organizacao.salvarOrdem(this, Organizacao.ordem(this).filter { it != card.token }.map { if (it == alvo.token) token else it })
-                token
-            } else Organizacao.empilhar(this, card.token, alvo.token)
-        } else {
-            Organizacao.salvarOrdem(this, listaMovendo().filter { it !is Entrada.Ocultos && it !is Entrada.Tv }.map { it.token })
-        }
-        terminarMover()
-        reorganizar()
-    }
-
-    private fun cancelarMover() {
-        ultimoToken = arrastado?.token   // o foco volta para o card que estava sendo movido, no lugar de origem
-        terminarMover()
-        desenhar()
-    }
-
-    private fun terminarMover() {
-        modoMover = false
-        arrastado = null
-        tokenMovendo = null
-        ignorarProximoUp = false
-        mostrarDica(false)
-    }
-
-    /** ▲ no modo mover: oculta o app arrastado (some da fila e vai para o card "Ocultos"). */
-    private fun ocultarArrastado() {
-        val card = arrastado as? Entrada.App ?: return
-        terminarMover()
-        Organizacao.ocultar(this, card.token)
-        atualizarAposMudanca(null)
-        avisarOculto()
-    }
-
-    /** O card "Ocultos" saiu da HOME (14/11/2026): ao ocultar, diz onde mostrar de volta. */
-    /** Congelar sob demanda (OnDemandTv): congela fora da tela (sem dono o shell leva segundos) e redesenha a lista. */
-    private fun mudarSobDemanda(pacote: String, ligar: Boolean) {
-        val nome = nomeDe(pacote)
-        Fundo.rodar("sob-demanda-menu") {
-            val motivo = if (ligar) OnDemandTv.mark(this, pacote) else OnDemandTv.unmark(this, pacote)
-            ui.post {
-                if (isDestroyed) return@post
-                AvisoTv.rapido(this, nome, when {
-                    motivo != null -> getString(R.string.sob_demanda_falhou)
-                    ligar -> getString(R.string.sob_demanda_ligado)
-                    else -> getString(R.string.sob_demanda_desligado)
-                })
-                atualizarAposMudanca(pacote)
-            }
-        }
-    }
-
-    private fun avisarOculto() = AvisoTv.rapido(this, getString(R.string.oc_aviso_titulo), getString(R.string.oc_aviso))
-
-    private fun restaurarOrdemAutomatica() {
-        terminarMover()
-        Organizacao.limparOrdem(this)
-        reorganizar()
-    }
-
-    /** Durante o modo de mover, aparece um guia de teclas na parte de baixo da tela. */
-    private fun mostrarDica(ligada: Boolean) {
-        if (!ligada) {
-            txtDica.visibility = View.GONE
-            return
-        }
-        val alvo = alvoDeEmpilhar()
-        txtDica.text = when {
-            alvo is Entrada.Pilha -> getString(R.string.home_mover_pilha)
-            alvo != null -> getString(R.string.home_mover_forma)
-            arrastado is Entrada.App -> getString(R.string.home_mover_app)
-            else -> getString(R.string.home_mover_dica)
-        }
-        txtDica.visibility = View.VISIBLE
-    }
-
-    private fun abrir(pacote: String) {
-        if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
-        // Congelado sob demanda (OnDemandTv): descongela, espera a tela dele e abre; volta a congelar depois de usado.
-        if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) { if (!todosAbertos) cruz?.naoAbriu() }; contarAbertura(pacote); return }
-        val intent = packageManager.getLeanbackLaunchIntentForPackage(pacote)
-            ?: packageManager.getLaunchIntentForPackage(pacote)
-            ?: run { if (!todosAbertos) cruz?.naoAbriu(); return }   // sem tela para abrir: a cruz avisa, não falha calada
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        contarAbertura(pacote)
-    }
 
     // ---- Aplicativos da cruz: quantas vezes cada app foi aberto pela HOME (meia-vida de 7 dias) e os fixados no topo.
     // Fica nas preferências "cruz_apps": "f:<pacote>" = "pontos;quando" e "fixados" = pacotes separados por vírgula.
 
-    private fun prefsApps() = getSharedPreferences(PREFS_CRUZ_APPS, MODE_PRIVATE)
 
-    private fun contarAbertura(pacote: String) {
-        val p = prefsApps()
-        val agora = System.currentTimeMillis()
-        val (pontos, desde) = lerFrequencia(p.getString("f:$pacote", null))
-        p.edit().putString("f:$pacote", "${CruzLogica.somarAbertura(pontos, desde, agora)};$agora").apply()
-    }
 
-    private fun lerFrequencia(v: String?): Pair<Double, Long> {
-        val partes = v?.split(';') ?: return 0.0 to 0L
-        return (partes.getOrNull(0)?.toDoubleOrNull() ?: 0.0) to (partes.getOrNull(1)?.toLongOrNull() ?: 0L)
-    }
 
-    private fun frequenciaApps(): Map<String, Double> {
-        val agora = System.currentTimeMillis()
-        return prefsApps().all.mapNotNull { (k, v) ->
-            if (!k.startsWith("f:")) return@mapNotNull null
-            val (pontos, desde) = lerFrequencia(v as? String)
-            k.substring(2) to CruzLogica.frequenciaAgora(pontos, desde, agora)
-        }.toMap()
-    }
 
-    private fun fixadosCruz(): List<String> = prefsApps().getString("fixados", null)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
 
-    private fun guardarFixadosCruz(l: List<String>) { prefsApps().edit().putString("fixados", l.joinToString(",")).apply() }
 
     // ---------------------------------------------------------------- clima, lua e rede
 
@@ -4665,7 +2456,7 @@ class MainActivity : Activity() {
                     ultimaTemp = r.temp
                     // Guarda o que o topo mostra: a previsão aberta por voz ("Boletim do Tempo") e o protetor de tela
                     // (ProtetorTela.kt, sem rede própria) não passam por aqui e leem isto.
-                    getSharedPreferences("clima", MODE_PRIVATE).edit()
+                    getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).edit()
                         .putInt("temp", r.temp).putBoolean("chovendo", r.chovendo)
                         .putInt("codigo", r.codigo).putBoolean("eDia", r.eDia)
                         .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.chuvaHoje)
@@ -4699,7 +2490,7 @@ class MainActivity : Activity() {
      */
     private fun mostrarClimaSalvo() {
         if (ultimaTemp != null) return   // a tela já mostra um clima desta Activity
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val em = c.getLong("em", 0)
         if (!c.contains("linha") || System.currentTimeMillis() - em > 3 * 3600_000L) return
         val codigo = c.getInt("codigo", -1).takeIf { it >= 0 } ?: return
@@ -4732,7 +2523,7 @@ class MainActivity : Activity() {
     private var ultimoEDia: Boolean? = null
     private fun recalcularDiaNoite() {
         if (ultimoCodigo < 0) return
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val lat = pontoAtual?.lat ?: c.getFloat("lat", Config.LATITUDE.toFloat()).toDouble()
         val lon = pontoAtual?.lon ?: c.getFloat("lon", Config.LONGITUDE.toFloat()).toDouble()
         val eDia = Astronomia.eDia(System.currentTimeMillis(), lat, lon, ultimoEDia ?: true)
@@ -4781,9 +2572,9 @@ class MainActivity : Activity() {
 
     // ---------------------------------------------------------------- utilidades
 
-    private fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()
+    internal fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()
 
-    private fun texto(sp: Float, cor: Int, fonte: Typeface? = null): TextView = TextView(this).apply {
+    internal fun texto(sp: Float, cor: Int, fonte: Typeface? = null): TextView = TextView(this).apply {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         setTextColor(cor)
         typeface = fonte ?: fonteUi

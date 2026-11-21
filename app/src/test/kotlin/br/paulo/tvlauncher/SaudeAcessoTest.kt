@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.privilege.SaudeRegras
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

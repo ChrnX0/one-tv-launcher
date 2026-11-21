@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.QuedasSeguidas.Estado
+import br.paulo.tvlauncher.observer.QuedasSeguidas
+import br.paulo.tvlauncher.observer.QuedasSeguidas.Estado
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

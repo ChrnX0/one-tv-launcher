@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Sprachkürzel</string>
     <string name="mcp_olhou_tela">Claude hat den Bildschirm angesehen</string>
     <string name="pg_max_min">max. %1$d° · min. %2$d°</string>
-    <string name="pg_por_do_sol">Sonnenuntergang %1$s</string>
     <string name="pg_compras">Einkaufsliste</string>
     <string name="cf_negar">Ablehnen</string>
     <string name="cf_permitir">Erlauben</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Löschen</string>
     <string name="pn_parear">Koppeln</string>
     <string name="pn_titulo">Launcher koppeln (ohne PC)</string>
-    <string name="pn_lido">Code vom Bildschirm gelesen</string>
     <string name="pn_nao_achei">Kopplungsbildschirm noch nicht gefunden</string>
     <string name="pn_6">der Code hat 6 Ziffern</string>
     <string name="pn_pareado">gekoppelt! Shell wird geprüft …</string>

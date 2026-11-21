@@ -3,18 +3,12 @@ package br.paulo.tvlauncher
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.Confirmacoes
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -161,8 +155,6 @@ class PerguntaTvActivity : Activity() {
     private var respondido = false
     private var pergunta = 0L
     private val ui = Handler(Looper.getMainLooper())
-
-    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
 
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)

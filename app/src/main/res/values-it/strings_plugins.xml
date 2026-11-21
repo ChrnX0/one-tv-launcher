@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugin</string>
-    <string name="plg_cfg_det">Schede di altre app nella riga Guarda. Ognuna richiede il tuo OK.</string>
-    <string name="plg_det">Attiva solo app di cui ti fidi. Il plugin invia solo un breve testo; non vede le tue app né i tuoi account.</string>
     <string name="plg_nenhum">Nessun plugin installato. I plugin sono app di altri sviluppatori che mostrano una scheda qui, come un punteggio o un prezzo.</string>
     <string name="plg_ligado">Attivo</string>
     <string name="plg_desligado">Disattivo</string>

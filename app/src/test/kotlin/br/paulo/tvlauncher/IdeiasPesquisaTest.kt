@@ -1,14 +1,26 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.RecadoImagem
+import br.paulo.tvlauncher.family.TravaHome
+import br.paulo.tvlauncher.input.TesteTeclas
+import br.paulo.tvlauncher.network.AcordarPc
+import br.paulo.tvlauncher.network.AgregadorDns
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.Dns
+import br.paulo.tvlauncher.network.DnsSeguro
+import br.paulo.tvlauncher.panel.precisaPin
+import br.paulo.tvlauncher.privilege.DebloatPosOta
+import br.paulo.tvlauncher.privilege.ExtrasDO
+import br.paulo.tvlauncher.settings.CorDoFundo
+import br.paulo.tvlauncher.settings.FiltroNoturno
+import java.util.TimeZone
 import org.json.JSONObject
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.TimeZone
 
 /**
  * Regras puras das ideias da pesquisa de 10/11/2026 (DNS que volta, filtro noturno, PIN da HOME, calibração, cor do

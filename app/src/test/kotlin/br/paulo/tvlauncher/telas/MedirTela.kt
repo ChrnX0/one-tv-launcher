@@ -7,8 +7,9 @@ import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.robolectric.RuntimeEnvironment
+import br.paulo.tvlauncher.Config
 import java.io.File
+import org.robolectric.RuntimeEnvironment
 
 /**
  * Regras fixas de tela do degrau 4 (17/11/2026), as mesmas do CuidarTelaTest: salva a foto em app/build/telas, e

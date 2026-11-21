@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.SubtitleSync
+import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import kotlin.random.Random
 
 class SubtitleSyncTest {
     /** Um "filme" de 10 min com falas de 1 a 4 s e silêncios de 0,5 a 6 s (semente fixa: o teste é sempre o mesmo). */

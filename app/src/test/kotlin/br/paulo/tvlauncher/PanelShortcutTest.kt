@@ -1,12 +1,17 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.Mtp
+import br.paulo.tvlauncher.panel.MtpArmazem
+import br.paulo.tvlauncher.panel.MtpLoja
+import br.paulo.tvlauncher.panel.PainelArquivos
+import br.paulo.tvlauncher.panel.PanelShortcut
+import java.io.File
+import java.nio.file.Files
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.nio.file.Files
 
 class PanelShortcutTest {
     @Test fun nomeDoArquivo() {

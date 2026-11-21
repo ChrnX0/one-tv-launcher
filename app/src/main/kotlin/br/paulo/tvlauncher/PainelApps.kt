@@ -16,13 +16,22 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import android.util.LruCache
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.home.AppShelf
+import br.paulo.tvlauncher.home.CategoriaApps
+import br.paulo.tvlauncher.home.MenuApp
+import br.paulo.tvlauncher.panel.PainelFicha
+import br.paulo.tvlauncher.panel.eventos
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PacoteDividido
+import br.paulo.tvlauncher.privilege.PrivilegioDO
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * O que a aba "Aplicativos" do painel no navegador faz, tudo por API em processo (somos Device Owner), sem shell:

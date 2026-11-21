@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">Na kanapie</string>
-    <string name="jogos_continuar">Kontynuuj</string>
     <string name="jogos_controle_pronto">gotowy</string>
     <string name="jogos_controle_carregar">naładuj wkrótce</string>
     <string name="jogos_parear_um">Sparuj kontroler</string>
-    <string name="jogos_todos">Wszystkie</string>
     <string name="turma_titulo">Twoja ekipa</string>
     <string name="turma_online">Online: %1$d</string>
     <string name="turma_mais_online">+ %1$d online</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Widżet serwera jest wyłączony</string>
     <string name="turma_desligado_texto">W Discordzie: Ustawienia serwera, Widżet, włącz Włącz widżet serwera.</string>
     <string name="turma_qr_dica">Skieruj tu telefon, aby dołączyć do kanału głosowego. Rozmowa idzie przez telefon.</string>
-    <string name="turma_aqui">Z ekipy tutaj: %1$d</string>
     <string name="turma_jogando">%1$s gra w %2$s</string>
     <string name="turma_dois">%1$s i %2$s</string>
     <string name="turma_e_mais">%1$s i %2$d innych</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Zapisz</string>
     <string name="turma_config_tirar">Usuń ekipę</string>
     <string name="turma_id_invalido">To nie jest ID serwera Discorda (17 do 20 cyfr).</string>
-    <string name="cruz_sofa">Kanapa</string>
     <string name="cruz_sofa_sub">Kontrolery i twoja ekipa z Discorda</string>
     <string name="cruz_sofa_voz">Na głosowym: %1$d · %2$s</string>
 </resources>

@@ -4,8 +4,8 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.input.TecladoCelular
+import br.paulo.tvlauncher.panel.WebPush
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.KeyPairGenerator
@@ -14,6 +14,8 @@ import java.security.PrivateKey
 import java.security.SecureRandom
 import java.security.Signature
 import java.security.spec.ECGenParameterSpec
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Avisos no celular (12/11/2026, ideia 3). O painel instalado na tela inicial do celular (PWA) se inscreve para

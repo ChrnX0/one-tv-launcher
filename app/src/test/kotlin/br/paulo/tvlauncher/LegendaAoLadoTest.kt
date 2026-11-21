@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.LegendaAoLado.Achada
+import br.paulo.tvlauncher.player.LegendaAoLado
+import br.paulo.tvlauncher.player.LegendaAoLado.Achada
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

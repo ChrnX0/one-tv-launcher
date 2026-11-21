@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Visuais prontos</string>
-    <string name="vpr_det">Cada OK passa ao próximo visual: tema, texto e tamanho dos cartões juntos</string>
+    <string name="vpr_det">Cada OK passa ao próximo visual: tema, texto e cor do fundo juntos</string>
     <string name="vpr_meu">Seu ajuste</string>
     <string name="vpr_classico">Clássico</string>
     <string name="vpr_leitura">Leitura fácil</string>
     <string name="vpr_galeria">Galeria</string>
     <string name="vpr_galeria_grande">Galeria grande</string>
-    <string name="vpr_grade">Grade</string>
-    <string name="vpr_grade_grande">Grade grande</string>
     <string name="vpr_cores">Cores do app</string>
-    <string name="vpr_cinema">Cinema</string>
 </resources>

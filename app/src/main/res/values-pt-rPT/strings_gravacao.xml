@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s até %2$s</string>
     <string name="grv_ate_hora">até %1$s</string>
     <string name="grv_selo">GRAVANDO até %1$s</string>
-    <string name="grv_selo_home">A gravar %1$s</string>
     <string name="grv_sem_canal">O canal não está na lista guardada. Abra a TV em direto uma vez e tente de novo.</string>
     <string name="grv_sem_destino">Sem lugar para gravar: ligue um pendrive no hub ou escolha uma pasta da rede em TV › Gravações.</string>
     <string name="grv_pendrive_formato">O pendrive “%1$s” está num formato que a TV não lê (NTFS). Use um pendrive em exFAT ou FAT32, ou formate este em Definições › Sistema › Armazenamento (isso apaga o que tem nele).</string>

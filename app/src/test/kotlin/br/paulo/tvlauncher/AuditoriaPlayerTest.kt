@@ -1,5 +1,21 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.FonteTv
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerDados
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.Serie
+import br.paulo.tvlauncher.player.TentativaLogo
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.VodFiltro
+import br.paulo.tvlauncher.player.Xmltv
+import java.io.File
+import java.nio.file.Files
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -7,8 +23,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.kxml2.io.KXmlParser
-import java.io.File
-import java.nio.file.Files
 
 /** Correções da auditoria de 10/11/2026 no player (filmes/séries, guia, juntar, Continuar da HOME, UPnP, logos). */
 class AuditoriaPlayerTest {

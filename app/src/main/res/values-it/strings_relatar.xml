@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Un QR apre il modulo sul telefono, con i dati tecnici già compilati</string>
     <string name="rel_texto">Inquadra il codice con la fotocamera del telefono. Scrivi cosa è successo e invia. Nome, account, rete e città non vengono inclusi.</string>
     <string name="rel_vai_junto">Cosa viene inclusa</string>
+    <string name="rel_l_oque">Cosa è successo</string>
+    <string name="rel_l_versao">Versione</string>
+    <string name="rel_l_uso">Modalità</string>
+    <string name="rel_l_quedas">Arresti / blocchi (7 giorni)</string>
+    <string name="rel_l_erro">Ultimo errore</string>
 </resources>

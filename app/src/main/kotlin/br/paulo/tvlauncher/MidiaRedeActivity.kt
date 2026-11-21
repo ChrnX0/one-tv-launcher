@@ -24,6 +24,40 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import br.paulo.tvlauncher.backup.Nuvem
+import br.paulo.tvlauncher.backup.RetornoNuvem
+import br.paulo.tvlauncher.home.BibliotecaIndice
+import br.paulo.tvlauncher.home.BibliotecaUnica
+import br.paulo.tvlauncher.home.IconeMidia
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.input.LeitorNomes
+import br.paulo.tvlauncher.input.SegurarOk
+import br.paulo.tvlauncher.network.Descoberta
+import br.paulo.tvlauncher.network.FilaRede
+import br.paulo.tvlauncher.panel.FotosRede
+import br.paulo.tvlauncher.panel.PainelArquivos
+import br.paulo.tvlauncher.panel.PainelVizinhos
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.panel.PastaLocal
+import br.paulo.tvlauncher.panel.Pastas
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.panel.Sftp
+import br.paulo.tvlauncher.panel.Smb
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.panel.WebDav
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.CatalogoPasta
+import br.paulo.tvlauncher.player.ContaMidia
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.FontesMidia
+import br.paulo.tvlauncher.player.Idioma
+import br.paulo.tvlauncher.player.InfoExternaCache
+import br.paulo.tvlauncher.player.Jellyfin
+import br.paulo.tvlauncher.player.MidiaArmazem
+import br.paulo.tvlauncher.player.MidiaContas
+import br.paulo.tvlauncher.player.Plex
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.player.salvar
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
@@ -263,7 +297,7 @@ class MidiaRedeActivity : Activity() {
         if (procurando) return
         procurando = true
         if (pilha.size == 1) desenharRaiz()
-        Thread {
+        Fundo.rodar("midia-procurar") {
             // O Android descarta pacotes de grupo (multicast) no Wi-Fi para poupar bateria: o "lock" libera enquanto procura.
             val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             val trava = wifi.createMulticastLock("tvlauncher-midia").apply { setReferenceCounted(false) }
@@ -271,14 +305,12 @@ class MidiaRedeActivity : Activity() {
             var d: List<Upnp.Servidor> = emptyList(); var j: List<Jellyfin.Achado> = emptyList()
             var p: List<Plex.Achado> = emptyList(); var m: List<Descoberta.Maquina> = emptyList()
             // Os quatro jeitos de achar ao mesmo tempo: a busca inteira leva o tempo do mais lento (~3 s), não a soma.
-            val tarefas = listOf(
-                Thread { d = runCatching { Upnp.procurar().mapNotNull { Upnp.ficha(it) }.distinctBy { it.pastas }.sortedBy { it.nome.lowercase() } }.getOrDefault(emptyList()) },
-                Thread { j = runCatching { Jellyfin.procurarTodos() }.getOrDefault(emptyList()) },
-                Thread { p = runCatching { Plex.procurar() }.getOrDefault(emptyList()) },
-                Thread { m = runCatching { Descoberta.pastas(applicationContext) }.getOrDefault(emptyList()) },
+            Fundo.juntos(9000,
+                { d = Upnp.procurar().mapNotNull { Upnp.ficha(it) }.distinctBy { it.pastas }.sortedBy { it.nome.lowercase() } },
+                { j = Jellyfin.procurarTodos() },
+                { p = Plex.procurar() },
+                { m = Descoberta.pastas(applicationContext) },
             )
-            tarefas.forEach { it.start() }
-            tarefas.forEach { it.join(9000) }
             runCatching { trava.release() }
             tela.post {
                 procurando = false
@@ -288,7 +320,7 @@ class MidiaRedeActivity : Activity() {
                 jellyAchados = j; plexAchados = p; maquinas = m
                 desenharRaiz()
             }
-        }.start()
+        }
     }
 
     // ---------------------------------------------------------------- navegar
@@ -1064,9 +1096,9 @@ class MidiaRedeActivity : Activity() {
             fechar.requestFocus()
         }
         val id = aparelho()
-        Thread {
+        Fundo.rodar("plex-login") {
             fun naTela(f: () -> Unit) = tela.post { if (!isDestroyed && !cancelar.get()) f() }
-            val cod = runCatching { Plex.pedirCodigo(id) }.getOrElse { e -> naTela { estado.text = erroLegivel(e); deNovo.visibility = View.VISIBLE }; return@Thread }
+            val cod = runCatching { Plex.pedirCodigo(id) }.getOrElse { e -> naTela { estado.text = erroLegivel(e); deNovo.visibility = View.VISIBLE }; return@rodar }
             val bmp = runCatching { QrCodigo.bitmap(Plex.paginaDoCodigo(id, cod.codigo), dp(156)) }.getOrNull()
             naTela {
                 codigoTv.text = cod.codigo
@@ -1081,8 +1113,8 @@ class MidiaRedeActivity : Activity() {
                 token = runCatching { Plex.conferirCodigo(id, cod.id) }.getOrNull()
                 if (token != null) break
             }
-            if (cancelar.get()) return@Thread
-            if (token == null) { naTela { estado.text = getString(R.string.rede_plex_venceu); codigoTv.alpha = 0.3f; deNovo.visibility = View.VISIBLE; deNovo.requestFocus() }; return@Thread }
+            if (cancelar.get()) return@rodar
+            if (token == null) { naTela { estado.text = getString(R.string.rede_plex_venceu); codigoTv.alpha = 0.3f; deNovo.visibility = View.VISIBLE; deNovo.requestFocus() }; return@rodar }
             naTela { estado.text = getString(R.string.rede_plex_buscando) }
             val r = runCatching {
                 val servidores = Plex.servidores(id, token)
@@ -1105,7 +1137,7 @@ class MidiaRedeActivity : Activity() {
                     }
                 }
             }
-        }.start()
+        }
     }
 
     // ---------------------------------------------------------------- nuvem: OneDrive e Dropbox (14/11/2026, Nuvem.kt)
@@ -1164,11 +1196,11 @@ class MidiaRedeActivity : Activity() {
             p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0); addView(fechar) })
             fechar.requestFocus()
         }
-        Thread {
+        Fundo.rodar("onedrive-login") {
             fun naTela(f: () -> Unit) = tela.post { if (!isDestroyed && !cancelar.get()) f() }
             val r = runCatching { Nuvem.postarForm("${Nuvem.MS_LOGIN}/devicecode", mapOf("client_id" to appId, "scope" to Nuvem.MS_ESCOPOS)) }
             val cod = r.mapCatching { if (it.codigo != 200) throw IllegalStateException("app") else Nuvem.lerCodigoTv(it.corpo) }
-                .getOrElse { e -> naTela { estado.text = if (r.isSuccess) getString(R.string.rede_od_erro_app) else erroLegivel(e) }; return@Thread }
+                .getOrElse { e -> naTela { estado.text = if (r.isSuccess) getString(R.string.rede_od_erro_app) else erroLegivel(e) }; return@rodar }
             naTela { codigoTv.text = cod.usuario; estado.text = getString(R.string.rede_nuvem_esperando) }
             var intervalo = cod.intervaloS
             val fim = System.currentTimeMillis() + minOf(cod.expiraEmS, 900) * 1000L
@@ -1180,11 +1212,11 @@ class MidiaRedeActivity : Activity() {
                     when (runCatching { org.json.JSONObject(t.corpo).optString("error") }.getOrDefault("")) {
                         "authorization_pending" -> continue
                         "slow_down" -> { intervalo += 5; continue }
-                        else -> { naTela { estado.text = getString(R.string.rede_nuvem_recusado); codigoTv.alpha = 0.3f }; return@Thread }
+                        else -> { naTela { estado.text = getString(R.string.rede_nuvem_recusado); codigoTv.alpha = 0.3f }; return@rodar }
                     }
                 }
                 val tokens = runCatching { Nuvem.lerTokens(t.corpo) }.getOrNull()
-                if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_od_erro_app) }; return@Thread }
+                if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_od_erro_app) }; return@rodar }
                 naTela { estado.text = getString(R.string.rede_nuvem_salvando) }
                 // Nome que aparece na lista: o dono do OneDrive (Files.Read basta para ler /me/drive).
                 val nome = runCatching {
@@ -1192,10 +1224,10 @@ class MidiaRedeActivity : Activity() {
                         .optJSONObject("owner")?.optJSONObject("user")?.optString("displayName")
                 }.getOrNull()?.takeIf { it.isNotBlank() } ?: "OneDrive"
                 if (!cancelar.get()) salvarNuvem(ContaMidia.ONEDRIVE, "OneDrive", nome, appId, tokens.renovacao, estado)
-                return@Thread
+                return@rodar
             }
             naTela { estado.text = getString(R.string.rede_plex_venceu); codigoTv.alpha = 0.3f }
-        }.start()
+        }
     }
 
     /** Passo 1 do Dropbox: a "App key" do app que o dono criou no App Console. */
@@ -1249,7 +1281,7 @@ class MidiaRedeActivity : Activity() {
             if (codigo.length < 8 || codigo.any { it.isWhitespace() }) { estado.text = getString(R.string.rede_dbx_codigo_erro); return@setOnClickListener }
             if (!ok.isEnabled) return@setOnClickListener
             ok.isEnabled = false; estado.text = getString(R.string.rede_nuvem_salvando)
-            Thread {
+            Fundo.rodar("dropbox-login") {
                 fun naTela(f: () -> Unit) = tela.post { if (!isDestroyed && !cancelar.get()) f() }
                 val tokens = runCatching {
                     val r = Nuvem.postarForm(Nuvem.DBX_TOKEN, mapOf("code" to codigo, "grant_type" to "authorization_code",
@@ -1257,13 +1289,13 @@ class MidiaRedeActivity : Activity() {
                     if (r.codigo != 200) throw IllegalStateException("recusado")
                     Nuvem.lerTokens(r.corpo)
                 }.getOrNull()
-                if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_nuvem_recusado); ok.isEnabled = true }; return@Thread }
+                if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_nuvem_recusado); ok.isEnabled = true }; return@rodar }
                 val nome = runCatching {
                     org.json.JSONObject(Nuvem.conferir(Nuvem.postarJson("${Nuvem.DBX_API}/2/users/get_current_account", tokens.acesso, "null")))
                         .let { o -> o.optJSONObject("name")?.optString("display_name")?.takeIf { it.isNotBlank() } ?: o.optString("email") }
                 }.getOrNull()?.takeIf { it.isNotBlank() } ?: "Dropbox"
                 if (!cancelar.get()) salvarNuvem(ContaMidia.DROPBOX, "Dropbox", nome, chave, tokens.renovacao, estado)
-            }.start()
+            }
         }
     }
 
@@ -1342,26 +1374,26 @@ class MidiaRedeActivity : Activity() {
             p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0); addView(fechar) })
             fechar.requestFocus()
         }
-        Thread {
+        Fundo.rodar("nuvem-volta") {
             fun naTela(f: () -> Unit) = tela.post { if (!isDestroyed && !cancelar.get()) f() }
             var ocupado = false
             val chegou = RetornoNuvem.esperar(numero, System.currentTimeMillis() + 10 * 60_000L, cancelar) { ocupado = true }
                 ?: run {
                     naTela { estado.text = if (ocupado) getString(R.string.rede_volta_porta, RetornoNuvem.PORTA) else getString(R.string.rede_plex_venceu) }
-                    return@Thread
+                    return@rodar
                 }
             val codigo = (chegou as? RetornoNuvem.Chegada.Codigo)?.codigo
-                ?: run { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@Thread }
+                ?: run { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@rodar }
             naTela { estado.text = getString(R.string.rede_nuvem_salvando) }
             val tokens = runCatching {
                 val r = trocar(codigo)
                 if (r.codigo != 200) throw IllegalStateException("recusado")
                 Nuvem.lerTokens(r.corpo)
             }.getOrNull()
-            if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@Thread }
+            if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@rodar }
             val quem = runCatching { nome(tokens.acesso) }.getOrNull()?.takeIf { it.isNotBlank() } ?: servico
             if (!cancelar.get()) salvarNuvem(tipo, servico, quem, appId, tokens.renovacao, estado, segredo)
-        }.start()
+        }
     }
 
     // ---------------------------------------------------------------- foto

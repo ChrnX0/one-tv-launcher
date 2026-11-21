@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Um QR abre o formulário no celular, com os dados técnicos já preenchidos</string>
     <string name="rel_texto">Aponte a câmera do celular para o código. Escreva o que aconteceu e envie. Seu nome, sua conta, sua rede e sua cidade não vão junto.</string>
     <string name="rel_vai_junto">O que vai junto</string>
+    <string name="rel_l_oque">O que aconteceu</string>
+    <string name="rel_l_versao">Versão</string>
+    <string name="rel_l_uso">Modo</string>
+    <string name="rel_l_quedas">Quedas / travadas (7 dias)</string>
+    <string name="rel_l_erro">Último erro</string>
 </resources>

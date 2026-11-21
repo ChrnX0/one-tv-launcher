@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.ChaveAcesso
+import br.paulo.tvlauncher.mcp.DesafiosChave
+import br.paulo.tvlauncher.panel.entrar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

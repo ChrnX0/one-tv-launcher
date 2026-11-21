@@ -8,10 +8,12 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.CruzLogica
 import br.paulo.tvlauncher.Estilo
-import br.paulo.tvlauncher.HomeCruz
-import br.paulo.tvlauncher.IconeCruz
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.IconeCruz
+import java.io.File
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -22,8 +24,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 /**
  * Tela inicial em cruz (17/11/2026): desenha a [HomeCruz] com os itens da amostra aprovada, anda com as setas como o

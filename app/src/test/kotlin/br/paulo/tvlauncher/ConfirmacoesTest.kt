@@ -1,8 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Confirmacoes.Acao
-import br.paulo.tvlauncher.Confirmacoes.Modo
-import br.paulo.tvlauncher.Confirmacoes.Regras
+import br.paulo.tvlauncher.privilege.Confirmacoes
+import br.paulo.tvlauncher.privilege.Confirmacoes.Acao
+import br.paulo.tvlauncher.privilege.Confirmacoes.Modo
+import br.paulo.tvlauncher.privilege.Confirmacoes.Regras
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -1,13 +1,14 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.RegrasDono.Arg
-import br.paulo.tvlauncher.RegrasDono.Parado
-import br.paulo.tvlauncher.RegrasDono.Veredito
+import br.paulo.tvlauncher.privilege.RegrasDono
+import br.paulo.tvlauncher.privilege.RegrasDono.Arg
+import br.paulo.tvlauncher.privilege.RegrasDono.Parado
+import br.paulo.tvlauncher.privilege.RegrasDono.Veredito
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** Empréstimo do Device Owner (Dhizuku): quem passa e o que nunca passa. */
 class RegrasDonoTest {

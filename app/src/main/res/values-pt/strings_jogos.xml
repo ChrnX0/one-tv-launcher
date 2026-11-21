@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Card "Jogos" da HOME (14/11/2026): JogosActivity, JogosTv, MainActivity. -->
 <resources>
-    <string name="home_card_jogos">Jogos</string>
-    <string name="home_destaque_jogos_vazio">Jogue na nuvem, pelo PC e jogos retrô</string>
-    <string name="home_linha_continuar_jogos">ASSISTIR E JOGAR</string>
-    <string name="home_jogos_ultimo">Último: %1$s</string>
     <plurals name="jogos_qtd">
         <item quantity="one">%d jogo</item>
         <item quantity="other">%d jogos</item>
@@ -38,8 +34,6 @@
     <string name="jogos_grupo_retro">Retrô</string>
     <string name="jogos_grupo_tv">Jogos da TV</string>
     <string name="jogos_para_comecar">Para começar</string>
-    <string name="jogos_vazio_dica">Ainda não há jogos nesta TV. Escolha um acima para abrir a página dele na Play Store.</string>
-    <string name="jogos_dica_segurar">Segure OK num jogo para mudar de grupo ou tirar daqui.</string>
     <string name="jogos_aviso_fraca_titulo">Rede fraca para jogar na nuvem</string>
     <string name="jogos_aviso_fraca">O jogo pode travar ou atrasar. Cabo de rede, ou a TV mais perto do roteador, ajuda.</string>
     <string name="jogos_jogar_assim">Jogar mesmo assim</string>
@@ -55,27 +49,16 @@
     <string name="jogos_pc_acordando">Acordando o PC… %1$d s</string>
     <string name="jogos_pc_nao_respondeu">O PC não respondeu. Abrindo o app mesmo assim.</string>
     <!-- Esboço A "Console" (14/11/2026): destaque do jogo em foco + fila dos jogados por último. -->
-    <string name="jogos_seus">Seus jogos</string>
     <string name="jogos_mais_jogos">Mais jogos</string>
     <string name="jogos_mais_opcoes">Mais</string>
-    <string name="jogos_por_tipo">Por tipo</string>
-    <string name="jogos_jogar">Jogar</string>
     <string name="jogos_ligar_pc_jogar">Ligar o PC e jogar</string>
-    <string name="jogos_desc_nuvem">O jogo roda num computador da internet e a TV recebe a imagem. Precisa de rede boa.</string>
     <string name="jogos_desc_pc">Jogue aqui na TV os jogos do computador ou do videogame da casa.</string>
-    <string name="jogos_desc_retro">Jogos antigos de vários videogames.</string>
-    <string name="jogos_desc_tv">Jogo instalado na própria TV.</string>
-    <string name="jogos_jogado">Jogado por último %1$s.</string>
-    <string name="jogos_nenhum_titulo">Nenhum jogo ainda</string>
-    <string name="jogos_chip_sem_controle">Sem controle</string>
     <string name="jogos_chip_medindo">Medindo a rede…</string>
     <string name="jogos_chip_boa">Rede boa</string>
     <string name="jogos_chip_ok">Rede ok</string>
     <string name="jogos_chip_fraca">Rede fraca</string>
     <string name="jogos_chip_sem">Sem internet</string>
-    <string name="jogos_tecla_escolher">escolher</string>
     <string name="jogos_tecla_jogar">jogar</string>
-    <string name="jogos_tecla_mais">mais opções</string>
     <string name="jogos_tecla_segurar">segurar OK</string>
     <string name="jogos_tecla_opcoes">mudar de grupo</string>
 </resources>

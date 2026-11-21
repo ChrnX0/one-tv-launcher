@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Raccourci vocal</string>
     <string name="mcp_olhou_tela">Claude a regardé l’écran</string>
     <string name="pg_max_min">max %1$d° · min %2$d°</string>
-    <string name="pg_por_do_sol">coucher %1$s</string>
     <string name="pg_compras">Liste de courses</string>
     <string name="cf_negar">Refuser</string>
     <string name="cf_permitir">Autoriser</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Effacer</string>
     <string name="pn_parear">Appairer</string>
     <string name="pn_titulo">Appairer le launcher (sans PC)</string>
-    <string name="pn_lido">code lu à l’écran</string>
     <string name="pn_nao_achei">écran d’association pas encore trouvé</string>
     <string name="pn_6">le code a 6 chiffres</string>
     <string name="pn_pareado">appairé ! vérification du shell…</string>

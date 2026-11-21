@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s（%2$s まで）</string>
     <string name="grv_ate_hora">%1$s まで</string>
     <string name="grv_selo">録画中（%1$s まで）</string>
-    <string name="grv_selo_home">%1$s を録画中</string>
     <string name="grv_sem_canal">このチャンネルは保存されたリストにありません。一度ライブ TV を開いてからもう一度お試しください。</string>
     <string name="grv_sem_destino">録画先がありません: ハブに USB メモリを接続するか、TV › 録画 でネットワークフォルダを選んでください。</string>
     <string name="grv_pendrive_formato">USB メモリ「%1$s」は TV が読めない形式（NTFS）です。exFAT か FAT32 のメモリを使うか、設定 › システム › ストレージ でこのメモリをフォーマットしてください（中身は消去されます）。</string>

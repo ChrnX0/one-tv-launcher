@@ -16,6 +16,25 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.family.Uso
+import br.paulo.tvlauncher.games.Jogos
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.games.TurmaDiscord
+import br.paulo.tvlauncher.games.TurmaDiscordTv
+import br.paulo.tvlauncher.home.CapaFoco
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.network.AcordarPc
+import br.paulo.tvlauncher.network.Rede
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * Tela Jogos (Central de jogos). Redesenhada em 18/11/2026 no padrão da cruz da HOME, como Rádio e Podcasts
@@ -451,20 +470,6 @@ class JogosActivity : Activity() {
             .setNegativeButton(android.R.string.cancel, null).show()
         corpo.getChildAt(0)?.requestFocus()
     }
-
-    /** "⋯ Mais opções": o que antes era uma fileira de botões. */
-    private fun maisOpcoes() = lista(getString(R.string.jogos_mais_opcoes), listOf(
-        getString(R.string.jogos_testar_rede) to { testarRede(avisar = true) },
-        getString(R.string.jogos_parear) to {
-            if (!JogosTv.abrirPareamento(this)) AvisoTv.rapido(this, getString(R.string.jogos_parear), getString(R.string.jogos_parear_falhou))
-        },
-        getString(R.string.jogos_jogar_pc) to { jogarNoPc(null) },
-        getString(R.string.jogos_baixar) to { mostrarLoja() },
-        getString(R.string.jogos_escolher) to {
-            startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_JOGOS))
-        },
-        getString(R.string.turma_config_titulo) to { configurarTurma() },
-    ))
 
     /** Sugestões que ainda não estão na TV. A Play Store decide se roda neste aparelho (dono: "problema dele"). */
     private fun mostrarLoja() {

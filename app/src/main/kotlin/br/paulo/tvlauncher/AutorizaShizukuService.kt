@@ -4,6 +4,30 @@ import android.accessibilityservice.AccessibilityService
 import android.util.Log
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.alarm.HoraDormirTv
+import br.paulo.tvlauncher.alarm.NaoPerturbeTv
+import br.paulo.tvlauncher.family.TempoTelaTv
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.input.BotoesControle
+import br.paulo.tvlauncher.input.SomNavegacaoTv
+import br.paulo.tvlauncher.input.TecladoCelular
+import br.paulo.tvlauncher.input.TesteTeclas
+import br.paulo.tvlauncher.mcp.McpServidor
+import br.paulo.tvlauncher.mcp.TunelTailscale
+import br.paulo.tvlauncher.network.AcordarComLg
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.privilege.JanelaNaFrente
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.SaudeAcesso
+import br.paulo.tvlauncher.privilege.ShizukuEmbutido
+import br.paulo.tvlauncher.settings.FiltroNoturno
+import br.paulo.tvlauncher.weather.AvisoChuva
 
 /**
  * Serviço de acessibilidade do launcher. Hoje só trata teclas do controle remoto (ver [onKeyEvent]) — chegou a

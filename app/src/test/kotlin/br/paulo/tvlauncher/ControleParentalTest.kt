@@ -1,5 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.CategoriasInfantis
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.VodFiltro
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

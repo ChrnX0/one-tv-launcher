@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">Escolhe uma fonte</string>
     <string name="ad_dica_voltar">voltar</string>
     <string name="ad_cfg_det">Addons instalados. Escolha para adicionar ou remover.</string>
-    <string name="ad_cfg_remover_qual">Remover qual addon?</string>
     <string name="ad_cfg_remover">%1$s vai sair desta TV.</string>
     <string name="ad_cfg_remover_sim">Remover</string>
     <string name="ad_add_titulo">Adicionar addon</string>

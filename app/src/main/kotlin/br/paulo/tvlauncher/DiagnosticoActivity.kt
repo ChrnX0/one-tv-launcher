@@ -17,6 +17,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.network.DiagnosticoInternet
+import br.paulo.tvlauncher.observer.Diagnostico
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.observer.VitaisTv
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.CorSegura
+import br.paulo.tvlauncher.settings.Fontes
 import java.util.concurrent.Executors
 
 private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT

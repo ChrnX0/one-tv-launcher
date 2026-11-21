@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.input.ComandoAscii
+import java.util.Base64
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Base64
 
 class ComandoAsciiTest {
     @Test fun asciiPassaIgual() {

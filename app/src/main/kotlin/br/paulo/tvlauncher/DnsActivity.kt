@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -18,6 +17,9 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.network.Dns
+import br.paulo.tvlauncher.network.DnsSeguro
+import br.paulo.tvlauncher.player.salvar
 import java.util.concurrent.Executors
 
 private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT

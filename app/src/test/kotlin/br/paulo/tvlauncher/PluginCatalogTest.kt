@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.LojaCurada
+import br.paulo.tvlauncher.screensaver.PluginCatalog
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue

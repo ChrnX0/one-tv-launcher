@@ -93,10 +93,6 @@
     <string name="vq_det">このテレビの見た目(テーマ、文字サイズ、アイコン)を QR コードで表示します。</string>
     <string name="vq_texto">スマホで読み取って保存したり、Sofaly を使っている人に送ったりできます。</string>
     <string name="vq_fechar">閉じる</string>
-    <string name="lh_titulo">アプリカードのサイズ</string>
-    <string name="lh_det">大きいカードはソファからでも見やすくなります。</string>
-    <string name="lh_normal">標準</string>
-    <string name="lh_grande">大</string>
     <string name="pl_titulo">プラン</string>
     <string name="pl_texto">販売開始までは、すべて無料です。今後、Pro と Ultra はスマホで購入します。</string>
     <string name="pl_basico">ベーシック</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• ベーシックの全機能\n• 複数の IPTV リスト、録画\n• Web パネルの全機能\n• Claude、ルーティン、Home Assistant\n• 全テーマ、クラウドバックアップ</string>
     <string name="pl_ultra_itens">• Pro の全機能\n• より正確な天気(3 モデル)\n• 充実した映画ページ\n• 自動字幕\n• テレビ 3 台まで</string>
     <string name="pl_qr">スマホで読み取って、価格の確認と購入ができます。</string>
-    <string name="lh_arranjo">アプリの並べ方</string>
-    <string name="lh_arranjo_det">横にスクロールする 1 列、またはすべてのアプリが見えるグリッド。</string>
-    <string name="lh_fileira">1 列</string>
-    <string name="lh_grade">グリッド</string>
     <string name="pl_assinar">登録する</string>
     <string name="pl_assinar_preco">登録する · %1$s</string>
     <string name="pl_seu_plano">ご利用中のプラン</string>

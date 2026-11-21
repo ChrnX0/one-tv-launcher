@@ -1,14 +1,20 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.InfoExterna.Candidato
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.FilmesFiltro
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.InfoExterna.Candidato
+import br.paulo.tvlauncher.player.OndeAssistir
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.Vod
+import java.time.LocalDate
+import java.util.Locale
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDate
-import java.util.Locale
 
 /** Respostas gravadas no formato das documentações do TMDB e do MDBList (schema de api.mdblist.com/schema). */
 class InfoExternaTest {

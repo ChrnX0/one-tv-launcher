@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ver_sec">Esta versão</string>
     <string name="ver_novidades">O que mudou</string>
     <string name="ver_novidades_det">%1$d novidades na versão %2$s · OK para ler</string>
     <string name="ver_novidades_sobre">Versão %1$s</string>

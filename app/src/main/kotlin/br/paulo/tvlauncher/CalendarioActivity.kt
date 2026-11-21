@@ -21,6 +21,12 @@ import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.Agenda
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.home.Grade
+import br.paulo.tvlauncher.panel.eventos
+import br.paulo.tvlauncher.settings.Fontes
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

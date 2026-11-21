@@ -1,11 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.ContaIptv
+import br.paulo.tvlauncher.player.FonteTv
+import br.paulo.tvlauncher.player.Xtream
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.TimeZone
 
 /** Área "Conta" das Configurações: leitura do user_info e as linhas mostradas. Dados inventados. */
 class ContaIptvTest {

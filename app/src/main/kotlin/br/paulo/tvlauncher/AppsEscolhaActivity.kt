@@ -6,6 +6,11 @@ import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.HospedeRegras
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.games.Jogos
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.home.Organizacao
 
 /**
  * Uma linha por app de TV, com OK para mudar (14/11/2026). Dois usos, mesma tela:

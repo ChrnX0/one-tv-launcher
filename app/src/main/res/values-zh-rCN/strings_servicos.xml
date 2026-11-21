@@ -13,7 +13,6 @@
     <string name="sv_desligado">登录</string>
     <string name="sv_entrando">正在登录…</string>
     <string name="sv_conectado">已连接</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">开</string>
     <string name="sv_sem_chave">此版本还没有这些服务的密钥。下次更新后会出现。</string>
     <string name="sv_pedindo">正在向 %1$s 请求代码…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">密码</string>
     <string name="sv_gravar">保存</string>
     <string name="sv_cancelar">取消</string>
-    <string name="sv_conferindo">正在向 %1$s 核对…</string>
     <string name="sv_limite_dia">今日字幕配额已用完。24 小时后恢复（使用 OpenSubtitles 账号每天 20 个）。</string>
     <string name="sv_tmdb_atribuicao">本产品使用 TMDB API，但未经 TMDB 认可或认证。</string>
     <string name="ext_saga">%1$s · 共 %3$d 部，你的清单里有 %2$d 部</string>

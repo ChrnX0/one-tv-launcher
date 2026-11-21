@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.BackupAutomatico
+import java.io.File
+import java.nio.file.Files
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.nio.file.Files
 
 class BackupAutomaticoTest {
     @Test fun nomeSoAceitaCopias() {

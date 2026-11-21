@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.TravaRelogioRegra.Acao
+import br.paulo.tvlauncher.family.TravaRelogioRegra
+import br.paulo.tvlauncher.family.TravaRelogioRegra.Acao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

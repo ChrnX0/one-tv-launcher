@@ -1,11 +1,17 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.CanalBusca
+import br.paulo.tvlauncher.player.Guia
+import br.paulo.tvlauncher.player.PlayerDados
+import br.paulo.tvlauncher.player.Programa
+import java.io.StringReader
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.StringReader
-import java.util.TimeZone
 
 /** "Coloca na Globo" / "o que passa na Globo" (CanalBusca e as ações novas do ComandosIa). gradlew testReleaseUnitTest. */
 class CanalBuscaTest {

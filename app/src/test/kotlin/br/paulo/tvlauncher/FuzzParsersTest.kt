@@ -1,5 +1,25 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.ChecagensPainel
+import br.paulo.tvlauncher.panel.ErroHttp
+import br.paulo.tvlauncher.panel.PainelHttp
+import br.paulo.tvlauncher.panel.Requisicao
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.Xmltv
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.io.PrintStream
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.util.Random
+import java.util.zip.GZIPOutputStream
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -11,16 +31,6 @@ import org.junit.Test
 import org.kxml2.io.KXmlParser
 import org.xml.sax.SAXException
 import org.xmlpull.v1.XmlPullParserException
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintStream
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.util.Random
-import java.util.zip.GZIPOutputStream
 
 /**
  * "Fuzz" dos leitores que recebem dados de FORA (10/11/2026): milhares de entradas aleatórias, quase certas e

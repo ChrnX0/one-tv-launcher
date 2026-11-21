@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.network.CasaHA
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

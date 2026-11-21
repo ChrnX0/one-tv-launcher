@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.mcp.McpPoderRegras
+
 /**
  * Ideia 55 (14/11/2026): "Enviar para a TV" pelo botão de compartilhar do celular. O painel instalado como app (https,
  * Chrome do Android) entra no menu de compartilhar (manifest.webmanifest, share_target) e manda aqui o que veio:

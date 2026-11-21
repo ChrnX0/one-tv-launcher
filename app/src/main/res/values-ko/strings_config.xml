@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV 및 영화</string>
     <string name="cl_aba_conta_det">IPTV 계정, 영화·시리즈 서비스, 오디오와 자막</string>
     <string name="cl_aba_parental">자녀 보호</string>
-    <string name="cl_aba_parental_det">PIN으로 채널 잠금: 목록에서 사라지고 재생되지 않음</string>
-    <string name="cl_aba_aparencia">모양</string>
-    <string name="cl_aba_aparencia_det">테마, 앱 묶음, 날씨, 화면 알림</string>
     <string name="cl_aba_energia">화면 및 전원</string>
     <string name="cl_aba_energia_det">화면 보호기 및 자동 전원 끄기</string>
-    <string name="cl_aba_visitas">게스트 및 루틴</string>
-    <string name="cl_aba_visitas_det">게스트 모드 및 예약된 동작</string>
     <string name="cl_aba_rede">네트워크</string>
-    <string name="cl_aba_rede_det">DNS, VPN, 인터넷 속도</string>
     <string name="cl_aba_remoto">원격 액세스</string>
     <string name="cl_aba_remoto_det">브라우저 패널, PIN, 인터넷으로 Claude 사용</string>
     <string name="cl_aba_sistema">시스템</string>
-    <string name="cl_aba_sistema_det">진단, 업데이트, 앱, 권한</string>
     <string name="cl_dica_aba">탭 선택</string>
     <string name="cl_dica_entrar">옵션 열기</string>
     <string name="cl_dica_sair">나가기</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">런처 자동 업데이트</string>
     <string name="cl_acao_atualizacao_det">화면이 꺼진 상태에서 새 버전을 자동으로 설치합니다. 차단됨 = 알림만 표시.</string>
     <string name="cl_tema">테마</string>
-    <string name="cl_pilhas_det">개별 앱을 카테고리별로 묶음, 직접 만든 묶음은 유지</string>
     <string name="cl_clima">날씨</string>
     <string name="cl_end_nenhum">없음 · TV가 Wi-Fi로 위치를 찾으며, 찾지 못할 때 주소를 사용</string>
     <string name="cl_end_clima">날씨 주소</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">카드</string>
     <string name="cl_widget_solto">상자 없음</string>
     <string name="cl_linha_baixo">화면 보호기 위젯</string>
-    <string name="cl_linha_baixo_det">유리 띠, 카드 또는 상자 없음 · OK로 변경</string>
     <string name="cl_desligar">사용하지 않을 때 끄기</string>
     <string name="cl_desligar_det">재생 중인 동영상은 사용으로 간주, 60초 전에 경고 · OK로 변경</string>
     <string name="cl_visita_det">프로필, 캘린더, 아래에서 선택한 앱을 숨김</string>
     <string name="cl_apps_visita">게스트 모드에서 숨기는 앱</string>
     <string name="cl_carregando_apps">앱 로드 중…</string>
-    <string name="cl_some_visita">게스트 모드가 켜져 있는 동안 숨김</string>
     <string name="cl_vpn_nao_fixa">런처가 VPN을 고정하지 않음</string>
     <string name="cl_vpn_adguard">AdGuard VPN 앱, 항상 켜짐 · OK로 앱 열기</string>
     <string name="cl_painel_navegador">브라우저 패널</string>

@@ -61,7 +61,6 @@
     <string name="jogos_semana">На этой неделе</string>
     <string name="jogos_semana_jogado">игры за 7 дней</string>
     <string name="jogos_semana_mais">больше всего</string>
-    <string name="jogos_semana_controles">геймпадов подключено</string>
     <string name="jogos_menos_de_1_min">меньше 1 мин</string>
     <string name="jogos_min">%1$d мин</string>
     <string name="jogos_h_min">%1$d ч %2$d мин</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Проверьте, что его сервер включён. Телевизор сам повторяет попытку каждые несколько секунд.</string>
     <string name="cruz_barra_ilha">Остров</string>
     <string name="cruz_canto_no_ar">В эфире</string>
-    <string name="cruz_canto_buscar">Поиск</string>
-    <string name="cruz_canto_buscar_txt">▲ открывает панель с поиском</string>
     <string name="cruz_canto_gravando">Запись</string>
     <string name="cruz_canto_tocando">Играет</string>
     <string name="cruz_canto_parou">Остановлено на</string>

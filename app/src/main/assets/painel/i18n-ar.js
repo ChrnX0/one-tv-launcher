@@ -1,5 +1,8 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"يعمل",
+"desligado":"متوقف",
+"sem leitura":"لا توجد قراءة",
 "Recados de hoje":"ملاحظات اليوم",
 "Congelados em prova":"مجمدة للتجربة",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"جمّد التلفزيون هذه التطبيقات وسيتحقق خلال 10 دقائق مما إذا توقف شيء عن العمل. إن حدث ذلك يتراجع عنه بنفسه، ويمكنك أنت أيضًا.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"عادي",
 "Grande":"كبير",
 "Maior":"أكبر",
-"Pilhas automáticas (agrupar os apps por tipo)":"مجموعات تلقائية (تجميع التطبيقات حسب النوع)",
 "Aviso de chuva por cima de qualquer app":"تنبيه المطر فوق أي تطبيق",
 "Unidade de rede":"محرك شبكة",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"يظهر تخزين التلفزيون على الكمبيوتر والهاتف كمجلد شبكة (WebDAV)، بالمجلدات نفسها في تبويب الملفات. كلمة المرور: PIN اللوحة (يصلح أي اسم مستخدم، مثل tv). يحتاج الجهاز إلى تثبيت شهادة التلفزيون (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"هذا الخيار يطلب PIN اللوحة.",
 "Tema trocado.":"تغيّر المظهر.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"حُفظ حجم النص (يُطبَّق عند فتح كل شاشة).",
-"Pilhas automáticas ligadas.":"المجموعات التلقائية مفعّلة.",
-"Pilhas automáticas desligadas.":"المجموعات التلقائية مطفأة.",
 "Aviso de chuva ligado.":"تنبيه المطر مفعّل.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"الأفلام بمعدل إطاراتها الأصلي (24 هرتز، بلا تقطّع في الحركة)",
 "Taxa de quadros do filme ligada.":"مطابقة معدل إطارات الأفلام مفعّلة.",

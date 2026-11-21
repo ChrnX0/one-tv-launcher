@@ -93,10 +93,6 @@
     <string name="vq_det">इस टीवी के लुक वाला QR कोड दिखाता है: थीम, टेक्स्ट का आकार, आइकन।</string>
     <string name="vq_texto">इसे रखने या Sofaly वाले किसी व्यक्ति को भेजने के लिए फ़ोन से स्कैन करें।</string>
     <string name="vq_fechar">बंद करें</string>
-    <string name="lh_titulo">ऐप कार्ड का आकार</string>
-    <string name="lh_det">बड़े कार्ड सोफ़े से आसानी से दिखते हैं।</string>
-    <string name="lh_normal">सामान्य</string>
-    <string name="lh_grande">बड़ा</string>
     <string name="pl_titulo">प्लान</string>
     <string name="pl_texto">जब तक बिक्री शुरू नहीं होती, सब कुछ मुफ़्त है। बाद में Pro और Ultra फ़ोन पर खरीदे जाएँगे।</string>
     <string name="pl_basico">बेसिक</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• बेसिक का सब कुछ\n• कई IPTV सूचियाँ, रिकॉर्डिंग\n• पूरा वेब पैनल\n• Claude, रूटीन, Home Assistant\n• सभी थीम, क्लाउड बैकअप</string>
     <string name="pl_ultra_itens">• Pro का सब कुछ\n• बेहतर मौसम (3 मॉडल)\n• विस्तृत फ़िल्म पेज\n• अपने-आप सबटाइटल\n• 3 टीवी तक</string>
     <string name="pl_qr">कीमतें देखने और खरीदने के लिए फ़ोन से स्कैन करें।</string>
-    <string name="lh_arranjo">ऐप लेआउट</string>
-    <string name="lh_arranjo_det">बगल में स्क्रॉल होने वाली एक पंक्ति, या सभी ऐप एक साथ दिखाने वाला ग्रिड।</string>
-    <string name="lh_fileira">पंक्ति</string>
-    <string name="lh_grade">ग्रिड</string>
     <string name="pl_assinar">सदस्यता लें</string>
     <string name="pl_assinar_preco">सदस्यता लें · %1$s</string>
     <string name="pl_seu_plano">आपका प्लान</string>

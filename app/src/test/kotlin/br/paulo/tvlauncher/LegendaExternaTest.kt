@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.LegendaExterna.Busca
+import br.paulo.tvlauncher.player.LegendaExterna
+import br.paulo.tvlauncher.player.LegendaExterna.Busca
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

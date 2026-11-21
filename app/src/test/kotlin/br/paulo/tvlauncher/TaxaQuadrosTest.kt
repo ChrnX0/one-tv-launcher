@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.TaxaQuadros.Modo
+import br.paulo.tvlauncher.player.TaxaQuadros
+import br.paulo.tvlauncher.player.TaxaQuadros.Modo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

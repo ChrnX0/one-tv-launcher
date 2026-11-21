@@ -13,7 +13,6 @@
     <string name="sv_desligado">ログイン</string>
     <string name="sv_entrando">ログイン中…</string>
     <string name="sv_conectado">接続済み</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">オン</string>
     <string name="sv_sem_chave">このビルドにはまだこれらのサービスのキーがありません。次のアップデート後に表示されます。</string>
     <string name="sv_pedindo">%1$s にコードを要求中…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">パスワード</string>
     <string name="sv_gravar">保存</string>
     <string name="sv_cancelar">キャンセル</string>
-    <string name="sv_conferindo">%1$s で確認中…</string>
     <string name="sv_limite_dia">1 日の字幕の上限に達しました。24 時間後にリセットされます（OpenSubtitles アカウントがあれば 1 日 20 件）。</string>
     <string name="sv_tmdb_atribuicao">この製品は TMDB API を使用していますが、TMDB による承認または認定を受けたものではありません。</string>
     <string name="ext_saga">%1$s · リストに %3$d 作品中 %2$d 作品</string>

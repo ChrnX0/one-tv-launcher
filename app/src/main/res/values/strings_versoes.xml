@@ -3,7 +3,6 @@
      Whoever publishes a Release rewrites both lists (here and in values-pt). Keep roteiro_ids, roteiro_titulos and
      roteiro_perguntas the same length and order; ids are never translated. -->
 <resources>
-    <string name="ver_sec">This version</string>
     <string name="ver_novidades">What changed</string>
     <string name="ver_novidades_det">%1$d changes in version %2$s · OK to read</string>
     <string name="ver_novidades_sobre">Version %1$s</string>

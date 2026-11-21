@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
+import br.paulo.tvlauncher.input.BotoesControle
+import br.paulo.tvlauncher.player.salvar
 
 /**
  * A lista que aparece ao segurar 3 s um botão de app do controle (ver BotoesControle).

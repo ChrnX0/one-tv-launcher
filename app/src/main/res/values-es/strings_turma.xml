@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">En el sofá</string>
-    <string name="jogos_continuar">Continuar</string>
     <string name="jogos_controle_pronto">listo</string>
     <string name="jogos_controle_carregar">cargar pronto</string>
     <string name="jogos_parear_um">Vincular un control</string>
-    <string name="jogos_todos">Todos</string>
     <string name="turma_titulo">Tu grupo</string>
     <string name="turma_online">%1$d en línea</string>
     <string name="turma_mais_online">+ %1$d en línea</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">El widget del servidor está desactivado</string>
     <string name="turma_desligado_texto">En Discord: Ajustes del servidor, Widget, activa Habilitar widget del servidor.</string>
     <string name="turma_qr_dica">Apunta el móvil aquí para entrar en la voz. La charla va por el móvil.</string>
-    <string name="turma_aqui">%1$d de tu grupo aquí</string>
     <string name="turma_jogando">%1$s jugando %2$s</string>
     <string name="turma_dois">%1$s y %2$s</string>
     <string name="turma_e_mais">%1$s y %2$d más</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Guardar</string>
     <string name="turma_config_tirar">Quitar el grupo</string>
     <string name="turma_id_invalido">Esto no es un ID de servidor de Discord (17 a 20 números).</string>
-    <string name="cruz_sofa">Sofá</string>
     <string name="cruz_sofa_sub">Controles y tu grupo de Discord</string>
     <string name="cruz_sofa_voz">%1$d en voz · %2$s</string>
 </resources>

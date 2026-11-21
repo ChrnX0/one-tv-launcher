@@ -3,6 +3,7 @@ package br.paulo.tvlauncher
 import android.app.admin.DeviceAdminReceiver
 import android.content.Context
 import android.content.Intent
+import br.paulo.tvlauncher.network.DiarioDns
 
 /**
  * Faz o launcher poder ser "device owner" (dono do dispositivo): o nível mais alto de gerenciamento do Android,

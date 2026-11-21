@@ -1,12 +1,10 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
 
 /**
  * "Licenças e créditos" (05/11/2026): mostra assets/licencas.txt numa tela rolável. Aberta pela última linha das

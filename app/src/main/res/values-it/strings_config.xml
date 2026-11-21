@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV e film</string>
     <string name="cl_aba_conta_det">Account IPTV, servizi di film e serie, audio e sottotitoli</string>
     <string name="cl_aba_parental">Controllo genitori</string>
-    <string name="cl_aba_parental_det">Blocca i canali con il PIN: spariscono dall’elenco e non si riproducono</string>
-    <string name="cl_aba_aparencia">Aspetto</string>
-    <string name="cl_aba_aparencia_det">Tema, pile di app, meteo e avvisi sullo schermo</string>
     <string name="cl_aba_energia">Schermo ed energia</string>
     <string name="cl_aba_energia_det">Salvaschermo e spegnimento automatico</string>
-    <string name="cl_aba_visitas">Ospiti e routine</string>
-    <string name="cl_aba_visitas_det">Modalità ospiti e azioni programmate</string>
     <string name="cl_aba_rede">Rete</string>
-    <string name="cl_aba_rede_det">DNS, VPN e velocità di internet</string>
     <string name="cl_aba_remoto">Accesso remoto</string>
     <string name="cl_aba_remoto_det">Pannello nel browser, PIN e Claude via internet</string>
     <string name="cl_aba_sistema">Sistema</string>
-    <string name="cl_aba_sistema_det">Diagnostica, aggiornamenti, app e permessi</string>
     <string name="cl_dica_aba">scegli una scheda</string>
     <string name="cl_dica_entrar">apri le opzioni</string>
     <string name="cl_dica_sair">esci</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Aggiornamenti automatici del launcher</string>
     <string name="cl_acao_atualizacao_det">Installa da solo la nuova versione a schermo spento. Bloccato = avvisa soltanto.</string>
     <string name="cl_tema">Tema</string>
-    <string name="cl_pilhas_det">Raggruppa le app sciolte per categoria; le tue pile restano</string>
     <string name="cl_clima">Meteo</string>
     <string name="cl_end_nenhum">nessuno · la TV si localizza tramite Wi-Fi; l’indirizzo si usa quando il Wi-Fi non ci riesce</string>
     <string name="cl_end_clima">Indirizzo per il meteo</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Schede</string>
     <string name="cl_widget_solto">Senza riquadro</string>
     <string name="cl_linha_baixo">Widget del salvaschermo</string>
-    <string name="cl_linha_baixo_det">Striscia di vetro, schede o senza riquadro · OK cambia</string>
     <string name="cl_desligar">Spegni se inattiva</string>
     <string name="cl_desligar_det">Un video in riproduzione conta come uso; avvisa 60 s prima · OK cambia</string>
     <string name="cl_visita_det">Nasconde il profilo, il calendario e le app segnate qui sotto</string>
     <string name="cl_apps_visita">App nascoste in modalità ospiti</string>
     <string name="cl_carregando_apps">Caricamento delle app…</string>
-    <string name="cl_some_visita">nascosta con la modalità ospiti attiva</string>
     <string name="cl_vpn_nao_fixa">il launcher non fissa alcuna VPN</string>
     <string name="cl_vpn_adguard">app AdGuard VPN, sempre attiva · OK apre l’app</string>
     <string name="cl_painel_navegador">Pannello nel browser</string>

@@ -93,10 +93,6 @@
     <string name="vq_det">Показывает QR-код с оформлением этого ТВ: тема, размер текста, значки.</string>
     <string name="vq_texto">Отсканируйте его телефоном, чтобы сохранить или отправить тому, у кого есть Sofaly.</string>
     <string name="vq_fechar">Закрыть</string>
-    <string name="lh_titulo">Размер карточек приложений</string>
-    <string name="lh_det">Крупные карточки лучше видно с дивана.</string>
-    <string name="lh_normal">Обычный</string>
-    <string name="lh_grande">Крупный</string>
     <string name="pl_titulo">Тарифы</string>
     <string name="pl_texto">Всё бесплатно, пока продажи не открыты. Позже Pro и Ultra покупаются на телефоне.</string>
     <string name="pl_basico">Базовый</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Всё из Базового\n• Много IPTV-списков, запись\n• Полная веб-панель\n• Claude, расписания, Home Assistant\n• Все темы, резервная копия в облаке</string>
     <string name="pl_ultra_itens">• Всё из Pro\n• Точнее погода (3 модели)\n• Подробные карточки фильмов\n• Автоматические субтитры\n• До 3 ТВ</string>
     <string name="pl_qr">Отсканируйте телефоном, чтобы увидеть цены и купить.</string>
-    <string name="lh_arranjo">Расположение приложений</string>
-    <string name="lh_arranjo_det">Ряд с прокруткой в сторону или сетка, где видны все приложения.</string>
-    <string name="lh_fileira">Ряд</string>
-    <string name="lh_grade">Сетка</string>
     <string name="pl_assinar">Оформить подписку</string>
     <string name="pl_assinar_preco">Оформить · %1$s</string>
     <string name="pl_seu_plano">Ваш тариф</string>

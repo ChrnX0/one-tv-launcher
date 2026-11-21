@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.AddonsProtocolo
+import br.paulo.tvlauncher.player.AddonsTmdb
+import br.paulo.tvlauncher.player.item
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

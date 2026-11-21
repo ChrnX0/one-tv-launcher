@@ -14,6 +14,12 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.CustomIcons
+import br.paulo.tvlauncher.home.CustomIconsRules
+import br.paulo.tvlauncher.home.IconPackFreezer
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.settings.Fontes
 import java.util.concurrent.Executors
 
 /**

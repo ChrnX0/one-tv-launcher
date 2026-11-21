@@ -1,13 +1,19 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.EntradaComPrazo
+import br.paulo.tvlauncher.mcp.McpExtras
+import br.paulo.tvlauncher.mcp.McpServidor
+import br.paulo.tvlauncher.panel.ErroHttp
+import br.paulo.tvlauncher.panel.PainelHttp
+import br.paulo.tvlauncher.privilege.Confirmacoes
+import java.io.InputStream
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
-import java.io.InputStream
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 /** Partes puras do McpServidor e do McpExtras (auditoria 10/11/2026). */
 class McpServidorTest {

@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">Kanepede</string>
-    <string name="jogos_continuar">Devam et</string>
     <string name="jogos_controle_pronto">hazır</string>
     <string name="jogos_controle_carregar">yakında şarj et</string>
     <string name="jogos_parear_um">Kumanda eşle</string>
-    <string name="jogos_todos">Tümü</string>
     <string name="turma_titulo">Ekibin</string>
     <string name="turma_online">%1$d çevrimiçi</string>
     <string name="turma_mais_online">+ %1$d çevrimiçi</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Sunucu widget’ı kapalı</string>
     <string name="turma_desligado_texto">Discord’da: Sunucu Ayarları, Widget, Sunucu Widget’ını Etkinleştir’i aç.</string>
     <string name="turma_qr_dica">Sese katılmak için telefonunu buraya tut. Konuşma telefondan olur.</string>
-    <string name="turma_aqui">Ekipten %1$d kişi burada</string>
     <string name="turma_jogando">%1$s, %2$s oynuyor</string>
     <string name="turma_dois">%1$s ve %2$s</string>
     <string name="turma_e_mais">%1$s ve %2$d kişi daha</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Kaydet</string>
     <string name="turma_config_tirar">Ekibi kaldır</string>
     <string name="turma_id_invalido">Bu bir Discord sunucu ID’si değil (17 ile 20 rakam).</string>
-    <string name="cruz_sofa">Kanepe</string>
     <string name="cruz_sofa_sub">Kumandalar ve Discord ekibin</string>
     <string name="cruz_sofa_voz">Seste %1$d kişi · %2$s</string>
 </resources>

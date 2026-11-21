@@ -1,5 +1,8 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"menyala",
+"desligado":"mati",
+"sem leitura":"tidak ada data",
 "Recados de hoje":"Catatan hari ini",
 "Congelados em prova":"Dibekukan untuk uji",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"TV membekukan aplikasi ini dan memeriksa dalam 10 menit apakah ada yang berhenti bekerja. Jika ya, TV membatalkannya; Anda juga bisa.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normal",
 "Grande":"Besar",
 "Maior":"Lebih besar",
-"Pilhas automáticas (agrupar os apps por tipo)":"Tumpukan otomatis (kelompokkan aplikasi menurut jenis)",
 "Aviso de chuva por cima de qualquer app":"Peringatan hujan di atas aplikasi apa pun",
 "Unidade de rede":"Drive jaringan",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"Penyimpanan TV muncul di komputer dan ponsel sebagai folder jaringan (WebDAV), dengan folder yang sama seperti tab File. Kata sandi: PIN panel (nama pengguna apa saja, mis. tv). Perangkat perlu sertifikat TV terpasang (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Opsi ini meminta PIN panel.",
 "Tema trocado.":"Tema diubah.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Ukuran teks disimpan (berlaku saat tiap layar dibuka).",
-"Pilhas automáticas ligadas.":"Tumpukan otomatis aktif.",
-"Pilhas automáticas desligadas.":"Tumpukan otomatis mati.",
 "Aviso de chuva ligado.":"Peringatan hujan aktif.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Film dengan frame rate aslinya (24 Hz, tanpa patah-patah saat bergerak)",
 "Taxa de quadros do filme ligada.":"Penyesuaian frame rate film aktif.",

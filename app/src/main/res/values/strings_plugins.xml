@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugins</string>
-    <string name="plg_cfg_det">Cards from other apps in the Watch row. Each one needs your OK.</string>
-    <string name="plg_det">Turn on only apps you trust. A plugin only sends a short text; it cannot see your apps or accounts.</string>
     <string name="plg_nenhum">No plugin installed. Plugins are apps from other developers that show a card here, like a match score or a price.</string>
     <string name="plg_ligado">On</string>
     <string name="plg_desligado">Off</string>

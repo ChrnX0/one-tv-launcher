@@ -1,14 +1,7 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.Test
+import br.paulo.tvlauncher.panel.CertificadoX509
 import java.net.InetAddress
-import java.net.ServerSocket
 import java.net.Socket
 import java.security.KeyStore
 import java.security.cert.CertPathValidator
@@ -22,6 +15,13 @@ import javax.net.ssl.SSLServerSocket
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.TrustManagerFactory
 import kotlin.concurrent.thread
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
+import org.junit.Test
 
 class CertificadoX509Test {
     private val agora = 1_794_000_000_000L   // nov/2026

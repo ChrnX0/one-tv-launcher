@@ -1239,7 +1239,6 @@ function desenharConfig(r) {
   $('cfgTamanho').value = String(r.tamanhoTexto);
   $('cfgAltoContraste').checked = !!r.altoContraste;
   aplicarContraste(r.altoContraste);
-  $('cfgPilhas').checked = r.pilhas;
   $('cfgChuva').checked = r.avisoChuva;
   $('cfgTemperatura').checked = r.avisoTemperatura !== false;
   $('cfgAudio').value = r.audio;
@@ -1311,7 +1310,6 @@ async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
 $('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', valor: e.target.value }, 'Tema trocado.'));
 $('cfgAltoContraste').addEventListener('change', (e) => gravarConfig({ campo: 'altoContraste', valor: e.target.checked }, e.target.checked ? 'Alto contraste ligado.' : 'Alto contraste desligado.'));
 $('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
-$('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
 $('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
 $('cfgQuadros').addEventListener('change', (e) => gravarConfig({ campo: 'taxaQuadros', valor: e.target.checked }, e.target.checked ? 'Taxa de quadros do filme ligada.' : 'Taxa de quadros do filme desligada.'));
 $('cfgTemperatura').addEventListener('change', (e) => gravarConfig({ campo: 'avisoTemperatura', valor: e.target.checked }, e.target.checked ? 'Aviso de calor e frio ligado.' : 'Aviso de calor e frio desligado.'));

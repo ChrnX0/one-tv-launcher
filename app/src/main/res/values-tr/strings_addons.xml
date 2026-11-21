@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">Bir kaynak seç</string>
     <string name="ad_dica_voltar">geri</string>
     <string name="ad_cfg_det">Yüklü eklentiler. Eklemek ya da kaldırmak için seçin.</string>
-    <string name="ad_cfg_remover_qual">Hangi eklenti kaldırılsın?</string>
     <string name="ad_cfg_remover">%1$s bu TV\'den kaldırılacak.</string>
     <string name="ad_cfg_remover_sim">Kaldır</string>
     <string name="ad_add_titulo">Eklenti ekle</string>

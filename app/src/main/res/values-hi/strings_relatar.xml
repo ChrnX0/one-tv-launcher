@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QR से फ़ोन पर फ़ॉर्म खुलता है, तकनीकी जानकारी पहले से भरी होती है</string>
     <string name="rel_texto">फ़ोन का कैमरा कोड की ओर करें। क्या हुआ लिखें और भेजें। आपका नाम, खाता, नेटवर्क और शहर नहीं जाते।</string>
     <string name="rel_vai_junto">साथ में क्या जाता है</string>
+    <string name="rel_l_oque">क्या हुआ</string>
+    <string name="rel_l_versao">संस्करण</string>
+    <string name="rel_l_uso">मोड</string>
+    <string name="rel_l_quedas">क्रैश / अटकना (7 दिन)</string>
+    <string name="rel_l_erro">आखिरी त्रुटि</string>
 </resources>

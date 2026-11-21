@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Polecenie głosowe</string>
     <string name="mcp_olhou_tela">Claude spojrzał na ekran</string>
     <string name="pg_max_min">maks. %1$d° · min. %2$d°</string>
-    <string name="pg_por_do_sol">zachód %1$s</string>
     <string name="pg_compras">Lista zakupów</string>
     <string name="cf_negar">Odmów</string>
     <string name="cf_permitir">Zezwól</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Wyczyść</string>
     <string name="pn_parear">Sparuj</string>
     <string name="pn_titulo">Parowanie launchera (bez komputera)</string>
-    <string name="pn_lido">kod odczytany z ekranu</string>
     <string name="pn_nao_achei">jeszcze nie znaleziono ekranu parowania</string>
     <string name="pn_6">kod ma 6 cyfr</string>
     <string name="pn_pareado">sparowano! sprawdzanie powłoki…</string>

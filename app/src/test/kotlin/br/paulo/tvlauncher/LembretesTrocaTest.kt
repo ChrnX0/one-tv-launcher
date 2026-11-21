@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.Lembretes
+import br.paulo.tvlauncher.player.avisar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

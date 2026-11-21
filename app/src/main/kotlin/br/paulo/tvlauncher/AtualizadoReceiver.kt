@@ -7,6 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.util.Log
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.home.HomeDesvio
 
 /**
  * Logo depois de uma versão nova do launcher ser instalada (MY_PACKAGE_REPLACED, 14/11/2026).

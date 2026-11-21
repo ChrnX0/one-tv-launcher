@@ -1,10 +1,10 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.media.AudioManager
 import android.media.ToneGenerator
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +14,10 @@ import android.view.KeyEvent
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.family.CuidarDeLonge
+import br.paulo.tvlauncher.input.SegurarOk
+import br.paulo.tvlauncher.panel.confirmar
 
 /**
  * A pergunta grande do "Cuidar de longe" (ideias 77, 78, 79), por cima de qualquer tela. Letra de Estilo.Leitura

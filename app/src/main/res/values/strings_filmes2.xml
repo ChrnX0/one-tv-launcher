@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Inside Movies (idea 23, 14/11/2026): combined filter, collections by name and a random pick. -->
 <resources>
-    <string name="filmes_filtro">Filter</string>
     <string name="filmes_filtro_titulo">Filter movies</string>
-    <string name="filmes_filtro_cabecalho">%1$s · FILTER: %2$s</string>
     <string name="filmes_filtro_genero">Genre: %1$s</string>
     <string name="filmes_filtro_epoca">Period: %1$s</string>
     <string name="filmes_filtro_nota">Minimum rating: %1$s</string>
@@ -18,7 +16,6 @@
     <string name="filmes_filtro_nao_vistos_curto">unwatched</string>
     <string name="filmes_filtro_sem_genero">No category of this list names a genre</string>
     <string name="filmes_filtro_vazio">No movie matches this filter in this category</string>
-    <string name="filmes_sorteio">Surprise me</string>
     <string name="filmes_sorteio_vazio">No movie to pick from here</string>
     <string name="filmes_colecao">Collection of this movie</string>
     <string name="filmes_colecao_cat">Collection: %1$s</string>

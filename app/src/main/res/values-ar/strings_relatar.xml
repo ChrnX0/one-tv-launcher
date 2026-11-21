@@ -5,4 +5,9 @@
     <string name="rel_linha_det">يفتح رمز QR النموذج على الهاتف مع البيانات التقنية معبأة</string>
     <string name="rel_texto">وجّه كاميرا الهاتف إلى الرمز. اكتب ما حدث وأرسله. لا يُرسل اسمك أو حسابك أو شبكتك أو مدينتك.</string>
     <string name="rel_vai_junto">ما يُرسل معه</string>
+    <string name="rel_l_oque">ماذا حدث</string>
+    <string name="rel_l_versao">الإصدار</string>
+    <string name="rel_l_uso">الوضع</string>
+    <string name="rel_l_quedas">الأعطال / التجمد (7 أيام)</string>
+    <string name="rel_l_erro">آخر خطأ</string>
 </resources>

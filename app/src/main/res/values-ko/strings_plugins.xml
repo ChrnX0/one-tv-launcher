@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">플러그인</string>
-    <string name="plg_cfg_det">보기 줄에 다른 앱의 카드. 각각 승인이 필요합니다.</string>
-    <string name="plg_det">신뢰하는 앱만 켜세요. 플러그인은 짧은 글만 보내며 앱이나 계정을 볼 수 없습니다.</string>
     <string name="plg_nenhum">설치된 플러그인이 없습니다. 플러그인은 경기 점수나 가격 같은 카드를 여기에 보여 주는 다른 개발자의 앱입니다.</string>
     <string name="plg_ligado">켜짐</string>
     <string name="plg_desligado">꺼짐</string>

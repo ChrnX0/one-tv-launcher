@@ -459,9 +459,11 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .acoes .botao-perigo, .acoes .botao-secundario { min-height: 40px; padding: 0 16px; font-size: 15px; }
 .protegido { display: inline-flex; align-items: center; gap: 8px; color: var(--texto-fraco); font-size: 15px; font-weight: 600;
   padding: 0 12px; min-height: 36px; }
+/* Cadeado em arquivo próprio: a CSP do painel (img-src 'self' blob:) bloqueava o data: e o ícone não aparecia
+   (teste na TV de verdade, 21/11/2026). */
 .protegido::before { content: ""; width: 12px; height: 12px; flex: none; background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center / contain no-repeat; }
+  -webkit-mask: url("lock.svg") center / contain no-repeat;
+  mask: url("lock.svg") center / contain no-repeat; }
 .linha-registro { flex-direction: column; align-items: flex-start; gap: 2px; font-size: 17px; }
 .linha-registro .quando { color: var(--texto-fraco); font-size: 15px; }
 .cartao .lista-registro { background: var(--afundado); }

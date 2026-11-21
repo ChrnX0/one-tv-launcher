@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.family.UsoLocal
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.settings.AjudaQr
+import br.paulo.tvlauncher.settings.Manual
 
 /**
  * Um assunto do manual (14/11/2026), aberto pela aba "Ajuda" das Configurações. Tela de LER a 3 m do sofá: letra

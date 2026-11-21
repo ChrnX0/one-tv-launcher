@@ -8,16 +8,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import br.paulo.tvlauncher.AboutActivity
 import br.paulo.tvlauncher.AjudaActivity
 import br.paulo.tvlauncher.AlarmesActivity
+import br.paulo.tvlauncher.AutomacoesActivity
 import br.paulo.tvlauncher.BoasVindasActivity
+import br.paulo.tvlauncher.BuscaActivity
 import br.paulo.tvlauncher.ConfigLauncherActivity
+import br.paulo.tvlauncher.ConhecerProActivity
+import br.paulo.tvlauncher.DiagnosticoActivity
 import br.paulo.tvlauncher.EntrarPeloQrActivity
+import br.paulo.tvlauncher.Estilo
+import br.paulo.tvlauncher.ExtrasActivity
+import br.paulo.tvlauncher.FilaAppsActivity
 import br.paulo.tvlauncher.FilmesActivity
 import br.paulo.tvlauncher.JogosActivity
 import br.paulo.tvlauncher.MainActivity
+import br.paulo.tvlauncher.PlacarActivity
 import br.paulo.tvlauncher.PrevisaoActivity
+import br.paulo.tvlauncher.RadioActivity
+import br.paulo.tvlauncher.ReceberTvActivity
 import br.paulo.tvlauncher.SeriesActivity
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.LayoutHome
+import br.paulo.tvlauncher.home.SplashOverlay
+import br.paulo.tvlauncher.player.salvar
+import br.paulo.tvlauncher.settings.AltoContraste
+import br.paulo.tvlauncher.settings.CorSegura
+import br.paulo.tvlauncher.weather.ClimaMet
+import br.paulo.tvlauncher.weather.WeatherApiSource
+import java.io.File
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.fail
@@ -29,7 +49,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /**
  * Teste de tela por foto (ideia 96, 14/11/2026). O Robolectric desenha as telas principais de verdade (gráficos nativos,
@@ -52,8 +71,6 @@ class TelasTest {
     private val telas: List<Pair<String, Class<out Activity>>> = listOf(
         "boas-vindas" to BoasVindasActivity::class.java,
         "home" to MainActivity::class.java,
-        "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
-        "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
         "home-leve" to MainActivity::class.java,     // cruz com a barra Leve (sem cápsulas) e ícones Duotom
         "home-relogio" to MainActivity::class.java,  // cruz com a barra Relógio grande e ícones Símbolo
         "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão por algumas horas na onda 3)
@@ -131,31 +148,27 @@ class TelasTest {
             val chave = "$idioma/$nome"
             val app = RuntimeEnvironment.getApplication()
             // A abertura com a logo (SplashOverlay) cobriria a HOME na foto: o relógio do Robolectric começa "logo após o boot".
-            br.paulo.tvlauncher.SplashOverlay.setEnabled(app, false)
-            br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
-            br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
-            br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
-            br.paulo.tvlauncher.AltoContraste.definir(app, nome.endsWith("-ac"))
-            // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
-            br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
-            br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
-                "home-leve" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.LEVE
-                "home-relogio" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RELOGIO
-                "home-vidro" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.VIDRO
-                "home-recua" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RECUA
-                else -> br.paulo.tvlauncher.LayoutHome.BarraCruz.ILHA
+            br.paulo.tvlauncher.home.SplashOverlay.setEnabled(app, false)
+            br.paulo.tvlauncher.settings.AltoContraste.definir(app, nome.endsWith("-ac"))
+            // "home" é a cruz (a única tela inicial; a antiga, em fileira/grade, saiu em 21/11/2026).
+            br.paulo.tvlauncher.home.LayoutHome.definirBarraCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.home.LayoutHome.BarraCruz.LEVE
+                "home-relogio" -> br.paulo.tvlauncher.home.LayoutHome.BarraCruz.RELOGIO
+                "home-vidro" -> br.paulo.tvlauncher.home.LayoutHome.BarraCruz.VIDRO
+                "home-recua" -> br.paulo.tvlauncher.home.LayoutHome.BarraCruz.RECUA
+                else -> br.paulo.tvlauncher.home.LayoutHome.BarraCruz.ILHA
             })
-            br.paulo.tvlauncher.LayoutHome.definirIconesCruz(app, when (nome) {
-                "home-leve" -> br.paulo.tvlauncher.IconeCruz.Estilo.DUOTOM
-                "home-relogio" -> br.paulo.tvlauncher.IconeCruz.Estilo.SIMBOLO
-                "home-vidro" -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
-                else -> br.paulo.tvlauncher.IconeCruz.Estilo.LINHA   // o padrão desde 18/11/2026
+            br.paulo.tvlauncher.home.LayoutHome.definirIconesCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.home.IconeCruz.Estilo.DUOTOM
+                "home-relogio" -> br.paulo.tvlauncher.home.IconeCruz.Estilo.SIMBOLO
+                "home-vidro" -> br.paulo.tvlauncher.home.IconeCruz.Estilo.OBJETO
+                else -> br.paulo.tvlauncher.home.IconeCruz.Estilo.LINHA   // o padrão desde 18/11/2026
             })
             // A Previsão busca o tempo numa thread: com rede, às vezes chega antes da foto (outro desenho, outra letra
             // menor) e às vezes não. Sem rede (proxy que recusa) e sem a resposta guardada na memória, a tela é sempre a mesma: a medida não depende da sorte.
             val semRede = nome in TELAS_SEM_REDE || cls == MainActivity::class.java
             val proxyAntes = listOf("https.proxyHost", "https.proxyPort", "http.proxyHost", "http.proxyPort").associateWith { System.getProperty(it) }
-            if (semRede) { br.paulo.tvlauncher.ClimaMet.esquecerCache(); br.paulo.tvlauncher.WeatherApiSource.esquecerCache()
+            if (semRede) { br.paulo.tvlauncher.weather.ClimaMet.esquecerCache(); br.paulo.tvlauncher.weather.WeatherApiSource.esquecerCache()
                 System.setProperty("https.proxyHost", "127.0.0.1"); System.setProperty("https.proxyPort", "9")
                 System.setProperty("http.proxyHost", "127.0.0.1"); System.setProperty("http.proxyPort", "9") }
             val m = try { medir(cls, "$idioma-$nome", ABA_DA_TELA[nome]) } catch (e: Throwable) {
@@ -173,7 +186,7 @@ class TelasTest {
             for (c in m.semNome - antes.semNome) problemas += "$chave: elemento com foco sem nome para o leitor de tela (16.1): $c"
             for (c in m.contraste - antes.contraste) problemas += "$chave: texto abaixo de 7:1 no alto contraste (16.3): $c"
         }
-        br.paulo.tvlauncher.AltoContraste.definir(RuntimeEnvironment.getApplication(), false)
+        br.paulo.tvlauncher.settings.AltoContraste.definir(RuntimeEnvironment.getApplication(), false)
         File(saida, "medidas-$idioma.json").writeText(agora.toString(1))
         File(saida, "relatorio-$idioma.md").writeText(if (problemas.isEmpty()) "Telas ($idioma): nada piorou.\n"
             else "Telas ($idioma): ${problemas.size} problema(s)\n\n" + problemas.joinToString("\n") { "- $it" } + "\n")
@@ -230,9 +243,9 @@ class TelasTest {
         val contraste = if (!arquivo.endsWith("-ac")) emptySet() else textos.mapNotNull { (t, _) ->
             // Fundo de comparação: o grafite da tela, ou o foco branco (texto escuro de linha focada). Vale o melhor.
             val cor = t.currentTextColor
-            val c = maxOf(br.paulo.tvlauncher.CorSegura.contraste(br.paulo.tvlauncher.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FUNDO), br.paulo.tvlauncher.Estilo.FUNDO),
-                br.paulo.tvlauncher.CorSegura.contraste(br.paulo.tvlauncher.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FOCO), br.paulo.tvlauncher.Estilo.FOCO))
-            if (c < br.paulo.tvlauncher.AltoContraste.MINIMO) "${rotulo(t)} (${"%.1f".format(c)}:1)" else null
+            val c = maxOf(br.paulo.tvlauncher.settings.CorSegura.contraste(br.paulo.tvlauncher.settings.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FUNDO), br.paulo.tvlauncher.Estilo.FUNDO),
+                br.paulo.tvlauncher.settings.CorSegura.contraste(br.paulo.tvlauncher.settings.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FOCO), br.paulo.tvlauncher.Estilo.FOCO))
+            if (c < br.paulo.tvlauncher.settings.AltoContraste.MINIMO) "${rotulo(t)} (${"%.1f".format(c)}:1)" else null
         }.toSet()
         val semNome = LeitorTela.semNome(raiz)
         a.finish()

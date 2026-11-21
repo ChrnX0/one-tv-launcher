@@ -11,10 +11,15 @@ import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
 import android.view.KeyEvent
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.family.CuidarDeLonge
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelControle
+import br.paulo.tvlauncher.settings.Planos
 import java.io.File
 import java.util.TimeZone
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * "Cuidar de longe" na TV (ideias 77, 78, 79): guardar, agendar, avisar. As regras moram em [CuidarDeLonge] (puras,

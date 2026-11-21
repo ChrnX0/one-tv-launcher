@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.AcertoAlarme.Resultado
-import br.paulo.tvlauncher.AcertoAlarme.Toque
+import br.paulo.tvlauncher.alarm.AcertoAlarme
+import br.paulo.tvlauncher.alarm.AcertoAlarme.Resultado
+import br.paulo.tvlauncher.alarm.AcertoAlarme.Toque
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.Classificacao
+import br.paulo.tvlauncher.family.ControleParental
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

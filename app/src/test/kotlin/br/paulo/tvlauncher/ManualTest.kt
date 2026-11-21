@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.Manual
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * Ajuda e manual (14/11/2026): cada assunto de [Manual.TOPICOS] tem título, resumo e texto em inglês (values/) e em

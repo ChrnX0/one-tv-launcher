@@ -1,8 +1,10 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Receitas.Ajuste
-import br.paulo.tvlauncher.Receitas.Aviso
-import br.paulo.tvlauncher.Receitas.Receita
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.Receitas
+import br.paulo.tvlauncher.settings.Receitas.Ajuste
+import br.paulo.tvlauncher.settings.Receitas.Aviso
+import br.paulo.tvlauncher.settings.Receitas.Receita
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

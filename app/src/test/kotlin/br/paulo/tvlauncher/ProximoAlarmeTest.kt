@@ -1,13 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.ProximoAlarme
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.TimeZone
 
 class ProximoAlarmeTest {
     private val sp = ZoneId.of("America/Sao_Paulo")

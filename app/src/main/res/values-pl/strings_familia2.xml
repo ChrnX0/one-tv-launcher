@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Wiadomość: %s. OK oznacza jako przeczytaną.</string>
     <string name="mu_apagar">Usuń wiadomość: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Twój telewizor w tym roku (w grudniu, na wygaszaczu)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Przezroczyste karty aplikacji, gdy nie są zaznaczone</string>
     <string name="extras_ENTRADAS_TV">Wejścia HDMI w rzędzie aplikacji (tylko w telewizorach z wejściami)</string>
     <string name="ra_titulo">Twój telewizor w %d</string>
     <string name="ra_canal">Ulubiony kanał: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">słuchaj</string>
     <string name="ra_dica_favoritar">ulubione</string>
     <string name="ra_carregando">Ładowanie stacji…</string>
-    <string name="ra_subtitulo">Stacje z całego świata · 1–9 na pilocie odtwarzają ulubione</string>
     <string name="ra_sem_catalogo">Katalog radiowy nie odpowiedział. Ulubione nadal działają.</string>
     <string name="ra_nada">Nie znaleziono stacji.</string>
     <string name="ra_continuar">wznów</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Szukaj po nazwie</string>
     <string name="ra_buscar_det">Dowolna stacja na świecie</string>
     <string name="ra_generos">Gatunki</string>
-    <string name="ra_paises">Inny kraj</string>
-    <string name="ra_paises_det">Kraje z największą liczbą stacji</string>
     <string name="ra_perto">W pobliżu</string>
-    <string name="ra_mais_ouvidas">Najczęściej słuchane: %s</string>
     <string name="ra_mundo">Najczęściej słuchane na świecie</string>
     <string name="ra_resultado">Wyszukiwanie: %s</string>
     <string name="ra_favoritada">Dodano do ulubionych</string>

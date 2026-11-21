@@ -1,5 +1,8 @@
 // Painel em de (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"an",
+"desligado":"aus",
+"sem leitura":"kein Messwert",
 "Recados de hoje":"Hinweise von heute",
 "Congelados em prova":"Eingefroren auf Probe",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"Der Fernseher hat diese Apps eingefroren und prüft in 10 Minuten, ob etwas nicht mehr geht. Wenn ja, macht er es rückgängig; du kannst das auch.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normal",
 "Grande":"Groß",
 "Maior":"Größer",
-"Pilhas automáticas (agrupar os apps por tipo)":"Automatische Stapel (Apps nach Art gruppieren)",
 "Aviso de chuva por cima de qualquer app":"Regenwarnung über jeder App",
 "Unidade de rede":"Netzlaufwerk",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"Der Speicher des Fernsehers erscheint auf Computer und Handy als Netzwerkordner (WebDAV), mit denselben Ordnern wie der Tab Dateien. Passwort: die Steuerungs-PIN (jeder Benutzername geht, z. B. tv). Das Gerät braucht das installierte Zertifikat des Fernsehers (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Diese Option fragt nach der Steuerungs-PIN.",
 "Tema trocado.":"Design geändert.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Textgröße gespeichert (gilt beim Öffnen jedes Bildschirms).",
-"Pilhas automáticas ligadas.":"Automatische Stapel an.",
-"Pilhas automáticas desligadas.":"Automatische Stapel aus.",
 "Aviso de chuva ligado.":"Regenwarnung an.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Filme mit eigener Bildrate (24 Hz, ohne Ruckeln)",
 "Taxa de quadros do filme ligada.":"Bildratenanpassung für Filme an.",

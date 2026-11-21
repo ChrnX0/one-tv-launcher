@@ -1,11 +1,17 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.SincronizarFilmes.AcaoFim
-import br.paulo.tvlauncher.SincronizarFilmes.Ep
-import br.paulo.tvlauncher.SincronizarFilmes.Ids
-import br.paulo.tvlauncher.SincronizarFilmes.Item
-import br.paulo.tvlauncher.SincronizarFilmes.Tipo
-import br.paulo.tvlauncher.SincronizarFilmes.Titulo
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.SincronizarFilmes
+import br.paulo.tvlauncher.player.SincronizarFilmes.AcaoFim
+import br.paulo.tvlauncher.player.SincronizarFilmes.Ep
+import br.paulo.tvlauncher.player.SincronizarFilmes.Ids
+import br.paulo.tvlauncher.player.SincronizarFilmes.Item
+import br.paulo.tvlauncher.player.SincronizarFilmes.Tipo
+import br.paulo.tvlauncher.player.SincronizarFilmes.Titulo
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.item
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

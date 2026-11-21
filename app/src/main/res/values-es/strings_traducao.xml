@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Atajo de voz</string>
     <string name="mcp_olhou_tela">Claude miró la pantalla</string>
     <string name="pg_max_min">máx %1$d° · mín %2$d°</string>
-    <string name="pg_por_do_sol">atardecer %1$s</string>
     <string name="pg_compras">Lista de compras</string>
     <string name="cf_negar">Denegar</string>
     <string name="cf_permitir">Permitir</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Borrar</string>
     <string name="pn_parear">Vincular</string>
     <string name="pn_titulo">Vincular el launcher (sin PC)</string>
-    <string name="pn_lido">código leído de la pantalla</string>
     <string name="pn_nao_achei">aún no encontré la pantalla de vinculación</string>
     <string name="pn_6">el código tiene 6 dígitos</string>
     <string name="pn_pareado">¡vinculado! comprobando el shell…</string>

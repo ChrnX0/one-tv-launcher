@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.item
+import java.io.File
+import javax.xml.parsers.DocumentBuilderFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * A lista "Conferir na TV" (ConferirTvActivity) junta três arrays por posição: ids, títulos e perguntas. Quem reescreve

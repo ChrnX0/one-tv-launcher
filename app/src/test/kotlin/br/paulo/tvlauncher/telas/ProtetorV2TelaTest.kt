@@ -10,9 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import br.paulo.tvlauncher.Protetor
-import br.paulo.tvlauncher.ProtetorGaleria
-import br.paulo.tvlauncher.RelogioProtetor
+import br.paulo.tvlauncher.alarm.DescansoFase
+import br.paulo.tvlauncher.screensaver.Protetor
+import br.paulo.tvlauncher.screensaver.ProtetorGaleria
+import br.paulo.tvlauncher.screensaver.RelogioProtetor
+import java.io.File
+import java.time.Duration
+import java.util.concurrent.AbstractExecutorService
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,10 +28,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
-import java.io.File
-import java.time.Duration
-import java.util.concurrent.AbstractExecutorService
-import java.util.concurrent.TimeUnit
 
 /**
  * Protetor v2 (17/11/2026): o protetor inteiro com o fundo "A Terra vista do espaço" (as fotos do APK), em cada estilo de
@@ -99,7 +100,7 @@ class ProtetorV2TelaTest {
             a.getSharedPreferences("clima", Context.MODE_PRIVATE).edit().clear()
                 .putInt("temp", 22).putLong("em", agora).putInt("codigo", 2).putInt("max", 27).putInt("min", 18)
                 .putInt("umidade", 70).putInt("chuva", 20).putBoolean("eDia", false).commit()
-            br.paulo.tvlauncher.DescansoFase.horaFixa = caso.hora
+            br.paulo.tvlauncher.alarm.DescansoFase.horaFixa = caso.hora
             val raiz = FrameLayout(a)
             val g = ProtetorGaleria(a, SoTerra(), comPintura = false, terra = true)
             g.montar(raiz)
@@ -141,7 +142,7 @@ class ProtetorV2TelaTest {
             a.finish()
             g.soltar()
         }
-        br.paulo.tvlauncher.DescansoFase.horaFixa = null
+        br.paulo.tvlauncher.alarm.DescansoFase.horaFixa = null
         if (problemas.isNotEmpty()) fail("Protetor v2 ($idioma):\n" + problemas.joinToString("\n"))
     }
 }

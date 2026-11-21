@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">插件</string>
-    <string name="plg_cfg_det">“观看”行中其他应用的卡片。每个都需要你的同意。</string>
-    <string name="plg_det">只开启你信任的应用。插件只发送一小段文字，看不到你的应用和账户。</string>
     <string name="plg_nenhum">尚未安装插件。插件是其他开发者的应用，可在此显示卡片，例如比赛比分或价格。</string>
     <string name="plg_ligado">开</string>
     <string name="plg_desligado">关</string>

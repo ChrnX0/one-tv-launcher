@@ -1,5 +1,8 @@
 // Painel em es (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"encendido",
+"desligado":"apagado",
+"sem leitura":"sin lectura",
 "Recados de hoje":"Avisos de hoy",
 "Congelados em prova":"Congeladas a prueba",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"La TV congeló estas apps y comprueba en 10 minutos si algo dejó de funcionar. Si es así, la TV lo deshace; tú también puedes.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normal",
 "Grande":"Grande",
 "Maior":"Más grande",
-"Pilhas automáticas (agrupar os apps por tipo)":"Pilas automáticas (agrupar apps por tipo)",
 "Aviso de chuva por cima de qualquer app":"Aviso de lluvia sobre cualquier app",
 "Unidade de rede":"Unidad de red",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"El almacenamiento de la TV aparece en el ordenador y el teléfono como carpeta de red (WebDAV), con las mismas carpetas que la pestaña Archivos. Contraseña: el PIN del panel (sirve cualquier nombre de usuario, ej. tv). El dispositivo necesita el certificado de la TV instalado (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Esta opción pide el PIN del panel.",
 "Tema trocado.":"Tema cambiado.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Tamaño del texto guardado (se aplica al abrir cada pantalla).",
-"Pilhas automáticas ligadas.":"Pilas automáticas activadas.",
-"Pilhas automáticas desligadas.":"Pilas automáticas desactivadas.",
 "Aviso de chuva ligado.":"Aviso de lluvia activado.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Películas a su propia frecuencia (24 Hz, sin tirones en el movimiento)",
 "Taxa de quadros do filme ligada.":"Ajuste de frecuencia de películas activado.",

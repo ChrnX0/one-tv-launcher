@@ -1,12 +1,19 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.network.Descoberta
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.panel.WebDav
+import br.paulo.tvlauncher.player.ContaMidia
+import br.paulo.tvlauncher.player.FontesMidia
+import br.paulo.tvlauncher.player.Jellyfin
+import br.paulo.tvlauncher.player.MidiaContas
+import br.paulo.tvlauncher.player.Plex
+import java.io.ByteArrayInputStream
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.ByteArrayInputStream
 
 /** Fontes de mídia novas de 10/11/2026: Plex, Emby, WebDAV, links e a busca NetBIOS. Tudo sem rede, só texto. */
 class FontesRedeTest {

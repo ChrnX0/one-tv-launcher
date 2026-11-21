@@ -16,6 +16,11 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.alarm.NaoPerturbe
+import br.paulo.tvlauncher.alarm.NaoPerturbeTv
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.observer.SofyDrawable
+import br.paulo.tvlauncher.weather.AvisoRegras
 
 /**
  * Aviso por cima de QUALQUER tela (Netflix, YouTube, a HOME…): o recado mandado pelo painel e o aviso de chuva

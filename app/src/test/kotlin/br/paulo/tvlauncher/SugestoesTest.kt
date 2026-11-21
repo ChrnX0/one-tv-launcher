@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.Sugestoes
+import java.util.Calendar
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.Calendar
-import java.util.TimeZone
 
 class SugestoesTest {
     private val fuso = TimeZone.getTimeZone("America/Sao_Paulo")

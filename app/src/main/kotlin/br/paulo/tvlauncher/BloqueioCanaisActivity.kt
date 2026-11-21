@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
@@ -17,6 +16,13 @@ import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import br.paulo.tvlauncher.family.CategoriasInfantis
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * Controle parental (07/11/2026): escolher os canais bloqueados. Só abre pelas Configurações do launcher, depois do PIN

@@ -1,5 +1,8 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"açık",
+"desligado":"kapalı",
+"sem leitura":"okuma yok",
 "Recados de hoje":"Bugünün notları",
 "Congelados em prova":"Deneme için donduruldu",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"TV bu uygulamaları dondurdu ve 10 dakika içinde bir şeyin bozulup bozulmadığını kontrol edecek. Bozulduysa TV geri alır; siz de alabilirsiniz.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normal",
 "Grande":"Büyük",
 "Maior":"Daha büyük",
-"Pilhas automáticas (agrupar os apps por tipo)":"Otomatik yığınlar (uygulamaları türe göre grupla)",
 "Aviso de chuva por cima de qualquer app":"Her uygulamanın üstünde yağmur uyarısı",
 "Unidade de rede":"Ağ sürücüsü",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"TV'nin depolaması bilgisayarda ve telefonda bir ağ klasörü (WebDAV) olarak, Dosyalar sekmesiyle aynı klasörlerle görünür. Şifre: panel PIN'i (herhangi bir kullanıcı adı olur, ör. tv). Cihazda TV'nin sertifikası kurulu olmalı (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"Bu seçenek panel PIN'ini ister.",
 "Tema trocado.":"Tema değişti.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Metin boyutu kaydedildi (her ekran açıldıkça uygulanır).",
-"Pilhas automáticas ligadas.":"Otomatik yığınlar açık.",
-"Pilhas automáticas desligadas.":"Otomatik yığınlar kapalı.",
 "Aviso de chuva ligado.":"Yağmur uyarısı açık.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Filmler kendi kare hızında (24 Hz, harekette takılma yok)",
 "Taxa de quadros do filme ligada.":"Film kare hızı eşleştirme açık.",

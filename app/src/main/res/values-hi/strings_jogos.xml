@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (hi) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">गेम</string>
-    <string name="home_destaque_jogos_vazio">क्लाउड में, अपने PC से और रेट्रो गेम खेलें</string>
-    <string name="home_linha_continuar_jogos">देखें और खेलें</string>
-    <string name="home_jogos_ultimo">आख़िरी: %1$s</string>
     <string name="extras_CARD_JOGOS">होम स्क्रीन पर गेम कार्ड (गेम ऐप ऐप पंक्ति छोड़ते हैं)</string>
     <string name="extras_MODO_JOGO">गेम मोड: गेम खुला रहने तक स्क्रीन सेवर, नाइट फ़िल्टर और सूचनाएँ इंतज़ार करते हैं</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">गेम कंट्रोलर चालू करने पर गेम स्क्रीन खुलती है</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">रेट्रो</string>
     <string name="jogos_grupo_tv">TV पर गेम</string>
     <string name="jogos_para_comecar">शुरू करने के लिए</string>
-    <string name="jogos_vazio_dica">इस TV पर अभी कोई गेम नहीं। Play Store में उसका पेज खोलने के लिए ऊपर से एक चुनें।</string>
-    <string name="jogos_dica_segurar">किसी गेम पर OK दबाए रखें ताकि वह दूसरे समूह में जाए या यहाँ से निकले।</string>
     <string name="jogos_aviso_fraca_titulo">क्लाउड गेमिंग के लिए कमज़ोर नेटवर्क</string>
     <string name="jogos_aviso_fraca">गेम अटक या धीमा हो सकता है। नेटवर्क केबल, या TV को राउटर के पास रखना मदद करता है।</string>
     <string name="jogos_jogar_assim">फिर भी खेलें</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">कौन सा ऐप PC पर खेलता है?</string>
     <string name="jogos_pc_acordando">PC जगाया जा रहा है… %1$d s</string>
     <string name="jogos_pc_nao_respondeu">PC ने जवाब नहीं दिया। फिर भी ऐप खोला जा रहा है।</string>
-    <string name="jogos_seus">आपके गेम</string>
     <string name="jogos_mais_jogos">और गेम</string>
     <string name="jogos_mais_opcoes">और</string>
-    <string name="jogos_por_tipo">प्रकार के अनुसार</string>
-    <string name="jogos_jogar">खेलें</string>
     <string name="jogos_ligar_pc_jogar">PC चालू करके खेलें</string>
-    <string name="jogos_desc_nuvem">गेम इंटरनेट पर किसी कंप्यूटर पर चलता है और TV को तस्वीर मिलती है। अच्छा नेटवर्क चाहिए।</string>
     <string name="jogos_desc_pc">घर के कंप्यूटर या कंसोल के गेम यहीं TV पर खेलें।</string>
-    <string name="jogos_desc_retro">कई कंसोल के क्लासिक गेम।</string>
-    <string name="jogos_desc_tv">TV पर ही इंस्टॉल किया गेम।</string>
-    <string name="jogos_jogado">आख़िरी बार खेला %1$s।</string>
-    <string name="jogos_nenhum_titulo">अभी कोई गेम नहीं</string>
-    <string name="jogos_chip_sem_controle">कोई कंट्रोलर नहीं</string>
     <string name="jogos_chip_medindo">नेटवर्क जाँचा जा रहा है…</string>
     <string name="jogos_chip_boa">अच्छा नेटवर्क</string>
     <string name="jogos_chip_ok">नेटवर्क ठीक</string>
     <string name="jogos_chip_fraca">कमज़ोर नेटवर्क</string>
     <string name="jogos_chip_sem">इंटरनेट नहीं</string>
-    <string name="jogos_tecla_escolher">चुनें</string>
     <string name="jogos_tecla_jogar">खेलें</string>
-    <string name="jogos_tecla_mais">और विकल्प</string>
     <string name="jogos_tecla_segurar">OK दबाए रखें</string>
     <string name="jogos_tecla_opcoes">समूह बदलें</string>
     <plurals name="jogos_qtd">

@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.screensaver.FotosTerra
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** Fotos da Terra do protetor v2 (17/11/2026): a foto da hora e do tempo, e que cada uma existe no APK. */
 class FotosTerraTest {

@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">电视和电影</string>
     <string name="cl_aba_conta_det">IPTV 账号、影视服务、音频和字幕</string>
     <string name="cl_aba_parental">家长控制</string>
-    <string name="cl_aba_parental_det">用 PIN 锁定频道：它们会从列表中消失且无法播放</string>
-    <string name="cl_aba_aparencia">外观</string>
-    <string name="cl_aba_aparencia_det">主题、应用分组、天气和屏幕提醒</string>
     <string name="cl_aba_energia">屏幕和电源</string>
     <string name="cl_aba_energia_det">屏保和自动关机</string>
-    <string name="cl_aba_visitas">访客和例行程序</string>
-    <string name="cl_aba_visitas_det">访客模式和定时操作</string>
     <string name="cl_aba_rede">网络</string>
-    <string name="cl_aba_rede_det">DNS、VPN 和网速</string>
     <string name="cl_aba_remoto">远程访问</string>
     <string name="cl_aba_remoto_det">浏览器面板、PIN 和通过互联网使用 Claude</string>
     <string name="cl_aba_sistema">系统</string>
-    <string name="cl_aba_sistema_det">诊断、更新、应用和权限</string>
     <string name="cl_dica_aba">选择标签页</string>
     <string name="cl_dica_entrar">打开选项</string>
     <string name="cl_dica_sair">退出</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">启动器自动更新</string>
     <string name="cl_acao_atualizacao_det">在屏幕关闭时自动安装新版本。已屏蔽 = 仅通知。</string>
     <string name="cl_tema">主题</string>
-    <string name="cl_pilhas_det">按类别整理零散应用；你自己的分组会保留</string>
     <string name="cl_clima">天气</string>
     <string name="cl_end_nenhum">无 · 电视通过 Wi-Fi 定位；Wi-Fi 无法定位时才使用地址</string>
     <string name="cl_end_clima">天气地址</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">卡片</string>
     <string name="cl_widget_solto">无边框</string>
     <string name="cl_linha_baixo">屏保小组件</string>
-    <string name="cl_linha_baixo_det">玻璃条、卡片或无边框 · 按 OK 更改</string>
     <string name="cl_desligar">空闲时关机</string>
     <string name="cl_desligar_det">正在播放的视频算作使用；关机前 60 秒提醒 · 按 OK 更改</string>
     <string name="cl_visita_det">隐藏个人资料、日历和下方勾选的应用</string>
     <string name="cl_apps_visita">访客模式下隐藏的应用</string>
     <string name="cl_carregando_apps">正在加载应用…</string>
-    <string name="cl_some_visita">访客模式开启时隐藏</string>
     <string name="cl_vpn_nao_fixa">启动器不固定 VPN</string>
     <string name="cl_vpn_adguard">AdGuard VPN 应用，始终开启 · 按 OK 打开应用</string>
     <string name="cl_painel_navegador">浏览器面板</string>

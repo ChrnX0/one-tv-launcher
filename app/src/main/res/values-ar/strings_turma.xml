@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">على الأريكة</string>
-    <string name="jogos_continuar">متابعة</string>
     <string name="jogos_controle_pronto">جاهزة</string>
     <string name="jogos_controle_carregar">اشحنها قريبًا</string>
     <string name="jogos_parear_um">إقران وحدة تحكم</string>
-    <string name="jogos_todos">الكل</string>
     <string name="turma_titulo">أصدقاؤك</string>
     <string name="turma_online">%1$d متصل</string>
     <string name="turma_mais_online">+ %1$d متصل</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">أداة الخادم متوقفة</string>
     <string name="turma_desligado_texto">في Discord: إعدادات الخادم، الأداة، فعّل تمكين أداة الخادم.</string>
     <string name="turma_qr_dica">وجّه الهاتف هنا للانضمام إلى الصوت. الحديث يكون عبر الهاتف.</string>
-    <string name="turma_aqui">%1$d من أصدقائك هنا</string>
     <string name="turma_jogando">%1$s يلعب %2$s</string>
     <string name="turma_dois">%1$s و%2$s</string>
     <string name="turma_e_mais">%1$s و%2$d آخرون</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">حفظ</string>
     <string name="turma_config_tirar">إزالة الأصدقاء</string>
     <string name="turma_id_invalido">هذا ليس معرّف خادم Discord (من 17 إلى 20 رقمًا).</string>
-    <string name="cruz_sofa">الأريكة</string>
     <string name="cruz_sofa_sub">وحدات التحكم وأصدقاؤك على Discord</string>
     <string name="cruz_sofa_voz">%1$d في الصوت · %2$s</string>
 </resources>

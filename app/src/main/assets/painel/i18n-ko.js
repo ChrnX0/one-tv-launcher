@@ -1,5 +1,8 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"켜짐",
+"desligado":"꺼짐",
+"sem leitura":"측정값 없음",
 "Recados de hoje":"오늘의 알림",
 "Congelados em prova":"시험 정지 중",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"TV가 이 앱들을 정지하고 10분 후에 멈춘 기능이 있는지 확인합니다. 있으면 TV가 되돌리며, 직접 되돌릴 수도 있습니다.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"보통",
 "Grande":"크게",
 "Maior":"더 크게",
-"Pilhas automáticas (agrupar os apps por tipo)":"자동 묶음(앱을 종류별로 묶기)",
 "Aviso de chuva por cima de qualquer app":"모든 앱 위에 비 알림",
 "Unidade de rede":"네트워크 드라이브",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"TV 저장소가 컴퓨터와 휴대폰에 네트워크 폴더(WebDAV)로 나타나며, 파일 탭과 같은 폴더가 보입니다. 비밀번호: 패널 PIN(사용자 이름은 아무거나, 예: tv). 기기에 TV 인증서가 설치되어 있어야 합니다(",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"이 옵션은 패널 PIN이 필요합니다.",
 "Tema trocado.":"테마가 바뀌었습니다.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"글자 크기를 저장했습니다(각 화면을 열 때 적용).",
-"Pilhas automáticas ligadas.":"자동 묶음을 켰습니다.",
-"Pilhas automáticas desligadas.":"자동 묶음을 껐습니다.",
 "Aviso de chuva ligado.":"비 알림을 켰습니다.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"영화를 원래 프레임 레이트로(24Hz, 움직임 끊김 없음)",
 "Taxa de quadros do filme ligada.":"영화 프레임 레이트 맞춤을 켰습니다.",

@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.Falhas
+import br.paulo.tvlauncher.player.item
+import java.io.File
+import javax.xml.parsers.DocumentBuilderFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 
 class FalhasTest {
     private val agora = 1_795_000_000_000L   // nov/2026

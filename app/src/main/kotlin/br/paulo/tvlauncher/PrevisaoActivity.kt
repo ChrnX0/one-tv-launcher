@@ -2,17 +2,16 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
-import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
@@ -23,9 +22,23 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
+import br.paulo.tvlauncher.alarm.Agenda
+import br.paulo.tvlauncher.alarm.FaixaDias
+import br.paulo.tvlauncher.home.EstadoCeu
+import br.paulo.tvlauncher.home.FundoVivo
+import br.paulo.tvlauncher.home.Grade
+import br.paulo.tvlauncher.home.Moldura
+import br.paulo.tvlauncher.home.criarFundo
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Tema
+import br.paulo.tvlauncher.weather.Astronomia
+import br.paulo.tvlauncher.weather.DataSources
+import br.paulo.tvlauncher.weather.IconesClima
+import br.paulo.tvlauncher.weather.Localizacao
+import br.paulo.tvlauncher.weather.Lua
+import br.paulo.tvlauncher.weather.WeatherApiSource
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.PI
@@ -33,6 +46,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
+import org.json.JSONObject
 
 /**
  * A previsão do tempo em tela cheia (abre com OK no bloco do clima, no topo da tela inicial). Voltar fecha.
@@ -91,7 +105,7 @@ class PrevisaoActivity : Activity() {
         }
         // Mesmo fundo do launcher (criarFundo(), ver Fundos.kt): acompanha o tema configurado (Escuro/Galeria) em
         // vez de uma cor fixa só desta tela — pedido do dono para as duas ficarem coerentes.
-        fundoVivo = criarFundo(this, Tema.atual(this), decoracao = false) { bloco -> Thread(bloco).start() }
+        fundoVivo = criarFundo(this, Tema.atual(this), decoracao = false) { bloco -> Fundo.rodar("previsao-fundo") { bloco() } }
         raiz = FrameLayout(this).apply {
             addView(fundoVivo, FrameLayout.LayoutParams(-1, -1))
             addView(rolagem, FrameLayout.LayoutParams(-1, -1))
@@ -113,7 +127,7 @@ class PrevisaoActivity : Activity() {
             }
         }
         // A medida do topo vem no Intent (OK no clima) ou, aberta por voz, do que a tela inicial guardou (se tiver até 90 min).
-        val guardado = getSharedPreferences("clima", MODE_PRIVATE)
+        val guardado = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val recente = System.currentTimeMillis() - guardado.getLong("em", 0) < 90 * 60_000L
         val tempTopo = intent.getIntExtra(EXTRA_TEMP, Int.MIN_VALUE).takeIf { it != Int.MIN_VALUE }
             ?: if (recente && guardado.contains("temp")) guardado.getInt("temp", 0) else null
@@ -187,10 +201,10 @@ class PrevisaoActivity : Activity() {
     )
 
     private fun carregar(): Dados? {
-        val ponto = Localizacao.atual(this) { httpGet(it) } ?: return null
+        val ponto = Localizacao.atual(this) { Http.getText(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
         val openMeteo = DataSources.weather(this) == DataSources.Weather.OPEN_METEO
-        val j = if (!openMeteo) DataSources.forecast(this, ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(httpGet(
+        val j = if (!openMeteo) DataSources.forecast(this, ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(Http.getText(
             "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
                 "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,is_day" +
                 "&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,visibility,dew_point_2m,uv_index" +
@@ -201,7 +215,7 @@ class PrevisaoActivity : Activity() {
         fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
         // Qualidade do ar: Open-Meteo (Ultra) ou WeatherAPI (Pro, já no JSON convertido); no MET (Básico) o cartão some.
         val aqi = if (!openMeteo) j.optJSONObject("air_quality")?.optInt("us_aqi", -1)?.takeIf { it >= 0 } else try {
-            JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
+            JSONObject(Http.getText("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: "{}").optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { null }
         return Dados(
@@ -222,18 +236,6 @@ class PrevisaoActivity : Activity() {
             aqi,
             j.optString("fonte"),
         )
-    }
-
-    private fun httpGet(endereco: String): String? {
-        val conexao = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            conexao.connectTimeout = 8000
-            conexao.readTimeout = 8000
-            conexao.setRequestProperty("User-Agent", "onetv-launcher")
-            if (conexao.responseCode == 200) conexao.inputStream.bufferedReader().use { it.readText() } else null
-        } finally {
-            conexao.disconnect()
-        }
     }
 
     // ---------------------------------------------------------------- tela

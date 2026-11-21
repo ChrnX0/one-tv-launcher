@@ -152,24 +152,6 @@
   "contraste": [],
   "semNome": []
  },
- "ar\/home-grade": {
-  "menorSp": 12,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
- "ar\/home-grande": {
-  "menorSp": 12,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
  "ar\/home-leve": {
   "menorSp": 15,
   "foco": true,
@@ -440,24 +422,6 @@
   "contraste": [],
   "semNome": []
  },
- "en\/home-grade": {
-  "menorSp": 12,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
- "en\/home-grande": {
-  "menorSp": 12,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
  "en\/home-leve": {
   "menorSp": 15,
   "foco": true,
@@ -721,24 +685,6 @@
  },
  "pt\/home-ac": {
   "menorSp": 18,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
- "pt\/home-grade": {
-  "menorSp": 12,
-  "foco": true,
-  "cortes": [],
-  "sobrepostos": [],
-  "soCor": [],
-  "contraste": [],
-  "semNome": []
- },
- "pt\/home-grande": {
-  "menorSp": 12,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],

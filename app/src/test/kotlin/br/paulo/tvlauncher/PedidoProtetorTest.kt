@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Confirmacoes.Modo
+import br.paulo.tvlauncher.player.CanalTv
+import br.paulo.tvlauncher.privilege.Confirmacoes
+import br.paulo.tvlauncher.privilege.Confirmacoes.Modo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

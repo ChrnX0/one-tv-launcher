@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.ChaveRecuperacao
+import br.paulo.tvlauncher.backup.CofreBackup
+import br.paulo.tvlauncher.home.abrir
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

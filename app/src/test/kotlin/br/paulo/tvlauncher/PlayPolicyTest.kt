@@ -1,14 +1,18 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.McpPoder
+import br.paulo.tvlauncher.mcp.McpPoder2
+import br.paulo.tvlauncher.mcp.McpProtocolo
+import br.paulo.tvlauncher.player.AddonsProtocolo
+import java.io.File
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** Versão da Play enxuta (18/11/2026): o que sai da Play e a garantia de que a Sala não muda. */
 class PlayPolicyTest {
     private val k = File("src/main/kotlin/br/paulo/tvlauncher")
-    private fun fonte(nome: String) = File(k, nome).readText()
+    private fun fonte(nome: String) = CodeSource.file(nome).readText()
 
     @Test fun naPlayAsFerramentasTiradasSomem() {
         for (n in PlayPolicy.PLAY_REMOVED_MCP_TOOLS) {
@@ -59,7 +63,7 @@ class PlayPolicyTest {
             PlayPolicy.Power.FREEZE_APPS to listOf("Congelar.kt"),
             PlayPolicy.Power.LEND_POWERS to listOf("ShizukuEmbutido.kt", "DonoEmprestado.kt"),
             PlayPolicy.Power.READ_PAIRING_CODE to listOf("PareamentoNaTv.kt"),
-            PlayPolicy.Power.LIVE_TV_LISTS to listOf("PlayerArmazem.kt", "ConfigLauncherActivity.kt", "PainelWeb.kt"),
+            PlayPolicy.Power.LIVE_TV_LISTS to listOf("PlayerArmazem.kt", "ConfigAccountTab.kt", "PainelWeb.kt"),
             PlayPolicy.Power.ADDON_STREAMS to listOf("AddonsTv.kt", "AddonsProtocolo.kt"),
         )
         assertTrue(usos.keys == PlayPolicy.Power.values().toSet())

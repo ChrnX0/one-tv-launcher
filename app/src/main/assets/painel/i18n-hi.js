@@ -1,5 +1,8 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"चालू",
+"desligado":"बंद",
+"sem leitura":"कोई रीडिंग नहीं",
 "Recados de hoje":"आज के संदेश",
 "Congelados em prova":"आज़माइश में फ़्रीज़",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"टीवी ने ये ऐप फ़्रीज़ किए हैं और 10 मिनट में जाँचेगा कि कुछ बंद तो नहीं हुआ। अगर हुआ, तो टीवी खुद वापस कर देगा; आप भी कर सकते हैं।",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"सामान्य",
 "Grande":"बड़ा",
 "Maior":"और बड़ा",
-"Pilhas automáticas (agrupar os apps por tipo)":"अपने आप ढेर (ऐप को प्रकार के हिसाब से समूह में)",
 "Aviso de chuva por cima de qualquer app":"किसी भी ऐप के ऊपर बारिश की चेतावनी",
 "Unidade de rede":"नेटवर्क ड्राइव",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"TV का स्टोरेज कंप्यूटर और फ़ोन पर नेटवर्क फ़ोल्डर (WebDAV) के रूप में दिखता है, फ़ाइलें टैब वाले ही फ़ोल्डरों के साथ। पासवर्ड: पैनल का PIN (कोई भी यूज़र नाम चलेगा, जैसे tv)। डिवाइस में TV का सर्टिफ़िकेट इंस्टॉल होना चाहिए (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"यह विकल्प पैनल PIN माँगता है।",
 "Tema trocado.":"थीम बदली गई।",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"टेक्स्ट का आकार सेव हुआ (हर स्क्रीन खुलने पर लागू होता है)।",
-"Pilhas automáticas ligadas.":"अपने आप ढेर चालू।",
-"Pilhas automáticas desligadas.":"अपने आप ढेर बंद।",
 "Aviso de chuva ligado.":"बारिश की चेतावनी चालू।",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"फ़िल्में अपनी फ़्रेम रेट पर (24 Hz, हिलती तस्वीर में झटके नहीं)",
 "Taxa de quadros do filme ligada.":"फ़िल्मों की फ़्रेम रेट मिलान चालू।",

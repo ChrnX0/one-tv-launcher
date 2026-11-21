@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Готовые стили</string>
-    <string name="vpr_det">Каждое нажатие OK включает следующий стиль: тема, текст и размер карточек сразу</string>
+    <string name="vpr_det">Каждое нажатие OK включает следующий стиль: тема, текст и цвет фона сразу</string>
     <string name="vpr_meu">Ваш вариант</string>
     <string name="vpr_classico">Классический</string>
     <string name="vpr_leitura">Удобное чтение</string>
     <string name="vpr_galeria">Галерея</string>
     <string name="vpr_galeria_grande">Большая галерея</string>
-    <string name="vpr_grade">Сетка</string>
-    <string name="vpr_grade_grande">Большая сетка</string>
     <string name="vpr_cores">Цвета приложения</string>
-    <string name="vpr_cinema">Кино</string>
 </resources>

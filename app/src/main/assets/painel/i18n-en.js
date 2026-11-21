@@ -1,5 +1,8 @@
 // Painel em en (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"on",
+"desligado":"off",
+"sem leitura":"no reading",
 "Recados de hoje":"Today's notes",
 "Congelados em prova":"Frozen, on trial",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"The TV froze these apps and checks in 10 minutes whether anything stopped working. If it did, the TV undoes it; you can too.",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"Normal",
 "Grande":"Large",
 "Maior":"Larger",
-"Pilhas automáticas (agrupar os apps por tipo)":"Automatic stacks (group apps by type)",
 "Aviso de chuva por cima de qualquer app":"Rain alert over any app",
 "Unidade de rede":"Network drive",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"The TV's storage shows up on your computer and phone as a network folder (WebDAV), with the same folders as the Files tab. Password: the panel PIN (any user name works, e.g. tv). The device needs the TV's certificate installed (",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"This option asks for the panel PIN.",
 "Tema trocado.":"Theme changed.",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"Text size saved (applies as each screen opens).",
-"Pilhas automáticas ligadas.":"Automatic stacks on.",
-"Pilhas automáticas desligadas.":"Automatic stacks off.",
 "Aviso de chuva ligado.":"Rain alert on.",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"Movies at their own frame rate (24 Hz, no judder in motion)",
 "Taxa de quadros do filme ligada.":"Movie frame rate matching on.",

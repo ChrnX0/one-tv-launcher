@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.RecadoVideo
 import br.paulo.tvlauncher.RecadoVideoActivity
+import java.io.File
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertTrue
@@ -16,7 +17,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /** Recado em vídeo (degrau 4): o cartão "Vídeo de Ana · OK para assistir" e a lista, em inglês e português. -Ptelas. */
 @RunWith(RobolectricTestRunner::class)

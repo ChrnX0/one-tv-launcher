@@ -1,12 +1,15 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.Aniversarios
+import br.paulo.tvlauncher.alarm.FiltroRede
+import br.paulo.tvlauncher.alarm.RelogioGatilhos
+import java.util.Calendar
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Calendar
-import java.util.TimeZone
 
 class RelogioGatilhosTest {
     private val utc = TimeZone.getTimeZone("UTC")

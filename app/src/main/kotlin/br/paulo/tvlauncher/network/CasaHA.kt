@@ -1,0 +1,645 @@
+package br.paulo.tvlauncher.network
+
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.os.PowerManager
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.util.Base64
+import android.util.Log
+import br.paulo.tvlauncher.AvisoTv
+import br.paulo.tvlauncher.Gatilhos
+import br.paulo.tvlauncher.R
+import br.paulo.tvlauncher.TocandoAgoraTv
+import br.paulo.tvlauncher.alarm.NaoPerturbe
+import br.paulo.tvlauncher.family.RecadoImagem
+import br.paulo.tvlauncher.home.IconeCard
+import br.paulo.tvlauncher.privilege.JanelaNaFrente
+import br.paulo.tvlauncher.txt
+import br.paulo.tvlauncher.weather.AvisoRegras
+import java.net.HttpURLConnection
+import java.net.URL
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.GCMParameterSpec
+import org.json.JSONArray
+import org.json.JSONObject
+
+/**
+ * A TV como painel da casa (ideia grande 1, 10/11/2026), pelo Home Assistant da casa, pela API REST dele
+ * (https://developers.home-assistant.io/docs/api/rest/). Nada de nuvem: a TV fala direto com o servidor na rede de casa.
+ *
+ *  - lista luzes, tomadas, ventiladores, cortinas, cenas e scripts ([DOMINIOS]) e liga/desliga com o controle, pelo painel
+ *    e pelo MCP. Catálogo fechado: só "ligar", "desligar" e "alternar" nesses domínios ([servico]); nada de serviço livre;
+ *  - a TV vira sensor da casa: publica `sensor.tv_<nome>` com "ligada"/"dormindo", o app na frente e, com o Tocando agora
+ *    ligado, a mídia (tocando/pausado e o título, [atributosMidia]) ([publicarEstado]),
+ *    para automações ("pausou o filme, acende a luz baixa");
+ *  - campainha: se um sensor estiver configurado ([CHAVE_CAMPAINHA]) e for para "on", a TV mostra a foto da câmera
+ *    ([CHAVE_CAMERA]) por cima do que estiver passando, com o [AvisoTv] (mesmo caminho do recado com foto).
+ *
+ * O token de acesso (long-lived token do Home Assistant) fica cifrado no Keystore, como a chave do UniFi. Verificação de
+ * TLS normal: se o servidor usar https com certificado próprio, não conecta (nunca desligar a verificação).
+ *
+ * Google Home: fica de fora. As Home APIs (https://developers.home.google.com/apis) falam em Android e iOS; não verifiquei
+ * se rodam no Google TV nem se pedem aprovação da Google. Quem tem o Google Home pode ligá-lo ao Home Assistant.
+ *
+ * Não verificado: tudo isto contra um Home Assistant de verdade (a nuvem não alcança a casa).
+ */
+object CasaHA {
+    private const val TAG = "TvLauncher.Casa"
+    private const val PREFS = "casa_ha"
+    private const val APELIDO = "casa_ha_token"
+    const val CHAVE_CAMPAINHA = "campainha"
+    const val CHAVE_CAMERA = "camera"
+    val DOMINIOS = setOf("light", "switch", "fan", "cover", "scene", "script", "input_boolean", "climate")
+
+    /**
+     * Ideia 51 (14/11/2026): sensores, só para LER (a tela mostra o valor; nada é acionado). Só estas classes: o resto
+     * dos sensores do Home Assistant (energia, sinal, bateria, centenas) entupiria a tela. Fechadura e alarme ficam de
+     * fora de propósito (outros domínios, que a tela nunca aciona).
+     */
+    val LEITURA = setOf("sensor", "binary_sensor")
+    val CLASSES_SENSOR = setOf("temperature", "humidity")
+    /** Ideia 52: câmeras aparecem como cartão; OK mostra a foto de agora por cima do que está passando (só na TV). */
+    const val CAMERA = "camera"
+    val CLASSES_BINARIO = setOf("door", "window", "opening", "garage_door", "motion", "occupancy", "moisture", "smoke")
+
+    /**
+     * Um aparelho. [regulavel]: luz que aceita brilho; [brilho]: 1-100 % quando acesa (null apagada ou sem brilho).
+     */
+    class Entidade(val id: String, val nome: String, val estado: String,
+                   val regulavel: Boolean = false, val brilho: Int? = null,
+                   val cores: List<CorLuz> = emptyList(),   // ideia 50: temperatura e cores que a luz aceita
+                   val classe: String? = null, val valor: String? = null,   // ideia 51: sensor (classe e "23,5 °C")
+                   val clima: Clima? = null) {   // ideia 51: ar-condicionado
+        val dominio get() = id.substringBefore('.')
+        val somenteLeitura get() = dominio in LEITURA
+        val camera get() = dominio == CAMERA
+        fun json(): JSONObject = JSONObject().put("id", id).put("nome", nome).put("estado", estado)
+            .apply {
+                if (brilho != null) put("brilho", brilho)
+                if (classe != null) put("classe", classe)
+                if (valor != null) put("valor", valor)
+                clima?.let { c -> c.alvo?.let { put("alvo", it) }; c.atual?.let { put("atual", it) } }
+            }
+    }
+
+    /** Ar-condicionado (domínio climate): temperatura pedida, a do ambiente, faixa e passo. */
+    class Clima(val alvo: Double?, val atual: Double?, val minimo: Double, val maximo: Double, val passo: Double)
+
+    // ---------------------------------------------------------------- puro
+
+    /** Endereço do Home Assistant: http(s)://host[:porta], sem caminho. Devolve normalizado ou null. */
+    fun enderecoValido(texto: String): String? {
+        val t = texto.trim().trimEnd('/')
+        val m = Regex("^(https?)://([A-Za-z0-9.-]{1,253})(:\\d{1,5})?$").matchEntire(t) ?: return null
+        val porta = m.groupValues[3].removePrefix(":").toIntOrNull()
+        if (porta != null && porta !in 1..65535) return null
+        // http manda o token em texto aberto: só dentro de casa (auditoria de 10/11/2026). Fora de casa, https.
+        if (m.groupValues[1] == "http" && !hostDeCasa(m.groupValues[2])) return null
+        return t
+    }
+
+    /**
+     * Endereço de dentro de casa (ou da rede Tailscale), onde http sem cadeado é aceitável. Pura.
+     * IP privado (10/8, 172.16/12, 192.168/16, 127/8), nome sem ponto ("homeassistant", resolvido pelo DNS do
+     * roteador, como o "chromecast" do painel) ou terminado em .local/.lan/.home.arpa. Fora de propósito: 100.64/10
+     * (também é o CGNAT da operadora, fora de casa) e *.ts.net (o app não passa pela rede Tailscale; de fora é Funnel).
+     */
+    fun hostDeCasa(host: String): Boolean {
+        val h = host.lowercase().trimEnd('.')
+        if (h.isNotEmpty() && '.' !in h && ':' !in h) return true
+        if (h.endsWith(".local") || h.endsWith(".lan") || h.endsWith(".home.arpa")) return true
+        val n = h.split('.').takeIf { it.size == 4 }?.map { it.toIntOrNull() ?: return false } ?: return false
+        if (n.any { it !in 0..255 }) return false
+        return n[0] == 10 || n[0] == 127 || (n[0] == 172 && n[1] in 16..31) || (n[0] == 192 && n[1] == 168)
+    }
+
+    /**
+     * Campainha: devolve true só na passagem para "on" e já guarda o estado novo NA MESMA conta (auditoria de 10/11/2026).
+     * Antes o estado só era guardado depois de buscar a foto da câmera (até 15 s), e as voltas seguintes, a cada 3 s,
+     * ainda viam "não tocou" e repetiam o aviso com som.
+     */
+    class Campainha {
+        private var antes = ""
+        @Synchronized fun tocou(estado: String): Boolean {
+            val tocou = estado == "on" && antes != "on"
+            antes = estado
+            return tocou
+        }
+    }
+
+    /** Token "long-lived" do Home Assistant: um JWT (três partes base64url separadas por ponto). */
+    fun tokenValido(t: String): Boolean = Regex("^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$").matches(t.trim()) && t.length in 40..1000
+
+    fun idValido(id: String): Boolean = Regex("^[a-z_]+\\.[a-z0-9_]{1,100}$").matches(id)
+
+    /** Resposta de GET /api/states -> as entidades controláveis, por nome. Pura. */
+    fun lerEstados(texto: String): List<Entidade> {
+        val a = try { JSONArray(texto) } catch (e: Exception) { return emptyList() }
+        return (0 until a.length()).mapNotNull { i ->
+            val o = a.optJSONObject(i) ?: return@mapNotNull null
+            val id = o.optString("entity_id")
+            if (!idValido(id)) return@mapNotNull null
+            val dominio = id.substringBefore('.')
+            val atr = o.optJSONObject("attributes")
+            val classe = atr?.optString("device_class")?.takeIf { it.isNotBlank() }
+            val leitura = dominio in LEITURA && when (dominio) {
+                "sensor" -> classe in CLASSES_SENSOR
+                else -> classe in CLASSES_BINARIO
+            }
+            if (dominio !in DOMINIOS && !leitura && dominio != CAMERA) return@mapNotNull null
+            val nome = atr?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
+            val estado = o.optString("state")
+            Entidade(id, nome.take(60), estado, regulavel(id, atr), brilhoPct(atr), coresDisponiveis(id, atr),
+                classe = if (leitura) classe else null,
+                valor = if (dominio == "sensor" && leitura) valorSensor(estado, atr?.optString("unit_of_measurement")) else null,
+                clima = if (dominio == "climate") lerClima(atr) else null)
+        }.sortedBy { it.nome.lowercase() }
+    }
+
+    // ---------------------------------------------------------------- sensores e ar-condicionado (ideia 51)
+
+    /** "23.456" + "°C" -> "23,5 °C" (no máximo 1 casa, vírgula ou ponto conforme o idioma). Não numérico: null. Pura. */
+    fun valorSensor(estado: String, unidade: String?, local: java.util.Locale = java.util.Locale.getDefault()): String? {
+        val v = estado.toDoubleOrNull()?.takeIf { it.isFinite() } ?: return null
+        val n = java.text.NumberFormat.getNumberInstance(local).apply { maximumFractionDigits = 1; minimumFractionDigits = 0 }.format(v)
+        val u = unidade?.trim()?.take(8).orEmpty()
+        return if (u.isEmpty()) n else if (u == "%") "$n%" else "$n $u"
+    }
+
+    /** Atributos do climate -> [Clima]. Faixa padrão 16-30 e passo 1 quando o Home Assistant não diz. Pura. */
+    fun lerClima(atr: JSONObject?): Clima {
+        fun num(k: String) = atr?.optDouble(k, Double.NaN)?.takeIf { it.isFinite() }
+        val min = num("min_temp") ?: 16.0
+        val max = (num("max_temp") ?: 30.0).coerceAtLeast(min)
+        val passo = (num("target_temp_step") ?: 1.0).takeIf { it in 0.1..5.0 } ?: 1.0
+        return Clima(num("temperature"), num("current_temperature"), min, max, passo)
+    }
+
+    /** Próxima temperatura pedida com ◀ ▶ (um passo do aparelho), dentro da faixa. [atual] null: começa em 24. Pura. */
+    fun proximaTemp(atual: Double?, passo: Int, c: Clima): Double {
+        val base = atual ?: 24.0
+        val alvo = base + passo * c.passo
+        return (Math.round(alvo / c.passo) * c.passo).coerceIn(c.minimo, c.maximo)
+    }
+
+    fun ajustarTemp(ctx: Context, id: String, graus: Double) {
+        if (!(idValido(id) && id.startsWith("climate."))) throw Erro("temperatura só para ar-condicionado")
+        pedir(ctx, "POST", "/api/services/climate/set_temperature", JSONObject().put("entity_id", id).put("temperature", graus).toString())
+    }
+
+    // ---------------------------------------------------------------- cômodos (13/11/2026)
+    // O /api/states não diz em que cômodo (área) cada aparelho está. A área mora nos registros do Home Assistant; o jeito
+    // mais curto de lê-la pela API REST é o POST /api/template com area_name(), que olha a área da entidade e, se ela não
+    // tiver, a do dispositivo dela (homeassistant/helpers/template/extensions/areas.py). O /api/template pede token de
+    // administrador: com token de usuário comum dá 401/403 e a tela volta ao agrupamento antigo (Aparelhos / Cenas).
+
+    /** Template que devolve [[entity_id, nome da área ou null], ...] só dos domínios que a tela mostra. */
+    val TEMPLATE_AREAS: String = "[{%- for s in states if s.domain in " +
+        (DOMINIOS + LEITURA + "camera").sorted().joinToString(",", "[", "]") { "'$it'" } +
+        " -%}{{ [s.entity_id, area_name(s.entity_id)] | tojson }}{{ ',' if not loop.last }}{%- endfor -%}]"
+
+    /** Resposta do template -> entity_id para nome do cômodo (só quem tem cômodo). Null se a resposta não for a lista. Pura. */
+    fun lerAreas(texto: String): Map<String, String>? {
+        val t = texto.trim()
+        // O HA responde o texto puro; se algum dia vier embrulhado como string JSON, desembrulha.
+        val bruto = if (t.startsWith("\"")) (try { org.json.JSONTokener(t).nextValue() as? String } catch (e: Exception) { null } ?: return null) else t
+        val a = try { JSONArray(bruto) } catch (e: Exception) { return null }
+        val m = LinkedHashMap<String, String>()
+        for (i in 0 until a.length()) {
+            val par = a.optJSONArray(i) ?: continue
+            val id = par.optString(0)
+            if (!idValido(id) || par.isNull(1)) continue
+            val area = par.optString(1).trim().take(40)
+            if (area.isNotEmpty()) m[id] = area
+        }
+        return m
+    }
+
+    /**
+     * Agrupa por cômodo: cômodos em ordem alfabética (sem ligar para acento e maiúscula), dentro de cada um os aparelhos
+     * antes das cenas e rotinas, e quem não tem cômodo por último, com nome null (a tela escreve "Sem cômodo"). Pura.
+     */
+    fun agruparPorComodo(lista: List<Entidade>, areas: Map<String, String>): List<Pair<String?, List<Entidade>>> {
+        val cena = { e: Entidade -> e.dominio == "scene" || e.dominio == "script" }
+        val ordem = java.text.Collator.getInstance(java.util.Locale.ROOT).apply { strength = java.text.Collator.PRIMARY }
+        val porArea = lista.groupBy { areas[it.id] }
+        val nomes = porArea.keys.filterNotNull().sortedWith(ordem)
+        return (nomes + listOf<String?>(null)).mapNotNull { n ->
+            porArea[n]?.let { l -> n to (l.filter { !cena(it) } + l.filter(cena)) }
+        }
+    }
+
+    // Tela Casa (13/11/2026): ícone e estado de cada cartão. Puras.
+    /** Domínio do Home Assistant -> ícone do [IconeCard]. */
+    fun iconeDe(dominio: String) = when (dominio) {
+        "light" -> "lampada"
+        "switch" -> "tomada"
+        "fan" -> "ventilador"
+        "cover" -> "cortina"
+        "scene" -> "cena"
+        "script" -> "rotina"
+        "climate" -> "ar"
+        "sensor" -> "termometro"
+        "binary_sensor" -> "porta"
+        CAMERA -> "camera"
+        else -> "chave"
+    }
+
+    /** Conta como "ligado" (verde-água): luz/tomada/ventilador/chave em "on" e cortina aberta. Cena e script nunca. */
+    fun ligado(dominio: String, estado: String) = when (dominio) {
+        "scene", "script", "sensor", CAMERA -> false
+        "climate" -> estado != "off" && estado != "unavailable" && estado != "unknown"
+        "cover" -> estado == "open" || estado == "opening"
+        else -> estado == "on"
+    }
+
+    /** Estado esperado depois de "alternar", para mostrar na hora; null = não sabe (não muda o cartão). */
+    fun inverso(dominio: String, estado: String): String? = when (dominio) {
+        "scene", "script", "sensor", "binary_sensor", CAMERA -> null
+        "climate" -> if (estado == "off" || estado == "unavailable" || estado == "unknown") null else "off"   // ligar volta ao último modo: não sabemos qual
+        "cover" -> when (estado) { "open", "opening" -> "closed"; "closed", "closing" -> "open"; else -> null }
+        else -> when (estado) { "on" -> "off"; "off" -> "on"; else -> null }
+    }
+
+    /**
+     * Luz com brilho: o Home Assistant lista os modos de cor; só "onoff" (ou nada) = só liga e desliga. Pura.
+     * Luz apagada não manda "brightness", por isso a decisão vem dos modos e não do brilho.
+     */
+    fun regulavel(id: String, atr: JSONObject?): Boolean {
+        if (!id.startsWith("light.") || atr == null) return false
+        val modos = atr.optJSONArray("supported_color_modes") ?: return atr.has("brightness")
+        return (0 until modos.length()).any { modos.optString(it) != "onoff" }
+    }
+
+    /** "brightness" do Home Assistant (0-255) em porcentagem, 1-100; null quando não vem (luz apagada). Pura. */
+    fun brilhoPct(atr: JSONObject?): Int? {
+        if (atr == null || !atr.has("brightness") || atr.isNull("brightness")) return null
+        val b = atr.optDouble("brightness", Double.NaN)
+        if (b.isNaN()) return null
+        return Math.round(b * 100 / 255).toInt().coerceIn(1, 100)
+    }
+
+    /** Próximo brilho com ◀ ▶ na tela Casa: passos de 10 %, de 0 (apagada) a 100. Pura. */
+    fun proximoBrilho(atual: Int?, passo: Int): Int {
+        val a = atual ?: 0
+        val alvo = if (passo > 0) (a / 10 + 1) * 10 else ((a + 9) / 10 - 1) * 10
+        return alvo.coerceIn(0, 100)
+    }
+
+    // ---------------------------------------------------------------- cor e temperatura (ideia 50, 14/11/2026)
+
+    /**
+     * Os tons que a tela Casa oferece com ▲ ▼ no ajuste da luz. Temperatura em kelvin (luz branca: quente, neutra,
+     * fria) ou matiz/saturação (luz colorida). Lista curta de propósito: no controle, escolher entre 10 é rápido; uma
+     * roda de cores não seria.
+     */
+    enum class CorLuz(val kelvin: Int? = null, val matiz: Int = 0, val saturacao: Int = 0) {
+        QUENTE(kelvin = 2700), NEUTRA(kelvin = 4000), FRIA(kelvin = 6500),
+        VERMELHO(matiz = 0, saturacao = 100), LARANJA(matiz = 25, saturacao = 100), AMARELO(matiz = 50, saturacao = 100),
+        VERDE(matiz = 120, saturacao = 100), AZUL(matiz = 230, saturacao = 100), ROXO(matiz = 275, saturacao = 100),
+        ROSA(matiz = 320, saturacao = 60);
+        val temperatura get() = kelvin != null
+    }
+
+    /**
+     * Pelos modos de cor que o Home Assistant lista (`supported_color_modes`): "color_temp" = só as 3 temperaturas;
+     * "hs", "xy", "rgb", "rgbw" ou "rgbww" = as temperaturas e as cores (o Home Assistant converte a temperatura em
+     * cor para quem não tem branco ajustável). "brightness", "onoff" ou nada = nenhum tom. Pura.
+     */
+    fun coresDisponiveis(id: String, atr: JSONObject?): List<CorLuz> {
+        if (!id.startsWith("light.") || atr == null) return emptyList()
+        val a = atr.optJSONArray("supported_color_modes") ?: return emptyList()
+        val modos = (0 until a.length()).map { a.optString(it) }.toSet()
+        val cor = modos.any { it in setOf("hs", "xy", "rgb", "rgbw", "rgbww") }
+        return when {
+            cor -> CorLuz.values().toList()
+            "color_temp" in modos -> CorLuz.values().filter { it.temperatura }
+            else -> emptyList()
+        }
+    }
+
+    /** Próximo tom com ▲ ▼ (dá a volta). [atual] -1 = nenhum escolhido ainda: ▼ vai ao 1º, ▲ ao último. Pura. */
+    fun proximaCor(quantas: Int, atual: Int, passo: Int): Int {
+        if (quantas <= 0) return -1
+        if (atual !in 0 until quantas) return if (passo > 0) 0 else quantas - 1
+        return Math.floorMod(atual + passo, quantas)
+    }
+
+    /** Corpo do light.turn_on para o tom (acende a luz junto). Pura. */
+    fun corpoCor(id: String, c: CorLuz): JSONObject = JSONObject().put("entity_id", id).apply {
+        if (c.kelvin != null) put("color_temp_kelvin", c.kelvin)
+        else put("hs_color", JSONArray().put(c.matiz).put(c.saturacao))
+    }
+
+    fun ajustarCor(ctx: Context, id: String, c: CorLuz) {
+        if (!(idValido(id) && id.startsWith("light."))) throw Erro("cor só para luz")
+        pedir(ctx, "POST", "/api/services/light/turn_on", corpoCor(id, c).toString())
+    }
+
+    /** Brilho de uma luz, 0-100 % (0 apaga). */
+    fun ajustarBrilho(ctx: Context, id: String, pct: Int) {
+        if (!(idValido(id) && id.startsWith("light."))) throw Erro("brilho só para luz")
+        val p = pct.coerceIn(0, 100)
+        if (p == 0) pedir(ctx, "POST", "/api/services/light/turn_off", JSONObject().put("entity_id", id).toString())
+        else pedir(ctx, "POST", "/api/services/light/turn_on", JSONObject().put("entity_id", id).put("brightness_pct", p).toString())
+    }
+
+    /** (domínio do serviço, serviço) para a ação pedida, ou null se a combinação não é permitida. Pura. */
+    fun servico(id: String, acao: String): Pair<String, String>? {
+        if (!idValido(id)) return null
+        val d = id.substringBefore('.')
+        if (d !in DOMINIOS) return null
+        return when {
+            d == "scene" || d == "script" -> if (acao == "ligar") d to "turn_on" else null
+            d == "climate" -> when (acao) { "ligar" -> d to "turn_on"; "desligar" -> d to "turn_off"; else -> null }   // sem "alternar": quem chama decide pelo estado
+            d == "cover" -> when (acao) { "ligar" -> d to "open_cover"; "desligar" -> d to "close_cover"; "alternar" -> d to "toggle"; else -> null }
+            else -> when (acao) { "ligar" -> d to "turn_on"; "desligar" -> d to "turn_off"; "alternar" -> d to "toggle"; else -> null }
+        }
+    }
+
+    /**
+     * Atributos de mídia do sensor da TV, a partir do [TocandoAgoraTv.json]. Pura.
+     *  - midia: "tocando", "pausado", "nada" (nenhuma sessão) ou "desconhecido" (Tocando agora desligado, ou sem acesso);
+     *  - midia_titulo e midia_app: só quando há sessão. O título vai só para o Home Assistant da casa (rede local).
+     * O estado do sensor continua "ligada"/"dormindo" para não quebrar automação que já exista.
+     */
+    fun atributosMidia(m: JSONObject, destino: JSONObject): JSONObject {
+        val situacao = when {
+            !m.optBoolean("ligado") -> "desconhecido"
+            m.optBoolean("nada") -> if (m.optBoolean("acesso", true)) "nada" else "desconhecido"
+            m.optBoolean("tocando") -> "tocando"
+            else -> "pausado"
+        }
+        destino.put("midia", situacao)
+        if (situacao == "tocando" || situacao == "pausado") {
+            destino.put("midia_titulo", m.optString("titulo").take(120)).put("midia_app", m.optString("app").take(60))
+        }
+        return destino
+    }
+
+    /** Nome da entidade que a TV publica: sensor.tv_<nome do aparelho em minúsculas, sem acento>. Pura. */
+    fun idDaTv(nomeAparelho: String): String {
+        val base = java.text.Normalizer.normalize(nomeAparelho.lowercase(), java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{M}"), "").replace(Regex("[^a-z0-9]+"), "_").trim('_').take(40)
+        return "sensor.tv_" + base.ifEmpty { "sala" }
+    }
+
+    // ---------------------------------------------------------------- configuração (na TV)
+
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    fun endereco(ctx: Context): String? = prefs(ctx).getString("endereco", null)
+    /** `uuid` do anúncio mDNS do Home Assistant que já aceitou a chave (HomeAssistantFinder só manda a chave a ele). */
+    fun uuidHa(ctx: Context): String? = prefs(ctx).getString("ha_uuid", null)
+    fun guardarUuidHa(ctx: Context, uuid: String) { prefs(ctx).edit().putString("ha_uuid", uuid.take(64)).apply() }
+    fun configurado(ctx: Context) = endereco(ctx) != null && prefs(ctx).contains("token_cifrado")
+    fun texto(ctx: Context, chave: String): String = prefs(ctx).getString(chave, "") ?: ""
+
+    /** Grava endereço e token. Devolve null se gravou, ou o motivo. */
+    fun configurar(ctx: Context, endereco: String, token: String): String? {
+        val e = enderecoValido(endereco) ?: return txt(R.string.casa_err_endereco)
+        if (!tokenValido(token)) return txt(R.string.casa_err_token)
+        return try {
+            val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, chave())
+            prefs(ctx).edit().putString("endereco", e).remove("ha_uuid")   // outra chave pode ser de outro HA
+                .putString("token_cifrado", Base64.encodeToString(c.doFinal(token.trim().toByteArray()), Base64.NO_WRAP))
+                .putString("token_iv", Base64.encodeToString(c.iv, Base64.NO_WRAP)).commit()
+            null
+        } catch (ex: Exception) { txt(R.string.casa_err_keystore, ex.javaClass.simpleName) }
+    }
+
+    /**
+     * Troca só o endereço, mantendo o token (adb: EXTRAS casa_endereco; 18/11/2026, o Home Assistant saiu do
+     * "adb reverse" do PC para o IP dele na rede). Devolve null se gravou, ou o motivo.
+     */
+    fun trocarEndereco(ctx: Context, endereco: String): String? {
+        val e = enderecoValido(endereco) ?: return txt(R.string.casa_err_endereco)
+        if (!prefs(ctx).contains("token_cifrado")) return txt(R.string.casa_err_token)
+        prefs(ctx).edit().putString("endereco", e).commit()
+        return null
+    }
+
+    /** Campainha e câmera (ids de entidade; vazio desliga o aviso). */
+    fun configurarCampainha(ctx: Context, sensor: String, camera: String): String? {
+        if (sensor.isNotEmpty() && !idValido(sensor)) return txt(R.string.casa_err_sensor)
+        if (camera.isNotEmpty() && !(idValido(camera) && camera.startsWith("camera."))) return txt(R.string.casa_err_camera)
+        prefs(ctx).edit().putString(CHAVE_CAMPAINHA, sensor).putString(CHAVE_CAMERA, camera).apply()
+        return null
+    }
+
+    fun esquecer(ctx: Context) { prefs(ctx).edit().clear().commit() }
+
+    /** Chaves que o Keystore cifrou: não servem em outra instalação (o backup completo leva o token em claro, no cofre). */
+    val CHAVES_DO_KEYSTORE = setOf("token_cifrado", "token_iv")
+
+    /** O token em claro, só para o backup completo (que vai trancado com a senha do dono). */
+    internal fun tokenParaBackup(ctx: Context): String? = token(ctx)
+
+    /** Cifra [token] com o Keystore DESTA instalação (restaurar backup). Devolve false se o Keystore falhar. */
+    internal fun definirToken(ctx: Context, token: String): Boolean = try {
+        val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, chave())
+        prefs(ctx).edit()
+            .putString("token_cifrado", Base64.encodeToString(c.doFinal(token.trim().toByteArray()), Base64.NO_WRAP))
+            .putString("token_iv", Base64.encodeToString(c.iv, Base64.NO_WRAP)).commit()
+    } catch (ex: Exception) { Log.w(TAG, "Keystore: ${ex.javaClass.simpleName}"); false }
+
+    private fun token(ctx: Context): String? {
+        val p = prefs(ctx)
+        val cif = p.getString("token_cifrado", null) ?: return null
+        val iv = p.getString("token_iv", null) ?: return null
+        return try {
+            val c = Cipher.getInstance("AES/GCM/NoPadding")
+            c.init(Cipher.DECRYPT_MODE, chave(), GCMParameterSpec(128, Base64.decode(iv, Base64.NO_WRAP)))
+            String(c.doFinal(Base64.decode(cif, Base64.NO_WRAP)))
+        } catch (e: Exception) { Log.w(TAG, "token ilegível: ${e.javaClass.simpleName}"); null }
+    }
+
+    private fun chave(): SecretKey {
+        val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+        (ks.getEntry(APELIDO, null) as? KeyStore.SecretKeyEntry)?.let { return it.secretKey }
+        val g = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+        g.init(KeyGenParameterSpec.Builder(APELIDO, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setKeySize(256).build())
+        return g.generateKey()
+    }
+
+    // ---------------------------------------------------------------- pedidos (fora da thread da tela)
+
+    class Erro(msg: String) : Exception(msg)
+
+    /** Não chegou ao endereço salvo (nem conectou): o Home Assistant pode ter mudado de endereço na rede. */
+    private class SemConexao(msg: String) : Exception(msg)
+
+    private fun pedir(ctx: Context, metodo: String, caminho: String, corpo: String? = null, limite: Int = 2 shl 20): ByteArray {
+        val e = endereco(ctx) ?: throw Erro("o Home Assistant não está configurado")
+        val t = token(ctx) ?: throw Erro("o token do Home Assistant sumiu: configure de novo")
+        return try { pedirEm(e, t, metodo, caminho, corpo, limite) } catch (ex: SemConexao) {
+            // Plug & play (18/11/2026): só para endereço de dentro de casa; um endereço de fora não se procura na rede.
+            val host = runCatching { URL(e).host }.getOrNull()
+            // Outro pedido ao mesmo tempo (a tela e o MCP) pode ter achado e gravado o endereço novo enquanto este
+            // esperava a procura (visto na Sala, 18/11/2026: a 2ª procura cai no intervalo e devolve null): vale o gravado.
+            val novo = if (host != null && hostDeCasa(host)) HomeAssistantFinder.reencontrar(ctx, t, e) ?: endereco(ctx) else null
+            if (novo == null || novo == e) throw Erro(ex.message ?: "não consegui falar com o Home Assistant")
+            pedirEm(novo, t, metodo, caminho, corpo, limite)
+        }
+    }
+
+    /** Força a procura na rede (adb: EXTRAS casa_procurar). */
+    fun procurarNaRede(ctx: Context): String {
+        val t = token(ctx) ?: return "sem token: configure a Casa primeiro"
+        return HomeAssistantFinder.reencontrar(ctx, t, endereco(ctx), forcar = true)?.let { "achei: $it" } ?: "não achei (endereço fica ${endereco(ctx)})"
+    }
+
+    private fun pedirEm(e: String, t: String, metodo: String, caminho: String, corpo: String?, limite: Int): ByteArray {
+        val c = (URL(e + caminho).openConnection() as HttpURLConnection).apply {
+            requestMethod = metodo; connectTimeout = 5_000; readTimeout = 10_000; instanceFollowRedirects = false
+            setRequestProperty("Authorization", "Bearer $t")
+            if (corpo != null) { doOutput = true; setRequestProperty("Content-Type", "application/json") }
+        }
+        try {
+            corpo?.let { b -> c.outputStream.use { it.write(b.toByteArray()) } }
+            if (c.responseCode == 401) throw Erro("o Home Assistant recusou o token")
+            if (c.responseCode !in 200..299) throw Erro("o Home Assistant respondeu ${c.responseCode}")
+            return c.inputStream.use { ent ->
+                val s = java.io.ByteArrayOutputStream(); val b = ByteArray(16 * 1024)
+                while (true) { val n = ent.read(b); if (n < 0) break; s.write(b, 0, n); if (s.size() > limite) throw Erro("resposta grande demais") }
+                s.toByteArray()
+            }
+        } catch (ex: Erro) { throw ex
+        } catch (ex: java.net.ConnectException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } catch (ex: java.net.SocketTimeoutException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } catch (ex: java.net.NoRouteToHostException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } catch (ex: Exception) { throw Erro("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } finally { c.disconnect() }
+    }
+
+    /** Estado de UMA entidade de qualquer domínio (ex.: person.ana = "home"), para a presença (ideia 40). Null se falhar. */
+    fun estadoDe(ctx: Context, id: String): String? = if (!idValido(id)) null else try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id", limite = 256 shl 10))).optString("state").ifEmpty { null }
+    } catch (e: Exception) { null }
+
+    fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
+
+    /** Cômodo de cada aparelho (entity_id -> nome da área). Erra com [Erro] se o token não for de administrador. */
+    fun areas(ctx: Context): Map<String, String> =
+        lerAreas(String(pedir(ctx, "POST", "/api/template", JSONObject().put("template", TEMPLATE_AREAS).toString(), limite = 512 * 1024)))
+            ?: throw Erro("resposta de áreas inesperada")
+
+    /** Liga, desliga ou alterna. Devolve o texto do resultado. */
+    fun acionar(ctx: Context, id: String, acao: String): String {
+        if (id.startsWith("$CAMERA.")) {   // ideia 52: qualquer ação numa câmera = mostrar a foto de agora na TV
+            if (acao !in setOf("ver", "ligar", "alternar") || !idValido(id)) throw Erro("ação não permitida para $id")
+            mostrarCamera(ctx, id, estadoNome(ctx, id) ?: id)
+            return "$id: na tela"
+        }
+        // Ideia 51: "alternar" no ar-condicionado vira ligar ou desligar pelo estado de agora (o climate não tem toggle certo).
+        val a = if (acao == "alternar" && id.startsWith("climate.")) (if (estadoDe(ctx, id) == "off") "ligar" else "desligar") else acao
+        val (d, s) = servico(id, a) ?: throw Erro("ação não permitida para $id")
+        pedir(ctx, "POST", "/api/services/$d/$s", JSONObject().put("entity_id", id).toString())
+        return "$id: $acao"
+    }
+
+    /** Foto da câmera (JPEG), pelo proxy do Home Assistant. */
+    fun fotoCamera(ctx: Context, camera: String): ByteArray {
+        if (!(idValido(camera) && camera.startsWith("camera."))) throw Erro("câmera inválida")
+        return pedir(ctx, "GET", "/api/camera_proxy/$camera", limite = RecadoImagem.MAX_BYTES)
+    }
+
+    /** Ideia 52: a foto de agora da câmera, por 30 s, por cima do que estiver passando. Bloqueia (rede): fora da tela. */
+    fun mostrarCamera(ctx: Context, camera: String, nome: String) {
+        val foto = RecadoImagem.decodificar(fotoCamera(ctx, camera)) ?: throw Erro("a câmera não mandou foto")
+        AvisoTv.mostrar(ctx, nome.take(60), "", 30, som = false, guardarSeApagada = false, imagem = foto,
+            prioridade = NaoPerturbe.Tipo.CAMPAINHA)   // a pessoa pediu para ver a câmera agora
+    }
+
+    private fun estadoNome(ctx: Context, id: String): String? = try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id"))).optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() }
+    } catch (e: Exception) { null }
+
+    // ---------------------------------------------------------------- vigia: estado da TV e campainha
+
+    private val ui by lazy { Handler(Looper.getMainLooper()) }
+    @Volatile private var rodando = false
+    private var ultimoPublicado = ""
+    private val campainha = Campainha()
+    private var ultimoEnvio = 0L
+    // Uma volta por vez, numa thread só: com o Home Assistant lento (até 15 s por pedido) as voltas não se empilham.
+    private val trabalho = java.util.concurrent.Executors.newSingleThreadExecutor()
+    private val ocupado = java.util.concurrent.atomic.AtomicBoolean(false)
+
+    private val tique = object : Runnable {
+        override fun run() {
+            val c = contexto ?: return
+            if (!rodando) return
+            // Volta anterior ainda rodando: pula esta (a próxima vem no próximo tique).
+            if (ocupado.compareAndSet(false, true)) trabalho.execute {
+                try { vigiar(c) } catch (_: Exception) {} finally { ocupado.set(false) }
+            }
+            // Campainha a cada 3 s só com a tela acesa: apagada, o aviso nem aparece (AvisoTv descarta), basta 30 s.
+            val telaAcesa = c.getSystemService(PowerManager::class.java)?.isInteractive != false
+            // Com a casa configurada e a tela acesa, 5 s: o sensor da TV avisa "pausou" a tempo de a luz acender. Cada volta
+            // só lê as sessões de mídia da própria TV; o POST ao Home Assistant sai só quando algo muda (publicarEstado).
+            ui.postDelayed(this, when {
+                !telaAcesa -> 30_000L
+                texto(c, CHAVE_CAMPAINHA).isNotEmpty() -> 3_000L
+                configurado(c) -> 5_000L
+                else -> 30_000L
+            })
+        }
+    }
+    @Volatile private var contexto: Context? = null
+
+    /** Chamado quando o serviço de acessibilidade conecta (processo vivo o tempo todo). */
+    fun iniciar(ctx: Context) {
+        contexto = ctx.applicationContext
+        if (rodando) return
+        rodando = true; ui.post(tique)
+    }
+
+    fun parar() { rodando = false; ui.removeCallbacks(tique) }
+
+    private fun vigiar(ctx: Context) {
+        if (!configurado(ctx)) return
+        try { publicarEstado(ctx) } catch (_: Exception) {}
+        val sensor = texto(ctx, CHAVE_CAMPAINHA)
+        if (sensor.isEmpty()) return
+        val estado = try { JSONObject(String(pedir(ctx, "GET", "/api/states/$sensor"))).optString("state") } catch (e: Exception) { return }
+        if (campainha.tocou(estado)) tocouCampainha(ctx)   // o estado já ficou guardado antes de buscar a foto
+    }
+
+    /** Quando a campainha tocou por último (0 = nunca, desde que o processo subiu): a Ilha da home mostra por alguns minutos. */
+    @Volatile var campainhaEm = 0L
+        private set
+    /** A home (MainActivity) escuta para a Ilha crescer na hora, sem esperar o tique de 1 min. */
+    @Volatile var aoTocarCampainha: (() -> Unit)? = null
+
+    private fun tocouCampainha(ctx: Context) {
+        campainhaEm = System.currentTimeMillis()
+        runCatching { aoTocarCampainha?.invoke() }
+        Gatilhos.disparar(ctx, Gatilhos.Evento.CAMPAINHA)   // elevação 10.6
+        val camera = texto(ctx, CHAVE_CAMERA)
+        val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
+        AvisoTv.mostrar(ctx, ctx.getString(R.string.casa_campainha), ctx.getString(R.string.casa_alguem_porta), 30, som = true, guardarSeApagada = false,
+            imagem = foto?.let { RecadoImagem.decodificar(it) }, fica = AvisoRegras.Fica.ATENCAO, prioridade = NaoPerturbe.Tipo.CAMPAINHA)
+    }
+
+    /** Publica sensor.tv_<nome> no Home Assistant quando muda, e de novo a cada 5 min (o HA esquece ao reiniciar). */
+    fun publicarEstado(ctx: Context) {
+        val ligada = ctx.getSystemService(PowerManager::class.java)?.isInteractive ?: true
+        val app = JanelaNaFrente.pacote ?: ""
+        val nome = android.provider.Settings.Global.getString(ctx.contentResolver, "device_name") ?: "Sala"
+        val atributos = JSONObject().put("friendly_name", "TV $nome").put("app", app).put("icon", "mdi:television")
+        // Mídia (11/11/2026): "pausou o filme, acende a luz baixa" e "me avisa quando acabar" viram automações do HA.
+        val midia = try { TocandoAgoraTv.json(ctx) } catch (e: Exception) { JSONObject().put("ligado", false) }
+        atributosMidia(midia, atributos)
+        val corpo = JSONObject().put("state", if (ligada) "ligada" else "dormindo").put("attributes", atributos).toString()
+        if (corpo == ultimoPublicado && System.currentTimeMillis() - ultimoEnvio < 5 * 60_000) return
+        pedir(ctx, "POST", "/api/states/${idDaTv(nome)}", corpo)
+        ultimoPublicado = corpo; ultimoEnvio = System.currentTimeMillis()
+    }
+}

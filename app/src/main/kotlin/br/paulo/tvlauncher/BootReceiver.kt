@@ -4,6 +4,18 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.backup.BackupAutomatico
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.mcp.McpServidor
+import br.paulo.tvlauncher.mcp.TunelTailscale
+import br.paulo.tvlauncher.network.AcordarComLg
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.privilege.DebloatPosOta
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.Privilegio
 
 /**
  * Roda quando a TV termina de REINICIAR: religa a Depuração sem fio (Privilegio.religarDepuracaoSemFio) e abre o app

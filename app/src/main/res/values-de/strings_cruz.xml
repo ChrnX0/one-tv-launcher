@@ -61,7 +61,6 @@
     <string name="jogos_semana">Diese Woche</string>
     <string name="jogos_semana_jogado">in 7 Tagen gespielt</string>
     <string name="jogos_semana_mais">am meisten gespielt</string>
-    <string name="jogos_semana_controles">Controller an</string>
     <string name="jogos_menos_de_1_min">unter 1 Min.</string>
     <string name="jogos_min">%1$d Min.</string>
     <string name="jogos_h_min">%1$d Std. %2$d Min.</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Prüfe, ob sein Server eingeschaltet ist. Der Fernseher versucht es alle paar Sekunden von selbst erneut.</string>
     <string name="cruz_barra_ilha">Insel</string>
     <string name="cruz_canto_no_ar">Läuft</string>
-    <string name="cruz_canto_buscar">Suchen</string>
-    <string name="cruz_canto_buscar_txt">▲ öffnet die Leiste mit der Suche</string>
     <string name="cruz_canto_gravando">Nimmt auf</string>
     <string name="cruz_canto_tocando">Läuft gerade</string>
     <string name="cruz_canto_parou">Gestoppt bei</string>

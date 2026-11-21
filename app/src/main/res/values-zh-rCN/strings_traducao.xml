@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">语音快捷方式</string>
     <string name="mcp_olhou_tela">Claude 查看了屏幕</string>
     <string name="pg_max_min">最高 %1$d° · 最低 %2$d°</string>
-    <string name="pg_por_do_sol">日落 %1$s</string>
     <string name="pg_compras">购物清单</string>
     <string name="cf_negar">拒绝</string>
     <string name="cf_permitir">允许</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">删除</string>
     <string name="pn_parear">配对</string>
     <string name="pn_titulo">配对启动器（无需电脑）</string>
-    <string name="pn_lido">已从屏幕读取代码</string>
     <string name="pn_nao_achei">尚未找到配对界面</string>
     <string name="pn_6">代码为 6 位数字</string>
     <string name="pn_pareado">已配对！正在检查 Shell…</string>

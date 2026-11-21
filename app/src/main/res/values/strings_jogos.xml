@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- "Games" card on the HOME (14/11/2026): JogosActivity, JogosTv, MainActivity. -->
 <resources>
-    <string name="home_card_jogos">Games</string>
-    <string name="home_destaque_jogos_vazio">Play in the cloud, from your PC and retro games</string>
-    <string name="home_linha_continuar_jogos">WATCH AND PLAY</string>
-    <string name="home_jogos_ultimo">Last: %1$s</string>
     <plurals name="jogos_qtd">
         <item quantity="one">%d game</item>
         <item quantity="other">%d games</item>
@@ -38,8 +34,6 @@
     <string name="jogos_grupo_retro">Retro</string>
     <string name="jogos_grupo_tv">Games on the TV</string>
     <string name="jogos_para_comecar">To get started</string>
-    <string name="jogos_vazio_dica">No games on this TV yet. Pick one above to open its page in the Play Store.</string>
-    <string name="jogos_dica_segurar">Hold OK on a game to move it to another group or take it out of here.</string>
     <string name="jogos_aviso_fraca_titulo">Weak network for cloud gaming</string>
     <string name="jogos_aviso_fraca">The game may stutter or lag. A network cable, or the TV closer to the router, helps.</string>
     <string name="jogos_jogar_assim">Play anyway</string>
@@ -55,27 +49,16 @@
     <string name="jogos_pc_acordando">Waking the PC… %1$d s</string>
     <string name="jogos_pc_nao_respondeu">The PC did not answer. Opening the app anyway.</string>
     <!-- Sketch A "Console" (14/11/2026): focused game spotlight + recently played row. -->
-    <string name="jogos_seus">Your games</string>
     <string name="jogos_mais_jogos">More games</string>
     <string name="jogos_mais_opcoes">More</string>
-    <string name="jogos_por_tipo">By type</string>
-    <string name="jogos_jogar">Play</string>
     <string name="jogos_ligar_pc_jogar">Turn on the PC and play</string>
-    <string name="jogos_desc_nuvem">The game runs on a computer on the internet and the TV gets the picture. Needs a good network.</string>
     <string name="jogos_desc_pc">Play the games from the computer or console at home right here on the TV.</string>
-    <string name="jogos_desc_retro">Classic games from many consoles.</string>
-    <string name="jogos_desc_tv">A game installed on the TV itself.</string>
-    <string name="jogos_jogado">Last played %1$s.</string>
-    <string name="jogos_nenhum_titulo">No games yet</string>
-    <string name="jogos_chip_sem_controle">No controller</string>
     <string name="jogos_chip_medindo">Checking the network…</string>
     <string name="jogos_chip_boa">Good network</string>
     <string name="jogos_chip_ok">Network ok</string>
     <string name="jogos_chip_fraca">Weak network</string>
     <string name="jogos_chip_sem">No internet</string>
-    <string name="jogos_tecla_escolher">choose</string>
     <string name="jogos_tecla_jogar">play</string>
-    <string name="jogos_tecla_mais">more options</string>
     <string name="jogos_tecla_segurar">hold OK</string>
     <string name="jogos_tecla_opcoes">change group</string>
 </resources>

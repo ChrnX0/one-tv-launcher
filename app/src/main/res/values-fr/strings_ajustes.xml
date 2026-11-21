@@ -93,10 +93,6 @@
     <string name="vq_det">Affiche un QR code avec le style de ce téléviseur : thème, taille du texte, icônes.</string>
     <string name="vq_texto">Scannez-le avec votre téléphone pour le garder ou l’envoyer à quelqu’un qui a Sofaly.</string>
     <string name="vq_fechar">Fermer</string>
-    <string name="lh_titulo">Taille des cartes d’applis</string>
-    <string name="lh_det">Les grandes cartes se voient mieux depuis le canapé.</string>
-    <string name="lh_normal">Normale</string>
-    <string name="lh_grande">Grande</string>
     <string name="pl_titulo">Formules</string>
     <string name="pl_texto">Tout est gratuit tant que la vente n’est pas ouverte. Plus tard, Pro et Ultra s’achètent sur le téléphone.</string>
     <string name="pl_basico">Essentiel</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Tout Essentiel\n• Plusieurs listes IPTV, enregistrement\n• Panneau web complet\n• Claude, routines, Home Assistant\n• Tous les thèmes, sauvegarde cloud</string>
     <string name="pl_ultra_itens">• Tout Pro\n• Météo plus précise (3 modèles)\n• Fiches de films complètes\n• Sous-titres automatiques\n• Jusqu’à 3 téléviseurs</string>
     <string name="pl_qr">Scannez avec votre téléphone pour voir les prix et acheter.</string>
-    <string name="lh_arranjo">Disposition des applis</string>
-    <string name="lh_arranjo_det">Une rangée qui défile sur le côté, ou une grille avec toutes les applis visibles.</string>
-    <string name="lh_fileira">Rangée</string>
-    <string name="lh_grade">Grille</string>
     <string name="pl_assinar">S’abonner</string>
     <string name="pl_assinar_preco">S’abonner · %1$s</string>
     <string name="pl_seu_plano">Votre forfait</string>

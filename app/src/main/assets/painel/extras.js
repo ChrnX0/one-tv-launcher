@@ -24,7 +24,6 @@ const NOMES_CHAVES = {
   RETROSPECTIVA: 'Sua semana na TV (domingo, 20h)',
   RETROSPECTIVA_ANO: 'Sua TV no ano (em dezembro, no protetor)',
   ENTRADAS_TV: 'Entradas HDMI na linha de apps (só em TV com entrada)',
-  CARTOES_TRANSPARENTES: 'Cartões de app transparentes fora do foco',
   NAO_PERTURBE: 'Não perturbe (avisos esperam durante filme, madrugada ou visita)',
   ABERTURA_PRONTA: 'Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)',
   MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
@@ -729,6 +728,9 @@ $('btnConsumo').addEventListener('click', async () => {
 
 // ---------- casa (Home Assistant; PainelExtras "casa/*", CasaHA.kt) ----------
 
+/** Estados do Home Assistant que aparecem para todo aparelho; os outros (valor de sensor, "heat"...) ficam como vêm. */
+const ESTADO_CASA = { on: 'ligado', off: 'desligado', unavailable: 'fora do ar', unknown: 'sem leitura' };
+
 async function carregarCasa() {
   const r = await chamar('GET', '/api/extras/casa');
   $('casaEndereco').value = r.endereco || '';
@@ -744,7 +746,9 @@ async function carregarCasa() {
     // Ideia 51: sensor mostra o valor; ar-condicionado, a temperatura pedida e a do ambiente.
     let estado = a.valor || a.estado;
     if (d === 'climate' && a.estado !== 'off' && a.alvo != null) estado = `${a.estado} ${a.alvo}°` + (a.atual != null ? ` (ambiente ${a.atual}°)` : '');
-    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${estado}`;
+    // 21/11/2026: o estado cru do Home Assistant ("unavailable") vira palavra da casa, num span próprio (o i18n traduz).
+    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · `;
+    const est = document.createElement('span'); est.textContent = ESTADO_CASA[estado] || estado; nome.append(est);
     if (d === 'sensor' || d === 'binary_sensor') { linha.append(nome); lista.append(linha); continue; }
     const acao = d === 'camera' ? 'ver' : (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
     const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario';

@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.RegrasEmprestimo.Modo
-import br.paulo.tvlauncher.RegrasEmprestimo.Parado
+import br.paulo.tvlauncher.privilege.RegrasEmprestimo
+import br.paulo.tvlauncher.privilege.RegrasEmprestimo.Modo
+import br.paulo.tvlauncher.privilege.RegrasEmprestimo.Parado
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 class RegrasEmprestimoTest {
     @Test fun desligadoDeFabrica() {

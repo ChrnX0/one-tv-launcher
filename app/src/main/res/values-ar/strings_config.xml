@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">التلفزيون والأفلام</string>
     <string name="cl_aba_conta_det">حساب IPTV وخدمات الأفلام والمسلسلات والصوت والترجمة</string>
     <string name="cl_aba_parental">الرقابة الأبوية</string>
-    <string name="cl_aba_parental_det">اقفل القنوات بـPIN: تختفي من القائمة ولا تُشغَّل</string>
-    <string name="cl_aba_aparencia">المظهر</string>
-    <string name="cl_aba_aparencia_det">السمة، مجموعات التطبيقات، الطقس والتنبيهات على الشاشة</string>
     <string name="cl_aba_energia">الشاشة والطاقة</string>
     <string name="cl_aba_energia_det">شاشة التوقف والإطفاء التلقائي</string>
-    <string name="cl_aba_visitas">الضيوف والروتينات</string>
-    <string name="cl_aba_visitas_det">وضع الضيوف والإجراءات المجدولة</string>
     <string name="cl_aba_rede">الشبكة</string>
-    <string name="cl_aba_rede_det">DNS وVPN وسرعة الإنترنت</string>
     <string name="cl_aba_remoto">الوصول عن بُعد</string>
     <string name="cl_aba_remoto_det">لوحة المتصفح وPIN وClaude عبر الإنترنت</string>
     <string name="cl_aba_sistema">النظام</string>
-    <string name="cl_aba_sistema_det">التشخيص، التحديثات، التطبيقات والأذونات</string>
     <string name="cl_dica_aba">اختر تبويبًا</string>
     <string name="cl_dica_entrar">فتح الخيارات</string>
     <string name="cl_dica_sair">خروج</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">تحديثات المشغّل التلقائية</string>
     <string name="cl_acao_atualizacao_det">يثبّت الإصدار الجديد وحده والشاشة مطفأة. محظور = يكتفي بالإشعار.</string>
     <string name="cl_tema">السمة</string>
-    <string name="cl_pilhas_det">يجمع التطبيقات المنفردة حسب الفئة؛ مجموعاتك تبقى</string>
     <string name="cl_clima">الطقس</string>
     <string name="cl_end_nenhum">لا شيء · يحدد التلفزيون موقعه عبر Wi-Fi؛ ويُستخدم العنوان عندما لا يستطيع Wi-Fi</string>
     <string name="cl_end_clima">عنوان الطقس</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">بطاقات</string>
     <string name="cl_widget_solto">بلا إطار</string>
     <string name="cl_linha_baixo">أدوات شاشة التوقف</string>
-    <string name="cl_linha_baixo_det">شريط زجاجي أو بطاقات أو بلا إطار · OK يغيّر</string>
     <string name="cl_desligar">الإطفاء عند عدم الاستخدام</string>
     <string name="cl_desligar_det">الفيديو المُشغَّل يُحسب استخدامًا؛ ينبّه قبل 60 ث · OK يغيّر</string>
     <string name="cl_visita_det">يخفي الملف الشخصي والتقويم والتطبيقات المحددة أدناه</string>
     <string name="cl_apps_visita">التطبيقات المخفية في وضع الضيوف</string>
     <string name="cl_carregando_apps">جارٍ تحميل التطبيقات…</string>
-    <string name="cl_some_visita">مخفي أثناء تفعيل وضع الضيوف</string>
     <string name="cl_vpn_nao_fixa">المشغّل لا يثبّت أي VPN</string>
     <string name="cl_vpn_adguard">تطبيق AdGuard VPN، يعمل دائمًا · OK يفتح التطبيق</string>
     <string name="cl_painel_navegador">لوحة المتصفح</string>

@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.CaixaComando
+import br.paulo.tvlauncher.search.BuscaFaz
+import br.paulo.tvlauncher.search.BuscaUnica
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

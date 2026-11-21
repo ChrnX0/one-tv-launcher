@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.AppShelf
+import br.paulo.tvlauncher.panel.PainelFicha
+import br.paulo.tvlauncher.privilege.Debloat
 import org.json.JSONArray
 import org.json.JSONObject
 

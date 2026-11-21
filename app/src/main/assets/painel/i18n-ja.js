@@ -1,5 +1,8 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"オン",
+"desligado":"オフ",
+"sem leitura":"測定値なし",
 "Recados de hoje":"今日のお知らせ",
 "Congelados em prova":"お試しで停止中",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"テレビがこれらのアプリを停止し、10分後に何か動かなくなっていないか確認します。動かなくなっていればテレビが元に戻します。あなたも戻せます。",
@@ -1046,7 +1049,6 @@ traduzirPainelCom({T:{
 "Normal":"標準",
 "Grande":"大",
 "Maior":"特大",
-"Pilhas automáticas (agrupar os apps por tipo)":"自動スタック(アプリを種類ごとにまとめる)",
 "Aviso de chuva por cima de qualquer app":"どのアプリの上にも雨の警告",
 "Unidade de rede":"ネットワークドライブ",
 "A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado da TV instalado no aparelho (":"テレビのストレージがPCやスマホにネットワークフォルダ(WebDAV)として表示され、ファイルタブと同じフォルダが見えます。パスワード:パネルのPIN(ユーザー名は何でも可、例:tv)。デバイスにテレビの証明書のインストールが必要です(",
@@ -1113,8 +1115,6 @@ traduzirPainelCom({T:{
 "Esta opção pede o PIN do painel.":"この項目にはパネルのPINが必要です。",
 "Tema trocado.":"テーマを変更しました。",
 "Tamanho do texto gravado (vale ao abrir cada tela).":"文字サイズを保存しました（各画面を開くと反映されます）。",
-"Pilhas automáticas ligadas.":"自動スタックをオンにしました。",
-"Pilhas automáticas desligadas.":"自動スタックをオフにしました。",
 "Aviso de chuva ligado.":"雨の通知をオンにしました。",
 "Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)":"映画を本来のフレームレートで（24 Hz、動きがカクつかない）",
 "Taxa de quadros do filme ligada.":"映画のフレームレート合わせをオンにしました。",

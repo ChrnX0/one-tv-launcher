@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.TamanhoTexto
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

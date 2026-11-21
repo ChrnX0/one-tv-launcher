@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.ElencoTmdb
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.UltimoEpisodio
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

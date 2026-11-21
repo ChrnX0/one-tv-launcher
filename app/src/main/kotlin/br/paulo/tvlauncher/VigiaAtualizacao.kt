@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.weather.AvisoRegras
 import java.io.File
 import java.io.RandomAccessFile
 import java.util.Collections
