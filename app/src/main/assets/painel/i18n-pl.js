@@ -1,5 +1,11 @@
 // Painel em pl (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Ouvir no celular":"Słuchaj na telefonie",
+"Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.":"Kontynuuje tutaj radio lub podcast, który telewizor odtwarzał ostatnio, od tego samego miejsca.",
+"Ouvir aqui":"Słuchaj tutaj",
+"Nada tocou na TV ainda.":"Na telewizorze nic jeszcze nie grało.",
+"Rádio":"Radio",
+"Podcast":"Podcast",
 "ligado":"włączone",
 "desligado":"wyłączone",
 "sem leitura":"brak odczytu",

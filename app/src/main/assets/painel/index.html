@@ -346,6 +346,13 @@
           <button type="button" class="botao-secundario" data-tocando="proxima" aria-label="Próxima">⏭</button>
           <button type="button" class="botao-secundario" id="btnTocando">Atualizar</button>
         </div>
+        <h3>Ouvir no celular</h3>
+        <p id="ouvirCelular" class="aviso">Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.</p>
+        <p id="ouvirCelularNome" hidden><span id="ouvirCelularTipo"></span> <strong id="ouvirCelularTitulo" translate="no"></strong></p>
+        <audio id="audioCelular" controls preload="none" hidden></audio>
+        <div class="barra-acoes">
+          <button type="button" class="botao-primario" id="btnOuvirCelular">Ouvir aqui</button>
+        </div>
       </div>
       <div class="acoes-perigo">
         <button id="btnReiniciarTv" type="button" class="botao-perigo">Reiniciar TV</button>

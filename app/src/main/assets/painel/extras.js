@@ -637,6 +637,23 @@ for (const b of document.querySelectorAll('[data-tocando]')) {
   });
 }
 
+// Ouvir no celular (21/11/2026): toca no celular a rádio ou o episódio que a TV tocou por último, do mesmo ponto.
+$('btnOuvirCelular').addEventListener('click', async () => {
+  const audio = $('audioCelular');
+  try {
+    const o = await chamar('GET', '/api/extras/ouvir');
+    if (o.nada || !o.url) { $('ouvirCelular').textContent = 'Nada tocou na TV ainda.'; return; }
+    $('ouvirCelularTipo').textContent = o.tipo === 'radio' ? 'Rádio' : 'Podcast';
+    $('ouvirCelularTitulo').textContent = o.nome + (o.de ? ' · ' + o.de : '');
+    $('ouvirCelularNome').hidden = false;
+    audio.hidden = false;
+    audio.src = o.url;
+    // Podcast: pula para onde a TV parou assim que o celular souber a duração.
+    if (o.tipo === 'podcast' && o.ms > 0) audio.addEventListener('loadedmetadata', () => { audio.currentTime = o.ms / 1000; }, { once: true });
+    await audio.play();
+  } catch (e) { $('ouvirCelular').textContent = textoErro(e); }
+});
+
 $('btnRecadoLink').addEventListener('click', async () => {
   try {
     const r = await comPin('Recado por link', 'Gerar um link novo (o anterior para de funcionar)', 'Gerar',
