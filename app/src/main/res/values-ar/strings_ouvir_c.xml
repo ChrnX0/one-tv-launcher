@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">الصوت</string>
+    <string name="som_titulo_pod">الصوت · %1$s</string>
+    <string name="som_voz_clara">صوت واضح</string>
+    <string name="som_so_este">لهذا البودكاست فقط</string>
+    <string name="som_abertura">تخطي المقدمة</string>
+    <string name="som_fim">تخطي النهاية</string>
+    <string name="som_segundos">%1$d ث</string>
+    <string name="som_rodape_proprio">هذه الإعدادات خاصة بـ %1$s فقط.</string>
+    <string name="som_rodape_geral">السرعة والصمت والصوت الواضح تسري على كل البودكاست. فعّل \"لهذا البودكاست فقط\" لحفظ إعدادات أخرى لـ %1$s.</string>
+    <string name="som_det">السرعة، صوت واضح، مؤقت</string>
+    <string name="som_det_radio">صوت واضح ومؤقت النوم</string>
+</resources>

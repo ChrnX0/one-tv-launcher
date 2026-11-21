@@ -27,6 +27,7 @@ import br.paulo.tvlauncher.listen.CapaOuvir
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
 import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.MenuSom
 import br.paulo.tvlauncher.listen.PodcastPlayerLogic
 import br.paulo.tvlauncher.listen.Podcasts
 import br.paulo.tvlauncher.player.BarraTempo
@@ -43,7 +44,8 @@ import java.util.Date
  *  - capa grande à esquerda, com a própria capa desfocada e escurecida de fundo;
  *  - à direita: TOCANDO AGORA, o podcast, o título (até 2 linhas), data e duração;
  *  - a barra de tempo larga com o tempo passado, quando termina ("termina às 12:58") e quanto falta;
- *  - os controles numa fileira: −15 s, ⏯ grande, +30 s, velocidade, pular silêncios e timer para dormir;
+ *  - os controles numa fileira: −15 s, ⏯ grande, +30 s, velocidade, Som ([MenuSom]: silêncios, voz clara, ajustes
+ *    deste podcast) e timer para dormir;
  *  - ▼ abre "A seguir": os próximos episódios do mesmo podcast ([PodcastPlayerLogic.aSeguir]); OK toca um deles.
  *
  * Foco em três andares, sem o foco do Android (como a cruz): 0 = barra (◀ ▶ andam 10 s), 1 = controles (◀ ▶ trocam),
@@ -81,7 +83,7 @@ class PodcastPlayerActivity : Activity() {
         const val ANDAR_BARRA = 0; const val ANDAR_BOTOES = 1; const val ANDAR_SEGUIR = 2
     }
 
-    private enum class Acao { VOLTAR, ALTERNAR, AVANCAR, VELOCIDADE, SILENCIO, DORMIR }
+    private enum class Acao { VOLTAR, ALTERNAR, AVANCAR, VELOCIDADE, SOM, DORMIR }
 
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
     private val relogio = object : Runnable {
@@ -291,8 +293,9 @@ class PodcastPlayerActivity : Activity() {
         vistas[Acao.ALTERNAR]?.icone(if (pausado) IconeOuvir.Tipo.CONTINUAR else IconeOuvir.Tipo.PAUSAR)
         vistas[Acao.VOLTAR]?.icone(IconeOuvir.Tipo.VOLTAR)
         vistas[Acao.AVANCAR]?.icone(IconeOuvir.Tipo.AVANCAR)
-        vistas[Acao.VELOCIDADE]?.escrito(PodcastPlayerLogic.rotuloVelocidade(OuvirServico.velocidade(this)))
-        vistas[Acao.SILENCIO]?.apply { icone(IconeOuvir.Tipo.SILENCIO); ligado = OuvirServico.pularSilencio(this@PodcastPlayerActivity) }
+        val ef = OuvirServico.efetivo(this, e.feed)
+        vistas[Acao.VELOCIDADE]?.escrito(PodcastPlayerLogic.rotuloVelocidade(ef.velocidade))
+        vistas[Acao.SOM]?.apply { icone(IconeOuvir.Tipo.OPCOES); ligado = true }
         vistas[Acao.DORMIR]?.apply { icone(IconeOuvir.Tipo.DORMIR); ligado = (s?.dormirAte ?: 0L) > 0L }
 
         carregarFila(e)
@@ -307,7 +310,7 @@ class PodcastPlayerActivity : Activity() {
         val tocando = s?.episodio?.ep?.guid == e.ep.guid
         val pos = if (tocando) s!!.posicaoMs else guardadaMs
         val dur = if (tocando) s!!.duracaoMs else e.ep.duracaoS * 1000L
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, e.feed).velocidade
         barra.valor = if (dur > 0) (pos.toFloat() / dur).coerceIn(0f, 1f) else 0f
         passou.text = PodcastPlayerLogic.tempo(pos)
         falta.text = PodcastPlayerLogic.falta(pos, dur, v)
@@ -327,9 +330,13 @@ class PodcastPlayerActivity : Activity() {
         Acao.VOLTAR -> getString(R.string.ouv_voltar)
         Acao.ALTERNAR -> getString(if (OuvirServico.instancia?.pausado == true) R.string.ouv_continuar else R.string.ouv_pausar)
         Acao.AVANCAR -> getString(R.string.ouv_avancar)
-        Acao.VELOCIDADE -> getString(R.string.pod_velocidade) + " · " + PodcastPlayerLogic.rotuloVelocidade(OuvirServico.velocidade(this))
-        Acao.SILENCIO -> getString(R.string.pod_silencio) + " · " +
-            getString(if (OuvirServico.pularSilencio(this)) R.string.pod_ligado else R.string.pod_desligado)
+        Acao.VELOCIDADE -> getString(R.string.pod_velocidade) + " · " + PodcastPlayerLogic.rotuloVelocidade(OuvirServico.efetivo(this, ep?.feed).velocidade)
+        Acao.SOM -> {
+            val ef = OuvirServico.efetivo(this, ep?.feed)
+            listOfNotNull(getString(R.string.som_titulo),
+                getString(R.string.som_voz_clara).takeIf { ef.vozClara },
+                getString(R.string.pod_silencio).takeIf { ef.pularSilencio }).joinToString(" · ")
+        }
         Acao.DORMIR -> {
             val m = PodcastPlayerLogic.minutosParaDormir(OuvirServico.instancia?.dormirAte ?: 0L, SystemClock.elapsedRealtime())
             getString(R.string.pl_dormir) + " · " + (if (m > 0) getString(R.string.pl_dorme_em, m) else getString(R.string.pod_desligado))
@@ -505,11 +512,11 @@ class PodcastPlayerActivity : Activity() {
             Acao.AVANCAR -> { s?.pular(OuvirServico.AVANCAR_MS); atualizarTempo() }
             Acao.ALTERNAR -> s?.alternar()
             Acao.VELOCIDADE -> {
-                val v = OuvirServico.velocidade(this)
+                val v = OuvirServico.efetivo(this, ep?.feed).velocidade
                 Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { PodcastPlayerLogic.rotuloVelocidade(it) },
                     listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); atualizar() }
             }
-            Acao.SILENCIO -> { s?.definirPularSilencio(!OuvirServico.pularSilencio(this)); atualizar() }
+            Acao.SOM -> MenuSom.abrir(this) { atualizar() }
             Acao.DORMIR -> {
                 val ops = PodcastPlayerLogic.DORMIR_MIN.map { if (it == 0) getString(R.string.pod_desligado).replaceFirstChar { c -> c.titlecase() } else getString(R.string.pl_dormir_min, it) }
                 val atual = PodcastPlayerLogic.minutosParaDormir(s?.dormirAte ?: 0L, SystemClock.elapsedRealtime())

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">ध्वनि</string>
+    <string name="som_titulo_pod">ध्वनि · %1$s</string>
+    <string name="som_voz_clara">साफ़ आवाज़</string>
+    <string name="som_so_este">सिर्फ़ इस पॉडकास्ट के लिए</string>
+    <string name="som_abertura">शुरुआत छोड़ें</string>
+    <string name="som_fim">आख़िरी हिस्सा छोड़ें</string>
+    <string name="som_segundos">%1$d से</string>
+    <string name="som_rodape_proprio">ये सेटिंग सिर्फ़ %1$s के लिए हैं।</string>
+    <string name="som_rodape_geral">गति, चुप्पी और साफ़ आवाज़ सभी पॉडकास्ट पर लागू हैं। %1$s के लिए अलग रखने को \"सिर्फ़ इस पॉडकास्ट के लिए\" चालू करें।</string>
+    <string name="som_det">गति, साफ़ आवाज़, टाइमर</string>
+    <string name="som_det_radio">साफ़ आवाज़ और स्लीप टाइमर</string>
+</resources>

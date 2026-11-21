@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Sound</string>
+    <string name="som_titulo_pod">Sound · %1$s</string>
+    <string name="som_voz_clara">Clear voice</string>
+    <string name="som_so_este">Only for this podcast</string>
+    <string name="som_abertura">Skip the intro</string>
+    <string name="som_fim">Skip the ending</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">These settings are kept only for %1$s.</string>
+    <string name="som_rodape_geral">Speed, silences and clear voice apply to every podcast. Turn on \"Only for this podcast\" to keep different ones for %1$s.</string>
+    <string name="som_det">Speed, clear voice, sleep timer</string>
+    <string name="som_det_radio">Clear voice and sleep timer</string>
+</resources>

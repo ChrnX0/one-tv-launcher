@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Sonido</string>
+    <string name="som_titulo_pod">Sonido · %1$s</string>
+    <string name="som_voz_clara">Voz clara</string>
+    <string name="som_so_este">Solo en este pódcast</string>
+    <string name="som_abertura">Saltar la intro</string>
+    <string name="som_fim">Saltar el final</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">Estos ajustes valen solo para %1$s.</string>
+    <string name="som_rodape_geral">Velocidad, silencios y voz clara valen para todos los pódcasts. Activa \"Solo en este pódcast\" para guardar otros para %1$s.</string>
+    <string name="som_det">Velocidad, voz clara, temporizador</string>
+    <string name="som_det_radio">Voz clara y temporizador</string>
+</resources>

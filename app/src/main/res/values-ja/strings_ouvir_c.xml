@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">サウンド</string>
+    <string name="som_titulo_pod">サウンド · %1$s</string>
+    <string name="som_voz_clara">声をはっきり</string>
+    <string name="som_so_este">このポッドキャストだけ</string>
+    <string name="som_abertura">オープニングを飛ばす</string>
+    <string name="som_fim">エンディングを飛ばす</string>
+    <string name="som_segundos">%1$d 秒</string>
+    <string name="som_rodape_proprio">この設定は %1$s だけに使われます。</string>
+    <string name="som_rodape_geral">速度・無音・声の設定はすべての番組に使われます。%1$s だけ変えるには「このポッドキャストだけ」をオンに。</string>
+    <string name="som_det">速度・声・タイマー</string>
+    <string name="som_det_radio">声をはっきり・スリープタイマー</string>
+</resources>

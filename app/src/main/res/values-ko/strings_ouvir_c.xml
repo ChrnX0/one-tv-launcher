@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">소리</string>
+    <string name="som_titulo_pod">소리 · %1$s</string>
+    <string name="som_voz_clara">또렷한 목소리</string>
+    <string name="som_so_este">이 팟캐스트에만</string>
+    <string name="som_abertura">도입부 건너뛰기</string>
+    <string name="som_fim">끝부분 건너뛰기</string>
+    <string name="som_segundos">%1$d초</string>
+    <string name="som_rodape_proprio">이 설정은 %1$s에만 적용됩니다.</string>
+    <string name="som_rodape_geral">속도, 무음, 또렷한 목소리는 모든 팟캐스트에 적용됩니다. %1$s에 따로 두려면 \"이 팟캐스트에만\"을 켜세요.</string>
+    <string name="som_det">속도, 또렷한 목소리, 타이머</string>
+    <string name="som_det_radio">또렷한 목소리와 취침 타이머</string>
+</resources>

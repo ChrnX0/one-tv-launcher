@@ -14,6 +14,7 @@ import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.MenuSom
 import br.paulo.tvlauncher.listen.PodcastAssuntos
 import br.paulo.tvlauncher.listen.PodcastBusca
 import br.paulo.tvlauncher.listen.PodcastFeed
@@ -204,8 +205,8 @@ class PodcastsActivity : Activity() {
     private fun prateleiraTocando(): CruzOuvir.Prateleira? {
         val s = OuvirServico.instancia ?: return null
         val e = s.episodio ?: return null
-        val v = OuvirServico.velocidade(this)
-        val sil = OuvirServico.pularSilencio(this)
+        val ef = OuvirServico.efetivo(this, e.feed)
+        val v = ef.velocidade
         return CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
             // O player em tela cheia (capa grande, barra de tempo, timer para dormir, "A seguir").
             CruzOuvir.Item("abrir", getString(R.string.pl_abrir), CruzLogica.linhas(e.ep.titulo, getString(R.string.pl_abrir_det)),
@@ -220,17 +221,19 @@ class PodcastsActivity : Activity() {
                 abrir = { OuvirServico.instancia?.pular(OuvirServico.AVANCAR_MS); atualizarTempo() }),
             CruzOuvir.Item("velocidade", getString(R.string.pod_velocidade), getString(R.string.ouv_velocidade_det, rotuloVelocidade(v)),
                 IconeOuvir.Tipo.VELOCIDADE, abrir = { escolherVelocidade() }),
-            CruzOuvir.Item("silencio", getString(R.string.pod_silencio),
-                CruzLogica.linhas(getString(if (sil) R.string.pod_ligado else R.string.pod_desligado).replaceFirstChar { it.titlecase(Locale.getDefault()) },
-                    getString(R.string.pod_silencio_det)),
-                IconeOuvir.Tipo.SILENCIO, abrir = { OuvirServico.instancia?.definirPularSilencio(!sil); montar() }),
+            // Som (21/11/2026): silêncios, voz clara, timer e os ajustes deste podcast num menu só ([MenuSom]).
+            CruzOuvir.Item("som", getString(R.string.som_titulo),
+                CruzLogica.linhas(listOfNotNull(getString(R.string.som_voz_clara).takeIf { ef.vozClara },
+                    getString(R.string.pod_silencio).takeIf { ef.pularSilencio }).joinToString(" · ").ifEmpty { getString(R.string.som_det) },
+                    getString(R.string.som_det)),
+                IconeOuvir.Tipo.OPCOES, abrir = { MenuSom.abrir(this) { montar() } }),
             CruzOuvir.Item("parar", getString(R.string.ra_parar), getString(R.string.ouv_parar_pod_det), IconeOuvir.Tipo.PARAR,
                 abrir = { OuvirServico.instancia?.parar() }),
         ))
     }
 
     private fun escolherVelocidade() {
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, OuvirServico.instancia?.episodio?.feed).velocidade
         Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { rotuloVelocidade(it) },
             listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); montar() }
     }
@@ -246,7 +249,7 @@ class PodcastsActivity : Activity() {
     /** (0..1 ou null, "12:30 de 58:00 · faltam 45 min · 1,2x"). */
     private fun progressoTempo(s: OuvirServico): Pair<Float?, String> {
         val dur = s.duracaoMs; val pos = s.posicaoMs
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, s.episodio?.feed).velocidade
         val texto = listOfNotNull(
             if (dur > 0) getString(R.string.pod_de, tempo(pos), tempo(dur)) else tempo(pos),
             if (dur > pos && dur > 0) BarraTempo.faltam(this, duracaoCurta(((dur - pos) / v).toLong())) else null,
@@ -266,7 +269,7 @@ class PodcastsActivity : Activity() {
     private fun aoMudarSom() {
         if (isDestroyed || !::cruz.isInitialized) return
         val s = OuvirServico.instancia
-        val agora = listOf(s?.episodio?.ep?.guid, s?.pausado, OuvirServico.velocidade(this), OuvirServico.pularSilencio(this))
+        val agora = listOf(s?.episodio?.ep?.guid, s?.pausado, OuvirServico.efetivo(this, s?.episodio?.feed))
         if (agora != visto) {
             // Parou ou trocou de episódio: a posição do anterior foi mandada gravar; relê (na fila, depois da gravação)
             // para "Continuar", "faltam" e "ouvido" saírem certos.

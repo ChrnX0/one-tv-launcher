@@ -20,6 +20,8 @@ import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.MenuSom
+import br.paulo.tvlauncher.listen.PodcastPlayerLogic
 import br.paulo.tvlauncher.listen.Radios
 import br.paulo.tvlauncher.settings.Fontes
 import br.paulo.tvlauncher.weather.Localizacao
@@ -238,6 +240,13 @@ class RadioActivity : Activity() {
 
     // ---------------------------------------------------------------- tela
 
+    /** "Voz clara · dorme em 20 min", ou a explicação do menu quando nada está ligado. */
+    private fun somDetalhe(s: OuvirServico): String {
+        val m = PodcastPlayerLogic.minutosParaDormir(s.dormirAte, android.os.SystemClock.elapsedRealtime())
+        return listOfNotNull(getString(R.string.som_voz_clara).takeIf { OuvirServico.vozClara(this) },
+            m.takeIf { it > 0 }?.let { getString(R.string.pl_dorme_em, it) }).joinToString(" · ").ifEmpty { getString(R.string.som_det_radio) }
+    }
+
     private fun montar(focar: Pair<String, String?>? = null, focarInicio: Boolean = false) {
         val l = ArrayList<CruzOuvir.Prateleira>()
         val s = OuvirServico.instancia
@@ -252,6 +261,9 @@ class RadioActivity : Activity() {
                     if (fav) getString(R.string.ouv_tecla, favoritas.indexOfFirst { it.id == r.id } + 1).takeIf { favoritas.indexOfFirst { it.id == r.id } < 9 }.orEmpty()
                     else getString(R.string.ouv_favoritar_det),
                     IconeOuvir.Tipo.FAVORITAS, abrir = { favoritar(r) }),
+                // Som (21/11/2026): voz clara e timer para dormir, como no player de podcast ([MenuSom]).
+                CruzOuvir.Item("som", getString(R.string.som_titulo), somDetalhe(s), IconeOuvir.Tipo.OPCOES,
+                    abrir = { MenuSom.abrir(this) { montar() } }),
                 CruzOuvir.Item("parar", getString(R.string.ra_parar),
                     getString(if (continuarFora(this)) R.string.ra_parar_det else R.string.ra_parar_det_antigo), IconeOuvir.Tipo.PARAR,
                     abrir = { OuvirServico.instancia?.parar() }),

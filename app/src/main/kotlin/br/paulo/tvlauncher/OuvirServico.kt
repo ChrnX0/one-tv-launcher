@@ -26,6 +26,8 @@ import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import br.paulo.tvlauncher.alarm.TocandoAgora
+import br.paulo.tvlauncher.input.EfeitosSom
+import br.paulo.tvlauncher.listen.AjustesPodcast
 import br.paulo.tvlauncher.listen.OuvirEstado
 import br.paulo.tvlauncher.listen.PodcastFeed
 import br.paulo.tvlauncher.listen.Podcasts
@@ -90,6 +92,20 @@ class OuvirServico : Service() {
         private const val CHAVE_SILENCIO = "pular_silencio"
         fun velocidade(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getFloat(CHAVE_VELOCIDADE, 1f).takeIf { it in VELOCIDADES } ?: 1f
         fun pularSilencio(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_SILENCIO, false)
+        private const val CHAVE_VOZ = "voz_clara"
+        /** Voz clara (equalizador da fala + compressor, o mesmo efeito do vídeo): vale para a rádio e para os podcasts sem ajuste próprio. */
+        fun vozClara(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_VOZ, false)
+        /** O ajuste próprio do podcast [feed] ([AjustesPodcast]), ou null (vale o geral). */
+        fun ajuste(ctx: Context, feed: String): AjustesPodcast.Ajuste? =
+            AjustesPodcast.deJson(ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getString(AjustesPodcast.chave(feed), null))
+        fun gravarAjuste(ctx: Context, feed: String, a: AjustesPodcast.Ajuste?) {
+            val ed = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+            if (a == null || a.vazio) ed.remove(AjustesPodcast.chave(feed)) else ed.putString(AjustesPodcast.chave(feed), AjustesPodcast.paraJson(a))
+            ed.apply()
+        }
+        /** O que vale para o podcast [feed]: o ajuste dele ou o geral. */
+        fun efetivo(ctx: Context, feed: String?): AjustesPodcast.Efetivo =
+            AjustesPodcast.efetivo(feed?.let { ajuste(ctx, it) }, velocidade(ctx), vozClara(ctx), pularSilencio(ctx))
 
         /** [tocarEpisodio] com isto = de onde parou (o serviço lê a posição gravada, depois de gravar a do anterior). */
         const val RETOMAR = -1L
@@ -129,6 +145,8 @@ class OuvirServico : Service() {
 
     private val ui = Handler(Looper.getMainLooper())
     private var player: ExoPlayer? = null
+    /** Voz clara no som do Ouvir (o efeito fica preso à sessão de áudio do player da vez). */
+    private val efeitos = EfeitosSom()
     private var sessao: MediaSession? = null
     /** A rádio tocando (ou pausada), ou null. */
     var radio: Radios.Radio? = null
@@ -228,12 +246,13 @@ class OuvirServico : Service() {
     fun tocar(r: Radios.Radio) {
         if (radio?.id == r.id && player != null) { continuar(); return }
         pedidoEp++   // episódio pedido e ainda não começado não passa por cima da rádio
+        // O timer de um podcast não passa para a rádio (ela pausava sozinha sem nada na tela dizendo por quê, debug
+        // 20/11/2026). Trocar de uma rádio para outra mantém o timer: ele foi marcado na tela da rádio (21/11/2026).
+        if (episodio != null || radio == null) { ui.removeCallbacks(dormir); dormirAte = 0L }
         largarAtual()
-        // O timer para dormir é do player de podcast: sem isto a rádio pausava sozinha depois, sem nada na tela dizendo
-        // por quê (debug 20/11/2026).
-        ui.removeCallbacks(dormir); dormirAte = 0L
         radio = r; musica = ""
         player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
+        aplicarEfeito()
         garantirSessao()
         primeiroPlano(r.nome, "")
         publicar()
@@ -277,13 +296,18 @@ class OuvirServico : Service() {
     private fun comecarEp(e: EpisodioTocando, inicioMs: Long) {
         episodio = e
         if (e.ep.video) Log.w(TAG, "episódio em vídeo tocado só como áudio: ${e.ep.titulo}")   // a tela abre o vídeo no player
+        val ef = efetivo(this, e.feed)
         player = novoPlayer(e.ep.url, fala = true).also { p ->
-            p.setPlaybackSpeed(velocidade(this))
-            p.skipSilenceEnabled = pularSilencio(this)
-            if (inicioMs > 0) p.seekTo(inicioMs)
+            p.setPlaybackSpeed(ef.velocidade)
+            p.skipSilenceEnabled = ef.pularSilencio
+            // Começando do zero, pula a abertura que o dono marcou para este podcast.
+            val inicio = AjustesPodcast.inicio(inicioMs, ef.aberturaS, e.ep.duracaoS * 1000L)
+            if (inicio > 0) p.seekTo(inicio)
             p.prepare(); p.playWhenReady = true
         }
+        aplicarEfeito()
         ui.removeCallbacks(salvarPeriodico); ui.postDelayed(salvarPeriodico, SALVAR_MS)
+        ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
         garantirSessao()
         primeiroPlano(e.podcast, e.ep.titulo)
         publicar()
@@ -378,16 +402,64 @@ class OuvirServico : Service() {
 
     fun irPara(ms: Long) { val p = player ?: return; if (episodio != null) { p.seekTo(ms.coerceAtLeast(0)); publicar() } }
 
+    /**
+     * Velocidade, pular silêncios e voz clara mudados no player: com o podcast tocando que tem ajuste próprio, muda o
+     * ajuste dele; senão, o geral do Ouvir (vale para todos os outros).
+     */
     fun definirVelocidade(v: Float) {
         if (v !in VELOCIDADES) return
-        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(CHAVE_VELOCIDADE, v).apply()
+        if (!mudarProprio { it.copy(velocidade = v) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(CHAVE_VELOCIDADE, v).apply()
         if (episodio != null) player?.setPlaybackSpeed(v)
         publicar()
     }
 
     fun definirPularSilencio(sim: Boolean) {
-        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_SILENCIO, sim).apply()
+        if (!mudarProprio { it.copy(pularSilencio = sim) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_SILENCIO, sim).apply()
         if (episodio != null) player?.skipSilenceEnabled = sim
+        publicar()
+    }
+
+    fun definirVozClara(sim: Boolean) {
+        if (!mudarProprio { it.copy(vozClara = sim) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_VOZ, sim).apply()
+        aplicarEfeito()
+        publicar()
+    }
+
+    /** O podcast tocando tem ajuste próprio: aplica [f] nele e devolve true. Sem ajuste próprio (ou rádio): false. */
+    private fun mudarProprio(f: (AjustesPodcast.Ajuste) -> AjustesPodcast.Ajuste): Boolean {
+        val feed = episodio?.feed ?: return false
+        val a = ajuste(this, feed) ?: return false
+        gravarAjuste(this, feed, f(a)); return true
+    }
+
+    /**
+     * Liga ou desliga o ajuste próprio do podcast tocando. Ligar copia o que vale agora (o geral), para nada mudar de
+     * repente; desligar volta ao geral na hora.
+     */
+    fun definirProprio(sim: Boolean) {
+        val e = episodio ?: return
+        if (sim) {
+            if (ajuste(this, e.feed) != null) return
+            gravarAjuste(this, e.feed, AjustesPodcast.Ajuste(velocidade(this), vozClara(this), pularSilencio(this)))
+        } else gravarAjuste(this, e.feed, null)
+        reaplicar()
+    }
+
+    /** Muda abertura/fim do podcast tocando (cria o ajuste próprio se não houver). */
+    fun definirAberturaFim(aberturaS: Int? = null, fimS: Int? = null) {
+        val e = episodio ?: return
+        val a = ajuste(this, e.feed) ?: AjustesPodcast.Ajuste(velocidade(this), vozClara(this), pularSilencio(this))
+        gravarAjuste(this, e.feed, a.copy(aberturaS = aberturaS ?: a.aberturaS, fimS = fimS ?: a.fimS))
+        reaplicar()
+    }
+
+    /** Aplica de novo no player tudo o que vale para o podcast tocando. */
+    private fun reaplicar() {
+        val e = episodio ?: return
+        val ef = efetivo(this, e.feed)
+        player?.setPlaybackSpeed(ef.velocidade); player?.skipSilenceEnabled = ef.pularSilencio
+        aplicarEfeito()
+        ui.removeCallbacks(vigiaFim); if (ef.fimS > 0) ui.postDelayed(vigiaFim, 1_000)
         publicar()
     }
 
@@ -452,7 +524,27 @@ class OuvirServico : Service() {
         stopSelf(ultimoInicio)
     }
 
-    private fun soltarPlayer() { player?.let { runCatching { it.release() } }; player = null }
+    private fun soltarPlayer() { efeitos.soltar(); ui.removeCallbacks(vigiaFim); player?.let { runCatching { it.release() } }; player = null }
+
+    /** Liga ou solta a voz clara no player da vez, conforme o ajuste do podcast (ou o geral, na rádio). */
+    private fun aplicarEfeito() {
+        val p = player ?: return
+        val voz = episodio?.let { efetivo(this, it.feed).vozClara } ?: vozClara(this)
+        // Voz clara = equalizador da fala + compressor (como o Voice Boost do Overcast): a fala sobe, o grito não estoura.
+        efeitos.aplicar(p.audioSessionId, volumeIgual = voz, vozClara = voz)
+    }
+
+    /** Podcast com "pular o fim": confere a cada segundo se já chegou nele (aí conta como ouvido e para). */
+    private val vigiaFim = object : Runnable {
+        override fun run() {
+            val e = episodio ?: return
+            val fim = efetivo(this@OuvirServico, e.feed).fimS
+            if (fim <= 0) return
+            val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
+            if (tocando && AjustesPodcast.noFim(posicaoMs, dur, fim)) { Log.i(TAG, "pulei o fim (${fim}s)"); terminouEpisodio(); return }
+            ui.postDelayed(this, 1_000)
+        }
+    }
 
     // ---------------------------------------------------------------- estado para fora
 

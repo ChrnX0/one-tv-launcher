@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Son</string>
+    <string name="som_titulo_pod">Son · %1$s</string>
+    <string name="som_voz_clara">Voix claire</string>
+    <string name="som_so_este">Pour ce podcast seulement</string>
+    <string name="som_abertura">Passer l\'intro</string>
+    <string name="som_fim">Passer la fin</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">Ces réglages ne valent que pour %1$s.</string>
+    <string name="som_rodape_geral">Vitesse, silences et voix claire valent pour tous les podcasts. Activez « Pour ce podcast seulement » pour en garder d\'autres pour %1$s.</string>
+    <string name="som_det">Vitesse, voix claire, minuterie</string>
+    <string name="som_det_radio">Voix claire et minuterie</string>
+</resources>
