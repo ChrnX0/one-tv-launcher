@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.settings
 
+import br.paulo.tvlauncher.AppIdentity
 import android.content.Context
 import android.content.Intent
 import br.paulo.tvlauncher.Atualizador
@@ -103,6 +104,7 @@ import java.io.File
  * Conferência (14/11/2026):
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
+ *  - tela --es classe <NomeActivity>   abre qualquer tela deste app (teste de telas; o am start só abre as exportadas)
  *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
  * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
  *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
@@ -138,6 +140,7 @@ object ComandosExtras {
         "teclas_tela" -> abrir(ctx, TesteTeclasActivity::class.java)
         "calibracao" -> abrir(ctx, CalibracaoActivity::class.java)
         "extras" -> abrir(ctx, ExtrasActivity::class.java)
+        "tela" -> abrirTela(ctx, i.getStringExtra("classe"))
         "diario_dns" -> DiarioDns.resumo(ctx, i.getStringExtra("dia") ?: DiarioDns.diaDe(System.currentTimeMillis()))
         "wol_mac" -> if (AcordarPc.guardarMac(ctx, i.getStringExtra("mac") ?: "")) "ok" else "MAC inválido"
         // Turma do Discord na tela Jogos (17/11/2026): ID do servidor e webhook do "Chamar a turma" ("" apaga).
@@ -318,6 +321,19 @@ object ComandosExtras {
             catch (e: Exception) { android.util.Log.w("TvLauncher.Tecla", "tecla falsa falhou: $e") }
         }, inicio + ev.emMs)
         return "${android.view.KeyEvent.keyCodeToString(codigo)} por $ms ms"
+    }
+
+    /**
+     * Teste de telas pelo adb (21/11/2026, refatoração C). O `am start` do shell só abre telas exportadas (2 de 44);
+     * este comando abre qualquer tela DESTE app por dentro do processo. Só nome simples de classe e só o que o
+     * manifesto declara como tela nossa: nada de fora, nada de caminho.
+     */
+    private fun abrirTela(ctx: Context, classe: String?): String {
+        val nome = classe?.takeIf { Regex("[A-Za-z0-9_]+").matches(it) } ?: return "falta --es classe <NomeActivity>"
+        val comp = android.content.ComponentName(ctx.packageName, "${AppIdentity.NAMESPACE}.$nome")
+        runCatching { ctx.packageManager.getActivityInfo(comp, 0) }.getOrNull() ?: return "não é tela deste app: $nome"
+        ctx.startActivity(Intent().setComponent(comp).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        return "aberto"
     }
 
     private fun abrir(ctx: Context, c: Class<*>): String {
