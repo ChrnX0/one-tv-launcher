@@ -3,6 +3,7 @@ package br.paulo.tvlauncher
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
 import java.io.File
 
 /**
