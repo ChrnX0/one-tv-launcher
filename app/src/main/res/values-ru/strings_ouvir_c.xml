@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Скорость, паузы и чёткий голос действуют для всех подкастов. Включите «Только для этого подкаста», чтобы сохранить другие для %1$s.</string>
     <string name="som_det">Скорость, чёткий голос, таймер</string>
     <string name="som_det_radio">Чёткий голос и таймер сна</string>
+    <string name="cap_titulo">Главы</string>
+    <string name="cap_de">Глава %1$d из %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ на 10 с · OK: главы</string>
 </resources>

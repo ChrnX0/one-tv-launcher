@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Prędkość, cisza i wyraźny głos dotyczą wszystkich podcastów. Włącz \"Tylko dla tego podcastu\", aby zapisać inne dla %1$s.</string>
     <string name="som_det">Prędkość, wyraźny głos, minutnik</string>
     <string name="som_det_radio">Wyraźny głos i wyłącznik czasowy</string>
+    <string name="cap_titulo">Rozdziały</string>
+    <string name="cap_de">Rozdział %1$d z %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ przesuwają o 10 s · OK: rozdziały</string>
 </resources>

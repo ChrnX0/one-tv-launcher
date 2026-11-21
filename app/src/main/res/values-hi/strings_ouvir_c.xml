@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">गति, चुप्पी और साफ़ आवाज़ सभी पॉडकास्ट पर लागू हैं। %1$s के लिए अलग रखने को \"सिर्फ़ इस पॉडकास्ट के लिए\" चालू करें।</string>
     <string name="som_det">गति, साफ़ आवाज़, टाइमर</string>
     <string name="som_det_radio">साफ़ आवाज़ और स्लीप टाइमर</string>
+    <string name="cap_titulo">अध्याय</string>
+    <string name="cap_de">अध्याय %1$d / %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ 10 से आगे-पीछे · OK: अध्याय</string>
 </resources>

@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Velocidad, silencios y voz clara valen para todos los pódcasts. Activa \"Solo en este pódcast\" para guardar otros para %1$s.</string>
     <string name="som_det">Velocidad, voz clara, temporizador</string>
     <string name="som_det_radio">Voz clara y temporizador</string>
+    <string name="cap_titulo">Capítulos</string>
+    <string name="cap_de">Capítulo %1$d de %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ avanzan 10 s · OK: capítulos</string>
 </resources>

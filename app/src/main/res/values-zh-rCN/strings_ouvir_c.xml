@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">速度、静音和人声清晰对所有播客生效。打开“仅此播客”可为 %1$s 单独保存。</string>
     <string name="som_det">速度、人声、定时</string>
     <string name="som_det_radio">人声清晰和睡眠定时</string>
+    <string name="cap_titulo">章节</string>
+    <string name="cap_de">第 %1$d 章，共 %2$d 章</string>
+    <string name="cap_barra_dica">◀ ▶ 移动 10 秒 · OK：章节</string>
 </resources>

@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Velocidade, silêncios e voz clara valem para todos os podcasts. Ligue \"Só neste podcast\" para guardar outros para %1$s.</string>
     <string name="som_det">Velocidade, voz clara, timer</string>
     <string name="som_det_radio">Voz clara e timer para dormir</string>
+    <string name="cap_titulo">Capítulos</string>
+    <string name="cap_de">Capítulo %1$d de %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ andam 10 s · OK: capítulos</string>
 </resources>

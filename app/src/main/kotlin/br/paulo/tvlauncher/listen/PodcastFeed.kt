@@ -98,6 +98,14 @@ object PodcastFeed {
                                 p.getAttributeValue(null, "language").orEmpty()))
                         }
                         n == "podcast:chapters" && e != null -> e["capitulos"] = p.getAttributeValue(null, "url").orEmpty().trim()
+                        // Capítulos Podlove dentro do próprio feed (<psc:chapter start="00:12:30" title="..."/>), comuns
+                        // em podcasts europeus e brasileiros feitos no Podlove: guardados como linhas "início\ttítulo".
+                        n == "psc:chapter" && e != null -> {
+                            val ini = p.getAttributeValue(null, "start").orEmpty().trim()
+                            val tit = p.getAttributeValue(null, "title").orEmpty().replace('\t', ' ').replace('\n', ' ').trim().take(120)
+                            val atual = e["psc"].orEmpty()
+                            if (ini.isNotEmpty() && tit.isNotEmpty() && atual.count { it == '\n' } < Capitulos.MAX) e["psc"] = atual + ini + "\t" + tit + "\n"
+                        }
                         n == "media:content" && e != null && e["url"].isNullOrEmpty() -> {
                             // Alguns feeds só trazem media:content (Media RSS) em vez de enclosure.
                             val u = p.getAttributeValue(null, "url").orEmpty().trim()
@@ -168,7 +176,8 @@ object PodcastFeed {
             m["capa"].orEmpty().takeIf { urlValida(it) }.orEmpty(),
             m["itunes:explicit"]?.let { simExplicito(it) } ?: canalExplicito,
             m["itunes:season"]?.trim()?.toIntOrNull() ?: 0, m["itunes:episode"]?.trim()?.toIntOrNull() ?: 0,
-            trs.take(5), m["capitulos"].orEmpty().takeIf { urlValida(it) }.orEmpty())
+            trs.take(5), m["capitulos"].orEmpty().takeIf { urlValida(it) }
+                ?: m["psc"]?.takeIf { it.isNotBlank() }?.let { Capitulos.PSC + it.trimEnd() }.orEmpty())
     }
 
     // ---------------------------------------------------------------- entrada protegida

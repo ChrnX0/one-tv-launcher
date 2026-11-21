@@ -24,6 +24,7 @@ import android.widget.TextView
 import br.paulo.tvlauncher.home.HomeCruz
 import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.Capitulos
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
 import br.paulo.tvlauncher.listen.PodcastFeed
@@ -124,6 +125,9 @@ class PodcastPlayerActivity : Activity() {
     private var esperado: String? = null
     private val desistir = Runnable { if (!jaTocou) finish() }
     private var tituloVisto = ""
+    /** Data, temporada e duração; o capítulo de agora entra depois, em [atualizarTempo]. */
+    private var infoBase = ""
+    private var capVisto = -2
 
     private val dm by lazy { resources.displayMetrics }
     private fun dp(v: Float) = v * dm.density
@@ -275,11 +279,12 @@ class PodcastPlayerActivity : Activity() {
             tituloVisto = e.ep.titulo
             titulo.text = caber(e.ep.titulo, titulo, dpi(TEXTO_L), 2)
         }
-        info.text = listOfNotNull(
+        infoBase = listOfNotNull(
             e.ep.dataMs.takeIf { it > 0 }?.let { java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(Date(it)) },
             e.ep.temporada.takeIf { it > 0 && e.ep.numero > 0 }?.let { getString(R.string.pod_temp_ep, it, e.ep.numero) },
             e.ep.duracaoS.takeIf { it > 0 }?.let { getString(R.string.pod_minutos, maxOf(1, (it + 59) / 60)) },
         ).joinToString(" · ")
+        info.text = infoBase; capVisto = -2
         val endereco = e.capaPodcast.ifEmpty { e.ep.capa }
         capa.monograma = CapaOuvir.iniciais(e.podcast)
         capa.cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST)
@@ -312,6 +317,15 @@ class PodcastPlayerActivity : Activity() {
         val dur = if (tocando) s!!.duracaoMs else e.ep.duracaoS * 1000L
         val v = OuvirServico.efetivo(this, e.feed).velocidade
         barra.valor = if (dur > 0) (pos.toFloat() / dur).coerceIn(0f, 1f) else 0f
+        // Capítulos (21/11/2026): marcas na barra e o capítulo de agora ao lado da data ("Capítulo 3 de 8 · Entrevista").
+        val caps = if (tocando) s!!.capitulos else emptyList()
+        barra.marcas = if (dur > 0 && caps.isNotEmpty()) FloatArray(caps.size) { caps[it].inicioMs.toFloat() / dur } else FloatArray(0)
+        val ci = Capitulos.atual(caps, pos)
+        if (ci != capVisto) {
+            capVisto = ci
+            info.text = if (ci >= 0) caber(listOf(infoBase, getString(R.string.cap_de, ci + 1, caps.size), caps[ci].titulo)
+                .filter { it.isNotEmpty() }.joinToString(" · "), info, dpi(TEXTO_L), 1) else infoBase
+        }
         passou.text = PodcastPlayerLogic.tempo(pos)
         falta.text = PodcastPlayerLogic.falta(pos, dur, v)
         val fim = PodcastPlayerLogic.terminaEm(System.currentTimeMillis(), pos, dur, v)
@@ -428,7 +442,7 @@ class PodcastPlayerActivity : Activity() {
         for ((i, a) in Acao.entries.withIndex()) vistas[a]?.focado = andar == ANDAR_BOTOES && i == botao
         rotuloBotao.text = when (andar) {
             ANDAR_BOTOES -> rotuloDoBotao(Acao.entries[botao])
-            ANDAR_BARRA -> getString(R.string.pl_barra_dica)
+            ANDAR_BARRA -> getString(if (OuvirServico.instancia?.capitulos.isNullOrEmpty()) R.string.pl_barra_dica else R.string.cap_barra_dica)
             else -> ""
         }
         for (i in 0 until fila.childCount) {
@@ -486,7 +500,8 @@ class PodcastPlayerActivity : Activity() {
                     sv.irPara(PodcastPlayerLogic.andar(sv.posicaoMs, d * vezes, sv.duracaoMs)); atualizarTempo()
                 }
                 KeyEvent.KEYCODE_DPAD_DOWN -> { andar = ANDAR_BOTOES; desenharFoco(true) }
-                else -> if (ok && e.repeatCount == 0) s?.alternar()   // segurar OK não liga/desliga sem parar
+                // Com capítulos, OK na barra abre a lista deles; sem, pausa/continua. Segurar OK não repete.
+                else -> if (ok && e.repeatCount == 0) { if (s?.capitulos.isNullOrEmpty()) s?.alternar() else escolherCapitulo() }
             }
             ANDAR_BOTOES -> when (e.keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> if (botao > 0) { botao--; desenharFoco(true) }
@@ -527,6 +542,17 @@ class PodcastPlayerActivity : Activity() {
         }
     }
 
+    /** A lista dos capítulos, com o tempo de cada um à direita e o de agora marcado. */
+    private fun escolherCapitulo() {
+        val s = OuvirServico.instancia ?: return
+        val c = s.capitulos; if (c.isEmpty()) return
+        val i = Capitulos.atual(c, s.posicaoMs)
+        Estilo.lista(this, getString(R.string.cap_titulo), c.map { it.titulo }, if (i >= 0) listOf(i) else emptyList(),
+            valores = c.map { PodcastPlayerLogic.tempo(it.inicioMs) }) { j ->
+            OuvirServico.instancia?.irPara(c[j].inicioMs); atualizarTempo()
+        }
+    }
+
     private fun tocarDaFila() {
         val x = aSeguir.getOrNull(naFila) ?: return
         val e = ep ?: return
@@ -544,6 +570,10 @@ class PodcastPlayerActivity : Activity() {
             set(v) { if (field != v) { field = v; invalidate() } }
         var focada = false
             set(v) { if (field != v) { field = v; invalidate() } }
+        /** Onde começa cada capítulo (0..1): um corte fino no trilho. */
+        var marcas = FloatArray(0)
+            set(v) { if (!field.contentEquals(v)) { field = v; invalidate() } }
+        private val corte = Paint().apply { color = 0xFF121528.toInt() }
         private val trilho = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x40FFFFFF }
         private val cheio = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.ACENTO }
         private val pino = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.TEXTO }
@@ -554,6 +584,7 @@ class PodcastPlayerActivity : Activity() {
             r.set(0f, y - a / 2, width.toFloat(), y + a / 2); c.drawRoundRect(r, a / 2, a / 2, trilho)
             val x = width * valor
             if (valor > 0f) { r.right = maxOf(a, x); c.drawRoundRect(r, a / 2, a / 2, cheio) }
+            for (m in marcas) if (m > 0.005f && m < 0.995f) { val mx = width * m; c.drawRect(mx - dp(1.5f), y - a, mx + dp(1.5f), y + a, corte) }
             if (focada) c.drawCircle(x.coerceIn(dp(10f), width - dp(10f)), y, dp(10f), pino)
         }
     }

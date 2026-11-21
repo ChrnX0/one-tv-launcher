@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Velocità, silenzi e voce chiara valgono per tutti i podcast. Attiva \"Solo per questo podcast\" per tenerne altri per %1$s.</string>
     <string name="som_det">Velocità, voce chiara, timer</string>
     <string name="som_det_radio">Voce chiara e timer</string>
+    <string name="cap_titulo">Capitoli</string>
+    <string name="cap_de">Capitolo %1$d di %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ spostano di 10 s · OK: capitoli</string>
 </resources>

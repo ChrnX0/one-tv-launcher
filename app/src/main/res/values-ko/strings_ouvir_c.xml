@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">속도, 무음, 또렷한 목소리는 모든 팟캐스트에 적용됩니다. %1$s에 따로 두려면 \"이 팟캐스트에만\"을 켜세요.</string>
     <string name="som_det">속도, 또렷한 목소리, 타이머</string>
     <string name="som_det_radio">또렷한 목소리와 취침 타이머</string>
+    <string name="cap_titulo">챕터</string>
+    <string name="cap_de">챕터 %1$d/%2$d</string>
+    <string name="cap_barra_dica">◀ ▶ 10초 이동 · OK: 챕터</string>
 </resources>

@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Hız, sessizlik ve net ses tüm podcast\'ler için geçerli. %1$s için farklı ayar tutmak üzere \"Yalnızca bu podcast için\"i açın.</string>
     <string name="som_det">Hız, net ses, zamanlayıcı</string>
     <string name="som_det_radio">Net ses ve uyku zamanlayıcısı</string>
+    <string name="cap_titulo">Bölümler</string>
+    <string name="cap_de">Bölüm %1$d / %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ 10 sn ilerletir · OK: bölümler</string>
 </resources>

@@ -28,6 +28,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import br.paulo.tvlauncher.alarm.TocandoAgora
 import br.paulo.tvlauncher.input.EfeitosSom
 import br.paulo.tvlauncher.listen.AjustesPodcast
+import br.paulo.tvlauncher.listen.Capitulos
 import br.paulo.tvlauncher.listen.OuvirEstado
 import br.paulo.tvlauncher.listen.PodcastFeed
 import br.paulo.tvlauncher.listen.Podcasts
@@ -308,9 +309,36 @@ class OuvirServico : Service() {
         aplicarEfeito()
         ui.removeCallbacks(salvarPeriodico); ui.postDelayed(salvarPeriodico, SALVAR_MS)
         ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
+        carregarCapitulos(e)
         garantirSessao()
         primeiroPlano(e.podcast, e.ep.titulo)
         publicar()
+    }
+
+    /** Os capítulos do episódio tocando ([Capitulos]); vazio = o episódio não tem (ou ainda está baixando). */
+    @Volatile var capitulos: List<Capitulos.Capitulo> = emptyList()
+        private set
+
+    /** Capítulos: os do feed (Podlove) na hora; os do JSON (Podcasting 2.0) baixados fora da thread da tela. */
+    private fun carregarCapitulos(e: EpisodioTocando) {
+        val campo = e.ep.capitulos
+        capitulos = Capitulos.doCampo(campo)
+        if (!Capitulos.precisaBaixar(campo)) return
+        val guid = e.ep.guid
+        Fundo.rodar("capitulos") {
+            // O endereço vem do feed (de fora): apontando para a própria rede da casa, não baixa.
+            val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(campo).host).toList() }.getOrNull()
+            if (ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }) return@rodar
+            val c = Capitulos.doJson(runCatching { Http.getText(campo, maxBytes = 512 * 1024, followRedirects = false) }.getOrNull())
+            ui.post { if (episodio?.ep?.guid == guid && c.isNotEmpty()) { capitulos = c; publicar() } }
+        }
+    }
+
+    /** Vai para o próximo capítulo (+1) ou volta ao começo deste/anterior (-1). Sem capítulos, não faz nada. */
+    fun irCapitulo(delta: Int) {
+        val c = capitulos; if (c.isEmpty() || episodio == null) return
+        val alvo = if (delta > 0) Capitulos.proximo(c, posicaoMs) else Capitulos.anterior(c, posicaoMs)
+        alvo?.let { irPara(it) }
     }
 
     /** Antes de trocar de rádio/episódio: grava onde o episódio parou e solta o player. */
@@ -318,7 +346,7 @@ class OuvirServico : Service() {
         if (episodio != null) salvarPosicao()
         ui.removeCallbacks(salvarPeriodico)
         soltarPlayer()
-        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L
+        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L; capitulos = emptyList()
     }
 
     private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {
@@ -580,7 +608,8 @@ class OuvirServico : Service() {
     private fun estadoSessao(estado: Int): PlaybackState {
         val ep = episodio != null
         val acoes = PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or
-            (if (ep) PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_REWIND else 0L)
+            (if (ep) PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_REWIND else 0L) or
+            (if (ep && capitulos.isNotEmpty()) PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS else 0L)
         val vel = if (estado == PlaybackState.STATE_PLAYING) (if (ep) player?.playbackParameters?.speed ?: 1f else 1f) else 0f
         return PlaybackState.Builder().setActions(acoes)
             .setState(estado, if (ep) posicaoMs else PlaybackState.PLAYBACK_POSITION_UNKNOWN, vel).build()
@@ -606,6 +635,9 @@ class OuvirServico : Service() {
                 override fun onFastForward() = pular(AVANCAR_MS)
                 override fun onRewind() = pular(-VOLTAR_MS)
                 override fun onSeekTo(pos: Long) = irPara(pos)
+                // ⏭ ⏮ (controles que têm): próximo capítulo / começo do capítulo.
+                override fun onSkipToNext() = irCapitulo(1)
+                override fun onSkipToPrevious() = irCapitulo(-1)
             }, ui)
             sessao = nova
         }

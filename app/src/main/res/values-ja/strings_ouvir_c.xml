@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">速度・無音・声の設定はすべての番組に使われます。%1$s だけ変えるには「このポッドキャストだけ」をオンに。</string>
     <string name="som_det">速度・声・タイマー</string>
     <string name="som_det_radio">声をはっきり・スリープタイマー</string>
+    <string name="cap_titulo">チャプター</string>
+    <string name="cap_de">チャプター %1$d/%2$d</string>
+    <string name="cap_barra_dica">◀ ▶ で10秒移動 · OK：チャプター</string>
 </resources>

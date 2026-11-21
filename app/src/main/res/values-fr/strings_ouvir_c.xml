@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Vitesse, silences et voix claire valent pour tous les podcasts. Activez « Pour ce podcast seulement » pour en garder d\'autres pour %1$s.</string>
     <string name="som_det">Vitesse, voix claire, minuterie</string>
     <string name="som_det_radio">Voix claire et minuterie</string>
+    <string name="cap_titulo">Chapitres</string>
+    <string name="cap_de">Chapitre %1$d sur %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ avancent de 10 s · OK : chapitres</string>
 </resources>

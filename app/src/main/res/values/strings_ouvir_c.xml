@@ -12,4 +12,7 @@
     <string name="som_rodape_geral">Speed, silences and clear voice apply to every podcast. Turn on \"Only for this podcast\" to keep different ones for %1$s.</string>
     <string name="som_det">Speed, clear voice, sleep timer</string>
     <string name="som_det_radio">Clear voice and sleep timer</string>
+    <string name="cap_titulo">Chapters</string>
+    <string name="cap_de">Chapter %1$d of %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ move 10 s · OK: chapters</string>
 </resources>
