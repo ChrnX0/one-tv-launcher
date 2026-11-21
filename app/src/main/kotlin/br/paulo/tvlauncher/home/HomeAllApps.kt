@@ -372,6 +372,7 @@ internal fun MainActivity.mudarSobDemanda(pacote: String, ligar: Boolean) {
 internal fun MainActivity.avisarOculto() = AvisoTv.rapido(this, getString(R.string.oc_aviso_titulo), getString(R.string.oc_aviso))
 
 internal fun MainActivity.abrir(pacote: String) {
+    if (todosAbertos) cruz?.marcarAberto("app:$pacote")   // voltando, o foco da cruz fica neste app (não em "Todos os apps")
     if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
     // Congelado sob demanda (OnDemandTv): descongela, espera a tela dele e abre; volta a congelar depois de usado.
     if (OnDemandTv.marked(this, pacote)) { OnDemandTv.open(this, pacote) { if (!todosAbertos) cruz?.naoAbriu() }; contarAbertura(pacote); return }
