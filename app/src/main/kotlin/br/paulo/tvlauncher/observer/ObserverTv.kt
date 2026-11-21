@@ -379,8 +379,14 @@ object ObserverTv {
     // ---------------------------------------------------------------- recados (para o rosto do Observador, fase do mascote)
 
     /** Os recados que valem agora, do mais novo ao mais velho. Quem mostra escolhe a frase pelo [ObserverCore.Note.kind]. */
-    fun notes(ctx: Context): List<ObserverCore.Note> =
-        ObserverCore.readNotes(ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("notes", null), System.currentTimeMillis())
+    fun notes(ctx: Context): List<ObserverCore.Note> {
+        val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        // Rede de segurança do dropCleared: recado de um estado que não está mais ativo não aparece (cobre a fila gravada
+        // por uma versão anterior, que não tirava o recado quando o estado acabava).
+        val ativos = p.getString("active", "").orEmpty().split(',').toSet()
+        return ObserverCore.readNotes(p.getString("notes", null), System.currentTimeMillis())
+            .filter { it.step != ObserverCore.Step.OBSERVED || it.kind.name in ativos }
+    }
 
     /** O rosto chama depois de mostrar um recado: ele não volta, e um novo do mesmo tipo pode entrar. */
     @Synchronized fun markSeen(ctx: Context, id: String) {
