@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.settings.FiltroNoturno
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

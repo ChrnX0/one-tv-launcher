@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverCore.Signal
-import br.paulo.tvlauncher.ObserverMorning.Change
+import br.paulo.tvlauncher.observer.ObserverCore.Signal
+import br.paulo.tvlauncher.observer.ObserverMorning
+import br.paulo.tvlauncher.observer.ObserverMorning.Change
+import br.paulo.tvlauncher.player.item
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

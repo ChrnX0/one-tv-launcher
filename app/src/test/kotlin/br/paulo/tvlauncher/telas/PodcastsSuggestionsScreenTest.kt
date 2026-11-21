@@ -1,8 +1,9 @@
 package br.paulo.tvlauncher.telas
 
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.PodcastStarter
 import br.paulo.tvlauncher.PodcastsActivity
+import br.paulo.tvlauncher.listen.PodcastStarter
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -14,7 +15,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.util.concurrent.TimeUnit
 
 /**
  * A tela de Podcasts de quem ainda não segue nada (18/11/2026): abre na prateleira "Sugestões", com os podcasts que

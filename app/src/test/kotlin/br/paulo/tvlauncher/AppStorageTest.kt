@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.AppStorageRules.Destino
+import br.paulo.tvlauncher.home.AppStorageRules
+import br.paulo.tvlauncher.home.AppStorageRules.Destino
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

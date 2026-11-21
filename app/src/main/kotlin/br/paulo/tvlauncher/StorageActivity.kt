@@ -6,6 +6,13 @@ import android.text.format.Formatter
 import android.view.KeyEvent
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.backup.StorageBackup
+import br.paulo.tvlauncher.backup.StorageMode
+import br.paulo.tvlauncher.backup.StorageModeRules
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.home.AppStorage
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.player.ContaMidia
 
 /**
  * "Pen drive e armazenamento" (pedido do Paulo, 20/11/2026, proposta C). Abre pela linha das Configurações > Sistema.

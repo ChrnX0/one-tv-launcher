@@ -7,6 +7,12 @@ import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import android.service.notification.NotificationListenerService
+import br.paulo.tvlauncher.alarm.TocandoAgora
+import br.paulo.tvlauncher.listen.OuvirEstado
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.screensaver.Protetor
+import br.paulo.tvlauncher.settings.Extras
 import org.json.JSONObject
 
 /**

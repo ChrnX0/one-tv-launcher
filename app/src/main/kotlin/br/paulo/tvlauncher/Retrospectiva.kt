@@ -8,9 +8,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import br.paulo.tvlauncher.alarm.ConsumoRede
+import br.paulo.tvlauncher.network.ConsumoRedeTv
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.network.ResumoRede
+import br.paulo.tvlauncher.observer.Recursos
+import br.paulo.tvlauncher.panel.eventos
+import br.paulo.tvlauncher.settings.Extras
+import java.util.Calendar
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.Calendar
 
 /**
  * Retrospectiva da semana (12/11/2026, ideia 9). Domingo às [HORA]h a TV junta a semana: horas de tela por app, internet

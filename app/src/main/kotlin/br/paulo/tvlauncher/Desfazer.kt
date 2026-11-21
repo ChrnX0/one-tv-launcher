@@ -16,6 +16,10 @@ import android.widget.LinearLayout
 import br.paulo.tvlauncher.DesfazerRegras.Categoria
 import br.paulo.tvlauncher.DesfazerRegras.Mudanca
 import br.paulo.tvlauncher.DesfazerRegras.Passo
+import br.paulo.tvlauncher.family.Diario
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.Debloat
+import br.paulo.tvlauncher.privilege.PrivilegioDO
 
 /**
  * Elevação 2.11: guarda os passos (prefs "desfazer", fora do backup: é sobre ESTA TV e estes dias) e desfaz.

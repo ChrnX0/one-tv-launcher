@@ -1,9 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.PodcastPlayerLogic
+import br.paulo.tvlauncher.player.Episodio
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.Locale
 
 /** As contas do player de podcast em tela cheia ([PodcastPlayerLogic]). */
 class PodcastPlayerLogicTest {

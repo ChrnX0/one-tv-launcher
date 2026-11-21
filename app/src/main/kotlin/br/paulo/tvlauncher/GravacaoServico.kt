@@ -17,7 +17,17 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.PowerManager
 import android.util.Log
-import org.json.JSONObject
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.CanoAoVivo
+import br.paulo.tvlauncher.player.GravacaoCanal
+import br.paulo.tvlauncher.player.GravacaoDestino
+import br.paulo.tvlauncher.player.GravacaoRegras
+import br.paulo.tvlauncher.player.Gravador
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.RecordingCloudCopy
+import br.paulo.tvlauncher.player.salvar
 import java.io.File
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -25,6 +35,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
+import org.json.JSONObject
 
 /**
  * Gravação da TV ao vivo, a parte Android (14/11/2026). Regras puras em GravacaoRegras, motor em Gravador, estudo em

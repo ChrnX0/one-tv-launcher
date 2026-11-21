@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.ObserverPackages
+import java.io.File
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 class ObserverPackagesTest {
 

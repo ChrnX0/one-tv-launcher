@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.VisualCodigo
+import java.io.File
+import java.util.Base64
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.util.Base64
 
 class VisualCodigoTest {
     private val v = VisualCodigo.Visual("GALERIA", 110, "com.exemplo.icones", true, 20, -20)

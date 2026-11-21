@@ -6,6 +6,8 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.backup.MudarDeTv
+import br.paulo.tvlauncher.home.abrir
 
 /**
  * Elevação 19.7: "Seus apps voltando". A TV nova recebeu da antiga a lista de apps; os que faltam vêm um por vez:

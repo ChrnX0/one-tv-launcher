@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Planos.Plano
-import br.paulo.tvlauncher.Planos.Recurso
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.Planos.Plano
+import br.paulo.tvlauncher.settings.Planos.Recurso
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,9 +1,12 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import br.paulo.tvlauncher.player.Idioma
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.Vod
 import java.text.Normalizer
 import kotlin.random.Random
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 /**
  * As contas rápidas de títulos (20/11/2026) dão EXATAMENTE o mesmo que as expressões regulares de antes. A chave do

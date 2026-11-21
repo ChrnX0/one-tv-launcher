@@ -1,14 +1,16 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.ErroHttp
+import br.paulo.tvlauncher.panel.PainelHttp
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 /** Testes do HTTP mínimo do painel (sem Android: roda no computador). */
 class PainelHttpTest {

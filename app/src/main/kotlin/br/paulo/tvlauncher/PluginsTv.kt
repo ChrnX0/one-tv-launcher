@@ -6,6 +6,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.player.LojaCurada
+import br.paulo.tvlauncher.screensaver.PluginCartao
+import br.paulo.tvlauncher.screensaver.PluginCatalog
+import br.paulo.tvlauncher.screensaver.WallpaperPlugins
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.Tema
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit

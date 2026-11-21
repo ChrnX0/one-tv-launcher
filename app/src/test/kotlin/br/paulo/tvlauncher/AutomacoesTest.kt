@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
 import android.view.KeyEvent
-import br.paulo.tvlauncher.Automacoes.Quando
+import br.paulo.tvlauncher.input.RemapTeclas
+import br.paulo.tvlauncher.network.Automacoes
+import br.paulo.tvlauncher.network.Automacoes.Quando
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

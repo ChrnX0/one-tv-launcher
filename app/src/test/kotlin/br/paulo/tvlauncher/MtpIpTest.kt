@@ -1,5 +1,21 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.EscritaAdiantada
+import br.paulo.tvlauncher.panel.Mtp
+import br.paulo.tvlauncher.panel.MtpArmazem
+import br.paulo.tvlauncher.panel.MtpLoja
+import br.paulo.tvlauncher.panel.MtpServico
+import br.paulo.tvlauncher.panel.PainelArquivos
+import br.paulo.tvlauncher.panel.PtpIp
+import br.paulo.tvlauncher.panel.entrar
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
+import java.net.InetAddress
+import java.net.ServerSocket
+import java.net.Socket
+import java.nio.file.Files
 import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -10,14 +26,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Assume
 import org.junit.Before
 import org.junit.Test
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.InetAddress
-import java.net.ServerSocket
-import java.net.Socket
-import java.nio.file.Files
 
 /**
  * O servidor MTP/IP inteiro (MtpIp.kt) no ar na JVM, numa pasta temporária, com um "computador" de teste que fala o

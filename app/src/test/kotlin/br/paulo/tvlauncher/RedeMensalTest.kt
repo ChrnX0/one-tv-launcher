@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.network.RedeMensal
+import br.paulo.tvlauncher.network.ResumoRede
+import java.time.LocalDate
+import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDate
-import java.time.ZoneId
 
 /** Ideias 36 e 37: dia fechado no arquivo mensal, meses, e o aviso "a internet voltou". */
 class RedeMensalTest {

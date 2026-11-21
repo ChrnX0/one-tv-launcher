@@ -2,8 +2,9 @@ package br.paulo.tvlauncher
 
 import android.content.Context
 import android.util.Log
-import org.json.JSONObject
+import br.paulo.tvlauncher.privilege.Debloat
 import java.io.File
+import org.json.JSONObject
 
 /**
  * Ideia 70: baixa, uma vez por semana, `comunidade/fichas-apps.json` e `comunidade/limpeza.json` da main do

@@ -3,6 +3,7 @@ package br.paulo.tvlauncher
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import br.paulo.tvlauncher.privilege.PareamentoNaTv
 
 /**
  * Aviso "Acesso remoto parado" (SaudeAcesso.kt): um cartão escuro no meio da tela, por cima da HOME, com o atalho para

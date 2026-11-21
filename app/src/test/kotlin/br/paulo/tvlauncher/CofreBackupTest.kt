@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.CofreBackup
+import br.paulo.tvlauncher.home.abrir
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

@@ -13,6 +13,14 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
+import br.paulo.tvlauncher.alarm.Agenda
+import br.paulo.tvlauncher.alarm.Aniversarios
+import br.paulo.tvlauncher.alarm.FiltroRede
+import br.paulo.tvlauncher.alarm.RelogioGatilhos
+import br.paulo.tvlauncher.home.HomeCardsTv
+import br.paulo.tvlauncher.home.MidiaRecente
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.settings.Extras
 import org.json.JSONObject
 
 /**

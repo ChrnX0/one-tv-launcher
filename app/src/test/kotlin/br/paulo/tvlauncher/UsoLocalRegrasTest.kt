@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.UsoLocalRegras
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -17,6 +17,21 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.alarm.AlarmeGarantia
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.alarm.SomAlarme
+import br.paulo.tvlauncher.family.CanalDespertar
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.LgNetcast
+import br.paulo.tvlauncher.network.TvWakeRetry
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.screensaver.RelogioTela
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * A tela que aparece quando um alarme toca: acende a tela (e, pelo HDMI-CEC, normalmente liga a TV), mostra a hora

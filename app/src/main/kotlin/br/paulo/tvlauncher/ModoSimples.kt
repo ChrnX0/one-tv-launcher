@@ -14,6 +14,12 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.home.Organizacao
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.settings.Extras
 import java.util.Locale
 
 /**

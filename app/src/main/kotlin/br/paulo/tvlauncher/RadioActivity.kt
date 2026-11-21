@@ -14,6 +14,15 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.weather.Localizacao
 import java.util.Locale
 
 /**

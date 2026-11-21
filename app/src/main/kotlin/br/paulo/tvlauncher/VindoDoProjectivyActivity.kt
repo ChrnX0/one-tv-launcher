@@ -8,6 +8,11 @@ import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import br.paulo.tvlauncher.home.FundoMeuDados
+import br.paulo.tvlauncher.home.Organizacao
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.settings.Tema
 import java.util.concurrent.Executors
 
 /**

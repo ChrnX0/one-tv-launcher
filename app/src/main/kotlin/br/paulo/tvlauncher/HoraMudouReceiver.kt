@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.family.TravaRelogio
 
 /**
  * O relógio ou o fuso da TV mudou (auditoria de 10/11/2026). Os alarmes e as rotinas ficam agendados num instante

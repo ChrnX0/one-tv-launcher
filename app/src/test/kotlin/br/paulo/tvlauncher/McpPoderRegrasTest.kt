@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.McpPoderRegras
+import br.paulo.tvlauncher.mcp.McpPoderRegras2
+import br.paulo.tvlauncher.mcp.McpProtocolo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import br.paulo.tvlauncher.mcp.PedidoIa
+import br.paulo.tvlauncher.mcp.PedidoPendente
 
 /**
  * A confirmação NA TV de um pedido de ações do catálogo (ComandosIa; hoje pelo adb, depois pelo MCP). Nada roda sem

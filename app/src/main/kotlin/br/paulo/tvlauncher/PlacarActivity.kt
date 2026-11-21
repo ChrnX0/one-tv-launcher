@@ -10,6 +10,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.observer.Falhas
+import br.paulo.tvlauncher.observer.FalhasTv
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Placar
+import br.paulo.tvlauncher.observer.VitaisLocais
+import br.paulo.tvlauncher.observer.VitaisTv
+import br.paulo.tvlauncher.settings.Fontes
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 

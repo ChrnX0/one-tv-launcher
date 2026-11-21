@@ -1,5 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.Nuvem
+import br.paulo.tvlauncher.panel.Pastas
+import br.paulo.tvlauncher.player.ContaMidia
+import br.paulo.tvlauncher.player.MidiaContas
+import br.paulo.tvlauncher.player.item
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -1,6 +1,10 @@
 package br.paulo.tvlauncher
 
 import android.content.Context
+import br.paulo.tvlauncher.panel.ChecagensPainel
+import br.paulo.tvlauncher.privilege.AutorizacoesShizuku
+import br.paulo.tvlauncher.privilege.DonoEmprestado
+import br.paulo.tvlauncher.privilege.ShizukuEmbutido
 import org.json.JSONArray
 import org.json.JSONObject
 

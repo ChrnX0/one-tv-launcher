@@ -1,12 +1,18 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.Aniversarios
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.family.RetrospectivaAno
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.weather.AvisoTemperatura
+import java.util.Calendar
+import java.util.GregorianCalendar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Calendar
-import java.util.GregorianCalendar
 
 /** Rodada 2 (14/11/2026): aniversários (93), calor/frio (94), mural lido (95), Sua TV no ano (92), rádios (87). */
 class FamiliaRodada2Test {

@@ -8,6 +8,12 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import br.paulo.tvlauncher.home.tocandoAgora
+import br.paulo.tvlauncher.listen.SomNoFone
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.JuntoRegras
 import org.json.JSONArray
 import org.json.JSONObject
 

@@ -1,5 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.PlayerLista
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.Xtream
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

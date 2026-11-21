@@ -2,16 +2,16 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
-import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
@@ -22,7 +22,23 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import org.json.JSONObject
+import br.paulo.tvlauncher.alarm.Agenda
+import br.paulo.tvlauncher.alarm.FaixaDias
+import br.paulo.tvlauncher.home.EstadoCeu
+import br.paulo.tvlauncher.home.FundoVivo
+import br.paulo.tvlauncher.home.Grade
+import br.paulo.tvlauncher.home.Moldura
+import br.paulo.tvlauncher.home.criarFundo
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Tema
+import br.paulo.tvlauncher.weather.Astronomia
+import br.paulo.tvlauncher.weather.DataSources
+import br.paulo.tvlauncher.weather.IconesClima
+import br.paulo.tvlauncher.weather.Localizacao
+import br.paulo.tvlauncher.weather.Lua
+import br.paulo.tvlauncher.weather.WeatherApiSource
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.PI
@@ -30,6 +46,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
+import org.json.JSONObject
 
 /**
  * A previsão do tempo em tela cheia (abre com OK no bloco do clima, no topo da tela inicial). Voltar fecha.

@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.family.UsoTv
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.observer.VitaisTv
+import br.paulo.tvlauncher.panel.QrCodigo
 import java.net.URLEncoder
 
 /**

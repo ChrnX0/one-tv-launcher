@@ -1,5 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.weather.Astronomia
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.TimeZone
+import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -7,10 +12,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.TimeZone
-import kotlin.math.abs
 
 /**
  * Nascer e pôr do sol contra uma tabela publicada (10/11/2026): timeanddate.com, São dono, novembro de 2026

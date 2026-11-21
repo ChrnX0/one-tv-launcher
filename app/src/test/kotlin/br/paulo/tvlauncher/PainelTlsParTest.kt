@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.PainelTls
+import java.security.KeyPairGenerator
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.security.KeyPairGenerator
 
 /** Chave e certificado de pares diferentes (troca que parou no meio) não podem ser usados juntos. */
 class PainelTlsParTest {

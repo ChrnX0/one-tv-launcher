@@ -9,6 +9,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.CenasProntas
+import br.paulo.tvlauncher.player.CanalBusca
 
 /**
  * Tela "Cenas" na TV (14/11/2026, ideia 4). Antes a cena só rodava por link; agora também pelo controle: abre pelo

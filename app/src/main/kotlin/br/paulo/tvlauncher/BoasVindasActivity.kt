@@ -8,6 +8,17 @@ import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import br.paulo.tvlauncher.family.UsoTv
+import br.paulo.tvlauncher.home.SofalyWordmark
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Recursos
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.PareamentoNaTv
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.SaudeAcesso
+import br.paulo.tvlauncher.privilege.VirarDono
+import br.paulo.tvlauncher.settings.Extras
 
 /**
  * Assistente de primeira abertura (05/11/2026, fila longa do brainstorm). Aparece UMA vez, na primeira HOME de quem

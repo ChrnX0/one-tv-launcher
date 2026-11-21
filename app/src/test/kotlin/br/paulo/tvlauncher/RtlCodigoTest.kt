@@ -19,7 +19,7 @@ class RtlCodigoTest {
         assertTrue("rodar a partir da pasta app/", pasta.isDirectory)
         val proibidos = listOf(Regex("""\b(left|right)Margin\s*="""), Regex("""Gravity\.(LEFT|RIGHT)\b"""), Regex("""(?<![\w.])setPadding\(|\.setPadding\("""))
         val achados = mutableListOf<String>()
-        pasta.listFiles { f -> f.name.endsWith(".kt") }!!.forEach { f ->
+        CodeSource.all().forEach { f ->
             f.readLines().forEachIndexed { i, l ->
                 val codigo = l.substringBefore("//")
                 if (proibidos.any { it.containsMatchIn(codigo) }) achados += "${f.name}:${i + 1}: ${l.trim().take(100)}"

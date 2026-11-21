@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.LayoutHome
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

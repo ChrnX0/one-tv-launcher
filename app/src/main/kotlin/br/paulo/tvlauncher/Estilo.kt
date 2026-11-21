@@ -15,6 +15,16 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.FundoEscuroPronto
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.IconeApp
+import br.paulo.tvlauncher.home.IconeLinha
+import br.paulo.tvlauncher.home.SofalySymbol
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.World
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.JanelaIcones
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * O sistema de design do launcher (10/11/2026, dono: "todo o launcher precisa ser conciso e coerente").

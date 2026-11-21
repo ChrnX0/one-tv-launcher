@@ -1,8 +1,9 @@
 package br.paulo.tvlauncher
 
 import android.view.KeyEvent
-import br.paulo.tvlauncher.TeclasProtetor.Acao
-import br.paulo.tvlauncher.TeclasProtetor.Tipo
+import br.paulo.tvlauncher.screensaver.TeclasProtetor
+import br.paulo.tvlauncher.screensaver.TeclasProtetor.Acao
+import br.paulo.tvlauncher.screensaver.TeclasProtetor.Tipo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

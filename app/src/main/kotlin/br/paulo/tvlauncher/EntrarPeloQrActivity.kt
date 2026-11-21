@@ -10,6 +10,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.panel.CodigoEntrada
+import br.paulo.tvlauncher.panel.DestinoPainel
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.panel.QrCodigo
 
 /**
  * "Entrar pelo celular" (10/11/2026, pedido do dono): a TV mostra um QR com o endereço do painel e um código de uso

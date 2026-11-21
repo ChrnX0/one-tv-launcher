@@ -1,16 +1,18 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PistaAdb.Pedido
-import br.paulo.tvlauncher.PistaAdb.Pista
+import br.paulo.tvlauncher.privilege.FilaDuasPistas
+import br.paulo.tvlauncher.privilege.PistaAdb
+import br.paulo.tvlauncher.privilege.PistaAdb.Pedido
+import br.paulo.tvlauncher.privilege.PistaAdb.Pista
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 
 /** Melhoria 10/11/2026: fila do adb com duas pistas (rápida e lenta). */
 class PistaAdbTest {

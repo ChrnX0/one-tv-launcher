@@ -12,6 +12,11 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
+import br.paulo.tvlauncher.alarm.SonoSuave
+import br.paulo.tvlauncher.network.AcordarComLg
+import br.paulo.tvlauncher.network.LgNetcast
+import br.paulo.tvlauncher.network.VolumeLg
+import br.paulo.tvlauncher.settings.irPara
 
 /**
  * "Desligar em X min" (05/11/2026, bloco 5 do brainstorm): o timer de sono da TV. Diferente do "desligar sozinha

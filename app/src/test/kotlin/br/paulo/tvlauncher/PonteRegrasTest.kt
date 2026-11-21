@@ -1,11 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.DnsPonte
+import br.paulo.tvlauncher.mcp.PonteRegras
+import br.paulo.tvlauncher.network.Dns
+import java.util.Base64
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Base64
 
 /** Regras da ponte de saída do túnel (PonteRegras). Roda no computador: gradlew testReleaseUnitTest. */
 class PonteRegrasTest {

@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.Feriados
+import java.io.File
+import java.util.Calendar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.util.Calendar
 
 /** Feriados nacionais do país da TV: o "dia útil" das automações não vale neles (pedido do Paulo, 18/11/2026). */
 class FeriadosTest {

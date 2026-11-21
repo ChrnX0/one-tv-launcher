@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.games.ProximoJogo
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.TimeZone
 
 /** Próximo jogo do "Meu time" na cápsula de avisos da HOME e no protetor (ideia 12). */
 class ProximoJogoTest {

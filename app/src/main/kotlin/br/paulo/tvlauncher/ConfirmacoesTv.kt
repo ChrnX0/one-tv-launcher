@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.Confirmacoes
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

@@ -13,6 +13,14 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.IconeFicha
+import br.paulo.tvlauncher.player.ServicosContas
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.ServicosSync
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.search.BuscaOutrosApps
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.weather.DataSources
 
 /**
  * Fichas de filme e série no estilo C "Botões grandes" (15/11/2026, maquete escolhida para quem vê de longe): à esquerda

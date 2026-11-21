@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.DestinoPainel
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 class DestinoPainelTest {
     private val codigo = "a".repeat(48)

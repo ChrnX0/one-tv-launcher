@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverCore.Kind
-import br.paulo.tvlauncher.ObserverCore.Level
-import br.paulo.tvlauncher.ObserverCore.Reading
-import br.paulo.tvlauncher.ObserverCore.Severity
-import br.paulo.tvlauncher.ObserverCore.Signal
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.ObserverCore.Kind
+import br.paulo.tvlauncher.observer.ObserverCore.Level
+import br.paulo.tvlauncher.observer.ObserverCore.Reading
+import br.paulo.tvlauncher.observer.ObserverCore.Severity
+import br.paulo.tvlauncher.observer.ObserverCore.Signal
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

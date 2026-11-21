@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.FotoPerfil
+import br.paulo.tvlauncher.panel.QrCodigo
 
 /**
  * "Buscar foto da conta" (Configurações do launcher > Conta): põe a foto da conta Google na bolinha do perfil.

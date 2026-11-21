@@ -9,11 +9,14 @@ import android.content.pm.PackageInstaller
 import android.content.pm.PackageManager
 import android.os.PowerManager
 import android.util.Log
-import org.json.JSONObject
+import br.paulo.tvlauncher.panel.confirmar
+import br.paulo.tvlauncher.player.CanalAtualizacao
+import br.paulo.tvlauncher.privilege.Confirmacoes
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
+import org.json.JSONObject
 
 /**
  * Atualização automática pelo GitHub Releases (05/11/2026).

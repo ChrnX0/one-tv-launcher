@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.input.RemapTeclas
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.player.salvar
 
 /**
  * "Botões do controle" (14/11/2026, ideia 6): escolhe o que cada tecla livre faz no toque, ao segurar e no toque duplo

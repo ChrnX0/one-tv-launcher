@@ -1,9 +1,11 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Placar.Numero
-import br.paulo.tvlauncher.Placar.Pilar
-import br.paulo.tvlauncher.Placar.Ponto
-import br.paulo.tvlauncher.Placar.Serie
+import br.paulo.tvlauncher.alarm.AcertoAlarme
+import br.paulo.tvlauncher.observer.Placar
+import br.paulo.tvlauncher.observer.Placar.Numero
+import br.paulo.tvlauncher.observer.Placar.Pilar
+import br.paulo.tvlauncher.observer.Placar.Ponto
+import br.paulo.tvlauncher.observer.Placar.Serie
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

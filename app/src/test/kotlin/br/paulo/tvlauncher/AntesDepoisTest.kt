@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import br.paulo.tvlauncher.AntesDepois.Medida
+import br.paulo.tvlauncher.observer.Placar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

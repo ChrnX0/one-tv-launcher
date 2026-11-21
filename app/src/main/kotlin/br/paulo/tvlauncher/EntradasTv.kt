@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.media.tv.TvContract
 import android.media.tv.TvInputInfo
 import android.media.tv.TvInputManager
+import br.paulo.tvlauncher.settings.Extras
 
 /**
  * Entradas HDMI e AV como cards da linha de apps (degrau 1 contra o Projectivy, 15/11/2026).

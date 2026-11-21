@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.panel.estadoReconectar
 
 /**
  * Confirmação NA TV do "Reconectar a TV" pedido pelo painel (a única ação que o launcher faz no roteador UniFi).

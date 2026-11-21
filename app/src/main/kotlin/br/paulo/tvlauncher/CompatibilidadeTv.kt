@@ -9,6 +9,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import android.os.SystemClock
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.home.WatchNextTv
+import br.paulo.tvlauncher.observer.DesempenhoTv
+import br.paulo.tvlauncher.observer.LevezaTv
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.privilege.PrivilegioDO
 import org.json.JSONArray
 
 /**

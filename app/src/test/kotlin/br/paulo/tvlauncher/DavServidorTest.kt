@@ -1,13 +1,11 @@
 package br.paulo.tvlauncher
 
-import org.junit.After
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Assume
-import org.junit.Before
-import org.junit.Test
+import br.paulo.tvlauncher.panel.DavLogica
+import br.paulo.tvlauncher.panel.ErroHttp
+import br.paulo.tvlauncher.panel.PainelArquivos
+import br.paulo.tvlauncher.panel.PainelDav
+import br.paulo.tvlauncher.panel.PainelHttp
+import br.paulo.tvlauncher.panel.PanelShortcut
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -16,6 +14,14 @@ import java.net.ServerSocket
 import java.net.Socket
 import java.nio.file.Files
 import java.util.Base64
+import org.junit.After
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Assume
+import org.junit.Before
+import org.junit.Test
 
 /**
  * O servidor da unidade de rede (PainelDav) de verdade, sem Android: numa pasta temporária no lugar da memória interna

@@ -7,12 +7,16 @@ import android.graphics.Typeface
 import android.view.KeyEvent
 import android.widget.FrameLayout
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.CapaOuvir
-import br.paulo.tvlauncher.CruzLogica
-import br.paulo.tvlauncher.CruzOuvir
 import br.paulo.tvlauncher.Estilo
-import br.paulo.tvlauncher.IconeOuvir
 import br.paulo.tvlauncher.R
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.player.BarraTempo
+import java.io.File
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -23,8 +27,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 /**
  * Telas Rádio e Podcasts em cruz (18/11/2026): desenha a [CruzOuvir] com rádios e episódios de exemplo (sem rede: as
@@ -196,7 +198,7 @@ class OuvirTelaTest {
                 CruzOuvir.Item("celular", a.getString(R.string.pod_pelo_celular), a.getString(R.string.pod_pelo_celular_det), IconeOuvir.Tipo.CELULAR))),
         ), "continuar" to null)
         cruz.tocando(CruzOuvir.Tocando("Os vulcões do Pacífico e o anel de fogo", "Café com Ciência", "", azul, CapaOuvir.iniciais("Café com Ciência"),
-            cobrir = true, progresso = 0.55f, tempo = a.getString(R.string.pod_de, "25:10", "46:00") + " · " + br.paulo.tvlauncher.BarraTempo.faltam(a, "21 min"),
+            cobrir = true, progresso = 0.55f, tempo = a.getString(R.string.pod_de, "25:10", "46:00") + " · " + br.paulo.tvlauncher.player.BarraTempo.faltam(a, "21 min"),
             pausado = false))
         cruz.requestFocus()
         ShadowLooper.idleMainLooper(2, TimeUnit.SECONDS)

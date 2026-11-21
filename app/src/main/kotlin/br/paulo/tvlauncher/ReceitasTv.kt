@@ -4,6 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.family.PinNaTela
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.confirmar
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.ExtrasTv
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.Receitas
+import br.paulo.tvlauncher.settings.TamanhoTexto
 
 /**
  * Receitas prontas, a parte do Android (degrau 4, 17/11/2026): ler e gravar os ajustes que já existem, a foto de antes

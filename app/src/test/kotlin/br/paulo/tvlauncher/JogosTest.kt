@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.Jogos.Grupo
+import br.paulo.tvlauncher.games.Jogos
+import br.paulo.tvlauncher.games.Jogos.Grupo
+import br.paulo.tvlauncher.network.Rede
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -9,6 +9,10 @@ import android.content.Intent
 import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.privilege.JanelaNaFrente
 import org.json.JSONArray
 import org.json.JSONObject
 

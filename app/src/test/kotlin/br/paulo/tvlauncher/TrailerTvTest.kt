@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import android.media.session.PlaybackState
+import br.paulo.tvlauncher.player.Vod
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

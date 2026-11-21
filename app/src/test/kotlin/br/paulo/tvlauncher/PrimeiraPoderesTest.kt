@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PrimeiraPoderes.Estado
-import br.paulo.tvlauncher.PrimeiraPoderes.Passo
+import br.paulo.tvlauncher.privilege.PrimeiraPoderes
+import br.paulo.tvlauncher.privilege.PrimeiraPoderes.Estado
+import br.paulo.tvlauncher.privilege.PrimeiraPoderes.Passo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.DiarioRegras
+import br.paulo.tvlauncher.player.item
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

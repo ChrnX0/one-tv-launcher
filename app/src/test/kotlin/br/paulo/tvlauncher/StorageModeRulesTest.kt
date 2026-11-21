@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.StorageModeRules.Modo
-import br.paulo.tvlauncher.StorageModeRules.Motivo
+import br.paulo.tvlauncher.backup.StorageModeRules
+import br.paulo.tvlauncher.backup.StorageModeRules.Modo
+import br.paulo.tvlauncher.backup.StorageModeRules.Motivo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

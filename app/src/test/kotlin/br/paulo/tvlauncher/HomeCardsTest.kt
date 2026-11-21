@@ -1,13 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.HomeCards
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.util.Locale
 
 class HomeCardsTest {
     private val hoje = LocalDate.of(2026, 11, 18)   // quarta-feira

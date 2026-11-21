@@ -1,8 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.weather.Lua
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.TimeZone
 
 class LuaTest {
     private val sp = TimeZone.getTimeZone("America/Sao_Paulo")

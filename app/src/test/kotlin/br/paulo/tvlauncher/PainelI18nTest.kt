@@ -1,9 +1,9 @@
 package br.paulo.tvlauncher
 
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * O painel em 14 línguas (17/11/2026): o i18n.js escolhe a língua do navegador e carrega i18n-<língua>.js.
@@ -50,8 +50,7 @@ class PainelI18nTest {
     }
 
     @Test fun oServidorEntregaCadaLingua() {
-        val web = listOf("src/main/kotlin/br/paulo/tvlauncher/PainelWeb.kt", "app/src/main/kotlin/br/paulo/tvlauncher/PainelWeb.kt")
-            .map(::File).first { it.isFile }.readText()
+        val web = CodeSource.file("PainelWeb.kt").readText()
         for (l in LINGUAS) assertTrue("i18n-$l.js fora da lista TIPOS do PainelWeb.kt", "\"/i18n-$l.js\" to" in web)
     }
 }

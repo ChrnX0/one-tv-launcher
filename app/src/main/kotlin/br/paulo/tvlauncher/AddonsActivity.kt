@@ -21,6 +21,26 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.BibliotecaIndice
+import br.paulo.tvlauncher.home.BibliotecaUnica
+import br.paulo.tvlauncher.home.IconeMidia
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.input.SegurarOk
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.AddonInstallDialog
+import br.paulo.tvlauncher.player.AddonsProtocolo
+import br.paulo.tvlauncher.player.AddonsTv
+import br.paulo.tvlauncher.player.Conforto
+import br.paulo.tvlauncher.player.ConfortoRegras
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.RecommendedAddons
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.search.BuscaOutrosApps
 import java.util.concurrent.Executors
 
 /**

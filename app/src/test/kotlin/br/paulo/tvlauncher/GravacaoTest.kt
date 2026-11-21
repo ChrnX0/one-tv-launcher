@@ -1,11 +1,9 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import br.paulo.tvlauncher.player.CanoAoVivo
+import br.paulo.tvlauncher.player.GravacaoCanal
+import br.paulo.tvlauncher.player.GravacaoRegras
+import br.paulo.tvlauncher.player.Gravador
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -13,6 +11,12 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.TimeZone
 import java.util.concurrent.atomic.AtomicBoolean
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /** Gravação da TV ao vivo (14/11/2026): nomes, pedaços, espaço, agendamentos e o motor que copia o canal. */
 class GravacaoTest {

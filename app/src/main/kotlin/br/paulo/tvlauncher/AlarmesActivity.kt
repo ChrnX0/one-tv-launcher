@@ -16,6 +16,24 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import br.paulo.tvlauncher.alarm.AlarmScreenLogic
+import br.paulo.tvlauncher.alarm.AlarmeGarantia
+import br.paulo.tvlauncher.alarm.Datas
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.alarm.SomAlarme
+import br.paulo.tvlauncher.alarm.VolumeAlarme
+import br.paulo.tvlauncher.home.CrossColumn
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.MolaViews
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.TimeWheel
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.LgNetcast
+import br.paulo.tvlauncher.network.VolumeLg
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.player.salvar
+import br.paulo.tvlauncher.settings.Fontes
 import java.util.Calendar
 
 /**

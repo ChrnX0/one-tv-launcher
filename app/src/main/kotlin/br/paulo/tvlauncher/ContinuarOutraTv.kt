@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.player.JuntoRegras
 import org.json.JSONObject
 
 /**

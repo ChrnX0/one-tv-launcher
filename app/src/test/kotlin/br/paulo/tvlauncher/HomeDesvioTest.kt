@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.HomeDesvio.Desvio
+import br.paulo.tvlauncher.home.HomeDesvio
+import br.paulo.tvlauncher.home.HomeDesvio.Desvio
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

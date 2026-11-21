@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PlayerFiltro.Qualidade
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.PlayerFiltro.Qualidade
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

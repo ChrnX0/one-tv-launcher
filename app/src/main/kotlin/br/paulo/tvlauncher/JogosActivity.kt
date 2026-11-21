@@ -16,6 +16,25 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.family.Uso
+import br.paulo.tvlauncher.games.Jogos
+import br.paulo.tvlauncher.games.JogosTv
+import br.paulo.tvlauncher.games.TurmaDiscord
+import br.paulo.tvlauncher.games.TurmaDiscordTv
+import br.paulo.tvlauncher.home.CapaFoco
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.network.AcordarPc
+import br.paulo.tvlauncher.network.Rede
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * Tela Jogos (Central de jogos). Redesenhada em 18/11/2026 no padrão da cruz da HOME, como Rádio e Podcasts

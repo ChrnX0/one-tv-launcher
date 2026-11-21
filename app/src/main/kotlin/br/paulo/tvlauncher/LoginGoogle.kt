@@ -2,12 +2,18 @@ package br.paulo.tvlauncher
 
 import android.content.Context
 import android.util.Log
-import org.json.JSONObject
+import br.paulo.tvlauncher.backup.DriveBackup
+import br.paulo.tvlauncher.backup.DriveRegras
+import br.paulo.tvlauncher.family.FotoPerfil
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.mcp.McpAutorizacao
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.security.SecureRandom
 import java.util.concurrent.ConcurrentHashMap
+import org.json.JSONObject
 
 /**
  * Login do conector (MCP) pela conta Google (09/11/2026, pedido do dono: "a conta Google que coincida com a do perfil

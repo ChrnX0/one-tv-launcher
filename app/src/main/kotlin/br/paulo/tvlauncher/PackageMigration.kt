@@ -13,9 +13,14 @@ import android.os.PersistableBundle
 import android.os.Process
 import android.provider.Settings
 import android.util.Log
+import br.paulo.tvlauncher.PackageMigrationRules.Step
+import br.paulo.tvlauncher.backup.BackupCompleto
+import br.paulo.tvlauncher.panel.PainelTls
+import br.paulo.tvlauncher.privilege.Congelar
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PrivilegioDO
 import java.io.File
 import java.util.zip.ZipInputStream
-import br.paulo.tvlauncher.PackageMigrationRules.Step
 
 /**
  * Troca de pacote SEM reset (19/11/2026, decisão do Paulo): br.paulo.tvlauncher (antigo, "source") passa o Device Owner

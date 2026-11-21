@@ -1,8 +1,11 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.CruzLogica.Categoria
-import br.paulo.tvlauncher.CruzLogica.Resultado
-import br.paulo.tvlauncher.CruzLogica.Tecla
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.CruzLogica.Categoria
+import br.paulo.tvlauncher.home.CruzLogica.Resultado
+import br.paulo.tvlauncher.home.CruzLogica.Tecla
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.player.item
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

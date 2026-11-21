@@ -3,6 +3,27 @@ package br.paulo.tvlauncher
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.family.Diario
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.mcp.PedidoIa
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.panel.PinSeguro
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.privilege.Debloat
+import br.paulo.tvlauncher.privilege.DonoEmprestado
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.ServidorShizuku
+import br.paulo.tvlauncher.privilege.ShizukuEmbutido
+import br.paulo.tvlauncher.settings.ComandosExtras
+import br.paulo.tvlauncher.weather.AvisoChuva
+import br.paulo.tvlauncher.weather.AvisoRegras
+import br.paulo.tvlauncher.weather.LocalClima
 
 /**
  * Comandos do launcher por adb (o nome é histórico: até 12/11/2026 controlava o servidor do Shizuku embutido, que saiu).

@@ -8,7 +8,8 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import br.paulo.tvlauncher.CorSegura
+import br.paulo.tvlauncher.Config
+import br.paulo.tvlauncher.settings.CorSegura
 import java.io.File
 
 /**

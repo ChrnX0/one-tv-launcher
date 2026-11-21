@@ -11,6 +11,11 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import br.paulo.tvlauncher.alarm.AgendaPerfis
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.family.PerfilCriancaTv
+import br.paulo.tvlauncher.family.PerfilDados
 import java.util.TimeZone
 
 /**

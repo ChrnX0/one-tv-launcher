@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.network.WifiVisita
+import br.paulo.tvlauncher.panel.QrCodigo
 
 /**
  * Boas-vindas do modo hóspede (degrau 2, 16/11/2026). Aparece uma vez por estadia, na primeira HOME depois de ligar o

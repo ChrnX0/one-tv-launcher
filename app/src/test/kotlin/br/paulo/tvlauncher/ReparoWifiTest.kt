@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ReparoWifi.Acao
+import br.paulo.tvlauncher.network.ReparoWifi
+import br.paulo.tvlauncher.network.ReparoWifi.Acao
+import br.paulo.tvlauncher.network.Unifi
+import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.ZoneId
 
 /** Wi-Fi que não volta sozinho (ReparoWifi) e o relato do roteador (Unifi.relato*). MACs e nomes são de exemplo. */
 class ReparoWifiTest {

@@ -7,6 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import android.util.Log
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.settings.Extras
 import org.json.JSONArray
 import org.json.JSONObject
 

@@ -6,6 +6,21 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.HoraDormir
+import br.paulo.tvlauncher.alarm.HoraDormirTv
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.family.TempoTela
+import br.paulo.tvlauncher.family.TempoTelaTv
+import br.paulo.tvlauncher.network.AcordarPc
+import br.paulo.tvlauncher.network.ConsumoRedeTv
+import br.paulo.tvlauncher.network.DiarioDns
+import br.paulo.tvlauncher.observer.Caches
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.ExtrasDO
+import br.paulo.tvlauncher.settings.ComandosExtras
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.ExtrasAbas
+import br.paulo.tvlauncher.settings.FiltroNoturno
 
 /**
  * Ajustes finos e ferramentas das ideias de 10/11/2026 ([Extras]). As chaves liga/desliga foram para as abas das
