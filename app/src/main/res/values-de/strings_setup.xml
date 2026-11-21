@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Installation von Sofaly abschließen</string>
+    <string name="setup_texto">Um auf diesen Fernseher zu kommen, kam Sofaly als Light-Version. Jetzt holt sie die Vollversion, mit den Tasten der Fernbedienung und „Läuft gerade“. Das dauert etwa eine Minute.</string>
+    <string name="setup_passos">Wenn der Fernseher fragt, erlaube Sofaly, Apps zu installieren, komm zurück und tippe auf Installieren.</string>
+    <string name="setup_instalar">Vollversion installieren</string>
+    <string name="setup_depois">Später</string>
+    <string name="setup_depois_det">Die Light-Version funktioniert weiter. Dieser Bildschirm erscheint wieder, wenn du Sofaly das nächste Mal öffnest.</string>
+    <string name="setup_permitir">Erlaube Sofaly, Apps zu installieren, und komm dann hierher zurück.</string>
+    <string name="setup_baixando">Vollversion wird heruntergeladen…</string>
+</resources>

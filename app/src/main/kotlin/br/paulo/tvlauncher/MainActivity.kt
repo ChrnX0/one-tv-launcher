@@ -359,6 +359,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         // Modo de segurança (degrau 2): a HOME caiu 3 vezes seguidas nesta versão -> HOME mínima no lugar desta.
         if (ModoSeguro.desviar(this)) { desviadaParaSegura = true; return }
+        // APK de instalação (-Psetup): primeiro traz a versão completa (SetupActivity). No APK normal não faz nada.
+        SetupActivity.talvezAbrir(this)
         // Elevação 2.11: só a organização (ordem, pilhas, ocultos); o resto que a HOME grava é estado da tela.
         VigiaDesfazer.ligar(this, getString(R.string.desf_rot_organizar), setOf(DesfazerRegras.Categoria.ORGANIZACAO))
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura

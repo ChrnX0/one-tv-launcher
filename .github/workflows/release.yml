@@ -174,6 +174,16 @@ jobs:
           ./gradlew :app:assembleRelease $CEL -PversionCode=$CODIGO --no-daemon --stacktrace
           cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/sofaly-launcher.apk
           cp "$SAIDA/app-arm64-v8a-release.apk" publicar/sofaly-launcher-arm64.apk
+          # APK de instalação (21/11/2026, SetupActivity.kt): sem acessibilidade e sem ouvinte de notificações, passa no
+          # Play Protect quando vem do Downloader/site e traz a versão completa deste Release. versionCode N-1: a completa
+          # (N) é uma atualização comum para ele. O Atualizador nunca o baixa (só procura sofaly-launcher*.apk).
+          # Num "commit=" antigo, de antes do -Psetup, o Gradle ignoraria a opção e sairia o app completo com esse nome: só
+          # com a pasta src/setup. Sem ela o Release sai sem o APK de instalação (o /download do site aponta para ele).
+          if [ -d app/src/setup ]; then
+            ./gradlew :app:assembleRelease -Psetup -PversionCode=$((CODIGO - 1)) --no-daemon --stacktrace
+            cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/sofaly-setup.apk
+            cp "$SAIDA/app-arm64-v8a-release.apk" publicar/sofaly-setup-arm64.apk
+          fi
 
       # Dois APKs (splits em app/build.gradle.kts), com o mesmo versionCode. NOME é o nome dos arquivos do Release
       # (o app tv.sofaly.launcher procura sofaly-launcher*.apk; a ponte antiga, one-tv-launcher*.apk).
@@ -195,6 +205,7 @@ jobs:
           if ! printf '%s' "$CODIGO" | grep -Eq '^[0-9]+$'; then echo "::error::versionCode não lido do APK"; exit 1; fi
           if [ "$CODIGO" != "$VERSION_CODE" ]; then echo "::error::versionCode $CODIGO, esperado $VERSION_CODE"; exit 1; fi
           APKS="$NOME.apk $NOME-arm64.apk"
+          [ -f publicar/sofaly-setup.apk ] && APKS="$APKS sofaly-setup.apk sofaly-setup-arm64.apk"
           [ -f publicar/one-tv-launcher.apk ] && APKS="$APKS one-tv-launcher.apk one-tv-launcher-arm64.apk"
           for APK in $APKS; do
             # Pacote e versão certos em cada arquivo: o app nunca sai com o nome antigo, nem a ponte com o novo.
@@ -202,7 +213,13 @@ jobs:
             VC=$("$AAPT" dump badging "publicar/$APK" | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
             case "$APK" in one-tv-launcher*) ESPERADO=br.paulo.tvlauncher ;; *) ESPERADO=tv.sofaly.launcher ;; esac
             if [ "$PKG" != "$ESPERADO" ]; then echo "::error::$APK é $PKG, esperado $ESPERADO"; exit 1; fi
-            if [ "$VC" != "$CODIGO" ]; then echo "::error::$APK versionCode $VC, esperado $CODIGO"; exit 1; fi
+            case "$APK" in sofaly-setup*) VC_ESPERADO=$((CODIGO - 1)) ;; *) VC_ESPERADO=$CODIGO ;; esac
+            if [ "$VC" != "$VC_ESPERADO" ]; then echo "::error::$APK versionCode $VC, esperado $VC_ESPERADO"; exit 1; fi
+            # O de instalação não pode levar os serviços que o Play Protect bloqueia (src/setup/AndroidManifest.xml).
+            case "$APK" in sofaly-setup*)
+              if "$AAPT" dump xmltree --file AndroidManifest.xml "publicar/$APK" | grep -Eq 'BIND_ACCESSIBILITY_SERVICE|BIND_NOTIFICATION_LISTENER_SERVICE'; then
+                echo "::error::$APK ainda declara acessibilidade ou ouvinte de notificações"; exit 1; fi ;;
+            esac
             # Cada APK só pode ter as libs da própria arquitetura (confere o splits).
             unzip -l "publicar/$APK" | grep -o 'lib/[^/]*/' | sort -u | tr '\n' ' '; echo " <- $APK"
             # O compilarTunel só avisa quando o go build falha: aqui um Release sem o túnel (MCP pela internet) não sai.
@@ -262,6 +279,8 @@ jobs:
           EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
           # Ponte (só com bridge=true): as TVs ainda em br.paulo.tvlauncher instalam a ponte e passam para o app novo.
           [ -f one-tv-launcher.apk ] && EXTRA="$EXTRA one-tv-launcher.apk one-tv-launcher.apk.sha256 one-tv-launcher-arm64.apk one-tv-launcher-arm64.apk.sha256"
+          # APK de instalação (SetupActivity.kt): é o que o /download do site entrega ao Downloader.
+          [ -f sofaly-setup.apk ] && EXTRA="$EXTRA sofaly-setup.apk sofaly-setup.apk.sha256 sofaly-setup-arm64.apk sofaly-setup-arm64.apk.sha256"
           [ -f leveza.json ] && EXTRA="$EXTRA leveza.json"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \

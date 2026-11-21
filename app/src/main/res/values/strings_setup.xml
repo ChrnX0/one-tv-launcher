@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Finish installing Sofaly</string>
+    <string name="setup_texto">To get onto this TV, Sofaly came in a light version. Now it brings the full version, with the remote\'s keys and “Now playing”. It takes about a minute.</string>
+    <string name="setup_passos">If the TV asks, allow Sofaly to install apps, come back and tap Install.</string>
+    <string name="setup_instalar">Install the full version</string>
+    <string name="setup_depois">Later</string>
+    <string name="setup_depois_det">The light version keeps working. This screen comes back the next time you open Sofaly.</string>
+    <string name="setup_permitir">Allow Sofaly to install apps, then come back here.</string>
+    <string name="setup_baixando">Downloading the full version…</string>
+</resources>

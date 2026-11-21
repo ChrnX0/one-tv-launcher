@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">完成安装 Sofaly</string>
+    <string name="setup_texto">为了装进这台电视，Sofaly 先以轻量版到来。现在它会装上完整版，包含遥控器按键和“正在播放”。大约需要一分钟。</string>
+    <string name="setup_passos">如果电视询问，请允许 Sofaly 安装应用，然后返回并点按“安装”。</string>
+    <string name="setup_instalar">安装完整版</string>
+    <string name="setup_depois">稍后</string>
+    <string name="setup_depois_det">轻量版会继续运行。下次打开 Sofaly 时，此画面会再次出现。</string>
+    <string name="setup_permitir">请允许 Sofaly 安装应用，然后回到这里。</string>
+    <string name="setup_baixando">正在下载完整版…</string>
+</resources>

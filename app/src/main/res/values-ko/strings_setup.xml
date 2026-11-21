@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Sofaly 설치 마치기</string>
+    <string name="setup_texto">이 TV에 들어오기 위해 Sofaly는 가벼운 버전으로 왔어요. 이제 리모컨 키와 ‘지금 재생 중’이 있는 전체 버전을 가져옵니다. 약 1분 걸려요.</string>
+    <string name="setup_passos">TV가 물으면 Sofaly의 앱 설치를 허용하고 돌아와서 설치를 누르세요.</string>
+    <string name="setup_instalar">전체 버전 설치</string>
+    <string name="setup_depois">나중에</string>
+    <string name="setup_depois_det">가벼운 버전은 계속 작동해요. 다음에 Sofaly를 열면 이 화면이 다시 나타나요.</string>
+    <string name="setup_permitir">Sofaly의 앱 설치를 허용한 뒤 여기로 돌아오세요.</string>
+    <string name="setup_baixando">전체 버전 다운로드 중…</string>
+</resources>

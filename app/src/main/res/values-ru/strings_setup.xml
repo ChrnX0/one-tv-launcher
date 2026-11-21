@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Завершите установку Sofaly</string>
+    <string name="setup_texto">Чтобы попасть на этот телевизор, Sofaly пришла в облегчённой версии. Теперь она загрузит полную версию — с кнопками пульта и «Сейчас играет». Это займёт около минуты.</string>
+    <string name="setup_passos">Если телевизор спросит, разрешите Sofaly устанавливать приложения, вернитесь и нажмите «Установить».</string>
+    <string name="setup_instalar">Установить полную версию</string>
+    <string name="setup_depois">Позже</string>
+    <string name="setup_depois_det">Облегчённая версия продолжит работать. Этот экран появится снова, когда вы в следующий раз откроете Sofaly.</string>
+    <string name="setup_permitir">Разрешите Sofaly устанавливать приложения и вернитесь сюда.</string>
+    <string name="setup_baixando">Загрузка полной версии…</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Sofaly kurulumunu tamamlayın</string>
+    <string name="setup_texto">Bu TV’ye girebilmek için Sofaly hafif bir sürümle geldi. Şimdi kumanda tuşları ve “Şimdi çalıyor” ile tam sürümü getiriyor. Yaklaşık bir dakika sürer.</string>
+    <string name="setup_passos">TV sorarsa Sofaly’nin uygulama yüklemesine izin verin, geri dönün ve Yükle’ye dokunun.</string>
+    <string name="setup_instalar">Tam sürümü yükle</string>
+    <string name="setup_depois">Daha sonra</string>
+    <string name="setup_depois_det">Hafif sürüm çalışmaya devam eder. Bu ekran Sofaly’yi bir sonraki açışınızda tekrar gelir.</string>
+    <string name="setup_permitir">Sofaly’nin uygulama yüklemesine izin verin, sonra buraya dönün.</string>
+    <string name="setup_baixando">Tam sürüm indiriliyor…</string>
+</resources>

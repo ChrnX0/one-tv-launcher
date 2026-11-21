@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Sofaly のインストールを完了</string>
+    <string name="setup_texto">このテレビに入るため、Sofaly は軽量版で届きました。これからリモコンのキーや「再生中」を含む完全版を入れます。1 分ほどかかります。</string>
+    <string name="setup_passos">テレビに聞かれたら Sofaly にアプリのインストールを許可し、戻って「インストール」を押してください。</string>
+    <string name="setup_instalar">完全版をインストール</string>
+    <string name="setup_depois">あとで</string>
+    <string name="setup_depois_det">軽量版はそのまま使えます。次に Sofaly を開くと、この画面がまた表示されます。</string>
+    <string name="setup_permitir">Sofaly にアプリのインストールを許可してから、ここに戻ってください。</string>
+    <string name="setup_baixando">完全版をダウンロード中…</string>
+</resources>

@@ -76,6 +76,13 @@ android {
         // não aceita (atualizador do GitHub, instalar APK). A fonte do clima não depende mais do build (19/11/2026): é o
         // plano e a licença que escolhem, em DataSources.kt (MET Norway no Básico).
         buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
+        // APK de instalação (`-Psetup`, 21/11/2026, thread "Contornar bloqueio do Play Protect"): o Play Protect bloqueia,
+        // sem botão para seguir, APK baixado pelo navegador/Downloader que declara acessibilidade ou ouvinte de
+        // notificações ("proteção avançada contra fraude", Brasil desde 06/2024). Este build sai SEM os dois serviços
+        // (src/setup/AndroidManifest.xml), passa no filtro e a primeira coisa que faz é trazer a versão completa do Release
+        // (SetupActivity + Atualizador). Mesmo pacote e mesma chave; o Release o publica com versionCode N-1, então a
+        // versão completa (N) é uma atualização comum.
+        buildConfigField("boolean", "SETUP", project.hasProperty("setup").toString())
         // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) até haver contrato. O Simkl entra (19/11/2026)
         // só no caminho grátis que eles aceitaram: a conta da própria pessoa e o convite "Conecte sua conta"; a nota sem
         // login fica para o Pro com licença (DataSources.kt). Trakt (Standard) e OpenSubtitles (login da pessoa) ficam.
@@ -165,6 +172,14 @@ android {
         sourceSets.getByName("main").assets.srcDir("src/play/assets")
         sourceSets.getByName("release").manifest.srcFile("src/play/AndroidManifest.xml")
         sourceSets.getByName("debug").manifest.srcFile("src/play/AndroidManifest.xml")
+    }
+
+    // APK de instalação (`-Psetup`, ver BuildConfig.SETUP acima): só o app tv.sofaly.launcher do site.
+    if (project.hasProperty("setup")) {
+        if (project.hasProperty("play") || project.hasProperty("legacy"))
+            throw GradleException("-Psetup é só o APK do site (tv.sofaly.launcher): não combina com -Pplay nem -Plegacy")
+        sourceSets.getByName("release").manifest.srcFile("src/setup/AndroidManifest.xml")
+        sourceSets.getByName("debug").manifest.srcFile("src/setup/AndroidManifest.xml")
     }
 
     compileOptions {
