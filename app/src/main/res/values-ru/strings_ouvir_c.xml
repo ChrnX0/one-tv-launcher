@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Найдено %1$d из %2$d · ◀ ▶ назад / вперёд · ▼ новый поиск · OK: закрыть</string>
     <string name="tx_buscar">Поиск по сказанному</string>
     <string name="tx_nada">Этого не говорили в этом выпуске.</string>
+    <string name="ra_ja_tocou">Уже звучало</string>
+    <string name="ra_parecidas">Похожие станции</string>
 </resources>

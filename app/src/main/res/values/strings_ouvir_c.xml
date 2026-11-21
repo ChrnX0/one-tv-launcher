@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Found %1$d of %2$d · ◀ ▶ previous / next · ▼ new search · OK: close</string>
     <string name="tx_buscar">Search in what was said</string>
     <string name="tx_nada">Nobody said that in this episode.</string>
+    <string name="ra_ja_tocou">Already played</string>
+    <string name="ra_parecidas">Similar stations</string>
 </resources>

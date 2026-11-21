@@ -48,6 +48,39 @@ object Radios {
     fun musicaUtil(t: String?, nomeRadio: String): Boolean =
         !t.isNullOrBlank() && !t.trim().equals(nomeRadio.trim(), ignoreCase = true) && !SEM_MUSICA.matches(t)
 
+    // ---------------------------------------------------------------- puro: já tocou e parecidas (21/11/2026)
+
+    /** Uma música que a rádio anunciou (ICY), com a hora em que começou. */
+    data class Tocada(val horaMs: Long, val texto: String)
+    const val MAX_TOCADAS = 30
+
+    /** Põe a música nova no topo do "Já tocou"; repetida seguida (a rádio reenvia o título) ou vazia não entra. */
+    fun comTocada(l: List<Tocada>, texto: String, agoraMs: Long): List<Tocada> =
+        if (texto.isBlank() || l.firstOrNull()?.texto == texto) l else (listOf(Tocada(agoraMs, texto)) + l).take(MAX_TOCADAS)
+
+    /** Os gêneros da rádio ("pop,rock, MPB" → pop, rock, mpb), sem os genéricos que não dizem nada. */
+    fun tagsDe(r: Radio): List<String> = r.tags.split(',').map { it.trim().lowercase() }
+        .filter { it.length in 2..30 && it !in TAGS_VAZIAS }.distinct()
+    private val TAGS_VAZIAS = setOf("radio", "fm", "am", "online", "music", "musica", "música", "internet", "web", "live", "stream")
+
+    /**
+     * Rádios parecidas com [base]: quantos gêneros dividem (o que mais pesa), depois o mesmo país; a ordem do catálogo
+     * (mais ouvidas primeiro) desempata. Fica de fora a própria rádio, a mesma com outro id (mesmo nome) e quem não
+     * divide nenhum gênero.
+     */
+    fun parecidas(base: Radio, candidatas: List<Radio>, max: Int = 20): List<Radio> {
+        val tags = tagsDe(base).toSet()
+        if (tags.isEmpty()) return emptyList()
+        val nomeBase = base.nome.trim().lowercase()
+        return candidatas.asSequence()
+            .filter { it.id != base.id && it.url != base.url && it.nome.trim().lowercase() != nomeBase }
+            .distinctBy { it.nome.trim().lowercase() }
+            .map { c -> c to tagsDe(c).count { it in tags } * 10 + (if (base.pais.isNotEmpty() && c.pais == base.pais) 3 else 0) }
+            .filter { it.second >= 10 }
+            .sortedByDescending { it.second }   // estável: empate mantém a ordem de cliques do catálogo
+            .take(max).map { it.first }.toList()
+    }
+
     // ---------------------------------------------------------------- puro: endereços
 
     private fun q(s: String) = URLEncoder.encode(s, "UTF-8")

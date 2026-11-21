@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Wynik %1$d z %2$d · ◀ ▶ poprzedni / następny · ▼ nowe szukanie · OK: zamknij</string>
     <string name="tx_buscar">Szukaj w wypowiedziach</string>
     <string name="tx_nada">Nikt tego nie powiedział w tym odcinku.</string>
+    <string name="ra_ja_tocou">Już grało</string>
+    <string name="ra_parecidas">Podobne stacje</string>
 </resources>

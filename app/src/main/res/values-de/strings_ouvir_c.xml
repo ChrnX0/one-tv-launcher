@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Treffer %1$d von %2$d · ◀ ▶ vorheriger / nächster · ▼ neue Suche · OK: schließen</string>
     <string name="tx_buscar">Im Gesagten suchen</string>
     <string name="tx_nada">Das wurde in dieser Folge nicht gesagt.</string>
+    <string name="ra_ja_tocou">Schon gespielt</string>
+    <string name="ra_parecidas">Ähnliche Sender</string>
 </resources>

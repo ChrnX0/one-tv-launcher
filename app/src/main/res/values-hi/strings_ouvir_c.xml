@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">परिणाम %1$d / %2$d · ◀ ▶ पिछला / अगला · ▼ नई खोज · OK: बंद</string>
     <string name="tx_buscar">कही गई बातों में खोजें</string>
     <string name="tx_nada">इस एपिसोड में यह नहीं कहा गया।</string>
+    <string name="ra_ja_tocou">पहले बजे गाने</string>
+    <string name="ra_parecidas">मिलते-जुलते रेडियो</string>
 </resources>

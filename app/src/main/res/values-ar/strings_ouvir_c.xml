@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">النتيجة %1$d من %2$d · ◀ ▶ السابق / التالي · ▼ بحث جديد · OK: إغلاق</string>
     <string name="tx_buscar">ابحث فيما قيل</string>
     <string name="tx_nada">لم يقل أحد ذلك في هذه الحلقة.</string>
+    <string name="ra_ja_tocou">تم تشغيله</string>
+    <string name="ra_parecidas">محطات مشابهة</string>
 </resources>

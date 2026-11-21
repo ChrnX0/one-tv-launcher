@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Résultat %1$d sur %2$d · ◀ ▶ précédent / suivant · ▼ nouvelle recherche · OK : fermer</string>
     <string name="tx_buscar">Chercher dans ce qui est dit</string>
     <string name="tx_nada">Personne n\'a dit cela dans cet épisode.</string>
+    <string name="ra_ja_tocou">Déjà diffusé</string>
+    <string name="ra_parecidas">Radios similaires</string>
 </resources>

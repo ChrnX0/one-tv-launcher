@@ -160,6 +160,9 @@ class OuvirServico : Service() {
     /** A música que a rádio manda (ICY), "" se não manda. */
     var musica: String = ""
         private set
+    /** "Já tocou" de cada rádio desta vez (id → mais nova primeiro). Só na memória: some quando o player fecha. */
+    private val tocadas = HashMap<String, List<Radios.Tocada>>()
+    fun tocadas(radioId: String): List<Radios.Tocada> = tocadas[radioId].orEmpty()
     private var tentativas = 0
     private var emPrimeiroPlano = false
     /** O último pedido de começar: [parar] encerra só até ele (um pedido novo que chegou no meio não é cortado). */
@@ -383,7 +386,11 @@ class OuvirServico : Service() {
                     // ICY "StreamTitle" (Artista - Música) chega como título; texto de espera não vale (Radios.musicaUtil).
                     val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
                         .distinct().joinToString(" · ")
-                    if (t != musica) { musica = t; publicar() }
+                    if (t != musica) {
+                        musica = t
+                        tocadas[r.id] = Radios.comTocada(tocadas[r.id].orEmpty(), t, System.currentTimeMillis())
+                        publicar()
+                    }
                 }
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     if (isPlaying) tentativas = 0

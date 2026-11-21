@@ -247,10 +247,33 @@ class RadioActivity : Activity() {
             m.takeIf { it > 0 }?.let { getString(R.string.pl_dorme_em, it) }).joinToString(" · ").ifEmpty { getString(R.string.som_det_radio) }
     }
 
+    /** Rádios parecidas com a que toca (id da que toca → lista; vazia = carregando). */
+    private var parecidas: Pair<String, List<Radios.Radio>>? = null
+
+    /** Busca as parecidas no Radio Browser: os 2 primeiros gêneros, no país da rádio e no mundo, e ordena por afinidade. */
+    private fun carregarParecidas(r: Radios.Radio) {
+        val tags = Radios.tagsDe(r).take(2)
+        if (tags.isEmpty()) { parecidas = r.id to emptyList(); return }
+        parecidas = r.id to emptyList()
+        Fundo.rodar("radios-parecidas") {
+            val todas = tags.flatMap { t ->
+                (if (r.pais.length == 2) Radios.estacoes(Radios.pedir { Radios.urlGenero(it, t, r.pais, 40) }) else emptyList()) +
+                    Radios.estacoes(Radios.pedir { Radios.urlGenero(it, t, null, 40) })
+            }
+            val l = Radios.parecidas(r, todas)
+            runOnUiThread {
+                if (isDestroyed || tocando?.id != r.id) return@runOnUiThread
+                parecidas = r.id to l
+                if (l.isNotEmpty()) montar()
+            }
+        }
+    }
+
     private fun montar(focar: Pair<String, String?>? = null, focarInicio: Boolean = false) {
         val l = ArrayList<CruzOuvir.Prateleira>()
         val s = OuvirServico.instancia
         val r = tocando
+        if (r != null && parecidas?.first != r.id) carregarParecidas(r)
         if (r != null && s != null) {
             val fav = favoritas.any { it.id == r.id }
             l += CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
@@ -274,6 +297,21 @@ class RadioActivity : Activity() {
                         montar()
                     }),
             ))
+        }
+        // Já tocou (21/11/2026): as músicas que esta rádio anunciou desde que começou a tocar, a mais nova primeiro.
+        if (r != null && s != null) {
+            val jt = s.tocadas(r.id)
+            if (jt.isNotEmpty()) {
+                val hora = android.text.format.DateFormat.getTimeFormat(this)
+                l += CruzOuvir.Prateleira("ja_tocou", getString(R.string.ra_ja_tocou), IconeOuvir.Tipo.RECENTES, jt.mapIndexed { i, t ->
+                    CruzOuvir.Item("jt:$i:${t.horaMs}", t.texto,
+                        CruzLogica.linhas(if (i == 0 && !s.pausado) "● " + getString(R.string.ouv_tocando_agora) else null, hora.format(java.util.Date(t.horaMs))),
+                        IconeOuvir.Tipo.RECENTES)
+                })
+            }
+            parecidas?.takeIf { it.first == r.id && it.second.isNotEmpty() }?.let { (_, lista) ->
+                l += CruzOuvir.Prateleira("parecidas", getString(R.string.ra_parecidas), IconeOuvir.Tipo.GENEROS, lista.map { itemRadio("par:", it) })
+            }
         }
         resultado?.let { (titulo, lista) ->
             l += CruzOuvir.Prateleira("res", titulo, IconeOuvir.Tipo.BUSCAR,

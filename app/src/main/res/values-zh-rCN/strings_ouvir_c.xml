@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">第 %1$d / %2$d 处 · ◀ ▶ 上一处 / 下一处 · ▼ 重新搜索 · OK：关闭</string>
     <string name="tx_buscar">在讲话内容中搜索</string>
     <string name="tx_nada">本集没有人说过这句话。</string>
+    <string name="ra_ja_tocou">已播放</string>
+    <string name="ra_parecidas">相似电台</string>
 </resources>

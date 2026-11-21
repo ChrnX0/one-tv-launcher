@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">%2$d 件中 %1$d 件目 · ◀ ▶ 前 / 次 · ▼ 再検索 · OK：閉じる</string>
     <string name="tx_buscar">話した内容を検索</string>
     <string name="tx_nada">このエピソードではその言葉は出てきません。</string>
+    <string name="ra_ja_tocou">再生済み</string>
+    <string name="ra_parecidas">似たラジオ局</string>
 </resources>

@@ -23,4 +23,6 @@
     <string name="tx_pe_busca">Sonuç %1$d / %2$d · ◀ ▶ önceki / sonraki · ▼ yeni arama · OK: kapat</string>
     <string name="tx_buscar">Söylenenlerde ara</string>
     <string name="tx_nada">Bu bölümde bu söylenmedi.</string>
+    <string name="ra_ja_tocou">Çalanlar</string>
+    <string name="ra_parecidas">Benzer radyolar</string>
 </resources>
