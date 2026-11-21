@@ -1,6 +1,5 @@
 package br.paulo.tvlauncher
 
-import android.content.Context
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Locale

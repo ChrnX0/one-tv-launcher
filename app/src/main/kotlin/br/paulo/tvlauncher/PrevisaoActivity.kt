@@ -11,7 +11,6 @@ import android.graphics.RectF
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -24,8 +23,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.PI

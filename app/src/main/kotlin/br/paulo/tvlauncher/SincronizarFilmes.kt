@@ -72,8 +72,6 @@ object SincronizarFilmes {
 
     private fun arranjo(json: String): JSONArray? = runCatching { JSONArray(json) }.getOrNull()
 
-    private fun tipoDoTexto(t: String): Tipo? = when (t) { "movie", "movies" -> Tipo.FILME; "show", "shows", "anime" -> Tipo.SERIE; else -> null }
-
     // ================================================================ Trakt
 
     /**
@@ -397,7 +395,7 @@ object SincronizarFilmes {
             for ((i, q) in filmes) put(objeto(i).put("watched_at", Instant.ofEpochMilli(q).toString()))
         })
         if (episodios.isNotEmpty()) o.put("shows", JSONArray().apply {
-            for ((serie, eps) in episodios.groupBy { it.first.ids }) {
+            for ((_, eps) in episodios.groupBy { it.first.ids }) {
                 val primeiro = eps.first().first
                 put(objeto(primeiro).put("seasons", JSONArray().apply {
                     for ((t, daTemp) in eps.groupBy { it.second.temporada }.toSortedMap()) put(JSONObject().put("number", t).put("episodes", JSONArray().apply {

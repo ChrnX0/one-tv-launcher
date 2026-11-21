@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONObject
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * Ideia 70: baixa, uma vez por semana, `comunidade/fichas-apps.json` e `comunidade/limpeza.json` da main do

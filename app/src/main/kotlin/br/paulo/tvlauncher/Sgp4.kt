@@ -141,7 +141,6 @@ class Sgp4(linha1: String, linha2: String) {
             templ += t3cof * t3 + t4 * (t4cof + t * t5cof)
         }
         val am = (XKE / no).pow(X2O3) * tempa * tempa
-        val nm = XKE / am.pow(1.5)
         var em = ecco - tempe
         if (em < 1.0e-6) em = 1.0e-6
         mm += no * templ

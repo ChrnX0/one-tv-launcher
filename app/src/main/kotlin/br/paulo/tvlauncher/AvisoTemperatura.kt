@@ -3,8 +3,6 @@ package br.paulo.tvlauncher
 import android.content.Context
 import android.util.Log
 import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.Calendar
 
 /**

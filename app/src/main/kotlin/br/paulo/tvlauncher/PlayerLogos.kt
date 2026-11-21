@@ -14,7 +14,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
-import java.util.concurrent.Executors
 
 /**
  * Player universal, lista completa (06/11/2026): os logotipos dos canais (tvg-logo / stream_icon).

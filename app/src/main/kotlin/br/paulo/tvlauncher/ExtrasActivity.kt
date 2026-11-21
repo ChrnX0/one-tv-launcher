@@ -2,15 +2,10 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 
 /**
  * Ajustes finos e ferramentas das ideias de 10/11/2026 ([Extras]). As chaves liga/desliga foram para as abas das
@@ -33,8 +28,6 @@ class ExtrasActivity : Activity() {
     }
 
     override fun onResume() { super.onResume(); atualizarTextos() }
-
-    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 
     private val linhas = mutableListOf<Pair<TextView, () -> String>>()
 

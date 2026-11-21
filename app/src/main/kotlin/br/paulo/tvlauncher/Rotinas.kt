@@ -11,7 +11,6 @@ import android.os.SystemClock
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.Calendar
 
 /**
  * Rotinas por horário (05/11/2026, fila longa do brainstorm). Exemplos: "dias úteis 7h: ligar e abrir o app do

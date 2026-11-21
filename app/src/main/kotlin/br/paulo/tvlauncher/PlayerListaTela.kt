@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -339,14 +338,6 @@ class PlayerListaTela(
     }
 
     // Um Drawable por ícone e cor (as linhas são recicladas; criar um a cada desenho seria lixo à toa na TV de 2 GB).
-    private val icones = HashMap<Pair<Any, Int>, Drawable>()
-
-    private fun icone(tipo: Any, cor: Int): Drawable = icones.getOrPut(tipo to cor) {
-        when (tipo) {
-            is IconePlayer.Tipo -> IconePlayer(tipo, cor)
-            else -> IconeMidia(tipo as IconeMidia.Tipo, cor)
-        }.apply { setBounds(0, 0, dp(18), dp(18)) }
-    }
 
     /** Peças de uma linha de canal, guardadas na tag para não procurar a cada desenho. */
     private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: View, val vivo: View)

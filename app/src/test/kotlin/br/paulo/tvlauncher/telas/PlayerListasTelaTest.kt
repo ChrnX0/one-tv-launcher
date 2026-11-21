@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher.telas
 
 import android.app.Activity
-import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color

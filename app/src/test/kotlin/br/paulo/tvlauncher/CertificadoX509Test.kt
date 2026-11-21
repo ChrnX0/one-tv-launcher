@@ -8,7 +8,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
 import java.net.InetAddress
-import java.net.ServerSocket
 import java.net.Socket
 import java.security.KeyStore
 import java.security.cert.CertPathValidator

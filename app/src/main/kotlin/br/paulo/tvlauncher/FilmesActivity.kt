@@ -1,12 +1,8 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,7 +22,6 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.ScrollView
 import android.widget.TextView
 import java.util.Locale
 
@@ -417,7 +412,6 @@ class FilmesActivity : Activity() {
         val idxS = indiceVersoes
         val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave; val notasS = notasFora
         val listasS = listasFora
-        val temOcultas = ocultas.isNotEmpty()
         val filtroS = filtro; val colecaoS = colecao; val marcoS = marcoNovos; val ultimaS = ultimaSalva
         val rotulo = { id: Int -> getString(id) }
         val antesSel = grade.selectedItemPosition
@@ -1241,19 +1235,6 @@ class FilmesActivity : Activity() {
             // A outra versão (dublada/legendada) vai junto: o ▼ do player troca no mesmo ponto (18/11/2026).
             outraVersao(f)?.let { o -> VodActivity.comOutraVersao(i, o.fonteId, o.id, o.extensao, Vod.nomeLimpo(o.nome), Idioma.versaoComPar(o.nome, o.grupo, f.nome, f.grupo)) } ?: i
         }
-    }
-
-    private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {
-        text = texto; textSize = Estilo.Leitura.BOTAO; typeface = fonteMedia; tag = marca
-        setPaddingRelative(dp(26), dp(12), dp(26), dp(12))
-        isFocusable = true; isClickable = true
-        background = StateListDrawable().apply {
-            addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(papel) })
-            // Sem foco: mais apagado (6% + fio, texto a 70%), para o botão branco com foco saltar aos olhos a 3 m (15/11/2026).
-            addState(intArrayOf(), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) })
-        }
-        setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.FUNDO, Estilo.TEXTO_2)))
-        setOnClickListener { aoApertar() }
     }
 
     private fun rotuloValor(r: String, v: String) = TextView(this).apply {

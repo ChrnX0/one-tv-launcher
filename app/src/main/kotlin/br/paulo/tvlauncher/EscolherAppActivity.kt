@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
 
 /**
  * A lista que aparece ao segurar 3 s um botão de app do controle (ver BotoesControle).

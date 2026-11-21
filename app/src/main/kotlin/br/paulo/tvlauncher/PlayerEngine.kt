@@ -6,11 +6,14 @@ import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.RenderersFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
@@ -39,11 +42,27 @@ object PlayerEngine {
         return FontePastas.Fabrica(ctx, DefaultDataSource.Factory(ctx, http))
     }
 
-    /** O player: renderizadores (EfeitosSom: FFmpeg para áudio, libass), áudio de filme e o que cada tela acrescentar. */
-    fun build(ctx: Context, renderers: RenderersFactory, configure: ExoPlayer.Builder.() -> Unit = {}): ExoPlayer =
-        ExoPlayer.Builder(ctx, renderers).apply(configure).build().also { p ->
-            p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
-        }
+    /**
+     * O player: renderizadores (EfeitosSom: FFmpeg para áudio, libass; sem eles, os do Media3), o tipo de som e o que
+     * cada tela acrescentar. [audioFocus] = true: o ExoPlayer pausa quando outro app toca e abaixa quando o Assistente
+     * fala. O despertador passa false (nada para disputar às 6 da manhã). 21/11/2026: rádio, podcast, despertador e a
+     * matriz de amostras passaram a nascer aqui também (antes cada um tinha o seu ExoPlayer.Builder).
+     */
+    fun build(
+        ctx: Context,
+        renderers: RenderersFactory = DefaultRenderersFactory(ctx),
+        contentType: Int = C.AUDIO_CONTENT_TYPE_MOVIE,
+        audioFocus: Boolean = true,
+        configure: ExoPlayer.Builder.() -> Unit = {},
+    ): ExoPlayer = ExoPlayer.Builder(ctx, renderers).apply(configure).build().also { p ->
+        p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(contentType).build(), audioFocus)
+    }
+
+    /** .m3u8 = HLS. Sem extensão conhecida, o Media3 descobre sozinho pelo conteúdo (ex.: .ts do Xtream). */
+    fun isHls(url: String) = url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)
+
+    /** O item de um endereço, com o tipo HLS quando a extensão diz. */
+    fun item(url: String): MediaItem.Builder = MediaItem.Builder().setUri(url).apply { if (isHls(url)) setMimeType(MimeTypes.APPLICATION_M3U8) }
 }
 
 /**

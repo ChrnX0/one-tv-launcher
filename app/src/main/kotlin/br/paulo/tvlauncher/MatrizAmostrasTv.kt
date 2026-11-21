@@ -14,12 +14,9 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.exoplayer.video.PlaceholderSurface
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -82,7 +79,7 @@ object MatrizAmostrasTv {
         var visto = MatrizAmostras.Visto()
         val fim = CountDownLatch(1)
         h.post {
-            val p = ExoPlayer.Builder(ctx, RenderizadoresPlayer(ctx)).setLooper(h.looper).build()
+            val p = PlayerEngine.build(ctx, RenderizadoresPlayer(ctx), audioFocus = false) { setLooper(h.looper) }   // teste por adb: não tira o som de ninguém
             val decs = LinkedHashSet<String>()
             p.addAnalyticsListener(object : AnalyticsListener {
                 override fun onVideoDecoderInitialized(e: AnalyticsListener.EventTime, nome: String, inicio: Long, dur: Long) { decs += nome }

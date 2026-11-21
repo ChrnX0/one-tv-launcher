@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * O clima da HOME: busca (Open-Meteo + METAR do aeroporto + mediana de 3 modelos) e decide temperatura, ícone e a linha

@@ -452,20 +452,6 @@ class JogosActivity : Activity() {
         corpo.getChildAt(0)?.requestFocus()
     }
 
-    /** "⋯ Mais opções": o que antes era uma fileira de botões. */
-    private fun maisOpcoes() = lista(getString(R.string.jogos_mais_opcoes), listOf(
-        getString(R.string.jogos_testar_rede) to { testarRede(avisar = true) },
-        getString(R.string.jogos_parear) to {
-            if (!JogosTv.abrirPareamento(this)) AvisoTv.rapido(this, getString(R.string.jogos_parear), getString(R.string.jogos_parear_falhou))
-        },
-        getString(R.string.jogos_jogar_pc) to { jogarNoPc(null) },
-        getString(R.string.jogos_baixar) to { mostrarLoja() },
-        getString(R.string.jogos_escolher) to {
-            startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_JOGOS))
-        },
-        getString(R.string.turma_config_titulo) to { configurarTurma() },
-    ))
-
     /** Sugestões que ainda não estão na TV. A Play Store decide se roda neste aparelho (dono: "problema dele"). */
     private fun mostrarLoja() {
         val faltam = Jogos.SUGESTOES.filter { !JogosTv.instalado(this, it.pacote) }

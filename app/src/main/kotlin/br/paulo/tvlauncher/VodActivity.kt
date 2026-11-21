@@ -3,14 +3,12 @@ package br.paulo.tvlauncher
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.SurfaceView
@@ -21,7 +19,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -31,12 +28,8 @@ import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.text.CueGroup
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import java.util.Locale
 
 /**
@@ -283,7 +276,6 @@ class VodActivity : Activity() {
     private var paramsAntesRepetir: androidx.media3.common.TrackSelectionParameters? = null
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
-    private val suave = Estilo.TEXTO_2
     private val coral = Estilo.ACENTO   // era 0xFF5A4E, um vermelho-rosado fora da marca (B9, 20/11/2026)
 
     private lateinit var video: SurfaceView

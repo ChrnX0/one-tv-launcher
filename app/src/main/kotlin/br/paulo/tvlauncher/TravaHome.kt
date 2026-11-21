@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText

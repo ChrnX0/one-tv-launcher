@@ -5,10 +5,7 @@ import android.graphics.Matrix
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.text.SpannableStringBuilder
 import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
-import android.text.style.TypefaceSpan
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -49,7 +46,6 @@ class ProtetorGaleria(
     /** Fundo "A Terra vista do espaço" (17/11/2026): as fotos da NASA no lugar do fundo do tema. */
     private val terra: Boolean = false,
 ) {
-    private val m200: Typeface = Fontes.nunito(ctx, 200)
     private val m400: Typeface = Fontes.nunito(ctx, 400)
     private val m500: Typeface = Fontes.nunito(ctx, 500)
     private val m600: Typeface = Fontes.nunito(ctx, 600)

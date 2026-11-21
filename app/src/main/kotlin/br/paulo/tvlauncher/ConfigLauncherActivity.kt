@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.util.Log
 import android.content.Context
 import android.content.Intent
@@ -63,11 +62,7 @@ class ConfigLauncherActivity : Activity() {
 
     private val textoClaro = Estilo.TEXTO     // cores do sistema de design
     private val textoSuave = Estilo.TEXTO_2
-    private val apagado = Estilo.TEXTO_3
-    private val destaque = Estilo.ACENTO
-    private val ambar = Estilo.ATENCAO
     private val coral = Estilo.ERRO
-    private val fonteLeve = Fontes.nunito(200)
     private val fonteMedia = Fontes.nunito(500)
 
     /** Uma aba do menu: título, explicação curta (aparece no alto do conteúdo) e quem monta o conteúdo. */

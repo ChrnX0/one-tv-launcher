@@ -42,10 +42,7 @@ object DnsSeguro {
      * Devolve true se voltou.
      */
     fun conferirDepoisDeTrocar(ctx: Context, anterior: Dns.Estado, novo: Dns.Estado): Boolean {
-        var resolveu = false
-        for (i in 1..TENTATIVAS) {
-            if (Dns.testarResolucao(ctx) != null) { resolveu = true; break }
-        }
+        val resolveu = (1..TENTATIVAS).any { Dns.testarResolucao(ctx) != null }   // para na 1ª que resolve
         val atual = Dns.atual(ctx)
         if (!deveVoltar(resolveu, novo, atual, anterior)) return false
         val ok = Dns.aplicar(ctx, anterior.modo, anterior.host)
