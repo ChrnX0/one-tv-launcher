@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.listen
 
+import br.paulo.tvlauncher.settings.Planos
 import br.paulo.tvlauncher.settings.PlanosTv
 import android.app.Activity
 import android.app.Dialog

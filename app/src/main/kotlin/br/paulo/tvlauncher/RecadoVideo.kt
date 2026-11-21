@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.Planos
 import android.app.Activity
 import android.content.Context
 import android.content.Intent

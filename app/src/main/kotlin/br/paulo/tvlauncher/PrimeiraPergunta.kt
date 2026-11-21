@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.Receitas
+import br.paulo.tvlauncher.family.UsoTv
+
 /**
  * Pergunta única da primeira abertura (T3, 17/11/2026). Antes eram duas perguntas parecidas ("Como esta TV vai ser
  * usada?" e "Para quem é esta TV?") e mais o "Modo simples" (hoje "Tela fácil"), três usos da palavra "simples".

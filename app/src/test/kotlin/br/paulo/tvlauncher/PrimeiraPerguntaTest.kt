@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
 import br.paulo.tvlauncher.PrimeiraPergunta.Resposta
+import br.paulo.tvlauncher.family.UsoTv
+import br.paulo.tvlauncher.settings.Receitas
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
