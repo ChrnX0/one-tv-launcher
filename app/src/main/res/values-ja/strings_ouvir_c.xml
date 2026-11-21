@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">要約 · %s</string>
     <string name="tx_resumindo">話した内容を読んでいます… 少々お待ちを。</string>
     <string name="tx_resumo_falhou">今回は要約が届きませんでした。少ししてからもう一度。</string>
+    <string name="ra_globo">地球儀で探す</string>
+    <string name="ra_globo_det">地球を回して世界中のラジオへ</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ 回す · OK：再生 · 戻る：閉じる</string>
+    <string name="ra_globo_mar">海の上… もう少し回して</string>
 </resources>

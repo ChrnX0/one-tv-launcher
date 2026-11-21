@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">ملخص · %s</string>
     <string name="tx_resumindo">أقرأ ما قيل… لحظة.</string>
     <string name="tx_resumo_falhou">لم يصل الملخص هذه المرة. حاول بعد قليل.</string>
+    <string name="ra_globo">استكشف الكرة الأرضية</string>
+    <string name="ra_globo_det">أدر العالم واهبط على إذاعة من أي مكان</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ تدوير · OK: تشغيل · رجوع: إغلاق</string>
+    <string name="ra_globo_mar">بحر مفتوح… أدر قليلًا بعد</string>
 </resources>

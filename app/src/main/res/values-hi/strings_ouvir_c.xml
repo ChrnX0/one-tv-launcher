@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">सारांश · %s</string>
     <string name="tx_resumindo">कही गई बातें पढ़ रही हूँ… एक पल।</string>
     <string name="tx_resumo_falhou">इस बार सारांश नहीं आया। थोड़ी देर बाद फिर कोशिश करें।</string>
+    <string name="ra_globo">ग्लोब पर खोजें</string>
+    <string name="ra_globo_det">दुनिया घुमाएँ और कहीं का भी रेडियो सुनें</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ घुमाएँ · OK: चलाएँ · वापस: बंद</string>
+    <string name="ra_globo_mar">खुला समुद्र… थोड़ा और घुमाएँ</string>
 </resources>

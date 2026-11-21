@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">요약 · %s</string>
     <string name="tx_resumindo">말한 내용을 읽는 중… 잠시만요.</string>
     <string name="tx_resumo_falhou">이번에는 요약이 오지 않았어요. 잠시 후 다시 시도하세요.</string>
+    <string name="ra_globo">지구본 탐색</string>
+    <string name="ra_globo_det">세계를 돌려 어디든 라디오를 찾아보세요</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ 돌리기 · OK: 재생 · 뒤로: 닫기</string>
+    <string name="ra_globo_mar">바다 위예요… 조금 더 돌려 보세요</string>
 </resources>

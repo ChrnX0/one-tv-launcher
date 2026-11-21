@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">Ringkasan · %s</string>
     <string name="tx_resumindo">Membaca yang dikatakan… sebentar.</string>
     <string name="tx_resumo_falhou">Ringkasan belum datang. Coba lagi sebentar lagi.</string>
+    <string name="ra_globo">Jelajahi globe</string>
+    <string name="ra_globo_det">Putar dunia dan temukan radio dari mana saja</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ putar · OK: putar radio · Kembali: tutup</string>
+    <string name="ra_globo_mar">Laut lepas… putar sedikit lagi</string>
 </resources>

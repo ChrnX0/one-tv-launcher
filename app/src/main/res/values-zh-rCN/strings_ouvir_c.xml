@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">摘要 · %s</string>
     <string name="tx_resumindo">正在阅读讲话内容… 请稍候。</string>
     <string name="tx_resumo_falhou">这次没有收到摘要，请稍后再试。</string>
+    <string name="ra_globo">在地球仪上探索</string>
+    <string name="ra_globo_det">转动地球，收听世界各地的电台</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ 转动 · OK：播放 · 返回：关闭</string>
+    <string name="ra_globo_mar">茫茫大海… 再转一点</string>
 </resources>

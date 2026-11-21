@@ -19,6 +19,8 @@ import br.paulo.tvlauncher.home.SonsCruz
 import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
 import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.GloboLogica
+import br.paulo.tvlauncher.listen.GloboRadiosView
 import br.paulo.tvlauncher.listen.IconeOuvir
 import br.paulo.tvlauncher.listen.MenuSom
 import br.paulo.tvlauncher.listen.PodcastPlayerLogic
@@ -350,7 +352,8 @@ class RadioActivity : Activity() {
             })
         }
         l += CruzOuvir.Prateleira("buscar", getString(R.string.ra_procurar), IconeOuvir.Tipo.BUSCAR, listOf(
-            CruzOuvir.Item("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), IconeOuvir.Tipo.BUSCAR, abrir = { pedirNome() })))
+            CruzOuvir.Item("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), IconeOuvir.Tipo.BUSCAR, abrir = { pedirNome() }),
+            CruzOuvir.Item("globo", getString(R.string.ra_globo), getString(R.string.ra_globo_det), IconeOuvir.Tipo.PAIS, abrir = { abrirGlobo() })))
         // Abrindo: o que toca (se toca), senão as favoritas (se há), senão as mais ouvidas do país.
         val inicio = when {
             !focarInicio -> null
@@ -421,6 +424,58 @@ class RadioActivity : Activity() {
     }
 
     // ---------------------------------------------------------------- som (quem toca é o OuvirServico)
+
+    // ---------------------------------------------------------------- globo (21/11/2026)
+
+    private var globo: FrameLayout? = null
+
+    /** Abre o globo das rádios ([GloboRadiosView]) por cima da tela: busca as ~1.500 mais ouvidas com lugar no mapa. */
+    private fun abrirGlobo() {
+        if (globo != null) return
+        AvisoTv.rapido(this, getString(R.string.ra_globo), getString(R.string.ra_carregando), 3)
+        Fundo.rodar("radios-globo") {
+            val l = Radios.estacoes(Radios.pedir { Radios.urlGlobo(it) }).filter { !it.lat.isNaN() }
+            runOnUiThread {
+                if (isDestroyed || globo != null) return@runOnUiThread
+                if (l.isEmpty()) { AvisoTv.rapido(this, getString(R.string.ra_globo), getString(R.string.ra_nada), 5); return@runOnUiThread }
+                mostrarGlobo(l)
+            }
+        }
+    }
+
+    private fun mostrarGlobo(l: List<Radios.Radio>) {
+        val raiz = FrameLayout(this)
+        val nome = TextView(this).apply {
+            setTextColor(Estilo.TEXTO); textSize = 30f; typeface = android.graphics.Typeface.DEFAULT_BOLD; gravity = Gravity.CENTER
+            maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
+        }
+        val sub = TextView(this).apply { setTextColor(Estilo.TEXTO_2); textSize = 20f; gravity = Gravity.CENTER; maxLines = 1 }
+        val dica = TextView(this).apply { setTextColor(0x99FFFFFF.toInt()); textSize = 18f; gravity = Gravity.CENTER; text = getString(R.string.ra_globo_dica) }
+        val v = GloboRadiosView(this, l, GloboLogica.centroDoPais(l, pais), aoTocar = { r -> tocar(r) }, aoFechar = { fecharGlobo() })
+        v.aoMirar = { r ->
+            nome.text = r?.nome ?: getString(R.string.ra_globo_mar)
+            sub.text = r?.let { CruzLogica.linhas(if (tocando?.id == it.id) "● " + getString(R.string.ouv_tocando_agora) else null, detalhe(it), it.tags.ifEmpty { null }) }.orEmpty()
+        }
+        raiz.addView(v, FrameLayout.LayoutParams(-1, -1))
+        val baixo = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            addView(nome); addView(sub); addView(dica, LinearLayout.LayoutParams(-1, -2).apply { topMargin = Estilo.dp(this@RadioActivity, 10) })
+        }
+        raiz.addView(baixo, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply {
+            val m = Estilo.dp(this@RadioActivity, 48); setMargins(m, 0, m, Estilo.dp(this@RadioActivity, 24))
+        })
+        (window.decorView.findViewById<android.view.ViewGroup>(android.R.id.content)).addView(raiz, FrameLayout.LayoutParams(-1, -1))
+        globo = raiz
+        raiz.alpha = 0f; raiz.animate().alpha(1f).setDuration(220).start()
+        v.requestFocus()
+    }
+
+    private fun fecharGlobo() {
+        val g = globo ?: return
+        globo = null
+        (g.parent as? android.view.ViewGroup)?.removeView(g)
+        montar()
+    }
 
     private fun tocar(r: Radios.Radio) {
         if (tocando?.id == r.id) { OuvirServico.instancia?.alternar(); return }

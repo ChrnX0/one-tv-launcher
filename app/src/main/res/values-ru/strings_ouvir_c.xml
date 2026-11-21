@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">Кратко · %s</string>
     <string name="tx_resumindo">Читаю сказанное… минутку.</string>
     <string name="tx_resumo_falhou">Краткое изложение не пришло. Попробуйте чуть позже.</string>
+    <string name="ra_globo">Глобус радио</string>
+    <string name="ra_globo_det">Вращайте мир и находите радио где угодно</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ вращать · OK: играть · Назад: закрыть</string>
+    <string name="ra_globo_mar">Открытое море… покрутите ещё</string>
 </resources>

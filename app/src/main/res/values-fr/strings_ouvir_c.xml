@@ -41,4 +41,8 @@
     <string name="tx_resumo_de">Résumé · %s</string>
     <string name="tx_resumindo">Lecture de ce qui a été dit… un instant.</string>
     <string name="tx_resumo_falhou">Le résumé n\'est pas arrivé cette fois. Réessayez plus tard.</string>
+    <string name="ra_globo">Explorer le globe</string>
+    <string name="ra_globo_det">Faites tourner le monde et tombez sur une radio de n\'importe où</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ tourner · OK : écouter · Retour : fermer</string>
+    <string name="ra_globo_mar">Pleine mer… tournez encore un peu</string>
 </resources>

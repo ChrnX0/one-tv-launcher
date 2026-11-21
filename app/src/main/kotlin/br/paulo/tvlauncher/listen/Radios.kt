@@ -36,7 +36,9 @@ object Radios {
 
     /** [logo]: o "favicon" do catálogo (endereço da imagem da rádio, às vezes vazio); a tela Rádio mostra no lugar da capa. */
     data class Radio(val id: String, val nome: String, val url: String, val pais: String = "", val tags: String = "",
-                     val bitrate: Int = 0, val codec: String = "", val logo: String = "")
+                     val bitrate: Int = 0, val codec: String = "", val logo: String = "",
+                     /** Onde fica (só do catálogo, para o globo; NaN = sem lugar). Não vai para as favoritas. */
+                     val lat: Double = Double.NaN, val lon: Double = Double.NaN)
 
     // ---------------------------------------------------------------- puro: o que está tocando
 
@@ -94,6 +96,9 @@ object Radios {
         "https://$servidor/json/stations/search?name=${q(nome.trim())}&$COMUM&limit=$limite"
     fun urlGenero(servidor: String, tag: String, pais: String? = null, limite: Int = LIMITE) =
         "https://$servidor/json/stations/search?tag=${q(tag)}&tagExact=true" + (pais?.let { "&countrycode=${q(it.uppercase())}" } ?: "") + "&$COMUM&limit=$limite"
+    /** As rádios com lugar no mapa, as mais ouvidas do mundo primeiro (o globo, 21/11/2026). */
+    fun urlGlobo(servidor: String, limite: Int = 1500) =
+        "https://$servidor/json/stations/search?has_geo_info=true&$COMUM&limit=$limite"
     fun urlPaises(servidor: String) = "https://$servidor/json/countries?order=stationcount&reverse=true&hidebroken=true"
     fun urlClique(servidor: String, id: String) = "https://$servidor/json/url/${q(id)}"
 
@@ -122,7 +127,9 @@ object Radios {
             if (!vistos.add("$n|$url") or !vistos.add("$n|pais:" + o.optString("countrycode").lowercase())) return@mapNotNull null
             Radio(o.optString("stationuuid").ifBlank { "url:" + url.hashCode() }, nome.take(80), url, o.optString("countrycode"),
                 o.optString("tags").split(',').map { it.trim() }.filter { it.isNotEmpty() }.take(3).joinToString(", "),
-                o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("favicon")))
+                o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("favicon")),
+                o.optDouble("geo_lat", Double.NaN).takeIf { it in -90.0..90.0 } ?: Double.NaN,
+                o.optDouble("geo_long", Double.NaN).takeIf { it in -180.0..180.0 } ?: Double.NaN)
         }
     }.getOrDefault(emptyList())
 
