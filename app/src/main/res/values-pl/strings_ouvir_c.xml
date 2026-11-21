@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Dźwięk</string>
+    <string name="som_titulo_pod">Dźwięk · %1$s</string>
+    <string name="som_voz_clara">Wyraźny głos</string>
+    <string name="som_so_este">Tylko dla tego podcastu</string>
+    <string name="som_abertura">Pomiń wstęp</string>
+    <string name="som_fim">Pomiń zakończenie</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">Te ustawienia dotyczą tylko %1$s.</string>
+    <string name="som_rodape_geral">Prędkość, cisza i wyraźny głos dotyczą wszystkich podcastów. Włącz \"Tylko dla tego podcastu\", aby zapisać inne dla %1$s.</string>
+    <string name="som_det">Prędkość, wyraźny głos, minutnik</string>
+    <string name="som_det_radio">Wyraźny głos i wyłącznik czasowy</string>
+    <string name="cap_titulo">Rozdziały</string>
+    <string name="cap_de">Rozdział %1$d z %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ przesuwają o 10 s · OK: rozdziały</string>
+    <string name="tx_titulo">Tekst wypowiedzi</string>
+    <string name="tx_carregando">wczytywanie</string>
+    <string name="tx_nao_tem">brak w tym odcinku</string>
+    <string name="tx_nao_tem_det">Ten podcast nie publikuje tekstu tego odcinka.</string>
+    <string name="tx_pe_busca">Wynik %1$d z %2$d · ◀ ▶ poprzedni / następny · ▼ nowe szukanie · OK: zamknij</string>
+    <string name="tx_buscar">Szukaj w wypowiedziach</string>
+    <string name="tx_nada">Nikt tego nie powiedział w tym odcinku.</string>
+    <string name="ra_ja_tocou">Już grało</string>
+    <string name="ra_parecidas">Podobne stacje</string>
+    <string name="som_radio">Ostatnio słuchane radio</string>
+    <string name="som_podcast">Najnowszy odcinek podcastów</string>
+    <string name="jor_titulo">Moje wiadomości</string>
+    <string name="jor_ouvir">Słuchaj wiadomości</string>
+    <string name="jor_min">%d min po kolei</string>
+    <string name="tx_pe">◀ ▶ poprzednie / następne zdanie · ▲ streszczenie · ▼ szukaj · OK: zamknij</string>
+    <string name="tx_gerando">tworzenie</string>
+    <string name="tx_gerando_det">Tworzenie tekstu… pierwsza część zajmie około minuty.</string>
+    <string name="tx_gerar">OK tworzy (za darmo)</string>
+    <string name="tx_cota">wróci jutro</string>
+    <string name="tx_cota_det">Dzisiejszy darmowy limit tekstu się skończył. Wróci jutro.</string>
+    <string name="tx_pulei">Pominięto reklamę</string>
+    <string name="tx_pulei_det">%d s · ◀ wraca do niej</string>
+    <string name="tx_resumo">Streszczenie od Sofy</string>
+    <string name="tx_resumo_de">Streszczenie · %s</string>
+    <string name="tx_resumindo">Czytam, co zostało powiedziane… chwila.</string>
+    <string name="tx_resumo_falhou">Streszczenie tym razem nie dotarło. Spróbuj za chwilę.</string>
+    <string name="ra_globo">Odkrywaj na globusie</string>
+    <string name="ra_globo_det">Zakręć światem i trafiaj na radio z każdego miejsca</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ obracają · OK: graj · Wstecz: zamknij</string>
+    <string name="ra_globo_mar">Otwarte morze… zakręć jeszcze trochę</string>
+    <string name="ra_voltar">Cofnij 30 s</string>
+    <string name="ra_voltar_det">Coś umknęło? Posłuchaj jeszcze raz (⏪ na pilocie)</string>
+    <string name="ra_ao_vivo">Wróć na żywo</string>
+    <string name="ra_atras">%s za transmisją na żywo</string>
+</resources>

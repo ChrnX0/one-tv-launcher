@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">المواضيع</string>
+    <string name="pod_ass_seus">تتابع: %d</string>
+    <string name="pod_ass_em_alta">رائج في هذا الموضوع</string>
+    <string name="pod_parecidos">مشابه: %s</string>
+    <string name="pod_ass_noticias">أخبار</string>
+    <string name="pod_ass_humor">كوميديا</string>
+    <string name="pod_ass_ciencia">علوم</string>
+    <string name="pod_ass_tecnologia">تقنية</string>
+    <string name="pod_ass_historia">تاريخ</string>
+    <string name="pod_ass_negocios">أعمال</string>
+    <string name="pod_ass_saude">صحة</string>
+    <string name="pod_ass_esportes">رياضة</string>
+    <string name="pod_ass_cultura">ثقافة</string>
+    <string name="pod_ass_crimes">جرائم حقيقية</string>
+    <string name="pod_ass_tv_filmes">تلفزيون وسينما</string>
+    <string name="pod_ass_musica">موسيقى</string>
+    <string name="pod_ass_educacao">تعليم</string>
+    <string name="pod_ass_infantil">الأطفال والعائلة</string>
+    <string name="pod_ass_fe">إيمان</string>
+    <string name="pod_ass_lazer">ترفيه</string>
+</resources>

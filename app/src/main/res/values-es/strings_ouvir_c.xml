@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Sonido</string>
+    <string name="som_titulo_pod">Sonido · %1$s</string>
+    <string name="som_voz_clara">Voz clara</string>
+    <string name="som_so_este">Solo en este pódcast</string>
+    <string name="som_abertura">Saltar la intro</string>
+    <string name="som_fim">Saltar el final</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">Estos ajustes valen solo para %1$s.</string>
+    <string name="som_rodape_geral">Velocidad, silencios y voz clara valen para todos los pódcasts. Activa \"Solo en este pódcast\" para guardar otros para %1$s.</string>
+    <string name="som_det">Velocidad, voz clara, temporizador</string>
+    <string name="som_det_radio">Voz clara y temporizador</string>
+    <string name="cap_titulo">Capítulos</string>
+    <string name="cap_de">Capítulo %1$d de %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ avanzan 10 s · OK: capítulos</string>
+    <string name="tx_titulo">Texto del audio</string>
+    <string name="tx_carregando">cargando</string>
+    <string name="tx_nao_tem">este episodio no lo tiene</string>
+    <string name="tx_nao_tem_det">Este pódcast no publica el texto de lo que se dice en este episodio.</string>
+    <string name="tx_pe_busca">Resultado %1$d de %2$d · ◀ ▶ anterior / siguiente · ▼ nueva búsqueda · OK: cerrar</string>
+    <string name="tx_buscar">Buscar en lo que se dijo</string>
+    <string name="tx_nada">Nadie dijo eso en este episodio.</string>
+    <string name="ra_ja_tocou">Ya sonó</string>
+    <string name="ra_parecidas">Radios parecidas</string>
+    <string name="som_radio">Última radio que escuché</string>
+    <string name="som_podcast">Episodio más nuevo de los pódcasts</string>
+    <string name="jor_titulo">Mi noticiero</string>
+    <string name="jor_ouvir">Escuchar el noticiero</string>
+    <string name="jor_min">%d min seguidos</string>
+    <string name="tx_pe">◀ ▶ frase anterior / siguiente · ▲ resumen · ▼ buscar · OK: cerrar</string>
+    <string name="tx_gerando">generando</string>
+    <string name="tx_gerando_det">Generando el texto… la primera parte tarda cerca de 1 minuto.</string>
+    <string name="tx_gerar">OK lo genera (gratis)</string>
+    <string name="tx_cota">vuelve mañana</string>
+    <string name="tx_cota_det">Se acabó la cuota gratis de texto de hoy. Vuelve mañana.</string>
+    <string name="tx_pulei">Anuncio saltado</string>
+    <string name="tx_pulei_det">%d s · ◀ vuelve a él</string>
+    <string name="tx_resumo">Resumen de Sofy</string>
+    <string name="tx_resumo_de">Resumen · %s</string>
+    <string name="tx_resumindo">Leyendo lo que se dijo… un momento.</string>
+    <string name="tx_resumo_falhou">El resumen no llegó esta vez. Inténtalo en un rato.</string>
+    <string name="ra_globo">Explorar el globo</string>
+    <string name="ra_globo_det">Gira el mundo y cae en una radio de cualquier lugar</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ giran · OK: reproducir · Atrás: cerrar</string>
+    <string name="ra_globo_mar">Mar abierto… gira un poco más</string>
+    <string name="ra_voltar">Atrás 30 s</string>
+    <string name="ra_voltar_det">¿Te perdiste algo? Vuelve a oírlo (⏪ en el mando)</string>
+    <string name="ra_ao_vivo">Volver al directo</string>
+    <string name="ra_atras">%s por detrás del directo</string>
+</resources>

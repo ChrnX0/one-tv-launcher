@@ -1,45 +1,47 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.player.Capitulos
+import br.paulo.tvlauncher.listen.Capitulos
+import br.paulo.tvlauncher.listen.PodcastFeed
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CapitulosTest {
-    private val caps = Capitulos.montar(longArrayOf(0, 90_000, 90_000, -1, 600_000, 0), listOf("Prólogo", " Opening ", ""), 1_200_000)
+    private val json = """{"version":"1.2.0","chapters":[{"startTime":0,"title":"Abertura"},{"startTime":95.5,"title":"Notícias"},
+        {"startTime":600,"title":"marca interna","toc":false},{"startTime":1200,"title":"Entrevista"}]}"""
 
-    @Test fun montaComFimInvalido() {
-        assertEquals(3, caps.size)
-        assertEquals(600_000L, caps[1].fimMs)        // fim inválido = começo do próximo
-        assertEquals(1_200_000L, caps[2].fimMs)      // último: duração
-        assertEquals("Opening", caps[1].titulo)
-        assertNull(caps[2].titulo)
+    @Test fun json() {
+        val c = Capitulos.doJson(json)
+        assertEquals(listOf("Abertura", "Notícias", "Entrevista"), c.map { it.titulo })
+        assertEquals(95_500L, c[1].inicioMs)
+        assertTrue(Capitulos.doJson("quebrado").isEmpty())
+        assertTrue(Capitulos.doJson("""{"chapters":[{"startTime":0,"title":"Só um"}]}""").isEmpty())   // 1 não é índice
     }
 
-    @Test fun aberturaPeloTitulo() {
-        // "Opening" de 8:30 é longo demais para ser abertura.
-        assertNull(Capitulos.abertura(caps))
-        val c = Capitulos.montar(longArrayOf(0, 60_000, 60_000, 150_000, 150_000, 900_000), listOf("A", "OP", "B"), 900_000)
-        assertEquals(60_000L, Capitulos.abertura(c)!!.inicioMs)
-        assertEquals("Abertura", Capitulos.abertura(Capitulos.montar(longArrayOf(0, 30_000), listOf("Abertura"), 30_000))!!.titulo)
+    @Test fun tempos() {
+        assertEquals(3_723_500L, Capitulos.tempoMs("1:02:03.5"))
+        assertEquals(750_000L, Capitulos.tempoMs("12:30"))
+        assertEquals(75_000L, Capitulos.tempoMs("75"))
+        assertNull(Capitulos.tempoMs("x"))
     }
 
-    @Test fun proximoEAnterior() {
-        assertEquals(90_000L, Capitulos.proximo(caps, 10_000))
-        assertEquals(-1L, Capitulos.proximo(caps, 700_000))
-        assertEquals(90_000L, Capitulos.anterior(caps, 100_000))    // passou 10 s: volta ao começo deste
-        assertEquals(0L, Capitulos.anterior(caps, 91_000))          // acabou de começar: o anterior
-        assertEquals(0L, Capitulos.anterior(caps, 1_000))
+    @Test fun navegar() {
+        val c = Capitulos.doJson(json)
+        assertEquals(1, Capitulos.atual(c, 100_000))
+        assertEquals(1_200_000L, Capitulos.proximo(c, 100_000))
+        assertNull(Capitulos.proximo(c, 1_300_000))
+        assertEquals(95_500L, Capitulos.anterior(c, 200_000))   // dentro do capítulo: volta ao começo dele
+        assertEquals(0L, Capitulos.anterior(c, 96_000))         // logo no começo: vai ao anterior
     }
 
-    @Test fun fontesEMiniatura() {
-        assertTrue(Capitulos.ehFonte("application/x-truetype-font", null))
-        assertTrue(Capitulos.ehFonte(null, "Arial.TTF"))
-        assertFalse(Capitulos.ehFonte("image/jpeg", "capa.jpg"))
-        assertEquals(240 to 134, Capitulos.tamanhoMiniatura(1920, 1080))
-        assertEquals(240 to 134, Capitulos.tamanhoMiniatura(0, 0))
-        assertEquals(240 to 180, Capitulos.tamanhoMiniatura(640, 480))
+    @Test fun podloveNoFeed() {
+        val xml = """<rss xmlns:psc="http://podlove.org/simple-chapters"><channel><title>P</title><item><title>E1</title>
+            <enclosure url="https://ex.com/a.mp3" type="audio/mpeg"/><psc:chapters><psc:chapter start="00:00:00" title="Início"/>
+            <psc:chapter start="00:05:10.250" title="Bloco 2"/></psc:chapters></item></channel></rss>"""
+        val p = org.kxml2.io.KXmlParser().apply { setInput(xml.reader()) }
+        val ep = PodcastFeed.ler(p)!!.episodios.first()
+        assertTrue(!Capitulos.precisaBaixar(ep.capitulos))
+        assertEquals(listOf(0L, 310_250L), Capitulos.doCampo(ep.capitulos).map { it.inicioMs })
     }
 }

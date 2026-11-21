@@ -495,7 +495,11 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         }
     }
 
-    private fun criarCategoria(p: Prateleira): View = LinearLayout(context).apply {
+    // Ícone e nome lado a lado, sem se cobrir: a transparência vai em cada desenho, sem camada fora da tela (saveLayer)
+    // a cada quadro. Mesma correção da HomeCruz (#319); medido na Sala 21/11/2026: aqui o quadro levava p50 32 ms.
+    private fun criarCategoria(p: Prateleira): View = object : LinearLayout(context) {
+        override fun hasOverlappingRendering() = false
+    }.apply {
         orientation = LinearLayout.VERTICAL
         gravity = Gravity.CENTER_HORIZONTAL
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
@@ -569,7 +573,12 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
             addView(linhaNome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(8); marginStart = dpi(PONTO + 10) })
         }
-        val raiz = LinearLayout(context).apply {
+        // Os vizinhos ficam meio transparentes (ALFA_COLUNA): com o padrão (hasOverlappingRendering = true) cada um vira
+        // uma camada fora da tela (saveLayer do tamanho do item) em TODO quadro, mesmo parado. Capa e textos não se
+        // cobrem, então aplicar a transparência em cada desenho dá o mesmo resultado (igual à HomeCruz, #319).
+        val raiz = object : LinearLayout(context) {
+            override fun hasOverlappingRendering() = false
+        }.apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.TOP
             clipChildren = false

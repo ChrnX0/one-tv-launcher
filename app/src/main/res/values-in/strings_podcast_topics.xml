@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">Topik</string>
+    <string name="pod_ass_seus">Anda ikuti: %d</string>
+    <string name="pod_ass_em_alta">Sedang tren di topik ini</string>
+    <string name="pod_parecidos">Serupa: %s</string>
+    <string name="pod_ass_noticias">Berita</string>
+    <string name="pod_ass_humor">Komedi</string>
+    <string name="pod_ass_ciencia">Sains</string>
+    <string name="pod_ass_tecnologia">Teknologi</string>
+    <string name="pod_ass_historia">Sejarah</string>
+    <string name="pod_ass_negocios">Bisnis</string>
+    <string name="pod_ass_saude">Kesehatan</string>
+    <string name="pod_ass_esportes">Olahraga</string>
+    <string name="pod_ass_cultura">Budaya</string>
+    <string name="pod_ass_crimes">Kriminal nyata</string>
+    <string name="pod_ass_tv_filmes">TV dan film</string>
+    <string name="pod_ass_musica">Musik</string>
+    <string name="pod_ass_educacao">Pendidikan</string>
+    <string name="pod_ass_infantil">Anak dan keluarga</string>
+    <string name="pod_ass_fe">Iman</string>
+    <string name="pod_ass_lazer">Hiburan</string>
+</resources>

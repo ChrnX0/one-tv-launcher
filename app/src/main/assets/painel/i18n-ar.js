@@ -1,5 +1,11 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Ouvir no celular":"استمع على الهاتف",
+"Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.":"يتابع هنا الإذاعة أو البودكاست الذي شغّله التلفاز آخر مرة، من النقطة نفسها.",
+"Ouvir aqui":"استمع هنا",
+"Nada tocou na TV ainda.":"لم يُشغَّل شيء على التلفاز بعد.",
+"Rádio":"إذاعة",
+"Podcast":"بودكاست",
 "ligado":"يعمل",
 "desligado":"متوقف",
 "sem leitura":"لا توجد قراءة",

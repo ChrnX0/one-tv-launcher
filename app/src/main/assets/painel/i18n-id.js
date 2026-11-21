@@ -1,5 +1,11 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Ouvir no celular":"Dengarkan di ponsel",
+"Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.":"Melanjutkan di sini radio atau podcast yang terakhir diputar TV, dari titik yang sama.",
+"Ouvir aqui":"Dengarkan di sini",
+"Nada tocou na TV ainda.":"Belum ada yang diputar di TV.",
+"Rádio":"Radio",
+"Podcast":"Podcast",
 "ligado":"menyala",
 "desligado":"mati",
 "sem leitura":"tidak ada data",

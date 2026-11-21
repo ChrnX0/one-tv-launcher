@@ -1,5 +1,11 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Ouvir no celular":"在手机上收听",
+"Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.":"从同一位置在此继续电视最后播放的电台或播客。",
+"Ouvir aqui":"在此收听",
+"Nada tocou na TV ainda.":"电视上还没有播放过任何内容。",
+"Rádio":"电台",
+"Podcast":"播客",
 "ligado":"开",
 "desligado":"关",
 "sem leitura":"无读数",

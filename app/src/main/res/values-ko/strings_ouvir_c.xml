@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">소리</string>
+    <string name="som_titulo_pod">소리 · %1$s</string>
+    <string name="som_voz_clara">또렷한 목소리</string>
+    <string name="som_so_este">이 팟캐스트에만</string>
+    <string name="som_abertura">도입부 건너뛰기</string>
+    <string name="som_fim">끝부분 건너뛰기</string>
+    <string name="som_segundos">%1$d초</string>
+    <string name="som_rodape_proprio">이 설정은 %1$s에만 적용됩니다.</string>
+    <string name="som_rodape_geral">속도, 무음, 또렷한 목소리는 모든 팟캐스트에 적용됩니다. %1$s에 따로 두려면 \"이 팟캐스트에만\"을 켜세요.</string>
+    <string name="som_det">속도, 또렷한 목소리, 타이머</string>
+    <string name="som_det_radio">또렷한 목소리와 취침 타이머</string>
+    <string name="cap_titulo">챕터</string>
+    <string name="cap_de">챕터 %1$d/%2$d</string>
+    <string name="cap_barra_dica">◀ ▶ 10초 이동 · OK: 챕터</string>
+    <string name="tx_titulo">말 자막</string>
+    <string name="tx_carregando">불러오는 중</string>
+    <string name="tx_nao_tem">이 에피소드에는 없음</string>
+    <string name="tx_nao_tem_det">이 팟캐스트는 이 에피소드의 텍스트를 제공하지 않습니다.</string>
+    <string name="tx_pe_busca">%2$d개 중 %1$d번째 · ◀ ▶ 이전 / 다음 · ▼ 새 검색 · OK: 닫기</string>
+    <string name="tx_buscar">말한 내용에서 검색</string>
+    <string name="tx_nada">이 에피소드에서 그 말은 나오지 않았어요.</string>
+    <string name="ra_ja_tocou">이미 나온 곡</string>
+    <string name="ra_parecidas">비슷한 라디오</string>
+    <string name="som_radio">마지막으로 들은 라디오</string>
+    <string name="som_podcast">최신 팟캐스트 에피소드</string>
+    <string name="jor_titulo">내 뉴스</string>
+    <string name="jor_ouvir">뉴스 듣기</string>
+    <string name="jor_min">연속 %d분</string>
+    <string name="tx_pe">◀ ▶ 이전 / 다음 문장 · ▲ 요약 · ▼ 검색 · OK: 닫기</string>
+    <string name="tx_gerando">만드는 중</string>
+    <string name="tx_gerando_det">텍스트를 만드는 중… 첫 부분은 약 1분 걸립니다.</string>
+    <string name="tx_gerar">OK로 만들기 (무료)</string>
+    <string name="tx_cota">내일 다시</string>
+    <string name="tx_cota_det">오늘의 무료 텍스트 한도를 다 썼어요. 내일 다시 생깁니다.</string>
+    <string name="tx_pulei">광고 건너뜀</string>
+    <string name="tx_pulei_det">%d초 · ◀ 되돌아가기</string>
+    <string name="tx_resumo">Sofy의 요약</string>
+    <string name="tx_resumo_de">요약 · %s</string>
+    <string name="tx_resumindo">말한 내용을 읽는 중… 잠시만요.</string>
+    <string name="tx_resumo_falhou">이번에는 요약이 오지 않았어요. 잠시 후 다시 시도하세요.</string>
+    <string name="ra_globo">지구본 탐색</string>
+    <string name="ra_globo_det">세계를 돌려 어디든 라디오를 찾아보세요</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ 돌리기 · OK: 재생 · 뒤로: 닫기</string>
+    <string name="ra_globo_mar">바다 위예요… 조금 더 돌려 보세요</string>
+    <string name="ra_voltar">30초 뒤로</string>
+    <string name="ra_voltar_det">놓쳤나요? 다시 들어요 (리모컨 ⏪)</string>
+    <string name="ra_ao_vivo">라이브로 돌아가기</string>
+    <string name="ra_atras">라이브보다 %s 늦음</string>
+</resources>
