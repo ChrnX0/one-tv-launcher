@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">现在与提示</string>
+    <string name="cl_pg_horas">接下来几小时和几天</string>
+    <string name="cl_pg_detalhes">详情、空气、太阳和月亮</string>
+    <string name="cl_hora">%1$d点</string>
+    <string name="cl_f_parar">正在下雨。预计%1$s左右停。</string>
+    <string name="cl_f_segue">正在下雨，接下来几小时还会继续。</string>
+    <string name="cl_f_chuva">%1$s左右可能下雨 (%2$d%%)。</string>
+    <string name="cl_f_calor">炎热：%2$s左右最高%1$d°。多喝水。</string>
+    <string name="cl_f_frio">降温：最低%1$d°。注意保暖。</string>
+    <string name="cl_f_sol">%1$s到%2$s阳光强烈。请涂防晒霜。</string>
+    <string name="cl_f_amanha">今天无雨。明天可能下雨 (%1$d%%)。</string>
+    <string name="cl_f_calmo">今天预计无雨。最高%1$d°。</string>
+    <string name="cl_d_guarda">雨伞</string>
+    <string name="cl_d_varal">晾衣服</string>
+    <string name="cl_d_sair">适合出门的时间</string>
+    <string name="cl_v_agora">现在</string>
+    <string name="cl_v_sim_as">%1$s起</string>
+    <string name="cl_v_talvez">也许</string>
+    <string name="cl_v_nao">不需要</string>
+    <string name="cl_v_ate">到%1$s</string>
+    <string name="cl_v_seca">今天能干</string>
+    <string name="cl_v_melhor_nao">最好别晾</string>
+    <string name="cl_v_amanha_sim">明天可以</string>
+    <string name="cl_v_amanha_nao">明天不行</string>
+    <string name="cl_v_as">%1$s</string>
+    <string name="cl_v_amanha_as">明天%1$s</string>
+    <string name="cl_v_hoje_nao">今天不行</string>
+</resources>

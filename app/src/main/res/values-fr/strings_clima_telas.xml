@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">Maintenant et conseils</string>
+    <string name="cl_pg_horas">Prochaines heures et jours</string>
+    <string name="cl_pg_detalhes">Détails, air, soleil et lune</string>
+    <string name="cl_hora">%1$d h</string>
+    <string name="cl_f_parar">Il pleut. La pluie devrait cesser vers %1$s.</string>
+    <string name="cl_f_segue">Il pleut, et cela devrait durer les prochaines heures.</string>
+    <string name="cl_f_chuva">Pluie probable vers %1$s (%2$d %%).</string>
+    <string name="cl_f_calor">Journée chaude : jusqu\'à %1$d° vers %2$s. Buvez de l\'eau.</string>
+    <string name="cl_f_frio">Froid en vue : jusqu\'à %1$d°. Couvrez-vous.</string>
+    <string name="cl_f_sol">Soleil fort de %1$s à %2$s. Mettez de la crème solaire.</string>
+    <string name="cl_f_amanha">Pas de pluie aujourd\'hui. Pluie probable demain (%1$d %%).</string>
+    <string name="cl_f_calmo">Pas de pluie prévue aujourd\'hui. Maximum %1$d°.</string>
+    <string name="cl_d_guarda">Parapluie</string>
+    <string name="cl_d_varal">Linge dehors</string>
+    <string name="cl_d_sair">Bon moment pour sortir</string>
+    <string name="cl_v_agora">Maintenant</string>
+    <string name="cl_v_sim_as">Dès %1$s</string>
+    <string name="cl_v_talvez">Peut-être</string>
+    <string name="cl_v_nao">Inutile</string>
+    <string name="cl_v_ate">Jusqu\'à %1$s</string>
+    <string name="cl_v_seca">Sèche aujourd\'hui</string>
+    <string name="cl_v_melhor_nao">Mieux vaut pas</string>
+    <string name="cl_v_amanha_sim">Demain, oui</string>
+    <string name="cl_v_amanha_nao">Demain, non</string>
+    <string name="cl_v_as">À %1$s</string>
+    <string name="cl_v_amanha_as">Demain %1$s</string>
+    <string name="cl_v_hoje_nao">Pas aujourd\'hui</string>
+</resources>

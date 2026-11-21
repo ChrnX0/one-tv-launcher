@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">अभी और सुझाव</string>
+    <string name="cl_pg_horas">अगले घंटे और दिन</string>
+    <string name="cl_pg_detalhes">विवरण, हवा, सूरज और चाँद</string>
+    <string name="cl_hora">%1$d:00</string>
+    <string name="cl_f_parar">अभी बारिश हो रही है। लगभग %1$s तक रुकनी चाहिए।</string>
+    <string name="cl_f_segue">अभी बारिश हो रही है, और अगले घंटों तक चल सकती है।</string>
+    <string name="cl_f_chuva">लगभग %1$s बारिश की संभावना (%2$d%%)।</string>
+    <string name="cl_f_calor">गर्म दिन: लगभग %2$s तक %1$d° तक। पानी पिएँ।</string>
+    <string name="cl_f_frio">ठंड आ रही है: %1$d° तक। गर्म कपड़े पहनें।</string>
+    <string name="cl_f_sol">%1$s से %2$s तक तेज़ धूप। सनस्क्रीन लगाएँ।</string>
+    <string name="cl_f_amanha">आज बारिश नहीं। कल बारिश की संभावना (%1$d%%)।</string>
+    <string name="cl_f_calmo">आज बारिश की उम्मीद नहीं। अधिकतम %1$d°।</string>
+    <string name="cl_d_guarda">छाता</string>
+    <string name="cl_d_varal">बाहर कपड़े सुखाना</string>
+    <string name="cl_d_sair">बाहर जाने का अच्छा समय</string>
+    <string name="cl_v_agora">अभी</string>
+    <string name="cl_v_sim_as">%1$s से</string>
+    <string name="cl_v_talvez">शायद</string>
+    <string name="cl_v_nao">ज़रूरत नहीं</string>
+    <string name="cl_v_ate">%1$s तक</string>
+    <string name="cl_v_seca">आज सूख जाएँगे</string>
+    <string name="cl_v_melhor_nao">बेहतर नहीं</string>
+    <string name="cl_v_amanha_sim">कल, हाँ</string>
+    <string name="cl_v_amanha_nao">कल, नहीं</string>
+    <string name="cl_v_as">%1$s पर</string>
+    <string name="cl_v_amanha_as">कल %1$s</string>
+    <string name="cl_v_hoje_nao">आज नहीं</string>
+</resources>

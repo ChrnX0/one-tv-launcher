@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">Şimdi ve ipuçları</string>
+    <string name="cl_pg_horas">Sonraki saatler ve günler</string>
+    <string name="cl_pg_detalhes">Ayrıntılar, hava, güneş ve ay</string>
+    <string name="cl_hora">%1$d:00</string>
+    <string name="cl_f_parar">Şu an yağmur yağıyor. %1$s civarı durması bekleniyor.</string>
+    <string name="cl_f_segue">Şu an yağmur yağıyor ve önümüzdeki saatlerde sürecek.</string>
+    <string name="cl_f_chuva">%1$s civarı yağmur olası (%%%2$d).</string>
+    <string name="cl_f_calor">Sıcak gün: %2$s civarı %1$d° kadar. Su için.</string>
+    <string name="cl_f_frio">Soğuk geliyor: %1$d° kadar. Sıkı giyinin.</string>
+    <string name="cl_f_sol">%1$s ile %2$s arası güneş güçlü. Güneş kremi sürün.</string>
+    <string name="cl_f_amanha">Bugün yağmur yok. Yarın yağmur olası (%%%1$d).</string>
+    <string name="cl_f_calmo">Bugün yağmur beklenmiyor. En yüksek %1$d°.</string>
+    <string name="cl_d_guarda">Şemsiye</string>
+    <string name="cl_d_varal">Dışarıda çamaşır</string>
+    <string name="cl_d_sair">Dışarı çıkmak için iyi saat</string>
+    <string name="cl_v_agora">Şimdi</string>
+    <string name="cl_v_sim_as">%1$s itibarıyla</string>
+    <string name="cl_v_talvez">Belki</string>
+    <string name="cl_v_nao">Gerek yok</string>
+    <string name="cl_v_ate">%1$s kadar</string>
+    <string name="cl_v_seca">Bugün kurur</string>
+    <string name="cl_v_melhor_nao">Yapmayın</string>
+    <string name="cl_v_amanha_sim">Yarın evet</string>
+    <string name="cl_v_amanha_nao">Yarın hayır</string>
+    <string name="cl_v_as">%1$s</string>
+    <string name="cl_v_amanha_as">Yarın %1$s</string>
+    <string name="cl_v_hoje_nao">Bugün yok</string>
+</resources>

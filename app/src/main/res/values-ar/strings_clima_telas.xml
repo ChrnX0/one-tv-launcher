@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">الآن ونصائح</string>
+    <string name="cl_pg_horas">الساعات والأيام القادمة</string>
+    <string name="cl_pg_detalhes">التفاصيل والهواء والشمس والقمر</string>
+    <string name="cl_hora">%1$d:00</string>
+    <string name="cl_f_parar">تمطر الآن. يُتوقع أن تتوقف نحو %1$s.</string>
+    <string name="cl_f_segue">تمطر الآن، ويُتوقع أن تستمر في الساعات القادمة.</string>
+    <string name="cl_f_chuva">مطر محتمل نحو %1$s (%2$d%%).</string>
+    <string name="cl_f_calor">يوم حار: حتى %1$d° نحو %2$s. اشرب الماء.</string>
+    <string name="cl_f_frio">برد قادم: حتى %1$d°. ارتدِ ملابس دافئة.</string>
+    <string name="cl_f_sol">شمس قوية من %1$s إلى %2$s. استخدم واقي الشمس.</string>
+    <string name="cl_f_amanha">لا مطر اليوم. مطر محتمل غدًا (%1$d%%).</string>
+    <string name="cl_f_calmo">لا مطر متوقع اليوم. العظمى %1$d°.</string>
+    <string name="cl_d_guarda">مظلة</string>
+    <string name="cl_d_varal">الغسيل في الخارج</string>
+    <string name="cl_d_sair">وقت مناسب للخروج</string>
+    <string name="cl_v_agora">الآن</string>
+    <string name="cl_v_sim_as">من %1$s</string>
+    <string name="cl_v_talvez">ربما</string>
+    <string name="cl_v_nao">لا داعي</string>
+    <string name="cl_v_ate">حتى %1$s</string>
+    <string name="cl_v_seca">يجف اليوم</string>
+    <string name="cl_v_melhor_nao">الأفضل لا</string>
+    <string name="cl_v_amanha_sim">غدًا، نعم</string>
+    <string name="cl_v_amanha_nao">غدًا، لا</string>
+    <string name="cl_v_as">في %1$s</string>
+    <string name="cl_v_amanha_as">غدًا %1$s</string>
+    <string name="cl_v_hoje_nao">ليس اليوم</string>
+</resources>
