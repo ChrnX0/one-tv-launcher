@@ -87,6 +87,23 @@ class FimDoVideoTest {
         assertFalse(FimDoVideo.erroDoTunel(3001))  // arquivo estragado
     }
 
+    @Test fun preparaProximoFaltando10MinMasNaoAntesDaMetade() {
+        val h = 3_600_000L
+        assertFalse(FimDoVideo.horaDePreparar(49 * 60_000L, h))
+        assertTrue(FimDoVideo.horaDePreparar(50 * 60_000L, h))
+        assertFalse(FimDoVideo.horaDePreparar(9 * 60_000L, 20 * 60_000L))   // episódio de 20 min: só da metade
+        assertTrue(FimDoVideo.horaDePreparar(10 * 60_000L, 20 * 60_000L))
+        assertFalse(FimDoVideo.horaDePreparar(10_000, 0))                   // duração desconhecida (ao vivo)
+    }
+
+    @Test fun lerProximoSoComOsTresCampos() {
+        assertEquals(Triple("123", 1, 2), FimDoVideo.lerProximo("123|1|2"))
+        assertNull(FimDoVideo.lerProximo("123|1"))
+        assertNull(FimDoVideo.lerProximo("|1|2"))
+        assertNull(FimDoVideo.lerProximo("123|x|2"))
+        assertNull(FimDoVideo.lerProximo(null))
+    }
+
     @Test fun tunelPresoSoComMuitoBaixado() {
         assertTrue(FimDoVideo.tunelPreso(30_000))    // o caso visto na Sala: 30 s baixados e parado
         assertFalse(FimDoVideo.tunelPreso(2_000))    // rede lenta de verdade: espera
