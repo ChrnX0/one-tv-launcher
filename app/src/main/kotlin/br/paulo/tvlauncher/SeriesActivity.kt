@@ -1215,12 +1215,7 @@ class SeriesActivity : Activity() {
             avisoBreve(getString(R.string.anteriormente_desligado)); tocar(s, ep, doComeco)
         }
         ver.setOnClickListener { d.dismiss(); tocar(s, ep, doComeco) }
-        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
-        d.setContentView(Estilo.dialogo(this, getString(R.string.anteriormente_titulo, Vod.nomeLimpo(s.nome)), titulo, resumo, listOf(nunca, ver)))
-        d.window?.apply {
-            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
+        Estilo.vestir(d, Estilo.dialogo(this, getString(R.string.anteriormente_titulo, Vod.nomeLimpo(s.nome)), titulo, resumo, listOf(nunca, ver)))
         d.setOnShowListener { ver.requestFocus() }
         d.show()
     }
@@ -1350,13 +1345,8 @@ class SeriesActivity : Activity() {
         parar.setOnClickListener { d.dismiss() }
         ver.setOnClickListener { d.dismiss(); if (perguntar) seguidos = 0; tocar(s, prox, doComeco = true) }
         val titulo = "${prox.rotulo} · ${Series.tituloCurto(s.nome, prox.titulo)}"
-        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
-        d.setContentView(Estilo.dialogo(this, getString(if (perguntar) R.string.vod_ainda_assistindo else R.string.vod_proximo_episodio),
+        Estilo.vestir(d, Estilo.dialogo(this, getString(if (perguntar) R.string.vod_ainda_assistindo else R.string.vod_proximo_episodio),
             titulo, if (perguntar) getString(R.string.vod_ainda_assistindo_texto) else null, listOf(parar, ver)))
-        d.window?.apply {
-            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
         d.setOnShowListener { ver.requestFocus() }
         d.setOnDismissListener { tela.removeCallbacks(tique); if (avisoProximo === d) avisoProximo = null }
         avisoProximo = d

@@ -2492,12 +2492,7 @@ class ConfigLauncherActivity : Activity() {
         // o QR entra no cartão antes do título (o cartão é o 1º filho do véu)
         (tela.getChildAt(0) as android.widget.LinearLayout).addView(qr, 0,
             android.widget.LinearLayout.LayoutParams(dp(280), dp(280)).apply { bottomMargin = dp(16) })
-        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
-        d.setContentView(tela)
-        d.window?.apply {
-            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
-            setLayout(-1, -1)
-        }
+        Estilo.vestir(d, tela)
         d.show()
         fechar.requestFocus()
     }

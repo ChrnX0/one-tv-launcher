@@ -254,9 +254,7 @@ class PluginsActivity : Activity() {
                 bottomMargin = Estilo.dp(this@PluginsActivity, 16)
             })
         }
-        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
-        d.setContentView(tela)
-        d.window?.apply { setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)); setLayout(-1, -1) }
+        Estilo.vestir(d, tela)
         d.show()
         aberto = d
         botoes.last().requestFocus()

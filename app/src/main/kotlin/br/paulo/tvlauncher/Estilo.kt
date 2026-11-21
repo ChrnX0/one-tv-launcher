@@ -609,6 +609,19 @@ object Estilo {
     const val CARTAO = 0xF5191C30.toInt()
 
     /**
+     * Põe [tela] (um [dialogo], já com o véu) numa janela [d] de tela cheia, sem título e sem o fundo do tema. As
+     * cópias destas 5 linhas em cada diálogo viraram esta função (refatoração 21/11/2026).
+     */
+    fun vestir(d: android.app.Dialog, tela: View) {
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(tela)
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+    }
+
+    /**
      * Diálogo único (perguntas por cima de qualquer tela: confirmar, permitir, aviso parado). Cartão opaco no padrão
      * dos painéis (raio 16, fio claro), rótulo SECAO em cima, TITULO, texto em LEGENDA e os botões em pílula
      * ([botao]) lado a lado. Devolve a tela inteira, já com o véu, para o setContentView.
