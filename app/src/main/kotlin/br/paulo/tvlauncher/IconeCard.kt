@@ -9,7 +9,7 @@ import android.view.View
 
 /**
  * Icone pequeno (desenhado em codigo, sem arquivos de imagem) para o lado esquerdo do titulo dos cards do
- * painel rápido (PainelRapidoActivity): mesmo espirito do SinalWifi e do IndicadorPilha, so que aqui um simbolo fixo
+ * painel rápido (PainelRapidoActivity): mesmo espirito do SinalWifi, so que aqui um simbolo fixo
  * por [tipo] ("bluetooth", "sistema", "audio", "launcher", "protetor", "timer", "acessibilidade", "fechar"). Traço fino.
  * [cor] muda com o foco (card branco = ícone escuro), pelo [definirCor].
  */

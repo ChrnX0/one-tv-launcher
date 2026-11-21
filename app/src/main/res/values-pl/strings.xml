@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Wygląd</string>
     <string name="cfg_tema">Motyw: %1$s</string>
     <string name="cfg_tema_det">Przełącza na następny wygląd</string>
-    <string name="cfg_pilhas">Automatyczne stosy</string>
     <string name="cfg_pilhas_on">wł.: luźne aplikacje grupują się według kategorii (wideo, muzyka, gry…) · OK wyłącza</string>
     <string name="cfg_pilhas_off">wył. · OK włącza (utworzone przez Ciebie stosy zostają)</string>
     <string name="cfg_sec_descanso">Wygaszacz ekranu</string>

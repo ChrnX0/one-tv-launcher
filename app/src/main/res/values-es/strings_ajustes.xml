@@ -93,10 +93,6 @@
     <string name="vq_det">Muestra un código QR con el aspecto de esta TV: tema, tamaño de texto, iconos.</string>
     <string name="vq_texto">Escanéalo con el móvil para guardarlo o enviarlo a alguien con Sofaly.</string>
     <string name="vq_fechar">Cerrar</string>
-    <string name="lh_titulo">Tamaño de las tarjetas de apps</string>
-    <string name="lh_det">Las tarjetas más grandes se ven mejor desde el sofá.</string>
-    <string name="lh_normal">Normal</string>
-    <string name="lh_grande">Grande</string>
     <string name="pl_titulo">Planes</string>
     <string name="pl_texto">Todo es gratis mientras las ventas no estén abiertas. Más adelante, Pro y Ultra se compran en el móvil.</string>
     <string name="pl_basico">Básico</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Todo lo de Básico\n• Muchas listas IPTV, grabación\n• Panel web completo\n• Claude, rutinas, Home Assistant\n• Todos los temas, copia en la nube</string>
     <string name="pl_ultra_itens">• Todo lo de Pro\n• Mejor pronóstico (3 modelos)\n• Fichas de películas completas\n• Subtítulos automáticos\n• Hasta 3 TV</string>
     <string name="pl_qr">Escanea con el móvil para ver precios y comprar.</string>
-    <string name="lh_arranjo">Disposición de las apps</string>
-    <string name="lh_arranjo_det">Una fila que se desplaza de lado, o una cuadrícula con todas las apps a la vista.</string>
-    <string name="lh_fileira">Fila</string>
-    <string name="lh_grade">Cuadrícula</string>
     <string name="pl_assinar">Suscribirse</string>
     <string name="pl_assinar_preco">Suscribirse · %1$s</string>
     <string name="pl_seu_plano">Tu plan</string>

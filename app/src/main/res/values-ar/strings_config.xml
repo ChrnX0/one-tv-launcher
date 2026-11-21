@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">تحديثات المشغّل التلقائية</string>
     <string name="cl_acao_atualizacao_det">يثبّت الإصدار الجديد وحده والشاشة مطفأة. محظور = يكتفي بالإشعار.</string>
     <string name="cl_tema">السمة</string>
-    <string name="cl_pilhas_det">يجمع التطبيقات المنفردة حسب الفئة؛ مجموعاتك تبقى</string>
     <string name="cl_clima">الطقس</string>
     <string name="cl_end_nenhum">لا شيء · يحدد التلفزيون موقعه عبر Wi-Fi؛ ويُستخدم العنوان عندما لا يستطيع Wi-Fi</string>
     <string name="cl_end_clima">عنوان الطقس</string>

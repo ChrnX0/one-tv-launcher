@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">런처 자동 업데이트</string>
     <string name="cl_acao_atualizacao_det">화면이 꺼진 상태에서 새 버전을 자동으로 설치합니다. 차단됨 = 알림만 표시.</string>
     <string name="cl_tema">테마</string>
-    <string name="cl_pilhas_det">개별 앱을 카테고리별로 묶음, 직접 만든 묶음은 유지</string>
     <string name="cl_clima">날씨</string>
     <string name="cl_end_nenhum">없음 · TV가 Wi-Fi로 위치를 찾으며, 찾지 못할 때 주소를 사용</string>
     <string name="cl_end_clima">날씨 주소</string>

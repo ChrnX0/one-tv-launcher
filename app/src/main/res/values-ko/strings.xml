@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">모양</string>
     <string name="cfg_tema">테마: %1$s</string>
     <string name="cfg_tema_det">다음 스타일로 전환</string>
-    <string name="cfg_pilhas">자동 묶음</string>
     <string name="cfg_pilhas_on">켜짐: 개별 앱을 카테고리별로 묶음(동영상, 음악, 게임…) · OK로 끄기</string>
     <string name="cfg_pilhas_off">꺼짐 · OK로 켜기(직접 만든 묶음은 유지됨)</string>
     <string name="cfg_sec_descanso">화면 보호기</string>

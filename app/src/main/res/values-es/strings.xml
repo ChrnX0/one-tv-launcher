@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Apariencia</string>
     <string name="cfg_tema">Tema: %1$s</string>
     <string name="cfg_tema_det">Cambia al siguiente aspecto</string>
-    <string name="cfg_pilhas">Pilas automáticas</string>
     <string name="cfg_pilhas_on">activadas: las apps sueltas se agrupan por categoría (video, música, juegos…) · OK desactiva</string>
     <string name="cfg_pilhas_off">desactivadas · OK activa (las pilas que creaste se mantienen)</string>
     <string name="cfg_sec_descanso">Protector de pantalla</string>

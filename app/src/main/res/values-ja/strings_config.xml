@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">ランチャーの自動アップデート</string>
     <string name="cl_acao_atualizacao_det">画面が消えているときに新しいバージョンを自動でインストールします。ブロック = 通知のみ。</string>
     <string name="cl_tema">テーマ</string>
-    <string name="cl_pilhas_det">単独のアプリをカテゴリ別にまとめます。自分で作ったスタックは残ります</string>
     <string name="cl_clima">天気</string>
     <string name="cl_end_nenhum">なし · TV は Wi-Fi で現在地を特定します。Wi-Fi で特定できないときに住所を使います</string>
     <string name="cl_end_clima">天気の住所</string>

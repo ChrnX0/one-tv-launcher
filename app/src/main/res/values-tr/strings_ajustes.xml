@@ -93,10 +93,6 @@
     <string name="vq_det">Bu TV’nin görünümünü içeren bir QR kod gösterir: tema, metin boyutu, simgeler.</string>
     <string name="vq_texto">Saklamak veya Sofaly kullanan birine göndermek için telefonunuzla tarayın.</string>
     <string name="vq_fechar">Kapat</string>
-    <string name="lh_titulo">Uygulama kartı boyutu</string>
-    <string name="lh_det">Büyük kartlar koltuktan daha kolay görünür.</string>
-    <string name="lh_normal">Normal</string>
-    <string name="lh_grande">Büyük</string>
     <string name="pl_titulo">Planlar</string>
     <string name="pl_texto">Satışlar açılana kadar her şey ücretsiz. Daha sonra Pro ve Ultra telefondan satın alınır.</string>
     <string name="pl_basico">Temel</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Temel’deki her şey\n• Çok sayıda IPTV listesi, kayıt\n• Tam web paneli\n• Claude, rutinler, Home Assistant\n• Tüm temalar, bulut yedeği</string>
     <string name="pl_ultra_itens">• Pro’daki her şey\n• Daha iyi hava durumu (3 model)\n• Zengin film sayfaları\n• Otomatik altyazılar\n• En fazla 3 TV</string>
     <string name="pl_qr">Fiyatları görmek ve satın almak için telefonunuzla tarayın.</string>
-    <string name="lh_arranjo">Uygulama düzeni</string>
-    <string name="lh_arranjo_det">Yana kayan bir sıra ya da tüm uygulamaların göründüğü bir ızgara.</string>
-    <string name="lh_fileira">Sıra</string>
-    <string name="lh_grade">Izgara</string>
     <string name="pl_assinar">Abone ol</string>
     <string name="pl_assinar_preco">Abone ol · %1$s</string>
     <string name="pl_seu_plano">Planınız</string>

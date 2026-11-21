@@ -43,14 +43,6 @@ class AppStorageTest {
         assertEquals("Failure [MOVE_FAILED_INSUFFICIENT_STORAGE]", AppStorageRules.falha("Failure [MOVE_FAILED_INSUFFICIENT_STORAGE]\n"))
     }
 
-    @Test fun menuMostraLugar() {
-        assertTrue(MenuApp.Acao.INSTALAR_EXTERNO in MenuApp.acoes(false, true, null, true))
-        assertTrue(MenuApp.Acao.INSTALAR_DISPOSITIVO in MenuApp.acoes(false, true, null, false))
-        val nada = MenuApp.acoes(false, true, null, null)
-        assertFalse(MenuApp.Acao.INSTALAR_EXTERNO in nada || MenuApp.Acao.INSTALAR_DISPOSITIVO in nada)
-        assertEquals(MenuApp.Acao.DESINSTALAR, MenuApp.acoes(false, true, null, true).last())
-    }
-
     @Test fun appGrandePedeAviso() {
         val mb = 1024L * 1024
         assertTrue(AppStorageRules.arriscado(904 * mb, 100))   // o RetroArch da Sala

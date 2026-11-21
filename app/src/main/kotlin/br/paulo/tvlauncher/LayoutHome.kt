@@ -3,62 +3,10 @@ package br.paulo.tvlauncher
 import android.content.Context
 
 /**
- * Layout flexível da HOME (degrau 1 contra o Projectivy, 15/11/2026): tamanho dos cartões de app e cartões
- * transparentes. Os dois ficam desligados de fábrica: a HOME padrão continua idêntica.
- *
- * Tamanho: o cartão 16:9 cresce e a linha de apps desce o mesmo tanto (a tela tem 540 dp; o Grande termina em ~522).
- * Os atalhos do Continuar (TV, Séries, Filmes) crescem junto, para cada um continuar em cima de um app.
- * Transparente: fora do foco o cartão fica a [ALFA_TRANSPARENTE] e o fundo aparece por ele; o focado fica inteiro.
- * Grade: os apps em fileiras (GradeApps) em vez de uma fila que rola de lado. A ficha do card em foco sai, o Continuar
- * sobe para logo abaixo do topo e a grade ocupa o resto da tela, rolando na vertical.
- * As contas são puras (LayoutHomeTest).
+ * Ajustes da tela inicial em cruz (HomeCruz), a ÚNICA HOME desde 21/11/2026: o PR que apagou a antiga (fileira/grade,
+ * tamanho e transparência dos cartões, pilhas, mover) levou junto as chaves dela. Cada ajuste mora em Extras.numero.
  */
 object LayoutHome {
-    const val CHAVE = "tamanho_cartoes"
-    val OPCOES = listOf(100, 115)
-    const val BASE_L = 112
-    const val BASE_A = 63
-    const val ALFA_TRANSPARENTE = 0.72f
-
-    fun valido(v: Int) = if (v in OPCOES) v else 100
-    fun proximo(atual: Int) = OPCOES[(OPCOES.indexOf(atual) + 1).mod(OPCOES.size)]
-
-    /** Largura e altura (dp) do cartão de app para o tamanho [pct]; mantém 16:9. */
-    fun largura(pct: Int) = BASE_L * valido(pct) / 100
-    fun altura(pct: Int) = largura(pct) * 9 / 16
-
-    /** Quanto a linha de apps (e a caixa do Continuar) cresce em altura, em dp. */
-    fun acrescimo(pct: Int) = altura(pct) - BASE_A
-
-    // ---- modo grade (posições em dp, tela de 960 x 540)
-    const val CHAVE_GRADE = "home_em_grade"
-    const val TELA_L = 960
-    const val TELA_A = 540
-    /** Onde o Continuar começa no modo grade: logo abaixo das pílulas do topo. */
-    const val TOPO_CONTINUAR_GRADE = 104
-
-    /** Quantas colunas cabem entre as margens [margem] com cartões de passo [passo] dp. Pelo menos 3. */
-    fun colunas(passo: Int, margem: Int) = ((TELA_L - 2 * margem) / passo).coerceAtLeast(3)
-
-    fun grade(ctx: Context) = Extras.numero(ctx, CHAVE_GRADE, 0) == 1
-    fun definirGrade(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_GRADE, if (sim) 1 else 0)
-
-    fun tamanho(ctx: Context) = valido(Extras.numero(ctx, CHAVE, 100))
-    fun definirTamanho(ctx: Context, v: Int) = Extras.definirNumero(ctx, CHAVE, valido(v))
-    fun transparente(ctx: Context) = Extras.ligado(ctx, Extras.Chave.CARTOES_TRANSPARENTES)
-
-    // ---- tela inicial em cruz (17/11/2026): a ÚNICA tela inicial (dono, 19:41Z: "aposenta a antiga"). Não há ajuste.
-    // A HOME antiga (fileira/grade) só volta por adb, como saída de emergência enquanto a Cruz não passa no teste de
-    // desempenho na TV: `EXTRAS --es o home_antiga --ez ligar true`. Depois do aceite, um PR próprio apaga a antiga.
-    const val CHAVE_JEITO = "home_jeito"
-    const val JEITO_ANTIGA = 2
-
-    /** true = Cruz (sempre, salvo a saída de emergência por adb). */
-    fun cruz(ctx: Context): Boolean = cruz(Extras.numero(ctx, CHAVE_JEITO, 0))
-    fun cruz(valorGuardado: Int): Boolean = valorGuardado != JEITO_ANTIGA
-
-    fun definirAntiga(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_JEITO, if (sim) JEITO_ANTIGA else 0)
-
     /**
      * Como os APPS aparecem na cruz (18/11/2026: o dono não gostou dos ícones quadrados). [BANNER] = a arte 16:9 de TV
      * do app com cantos arredondados (sem banner: o ícone num retângulo da cor dele); [REDONDO] = o ícone recortado em

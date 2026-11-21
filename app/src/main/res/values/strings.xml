@@ -14,7 +14,6 @@
     <string name="cfg_sec_aparencia">Appearance</string>
     <string name="cfg_tema">Theme: %1$s</string>
     <string name="cfg_tema_det">Switches to the next look</string>
-    <string name="cfg_pilhas">Automatic stacks</string>
     <string name="cfg_pilhas_on">on: loose apps group by category (video, music, games…) · OK turns off</string>
     <string name="cfg_pilhas_off">off · OK turns on (the stacks you made stay)</string>
     <string name="cfg_sec_descanso">Screen saver</string>

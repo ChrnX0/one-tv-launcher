@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">दिखावट</string>
     <string name="cfg_tema">थीम: %1$s</string>
     <string name="cfg_tema_det">अगले रूप पर बदलता है</string>
-    <string name="cfg_pilhas">अपने-आप बनने वाले समूह</string>
     <string name="cfg_pilhas_on">चालू: अलग ऐप श्रेणी के अनुसार समूह में (वीडियो, संगीत, गेम…) · OK से बंद</string>
     <string name="cfg_pilhas_off">बंद · OK से चालू (आपके बनाए समूह बने रहते हैं)</string>
     <string name="cfg_sec_descanso">स्क्रीन सेवर</string>

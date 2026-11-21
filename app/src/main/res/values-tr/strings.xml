@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Görünüm</string>
     <string name="cfg_tema">Tema: %1$s</string>
     <string name="cfg_tema_det">Sonraki görünüme geçer</string>
-    <string name="cfg_pilhas">Otomatik yığınlar</string>
     <string name="cfg_pilhas_on">açık: tek başına duran uygulamalar kategoriye göre gruplanır (video, müzik, oyun…) · OK kapatır</string>
     <string name="cfg_pilhas_off">kapalı · OK açar (oluşturduğunuz yığınlar kalır)</string>
     <string name="cfg_sec_descanso">Ekran koruyucu</string>

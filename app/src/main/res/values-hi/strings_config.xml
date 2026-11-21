@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">लॉन्चर के अपने-आप अपडेट</string>
     <string name="cl_acao_atualizacao_det">स्क्रीन बंद होने पर नया वर्शन खुद इंस्टॉल करता है। ब्लॉक = सिर्फ़ सूचना।</string>
     <string name="cl_tema">थीम</string>
-    <string name="cl_pilhas_det">अलग ऐप को श्रेणी के अनुसार समूह में रखता है; आपके अपने समूह बने रहते हैं</string>
     <string name="cl_clima">मौसम</string>
     <string name="cl_end_nenhum">कोई नहीं · TV Wi-Fi से अपनी जगह ढूँढता है; जब Wi-Fi न कर पाए तब पता इस्तेमाल होता है</string>
     <string name="cl_end_clima">मौसम पता</string>

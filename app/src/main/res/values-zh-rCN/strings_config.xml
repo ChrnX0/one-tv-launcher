@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">启动器自动更新</string>
     <string name="cl_acao_atualizacao_det">在屏幕关闭时自动安装新版本。已屏蔽 = 仅通知。</string>
     <string name="cl_tema">主题</string>
-    <string name="cl_pilhas_det">按类别整理零散应用；你自己的分组会保留</string>
     <string name="cl_clima">天气</string>
     <string name="cl_end_nenhum">无 · 电视通过 Wi-Fi 定位；Wi-Fi 无法定位时才使用地址</string>
     <string name="cl_end_clima">天气地址</string>

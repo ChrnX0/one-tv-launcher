@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Pembaruan launcher otomatis</string>
     <string name="cl_acao_atualizacao_det">Memasang versi baru sendiri saat layar mati. Diblokir = hanya memberi tahu.</string>
     <string name="cl_tema">Tema</string>
-    <string name="cl_pilhas_det">Mengelompokkan aplikasi lepas menurut kategori; tumpukan buatan Anda tetap ada</string>
     <string name="cl_clima">Cuaca</string>
     <string name="cl_end_nenhum">tidak ada · TV menemukan lokasinya lewat Wi-Fi; alamat dipakai saat Wi-Fi tidak bisa</string>
     <string name="cl_end_clima">Alamat cuaca</string>

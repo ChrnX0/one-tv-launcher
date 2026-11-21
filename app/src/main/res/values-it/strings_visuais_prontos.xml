@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Stili pronti</string>
-    <string name="vpr_det">Ogni OK passa allo stile successivo: tema, testo e dimensione delle schede insieme</string>
+    <string name="vpr_det">Ogni OK passa allo stile successivo: tema, testo e colore dello sfondo insieme</string>
     <string name="vpr_meu">Il tuo stile</string>
     <string name="vpr_classico">Classico</string>
     <string name="vpr_leitura">Lettura facile</string>
     <string name="vpr_galeria">Galleria</string>
     <string name="vpr_galeria_grande">Galleria grande</string>
-    <string name="vpr_grade">Griglia</string>
-    <string name="vpr_grade_grande">Griglia grande</string>
     <string name="vpr_cores">Colori dell’app</string>
-    <string name="vpr_cinema">Cinema</string>
 </resources>

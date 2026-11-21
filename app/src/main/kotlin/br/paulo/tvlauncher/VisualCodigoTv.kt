@@ -8,10 +8,8 @@ object VisualCodigoTv {
 
     fun atual(ctx: Context) = VisualCodigo.Visual(
         tema = Tema.atual(ctx).name, texto = TamanhoTexto.atual(ctx), icones = PacoteIcones.escolhido(ctx),
-        corDoFundo = Extras.ligado(ctx, Extras.Chave.COR_DO_FUNDO), pilhas = Organizacao.pilhasAutomaticas(ctx),
+        corDoFundo = Extras.ligado(ctx, Extras.Chave.COR_DO_FUNDO),
         brilho = FundoMeuDados.brilho(ctx), contraste = FundoMeuDados.contraste(ctx),
-        cartoes = LayoutHome.tamanho(ctx), transparente = LayoutHome.transparente(ctx),
-        grade = LayoutHome.grade(ctx),
     )
 
     fun codigo(ctx: Context) = VisualCodigo.codificar(atual(ctx))
@@ -34,12 +32,8 @@ object VisualCodigoTv {
             if (ok) { PacoteIcones.escolher(ctx, p); feito += "icones=${p.ifEmpty { "nenhum" }}" } else feito += "icones: $p não instalado"
         }
         v.corDoFundo?.let { Extras.definir(ctx, Extras.Chave.COR_DO_FUNDO, it); feito += "cor_do_fundo=$it" }
-        v.pilhas?.let { Organizacao.definirPilhasAutomaticas(ctx, it); feito += "pilhas=$it" }
         v.brilho?.let { FundoMeuDados.definirBrilho(ctx, it); feito += "brilho=$it" }
         v.contraste?.let { FundoMeuDados.definirContraste(ctx, it); feito += "contraste=$it" }
-        v.cartoes?.let { LayoutHome.definirTamanho(ctx, it); feito += "cartoes=$it" }
-        v.grade?.let { LayoutHome.definirGrade(ctx, it); feito += "grade=$it" }
-        v.transparente?.let { Extras.definir(ctx, Extras.Chave.CARTOES_TRANSPARENTES, it); feito += "transparente=$it" }
         return feito
     }
 }

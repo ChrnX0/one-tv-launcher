@@ -52,8 +52,6 @@ class TelasTest {
     private val telas: List<Pair<String, Class<out Activity>>> = listOf(
         "boas-vindas" to BoasVindasActivity::class.java,
         "home" to MainActivity::class.java,
-        "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
-        "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
         "home-leve" to MainActivity::class.java,     // cruz com a barra Leve (sem cápsulas) e ícones Duotom
         "home-relogio" to MainActivity::class.java,  // cruz com a barra Relógio grande e ícones Símbolo
         "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão por algumas horas na onda 3)
@@ -132,12 +130,8 @@ class TelasTest {
             val app = RuntimeEnvironment.getApplication()
             // A abertura com a logo (SplashOverlay) cobriria a HOME na foto: o relógio do Robolectric começa "logo após o boot".
             br.paulo.tvlauncher.SplashOverlay.setEnabled(app, false)
-            br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
-            br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
-            br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
             br.paulo.tvlauncher.AltoContraste.definir(app, nome.endsWith("-ac"))
-            // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
-            br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
+            // "home" é a cruz (a única tela inicial; a antiga, em fileira/grade, saiu em 21/11/2026).
             br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
                 "home-leve" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.LEVE
                 "home-relogio" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RELOGIO

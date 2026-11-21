@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Automatische Launcher-Updates</string>
     <string name="cl_acao_atualizacao_det">Installiert die neue Version selbst bei ausgeschaltetem Bildschirm. Gesperrt = nur Hinweis.</string>
     <string name="cl_tema">Design</string>
-    <string name="cl_pilhas_det">Gruppiert einzelne Apps nach Kategorie; deine eigenen Stapel bleiben</string>
     <string name="cl_clima">Wetter</string>
     <string name="cl_end_nenhum">keine · der Fernseher ortet sich über das WLAN; die Adresse dient, wenn das WLAN es nicht kann</string>
     <string name="cl_end_clima">Wetteradresse</string>

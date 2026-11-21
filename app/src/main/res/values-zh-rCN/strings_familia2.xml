@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">留言：%s。按 OK 标为已读。</string>
     <string name="mu_apagar">删除留言：%s</string>
     <string name="extras_RETROSPECTIVA_ANO">你的电视年度回顾（12 月在屏保上显示）</string>
-    <string name="extras_CARTOES_TRANSPARENTES">未选中时应用卡片半透明</string>
     <string name="extras_ENTRADAS_TV">在应用行中显示 HDMI 输入(仅限有输入接口的电视)</string>
     <string name="ra_titulo">你的电视 %d 年度回顾</string>
     <string name="ra_canal">最爱的频道：%1$s（%2$s）</string>

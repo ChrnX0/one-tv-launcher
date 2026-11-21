@@ -93,10 +93,6 @@
     <string name="vq_det">이 TV의 모양(테마, 글자 크기, 아이콘)을 QR 코드로 보여 줍니다.</string>
     <string name="vq_texto">휴대폰으로 스캔해 보관하거나 Sofaly를 쓰는 사람에게 보내세요.</string>
     <string name="vq_fechar">닫기</string>
-    <string name="lh_titulo">앱 카드 크기</string>
-    <string name="lh_det">카드가 크면 소파에서도 잘 보입니다.</string>
-    <string name="lh_normal">보통</string>
-    <string name="lh_grande">크게</string>
     <string name="pl_titulo">요금제</string>
     <string name="pl_texto">판매가 시작되기 전까지는 모두 무료입니다. 나중에 Pro와 Ultra는 휴대폰에서 구매합니다.</string>
     <string name="pl_basico">기본</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• 기본의 모든 기능\n• 여러 IPTV 목록, 녹화\n• 전체 웹 패널\n• Claude, 루틴, Home Assistant\n• 모든 테마, 클라우드 백업</string>
     <string name="pl_ultra_itens">• Pro의 모든 기능\n• 더 정확한 날씨(모델 3개)\n• 풍부한 영화 페이지\n• 자동 자막\n• TV 최대 3대</string>
     <string name="pl_qr">휴대폰으로 스캔해 가격을 보고 구매하세요.</string>
-    <string name="lh_arranjo">앱 배치</string>
-    <string name="lh_arranjo_det">옆으로 스크롤되는 한 줄, 또는 모든 앱이 보이는 격자.</string>
-    <string name="lh_fileira">한 줄</string>
-    <string name="lh_grade">격자</string>
     <string name="pl_assinar">구독하기</string>
     <string name="pl_assinar_preco">구독하기 · %1$s</string>
     <string name="pl_seu_plano">내 요금제</string>

@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">संदेश: %s। OK से पढ़ा चिह्नित करें।</string>
     <string name="mu_apagar">संदेश हटाएँ: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">इस साल आपका TV (दिसंबर में, स्क्रीन सेवर पर)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">चुने न होने पर पारदर्शी ऐप कार्ड</string>
     <string name="extras_ENTRADAS_TV">ऐप पंक्ति में HDMI इनपुट (केवल इनपुट वाले टीवी पर)</string>
     <string name="ra_titulo">%d में आपका TV</string>
     <string name="ra_canal">पसंदीदा चैनल: %1$s (%2$s)</string>

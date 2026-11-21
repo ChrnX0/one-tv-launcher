@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Tampilan</string>
     <string name="cfg_tema">Tema: %1$s</string>
     <string name="cfg_tema_det">Beralih ke tampilan berikutnya</string>
-    <string name="cfg_pilhas">Tumpukan otomatis</string>
     <string name="cfg_pilhas_on">aktif: aplikasi lepas dikelompokkan menurut kategori (video, musik, game…) · OK menonaktifkan</string>
     <string name="cfg_pilhas_off">nonaktif · OK mengaktifkan (tumpukan buatan Anda tetap ada)</string>
     <string name="cfg_sec_descanso">Screensaver</string>

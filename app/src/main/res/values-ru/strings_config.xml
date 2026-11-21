@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Автообновление лаунчера</string>
     <string name="cl_acao_atualizacao_det">Сам ставит новую версию при выключенном экране. Заблокировано = только уведомляет.</string>
     <string name="cl_tema">Тема</string>
-    <string name="cl_pilhas_det">Группирует отдельные приложения по категориям; ваши стопки остаются</string>
     <string name="cl_clima">Погода</string>
     <string name="cl_end_nenhum">нет · ТВ определяет место по Wi-Fi; адрес используется, когда Wi-Fi не справляется</string>
     <string name="cl_end_clima">Адрес для погоды</string>

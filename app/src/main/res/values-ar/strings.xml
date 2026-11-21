@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">المظهر</string>
     <string name="cfg_tema">السمة: %1$s</string>
     <string name="cfg_tema_det">ينتقل إلى المظهر التالي</string>
-    <string name="cfg_pilhas">مجموعات تلقائية</string>
     <string name="cfg_pilhas_on">مفعّل: التطبيقات المنفردة تُجمع حسب الفئة (فيديو، موسيقى، ألعاب…) · OK يوقفه</string>
     <string name="cfg_pilhas_off">متوقف · OK يفعّله (المجموعات التي أنشأتها تبقى)</string>
     <string name="cfg_sec_descanso">شاشة التوقف</string>

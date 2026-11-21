@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Automatic launcher updates</string>
     <string name="cl_acao_atualizacao_det">Installs the new version by itself with the screen off. Blocked = only notifies.</string>
     <string name="cl_tema">Theme</string>
-    <string name="cl_pilhas_det">Groups loose apps by category; your own stacks stay</string>
     <string name="cl_clima">Weather</string>
     <string name="cl_end_nenhum">none · the TV locates itself via Wi-Fi; the address is used when Wi-Fi can\'t</string>
     <string name="cl_end_clima">Weather address</string>

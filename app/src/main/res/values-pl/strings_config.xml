@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Automatyczne aktualizacje launchera</string>
     <string name="cl_acao_atualizacao_det">Sam instaluje nową wersję przy wyłączonym ekranie. Zablokowane = tylko powiadamia.</string>
     <string name="cl_tema">Motyw</string>
-    <string name="cl_pilhas_det">Grupuje luźne aplikacje według kategorii; Twoje stosy zostają</string>
     <string name="cl_clima">Pogoda</string>
     <string name="cl_end_nenhum">brak · telewizor lokalizuje się przez Wi-Fi; adres jest używany, gdy Wi-Fi nie wystarcza</string>
     <string name="cl_end_clima">Adres dla pogody</string>

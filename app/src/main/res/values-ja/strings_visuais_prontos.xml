@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">おすすめの見た目</string>
-    <string name="vpr_det">OKを押すたびに次の見た目に切り替わります（テーマ・文字・カードの大きさ）</string>
+    <string name="vpr_det">OKを押すたびに次の見た目に切り替わります（テーマ・文字・背景の色）</string>
     <string name="vpr_meu">自分の設定</string>
     <string name="vpr_classico">クラシック</string>
     <string name="vpr_leitura">読みやすい</string>
     <string name="vpr_galeria">ギャラリー</string>
     <string name="vpr_galeria_grande">大きなギャラリー</string>
-    <string name="vpr_grade">グリッド</string>
-    <string name="vpr_grade_grande">大きなグリッド</string>
     <string name="vpr_cores">アプリの色</string>
-    <string name="vpr_cinema">シネマ</string>
 </resources>

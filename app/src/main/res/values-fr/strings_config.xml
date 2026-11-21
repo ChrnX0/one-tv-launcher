@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Mises à jour automatiques du launcher</string>
     <string name="cl_acao_atualizacao_det">Installe la nouvelle version seule, écran éteint. Bloqué = avertit seulement.</string>
     <string name="cl_tema">Thème</string>
-    <string name="cl_pilhas_det">Regroupe les apps isolées par catégorie ; vos propres piles restent</string>
     <string name="cl_clima">Météo</string>
     <string name="cl_end_nenhum">aucune · la TV se localise via le Wi-Fi ; l’adresse sert quand le Wi-Fi n’y arrive pas</string>
     <string name="cl_end_clima">Adresse pour la météo</string>

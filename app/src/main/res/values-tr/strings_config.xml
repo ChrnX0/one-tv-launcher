@@ -116,7 +116,6 @@
     <string name="cl_acao_atualizacao">Otomatik launcher güncellemeleri</string>
     <string name="cl_acao_atualizacao_det">Yeni sürümü ekran kapalıyken kendisi yükler. Engelli = yalnızca bildirir.</string>
     <string name="cl_tema">Tema</string>
-    <string name="cl_pilhas_det">Tek başına duran uygulamaları kategoriye göre gruplar; kendi yığınlarınız kalır</string>
     <string name="cl_clima">Hava durumu</string>
     <string name="cl_end_nenhum">yok · TV kendini Wi-Fi ile bulur; Wi-Fi yetmezse adres kullanılır</string>
     <string name="cl_end_clima">Hava durumu adresi</string>

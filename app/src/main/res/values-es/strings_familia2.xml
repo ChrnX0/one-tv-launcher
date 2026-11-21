@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Mensaje: %s. OK marca como leído.</string>
     <string name="mu_apagar">Borrar mensaje: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Tu TV este año (en diciembre, en el protector)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Tarjetas de apps transparentes cuando no están seleccionadas</string>
     <string name="extras_ENTRADAS_TV">Entradas HDMI en la fila de apps (solo en TV con entradas)</string>
     <string name="ra_titulo">Tu TV en %d</string>
     <string name="ra_canal">Canal favorito: %1$s (%2$s)</string>

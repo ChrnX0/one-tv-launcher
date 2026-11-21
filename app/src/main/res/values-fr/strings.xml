@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Apparence</string>
     <string name="cfg_tema">Thème : %1$s</string>
     <string name="cfg_tema_det">Passe au style suivant</string>
-    <string name="cfg_pilhas">Piles automatiques</string>
     <string name="cfg_pilhas_on">activé : les apps isolées sont groupées par catégorie (vidéo, musique, jeux…) · OK désactive</string>
     <string name="cfg_pilhas_off">désactivé · OK active (les piles que vous avez faites restent)</string>
     <string name="cfg_sec_descanso">Économiseur d’écran</string>

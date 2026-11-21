@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Message : %s. OK marque comme lu.</string>
     <string name="mu_apagar">Supprimer le message : %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Votre année de TV (en décembre, sur l’économiseur)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Cartes d’applis transparentes quand elles ne sont pas sélectionnées</string>
     <string name="extras_ENTRADAS_TV">Entrées HDMI dans la rangée d’applis (seulement sur les téléviseurs avec entrées)</string>
     <string name="ra_titulo">Votre TV en %d</string>
     <string name="ra_canal">Chaîne préférée : %1$s (%2$s)</string>

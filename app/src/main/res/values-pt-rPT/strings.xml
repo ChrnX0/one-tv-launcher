@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Aparência</string>
     <string name="cfg_tema">Tema: %1$s</string>
     <string name="cfg_tema_det">Muda para o próximo visual</string>
-    <string name="cfg_pilhas">Pilhas automáticas</string>
     <string name="cfg_pilhas_on">ligadas: apps soltos juntam pela categoria (vídeo, música, jogo…) · OK desliga</string>
     <string name="cfg_pilhas_off">desligadas · OK liga (as pilhas que montou continuam)</string>
     <string name="cfg_sec_descanso">Descanso de ecrã</string>

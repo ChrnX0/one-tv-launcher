@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">مظاهر جاهزة</string>
-    <string name="vpr_det">كل ضغطة OK تنتقل إلى المظهر التالي: السمة والنص وحجم البطاقات معًا</string>
+    <string name="vpr_det">كل ضغطة OK تنتقل إلى المظهر التالي: السمة والنص ولون الخلفية معًا</string>
     <string name="vpr_meu">إعدادك</string>
     <string name="vpr_classico">كلاسيكي</string>
     <string name="vpr_leitura">قراءة سهلة</string>
     <string name="vpr_galeria">معرض</string>
     <string name="vpr_galeria_grande">معرض كبير</string>
-    <string name="vpr_grade">شبكة</string>
-    <string name="vpr_grade_grande">شبكة كبيرة</string>
     <string name="vpr_cores">ألوان التطبيق</string>
-    <string name="vpr_cinema">سينما</string>
 </resources>

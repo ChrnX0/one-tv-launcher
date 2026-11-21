@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">外観</string>
     <string name="cfg_tema">テーマ: %1$s</string>
     <string name="cfg_tema_det">次の外観に切り替えます</string>
-    <string name="cfg_pilhas">自動スタック</string>
     <string name="cfg_pilhas_on">オン: 単独のアプリをカテゴリ別にまとめます（動画、音楽、ゲーム…）· OK でオフ</string>
     <string name="cfg_pilhas_off">オフ · OK でオン（作成したスタックは残ります）</string>
     <string name="cfg_sec_descanso">スクリーンセーバー</string>

@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Darstellung</string>
     <string name="cfg_tema">Design: %1$s</string>
     <string name="cfg_tema_det">Wechselt zum nächsten Aussehen</string>
-    <string name="cfg_pilhas">Automatische Stapel</string>
     <string name="cfg_pilhas_on">an: einzelne Apps werden nach Kategorie gruppiert (Video, Musik, Spiele …) · OK schaltet aus</string>
     <string name="cfg_pilhas_off">aus · OK schaltet ein (deine eigenen Stapel bleiben)</string>
     <string name="cfg_sec_descanso">Bildschirmschoner</string>

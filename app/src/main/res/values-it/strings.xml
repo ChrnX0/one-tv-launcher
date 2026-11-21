@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Aspetto</string>
     <string name="cfg_tema">Tema: %1$s</string>
     <string name="cfg_tema_det">Passa allo stile successivo</string>
-    <string name="cfg_pilhas">Pile automatiche</string>
     <string name="cfg_pilhas_on">attive: le app sciolte si raggruppano per categoria (video, musica, giochi…) · OK disattiva</string>
     <string name="cfg_pilhas_off">disattivate · OK attiva (le pile che hai creato restano)</string>
     <string name="cfg_sec_descanso">Salvaschermo</string>

@@ -213,13 +213,11 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
             //     -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver      (sem extras: só mostra o estado)
             HOME_TESTE -> if (this is ControleShizukuAdbReceiver) {
                 TesteHome.capa = intent.getBooleanExtra("capa", TesteHome.capa)
-                TesteHome.destaque = intent.getBooleanExtra("destaque", TesteHome.destaque)
-                TesteHome.faixa = intent.getBooleanExtra("faixa", TesteHome.faixa)
                 TesteHome.fundo = intent.getBooleanExtra("fundo", TesteHome.fundo)
                 TesteHome.capaAnima = intent.getBooleanExtra("capaAnima", TesteHome.capaAnima)
                 TesteHome.capaCamada = intent.getBooleanExtra("capaCamada", TesteHome.capaCamada)
                 TesteHome.aplicar?.invoke()
-                resultData = TesteHome.run { "capa=$capa destaque=$destaque faixa=$faixa fundo=$fundo capaAnima=$capaAnima capaCamada=$capaCamada" }
+                resultData = TesteHome.run { "capa=$capa fundo=$fundo capaAnima=$capaAnima capaCamada=$capaCamada" }
             }
             UNIFI -> if (this is ControleShizukuAdbReceiver) {
                 val pendente = goAsync()   // HTTP: fora da thread principal

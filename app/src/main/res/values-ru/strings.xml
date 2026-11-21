@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">Внешний вид</string>
     <string name="cfg_tema">Тема: %1$s</string>
     <string name="cfg_tema_det">Переключает на следующий стиль</string>
-    <string name="cfg_pilhas">Автоматические стопки</string>
     <string name="cfg_pilhas_on">включены: отдельные приложения группируются по категориям (видео, музыка, игры…) · OK выключает</string>
     <string name="cfg_pilhas_off">выключены · OK включает (созданные вами стопки остаются)</string>
     <string name="cfg_sec_descanso">Заставка</string>

@@ -13,7 +13,6 @@
     <string name="cfg_sec_aparencia">外观</string>
     <string name="cfg_tema">主题：%1$s</string>
     <string name="cfg_tema_det">切换到下一种外观</string>
-    <string name="cfg_pilhas">自动分组</string>
     <string name="cfg_pilhas_on">开：零散应用按类别分组（视频、音乐、游戏…）· 按 OK 关闭</string>
     <string name="cfg_pilhas_off">关 · 按 OK 开启（你建立的分组会保留）</string>
     <string name="cfg_sec_descanso">屏幕保护程序</string>
