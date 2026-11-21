@@ -31,6 +31,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Foto do perfil: inicial da conta Google da TV. Liberada uma vez por adb (pm grant) -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Tile "Bluetooth" do painel rapido (21/11/2026): a tela de parear do sistema (AddAccessoryActivity) exige
+         BLUETOOTH_CONNECT de quem a abre; sem ela o Android recusa e caia nas configuracoes gerais. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- Ordenar por uso recente: precisa ser liberada uma vez por adb (appops), não aparece como pop-up na TV -->
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"

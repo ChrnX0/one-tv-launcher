@@ -102,7 +102,9 @@ object Config {
     // POST_NOTIFICATIONS (Android 13+, 15/11/2026): o aviso de pedido sem resposta (PedidoPendente) e o da gravação.
     val PERMISSOES_FIXAS = listOf("android.permission.READ_CALENDAR", "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.GET_ACCOUNTS") +
-        (if (android.os.Build.VERSION.SDK_INT >= 33) listOf("android.permission.POST_NOTIFICATIONS") else emptyList())
+        (if (android.os.Build.VERSION.SDK_INT >= 33) listOf("android.permission.POST_NOTIFICATIONS") else emptyList()) +
+        // BLUETOOTH_CONNECT (Android 12+, 21/11/2026): sem ela a tela de parear do sistema recusa abrir pelo painel rápido.
+        (if (android.os.Build.VERSION.SDK_INT >= 31) listOf("android.permission.BLUETOOTH_CONNECT") else emptyList())
 
     // --- Painel no navegador (PainelWeb.kt): liga/desliga e PIN em Configurações do launcher > Painel no navegador.
     // Porta: abaixo de 1024 (ex.: 80) o Android não deixa um app abrir (medido na TV em 04/11/2026), por isso 8080.
