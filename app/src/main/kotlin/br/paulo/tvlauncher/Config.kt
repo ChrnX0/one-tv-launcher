@@ -101,7 +101,10 @@ object Config {
         "android.permission.GET_ACCOUNTS") +
         (if (android.os.Build.VERSION.SDK_INT >= 33) listOf("android.permission.POST_NOTIFICATIONS") else emptyList()) +
         // BLUETOOTH_CONNECT (Android 12+, 21/11/2026): sem ela a tela de parear do sistema recusa abrir pelo painel rápido.
-        (if (android.os.Build.VERSION.SDK_INT >= 31) listOf("android.permission.BLUETOOTH_CONNECT") else emptyList())
+        (if (android.os.Build.VERSION.SDK_INT >= 31) listOf("android.permission.BLUETOOTH_CONNECT") else emptyList()) +
+        // READ_TV_LISTINGS (Android 11+, 21/11/2026): ler as fileiras (canais de prévia) que os outros apps publicam.
+        // Medido na Sala: concedida, 10 canais de YouTube, Prime Video, Max e Play Filmes (WatchNextTv.canais).
+        (if (android.os.Build.VERSION.SDK_INT >= 30) listOf("android.permission.READ_TV_LISTINGS") else emptyList())
 
     // --- Painel no navegador (PainelWeb.kt): liga/desliga e PIN em Configurações do launcher > Painel no navegador.
     // Porta: abaixo de 1024 (ex.: 80) o Android não deixa um app abrir (medido na TV em 04/11/2026), por isso 8080.

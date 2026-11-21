@@ -43,6 +43,16 @@ object WatchNextTv {
         l
     }
 
+    /** Programas dos canais de prévia (os cartões de cada fileira): pacote, título e se tem imagem. Só para medir. */
+    fun programas(ctx: Context, max: Int = 200): Result<List<Triple<String, String, Boolean>>> = runCatching {
+        val l = ArrayList<Triple<String, String, Boolean>>()
+        ctx.contentResolver.query(TvContract.PreviewPrograms.CONTENT_URI, arrayOf(TvContract.PreviewPrograms.COLUMN_PACKAGE_NAME,
+            TvContract.PreviewPrograms.COLUMN_TITLE, TvContract.PreviewPrograms.COLUMN_POSTER_ART_URI), null, null, null)?.use { c ->
+            while (c.moveToNext() && l.size < max) l += Triple(c.getString(0) ?: "?", c.getString(1) ?: "", !c.getString(2).isNullOrEmpty())
+        }
+        l
+    }
+
     /**
      * Para o adb e o relatório de compatibilidade: quantos, de quais apps, ou o erro (ex.: SecurityException).
      * 21/11/2026: também os canais e se a READ_TV_LISTINGS (Android 11+) está concedida.
@@ -52,5 +62,8 @@ object WatchNextTv {
             .put("titulos", JSONArray(l.take(5).map { it.titulo })) },
         { e -> JSONObject().put("ok", false).put("erro", e.javaClass.simpleName + ": " + (e.message ?: "")) })
         .put("read_tv_listings", ctx.checkSelfPermission("android.permission.READ_TV_LISTINGS") == android.content.pm.PackageManager.PERMISSION_GRANTED)
+        .put("programas", programas(ctx).fold({ p -> JSONObject().put("quantos", p.size).put("com_imagem", p.count { it.third })
+            .put("por_app", JSONObject(p.groupingBy { it.first }.eachCount())).put("exemplos", JSONArray(p.take(6).map { "${it.first}: ${it.second}" })) },
+            { e -> e.javaClass.simpleName + ": " + (e.message ?: "") }))
         .put("canais", canais(ctx).fold({ c -> JSONArray(c.map { "${it.first}: ${it.second}" }) }, { e -> e.javaClass.simpleName + ": " + (e.message ?: "") }))
 }
