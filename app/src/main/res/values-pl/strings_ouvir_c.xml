@@ -15,4 +15,12 @@
     <string name="cap_titulo">Rozdziały</string>
     <string name="cap_de">Rozdział %1$d z %2$d</string>
     <string name="cap_barra_dica">◀ ▶ przesuwają o 10 s · OK: rozdziały</string>
+    <string name="tx_titulo">Tekst wypowiedzi</string>
+    <string name="tx_carregando">wczytywanie</string>
+    <string name="tx_nao_tem">brak w tym odcinku</string>
+    <string name="tx_nao_tem_det">Ten podcast nie publikuje tekstu tego odcinka.</string>
+    <string name="tx_pe">◀ ▶ poprzednie / następne zdanie · ▼ szukaj · OK: zamknij</string>
+    <string name="tx_pe_busca">Wynik %1$d z %2$d · ◀ ▶ poprzedni / następny · ▼ nowe szukanie · OK: zamknij</string>
+    <string name="tx_buscar">Szukaj w wypowiedziach</string>
+    <string name="tx_nada">Nikt tego nie powiedział w tym odcinku.</string>
 </resources>

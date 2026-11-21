@@ -15,4 +15,12 @@
     <string name="cap_titulo">Chapters</string>
     <string name="cap_de">Chapter %1$d of %2$d</string>
     <string name="cap_barra_dica">◀ ▶ move 10 s · OK: chapters</string>
+    <string name="tx_titulo">Speech text</string>
+    <string name="tx_carregando">loading</string>
+    <string name="tx_nao_tem">not in this episode</string>
+    <string name="tx_nao_tem_det">This podcast does not publish the text of what is said in this episode.</string>
+    <string name="tx_pe">◀ ▶ previous / next sentence · ▼ search · OK: close</string>
+    <string name="tx_pe_busca">Found %1$d of %2$d · ◀ ▶ previous / next · ▼ new search · OK: close</string>
+    <string name="tx_buscar">Search in what was said</string>
+    <string name="tx_nada">Nobody said that in this episode.</string>
 </resources>

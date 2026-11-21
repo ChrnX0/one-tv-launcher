@@ -15,4 +15,12 @@
     <string name="cap_titulo">الفصول</string>
     <string name="cap_de">الفصل %1$d من %2$d</string>
     <string name="cap_barra_dica">◀ ▶ تحريك 10 ث · OK: الفصول</string>
+    <string name="tx_titulo">نص الكلام</string>
+    <string name="tx_carregando">جارٍ التحميل</string>
+    <string name="tx_nao_tem">غير متوفر في هذه الحلقة</string>
+    <string name="tx_nao_tem_det">لا ينشر هذا البودكاست نص هذه الحلقة.</string>
+    <string name="tx_pe">◀ ▶ الجملة السابقة / التالية · ▼ بحث · OK: إغلاق</string>
+    <string name="tx_pe_busca">النتيجة %1$d من %2$d · ◀ ▶ السابق / التالي · ▼ بحث جديد · OK: إغلاق</string>
+    <string name="tx_buscar">ابحث فيما قيل</string>
+    <string name="tx_nada">لم يقل أحد ذلك في هذه الحلقة.</string>
 </resources>

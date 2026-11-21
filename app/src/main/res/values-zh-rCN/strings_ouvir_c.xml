@@ -15,4 +15,12 @@
     <string name="cap_titulo">章节</string>
     <string name="cap_de">第 %1$d 章，共 %2$d 章</string>
     <string name="cap_barra_dica">◀ ▶ 移动 10 秒 · OK：章节</string>
+    <string name="tx_titulo">语音文字</string>
+    <string name="tx_carregando">加载中</string>
+    <string name="tx_nao_tem">本集没有</string>
+    <string name="tx_nao_tem_det">该播客未发布本集的文字。</string>
+    <string name="tx_pe">◀ ▶ 上一句 / 下一句 · ▼ 搜索 · OK：关闭</string>
+    <string name="tx_pe_busca">第 %1$d / %2$d 处 · ◀ ▶ 上一处 / 下一处 · ▼ 重新搜索 · OK：关闭</string>
+    <string name="tx_buscar">在讲话内容中搜索</string>
+    <string name="tx_nada">本集没有人说过这句话。</string>
 </resources>

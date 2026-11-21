@@ -15,4 +15,12 @@
     <string name="cap_titulo">Capítulos</string>
     <string name="cap_de">Capítulo %1$d de %2$d</string>
     <string name="cap_barra_dica">◀ ▶ avanzan 10 s · OK: capítulos</string>
+    <string name="tx_titulo">Texto del audio</string>
+    <string name="tx_carregando">cargando</string>
+    <string name="tx_nao_tem">este episodio no lo tiene</string>
+    <string name="tx_nao_tem_det">Este pódcast no publica el texto de lo que se dice en este episodio.</string>
+    <string name="tx_pe">◀ ▶ frase anterior / siguiente · ▼ buscar · OK: cerrar</string>
+    <string name="tx_pe_busca">Resultado %1$d de %2$d · ◀ ▶ anterior / siguiente · ▼ nueva búsqueda · OK: cerrar</string>
+    <string name="tx_buscar">Buscar en lo que se dijo</string>
+    <string name="tx_nada">Nadie dijo eso en este episodio.</string>
 </resources>

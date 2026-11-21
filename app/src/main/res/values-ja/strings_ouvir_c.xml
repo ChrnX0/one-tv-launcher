@@ -15,4 +15,12 @@
     <string name="cap_titulo">チャプター</string>
     <string name="cap_de">チャプター %1$d/%2$d</string>
     <string name="cap_barra_dica">◀ ▶ で10秒移動 · OK：チャプター</string>
+    <string name="tx_titulo">会話テキスト</string>
+    <string name="tx_carregando">読み込み中</string>
+    <string name="tx_nao_tem">このエピソードにはありません</string>
+    <string name="tx_nao_tem_det">このポッドキャストはこのエピソードのテキストを公開していません。</string>
+    <string name="tx_pe">◀ ▶ 前 / 次の文 · ▼ 検索 · OK：閉じる</string>
+    <string name="tx_pe_busca">%2$d 件中 %1$d 件目 · ◀ ▶ 前 / 次 · ▼ 再検索 · OK：閉じる</string>
+    <string name="tx_buscar">話した内容を検索</string>
+    <string name="tx_nada">このエピソードではその言葉は出てきません。</string>
 </resources>

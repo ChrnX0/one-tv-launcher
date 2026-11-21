@@ -15,4 +15,12 @@
     <string name="cap_titulo">अध्याय</string>
     <string name="cap_de">अध्याय %1$d / %2$d</string>
     <string name="cap_barra_dica">◀ ▶ 10 से आगे-पीछे · OK: अध्याय</string>
+    <string name="tx_titulo">बोले गए शब्द</string>
+    <string name="tx_carregando">लोड हो रहा है</string>
+    <string name="tx_nao_tem">इस एपिसोड में नहीं</string>
+    <string name="tx_nao_tem_det">यह पॉडकास्ट इस एपिसोड का टेक्स्ट प्रकाशित नहीं करता।</string>
+    <string name="tx_pe">◀ ▶ पिछला / अगला वाक्य · ▼ खोजें · OK: बंद</string>
+    <string name="tx_pe_busca">परिणाम %1$d / %2$d · ◀ ▶ पिछला / अगला · ▼ नई खोज · OK: बंद</string>
+    <string name="tx_buscar">कही गई बातों में खोजें</string>
+    <string name="tx_nada">इस एपिसोड में यह नहीं कहा गया।</string>
 </resources>

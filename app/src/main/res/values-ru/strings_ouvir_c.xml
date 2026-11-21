@@ -15,4 +15,12 @@
     <string name="cap_titulo">Главы</string>
     <string name="cap_de">Глава %1$d из %2$d</string>
     <string name="cap_barra_dica">◀ ▶ на 10 с · OK: главы</string>
+    <string name="tx_titulo">Текст речи</string>
+    <string name="tx_carregando">загрузка</string>
+    <string name="tx_nao_tem">нет в этом выпуске</string>
+    <string name="tx_nao_tem_det">Этот подкаст не публикует текст этого выпуска.</string>
+    <string name="tx_pe">◀ ▶ предыдущая / следующая фраза · ▼ поиск · OK: закрыть</string>
+    <string name="tx_pe_busca">Найдено %1$d из %2$d · ◀ ▶ назад / вперёд · ▼ новый поиск · OK: закрыть</string>
+    <string name="tx_buscar">Поиск по сказанному</string>
+    <string name="tx_nada">Этого не говорили в этом выпуске.</string>
 </resources>

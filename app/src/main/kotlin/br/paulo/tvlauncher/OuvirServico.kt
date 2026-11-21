@@ -33,6 +33,7 @@ import br.paulo.tvlauncher.listen.OuvirEstado
 import br.paulo.tvlauncher.listen.PodcastFeed
 import br.paulo.tvlauncher.listen.Podcasts
 import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.listen.Transcricao
 import br.paulo.tvlauncher.player.Episodio
 import br.paulo.tvlauncher.player.PlayerEngine
 import br.paulo.tvlauncher.player.Posicao
@@ -310,6 +311,7 @@ class OuvirServico : Service() {
         ui.removeCallbacks(salvarPeriodico); ui.postDelayed(salvarPeriodico, SALVAR_MS)
         ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
         carregarCapitulos(e)
+        carregarTexto(e)
         garantirSessao()
         primeiroPlano(e.podcast, e.ep.titulo)
         publicar()
@@ -334,6 +336,27 @@ class OuvirServico : Service() {
         }
     }
 
+    /** O texto da fala do episódio tocando ([Transcricao]); vazio = não tem (ou ainda está baixando). */
+    @Volatile var texto: List<Transcricao.Trecho> = emptyList()
+        private set
+    /** Ainda baixando o texto da fala (a tela diz "carregando" em vez de "não tem"). */
+    @Volatile var textoCarregando = false
+        private set
+
+    /** Baixa a transcrição que o próprio feed oferece (a melhor para sincronizar), fora da thread da tela. */
+    private fun carregarTexto(e: EpisodioTocando) {
+        texto = emptyList()
+        val tr = Transcricao.escolher(e.ep.transcricoes) ?: return
+        val guid = e.ep.guid
+        textoCarregando = true
+        Fundo.rodar("transcricao") {
+            val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(tr.url).host).toList() }.getOrNull()
+            val l = if (ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }) emptyList()
+                else Transcricao.ler(runCatching { Http.getText(tr.url, readMs = 15_000, maxBytes = 3 * 1024 * 1024, followRedirects = false) }.getOrNull(), tr.tipo)
+            ui.post { if (episodio?.ep?.guid == guid) { texto = l; textoCarregando = false; publicar() } }
+        }
+    }
+
     /** Vai para o próximo capítulo (+1) ou volta ao começo deste/anterior (-1). Sem capítulos, não faz nada. */
     fun irCapitulo(delta: Int) {
         val c = capitulos; if (c.isEmpty() || episodio == null) return
@@ -346,7 +369,7 @@ class OuvirServico : Service() {
         if (episodio != null) salvarPosicao()
         ui.removeCallbacks(salvarPeriodico)
         soltarPlayer()
-        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L; capitulos = emptyList()
+        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L; capitulos = emptyList(); texto = emptyList(); textoCarregando = false
     }
 
     private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {

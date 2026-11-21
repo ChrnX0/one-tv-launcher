@@ -15,4 +15,12 @@
     <string name="cap_titulo">Chapitres</string>
     <string name="cap_de">Chapitre %1$d sur %2$d</string>
     <string name="cap_barra_dica">◀ ▶ avancent de 10 s · OK : chapitres</string>
+    <string name="tx_titulo">Texte de l\'audio</string>
+    <string name="tx_carregando">chargement</string>
+    <string name="tx_nao_tem">absent de cet épisode</string>
+    <string name="tx_nao_tem_det">Ce podcast ne publie pas le texte de cet épisode.</string>
+    <string name="tx_pe">◀ ▶ phrase précédente / suivante · ▼ chercher · OK : fermer</string>
+    <string name="tx_pe_busca">Résultat %1$d sur %2$d · ◀ ▶ précédent / suivant · ▼ nouvelle recherche · OK : fermer</string>
+    <string name="tx_buscar">Chercher dans ce qui est dit</string>
+    <string name="tx_nada">Personne n\'a dit cela dans cet épisode.</string>
 </resources>

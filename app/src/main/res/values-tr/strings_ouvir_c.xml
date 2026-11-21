@@ -15,4 +15,12 @@
     <string name="cap_titulo">Bölümler</string>
     <string name="cap_de">Bölüm %1$d / %2$d</string>
     <string name="cap_barra_dica">◀ ▶ 10 sn ilerletir · OK: bölümler</string>
+    <string name="tx_titulo">Konuşma metni</string>
+    <string name="tx_carregando">yükleniyor</string>
+    <string name="tx_nao_tem">bu bölümde yok</string>
+    <string name="tx_nao_tem_det">Bu podcast bu bölümün metnini yayınlamıyor.</string>
+    <string name="tx_pe">◀ ▶ önceki / sonraki cümle · ▼ ara · OK: kapat</string>
+    <string name="tx_pe_busca">Sonuç %1$d / %2$d · ◀ ▶ önceki / sonraki · ▼ yeni arama · OK: kapat</string>
+    <string name="tx_buscar">Söylenenlerde ara</string>
+    <string name="tx_nada">Bu bölümde bu söylenmedi.</string>
 </resources>
