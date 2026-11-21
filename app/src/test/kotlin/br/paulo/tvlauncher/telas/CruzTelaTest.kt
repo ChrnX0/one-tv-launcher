@@ -49,6 +49,19 @@ class CruzTelaTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
+    // Conjuntos de arte pronta (21/11/2026): a mesma cruz com Vintage, Joia, Fotorrealista e Vintage 2.0.
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun vintage() = conferir(IconeCruz.Estilo.VINTAGE, "vintage")
+
+    @Config(qualifiers = "en-w960dp-h540dp-land-television-xhdpi")
+    @Test fun joia() = conferir(IconeCruz.Estilo.JOIA, "joia")
+
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun foto() = conferir(IconeCruz.Estilo.FOTO, "foto")
+
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun vintage2() = conferir(IconeCruz.Estilo.VINTAGE2, "vintage2")
+
     /**
      * Uma linha embaixo do nome e o resto no canto de baixo à direita (Paulo, 18/11/2026 12:15 local). A situação do
      * item ([HomeCruz.Item.situacao], o programa no ar) abre os detalhes e não aparece de novo embaixo.
@@ -117,6 +130,23 @@ class CruzTelaTest {
             ic.draw(c)
         }
         File(saida, "cruz-icones-animacao.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    /** A mesma prévia para os conjuntos de arte (21/11/2026): um arquivo por conjunto, a parte que se mexe em 8 quadros. */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun animacaoDosConjuntos() {
+        saida.mkdirs()
+        val tipos = IconeCruz.Tipo.entries
+        val lado = 96; val fases = listOf(-1f, 0.12f, 0.25f, 0.37f, 0.5f, 0.62f, 0.75f, 0.87f)
+        for (e in IconeCruz.Estilo.entries.filter { it.pasta != null }) {
+            val bmp = Bitmap.createBitmap(lado * fases.size, lado * tipos.size, Bitmap.Config.ARGB_8888)
+            val c = Canvas(bmp); c.drawColor(Estilo.FUNDO)
+            for ((i, t) in tipos.withIndex()) for ((j, f) in fases.withIndex()) {
+                val ic = IconeCruz(t, e).apply { faseFixa = f; setBounds(j * lado + 6, i * lado + 6, (j + 1) * lado - 6, (i + 1) * lado - 6) }
+                ic.draw(c)
+            }
+            File(saida, "cruz-icones-animacao-${e.pasta}.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
     }
 
     private fun conferir(estilo: IconeCruz.Estilo, nome: String) {

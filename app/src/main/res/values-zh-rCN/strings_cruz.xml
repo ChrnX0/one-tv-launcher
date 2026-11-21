@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">屏幕慢慢变暗，电视随后关闭</string>
     <string name="cruz_desliga_as">将于 %1$s 关闭</string>
     <string name="cruz_dormir_cancelar">按 OK 取消</string>
-    <string name="cruz_linha">线条</string>
+    <string name="cruz_linha">基础</string>
     <string name="cruz_mover">移动到…</string>
     <string name="cruz_mover_titulo">将 %1$s 移动到</string>
     <string name="cruz_central">游戏中心</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">正在播放</string>
     <string name="cruz_canto_parou">停在</string>
     <string name="cruz_canto_conectado">已连接</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">复古</string>
+    <string name="cruz_joia">宝石</string>
+    <string name="cruz_foto">写实</string>
+    <string name="cruz_vintage2">复古 2.0</string>
+    <string name="cruz_icone_seguir">跟随图标组（%1$s）</string>
+    <string name="cruz_icone_de">图标：%1$s</string>
+    <string name="cruz_icone_categoria">整个分类：%1$s</string>
 </resources>

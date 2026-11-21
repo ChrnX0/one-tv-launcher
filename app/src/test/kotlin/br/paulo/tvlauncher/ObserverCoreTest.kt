@@ -172,4 +172,21 @@ class ObserverCoreTest {
         val ficou = ObserverCore.readNotes(fila, agora + 1)
         assertEquals(listOf(ObserverCore.Kind.FREEZE_UNDONE), ficou.map { it.kind })   // o que a Sofy FEZ continua
     }
+
+    @Test fun reinicioDoReparoDoWifiSeExplica() {
+        val boot = 1_000_000_000L
+        assertEquals("ligou de novo (motivo: reboot,deviceowner); quem reiniciou foi o reparo do Wi-Fi (sem Wi-Fi e religar não bastou); sem sinal desde 0 min antes de ligar",
+            ObserverCore.bootWhy("reboot,deviceowner", boot - 30_000L, boot, wifiRepairAt = boot - 40_000L))
+        // Reparo de horas atrás não explica este boot.
+        assertEquals("ligou de novo (motivo: reboot)", ObserverCore.bootWhy("reboot", 0L, boot, wifiRepairAt = boot - 3_600_000L))
+    }
+
+    @Test fun medidaVelhaNaoEVoltouAoNormal() {
+        val velha = snap(Signal.SLOW_FRAMES_PCT to 45, Signal.INTERNET to 1, idade = ObserverCore.STALE_MS + 1)
+        assertEquals(emptyList<Kind>(), ObserverCore.confirmedCleared(listOf(Kind.SLOW_HOME, Kind.NO_INTERNET), velha, agora))
+        val nova = snap(Signal.SLOW_FRAMES_PCT to 5, Signal.INTERNET to 1)
+        assertEquals(listOf(Kind.SLOW_HOME, Kind.NO_INTERNET), ObserverCore.confirmedCleared(listOf(Kind.SLOW_HOME, Kind.NO_INTERNET), nova, agora))
+        // Sem sinal próprio (congelamento desfeito): fecha já.
+        assertEquals(listOf(Kind.FREEZE_UNDONE), ObserverCore.confirmedCleared(listOf(Kind.FREEZE_UNDONE), emptyMap(), agora))
+    }
 }

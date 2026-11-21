@@ -44,7 +44,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val id: String, val nome: String, val sub: String, val icone: Drawable,
         val abrir: () -> Unit, val opcoes: (() -> Unit)? = null, val aoEscolher: (() -> Unit)? = null,
         val progresso: Float? = null, val situacao: CruzLogica.Situacao? = null,
-    )
+    ) {
+        /** O mesmo item com outro menu do OK segurado (o "Trocar ícone" dos itens do Sofaly, HomeMotion). */
+        fun comOpcoes(o: () -> Unit) = Item(id, nome, sub, icone, abrir, o, aoEscolher, progresso, situacao)
+    }
     class Categoria(val cat: CruzLogica.Categoria, val nome: String, val icone: Drawable, val itens: List<Item>)
 
     companion object {

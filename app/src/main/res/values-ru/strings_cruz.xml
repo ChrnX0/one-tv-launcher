@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">Экран медленно темнеет, и ТВ выключается</string>
     <string name="cruz_desliga_as">Выключится в %1$s</string>
     <string name="cruz_dormir_cancelar">OK — отменить</string>
-    <string name="cruz_linha">Линия</string>
+    <string name="cruz_linha">Базовый</string>
     <string name="cruz_mover">Переместить в…</string>
     <string name="cruz_mover_titulo">Переместить %1$s в</string>
     <string name="cruz_central">Игровой центр</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">Играет</string>
     <string name="cruz_canto_parou">Остановлено на</string>
     <string name="cruz_canto_conectado">Подключено</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Винтаж</string>
+    <string name="cruz_joia">Самоцвет</string>
+    <string name="cruz_foto">Фотореализм</string>
+    <string name="cruz_vintage2">Винтаж 2.0</string>
+    <string name="cruz_icone_seguir">Как в наборе (%1$s)</string>
+    <string name="cruz_icone_de">Значок: %1$s</string>
+    <string name="cruz_icone_categoria">Вся категория: %1$s</string>
 </resources>

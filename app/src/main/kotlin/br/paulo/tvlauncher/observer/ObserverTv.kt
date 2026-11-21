@@ -11,6 +11,8 @@ import br.paulo.tvlauncher.Rotinas
 import br.paulo.tvlauncher.family.Diario
 import br.paulo.tvlauncher.player.OnDemand
 import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
 import br.paulo.tvlauncher.privilege.PrivilegioDO
 import java.util.concurrent.atomic.AtomicBoolean
 
