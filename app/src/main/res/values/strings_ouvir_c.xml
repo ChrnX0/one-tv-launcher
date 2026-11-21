@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Spin the world and land on a radio station from anywhere</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ spin · OK: play · Back: close</string>
     <string name="ra_globo_mar">Open sea… spin a little more</string>
+    <string name="ra_voltar">Back 30 s</string>
+    <string name="ra_voltar_det">Missed something? Hear it again (⏪ on the remote)</string>
+    <string name="ra_ao_vivo">Back to live</string>
+    <string name="ra_atras">%s behind live</string>
 </resources>

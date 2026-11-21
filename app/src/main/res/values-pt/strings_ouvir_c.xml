@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Gire o mundo e caia numa rádio de qualquer lugar</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ giram · OK: tocar · Voltar: fechar</string>
     <string name="ra_globo_mar">Mar aberto… gire mais um pouco</string>
+    <string name="ra_voltar">Voltar 30 s</string>
+    <string name="ra_voltar_det">Perdeu algo? Ouça de novo (⏪ no controle)</string>
+    <string name="ra_ao_vivo">Voltar ao ao vivo</string>
+    <string name="ra_atras">%s atrás do ao vivo</string>
 </resources>

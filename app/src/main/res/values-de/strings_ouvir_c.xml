@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Dreh die Welt und lande bei einem Sender irgendwo</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ drehen · OK: abspielen · Zurück: schließen</string>
     <string name="ra_globo_mar">Offenes Meer … dreh noch ein wenig</string>
+    <string name="ra_voltar">30 s zurück</string>
+    <string name="ra_voltar_det">Etwas verpasst? Nochmal hören (⏪ auf der Fernbedienung)</string>
+    <string name="ra_ao_vivo">Zurück zu live</string>
+    <string name="ra_atras">%s hinter live</string>
 </resources>

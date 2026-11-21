@@ -45,4 +45,8 @@
     <string name="ra_globo_det">转动地球，收听世界各地的电台</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ 转动 · OK：播放 · 返回：关闭</string>
     <string name="ra_globo_mar">茫茫大海… 再转一点</string>
+    <string name="ra_voltar">后退 30 秒</string>
+    <string name="ra_voltar_det">错过了？再听一次（遥控器 ⏪）</string>
+    <string name="ra_ao_vivo">回到直播</string>
+    <string name="ra_atras">落后直播 %s</string>
 </resources>

@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Вращайте мир и находите радио где угодно</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ вращать · OK: играть · Назад: закрыть</string>
     <string name="ra_globo_mar">Открытое море… покрутите ещё</string>
+    <string name="ra_voltar">Назад 30 с</string>
+    <string name="ra_voltar_det">Что-то пропустили? Послушайте снова (⏪ на пульте)</string>
+    <string name="ra_ao_vivo">Вернуться в эфир</string>
+    <string name="ra_atras">%s от прямого эфира</string>
 </resources>

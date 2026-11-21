@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Zakręć światem i trafiaj na radio z każdego miejsca</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ obracają · OK: graj · Wstecz: zamknij</string>
     <string name="ra_globo_mar">Otwarte morze… zakręć jeszcze trochę</string>
+    <string name="ra_voltar">Cofnij 30 s</string>
+    <string name="ra_voltar_det">Coś umknęło? Posłuchaj jeszcze raz (⏪ na pilocie)</string>
+    <string name="ra_ao_vivo">Wróć na żywo</string>
+    <string name="ra_atras">%s za transmisją na żywo</string>
 </resources>

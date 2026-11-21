@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Gira il mondo e trova una radio ovunque</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ ruotano · OK: ascolta · Indietro: chiudi</string>
     <string name="ra_globo_mar">Mare aperto… gira ancora un po\'</string>
+    <string name="ra_voltar">Indietro 30 s</string>
+    <string name="ra_voltar_det">Perso qualcosa? Riascolta (⏪ sul telecomando)</string>
+    <string name="ra_ao_vivo">Torna in diretta</string>
+    <string name="ra_atras">%s indietro rispetto alla diretta</string>
 </resources>

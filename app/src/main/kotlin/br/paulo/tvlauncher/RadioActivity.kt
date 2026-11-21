@@ -18,6 +18,7 @@ import br.paulo.tvlauncher.home.CruzLogica
 import br.paulo.tvlauncher.home.SonsCruz
 import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.AtrasoRadio
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.GloboLogica
 import br.paulo.tvlauncher.listen.GloboRadiosView
@@ -68,7 +69,7 @@ class RadioActivity : Activity() {
     private lateinit var veuMusica: TextView
     private val tocando: Radios.Radio? get() = OuvirServico.instancia?.radio
     /** O que a tela mostrou por último (id, música, pausado): só refaz quando muda. */
-    private var visto: Triple<String?, String, Boolean>? = null
+    private var visto: List<Any?>? = null
     private val mudou: () -> Unit = { aoMudarSom() }
     private var favoritas: List<Radios.Radio> = emptyList()
     private var recentes: List<Radios.Radio> = emptyList()
@@ -168,7 +169,8 @@ class RadioActivity : Activity() {
         if (s?.tocando == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (r == null) { ui.removeCallbacks(escurecer); veuLigado(false) }
-        val agora = Triple(r?.id, s?.musica.orEmpty(), s?.pausado == true)
+        // + voltar 30 s: o botão aparece quando a gravação começa, e o "−0:30" muda ao voltar/ir ao vivo.
+        val agora = listOf(r?.id, s?.musica.orEmpty(), s?.pausado == true, s?.podeVoltar == true, (s?.atrasoS ?: 0) / AtrasoRadio.PASSO_S)
         if (agora != visto) {
             // Começou a tocar (OK numa rádio): o foco fica onde está; o cartão de cima à direita já mostra o que toca.
             visto = agora
@@ -193,6 +195,9 @@ class RadioActivity : Activity() {
                 KeyEvent.KEYCODE_MEDIA_PLAY -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.continuar(); return true }
                 KeyEvent.KEYCODE_MEDIA_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.pausar(); return true }
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.alternar(); return true }
+                // ⏪ volta 30 s no ao vivo; ⏩ volta ao ao vivo ([AtrasoRadio]).
+                KeyEvent.KEYCODE_MEDIA_REWIND -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.voltarRadio(); return true }
+                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.aoVivo(); return true }
             }
         }
         return super.dispatchKeyEvent(e)
@@ -286,6 +291,13 @@ class RadioActivity : Activity() {
                     if (fav) getString(R.string.ouv_tecla, favoritas.indexOfFirst { it.id == r.id } + 1).takeIf { favoritas.indexOfFirst { it.id == r.id } < 9 }.orEmpty()
                     else getString(R.string.ouv_favoritar_det),
                     IconeOuvir.Tipo.FAVORITAS, abrir = { favoritar(r) }),
+                // Voltar 30 s / Ao vivo (21/11/2026, [AtrasoRadio]): só quando a gravação paralela está de pé.
+                *listOfNotNull(
+                    CruzOuvir.Item("voltar30", getString(R.string.ra_voltar), if (s.atrasoS > 0) getString(R.string.ra_atras, tempo(s.atrasoS)) else getString(R.string.ra_voltar_det),
+                        IconeOuvir.Tipo.VOLTAR, abrir = { OuvirServico.instancia?.voltarRadio() }).takeIf { s.podeVoltar },
+                    CruzOuvir.Item("aovivo", getString(R.string.ra_ao_vivo), getString(R.string.ra_atras, tempo(s.atrasoS)),
+                        IconeOuvir.Tipo.AVANCAR, abrir = { OuvirServico.instancia?.aoVivo() }).takeIf { s.atrasoS > 0 },
+                ).toTypedArray(),
                 // Som (21/11/2026): voz clara e timer para dormir, como no player de podcast ([MenuSom]).
                 CruzOuvir.Item("som", getString(R.string.som_titulo), somDetalhe(s), IconeOuvir.Tipo.OPCOES,
                     abrir = { MenuSom.abrir(this) { montar() } }),
@@ -371,10 +383,13 @@ class RadioActivity : Activity() {
         val r = s.radio ?: return null
         return CruzOuvir.Tocando(r.nome, CruzLogica.linhas(s.musica, detalhe(r)), r.logo, corDe(r.id), CapaOuvir.iniciais(r.nome),
             cobrir = false, progresso = null, tempo = null, pausado = s.pausado,
-            aoVivo = if (s.pausado) null else getString(R.string.ouv_ao_vivo).uppercase(), chave = r.id)
+            aoVivo = if (s.pausado) null else if (s.atrasoS > 0) "−" + tempo(s.atrasoS) else getString(R.string.ouv_ao_vivo).uppercase(), chave = r.id)
     }
 
     private fun aviso(id: String, nome: String, sub: String, icone: IconeOuvir.Tipo) = CruzOuvir.Item(id, nome, sub, icone)
+
+    /** 90 → "1:30". */
+    private fun tempo(s: Int) = "%d:%02d".format(s / 60, s % 60)
 
     /** "Brasil": só o país (o "128 kbps" saiu: jargão que não ajuda a escolher a rádio; crítica de design 19/11/2026). */
     private fun detalhe(r: Radios.Radio): String =

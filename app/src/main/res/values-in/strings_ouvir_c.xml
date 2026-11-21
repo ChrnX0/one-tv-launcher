@@ -45,4 +45,8 @@
     <string name="ra_globo_det">Putar dunia dan temukan radio dari mana saja</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ putar · OK: putar radio · Kembali: tutup</string>
     <string name="ra_globo_mar">Laut lepas… putar sedikit lagi</string>
+    <string name="ra_voltar">Mundur 30 dtk</string>
+    <string name="ra_voltar_det">Ada yang terlewat? Dengar lagi (⏪ di remote)</string>
+    <string name="ra_ao_vivo">Kembali ke siaran langsung</string>
+    <string name="ra_atras">%s di belakang siaran langsung</string>
 </resources>

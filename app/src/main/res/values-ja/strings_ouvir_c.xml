@@ -45,4 +45,8 @@
     <string name="ra_globo_det">地球を回して世界中のラジオへ</string>
     <string name="ra_globo_dica">◀ ▶ ▲ ▼ 回す · OK：再生 · 戻る：閉じる</string>
     <string name="ra_globo_mar">海の上… もう少し回して</string>
+    <string name="ra_voltar">30秒戻る</string>
+    <string name="ra_voltar_det">聞き逃した？ もう一度（リモコンの⏪）</string>
+    <string name="ra_ao_vivo">ライブに戻る</string>
+    <string name="ra_atras">ライブから%s遅れ</string>
 </resources>

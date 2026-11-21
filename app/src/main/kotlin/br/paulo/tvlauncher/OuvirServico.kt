@@ -28,6 +28,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import br.paulo.tvlauncher.alarm.TocandoAgora
 import br.paulo.tvlauncher.input.EfeitosSom
 import br.paulo.tvlauncher.listen.AjustesPodcast
+import br.paulo.tvlauncher.listen.AtrasoRadio
 import br.paulo.tvlauncher.listen.Capitulos
 import br.paulo.tvlauncher.listen.OuvirEstado
 import br.paulo.tvlauncher.listen.PodcastFeed
@@ -274,6 +275,8 @@ class OuvirServico : Service() {
         largarAtual()
         radio = r; musica = ""
         player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
+        // Voltar 30 s: a gravação paralela começa junto ([AtrasoRadio]); falhando, a rádio segue sem o botão.
+        if (AtrasoRadio.suporta(r)) gravador = AtrasoRadio.Gravador(r.url) { ui.post { publicar() } }.also { it.comecar() }
         aplicarEfeito()
         garantirSessao()
         primeiroPlano(r.nome, "")
@@ -447,6 +450,50 @@ class OuvirServico : Service() {
         }
     }
 
+    // ---------------------------------------------------------------- voltar 30 s na rádio (21/11/2026)
+
+    private var gravador: AtrasoRadio.Gravador? = null
+    private var leitor: AtrasoRadio.Leitor? = null
+
+    /** Dá para voltar agora (gravando, e já há algo gravado)? */
+    val podeVoltar: Boolean get() = radio != null && gravador?.let { !it.falhou && it.anel.escrito > 0 } == true
+
+    private fun taxaRadio(): Long = AtrasoRadio.taxa(radio?.bitrate ?: 0, gravador?.medidoBps ?: 0)
+
+    /** Segundos atrás do ao vivo (0 = ao vivo). */
+    val atrasoS: Int get() {
+        val l = leitor ?: return 0
+        val g = gravador ?: return 0
+        return AtrasoRadio.atrasoS(l.pos, g.anel.escrito, taxaRadio()).coerceAtLeast(1)
+    }
+
+    /** Volta [AtrasoRadio.PASSO_S] segundos: o player passa a ler da gravação. */
+    @androidx.annotation.OptIn(markerClass = [androidx.media3.common.util.UnstableApi::class])
+    fun voltarRadio() {
+        val g = gravador ?: return; val p = player ?: return
+        if (!podeVoltar) return
+        val agora = leitor?.pos ?: g.anel.escrito
+        val de = AtrasoRadio.destino(agora, AtrasoRadio.PASSO_S, taxaRadio(), g.anel.maisVelho)
+        val l = AtrasoRadio.Leitor(g.anel, de)
+        leitor = l
+        val fonte = androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory { l }
+            .createMediaSource(androidx.media3.common.MediaItem.fromUri("sofaly://radio-atraso"))
+        p.setMediaSource(fonte); p.prepare(); p.playWhenReady = true
+        publicar()
+    }
+
+    /** De volta ao ao vivo (a gravação continua para o próximo "voltar"). */
+    fun aoVivo() {
+        val r = radio ?: return; val p = player ?: return
+        if (leitor == null) return
+        leitor = null
+        p.setMediaSource(DefaultMediaSourceFactory(PlayerEngine.data(this, userAgent = Http.USER_AGENT)).createMediaSource(PlayerEngine.item(r.url).build()))
+        p.prepare(); p.playWhenReady = true
+        publicar()
+    }
+
+    private fun pararGravador() { gravador?.parar(); gravador = null; leitor = null }
+
     /** O resumo da Sofy do episódio tocando ("" = ainda não pedido) e as propagandas achadas junto. */
     @Volatile var resumo: String = ""
         private set
@@ -540,6 +587,8 @@ class OuvirServico : Service() {
     private fun caiu(p: ExoPlayer, motivo: String) {
         val nome = radio?.nome ?: episodio?.ep?.titulo ?: return
         Log.w(TAG, "$nome: $motivo (tentativa ${tentativas + 1})")
+        // Atrasado e a leitura da gravação falhou (formato que não começa no meio, gravação caiu): volta ao ao vivo.
+        if (leitor != null && player === p) { Log.w(TAG, "atraso falhou: ao vivo"); ui.post { aoVivo() }; return }
         if (!p.playWhenReady) { publicar(); return }   // pausada: continuar() reconecta; não volta a tocar sozinha
         if (tentativas < RETENTATIVAS) {
             tentativas++
@@ -702,7 +751,7 @@ class OuvirServico : Service() {
         stopSelf(ultimoInicio)
     }
 
-    private fun soltarPlayer() { efeitos.soltar(); ui.removeCallbacks(vigiaFim); player?.let { runCatching { it.release() } }; player = null }
+    private fun soltarPlayer() { pararGravador(); efeitos.soltar(); ui.removeCallbacks(vigiaFim); player?.let { runCatching { it.release() } }; player = null }
 
     /** Liga ou solta a voz clara no player da vez, conforme o ajuste do podcast (ou o geral, na rádio). */
     private fun aplicarEfeito() {
