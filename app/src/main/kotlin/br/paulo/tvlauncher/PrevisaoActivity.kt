@@ -341,7 +341,7 @@ class PrevisaoActivity : Activity() {
             }
             item.addView(texto(17f, textoSuave).apply { text = hora; gravity = Gravity.CENTER; maxLines = 1 })
             item.addView(IconesClima.imagem(this, if (i == i0) iconeAgora else IconesClima.chave(d.hCodigo[i], eDiaNaHora(i), false)),
-                LinearLayout.LayoutParams(dp(44), dp(44)).apply { topMargin = dp(4); bottomMargin = dp(4) })
+                LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2); bottomMargin = dp(2) })
             item.addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$tempH°"; gravity = Gravity.CENTER })
             item.addView(texto(17f, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
             faixa.addView(item, LinearLayout.LayoutParams(dp(78), ViewGroup.LayoutParams.WRAP_CONTENT))
@@ -364,14 +364,14 @@ class PrevisaoActivity : Activity() {
                 orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
                 addView(texto(17f, if (i == 0) Estilo.TEXTO else textoSuave, fonteMedia).apply { text = nome; maxLines = 1; gravity = Gravity.CENTER })
                 addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.chave(d.dCodigo[i], true, false)),
-                    LinearLayout.LayoutParams(dp(44), dp(44)).apply { topMargin = dp(4); bottomMargin = dp(2) })
+                    LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2) })
                 addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$mx°"; gravity = Gravity.CENTER })
                 addView(texto(18f, textoSuave).apply { text = "$mn°"; gravity = Gravity.CENTER })
                 addView(texto(17f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.CENTER })
             }, LinearLayout.LayoutParams(0, -2, 1f))
         }
         dias.contentDescription = getString(R.string.pv_7d) + ". " + descricao
-        dias.addView(linhaDias, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
+        dias.addView(linhaDias, LinearLayout.LayoutParams(-1, -2))   // sem folga extra: a linha da chance cabia cortada (21/11)
         p2.addView(dias, lpCartao())
 
         // ================================================================ tela 3: detalhes, ar, sol e lua
