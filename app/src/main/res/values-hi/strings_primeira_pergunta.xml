@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">एक जवाब से मेन्यू और स्क्रीन तय हो जाते हैं। बाद में सेटिंग्स › सिस्टम में बदल सकते हैं।</string>
+    <string name="pp_casa">पूरे घर के लिए</string>
+    <string name="pp_vo_det">बोले गए नामों वाले बड़े कार्ड और बड़े अक्षर, और आप दूर से फ़ोन से मदद करते हैं।</string>
+</resources>

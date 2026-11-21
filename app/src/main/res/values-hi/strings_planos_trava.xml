@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">%1$s प्लान का हिस्सा</string>
+    <string name="plt_texto">यह %1$s प्लान में है। प्लान टीवी पर देखें और फ़ोन से खरीदें।</string>
+    <string name="plt_ver">प्लान देखें</string>
+    <string name="plt_agora_nao">अभी नहीं</string>
+</resources>

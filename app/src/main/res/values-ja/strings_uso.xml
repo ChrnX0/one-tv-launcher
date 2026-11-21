@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">このテレビの使い方</string>
-    <string name="uso_det">シンプルでは技術的なタブ（ホーム、リモート、詳細）を隠します。何もオフにはなりません。</string>
-    <string name="uso_simples">シンプル</string>
+    <string name="uso_det">ベーシックでは技術的なタブ（ホーム、リモート、詳細）を隠します。何もオフにはなりません。</string>
+    <string name="uso_simples">ベーシック</string>
     <string name="uso_completo">フル</string>
     <string name="uso_cuida">見守る家族のため</string>
     <string name="uso_pergunta">このテレビをどう使いますか？</string>

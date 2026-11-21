@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">모두 외출하면 끄기(UniFi 라우터)</string>
     <string name="extras_HOJE_NA_TV">검색 화면의 ‘오늘의 TV’</string>
     <string name="extras_RETROSPECTIVA">주간 요약(일요일 밤)</string>
-    <string name="extras_MODO_SIMPLES">간편 모드(큰 카드, 이름 읽어 주기)</string>
+    <string name="extras_MODO_SIMPLES">쉬운 화면(큰 카드, 이름 읽어 주기)</string>
 </resources>

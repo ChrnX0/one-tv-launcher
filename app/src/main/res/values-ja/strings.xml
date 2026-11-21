@@ -855,7 +855,7 @@ AS\\Movies）。</string>
     <string name="home_arquivos_falhou">%1$sを許可できませんでした：%2$s</string>
     <string name="aviso_continuar_titulo">続きはありません</string>
     <string name="aviso_continuar_texto">別のテレビから続ける招待は期限切れです。</string>
-    <string name="aviso_simples_titulo">シンプルモードはオフです</string>
+    <string name="aviso_simples_titulo">かんたん画面はオフです</string>
     <string name="aviso_simples_texto">テレビは通常のホーム画面に戻りました。</string>
     <string name="aviso_sync_titulo">アカウントが未接続</string>
     <string name="aviso_sync_texto">このテレビに%1$sのアカウントはありません。設定 › テレビと映画で接続してください。</string>

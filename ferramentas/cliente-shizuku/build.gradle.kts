@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "br.paulo.clienteshizuku"
-    compileSdk = 36
+    compileSdk = 37   // hiddenapibypass 6.2 exige API 37 (21/11/2026)
     defaultConfig {
         applicationId = "br.paulo.clienteshizuku"
         minSdk = 26
@@ -34,5 +34,5 @@ dependencies {
     implementation(project(":provider"))
     // Teste do Dhizuku embutido (15/11/2026): cliente igual aos apps feitos para o Dhizuku.
     implementation("io.github.iamr0s:Dhizuku-API:2.7.0")
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.2")
 }

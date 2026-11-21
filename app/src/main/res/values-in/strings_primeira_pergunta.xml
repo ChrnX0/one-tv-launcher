@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">Satu jawaban mengatur menu dan layar. Bisa diubah nanti di Setelan › Sistem.</string>
+    <string name="pp_casa">Untuk seisi rumah</string>
+    <string name="pp_vo_det">Kartu besar dengan nama diucapkan dan huruf lebih besar, dan Anda membantu dari ponsel, dari jauh.</string>
+</resources>

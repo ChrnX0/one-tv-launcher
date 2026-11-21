@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Turn off when everyone leaves home (UniFi router)</string>
     <string name="extras_HOJE_NA_TV">\"On TV today\" in the Search screen</string>
     <string name="extras_RETROSPECTIVA">Weekly recap (Sunday night)</string>
-    <string name="extras_MODO_SIMPLES">Simple mode (large cards, spoken names)</string>
+    <string name="extras_MODO_SIMPLES">Easy screen (large cards, spoken names)</string>
 </resources>

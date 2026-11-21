@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">一个回答就设好菜单和屏幕。之后可在 设置 › 系统 中更改。</string>
+    <string name="pp_casa">全家使用</string>
+    <string name="pp_vo_det">大卡片、朗读名称、更大的字，你可以在远处用手机帮忙。</string>
+</resources>

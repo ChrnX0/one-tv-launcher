@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">यह टीवी कैसे इस्तेमाल होता है</string>
-    <string name="uso_det">सरल तकनीकी टैब (घर, रिमोट, उन्नत) छिपाता है। कुछ भी बंद नहीं होता।</string>
-    <string name="uso_simples">सरल</string>
+    <string name="uso_det">ज़रूरी तकनीकी टैब (घर, रिमोट, उन्नत) छिपाता है। कुछ भी बंद नहीं होता।</string>
+    <string name="uso_simples">ज़रूरी</string>
     <string name="uso_completo">पूरा</string>
     <string name="uso_cuida">जिनकी मैं देखभाल करता हूँ, उनके लिए</string>
     <string name="uso_pergunta">यह टीवी कैसे इस्तेमाल होगा?</string>

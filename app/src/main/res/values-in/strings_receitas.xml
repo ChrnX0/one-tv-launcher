@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Urungkan</string>
     <string name="rec_desfazer_det">Kembalikan semuanya seperti sebelum %1$s.</string>
     <string name="rec_ja_esta">TV ini sudah diatur seperti ini.</string>
-    <string name="rec_aviso_prende">Mode sederhana hanya bisa ditutup dengan PIN. Pastikan ada orang di rumah yang tahu PIN-nya.</string>
+    <string name="rec_aviso_prende">Layar mudah hanya bisa ditutup dengan PIN. Pastikan ada orang di rumah yang tahu PIN-nya.</string>
     <string name="rec_aviso_sem_pin">Belum ada PIN, jadi siapa pun bisa mematikannya. Buat PIN di panel ponsel.</string>
     <string name="rec_aviso_plano">Perlu paket berbayar, jadi tetap mati: %1$s.</string>
     <string name="rec_voltar">Kembali</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">nonaktif</string>
     <string name="rec_aj_hospede">Mode tamu</string>
     <string name="rec_aj_visita">Mode kunjungan</string>
-    <string name="rec_aj_simples">Mode sederhana</string>
+    <string name="rec_aj_simples">Layar mudah</string>
     <string name="rec_aj_infantil">Mode anak</string>
     <string name="rec_aj_dormir">Jam tidur</string>
     <string name="rec_aj_texto">Ukuran teks</string>

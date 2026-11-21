@@ -864,7 +864,7 @@ AS\\Фильмы).</string>
     <string name="home_arquivos_falhou">Не удалось разрешить %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Нечего продолжать</string>
     <string name="aviso_continuar_texto">Приглашение продолжить с другого телевизора истекло.</string>
-    <string name="aviso_simples_titulo">Простой режим выключен</string>
+    <string name="aviso_simples_titulo">Простой экран выключен</string>
     <string name="aviso_simples_texto">Телевизор вернулся к полному главному экрану.</string>
     <string name="aviso_sync_titulo">Нет подключённого аккаунта</string>
     <string name="aviso_sync_texto">На этом телевизоре нет аккаунта %1$s. Подключите его в Настройки › ТВ и фильмы.</string>
