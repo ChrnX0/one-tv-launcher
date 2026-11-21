@@ -613,7 +613,8 @@ class PrevisaoActivity : Activity() {
         atual = nova
         val dist = dp(56).toFloat() * if (descendo) 1 else -1
         entra.visibility = View.VISIBLE
-        (if (descendo) entraDescendo else entraSubindo).getOrNull(nova)?.requestFocus()
+        // Recém-mostrada, a tela ainda não passou pelo layout e o pedido de foco pode não pegar: repete depois dele.
+        (if (descendo) entraDescendo else entraSubindo).getOrNull(nova)?.let { alvo -> if (!alvo.requestFocus()) alvo.post { alvo.requestFocus() } }
         seta.text = "▼  " + getString(nomes[(nova + 1) % nomes.size]); seta.visibility = View.VISIBLE
         desenharPontos()
         entra.announceForAccessibility(getString(nomes[nova]))
