@@ -590,6 +590,8 @@ class PrevisaoActivity : Activity() {
                 if (prox == null || !dentro(paginas[atual], prox)) {
                     irPara(Math.floorMod(atual + if (descendo) 1 else -1, paginas.size), descendo); return true
                 }
+                // Dentro da tela, o próprio carrossel anda (o mesmo que o sistema faria), para teclas e teste baterem.
+                prox.requestFocus(); return true
             }
         }
         return super.dispatchKeyEvent(e)
