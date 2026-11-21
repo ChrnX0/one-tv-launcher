@@ -53,16 +53,5 @@ object PodcastBusca {
 
     fun emAlta(idioma: String): List<Resultado> = if (!disponivel()) emptyList() else ler(get(urlEmAlta(SERVIDOR, idioma)))
 
-    private fun get(u: String): String? = runCatching {
-        val c = URL(u).openConnection() as HttpURLConnection
-        try {
-            c.connectTimeout = 8_000; c.readTimeout = 12_000
-            c.setRequestProperty("User-Agent", "Sofaly/1 (TV podcast player)")
-            if (c.responseCode != 200) null else c.inputStream.use { e ->
-                val saida = java.io.ByteArrayOutputStream(); val buf = ByteArray(16_384)
-                while (saida.size() < 1_000_000) { val n = e.read(buf); if (n < 0) break; saida.write(buf, 0, n) }
-                saida.toString("UTF-8")
-            }
-        } finally { c.disconnect() }
-    }.getOrNull()
+    private fun get(u: String): String? = Http.getTextOrNull(u, readMs = 12_000, maxBytes = 1_000_000, cut = true)
 }

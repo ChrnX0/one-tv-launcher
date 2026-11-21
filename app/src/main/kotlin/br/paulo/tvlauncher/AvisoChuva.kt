@@ -104,13 +104,13 @@ object AvisoChuva {
             SEGUNDOS_NA_TELA, som = false, guardarSeApagada = false, icone = IconeLinha(IconeLinha.Tipo.CHUVA), fica = AvisoRegras.Fica.CHUVA)
 
     private fun buscar(app: Context, agora: Calendar): Previsao? {
-        val ponto = Localizacao.atual(app) { httpGet(it) } ?: throw IllegalStateException("sem localização")
+        val ponto = Localizacao.atual(app) { Http.getText(it) } ?: throw IllegalStateException("sem localização")
         val url = "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
             "&hourly=precipitation_probability&forecast_hours=${HORAS_A_FRENTE + 2}&timezone=auto&models=${MODELOS.joinToString(",")}"
         val met = if (DataSources.weather(app) != DataSources.Weather.OPEN_METEO)
             DataSources.forecast(app, ponto.lat, ponto.lon, desdeAgora = true, dias = 2) ?: throw IllegalStateException("sem resposta") else null
         val h = met?.getJSONObject("hourly")
-            ?: JSONObject(httpGet(url) ?: throw IllegalStateException("sem resposta")).getJSONObject("hourly")
+            ?: JSONObject(Http.getText(url) ?: throw IllegalStateException("sem resposta")).getJSONObject("hourly")
         val tempo = h.getJSONArray("time")
         val horas = (0 until tempo.length()).map { tempo.getString(it) }
         // MET ou WeatherAPI (Básico e Pro): um modelo só, a chance (estimada) vem em "precipitation_probability".
@@ -157,14 +157,5 @@ object AvisoChuva {
             }
         }
         return null
-    }
-
-    private fun httpGet(endereco: String): String? {
-        val c = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            c.connectTimeout = 8000; c.readTimeout = 8000
-            c.setRequestProperty("User-Agent", "onetv-launcher")
-            if (c.responseCode == 200) c.inputStream.bufferedReader().use { it.readText() } else null
-        } finally { c.disconnect() }
     }
 }

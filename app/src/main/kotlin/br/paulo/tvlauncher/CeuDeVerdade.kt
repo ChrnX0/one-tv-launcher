@@ -152,7 +152,7 @@ object NuvensSatelite {
             val c = URL(url).openConnection() as HttpURLConnection
             try {
                 c.connectTimeout = 10_000; c.readTimeout = 15_000
-                c.setRequestProperty("User-Agent", "onetv-launcher")
+                c.setRequestProperty("User-Agent", Http.USER_AGENT)
                 if (c.responseCode != 200 || c.contentType?.startsWith("image/") != true) null
                 else c.inputStream.use { BitmapFactory.decodeStream(it) }
             } finally { c.disconnect() }

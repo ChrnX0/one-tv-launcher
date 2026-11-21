@@ -57,7 +57,7 @@ object Diario {
                 val c = URL(url).openConnection() as HttpURLConnection   // https: a verificação de TLS padrão do Android
                 c.connectTimeout = 5000; c.readTimeout = 5000; c.requestMethod = "POST"; c.doOutput = true
                 c.instanceFollowRedirects = false
-                c.setRequestProperty("Content-Type", "application/json"); c.setRequestProperty("User-Agent", "onetv-launcher")
+                c.setRequestProperty("Content-Type", "application/json"); c.setRequestProperty("User-Agent", Http.USER_AGENT)
                 c.outputStream.use { it.write(corpo) }
                 val codigo = c.responseCode
                 c.disconnect()

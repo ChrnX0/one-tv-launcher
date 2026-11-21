@@ -47,7 +47,7 @@ object AberturaProntaTv {
             if (em != null && corpo.isNotEmpty() && (corpo != "-" || agora - em < AberturaPronta.REPERGUNTAR_MS))
                 return if (corpo == "-") null else EpisodeSegments.lerIntroDb(corpo)
         }
-        val resposta = Endereco.httpGet(url) ?: return null   // sem rede: tenta na próxima vez (nada guardado)
+        val resposta = Http.getTextOrNull(url) ?: return null   // sem rede: tenta na próxima vez (nada guardado)
         val t = EpisodeSegments.lerIntroDb(resposta)
         val vazio = t == null || (t.abertura == null && t.resumo == null && t.creditos == null)
         prefs.edit().putString(k, "$agora|" + if (vazio) "-" else resposta.replace('\n', ' ')).apply()

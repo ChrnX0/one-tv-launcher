@@ -251,21 +251,9 @@ object Radios {
         runCatching { pedir { urlClique(it, r.id) } }
     }
 
-    private fun httpGet(endereco: String): String? {
-        val c = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            c.connectTimeout = 8000; c.readTimeout = 10000
-            // Sem seguir redirecionamento: a checagem de destino (colar) olhou só o primeiro host; um 302 para
-            // 127.0.0.1:8091 (MCP) ou :8080 (painel) passava por cima dela.
-            c.instanceFollowRedirects = false
-            c.setRequestProperty("User-Agent", "onetv-launcher/1 (+https://github.com/ChrnX0/sofaly)")
-            if (c.responseCode != 200) null else c.inputStream.use { e ->
-                // Lê no máximo 2 MB: um link que é o próprio áudio (não a lista .m3u/.pls) nunca acaba, e o readText()
-                // inteiro antes do take() enchia a memória até o processo cair.
-                val saida = java.io.ByteArrayOutputStream(); val buf = ByteArray(16_384)
-                while (saida.size() < 2_000_000) { val n = e.read(buf, 0, minOf(buf.size, 2_000_000 - saida.size())); if (n < 0) break; saida.write(buf, 0, n) }
-                saida.toString("UTF-8")
-            }
-        } finally { c.disconnect() }
-    }
+    // Sem seguir redirecionamento: a checagem de destino (colar) olhou só o primeiro host; um 302 para 127.0.0.1:8091
+    // (MCP) ou :8080 (painel) passava por cima dela. No máximo 2 MB: um link que é o próprio áudio (não a lista
+    // .m3u/.pls) nunca acaba, e ler tudo antes de cortar enchia a memória até o processo cair.
+    private fun httpGet(endereco: String): String? =
+        Http.getText(endereco, readMs = 10_000, maxBytes = 2_000_000, cut = true, followRedirects = false)
 }

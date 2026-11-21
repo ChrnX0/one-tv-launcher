@@ -371,7 +371,7 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
 
     private fun ler(u: String): String = (URL(u).openConnection() as HttpURLConnection).run {
         connectTimeout = 15000; readTimeout = 20000
-        setRequestProperty("User-Agent", "onetv-launcher")
+        setRequestProperty("User-Agent", Http.USER_AGENT)
         try {
             if (responseCode != 200) throw java.io.IOException("HTTP $responseCode em $u")
             inputStream.bufferedReader().use { it.readText() }

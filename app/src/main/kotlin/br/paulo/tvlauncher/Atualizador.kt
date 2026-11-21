@@ -323,7 +323,7 @@ object Atualizador {
     private fun conexao(url: String) = (URL(url).openConnection() as HttpURLConnection).apply {
         connectTimeout = 15_000
         readTimeout = 30_000
-        setRequestProperty("User-Agent", "onetv-launcher")
+        setRequestProperty("User-Agent", Http.USER_AGENT)
         setRequestProperty("Accept", "application/vnd.github+json")
     }
 

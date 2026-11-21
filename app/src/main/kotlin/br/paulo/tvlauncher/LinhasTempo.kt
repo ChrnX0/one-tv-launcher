@@ -65,16 +65,10 @@ object EstacaoEspacial {
     }
 
     private fun baixar(): Pair<String, String>? = try {
-        val c = URL(URL_TLE).openConnection() as HttpURLConnection
-        try {
-            c.connectTimeout = 8000; c.readTimeout = 8000
-            c.setRequestProperty("User-Agent", "onetv-launcher")
-            if (c.responseCode != 200) null else {
-                val linhas = c.inputStream.bufferedReader().use { it.readText() }.lines().map { it.trimEnd() }
-                val a = linhas.firstOrNull { it.startsWith("1 25544") }; val b = linhas.firstOrNull { it.startsWith("2 25544") }
-                if (a != null && b != null) a to b else null
-            }
-        } finally { c.disconnect() }
+        Http.getText(URL_TLE)?.lines()?.map { it.trimEnd() }?.let { linhas ->
+            val a = linhas.firstOrNull { it.startsWith("1 25544") }; val b = linhas.firstOrNull { it.startsWith("2 25544") }
+            if (a != null && b != null) a to b else null
+        }
     } catch (e: Exception) { Log.w(TAG, "CelesTrak: ${e.javaClass.simpleName}"); null }
 }
 

@@ -201,7 +201,7 @@ object LojaCurada {
 
     private fun conexao(url: String) = (URL(url).openConnection() as HttpURLConnection).apply {
         connectTimeout = 15_000; readTimeout = 60_000
-        setRequestProperty("User-Agent", "onetv-launcher"); setRequestProperty("Accept", "application/vnd.github+json")
+        setRequestProperty("User-Agent", Http.USER_AGENT); setRequestProperty("Accept", "application/vnd.github+json")
     }
 
     private fun baixarTexto(url: String): String {

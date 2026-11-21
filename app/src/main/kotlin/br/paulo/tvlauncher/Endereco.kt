@@ -16,7 +16,6 @@ import java.net.URLEncoder
  * As funções de texto/JSON são puras (testadas no computador); [buscar] faz a rede e roda fora da thread da tela.
  */
 object Endereco {
-    const val AGENTE = "tv-launcher/0.1 (github.com/ChrnX0/sofaly)"
 
     data class Cep(val cep: String, val rua: String, val bairro: String, val cidade: String, val uf: String)
     data class Achado(val nome: String, val lat: Double, val lon: Double, val precisao: String)
@@ -64,14 +63,6 @@ object Endereco {
     }
 
     /** GET simples com o User-Agent do app (o Nominatim exige); null se não vier 200. Fora da thread da tela. */
-    fun httpGet(endereco: String): String? = try {
-        val c = java.net.URL(endereco).openConnection() as java.net.HttpURLConnection
-        try {
-            c.connectTimeout = 8000; c.readTimeout = 8000
-            c.setRequestProperty("User-Agent", AGENTE)
-            if (c.responseCode == 200) c.inputStream.bufferedReader().use { it.readText() } else null
-        } finally { c.disconnect() }
-    } catch (e: Exception) { null }
 
     // ---------------------------------------------------------------- cidade em qualquer país (ideia 40, 14/11/2026)
     // Pela lista de cidades do APK: a busca da Open-Meteo que ficava aqui é só para uso não comercial (tirada em 19/11/2026).

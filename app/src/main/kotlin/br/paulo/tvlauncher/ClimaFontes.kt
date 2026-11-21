@@ -27,7 +27,7 @@ object ClimaFontes {
     /** null = sem lugar ou sem resposta da Open-Meteo (a HOME mantém o que mostra). Erro de formato sobe como exceção. */
     fun buscar(ctx: Context): Resultado? {
         // Onde estamos: Wi-Fi do Android (±dezenas de m) > IP > Config.kt. Ver Localizacao.kt.
-        val ponto = Localizacao.atual(ctx) { httpGet(it) } ?: return null
+        val ponto = Localizacao.atual(ctx) { Http.getText(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
         // Previsao (minima/maxima, chance de chuva, ceu) do modelo da Open-Meteo, no ponto exato.
         val url = "https://api.open-meteo.com/v1/forecast" +
@@ -40,7 +40,7 @@ object ClimaFontes {
         // Fonte pelo plano e pela licença (DataSources, 19/11/2026): MET Norway no Básico, WeatherAPI no Pro, Open-Meteo paga no Ultra.
         val openMeteo = DataSources.weather(ctx) == DataSources.Weather.OPEN_METEO
         val json = if (!openMeteo) DataSources.forecast(ctx, ponto.lat, ponto.lon, desdeAgora = true) ?: return null
-            else JSONObject(httpGet(url) ?: return null)
+            else JSONObject(Http.getText(url) ?: return null)
         val atual = json.getJSONObject("current")
         val dia = json.getJSONObject("daily")
         // Temperatura: a MEDIDA na estacao do aeroporto (METAR) vence a do modelo da Open-Meteo. Em 31/10 as 16:15
@@ -166,7 +166,7 @@ object ClimaFontes {
         val agora = System.currentTimeMillis()
         arGuardado?.let { (em, v) -> if (agora - em < 60 * 60_000L) return v }
         val v = try {
-            JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
+            JSONObject(Http.getText("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: return arGuardado?.second).optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { return arGuardado?.second }
         arGuardado = agora to v
@@ -230,7 +230,7 @@ object ClimaFontes {
             "&hourly=precipitation_probability&forecast_hours=24" +
             "&daily=precipitation_probability_max,precipitation_probability_mean&forecast_days=${FaixaDias.DIAS}" +
             "&timezone=auto&models=${modelos.joinToString(",")}"
-        val json = JSONObject(httpGet(url) ?: throw IllegalStateException("sem resposta"))
+        val json = JSONObject(Http.getText(url) ?: throw IllegalStateException("sem resposta"))
         val h = json.getJSONObject("hourly")
         val tempo = h.getJSONArray("time")
         val arrays = modelos.mapNotNull { h.optJSONArray("precipitation_probability_$it") }
@@ -260,7 +260,7 @@ object ClimaFontes {
             val modelos = listOf("ecmwf_ifs025", "icon_global", "gfs_seamless")
             val url = "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
                 "&hourly=precipitation_probability,temperature_2m&forecast_hours=1&timezone=auto&models=${modelos.joinToString(",")}"
-            val h = JSONObject(httpGet(url) ?: return).getJSONObject("hourly")
+            val h = JSONObject(Http.getText(url) ?: return).getJSONObject("hourly")
             val colunas = modelos.flatMap { m ->
                 listOf(h.getJSONArray("temperature_2m_$m").optString(0), h.getJSONArray("precipitation_probability_$m").optString(0))
             }
@@ -295,7 +295,7 @@ object ClimaFontes {
                 // A API recusa (erro 400) coordenadas com muitas casas decimais: vao com 2 (~1 km, sobra para uma caixa de 130 km).
                 else "bbox=" + listOf(ponto.lat - 0.6, ponto.lon - 0.6, ponto.lat + 0.6, ponto.lon + 0.6)
                     .joinToString(",") { String.format(java.util.Locale.US, "%.2f", it) }
-            val lista = JSONArray(httpGet("https://aviationweather.gov/api/data/metar?$filtro&format=json") ?: return null)
+            val lista = JSONArray(Http.getText("https://aviationweather.gov/api/data/metar?$filtro&format=json") ?: return null)
             val agoraS = System.currentTimeMillis() / 1000
             val boletim = (0 until lista.length()).mapNotNull { lista.optJSONObject(it) }
                 .filter { it.has("temp") && (agoraS - it.optLong("obsTime")) / 60 <= 90 }
@@ -328,18 +328,6 @@ object ClimaFontes {
         } catch (e: Exception) {
             Log.w("TvLauncher.Local", "METAR falhou: ${e.javaClass.simpleName}")
             null   // formato mudou, sem internet etc.: fica o modelo
-        }
-    }
-
-    private fun httpGet(endereco: String): String? {
-        val conexao = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            conexao.connectTimeout = 8000
-            conexao.readTimeout = 8000
-            conexao.setRequestProperty("User-Agent", "onetv-launcher")
-            if (conexao.responseCode == 200) conexao.inputStream.bufferedReader().use { it.readText() } else null
-        } finally {
-            conexao.disconnect()
         }
     }
 }

@@ -54,11 +54,8 @@ object MatrizAmostrasTv {
     fun resultado(ctx: Context): String = if (rodando) "rodando: $andamento"
         else runCatching { arquivo(ctx).readText() }.getOrDefault("ainda não rodou")
 
-    private fun baixar(url: String): String {
-        val c = URL(url).openConnection() as HttpURLConnection
-        c.connectTimeout = 5000; c.readTimeout = 10000
-        return c.inputStream.use { it.readBytes().decodeToString() }.also { c.disconnect() }
-    }
+    private fun baixar(url: String): String =
+        Http.getText(url, connectMs = 5_000, readMs = 10_000) ?: throw java.io.IOException("matriz não veio: $url")
 
     private fun rodar(ctx: Context, base: String) {
         val lista = MatrizAmostras.ler(baixar(MatrizAmostras.url(base, "matriz.json")!!))

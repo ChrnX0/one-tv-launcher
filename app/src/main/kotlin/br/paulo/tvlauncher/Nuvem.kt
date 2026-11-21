@@ -216,7 +216,7 @@ object Nuvem {
         (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = metodo; connectTimeout = 10_000; readTimeout = 20_000; useCaches = false
             instanceFollowRedirects = false   // o token nunca segue para outro endereço
-            setRequestProperty("User-Agent", "OneTV-Launcher")
+            setRequestProperty("User-Agent", Http.USER_AGENT)
             cabecalhos.forEach { (k, v) -> setRequestProperty(k, v) }
         }
 

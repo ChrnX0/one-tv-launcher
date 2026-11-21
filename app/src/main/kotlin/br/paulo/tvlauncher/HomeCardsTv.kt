@@ -144,7 +144,7 @@ object HomeCardsTv {
             c.connectTimeout = 4_000; c.readTimeout = 4_000
             c.instanceFollowRedirects = false
             c.requestMethod = "GET"
-            c.setRequestProperty("User-Agent", "Sofaly-TV")
+            c.setRequestProperty("User-Agent", Http.USER_AGENT)
             c.responseCode
         } finally { c.disconnect() }
     }.onFailure { Log.i(TAG, "serviço sem resposta: ${it.javaClass.simpleName}") }.getOrNull()
@@ -185,7 +185,7 @@ object HomeCardsTv {
             val c = URL("https://api.frankfurter.dev/v2/rates?base=$casa&quotes=${moedas(ctx).joinToString(",")}").openConnection() as HttpURLConnection
             try {
                 c.connectTimeout = 4_000; c.readTimeout = 4_000
-                c.setRequestProperty("User-Agent", "Sofaly-TV")
+                c.setRequestProperty("User-Agent", Http.USER_AGENT)
                 if (c.responseCode != 200) null else c.inputStream.use { it.readBytes().toString(Charsets.UTF_8) }
             } finally { c.disconnect() }
         }.onFailure { Log.i(TAG, "cotação falhou: ${it.javaClass.simpleName}") }.getOrNull()

@@ -57,18 +57,8 @@ object ComunidadeApps {
         tmp.writeText(texto); tmp.renameTo(File(pasta(ctx), nome))
     }
 
+    /** O arquivo da comunidade, ou null (sem rede, outro código, ou maior que FichasComunidade.MAX_BYTES). */
     private fun baixar(arq: String): String? = try {
-        val c = (URL(url(arq)).openConnection() as HttpURLConnection).apply {
-            connectTimeout = 15_000; readTimeout = 30_000; instanceFollowRedirects = false
-            setRequestProperty("User-Agent", "onetv-launcher")
-        }
-        try {
-            if (c.responseCode != 200) null
-            else c.inputStream.use { e ->
-                val b = java.io.ByteArrayOutputStream(); val buf = ByteArray(16 * 1024)
-                while (true) { val n = e.read(buf); if (n < 0) break; b.write(buf, 0, n); if (b.size() > FichasComunidade.MAX_BYTES) return null }
-                b.toString("UTF-8")
-            }
-        } finally { c.disconnect() }
+        Http.getText(url(arq), connectMs = 15_000, readMs = 30_000, maxBytes = FichasComunidade.MAX_BYTES, followRedirects = false)
     } catch (e: Exception) { Log.w(TAG, "$arq: ${e.javaClass.simpleName}"); null }
 }

@@ -187,10 +187,10 @@ class PrevisaoActivity : Activity() {
     )
 
     private fun carregar(): Dados? {
-        val ponto = Localizacao.atual(this) { httpGet(it) } ?: return null
+        val ponto = Localizacao.atual(this) { Http.getText(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
         val openMeteo = DataSources.weather(this) == DataSources.Weather.OPEN_METEO
-        val j = if (!openMeteo) DataSources.forecast(this, ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(httpGet(
+        val j = if (!openMeteo) DataSources.forecast(this, ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(Http.getText(
             "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
                 "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,is_day" +
                 "&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,visibility,dew_point_2m,uv_index" +
@@ -201,7 +201,7 @@ class PrevisaoActivity : Activity() {
         fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
         // Qualidade do ar: Open-Meteo (Ultra) ou WeatherAPI (Pro, já no JSON convertido); no MET (Básico) o cartão some.
         val aqi = if (!openMeteo) j.optJSONObject("air_quality")?.optInt("us_aqi", -1)?.takeIf { it >= 0 } else try {
-            JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
+            JSONObject(Http.getText("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: "{}").optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { null }
         return Dados(
@@ -222,18 +222,6 @@ class PrevisaoActivity : Activity() {
             aqi,
             j.optString("fonte"),
         )
-    }
-
-    private fun httpGet(endereco: String): String? {
-        val conexao = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            conexao.connectTimeout = 8000
-            conexao.readTimeout = 8000
-            conexao.setRequestProperty("User-Agent", "onetv-launcher")
-            if (conexao.responseCode == 200) conexao.inputStream.bufferedReader().use { it.readText() } else null
-        } finally {
-            conexao.disconnect()
-        }
     }
 
     // ---------------------------------------------------------------- tela

@@ -83,21 +83,12 @@ object AvisoTemperatura {
     }
 
     private fun buscar(app: Context): Pair<Double?, Double?> {
-        val ponto = Localizacao.atual(app) { httpGet(it) } ?: throw IllegalStateException("sem localização")
+        val ponto = Localizacao.atual(app) { Http.getText(it) } ?: throw IllegalStateException("sem localização")
         val url = "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
             "&daily=temperature_2m_max,temperature_2m_min&forecast_days=2&timezone=auto"
         val d = (if (DataSources.weather(app) != DataSources.Weather.OPEN_METEO) DataSources.forecast(app, ponto.lat, ponto.lon, desdeAgora = true, dias = 2)
-            else httpGet(url)?.let { JSONObject(it) })?.getJSONObject("daily") ?: throw IllegalStateException("sem resposta")
+            else Http.getText(url)?.let { JSONObject(it) })?.getJSONObject("daily") ?: throw IllegalStateException("sem resposta")
         fun valor(k: String, i: Int) = d.optJSONArray(k)?.let { if (it.isNull(i)) null else it.optDouble(i).takeIf { v -> !v.isNaN() } }
         return valor("temperature_2m_max", 0) to valor("temperature_2m_min", 1)
-    }
-
-    private fun httpGet(endereco: String): String? {
-        val c = URL(endereco).openConnection() as HttpURLConnection
-        return try {
-            c.connectTimeout = 8000; c.readTimeout = 8000
-            c.setRequestProperty("User-Agent", "onetv-launcher")
-            if (c.responseCode == 200) c.inputStream.bufferedReader().use { it.readText() } else null
-        } finally { c.disconnect() }
     }
 }

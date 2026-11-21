@@ -207,7 +207,7 @@ object RecordingCloudCopy {
         val c = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = metodo; connectTimeout = 15_000; readTimeout = 120_000; useCaches = false
             instanceFollowRedirects = false
-            setRequestProperty("User-Agent", "OneTV-Launcher")
+            setRequestProperty("User-Agent", Http.USER_AGENT)
             cab.forEach { (k, v) -> setRequestProperty(k, v) }
             if (corpo != null) { doOutput = true; setFixedLengthStreamingMode(tam) }
             else if (metodo == "POST" || metodo == "PUT") { doOutput = true; setFixedLengthStreamingMode(0) }

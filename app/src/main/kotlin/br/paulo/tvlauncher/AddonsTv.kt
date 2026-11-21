@@ -19,7 +19,6 @@ object AddonsTv {
     private const val ACEITE = "aceite_termos"
     private const val TEMPO_MS = 12_000
     private const val MAX_BYTES = 3_000_000
-    private const val AGENTE = "Sofaly"
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_MULTI_PROCESS)
 
@@ -68,7 +67,7 @@ object AddonsTv {
             val c = runCatching { URL(u).openConnection() as HttpURLConnection }.getOrNull() ?: return null
             try {
                 c.connectTimeout = TEMPO_MS; c.readTimeout = TEMPO_MS; c.instanceFollowRedirects = false
-                c.setRequestProperty("User-Agent", AGENTE); c.setRequestProperty("Accept", "application/json")
+                c.setRequestProperty("User-Agent", Http.USER_AGENT); c.setRequestProperty("Accept", "application/json")
                 val codigo = runCatching { c.responseCode }.getOrNull() ?: return null
                 if (codigo in 300..399) {
                     val prox = c.getHeaderField("Location") ?: return null

@@ -219,7 +219,7 @@ object McpPoder {
             val c = atual.openConnection() as? HttpsURLConnection ?: throw McpProtocolo.ErroFerramenta("só https://")
             c.instanceFollowRedirects = false
             c.connectTimeout = 15_000; c.readTimeout = 30_000
-            c.setRequestProperty("User-Agent", "onetv-launcher")
+            c.setRequestProperty("User-Agent", Http.USER_AGENT)
             try {
                 val codigo = c.responseCode
                 if (codigo in 300..399) {

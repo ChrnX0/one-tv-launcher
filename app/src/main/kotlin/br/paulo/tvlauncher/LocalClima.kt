@@ -49,7 +49,7 @@ object LocalClima {
     fun definirPorCep(ctx: Context, cep: String?, numero: String?): Result<Lugar> =
         // Sem Nominatim (a política dele não serve a app pago) em todo build desde 19/11/2026: a coordenada vem da lista
         // de cidades do APK (precisão de cidade).
-        Endereco.buscar(cep, numero, CidadesOffline.lista(ctx)) { Endereco.httpGet(it) }.map { a ->
+        Endereco.buscar(cep, numero, CidadesOffline.lista(ctx)) { Http.getTextOrNull(it) }.map { a ->
             Lugar(a.nome, a.lat, a.lon, Endereco.limparCep(cep).orEmpty(), Endereco.limparNumero(numero).orEmpty())
                 .also { gravar(ctx, it) }
         }

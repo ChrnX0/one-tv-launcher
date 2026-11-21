@@ -62,7 +62,7 @@ object TurmaDiscordTv {
         val e = try {
             val c = (URL(TurmaDiscord.urlWidget(id)).openConnection() as HttpURLConnection).apply {
                 connectTimeout = 6000; readTimeout = 8000
-                setRequestProperty("User-Agent", "Sofaly (Android TV)")
+                setRequestProperty("User-Agent", Http.USER_AGENT)
                 setRequestProperty("Accept", "application/json")
             }
             try {
@@ -100,7 +100,7 @@ object TurmaDiscordTv {
                 connectTimeout = 6000; readTimeout = 8000
                 instanceFollowRedirects = false   // o POST vai só ao endereço validado
                 setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                setRequestProperty("User-Agent", "Sofaly (Android TV)")
+                setRequestProperty("User-Agent", Http.USER_AGENT)
             }
             try {
                 c.outputStream.use { it.write(TurmaDiscord.corpoChamado(texto, nomeTv).toByteArray()) }

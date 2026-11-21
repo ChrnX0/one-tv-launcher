@@ -265,7 +265,7 @@ object Podcasts {
             try {
                 c.instanceFollowRedirects = false
                 c.connectTimeout = 10_000; c.readTimeout = 20_000
-                c.setRequestProperty("User-Agent", "Sofaly/1 (TV podcast player)")
+                c.setRequestProperty("User-Agent", Http.USER_AGENT)
                 c.setRequestProperty("Accept", "application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.5")
                 if (etag.isNotEmpty() && atual == url) c.setRequestProperty("If-None-Match", etag)
                 if (modificado.isNotEmpty() && atual == url) c.setRequestProperty("If-Modified-Since", modificado)
