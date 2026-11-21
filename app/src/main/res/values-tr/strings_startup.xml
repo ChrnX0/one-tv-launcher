@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">TV açılınca</string>
+    <string name="su_det">Ana ekrandan geçmeden bunu doğrudan açar</string>
+    <string name="su_home">Ana ekran</string>
+    <string name="su_last">Son uygulama</string>
+    <string name="su_quem">Kimin için?</string>
+    <string name="su_todos">Tüm TV</string>
+    <string name="su_so">Yalnızca %1$s</string>
+    <string name="su_segue_tv">TV\'nin seçimini izle</string>
+    <string name="su_acordar">Uyanınca da</string>
+    <string name="su_acordar_det">Yalnızca yeniden başlatmada değil: TV bekleme modundan uyanınca da. Asla bir Cast\'in ya da alarmın üstüne açmaz</string>
+    <string name="su_esperar">Yeniden başlatmada bekle</string>
+    <string name="su_esperar_det">Uygulamayı açmadan önce TV\'ye bağlanma süresi verir</string>
+    <string name="su_horario">Saate göre farklı uygulama</string>
+    <string name="su_horario_det">“TV açıldı” tetikleyicili ve “Yalnızca şu durumda” koşullu bir otomasyon</string>
+</resources>

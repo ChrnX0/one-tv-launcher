@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">Al encender la TV</string>
+    <string name="su_det">Abre esto directamente, sin pasar por la pantalla de inicio</string>
+    <string name="su_home">Pantalla de inicio</string>
+    <string name="su_last">Última app</string>
+    <string name="su_quem">¿Para quién?</string>
+    <string name="su_todos">Toda la TV</string>
+    <string name="su_so">Solo %1$s</string>
+    <string name="su_segue_tv">Seguir la de la TV</string>
+    <string name="su_acordar">También al despertar</string>
+    <string name="su_acordar_det">No solo tras reiniciar: también cuando la TV sale del reposo. Nunca encima de un Cast o de la alarma</string>
+    <string name="su_esperar">Esperar al reiniciar</string>
+    <string name="su_esperar_det">Da tiempo a la TV para conectarse antes de abrir la app</string>
+    <string name="su_horario">App distinta según la hora</string>
+    <string name="su_horario_det">Una automatización con el disparador “TV encendida” y “Solo si”</string>
+</resources>

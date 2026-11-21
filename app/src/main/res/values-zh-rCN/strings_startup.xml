@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">打开电视时</string>
+    <string name="su_det">直接打开此项，不经过主屏幕</string>
+    <string name="su_home">主屏幕</string>
+    <string name="su_last">上次的应用</string>
+    <string name="su_quem">给谁？</string>
+    <string name="su_todos">整台电视</string>
+    <string name="su_so">仅 %1$s</string>
+    <string name="su_segue_tv">跟随电视的设置</string>
+    <string name="su_acordar">唤醒时也打开</string>
+    <string name="su_acordar_det">不只是重启后：电视从待机唤醒时也会打开。绝不会盖过投屏或闹钟</string>
+    <string name="su_esperar">重启后等待</string>
+    <string name="su_esperar_det">在打开应用前给电视联网的时间</string>
+    <string name="su_horario">按时段打开不同应用</string>
+    <string name="su_horario_det">使用触发条件“电视已打开”和“仅当”的自动化</string>
+</resources>

@@ -28,6 +28,7 @@ import br.paulo.tvlauncher.family.UsoTv
 import br.paulo.tvlauncher.home.SofalyWordmark
 import br.paulo.tvlauncher.home.WrapRow
 import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.settings.linhasAoLigar
 import br.paulo.tvlauncher.mcp.McpServidor
 import br.paulo.tvlauncher.mcp.TunelTailscale
 import br.paulo.tvlauncher.network.CasaHA
@@ -586,6 +587,7 @@ class ConfigLauncherActivity : Activity() {
             linhaDesligar.valor(rotuloDesligar(proximo))
         }
         c.addView(linhaDesligar, lp())
+        linhasAoLigar(c)   // "Ao ligar a TV" (StartupApp): o que abre quando a TV acende
         linhaQr(c, DestinoPainel.FOTOS, R.string.qrd_fotos, R.string.qrd_fotos_det)
         linhaQr(c, DestinoPainel.MURAL, R.string.qrd_mural, R.string.qrd_mural_det)
         protetorElementos(c)

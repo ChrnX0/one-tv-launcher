@@ -46,9 +46,6 @@ object Config {
     // --- Pacote das Configurações do sistema (abre pelo menu da bolinha do perfil, no canto superior direito).
     const val PACOTE_CONFIG = "com.android.tv.settings"
 
-    // --- App aberto automaticamente quando a TV REINICIA (não quando acorda do standby). "" desliga.
-    const val ABRIR_AO_LIGAR = ""   // desligado: o OneStream tem opcao propria de abrir ao reiniciar; ponha o pacote aqui so se quiser que o launcher faca isso
-
     // --- Serviço de acessibilidade (AutorizaShizukuService, hoje só trata teclas do controle remoto): true = o
     //     launcher RELIGA o serviço sozinho se o Android o desligar (ver Privilegio.religarAcessibilidade).
     //     Até 03/11/2026 esta chave também controlava a aprovação automática dos diálogos do Shizuku; esse app
