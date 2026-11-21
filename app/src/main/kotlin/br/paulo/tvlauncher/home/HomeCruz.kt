@@ -292,6 +292,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         }
         estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados, ultimoAberto?.substringAfter('|'))
             else CruzLogica.reajustar(mapa, estado, novoMapa)
+        if (voltarPendente) ultimoAberto?.let { u ->
+            CruzLogica.focar(novoMapa, estado, u.substringAfter('|'), CruzLogica.Categoria.entries.firstOrNull { it.id == u.substringBefore('|') })
+                ?.let { estado = it; voltarPendente = false }
+        }
         assinatura = sig
         cats = novas
         mapa = novoMapa
@@ -313,11 +317,22 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     fun voltarDoApp() {
         val u = ultimoAberto ?: return
         val cat = CruzLogica.Categoria.entries.firstOrNull { it.id == u.substringBefore('|') }
-        val e = CruzLogica.focar(mapa, estado, u.substringAfter('|'), cat) ?: return
+        // O app pode ainda não estar na coluna (aberto pela grade "Todos os apps": a coluna só o põe no topo quando a cruz
+        // se refaz pelo último uso). Fica pendente e [atualizar] foca nele assim que ele aparecer.
+        val e = CruzLogica.focar(mapa, estado, u.substringAfter('|'), cat) ?: run { voltarPendente = true; return }
+        voltarPendente = false
         if (e == estado) return
         estado = e
         posicionar(animar = false); avisarMudanca()
     }
+
+    private var voltarPendente = false
+
+    /**
+     * Um app aberto FORA da cruz (grade "Todos os apps"): ao voltar, o foco vai nele, não em "Todos os apps"
+     * (Paulo, 21/11/2026: "o destaque seja exatamente o último aplicativo selecionado"). Sem categoria: procura em todas.
+     */
+    fun marcarAberto(itemId: String) { ultimoAberto = "|$itemId" }
 
     /** HOME: Assistir; HOME de novo: a TV. */
     fun home() = aplicar(CruzLogica.Tecla.HOME)
