@@ -274,9 +274,12 @@ class OuvirServico : Service() {
         if (episodio != null || radio == null) { ui.removeCallbacks(dormir); dormirAte = 0L }
         largarAtual()
         radio = r; musica = ""
-        player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
-        // Voltar 30 s: a gravação paralela começa junto ([AtrasoRadio]); falhando, a rádio segue sem o botão.
-        if (AtrasoRadio.suporta(r)) gravador = AtrasoRadio.Gravador(r.url) { ui.post { publicar() } }.also { it.comecar() }
+        player = novoPlayer(r.url, fala = false).also { p ->
+            // MP3/AAC: uma conexão só, gravada numa fita que o player lê ([AtrasoRadio]); dá para voltar 30 s.
+            usarFita = AtrasoRadio.suporta(r)
+            if (usarFita) ligarFita(p, r)
+            p.prepare(); p.playWhenReady = true
+        }
         aplicarEfeito()
         garantirSessao()
         primeiroPlano(r.nome, "")
@@ -454,45 +457,88 @@ class OuvirServico : Service() {
 
     private var gravador: AtrasoRadio.Gravador? = null
     private var leitor: AtrasoRadio.Leitor? = null
+    private var inicioLeitor = 0L        // de que byte da fita o player começou a ler (posição 0 dele)
+    private var usarFita = false         // esta rádio toca pela fita (MP3/AAC e a gravação conseguiu começar)
+    @Volatile private var atrasado = false   // o ouvinte voltou (ou pausou): mostra "−m:ss"
 
     /** Dá para voltar agora (gravando, e já há algo gravado)? */
     val podeVoltar: Boolean get() = radio != null && gravador?.let { !it.falhou && it.anel.escrito > 0 } == true
 
+    /** Fita no pendrive (até 1 h) ou na RAM (~4 min). */
+    val fitaNoPendrive: Boolean get() = gravador?.anel?.armazem?.noPendrive == true
+
     private fun taxaRadio(): Long = AtrasoRadio.taxa(radio?.bitrate ?: 0, gravador?.medidoBps ?: 0)
+
+    /** O byte da fita que está SAINDO no som agora (o player lê adiantado; a posição dele diz o que já tocou). */
+    private fun tocandoNaFita(): Long {
+        val p = player ?: return 0
+        return inicioLeitor + p.currentPosition.coerceAtLeast(0) * taxaRadio() / 1000
+    }
 
     /** Segundos atrás do ao vivo (0 = ao vivo). */
     val atrasoS: Int get() {
-        val l = leitor ?: return 0
+        if (!atrasado) return 0
         val g = gravador ?: return 0
-        return AtrasoRadio.atrasoS(l.pos, g.anel.escrito, taxaRadio()).coerceAtLeast(1)
+        return AtrasoRadio.atrasoS(tocandoNaFita(), g.anel.escrito, taxaRadio()).coerceAtLeast(1)
     }
 
-    /** Volta [AtrasoRadio.PASSO_S] segundos: o player passa a ler da gravação. */
+    private fun direto(r: Radios.Radio) =
+        DefaultMediaSourceFactory(PlayerEngine.data(this, userAgent = Http.USER_AGENT)).createMediaSource(PlayerEngine.item(r.url).build())
+
+    /** Começa a gravação da rádio [r] e põe o player para ler a fita desde o começo (= o ao vivo). */
+    private fun ligarFita(p: ExoPlayer, r: Radios.Radio) {
+        pararGravador()
+        val g = AtrasoRadio.Gravador(r.url, AtrasoRadio.armazem(this, AtrasoRadio.taxa(r.bitrate, 0))) { ui.post { publicar() } }
+        gravador = g; g.comecar()
+        lerDaFita(p, g, 0); atrasado = false
+        ui.removeCallbacks(vigiaTitulo); ui.postDelayed(vigiaTitulo, 2_000)
+    }
+
+    /** Reconecta a rádio que caiu: fita nova (a velha parou de crescer) ou o endereço direto. */
+    private fun reconectar(p: ExoPlayer) {
+        val r = radio ?: return
+        p.stop()
+        if (usarFita) ligarFita(p, r)
+    }
+
     @androidx.annotation.OptIn(markerClass = [androidx.media3.common.util.UnstableApi::class])
+    private fun lerDaFita(p: ExoPlayer, g: AtrasoRadio.Gravador, de: Long) {
+        val l = AtrasoRadio.Leitor(g.anel, de)
+        leitor = l; inicioLeitor = de
+        p.setMediaSource(androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory { l }
+            .createMediaSource(androidx.media3.common.MediaItem.fromUri("sofaly://radio-atraso")))
+    }
+
+    /** A cada 2 s: o título da música que está saindo no som (anotado na fita pela gravação). */
+    private val vigiaTitulo = object : Runnable {
+        override fun run() {
+            val g = gravador ?: return
+            g.tituloEm(tocandoNaFita())?.let { novoTitulo(listOf(it)) }
+            if (atrasado && atrasoS <= 1) { atrasado = false; publicar() }   // alcançou o ao vivo
+            ui.postDelayed(this, 2_000)
+        }
+    }
+
+    /** Volta [AtrasoRadio.PASSO_S] segundos na fita. */
     fun voltarRadio() {
         val g = gravador ?: return; val p = player ?: return
         if (!podeVoltar) return
-        val agora = leitor?.pos ?: g.anel.escrito
-        val de = AtrasoRadio.destino(agora, AtrasoRadio.PASSO_S, taxaRadio(), g.anel.maisVelho)
-        val l = AtrasoRadio.Leitor(g.anel, de)
-        leitor = l
-        val fonte = androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory { l }
-            .createMediaSource(androidx.media3.common.MediaItem.fromUri("sofaly://radio-atraso"))
-        p.setMediaSource(fonte); p.prepare(); p.playWhenReady = true
-        publicar()
-    }
-
-    /** De volta ao ao vivo (a gravação continua para o próximo "voltar"). */
-    fun aoVivo() {
-        val r = radio ?: return; val p = player ?: return
-        if (leitor == null) return
-        leitor = null
-        p.setMediaSource(DefaultMediaSourceFactory(PlayerEngine.data(this, userAgent = Http.USER_AGENT)).createMediaSource(PlayerEngine.item(r.url).build()))
+        val de = AtrasoRadio.destino(tocandoNaFita(), AtrasoRadio.PASSO_S, taxaRadio(), g.anel.maisVelho)
+        lerDaFita(p, g, de); atrasado = true
         p.prepare(); p.playWhenReady = true
         publicar()
     }
 
-    private fun pararGravador() { gravador?.parar(); gravador = null; leitor = null }
+    /** De volta ao ao vivo: lê da ponta da fita (3 s antes, para o player ter de onde começar). */
+    fun aoVivo() {
+        val g = gravador ?: return; val p = player ?: return
+        if (!atrasado) return
+        lerDaFita(p, g, maxOf(g.anel.maisVelho, g.anel.escrito - 3 * taxaRadio())); atrasado = false
+        p.prepare(); p.playWhenReady = true
+        publicar()
+    }
+
+    private fun pararGravador() { ui.removeCallbacks(vigiaTitulo); gravador?.parar(); gravador = null; leitor = null; atrasado = false }
 
     /** O resumo da Sofy do episódio tocando ("" = ainda não pedido) e as propagandas achadas junto. */
     @Volatile var resumo: String = ""
@@ -546,15 +592,8 @@ class OuvirServico : Service() {
         return PlayerEngine.build(this, contentType = if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).also { p ->
             p.addListener(object : Player.Listener {
                 override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
-                    val r = radio ?: return
-                    // ICY "StreamTitle" (Artista - Música) chega como título; texto de espera não vale (Radios.musicaUtil).
-                    val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
-                        .distinct().joinToString(" · ")
-                    if (t != musica) {
-                        musica = t
-                        tocadas[r.id] = Radios.comTocada(tocadas[r.id].orEmpty(), t, System.currentTimeMillis())
-                        publicar()
-                    }
+                    // ICY "StreamTitle" (Artista - Música) chega como título quando o player lê a rádio direto.
+                    if (gravador == null) novoTitulo(listOfNotNull(m.title?.toString(), m.artist?.toString()))
                 }
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     if (isPlaying) tentativas = 0
@@ -583,17 +622,32 @@ class OuvirServico : Service() {
         }
     }
 
+    /** Texto de espera não vale (Radios.musicaUtil). Mudou: anota em "Já tocou" e mostra. */
+    private fun novoTitulo(partes: List<String>) {
+        val r = radio ?: return
+        val t = partes.filter { Radios.musicaUtil(it, r.nome) }.distinct().joinToString(" · ")
+        if (t != musica) {
+            musica = t
+            tocadas[r.id] = Radios.comTocada(tocadas[r.id].orEmpty(), t, System.currentTimeMillis())
+            publicar()
+        }
+    }
+
     /** A rádio caiu: com o som pedido, tenta de novo [RETENTATIVAS] vezes; depois avisa e para. Pausada, espera o continuar. */
     private fun caiu(p: ExoPlayer, motivo: String) {
         val nome = radio?.nome ?: episodio?.ep?.titulo ?: return
         Log.w(TAG, "$nome: $motivo (tentativa ${tentativas + 1})")
-        // Atrasado e a leitura da gravação falhou (formato que não começa no meio, gravação caiu): volta ao ao vivo.
-        if (leitor != null && player === p) { Log.w(TAG, "atraso falhou: ao vivo"); ui.post { aoVivo() }; return }
+        // A gravação nem começou (servidor recusa a 2ª forma de pedir, formato estranho): esta rádio toca direto, sem fita.
+        val g = gravador
+        if (g != null && player === p && g.anel.escrito == 0L && usarFita) {
+            Log.w(TAG, "fita não começou: toca direto"); usarFita = false
+            pararGravador(); radio?.let { p.setMediaSource(direto(it)) }
+        }
         if (!p.playWhenReady) { publicar(); return }   // pausada: continuar() reconecta; não volta a tocar sozinha
         if (tentativas < RETENTATIVAS) {
             tentativas++
             // Rádio: reconecta no "agora". Episódio: o prepare retoma do ponto em que estava.
-            ui.postDelayed({ if (player === p && p.playWhenReady) { if (radio != null) p.stop(); p.prepare() } }, ESPERA_RETENTATIVA_MS)
+            ui.postDelayed({ if (player === p && p.playWhenReady) { reconectar(p); p.prepare() } }, ESPERA_RETENTATIVA_MS)
             return
         }
         AvisoTv.rapido(this, nome, getString(if (radio != null) R.string.ra_falhou else R.string.pod_falhou), 6)
@@ -608,8 +662,14 @@ class OuvirServico : Service() {
         if (episodio != null) {
             // Episódio: continua do ponto (caiu enquanto pausado: reconecta no mesmo ponto).
             if (p.playbackState == Player.STATE_IDLE) p.prepare()
-        } else if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || pausadoHa > VOLTAR_AO_VIVO_MS) {
-            // Rádio é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta), não para o áudio guardado.
+        } else if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || gravador?.falhou == true) {
+            reconectar(p); p.prepare()
+        } else if (gravador != null) {
+            // Com a fita, a pausa vira "pausar o ao vivo": continua de onde parou (a gravação seguiu). Pausa maior que a
+            // fita retoma do mais velho que ela ainda tem.
+            if (pausadoHa > 2_000) atrasado = true
+        } else if (pausadoHa > VOLTAR_AO_VIVO_MS) {
+            // Rádio direta é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta).
             p.stop(); p.prepare()
         }
         p.playWhenReady = true

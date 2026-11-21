@@ -1,13 +1,18 @@
 package br.paulo.tvlauncher.listen
 
+import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.BaseDataSource
 import androidx.media3.datasource.DataSpec
 import br.paulo.tvlauncher.Http
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
+import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.URL
@@ -16,16 +21,75 @@ import java.net.URL
  * "Voltar 30 s" na rádio ao vivo (proposta C do Ouvir, 21/11/2026).
  *
  * Por quê: o Apple e o TuneIn deixam voltar alguns segundos no ao vivo ("o que ele disse?"); rádio na TV não deixava.
- * Para quê: ⏪ (ou "Voltar 30 s" na prateleira Tocando) volta 30 s, quantas vezes quiser até ~4 min; "Ao vivo" volta.
- * Como: enquanto a rádio toca, uma segunda conexão grava o áudio num anel de [CAPACIDADE] bytes na memória ([Anel]).
- * Ao voltar, o player passa a ler do anel ([Leitor]) a partir de N segundos atrás (bytes = taxa × segundos) e segue
- * lendo o que a gravação continua trazendo, como um gravador de fita. O ao vivo normal nunca passa pelo anel: se a
- * gravação falhar, a rádio segue igual, só sem o botão. Só MP3 e AAC (dá para começar a tocar de qualquer byte);
- * HLS, Ogg e FLAC ficam sem. Custo: a rádio baixa duas vezes enquanto toca (~1 MB por minuto a 128 kbps).
+ * Para quê: ⏪ (ou "Voltar 30 s" na prateleira Tocando) volta 30 s, quantas vezes quiser; "Ao vivo" volta ao agora.
+ * Como (revisto 21/11/2026, pedido do Paulo): UMA conexão só. O [Gravador] baixa a rádio e grava numa fita ([Anel]);
+ * o player SEMPRE lê da fita ([Leitor]): no ao vivo, da ponta; atrasado, de N segundos atrás. Antes eram duas conexões
+ * (o player e a gravação), o dobro de internet. Com pendrive ligado a fita é um arquivo nele ([armazem]: até 1 h, sem
+ * gastar a memória interna da TV); sem pendrive, 4 MB na RAM (~4 min a 128 kbps). O título da música (ICY) passa a
+ * ser lido pelo Gravador ([Icy]) e anotado na posição da fita, para mostrar a música que se OUVE, não a do ao vivo.
+ * Só MP3 e AAC (dá para começar a tocar de qualquer byte); HLS, Ogg e FLAC tocam direto, sem o botão. Se a gravação não
+ * consegue começar, a rádio toca direto como antes (OuvirServico).
  */
 object AtrasoRadio {
     const val CAPACIDADE = 4 * 1024 * 1024
     const val PASSO_S = 30
+    /** No pendrive: guarda até 1 h, entre 8 e 128 MB, e nunca mais que metade do livre. */
+    const val PENDRIVE_S = 3600
+    const val PENDRIVE_MIN = 8L * 1024 * 1024
+    const val PENDRIVE_MAX = 128L * 1024 * 1024
+    const val ARQUIVO = "radio-atraso.bin"
+
+    /** Tamanho da fita no pendrive para a [taxa] (bytes/s) com [livre] bytes livres; 0 = não cabe (usa a RAM). Puro. */
+    fun capacidadePendrive(taxa: Long, livre: Long): Long {
+        val c = (PENDRIVE_S * taxa).coerceIn(PENDRIVE_MIN, PENDRIVE_MAX).coerceAtMost(livre / 2)
+        return if (c < PENDRIVE_MIN) 0 else c
+    }
+
+    /** Onde a fita guarda os bytes: posição física [i] dentro de 0 until capacidade. */
+    interface Armazem {
+        val capacidade: Long
+        val noPendrive: Boolean get() = false
+        fun escrever(i: Long, b: ByteArray, off: Int, n: Int)
+        fun ler(i: Long, dest: ByteArray, off: Int, n: Int)
+        fun fechar() {}
+    }
+
+    class Memoria(cap: Int = CAPACIDADE) : Armazem {
+        private val buf = ByteArray(cap)
+        override val capacidade = cap.toLong()
+        override fun escrever(i: Long, b: ByteArray, off: Int, n: Int) = System.arraycopy(b, off, buf, i.toInt(), n)
+        override fun ler(i: Long, dest: ByteArray, off: Int, n: Int) = System.arraycopy(buf, i.toInt(), dest, off, n)
+    }
+
+    /**
+     * Arquivo de tamanho fixo (pendrive). Começa vazio e cresce na primeira volta (sem pré-alocar: no FAT de um pendrive
+     * lento, reservar 60 MB de zeros levaria segundos antes do som). Apagado ao [fechar].
+     */
+    class Arquivo(private val f: File, override val capacidade: Long) : Armazem {
+        private val raf = RandomAccessFile(f, "rw").also { it.setLength(0) }
+        override val noPendrive = true
+        override fun escrever(i: Long, b: ByteArray, off: Int, n: Int) { raf.seek(i); raf.write(b, off, n) }
+        override fun ler(i: Long, dest: ByteArray, off: Int, n: Int) { raf.seek(i); raf.readFully(dest, off, n) }
+        override fun fechar() { runCatching { raf.close() }; f.delete() }
+    }
+
+    /**
+     * A fita para esta rádio: arquivo na pasta do app no pendrive (escrever ali não pede permissão) quando há pendrive
+     * com espaço; senão a RAM. [taxa] em bytes/s.
+     */
+    fun armazem(ctx: Context, taxa: Long): Armazem {
+        val dir = runCatching {
+            ctx.getExternalFilesDirs(null).filterNotNull().firstOrNull {
+                Environment.isExternalStorageRemovable(it) && Environment.getExternalStorageState(it) == Environment.MEDIA_MOUNTED
+            }
+        }.getOrNull()
+        if (dir != null) {
+            val cap = capacidadePendrive(taxa, runCatching { dir.usableSpace }.getOrDefault(0L))
+            if (cap > 0) runCatching { return Arquivo(File(dir.apply { mkdirs() }, ARQUIVO), cap) }
+                .onFailure { Log.w("TvLauncher.Ouvir", "fita no pendrive falhou: ${it.javaClass.simpleName}") }
+        }
+        return Memoria()
+    }
 
     /** O formato deixa começar de qualquer ponto? (codec do catálogo, ou o endereço quando não diz). */
     fun suporta(r: Radios.Radio): Boolean {
@@ -52,8 +116,9 @@ object AtrasoRadio {
      * Anel de bytes: a gravação escreve sem parar, sobrescrevendo o mais velho; quem lê pede pela posição absoluta
      * (bytes desde o começo da gravação). Puro (AtrasoRadioTest).
      */
-    class Anel(val capacidade: Int = CAPACIDADE) {
-        private val buf = ByteArray(capacidade)
+    class Anel(val armazem: Armazem = Memoria()) {
+        constructor(capacidade: Int) : this(Memoria(capacidade))
+        val capacidade: Long = armazem.capacidade
         @Volatile var escrito = 0L
             private set
         @Volatile var fechado = false
@@ -65,15 +130,18 @@ object AtrasoRadio {
         fun escrever(b: ByteArray, off: Int, n: Int) = synchronized(trava) {
             var o = off; var falta = n
             while (falta > 0) {
-                val i = (escrito % capacidade).toInt()
-                val k = minOf(falta, capacidade - i)
-                System.arraycopy(b, o, buf, i, k)
+                val i = escrito % capacidade
+                val k = minOf(falta.toLong(), capacidade - i).toInt()
+                armazem.escrever(i, b, o, k)
                 o += k; falta -= k; escrito += k
             }
             trava.notifyAll()
         }
 
         fun fechar() = synchronized(trava) { fechado = true; trava.notifyAll() }
+
+        /** Fim de tudo (rádio trocada ou parada): solta o arquivo do pendrive. */
+        fun soltar() = synchronized(trava) { fechado = true; armazem.fechar(); trava.notifyAll() }
 
         /**
          * Lê a partir de [pos] até [n] bytes em [dest]. Espera até [esperaMs] por dado novo. Devolve quantos leu,
@@ -90,29 +158,77 @@ object AtrasoRadio {
                 p = maxOf(pos, maisVelho)
                 if (p >= escrito) { ondeFicou = p; return if (fechado) -1 else 0 }
             }
-            val disp = (escrito - p).toInt()
-            val i = (p % capacidade).toInt()
-            val k = minOf(n, disp, capacidade - i)
-            System.arraycopy(buf, i, dest, off, k)
+            val i = p % capacidade
+            val k = minOf(n.toLong(), escrito - p, capacidade - i).toInt()
+            armazem.ler(i, dest, off, k)
             ondeFicou = p + k
             k
         }
     }
 
-    /** A segunda conexão: grava a rádio no [anel] até [parar]. Mede a taxa real para quando o catálogo não diz. */
-    class Gravador(private val url: String, private val aoPrimeiro: () -> Unit = {}) {
-        val anel = Anel()
+    /**
+     * Tira do fluxo os blocos de metadados ICY (a cada [metaint] bytes de áudio vem 1 byte de tamanho × 16 e o texto,
+     * com `StreamTitle='Artista - Música';`) e entrega só o áudio. Puro (AtrasoRadioTest). Mesmas regras de texto do
+     * leitor ICY do media3: UTF-8, e Latin-1 quando o UTF-8 não fecha.
+     */
+    class Icy(private val metaint: Int, private val aoTitulo: (String) -> Unit) {
+        private var faltaDados = metaint
+        private var faltaMeta = 0
+        private var lendoTamanho = false
+        private val meta = ByteArrayOutputStream()
+
+        fun filtrar(b: ByteArray, n: Int, audio: (ByteArray, Int, Int) -> Unit) {
+            var i = 0
+            while (i < n) {
+                when {
+                    faltaMeta > 0 -> {
+                        val k = minOf(faltaMeta, n - i); meta.write(b, i, k); i += k; faltaMeta -= k
+                        if (faltaMeta == 0) { titulo(meta.toByteArray())?.let(aoTitulo); faltaDados = metaint }
+                    }
+                    faltaDados > 0 -> { val k = minOf(faltaDados, n - i); audio(b, i, k); i += k; faltaDados -= k }
+                    else -> {
+                        val len = (b[i].toInt() and 0xff) * 16; i++
+                        if (len == 0) faltaDados = metaint else { faltaMeta = len; meta.reset() }
+                    }
+                }
+            }
+        }
+
+        companion object {
+            private val TITULO = Regex("StreamTitle='(.*?)';", RegexOption.DOT_MATCHES_ALL)
+            fun titulo(bytes: ByteArray): String? {
+                val utf = String(bytes, Charsets.UTF_8)
+                val txt = if ('\uFFFD' in utf) String(bytes, Charsets.ISO_8859_1) else utf
+                return TITULO.find(txt.trimEnd('\u0000'))?.groupValues?.get(1)?.trim()
+            }
+        }
+    }
+
+    /**
+     * A única conexão com a rádio: grava na fita ([anel]) até [parar]. Pede os títulos ICY e anota cada um na posição da
+     * fita em que começou ([tituloEm]). Mede a taxa real para quando o catálogo não diz.
+     */
+    class Gravador(private val url: String, armazem: Armazem = Memoria(), private val aoPrimeiro: () -> Unit = {}) {
+        val anel = Anel(armazem)
         @Volatile private var ativo = true
         @Volatile var medidoBps = 0L
             private set
         @Volatile var falhou = false
             private set
         private var con: HttpURLConnection? = null
+        private val titulos = ArrayList<Pair<Long, String>>()   // (posição na fita, título), em ordem
+
+        /** O título que vale na posição [pos] da fita (a música que está tocando ali), ou null se nenhum chegou. */
+        fun tituloEm(pos: Long): String? = synchronized(titulos) { titulos.lastOrNull { it.first <= pos }?.second }
 
         fun comecar() = Thread({
             try {
                 val c = abrir(url) ?: throw IOException("destino recusado")
                 con = c
+                val metaint = c.getHeaderField("icy-metaint")?.trim()?.toIntOrNull()?.takeIf { it in 1..1_000_000 }
+                val icy = metaint?.let { Icy(it) { t -> synchronized(titulos) {
+                    if (titulos.lastOrNull()?.second != t) { titulos.add(anel.escrito to t); if (titulos.size > 200) titulos.removeAt(0) }
+                } } }
                 val inicio = System.currentTimeMillis()
                 var marcaT = 0L; var marcaB = 0L
                 c.inputStream.use { ins ->
@@ -120,8 +236,9 @@ object AtrasoRadio {
                     while (ativo) {
                         val n = ins.read(b)
                         if (n < 0) break
-                        anel.escrever(b, 0, n)
-                        if (anel.escrito == n.toLong()) aoPrimeiro()   // os primeiros bytes: o botão "Voltar 30 s" pode aparecer
+                        val antes = anel.escrito
+                        if (icy != null) icy.filtrar(b, n) { x, o, k -> anel.escrever(x, o, k) } else anel.escrever(b, 0, n)
+                        if (antes == 0L && anel.escrito > 0) aoPrimeiro()   // os primeiros bytes: dá para tocar e voltar
                         // Os primeiros 10 s vêm em rajada (o servidor manda um estoque): mede depois deles.
                         val t = System.currentTimeMillis() - inicio
                         if (t > 10_000 && marcaT == 0L) { marcaT = t; marcaB = anel.escrito }
@@ -133,7 +250,7 @@ object AtrasoRadio {
             } finally { anel.fechar() }
         }, "radio-atraso").apply { isDaemon = true; start() }
 
-        fun parar() { ativo = false; runCatching { con?.disconnect() }; anel.fechar() }
+        fun parar() { ativo = false; runCatching { con?.disconnect() }; anel.soltar() }
 
         /** Segue até 5 redirecionamentos conferindo cada destino (a rede de casa vale: rádio do NAS; a própria TV não). */
         private fun abrir(url: String): HttpURLConnection? {
@@ -144,6 +261,7 @@ object AtrasoRadio {
                 val c = URL(u).openConnection() as HttpURLConnection
                 c.instanceFollowRedirects = false; c.connectTimeout = 10_000; c.readTimeout = 20_000
                 c.setRequestProperty("User-Agent", Http.USER_AGENT)
+                c.setRequestProperty("Icy-MetaData", "1")   // o título da música vem junto e o Icy separa
                 val cod = c.responseCode
                 if (cod in 300..399) {
                     val prox = c.getHeaderField("Location"); c.disconnect()
@@ -156,7 +274,7 @@ object AtrasoRadio {
         }
     }
 
-    /** O que o player lê quando está atrasado: o anel, a partir de [inicio], esperando o que a gravação ainda traz. */
+    /** O que o player lê: a fita, a partir de [inicio] (ponta = ao vivo), esperando o que a gravação ainda traz. */
     @androidx.annotation.OptIn(markerClass = [UnstableApi::class])
     class Leitor(private val anel: Anel, private val inicio: Long) : BaseDataSource(true) {
         @Volatile var pos = inicio
