@@ -73,6 +73,7 @@ import java.util.concurrent.Executors
  */
 class PainelRapidoActivity : Activity() {
     companion object {
+        private const val PEDIDO_BLUETOOTH = 41
         fun abrir(ctx: Context) {
             try {
                 ctx.startActivity(Intent(ctx, PainelRapidoActivity::class.java)
@@ -591,10 +592,7 @@ class PainelRapidoActivity : Activity() {
             if (ModoVisita.ativo(this) && WifiVisita.configurado(this)) WifiVisita.mostrarQr(this)
             else abrirEFechar(Intent(Settings.ACTION_WIFI_SETTINGS))
         }
-        tBluetooth = tile("bluetooth", "Bluetooth") {
-            // A tela de parear do sistema (a lista "Controles remotos e acessórios" não tem Activity própria).
-            abrirEFechar(Intent().setClassName("com.android.tv.settings", "com.android.tv.settings.accessories.AddAccessoryActivity"))
-        }
+        tBluetooth = tile("bluetooth", "Bluetooth") { abrirParear() }
         tTimer = tile("timer", getString(R.string.pr_timer)) { trocarTimer() }
         val dormir = tile("dormir", getString(R.string.pr_dormir)) {
             val app = applicationContext
@@ -1051,6 +1049,32 @@ class PainelRapidoActivity : Activity() {
     }
 
     // ---------------------------------------------------------------- utilidades
+
+    /**
+     * Tile "Bluetooth": a tela de parear do sistema (a lista "Controles remotos e acessórios" não tem Activity própria).
+     * Medido na Sala (21/11/2026, `cmd package resolve-activity`): a AddAccessoryActivity é exportada mas exige
+     * BLUETOOTH_CONNECT de quem abre. Sem a permissão o Android recusava e o painel caía nas configurações gerais.
+     * Ordem: já temos > o Device Owner concede em silêncio > a pergunta do sistema (TV sem dono) > configurações gerais.
+     */
+    private fun abrirParear() {
+        val bt = android.Manifest.permission.BLUETOOTH_CONNECT
+        val temos = { android.os.Build.VERSION.SDK_INT < 31 || checkSelfPermission(bt) == android.content.pm.PackageManager.PERMISSION_GRANTED }
+        if (!temos()) br.paulo.tvlauncher.privilege.PrivilegioDO.conceder(this, packageName, bt)
+        if (temos()) abrirEFechar(intentParear())
+        else requestPermissions(arrayOf(bt), PEDIDO_BLUETOOTH)
+    }
+
+    private fun intentParear() =
+        Intent().setClassName("com.android.tv.settings", "com.android.tv.settings.accessories.AddAccessoryActivity")
+
+    @Deprecated("Activity simples, sem AndroidX")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode != PEDIDO_BLUETOOTH) return
+        // Recusou: as configurações gerais ainda levam a "Controles remotos e acessórios" em um passo.
+        abrirEFechar(if (grantResults.firstOrNull() == android.content.pm.PackageManager.PERMISSION_GRANTED) intentParear()
+            else Intent(Settings.ACTION_SETTINGS))
+    }
 
     /** Abre outra tela e fecha o painel (como o do Google: o painel não fica por baixo do que abriu). */
     private fun abrirEFechar(i: Intent) {
