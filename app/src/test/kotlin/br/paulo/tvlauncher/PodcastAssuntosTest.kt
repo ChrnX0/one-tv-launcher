@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PodcastAssuntos.Assunto
+import br.paulo.tvlauncher.listen.PodcastAssuntos
+import br.paulo.tvlauncher.listen.PodcastAssuntos.Assunto
+import br.paulo.tvlauncher.listen.PodcastBusca
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

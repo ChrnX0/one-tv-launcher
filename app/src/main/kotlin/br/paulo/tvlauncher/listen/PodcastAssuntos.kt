@@ -1,4 +1,4 @@
-package br.paulo.tvlauncher
+package br.paulo.tvlauncher.listen
 
 /**
  * Os assuntos dos podcasts (pedido do Paulo, 21/11/2026: "o player de podcast poderia ter um filtro de assunto").
