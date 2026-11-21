@@ -552,7 +552,10 @@ class PodcastsActivity : Activity() {
         deAssunto = a
         if (!emAlta) { resultados = titulo to seus; focarDepois = "res" to null; montar(); return }
         procurar(titulo, deAssunto = a) {
+            // Só entra o que o próprio podcast declara desse assunto: um servidor antigo (sem cat=) devolveria o
+            // Em alta geral, e ele apareceria com o nome do assunto. Sem tema conhecido, fica de fora.
             val fora = PodcastBusca.emAlta(Locale.getDefault().language, a)
+                .filter { a in PodcastAssuntos.de(it.categorias) }
             (seus + fora).distinctBy { Podcasts.normalizar(it.url) }
         }
     }
