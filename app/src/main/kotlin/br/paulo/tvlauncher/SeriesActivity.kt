@@ -1,25 +1,19 @@
 package br.paulo.tvlauncher
 
-import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.text.InputType
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.BaseAdapter
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
@@ -36,67 +30,33 @@ import java.util.Locale
  * "Assistir T1E1"); embaixo, as temporadas e a lista de episódios com a barra do que já foi visto. Quando um episódio
  * vai até o fim, o próximo começa sozinho (VodActivity devolve "terminou").
  */
-class SeriesActivity : Activity() {
+class SeriesActivity : CatalogActivity<Serie>("series", isSeries = true) {
     private companion object {
         const val ANTERIORMENTE_OFF = "anteriormente_off"   // prefs "player" (vai no backup): o dono desligou o resumo
         const val MAX_NOVIDADES = 15
-        const val ESPERA_EXTERNO_MS = 400L   // quanto a ficha do servidor espera pela de fora (com MDBList/Simkl ligados ela vem 150-400 ms depois, medido 16/11)
-        const val MIN_PULAR = 30
-        const val BUSCAR = "*buscar"
-        const val FILTRO = "*filtro"
-        const val CONTINUAR = "*continuar"
-        const val INTERESSES = "*interesses"
-        const val ASSISTIDOS = "*assistidos"
-        const val TODOS = "*todos"
-        const val BUSCA = "*busca"
         const val CODIGO_VIDEO = 7
     }
 
+    override val buscaDica = R.string.series_busca_dica
+    override val ordemRecentes = R.string.series_ordem_recentes
+    override fun groupOf(t: Serie) = t.grupo
+    override fun nameOf(t: Serie) = t.nome
+    override fun tmdbOf(t: Serie) = tmdbDaSerie(t)
+    override fun addedOf(t: Serie) = t.atualizada
 
-    private val tela = Handler(Looper.getMainLooper())
-    private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
-    private val suave = Estilo.TEXTO_2
-    private val apagado = Estilo.TEXTO_3
-    private val ambar = Estilo.ATENCAO
-    private val verdeEtiqueta = 0xE62E7D4F.toInt()
-    private val fonteMedia = Fontes.nunito(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Ficha de fora (TMDB: sinopse, próximo episódio; Trakt: nota) da série aberta (InfoExterna, 14/11/2026).
     private var externo: Pair<Serie, InfoExterna.Guardado>? = null
-    /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3). */
-    @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
     @Volatile private var cacheTitulos: Pair<List<Serie>, List<SincronizarFilmes.Titulo>>? = null
-    private var todas: List<Serie> = emptyList()       // o catálogo inteiro, como veio do servidor
-    private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
-    @Volatile private var porIdade: IdadesTmdb.Filtro? = null   // ideia 91: modo infantil com idade máxima
-    private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
-    private var indoAoVideo = false                    // saiu para a VodActivity: o PIN continua valendo na volta
-    private val janelas by lazy { PlayerJanelas(this) }
     private var ultimos: Map<String, UltimoEpisodio> = emptyMap()
-    private var posicoes: Map<String, Posicao> = emptyMap()
-    private var interesses: Set<String> = emptySet()
     /** Próximo episódio marcado no TMDB (só o que já está guardado), por chave: vira a etiqueta "Novo ep. sex., 20/11". */
     private var proximos: Map<String, InfoExterna.ProximoEp> = emptyMap()
-    /** De que perfil são os interesses e posições na memória (ideia 11): trocou de perfil, a tela se refaz ao voltar. */
-    private var perfilCarregado = ""
     private var progresso: Map<String, ProgressoSerie> = emptyMap()   // episódios vistos / total, por série
-    private val segurar = SegurarOk()
-    private var ordem = Vod.Ordem.RECENTES
-    private var itens: List<ColunaCategorias.Linha> = emptyList()   // as três partes da coluna, juntas
-    private var marcoNovos = 0L              // "N novos" por categoria: a série atualizada mais recente da visita anterior
-    private var ultimaSalva: String? = null  // a última categoria aberta (por perfil)
     private var soNaoVistas = false          // Filtro: só séries sem episódio visto
-    private var chave = TODOS
-    private var termo = ""
-    private var resultados: List<Serie> = emptyList()
-    private var naGrade: List<Serie> = emptyList()
 
     // Ficha aberta
     private var aberta: Serie? = null
-    // Dublado x legendado (Idioma, 11/11/2026): a mesma série nas duas versões do catálogo, e o que a pessoa prefere.
-    private var indiceVersoes: Map<String, List<Serie>> = emptyMap()
-    private var prefsIdioma = Idioma.Prefs()
     private var fichaAberta: FichaSerie? = null
     // A outra versão da série aberta, com os episódios dela, para o ▼ do player trocar no mesmo ponto (18/11/2026).
     private var outraFicha: Pair<Serie, FichaSerie>? = null
@@ -105,17 +65,8 @@ class SeriesActivity : Activity() {
     private var seguidos = 0   // ideia 19: episódios seguidos que terminaram sem ninguém apertar tecla
     private var avisoProximo: android.app.Dialog? = null
 
-    private lateinit var coluna: ColunaCategorias
-    /** Modo simples da HOME (ModoSimples): o player segue, com menos linhas, letra maior e entrada no Continuar. */
-    private val simples by lazy { ModoSimples.ligado(this) }
-    private lateinit var grade: GridView
     private lateinit var painelInfo: PainelCatalogo   // topo (categoria + pílulas do filtro) e a ficha rápida da série em foco
-    private lateinit var aviso: TextView
     private lateinit var painel: FrameLayout
-
-    /** A grade e a coluna, atrás da ficha. Escondidas enquanto a ficha está aberta: a ficha cobre a tela toda e,
-     *  visíveis, eram desenhadas de novo a cada quadro (fundo, 10 pôsteres, a coluna), o que pesava ao abrir (15/11/2026). */
-    private lateinit var telaDeTras: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -202,7 +153,7 @@ class SeriesActivity : Activity() {
         if (vazioMostrado) { recreate(); return }
         indoAoVideo = false
         // O controle parental pode ter mudado nas Configurações (igual à tela de Filmes): relê as categorias ocultas.
-        val lista = todas
+        val lista = catalogo
         if (lista.isNotEmpty()) Fundo.rodar {
             val oc = VodFiltro.ocultas(lista.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
@@ -244,36 +195,8 @@ class SeriesActivity : Activity() {
         }
     }
 
-    override fun onDestroy() {
-        calculo.fechar()
-        if (!VigiaAtualizacao.fechada(this)) coluna.parar()   // modo seguro: o onCreate parou antes de criar a coluna
-        tela.removeCallbacksAndMessages(null)
-        super.onDestroy()
-    }
-
-    // Preferências por perfil (ideia 11): a última categoria e o marco dos "novos" são de cada pessoa.
-    private fun prefsPlayer() = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
-    private fun chavePref(nome: String) = "${nome}_series_" + Perfil.chaveDados(this)
-
-    private fun guardarMarco() {
-        val lista = todas; val antes = marcoNovos
-        if (lista.isEmpty()) return
-        Fundo.rodar {
-            val m = ColunaRegras.novoMarco(lista, antes) { it.atualizada }
-            if (m != antes) prefsPlayer().edit().putLong(chavePref("marco"), m).apply()
-        }
-    }
-
-    private fun okNaColuna(k: String) {
-        when (k) {
-            BUSCAR -> buscar()
-            FILTRO -> menuFiltroUnico()
-            else -> escolherCat(k, focarGrade = true)
-        }
-    }
-
     /** O Filtro único (14/11/2026): Ordem, só não vistas, Sortear e "Mostrar ocultas". Mexe só na grade da direita. */
-    private fun menuFiltroUnico() {
+    override fun menuFiltroUnico() {
         val opcoes = ArrayList<Pair<CharSequence, () -> Unit>>()
         opcoes += getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to { escolherOrdem() }
         opcoes += getString(R.string.filmes_filtro_nao_vistos, getString(if (soNaoVistas) R.string.filmes_filtro_sim else R.string.filmes_filtro_nao)) to {
@@ -292,14 +215,6 @@ class SeriesActivity : Activity() {
         if (g.isEmpty()) { avisoBreve(getString(R.string.filmes_sorteio_vazio)); return }
         val preferidas = g.filter { it.chave in interesses && it.chave !in ultimos }
         abrirSerie((preferidas.ifEmpty { g.filter { it.chave !in ultimos }.ifEmpty { g } }).random(), trocar = true)
-    }
-
-    private fun refiltrarOcultas() = recalcular(ModoGrade.NOVA)
-
-    /** "Mostrar categorias ocultas" pede o PIN do painel (o mesmo do player); "Esconder de novo" não pede nada. */
-    private fun alternarOcultas() {
-        if (mostrarOcultas) { mostrarOcultas = false; refiltrarOcultas() }
-        else janelas.pedirPin(aoLiberar = { mostrarOcultas = true; refiltrarOcultas() }, aviso = { avisoBreve(it) })
     }
 
     private fun carregar() {
@@ -323,7 +238,7 @@ class SeriesActivity : Activity() {
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
             tela.post {
                 if (isDestroyed) return@post
-                todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi; proximos = px
+                catalogo = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi; proximos = px
                 marcoNovos = marco; ultimaSalva = ultima
                 conferirNovidades()
                 if (s.isEmpty()) {
@@ -343,7 +258,7 @@ class SeriesActivity : Activity() {
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(s, { it.nome }, { it.grupo })
-                    tela.post { if (!isDestroyed && todas === s) indiceVersoes = idx }
+                    tela.post { if (!isDestroyed && catalogo === s) indiceVersoes = idx }
                 }
             }
         }
@@ -351,35 +266,10 @@ class SeriesActivity : Activity() {
 
     // ---------------------------------------------------------------- Trakt/Simkl e listas de fora (fatia 3)
 
-    private fun titulosDoCatalogo(vis: List<Serie>): List<SincronizarFilmes.Titulo> =
+    override fun titulosDoCatalogo(vis: List<Serie>): List<SincronizarFilmes.Titulo> =
         cacheTitulos?.takeIf { it.first === vis }?.second ?: vis.map {
             SincronizarFilmes.Titulo(it.chave, it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb, InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
         }.also { cacheTitulos = vis to it }
-
-    /** Igual a Filmes: listas escolhidas e sincronização (no máximo a cada 20 min); mudou algo, relê e refaz a coluna. */
-    private fun sincronizarFora(s: List<Serie>, forcar: Boolean) {
-        val escolhidas = ServicosSync.listas(this)
-        val algumaConta = ServicosSync.ativo(this, ServicosFilmes.Servico.TRAKT) || ServicosSync.ativo(this, ServicosFilmes.Servico.SIMKL)
-        if (escolhidas.isEmpty() && !algumaConta) { listasFora = emptyList(); return }
-        Fundo.rodar("series-fora") {
-            if (escolhidas.isNotEmpty()) {
-                listasFora = escolhidas.map { it to ServicosSync.itensGuardados(this, it) }
-                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
-                listasFora = escolhidas.map { it to ServicosSync.itens(this, it, forcar) }
-                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
-            }
-            if (!algumaConta) return@rodar
-            val m = ServicosSync.sincronizar(this, SincronizarFilmes.Tipo.SERIE, titulosDoCatalogo(s), forcar)
-            if (!m.interesses && !m.posicoes) return@rodar
-            val i = PlayerArmazem.interesses(this, series = true); val p = PlayerArmazem.posicoes(this)
-            tela.post {
-                if (isDestroyed) return@post
-                interesses = i; posicoes = p
-                adaptadorGrade.notifyDataSetChanged()
-                recalcular(ModoGrade.MANTER_LUGAR)
-            }
-        }
-    }
 
     /** Episódios vistos no Trakt e ainda não aqui: marca como vistos (visto é união). Na tela, com a ficha aberta. */
     private fun trazerEpisodiosVistos(s: Serie, f: FichaSerie, tmdb: Int) {
@@ -424,7 +314,7 @@ class SeriesActivity : Activity() {
     }
 
     private fun conferirNovidades() {
-        val alvo = todas.filter { s -> (s.chave in interesses || s.chave in ultimos) && Series.etiqueta(s, progresso[s.chave]) == EtiquetaSerie.Novos(0) }
+        val alvo = catalogo.filter { s -> (s.chave in interesses || s.chave in ultimos) && Series.etiqueta(s, progresso[s.chave]) == EtiquetaSerie.Novos(0) }
             .take(MAX_NOVIDADES)
         if (alvo.isEmpty()) return
         Fundo.rodar("series-novidades") {
@@ -433,17 +323,11 @@ class SeriesActivity : Activity() {
         }
     }
 
-    /** O que fazer com a grade quando a conta chegar. */
-    /** A ordem importa: do mais forte ao mais fraco ([GridRequest.Need.strength] = 2 - ordinal). */
-    private enum class ModoGrade { NOVA, MANTER_LUGAR, IGUAL }
-
     /** Resultado de uma conta: tudo que a tela precisa, calculado fora dela. */
     private class Estado(val series: List<Serie>, val resultados: List<Serie>, val acoes: List<ColunaCategorias.Linha>,
                          val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
                          val grade: List<Serie>?, val deLista: Pair<Int, Int>? = null)
-
-    private val calculo = CalculoTela(tela, "series-conta")
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Serie>, Set<String>, List<Serie>>? = null
@@ -451,17 +335,6 @@ class SeriesActivity : Activity() {
 
     private fun tmdbDaSerie(s: Serie): Int? = s.tmdb ?: InfoExternaCache.guardado(this, s.chave)?.tmdb
 
-    /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação das que faltam (infantis primeiro) e refaz a grade. */
-    private fun classificarIdades(lista: List<Serie>) {
-        val fi = porIdade ?: return
-        Fundo.rodar("series-idades") {
-            val ids = lista.filter { it.grupo.trim() !in fi.duras }.sortedBy { if (it.grupo.trim() in fi.infantis) 0 else 1 }.mapNotNull { tmdbDaSerie(it) }
-            if (IdadesTmdb.classificar(this, serie = true, ids) > 0) {
-                val novo = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = true)
-                tela.post { if (!isDestroyed && todas === lista) { porIdade = novo; recalcular(ModoGrade.MANTER_LUGAR) } }
-            }
-        }
-    }
     private var cacheBusca: Triple<List<Serie>, String, List<Serie>>? = null
     private var cacheOrdem: Triple<List<Serie>, Vod.Ordem, List<Serie>>? = null
     private var cacheGrupos: Pair<List<Serie>, List<Pair<String, Int>>>? = null
@@ -475,11 +348,11 @@ class SeriesActivity : Activity() {
     /** Pedido que ainda não chegou à tela: o próximo herda o que ele exigia ([GridRequest]). */
     private var pedidoPendente: GridRequest.Need? = null
 
-    private fun recalcular(modoPedido: ModoGrade, inicialPedido: Boolean = false, depoisPedido: (() -> Unit)? = null) {
+    override fun recalcular(modoPedido: ModoGrade, inicialPedido: Boolean, depoisPedido: (() -> Unit)?) {
         val pedido = GridRequest.merge(pedidoPendente, GridRequest.Need(2 - modoPedido.ordinal, inicialPedido, depoisPedido))
         pedidoPendente = pedido
         val modo = ModoGrade.entries[2 - pedido.strength]; val inicial = pedido.initial; val depois = pedido.after
-        val todasS = todas; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
+        val todasS = catalogo; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
         val idadeS = porIdade
         val termoS = termo; val ultS = ultimos; val posS = posicoes; val intS = interesses; val progS = progresso
         val ordemS = ordem; val chaveS = chave; val marcoS = marcoNovos; val ultimaS = ultimaSalva; val naoVistasS = soNaoVistas
@@ -594,20 +467,11 @@ class SeriesActivity : Activity() {
         )
     }
 
-    private fun escolherCat(k: String, focarGrade: Boolean = false) {
-        if (k == BUSCAR || k == FILTRO || itens.none { it.chave == k }) return
-        if (k == chave) { if (focarGrade && naGrade.isNotEmpty() && !calculo.calculando) grade.requestFocus(); return }
-        chave = k
-        coluna.escolher(k)   // mesma lista: só troca a cor da escolhida
-        if (k != BUSCA) { ultimaSalva = k; prefsPlayer().edit().putString(chavePref("ultima"), k).apply() }
-        recalcular(ModoGrade.NOVA) { if (focarGrade && naGrade.isNotEmpty()) grade.requestFocus() }
-    }
-
     /**
      * Ficha rápida da série em foco (acréscimo 2): nota, ano, temporadas, gênero e episódio numa linha, sem abrir a
      * ficha. Temporadas só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo).
      */
-    private fun mostrarFocado(s: Serie?) {
+    override fun mostrarFocado(s: Serie?) {
         tela.removeCallbacks(lerFichaRapida)
         if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else ""); return }
         val info = fichasRapidas[s.chave]
@@ -665,76 +529,13 @@ class SeriesActivity : Activity() {
         return listOfNotNull(notas, prox).joinToString("  ·  ")
     }
 
-    // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
-
-    private fun podePularLetra() = naGrade.size >= MIN_PULAR && (chave == TODOS || chave.startsWith("g:"))
-
-    private fun pularParaLetra() {
-        if (!podePularLetra()) return
-        PainelCatalogo.escolherLetra(this) { letra ->
-            val pular = {
-                val atual = naGrade
-                // Busca binária: a grade em ordem de nome está ordenada pela mesma chave.
-                val i = ColunaRegras.indiceDaLetra(atual.size, { Vod.chaveNome(atual[it].nome) }, letra)
-                if (i >= 0) { grade.requestFocus(); grade.setSelection(i); mostrarFocado(atual[i]) }
-            }
-            if (ordem == Vod.Ordem.NOME) pular() else {
-                ordem = Vod.Ordem.NOME
-                getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
-                recalcular(ModoGrade.NOVA) { pular() }
-            }
-        }
-    }
-
-    private fun nomeOrdem(o: Vod.Ordem) = getString(when (o) {
-        Vod.Ordem.RECENTES -> R.string.series_ordem_recentes
-        Vod.Ordem.NOME -> R.string.filmes_ordem_nome
-        Vod.Ordem.NOTA -> R.string.filmes_ordem_nota
-        Vod.Ordem.ANO -> R.string.filmes_ordem_ano
-    })
-
-    private fun escolherOrdem() {
-        val todas = Vod.Ordem.values()
-        Estilo.lista(this, getString(R.string.filmes_ordem_titulo), todas.map { nomeOrdem(it) }, listOf(todas.indexOf(ordem))) { i ->
-            ordem = todas[i]
-            getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
-            recalcular(ModoGrade.NOVA)
-        }
-    }
-
-    private fun buscar() {
-        val campo = EditText(this).apply {
-            setText(termo); setSelection(termo.length); hint = getString(R.string.series_busca_dica)
-            inputType = InputType.TYPE_CLASS_TEXT; imeOptions = EditorInfo.IME_ACTION_SEARCH; isSingleLine = true
-        }
-        val aplicar = { t: String ->
-            if (t.isNotEmpty()) {
-                termo = t; chave = BUSCA
-                recalcular(ModoGrade.NOVA) { if (resultados.isNotEmpty()) grade.requestFocus() }
-            }
-        }
-        val d = CaixaTv(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
-            .setTitle(R.string.player_acao_buscar)
-            .setView(FrameLayout(this).apply { setPaddingRelative(dp(20), dp(10), dp(20), 0); addView(campo) })
-            .setPositiveButton(R.string.player_acao_buscar) { _, _ -> aplicar(campo.text.toString().trim()) }
-            .setNegativeButton(android.R.string.cancel, null).create()
-        campo.setOnEditorActionListener { _, acao, _ ->
-            if (acao == EditorInfo.IME_ACTION_SEARCH) { d.dismiss(); aplicar(campo.text.toString().trim()); true } else false
-        }
-        d.show()
-    }
-
     private class Card(val capa: ImageView, val nome: TextView, val estrela: TextView, val etiqueta: TextView, val barra: BarraTempo.Barra,
                        val moldura: View, val selo: TextView)
 
     /** Medida atual da grade (PosterGridSize); até a grade ter tamanho, a de antes. */
     private var medidaGrade = PosterGridSize.Medida(Estilo.Leitura.GRADE_COLUNAS, Estilo.Leitura.POSTER_ALTURA, Estilo.Leitura.POSTER_ALTURA + PosterGridSize.EXTRA_CARD)
 
-    /** Legendada sem a versão dublada junto (selo LEG); espera o índice de versões, como em Filmes. */
-    private fun soLegendado(s: Serie): Boolean =
-        indiceVersoes.isNotEmpty() && Idioma.versao(s.nome, s.grupo) == Idioma.Versao.LEGENDADA && outraVersao(s) == null
-
-    private val adaptadorGrade = object : BaseAdapter() {
+    override val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
         override fun getItem(p: Int) = naGrade[p]
         override fun getItemId(p: Int) = p.toLong()
@@ -835,7 +636,7 @@ class SeriesActivity : Activity() {
     // ---------------------------------------------------------------- ficha da série
 
     /** A mesma série na outra versão (dublada x legendada), só entre as que a tela pode mostrar (parental). */
-    private fun outraVersao(s: Serie): Serie? = Idioma.outraVersao(s, indiceVersoes, { it.nome }, { it.grupo }, { it.ano })
+    override fun outraVersao(s: Serie): Serie? = Idioma.outraVersao(s, indiceVersoes, { it.nome }, { it.grupo }, { it.ano })
         ?.takeIf { mostrarOcultas || it.grupo.trim() !in ocultas }
 
     /**
@@ -947,13 +748,6 @@ class SeriesActivity : Activity() {
         adaptadorGrade.notifyDataSetChanged()
         recalcular(if (chave == INTERESSES) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
         avisoBreve(getString(if (virou) R.string.filmes_interesse_pos else R.string.filmes_interesse_tirou, Vod.nomeLimpo(s.nome)))
-    }
-
-    private val esconderAviso = Runnable { aviso.visibility = View.GONE }
-
-    private fun avisoBreve(t: String) {
-        aviso.text = t; aviso.visibility = View.VISIBLE
-        tela.removeCallbacks(esconderAviso); tela.postDelayed(esconderAviso, 2_500)
     }
 
     private var verEpisodios = false     // ficha C: a direita mostra a lista de episódios em vez das informações
@@ -1387,19 +1181,9 @@ class SeriesActivity : Activity() {
         if (l is ListView) l.divider = null
     }
 
-    private fun coluna(titulo: TextView, lista: View) = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL; addView(titulo); addView(lista, LinearLayout.LayoutParams(-1, 0, 1f))
-    }
-
-    private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
-        setPaddingRelative(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-    }
-
     private fun relogio(ms: Long): String {
         val s = ms / 1000
         return if (s >= 3600) String.format(Locale.ROOT, "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) else String.format(Locale.ROOT, "%d:%02d", s / 60, s % 60)
     }
 
-    private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }
