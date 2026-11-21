@@ -1,5 +1,8 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"オン",
+"desligado":"オフ",
+"sem leitura":"測定値なし",
 "Recados de hoje":"今日のお知らせ",
 "Congelados em prova":"お試しで停止中",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"テレビがこれらのアプリを停止し、10分後に何か動かなくなっていないか確認します。動かなくなっていればテレビが元に戻します。あなたも戻せます。",

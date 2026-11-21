@@ -1,5 +1,8 @@
 // Painel em pl (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"włączone",
+"desligado":"wyłączone",
+"sem leitura":"brak odczytu",
 "Recados de hoje":"Dzisiejsze wiadomości",
 "Congelados em prova":"Zamrożone na próbę",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"Telewizor zamroził te aplikacje i za 10 minut sprawdzi, czy coś przestało działać. Jeśli tak, cofnie to sam; ty też możesz.",

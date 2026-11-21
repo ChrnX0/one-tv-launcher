@@ -1,5 +1,8 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"开",
+"desligado":"关",
+"sem leitura":"无读数",
 "Recados de hoje":"今天的消息",
 "Congelados em prova":"试冻结中",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"电视冻结了这些应用，并会在 10 分钟后检查是否有功能停止工作。如果有，电视会自动撤销；你也可以撤销。",

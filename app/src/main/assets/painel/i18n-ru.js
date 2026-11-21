@@ -1,5 +1,8 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"вкл.",
+"desligado":"выкл.",
+"sem leitura":"нет данных",
 "Recados de hoje":"Сообщения за сегодня",
 "Congelados em prova":"Заморожены на пробу",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"Телевизор заморозил эти приложения и через 10 минут проверит, не перестало ли что-то работать. Если перестало, он всё вернёт; вы тоже можете.",

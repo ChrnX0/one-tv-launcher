@@ -1,5 +1,8 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"açık",
+"desligado":"kapalı",
+"sem leitura":"okuma yok",
 "Recados de hoje":"Bugünün notları",
 "Congelados em prova":"Deneme için donduruldu",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"TV bu uygulamaları dondurdu ve 10 dakika içinde bir şeyin bozulup bozulmadığını kontrol edecek. Bozulduysa TV geri alır; siz de alabilirsiniz.",

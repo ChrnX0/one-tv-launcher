@@ -1,5 +1,8 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"चालू",
+"desligado":"बंद",
+"sem leitura":"कोई रीडिंग नहीं",
 "Recados de hoje":"आज के संदेश",
 "Congelados em prova":"आज़माइश में फ़्रीज़",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"टीवी ने ये ऐप फ़्रीज़ किए हैं और 10 मिनट में जाँचेगा कि कुछ बंद तो नहीं हुआ। अगर हुआ, तो टीवी खुद वापस कर देगा; आप भी कर सकते हैं।",

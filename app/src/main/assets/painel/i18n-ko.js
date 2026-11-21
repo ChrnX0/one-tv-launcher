@@ -1,5 +1,8 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"켜짐",
+"desligado":"꺼짐",
+"sem leitura":"측정값 없음",
 "Recados de hoje":"오늘의 알림",
 "Congelados em prova":"시험 정지 중",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"TV가 이 앱들을 정지하고 10분 후에 멈춘 기능이 있는지 확인합니다. 있으면 TV가 되돌리며, 직접 되돌릴 수도 있습니다.",

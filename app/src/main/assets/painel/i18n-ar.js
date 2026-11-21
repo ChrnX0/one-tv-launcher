@@ -1,5 +1,8 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"ligado":"يعمل",
+"desligado":"متوقف",
+"sem leitura":"لا توجد قراءة",
 "Recados de hoje":"ملاحظات اليوم",
 "Congelados em prova":"مجمدة للتجربة",
 "A TV congelou estes apps e confere em 10 minutos se algo parou. Se parou, ela mesma desfaz; você também pode.":"جمّد التلفزيون هذه التطبيقات وسيتحقق خلال 10 دقائق مما إذا توقف شيء عن العمل. إن حدث ذلك يتراجع عنه بنفسه، ويمكنك أنت أيضًا.",
