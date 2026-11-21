@@ -83,8 +83,10 @@ class RetroLibraryTest {
     }
 
     @Test fun extrasDoRetroArch() {
-        val e = RetroLibrary.extrasRetroArch("/x/a.sfc", Console.SNES)
-        assertEquals("/data/data/com.retroarch/cores/snes9x_libretro_android.so", e["LIBRETRO"])
+        // Pasta real da Sala (21/11/2026): os núcleos da Play ficam em lib/arm do app, como lib<nucleo>.so.
+        val e = RetroLibrary.extrasRetroArch("/x/a.sfc", Console.SNES, "/data/app/~~x/com.retroarch-y/lib/arm")
+        assertEquals("/data/app/~~x/com.retroarch-y/lib/arm/libsnes9x.so", e["LIBRETRO"])
+        assertNull(e["CONFIGFILE"])
         assertEquals("/x/a.sfc", e["ROM"])
     }
 }

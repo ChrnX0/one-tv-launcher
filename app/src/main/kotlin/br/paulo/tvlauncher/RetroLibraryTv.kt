@@ -63,11 +63,15 @@ object RetroLibraryTv {
      */
     fun abrir(ctx: Context, jogo: RetroLibrary.Jogo): Boolean {
         val destino = RetroLibrary.destinoNoEmulador(jogo.caminho) ?: return false
+        // Pasta onde o RetroArch da Play guarda os núcleos (muda a cada atualização dele: perguntar sempre).
+        val nucleos = try {
+            ctx.packageManager.getApplicationInfo(RetroLibrary.RETROARCH, 0).nativeLibraryDir
+        } catch (_: Exception) { return false }
         val r = GuardiaoShizuku.comando(ctx, RetroLibrary.comandoCopiar(jogo.caminho, destino), 40_000)
         if (r?.contains("ok") != true) return false
         val i = Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(RetroLibrary.RETROARCH, RetroLibrary.RETROARCH_ATIVIDADE)
-            for ((k, v) in RetroLibrary.extrasRetroArch(destino, jogo.console)) putExtra(k, v)
+            for ((k, v) in RetroLibrary.extrasRetroArch(destino, jogo.console, nucleos)) putExtra(k, v)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
         return try { ctx.startActivity(i); marcarJogado(ctx, jogo.caminho); true } catch (_: Exception) { false }

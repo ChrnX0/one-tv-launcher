@@ -20,7 +20,8 @@ object RetroLibrary {
     /**
      * Consoles reconhecidos. [extensoes] só valem sozinhas quando são exclusivas do console; as genéricas (.bin, .iso,
      * .zip, .chd, .cue, .7z) precisam de uma pasta com o nome do console. [nucleo] = núcleo do RetroArch para Android
-     * (nome do arquivo `<nucleo>_libretro_android.so`), escolhido pelo desempenho no Chromecast 32 bits.
+     * da Play (vem como módulo da Play: `lib<nucleo>.so` na pasta de bibliotecas do app; conferido na Sala em 21/11/2026,
+     * 50 núcleos instalados), escolhido pelo desempenho no Chromecast 32 bits.
      */
     enum class Console(val nome: String, val extensoes: Set<String>, val pastas: Set<String>, val nucleo: String) {
         NES("NES", setOf("nes", "fds", "unf", "unif"), setOf("nes", "nintendo", "famicom", "fc"), "fceumm"),
@@ -29,14 +30,14 @@ object RetroLibrary {
         GB("Game Boy", setOf("gb"), setOf("gb", "game boy", "gameboy"), "gambatte"),
         GBC("Game Boy Color", setOf("gbc"), setOf("gbc", "game boy color", "gameboy color"), "gambatte"),
         GBA("Game Boy Advance", setOf("gba"), setOf("gba", "game boy advance", "gameboy advance"), "mgba"),
-        NDS("Nintendo DS", setOf("nds"), setOf("nds", "nintendo ds", "ds"), "melonds"),
+        NDS("Nintendo DS", setOf("nds"), setOf("nds", "nintendo ds", "ds"), "melondsds"),
         MD("Mega Drive", setOf("md", "gen", "smd"), setOf("megadrive", "mega drive", "genesis", "md"), "genesis_plus_gx"),
         SMS("Master System", setOf("sms"), setOf("mastersystem", "master system", "sms"), "genesis_plus_gx"),
         GG("Game Gear", setOf("gg"), setOf("gamegear", "game gear", "gg"), "genesis_plus_gx"),
         PS1("PlayStation", setOf("pbp"), setOf("psx", "ps1", "playstation", "playstation 1"), "pcsx_rearmed"),
         PSP("PSP", setOf("cso"), setOf("psp"), "ppsspp"),
         ATARI2600("Atari 2600", setOf("a26"), setOf("atari2600", "atari 2600", "a2600"), "stella"),
-        PCE("PC Engine", setOf("pce"), setOf("pce", "pc engine", "pcengine", "turbografx"), "mednafen_pce_fast"),
+        PCE("PC Engine", setOf("pce"), setOf("pce", "pc engine", "pcengine", "turbografx"), "geargrafx"),
     }
 
     /** Extensões que só contam com a pasta do console (sozinhas não dizem nada). */
@@ -163,14 +164,14 @@ object RetroLibrary {
     }
 
     /**
-     * Extras do Intent que abre [rom] direto no RetroArch (ROM, núcleo e config), no formato que outros frontends
-     * usam (Pegasus, Daijishō). O caminho do núcleo é o da pasta interna do RetroArch: o núcleo precisa ter sido baixado
-     * nele uma vez (Atualizador online). Não verificado na TV até o teste da Sala.
+     * Extras do Intent que abre [rom] direto no RetroArch (ROM e núcleo), no formato que outros frontends usam
+     * (Pegasus, Daijishō). [dirNucleos] = `nativeLibraryDir` do RetroArch: a versão da Play extrai ali os núcleos que
+     * vêm da Play (ex.: `libsnes9x.so`, conferido na Sala em 21/11/2026). Sem CONFIGFILE: um caminho errado faria o
+     * RetroArch criar outra configuração e "perder" a da pessoa. Abrir o jogo ainda não foi testado na TV.
      */
-    fun extrasRetroArch(rom: String, console: Console, pacote: String = RETROARCH): Map<String, String> = mapOf(
+    fun extrasRetroArch(rom: String, console: Console, dirNucleos: String): Map<String, String> = mapOf(
         "ROM" to rom,
-        "LIBRETRO" to "/data/data/$pacote/cores/${console.nucleo}_libretro_android.so",
-        "CONFIGFILE" to "/storage/emulated/0/Android/data/$pacote/files/retroarch.cfg",
+        "LIBRETRO" to "$dirNucleos/lib${console.nucleo}.so",
         "QUITFOCUS" to "",
     )
 }
