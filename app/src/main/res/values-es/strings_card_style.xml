@@ -18,4 +18,19 @@
     <string name="cs_forte">Fuerte</string>
     <string name="cs_menor">Más pequeña</string>
     <string name="cs_maior">Más grande</string>
+    <string name="bg_tintura">Color sobre el fondo</string>
+    <string name="bg_cor">Color del fondo</string>
+    <string name="bg_desfoque">Desenfoque del fondo</string>
+    <string name="bg_transicao">Transición de imágenes</string>
+    <string name="bg_novo">Nuevo fondo ahora</string>
+    <string name="bg_solida">Sólido</string>
+    <string name="bg_destaque">Realce</string>
+    <string name="bg_noite">Noche</string>
+    <string name="bg_mata">Bosque</string>
+    <string name="bg_brasa">Brasa</string>
+    <string name="bg_grafite">Grafito</string>
+    <string name="bg_corte">Corte</string>
+    <string name="bg_lenta">Lenta</string>
+    <string name="bg_trocado">Cambiado</string>
+    <string name="bg_nao_troca">Este fondo no cambia</string>
 </resources>

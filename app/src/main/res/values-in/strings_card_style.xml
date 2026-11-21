@@ -18,4 +18,19 @@
     <string name="cs_forte">Kuat</string>
     <string name="cs_menor">Lebih kecil</string>
     <string name="cs_maior">Lebih besar</string>
+    <string name="bg_tintura">Warna di atas latar</string>
+    <string name="bg_cor">Warna latar</string>
+    <string name="bg_desfoque">Buram latar</string>
+    <string name="bg_transicao">Transisi gambar</string>
+    <string name="bg_novo">Latar baru sekarang</string>
+    <string name="bg_solida">Solid</string>
+    <string name="bg_destaque">Sorotan</string>
+    <string name="bg_noite">Malam</string>
+    <string name="bg_mata">Hutan</string>
+    <string name="bg_brasa">Bara</string>
+    <string name="bg_grafite">Grafit</string>
+    <string name="bg_corte">Potong</string>
+    <string name="bg_lenta">Lambat</string>
+    <string name="bg_trocado">Diganti</string>
+    <string name="bg_nao_troca">Latar ini tidak berganti</string>
 </resources>

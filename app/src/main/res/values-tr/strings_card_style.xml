@@ -18,4 +18,19 @@
     <string name="cs_forte">Güçlü</string>
     <string name="cs_menor">Daha küçük</string>
     <string name="cs_maior">Daha büyük</string>
+    <string name="bg_tintura">Arka plan üstü renk</string>
+    <string name="bg_cor">Arka plan rengi</string>
+    <string name="bg_desfoque">Arka plan bulanıklığı</string>
+    <string name="bg_transicao">Görsel geçişi</string>
+    <string name="bg_novo">Şimdi yeni arka plan</string>
+    <string name="bg_solida">Düz</string>
+    <string name="bg_destaque">Vurgu</string>
+    <string name="bg_noite">Gece</string>
+    <string name="bg_mata">Orman</string>
+    <string name="bg_brasa">Köz</string>
+    <string name="bg_grafite">Grafit</string>
+    <string name="bg_corte">Kesme</string>
+    <string name="bg_lenta">Yavaş</string>
+    <string name="bg_trocado">Değişti</string>
+    <string name="bg_nao_troca">Bu arka plan değişmez</string>
 </resources>

@@ -18,4 +18,19 @@
     <string name="cs_forte">तेज़</string>
     <string name="cs_menor">छोटा</string>
     <string name="cs_maior">बड़ा</string>
+    <string name="bg_tintura">बैकग्राउंड पर रंग</string>
+    <string name="bg_cor">बैकग्राउंड का रंग</string>
+    <string name="bg_desfoque">बैकग्राउंड धुंधला</string>
+    <string name="bg_transicao">चित्र बदलाव</string>
+    <string name="bg_novo">अभी नया बैकग्राउंड</string>
+    <string name="bg_solida">ठोस</string>
+    <string name="bg_destaque">हाइलाइट</string>
+    <string name="bg_noite">रात</string>
+    <string name="bg_mata">जंगल</string>
+    <string name="bg_brasa">अंगार</string>
+    <string name="bg_grafite">ग्रेफ़ाइट</string>
+    <string name="bg_corte">कट</string>
+    <string name="bg_lenta">धीमा</string>
+    <string name="bg_trocado">बदल गया</string>
+    <string name="bg_nao_troca">यह बैकग्राउंड नहीं बदलता</string>
 </resources>

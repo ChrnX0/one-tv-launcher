@@ -9,6 +9,7 @@ import android.view.animation.PathInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import br.paulo.tvlauncher.settings.BackgroundStyle
 import br.paulo.tvlauncher.settings.CardStyle
 import br.paulo.tvlauncher.settings.ClockStyle
 import br.paulo.tvlauncher.settings.FontChoice
@@ -17,7 +18,7 @@ import br.paulo.tvlauncher.settings.FontChoice
  * Ajuste fino com prévia ao vivo (21/11/2026, proposta B do plano para passar o Projectivy).
  *
  * Porquê: no Projectivy cada ajuste visual se vê na hora; na Sofaly era mudar em Configurações e voltar para ver.
- * Para quê: ajustar letra, hora, cor de destaque, cantos, brilho e tamanho da cruz VENDO a tela inicial.
+ * Para quê: ajustar letra, hora, cor de destaque, cantos, brilho, tamanho da cruz e o fundo VENDO a tela inicial.
  * Como: um painel de vidro à direita (janela translúcida) por cima da HOME. Cada linha troca o valor com OK, ▶ ou ◀;
  * a HOME ouve as preferências e se refaz atrás do painel (MainActivity.ouvinteAjuste). Abre a HOME antes, para que a
  * prévia seja dela e não da tela de Configurações. Movimento: painel entra em 400 ms e sai em 350 ms, curva
@@ -110,7 +111,48 @@ class FineTuneActivity : Activity() {
         Ajuste(R.string.cs_tamanho, { nomeTamanho(CardStyle.size(this)) }) { passo ->
             nomeTamanho(CardStyle.next(this, CardStyle.KEY_SIZE, CardStyle.size(this), passo))
         },
+        // Fundo (BackgroundStyle, item 2): cor por cima / sólida, cor, desfoque, transição e "novo fundo agora".
+        Ajuste(R.string.bg_tintura, { nomeTintura(BackgroundStyle.tint(this)) }) { passo ->
+            nomeTintura(BackgroundStyle.Tint.entries[BackgroundStyle.next(this, BackgroundStyle.KEY_TINT, BackgroundStyle.tint(this), BackgroundStyle.Tint.entries.size, passo)])
+        },
+        Ajuste(R.string.bg_cor, { nomeCorFundo(BackgroundStyle.tintColor(this)) }) { passo ->
+            nomeCorFundo(BackgroundStyle.TintColor.entries[BackgroundStyle.next(this, BackgroundStyle.KEY_TINT_COLOR, BackgroundStyle.tintColor(this), BackgroundStyle.TintColor.entries.size, passo)])
+        },
+    ) + (if (BackgroundStyle.blurPossivel) listOf(
+        Ajuste(R.string.bg_desfoque, { nomeDesfoque(BackgroundStyle.blur(this)) }) { passo ->
+            nomeDesfoque(BackgroundStyle.Blur.entries[BackgroundStyle.next(this, BackgroundStyle.KEY_BLUR, BackgroundStyle.blur(this), BackgroundStyle.Blur.entries.size, passo)])
+        }) else emptyList()) + listOf(
+        Ajuste(R.string.bg_transicao, { nomeTransicao(BackgroundStyle.fade(this)) }) { passo ->
+            nomeTransicao(BackgroundStyle.Fade.entries[BackgroundStyle.next(this, BackgroundStyle.KEY_FADE, BackgroundStyle.fade(this), BackgroundStyle.Fade.entries.size, passo)])
+        },
+        Ajuste(R.string.bg_novo, { "OK" }) { _ ->
+            getString(if (BackgroundStyle.proximoFundo?.invoke() == true) R.string.bg_trocado else R.string.bg_nao_troca)
+        },
     )
+
+    private fun nomeTintura(k: BackgroundStyle.Tint) = getString(when (k) {
+        BackgroundStyle.Tint.OFF -> R.string.cs_sem
+        BackgroundStyle.Tint.SOFT -> R.string.cs_suave
+        BackgroundStyle.Tint.STRONG -> R.string.cs_forte
+        BackgroundStyle.Tint.SOLID -> R.string.bg_solida
+    })
+    private fun nomeCorFundo(k: BackgroundStyle.TintColor) = getString(when (k) {
+        BackgroundStyle.TintColor.ACCENT -> R.string.bg_destaque
+        BackgroundStyle.TintColor.NIGHT -> R.string.bg_noite
+        BackgroundStyle.TintColor.FOREST -> R.string.bg_mata
+        BackgroundStyle.TintColor.EMBER -> R.string.bg_brasa
+        BackgroundStyle.TintColor.GRAPHITE -> R.string.bg_grafite
+    })
+    private fun nomeDesfoque(k: BackgroundStyle.Blur) = getString(when (k) {
+        BackgroundStyle.Blur.OFF -> R.string.cs_sem
+        BackgroundStyle.Blur.SOFT -> R.string.cs_suave
+        BackgroundStyle.Blur.STRONG -> R.string.cs_forte
+    })
+    private fun nomeTransicao(k: BackgroundStyle.Fade) = getString(when (k) {
+        BackgroundStyle.Fade.CUT -> R.string.bg_corte
+        BackgroundStyle.Fade.SOFT -> R.string.cs_suave
+        BackgroundStyle.Fade.SLOW -> R.string.bg_lenta
+    })
 
     /** Fonte: a próxima da lista; se precisar baixar, mostra "Baixando…" e só troca quando o arquivo chegou. */
     private fun trocarFonte(passo: Int): String {

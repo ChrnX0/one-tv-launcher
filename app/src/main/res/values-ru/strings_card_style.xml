@@ -18,4 +18,19 @@
     <string name="cs_forte">Сильное</string>
     <string name="cs_menor">Меньше</string>
     <string name="cs_maior">Больше</string>
+    <string name="bg_tintura">Цвет поверх фона</string>
+    <string name="bg_cor">Цвет фона</string>
+    <string name="bg_desfoque">Размытие фона</string>
+    <string name="bg_transicao">Смена изображений</string>
+    <string name="bg_novo">Новый фон сейчас</string>
+    <string name="bg_solida">Сплошной</string>
+    <string name="bg_destaque">Акцент</string>
+    <string name="bg_noite">Ночь</string>
+    <string name="bg_mata">Лес</string>
+    <string name="bg_brasa">Угли</string>
+    <string name="bg_grafite">Графит</string>
+    <string name="bg_corte">Резко</string>
+    <string name="bg_lenta">Медленно</string>
+    <string name="bg_trocado">Сменён</string>
+    <string name="bg_nao_troca">Этот фон не меняется</string>
 </resources>

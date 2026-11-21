@@ -408,7 +408,8 @@ class MainActivity : Activity() {
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
     private fun assinaturaDoLayout() = "${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
         "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}|" +
-        "${br.paulo.tvlauncher.settings.FontChoice.currentId(this)}|${br.paulo.tvlauncher.settings.ClockStyle.format(this)}|${br.paulo.tvlauncher.settings.ClockStyle.color(this)}"   // ajuste fino (21/11/2026)
+        "${br.paulo.tvlauncher.settings.FontChoice.currentId(this)}|${br.paulo.tvlauncher.settings.ClockStyle.format(this)}|${br.paulo.tvlauncher.settings.ClockStyle.color(this)}|" +
+        "${br.paulo.tvlauncher.settings.CardStyle.assinatura(this)}|${br.paulo.tvlauncher.settings.BackgroundStyle.assinatura(this)}"   // ajuste fino (21/11/2026)
 
     override fun onResume() {
         super.onResume()
@@ -555,6 +556,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         br.paulo.tvlauncher.settings.Extras.parar(this, ouvinteAjuste)
+        br.paulo.tvlauncher.settings.BackgroundStyle.proximoFundo = null
         vigiaTela?.let { runCatching { unregisterReceiver(it) } }; vigiaTela = null
         rede.shutdownNow()
         // Cada recreate() (troca de tema) cria uma Activity nova com a sua própria fila: sem isto a thread "Apps"
@@ -894,8 +896,13 @@ class MainActivity : Activity() {
         topoRaiz = topo
 
         // Sem decoração (arco do sol/lua, etiqueta da obra): o lugar dela é da cruz.
-        val vivo = criarFundo(this, tema, decoracao = false) { bloco -> rede.execute { bloco() } }
+        // Fundo mais rico (BackgroundStyle, 21/11/2026): "cor sólida" troca o fundo inteiro; senão, cor por cima e desfoque.
+        val vivo = if (br.paulo.tvlauncher.settings.BackgroundStyle.tint(this) == br.paulo.tvlauncher.settings.BackgroundStyle.Tint.SOLID)
+            br.paulo.tvlauncher.settings.BackgroundStyle.solido(this)
+        else criarFundo(this, tema, decoracao = false) { bloco -> rede.execute { bloco() } }
+            .also { br.paulo.tvlauncher.settings.BackgroundStyle.vestir(this, it) }
         fundo = vivo
+        br.paulo.tvlauncher.settings.BackgroundStyle.proximoFundo = { (fundo as? FundoVivo)?.proximo() ?: false }
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
         capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || tema == Tema.PLUGIN || !LayoutHome.arteCruz(this@MainActivity) }   // Galeria: a obra é o fundo, sem brilho por cima

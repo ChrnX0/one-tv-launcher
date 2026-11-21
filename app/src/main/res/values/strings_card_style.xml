@@ -18,4 +18,19 @@
     <string name="cs_forte">Strong</string>
     <string name="cs_menor">Smaller</string>
     <string name="cs_maior">Larger</string>
+    <string name="bg_tintura">Color over the background</string>
+    <string name="bg_cor">Background color</string>
+    <string name="bg_desfoque">Background blur</string>
+    <string name="bg_transicao">Image transition</string>
+    <string name="bg_novo">New background now</string>
+    <string name="bg_solida">Solid</string>
+    <string name="bg_destaque">Highlight</string>
+    <string name="bg_noite">Night</string>
+    <string name="bg_mata">Forest</string>
+    <string name="bg_brasa">Ember</string>
+    <string name="bg_grafite">Graphite</string>
+    <string name="bg_corte">Cut</string>
+    <string name="bg_lenta">Slow</string>
+    <string name="bg_trocado">Changed</string>
+    <string name="bg_nao_troca">This background doesn\'t change</string>
 </resources>

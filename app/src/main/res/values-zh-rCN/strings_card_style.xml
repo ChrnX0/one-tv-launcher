@@ -18,4 +18,19 @@
     <string name="cs_forte">强烈</string>
     <string name="cs_menor">更小</string>
     <string name="cs_maior">更大</string>
+    <string name="bg_tintura">背景叠加色</string>
+    <string name="bg_cor">背景颜色</string>
+    <string name="bg_desfoque">背景模糊</string>
+    <string name="bg_transicao">图片过渡</string>
+    <string name="bg_novo">立即换背景</string>
+    <string name="bg_solida">纯色</string>
+    <string name="bg_destaque">强调色</string>
+    <string name="bg_noite">夜色</string>
+    <string name="bg_mata">森林</string>
+    <string name="bg_brasa">余烬</string>
+    <string name="bg_grafite">石墨</string>
+    <string name="bg_corte">直切</string>
+    <string name="bg_lenta">缓慢</string>
+    <string name="bg_trocado">已更换</string>
+    <string name="bg_nao_troca">此背景不会更换</string>
 </resources>

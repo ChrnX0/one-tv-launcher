@@ -18,4 +18,19 @@
     <string name="cs_forte">قوي</string>
     <string name="cs_menor">أصغر</string>
     <string name="cs_maior">أكبر</string>
+    <string name="bg_tintura">لون فوق الخلفية</string>
+    <string name="bg_cor">لون الخلفية</string>
+    <string name="bg_desfoque">تمويه الخلفية</string>
+    <string name="bg_transicao">انتقال الصور</string>
+    <string name="bg_novo">خلفية جديدة الآن</string>
+    <string name="bg_solida">مصمت</string>
+    <string name="bg_destaque">تمييز</string>
+    <string name="bg_noite">ليل</string>
+    <string name="bg_mata">غابة</string>
+    <string name="bg_brasa">جمر</string>
+    <string name="bg_grafite">جرافيت</string>
+    <string name="bg_corte">قطع</string>
+    <string name="bg_lenta">بطيء</string>
+    <string name="bg_trocado">تم التغيير</string>
+    <string name="bg_nao_troca">هذه الخلفية لا تتغير</string>
 </resources>

@@ -18,4 +18,19 @@
     <string name="cs_forte">강하게</string>
     <string name="cs_menor">작게</string>
     <string name="cs_maior">크게</string>
+    <string name="bg_tintura">배경 위 색</string>
+    <string name="bg_cor">배경 색</string>
+    <string name="bg_desfoque">배경 흐림</string>
+    <string name="bg_transicao">이미지 전환</string>
+    <string name="bg_novo">지금 새 배경</string>
+    <string name="bg_solida">단색</string>
+    <string name="bg_destaque">강조</string>
+    <string name="bg_noite">밤</string>
+    <string name="bg_mata">숲</string>
+    <string name="bg_brasa">잉걸불</string>
+    <string name="bg_grafite">흑연</string>
+    <string name="bg_corte">컷</string>
+    <string name="bg_lenta">느리게</string>
+    <string name="bg_trocado">바뀜</string>
+    <string name="bg_nao_troca">이 배경은 바뀌지 않음</string>
 </resources>
