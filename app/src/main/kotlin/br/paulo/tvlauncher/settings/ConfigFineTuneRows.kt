@@ -11,6 +11,10 @@ import br.paulo.tvlauncher.R
  * mesma coisa que ele (a cara da tela). A tela inicial se recria sozinha ao voltar (MainActivity.assinaturaDoLayout).
  */
 internal fun ConfigLauncherActivity.linhasAjusteFino(c: LinearLayout) {
+    // Painel com prévia ao vivo: tudo abaixo e mais cor de destaque, cantos, brilho e tamanho da cruz, vendo a HOME.
+    c.addView(linha(getString(R.string.ft_abrir), getString(R.string.ft_abrir_det), seta = true) {
+        br.paulo.tvlauncher.FineTuneActivity.abrir(this)
+    }, lp())
     lateinit var linhaFonte: LinhaCfg
     linhaFonte = linha(getString(R.string.fc_titulo), getString(R.string.fc_det), valor = FontChoice.current(this).name) {
         val fontes = FontChoice.FONTS

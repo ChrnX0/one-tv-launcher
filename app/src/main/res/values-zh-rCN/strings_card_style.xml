@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">微调</string>
+    <string name="ft_dica">OK 或 ▶ ◀ 切换 · 返回关闭</string>
+    <string name="ft_abrir">边看主屏幕边调整</string>
+    <string name="ft_abrir_det">字体、时钟、强调色、圆角、光晕和大小，实时预览</string>
+    <string name="cs_destaque">强调色</string>
+    <string name="cs_cantos">圆角</string>
+    <string name="cs_brilho">焦点光晕</string>
+    <string name="cs_tamanho">十字大小</string>
+    <string name="cs_ceu">天蓝</string>
+    <string name="cs_lilas">淡紫</string>
+    <string name="cs_retos">直角</string>
+    <string name="cs_redondos">圆润</string>
+    <string name="cs_sem">关闭</string>
+    <string name="cs_suave">柔和</string>
+    <string name="cs_forte">强烈</string>
+    <string name="cs_menor">更小</string>
+    <string name="cs_maior">更大</string>
+</resources>

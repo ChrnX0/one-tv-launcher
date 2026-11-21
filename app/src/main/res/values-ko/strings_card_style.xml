@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">세부 조정</string>
+    <string name="ft_dica">OK 또는 ▶ ◀ 변경 · 뒤로 닫기</string>
+    <string name="ft_abrir">홈 화면을 보면서 조정</string>
+    <string name="ft_abrir_det">글꼴, 시계, 강조 색, 모서리, 빛, 크기를 실시간으로</string>
+    <string name="cs_destaque">강조 색</string>
+    <string name="cs_cantos">모서리</string>
+    <string name="cs_brilho">포커스 빛</string>
+    <string name="cs_tamanho">십자 크기</string>
+    <string name="cs_ceu">하늘</string>
+    <string name="cs_lilas">라일락</string>
+    <string name="cs_retos">각진</string>
+    <string name="cs_redondos">둥근</string>
+    <string name="cs_sem">끔</string>
+    <string name="cs_suave">은은하게</string>
+    <string name="cs_forte">강하게</string>
+    <string name="cs_menor">작게</string>
+    <string name="cs_maior">크게</string>
+</resources>

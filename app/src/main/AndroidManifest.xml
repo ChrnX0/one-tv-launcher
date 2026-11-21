@@ -278,6 +278,12 @@
             android:name=".DiagnosticoActivity"
             android:exported="false"
             android:label="@string/lbl_diagnostico" />
+        <!-- Ajuste fino com prévia ao vivo (21/11/2026): painel de vidro por cima da HOME (FineTuneActivity.kt). -->
+        <activity
+            android:name=".FineTuneActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@style/One.Translucido" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

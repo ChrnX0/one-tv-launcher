@@ -155,6 +155,11 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             detalhe.gravity = (if (v) Gravity.TOP else Gravity.BOTTOM) or Gravity.END
             detalhe.requestLayout()
         }
+    /**
+     * Brilho atrás do ícone escolhido (Ajuste fino, CardStyle.Glow): 0 = sem (padrão). Na cor de destaque, só no item
+     * escolhido da coluna em foco. Quem usa define antes de montar a cruz.
+     */
+    var brilho = 0f
     /** Itens lembrados (id da categoria -> id do item), lidos por quem usa; valem só na 1ª montagem. */
     var lembrados: Map<String, String> = emptyMap()
     /** O último item aberto ("categoria|item"); quem usa grava e devolve aqui na 1ª montagem (HOME refeita). */
@@ -578,7 +583,16 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     }
 
     private fun criarItem(): ItemView {
-        val icone = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+        val icone = ImageView(context).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            // Halo radial atrás do ícone (só existe com brilho ligado; apagado até o item ser o escolhido).
+            if (brilho > 0f) background = GradientDrawable().apply {
+                gradientType = GradientDrawable.RADIAL_GRADIENT
+                gradientRadius = dp(ICONE_A / 2f)
+                colors = intArrayOf(Estilo.ACENTO, Estilo.alfa(Estilo.ACENTO, 0))
+                alpha = 0
+            }
+        }
         val nome = TextView(context).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_ESCOLHIDO)
             setTextColor(Estilo.TEXTO)
@@ -715,7 +729,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
                 mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
                 // Sem o ponto quando outra janela (menu do app, lista) está por cima: um foco só na tela (crítica 19/11/2026).
-                iv.traco.alpha = if (rel == 0 && focada && hasWindowFocus()) 1f else 0f
+                // Com o painel do Ajuste fino por cima, o ponto e o brilho ficam: é justamente o que se está ajustando.
+                val semMenu = hasWindowFocus() || br.paulo.tvlauncher.FineTuneActivity.aberto
+                iv.traco.alpha = if (rel == 0 && focada && semMenu) 1f else 0f
+                iv.icone.background?.alpha = if (rel == 0 && focada && semMenu) (brilho * 255).toInt() else 0
                 // Ícones "Linha" (IconeCruz): o escolhido toca a animação dele (a cor é de cada ícone, sempre).
                 val aceso = rel == 0 && focada
                 if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Ajuste fino</string>
+    <string name="ft_dica">OK ou ▶ ◀ troca · VOLTAR fecha</string>
+    <string name="ft_abrir">Ajustar vendo a tela inicial</string>
+    <string name="ft_abrir_det">Letra, hora, cor de destaque, cantos, brilho e tamanho, ao vivo</string>
+    <string name="cs_destaque">Cor de destaque</string>
+    <string name="cs_cantos">Cantos</string>
+    <string name="cs_brilho">Brilho do foco</string>
+    <string name="cs_tamanho">Tamanho da cruz</string>
+    <string name="cs_ceu">Céu</string>
+    <string name="cs_lilas">Lilás</string>
+    <string name="cs_retos">Retos</string>
+    <string name="cs_redondos">Redondos</string>
+    <string name="cs_sem">Desligado</string>
+    <string name="cs_suave">Suave</string>
+    <string name="cs_forte">Forte</string>
+    <string name="cs_menor">Menor</string>
+    <string name="cs_maior">Maior</string>
+</resources>

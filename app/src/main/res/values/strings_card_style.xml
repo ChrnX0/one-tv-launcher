@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Fine-tune</string>
+    <string name="ft_dica">OK or ▶ ◀ changes · BACK closes</string>
+    <string name="ft_abrir">Adjust while seeing the home screen</string>
+    <string name="ft_abrir_det">Font, clock, highlight color, corners, glow and size, live</string>
+    <string name="cs_destaque">Highlight color</string>
+    <string name="cs_cantos">Corners</string>
+    <string name="cs_brilho">Focus glow</string>
+    <string name="cs_tamanho">Cross size</string>
+    <string name="cs_ceu">Sky</string>
+    <string name="cs_lilas">Lilac</string>
+    <string name="cs_retos">Square</string>
+    <string name="cs_redondos">Round</string>
+    <string name="cs_sem">Off</string>
+    <string name="cs_suave">Soft</string>
+    <string name="cs_forte">Strong</string>
+    <string name="cs_menor">Smaller</string>
+    <string name="cs_maior">Larger</string>
+</resources>

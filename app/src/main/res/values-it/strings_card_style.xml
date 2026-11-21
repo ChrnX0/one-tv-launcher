@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Regolazione fine</string>
+    <string name="ft_dica">OK o ▶ ◀ cambia · INDIETRO chiude</string>
+    <string name="ft_abrir">Regola vedendo la schermata Home</string>
+    <string name="ft_abrir_det">Carattere, ora, colore di risalto, angoli, bagliore e dimensione, dal vivo</string>
+    <string name="cs_destaque">Colore di risalto</string>
+    <string name="cs_cantos">Angoli</string>
+    <string name="cs_brilho">Bagliore del focus</string>
+    <string name="cs_tamanho">Dimensione della croce</string>
+    <string name="cs_ceu">Cielo</string>
+    <string name="cs_lilas">Lilla</string>
+    <string name="cs_retos">Squadrati</string>
+    <string name="cs_redondos">Arrotondati</string>
+    <string name="cs_sem">Spento</string>
+    <string name="cs_suave">Leggero</string>
+    <string name="cs_forte">Forte</string>
+    <string name="cs_menor">Più piccola</string>
+    <string name="cs_maior">Più grande</string>
+</resources>

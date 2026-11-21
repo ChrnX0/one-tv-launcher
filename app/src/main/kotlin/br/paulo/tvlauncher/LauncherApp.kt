@@ -67,6 +67,7 @@ class LauncherApp : Application() {
             override fun onActivityPreCreated(a: android.app.Activity, salvo: android.os.Bundle?) {
                 TamanhoTexto.aplicar(a)
                 AltoContraste.aplicar(a)   // elevação 16.3
+                br.paulo.tvlauncher.settings.CardStyle.aplicar(a)   // cor de destaque e cantos (Ajuste fino)
             }
             override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) {
                 if (salvo == null) UsoLocal.contarTela(a)   // ideia 67

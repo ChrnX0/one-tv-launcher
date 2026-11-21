@@ -366,6 +366,7 @@ class MainActivity : Activity() {
         assinaturaFundo = FundoMeuDados.assinatura(this) + "|" + WallpaperPlugins.escolhidoId(this)
         idiomaMontado = idiomaAtual()
         assinaturaLayout = assinaturaDoLayout()
+        br.paulo.tvlauncher.settings.Extras.ouvir(this, ouvinteAjuste)   // prévia ao vivo do Ajuste fino (FineTuneActivity)
         setContentView(montarTela())
         // Logo Sofaly ao ligar (18/11/2026): no boot, uma vez por processo, por cima da HOME já montada (SplashRules).
         if (!splashBootDecidido) {
@@ -543,7 +544,17 @@ class MainActivity : Activity() {
         if (Memoria.soltarCapasDaHome(level, hasWindowFocus())) { capas.clear(); arteAtalho.clear() }
     }
 
+    /**
+     * Prévia ao vivo (21/11/2026): com o painel do Ajuste fino aberto por cima, a HOME continua visível atrás; cada troca
+     * de letra/hora/cor/cantos/brilho/tamanho refaz a HOME na hora (um quadro de espera junta trocas seguidas).
+     */
+    private val refazerAjuste = Runnable { if (!isDestroyed && assinaturaDoLayout() != assinaturaLayout) recreate() }
+    private val ouvinteAjuste = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        window?.decorView?.let { it.removeCallbacks(refazerAjuste); it.postDelayed(refazerAjuste, 120) }
+    }
+
     override fun onDestroy() {
+        br.paulo.tvlauncher.settings.Extras.parar(this, ouvinteAjuste)
         vigiaTela?.let { runCatching { unregisterReceiver(it) } }; vigiaTela = null
         rede.shutdownNow()
         // Cada recreate() (troca de tema) cria uma Activity nova com a sua própria fila: sem isto a thread "Apps"
@@ -1913,6 +1924,12 @@ class MainActivity : Activity() {
             ui.post { bolinhaPerfil?.requestFocus() }   // ▲ no 1º item: o perfil, 1º da barra
         }
         c.aoPasso = { t -> deslizarArte(t) }
+        // Ajuste fino (CardStyle): brilho atrás do escolhido e tamanho da cruz, com o centro no cruzamento (não sai do lugar).
+        c.brilho = br.paulo.tvlauncher.settings.CardStyle.glow(this).alpha
+        br.paulo.tvlauncher.settings.CardStyle.size(this).scale.takeIf { it != 1f }?.let { k ->
+            val d = resources.displayMetrics.density
+            c.pivotX = HomeCruz.COLUNA * d; c.pivotY = HomeCruz.LINHA * d; c.scaleX = k; c.scaleY = k
+        }
         raizCruz = raiz
         vigiarTela()
         montarBarraCruz(raiz, c)

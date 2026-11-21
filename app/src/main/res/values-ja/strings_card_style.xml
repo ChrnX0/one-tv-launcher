@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">微調整</string>
+    <string name="ft_dica">OK または ▶ ◀ で変更 · 戻るで閉じる</string>
+    <string name="ft_abrir">ホーム画面を見ながら調整</string>
+    <string name="ft_abrir_det">フォント、時計、アクセント色、角、光彩、サイズをその場で</string>
+    <string name="cs_destaque">アクセント色</string>
+    <string name="cs_cantos">角</string>
+    <string name="cs_brilho">フォーカスの光彩</string>
+    <string name="cs_tamanho">十字のサイズ</string>
+    <string name="cs_ceu">スカイ</string>
+    <string name="cs_lilas">ライラック</string>
+    <string name="cs_retos">角型</string>
+    <string name="cs_redondos">丸型</string>
+    <string name="cs_sem">オフ</string>
+    <string name="cs_suave">弱</string>
+    <string name="cs_forte">強</string>
+    <string name="cs_menor">小さく</string>
+    <string name="cs_maior">大きく</string>
+</resources>
