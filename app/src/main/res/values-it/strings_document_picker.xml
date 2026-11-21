@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">Scegli una cartella</string>
+    <string name="dp_titulo_arquivo">Scegli un file</string>
+    <string name="dp_titulo_salvar">Scegli dove salvare</string>
+    <string name="dp_para">Per %1$s</string>
+    <string name="dp_usar_pasta">Usa questa cartella</string>
+    <string name="dp_salvar_aqui">Salva qui</string>
+    <string name="dp_memoria">Memoria della TV</string>
+    <string name="dp_rede">Cartella di rete</string>
+    <string name="dp_livre">%1$s liberi</string>
+    <string name="dp_vazia">Niente da scegliere qui</string>
+    <string name="dp_abrindo">Apertura…</string>
+    <string name="dp_erro">Impossibile aprire questo percorso. Controlla che sia collegato e riprova.</string>
+    <string name="dp_arquivos">File in questa cartella: %1$d</string>
+    <string name="dp_dicas">OK: apri · INDIETRO: torna</string>
+    <string name="dp_diario">%1$s ha ricevuto %2$s dal selettore</string>
+    <string name="dp_sem_nome">senza nome</string>
+</resources>

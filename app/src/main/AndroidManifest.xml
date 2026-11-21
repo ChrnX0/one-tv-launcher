@@ -337,6 +337,39 @@
         <!-- Lista para escolher o app dos botões Netflix/YouTube do controle (segurar 3 s, ver BotoesControle).
              Tinha sumido do manifest no commit df3d9c0; sem ela, segurar o botão derrubava a HOME
              (ActivityNotFoundException no processo do launcher). Devolvida em 04/11/2026. -->
+        <!-- Seletor de pastas e arquivos (21/11/2026): o Google TV não traz o do Android, e apps como o RetroArch da Play
+             pediam pasta e recebiam "nenhum app compatível". Ver DocumentPickerActivity e TvDocumentsProvider. Pública por
+             natureza (qualquer app pede); só devolve o que a pessoa escolheu com o controle. -->
+        <activity
+            android:name=".DocumentPickerActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:label="@string/dp_titulo_pasta">
+            <intent-filter>
+                <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.OPEN_DOCUMENT" />
+                <action android:name="android.intent.action.CREATE_DOCUMENT" />
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+        <!-- Os lugares do seletor (memória, pen drive, "Na rede") para os outros apps, pelo padrão do Android. MANAGE_DOCUMENTS
+             (só o sistema tem): nenhum app lê daqui sem a permissão da pasta que a pessoa escolheu. -->
+        <provider
+            android:name=".TvDocumentsProvider"
+            android:authorities="${applicationId}.documents"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
         <activity
             android:name=".EscolherAppActivity"
             android:exported="false"

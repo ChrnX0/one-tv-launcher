@@ -24,6 +24,7 @@ CP="$CACHE/junit-4.13.2.jar:$CACHE/hamcrest-core-1.3.jar:$CACHE/json-20240303.ja
 # teste -> arquivos de produção que ele usa (acrescente aqui quando um teste novo for puro)
 declare -A FONTES=(
   [FimDoVideoTest]="FimDoVideo"
+  [DocumentIdsTest]="DocumentIds"
   [AppStorageTest]="AppStorageRules MenuApp AppIdentity"
   [MenuAppTest]="MenuApp AppIdentity"
   [BarraIlhaTest]="BarraIlha CruzLogica"
