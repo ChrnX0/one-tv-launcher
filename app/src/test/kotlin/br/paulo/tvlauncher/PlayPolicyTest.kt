@@ -59,7 +59,7 @@ class PlayPolicyTest {
             PlayPolicy.Power.FREEZE_APPS to listOf("Congelar.kt"),
             PlayPolicy.Power.LEND_POWERS to listOf("ShizukuEmbutido.kt", "DonoEmprestado.kt"),
             PlayPolicy.Power.READ_PAIRING_CODE to listOf("PareamentoNaTv.kt"),
-            PlayPolicy.Power.LIVE_TV_LISTS to listOf("PlayerArmazem.kt", "ConfigLauncherActivity.kt", "PainelWeb.kt"),
+            PlayPolicy.Power.LIVE_TV_LISTS to listOf("PlayerArmazem.kt", "ConfigAccountTab.kt", "PainelWeb.kt"),
             PlayPolicy.Power.ADDON_STREAMS to listOf("AddonsTv.kt", "AddonsProtocolo.kt"),
         )
         assertTrue(usos.keys == PlayPolicy.Power.values().toSet())

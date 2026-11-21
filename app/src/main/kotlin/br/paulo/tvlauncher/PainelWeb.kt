@@ -6,9 +6,6 @@ import android.os.Looper
 import android.os.Process
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.net.Inet4Address
@@ -21,6 +18,8 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Painel no navegador SERVIDO PELO PRÓPRIO LAUNCHER (04/11/2026), sem PC: em qualquer celular ou computador da casa,
@@ -45,7 +44,7 @@ import java.util.concurrent.TimeUnit
  *  Não existe rota de shell genérico: cada ação é uma função fixa, e o pacote é validado antes de tudo.
  */
 object PainelWeb {
-    private const val TAG = "TvLauncher.Painel"
+    internal const val TAG = "TvLauncher.Painel"
     const val COOKIE = "painel_sessao"
     private const val LIMITE_CORPO = 4 * 1024   // login e ações: corpo pequeno
     private const val TEMPO_LEITURA_MS = 15_000
@@ -54,7 +53,7 @@ object PainelWeb {
     @Volatile private var servidor: ServerSocket? = null
     /** A porta https da rede de casa (PainelTls, 13/11/2026): o mesmo painel, com o certificado que a TV gera. */
     @Volatile private var servidorTls: ServerSocket? = null
-    private lateinit var app: Context
+    internal lateinit var app: Context
 
     val sessoes = Sessoes({ System.currentTimeMillis() })
 
@@ -83,7 +82,7 @@ object PainelWeb {
      * deixa a porta abrir sem PIN. O modo só vale enquanto a tela do QR está na TV (EntrarPeloQrActivity sem PIN).
      */
     val codigoPrimeira = CodigoEntrada({ System.currentTimeMillis() }, PrimeiraConfig.VALIDADE_MS)
-    @Volatile private var modoPrimeira = false
+    @Volatile internal var modoPrimeira = false
 
     /**
      * Liga o modo da primeira configuração, abre a porta (sem PIN) e devolve o endereço do QR: `#primeira=<código>`.
@@ -106,11 +105,11 @@ object PainelWeb {
         ajustar(app)
     }
 
-    @Volatile private var tentativas: ControleTentativas? = null
+    @Volatile internal var tentativas: ControleTentativas? = null
 
     /** Entrar com a digital (ideia 99, [ChaveAcesso]): desafios de uso único, para cadastrar e para entrar. */
-    private val desafiosChave = DesafiosChave({ System.currentTimeMillis() })
-    private val travaPin = Any()   // um PBKDF2 por vez: muitas tentativas juntas não derrubam a CPU da TV
+    internal val desafiosChave = DesafiosChave({ System.currentTimeMillis() })
+    internal val travaPin = Any()   // um PBKDF2 por vez: muitas tentativas juntas não derrubam a CPU da TV
 
     /**
      * Até 6 threads atendendo e até 24 conexões esperando; além disso a conexão é recusada. 6 (10/11/2026; antes 4):
@@ -157,7 +156,7 @@ object PainelWeb {
     }
 
     /** Só chamar dentro de synchronized(travaPin): assim todas as threads usam o MESMO contador. */
-    private fun controle(): ControleTentativas = tentativas ?: ControleTentativas(
+    internal fun controle(): ControleTentativas = tentativas ?: ControleTentativas(
         { System.currentTimeMillis() }, PainelArmazem.falhas(app),
     ) { PainelArmazem.definirFalhas(app, it) }.also { tentativas = it }
 
@@ -477,7 +476,7 @@ object PainelWeb {
     private fun nomesPermitidos(): Set<String> = ipsDaRede() + Config.PAINEL_NOMES + nomesTailscale()
 
     /** Com a "rede Tailscale" ligada, o nome completo (…ts.net) também atende em https na porta 8443 (o túnel decifra). */
-    private fun nomesHttps(): Set<String> {
+    internal fun nomesHttps(): Set<String> {
         if (!TunelTailscale.redeLigada(app)) return emptySet()
         return setOfNotNull(TunelTailscale.nome(app)?.lowercase())
     }
@@ -522,17 +521,17 @@ object PainelWeb {
     // ---------------------------------------------------------------- atender uma requisição
 
     /** [arquivo] != null: o corpo é esse arquivo, mandado aos pedaços (download da aba Arquivos). */
-    private class Resposta(val codigo: Int, val tipo: String?, val corpo: ByteArray, val extras: Map<String, String> = emptyMap(),
+    internal class Resposta(val codigo: Int, val tipo: String?, val corpo: ByteArray, val extras: Map<String, String> = emptyMap(),
                            val arquivo: File? = null, val fluxo: ((java.io.OutputStream) -> Unit)? = null,
                            val range: String? = null)   // cabeçalho Range do pedido, para arquivo (vídeo pula para o meio)
 
     /** Rotas que recebem o corpo como fluxo, direto para o disco (arquivo de vários GB não cabe na memória). */
     private val ROTAS_FLUXO = setOf("/api/arquivos/enviar", "/api/apps/instalar", "/api/fotos/enviar", "/api/perfil/foto")
 
-    private fun json(codigo: Int, o: JSONObject, extras: Map<String, String> = emptyMap()) =
+    internal fun json(codigo: Int, o: JSONObject, extras: Map<String, String> = emptyMap()) =
         Resposta(codigo, "application/json; charset=utf-8", o.toString().toByteArray(), extras)
 
-    private fun erro(codigo: Int, mensagem: String, extra: JSONObject.() -> Unit = {}) =
+    internal fun erro(codigo: Int, mensagem: String, extra: JSONObject.() -> Unit = {}) =
         json(codigo, JSONObject().put("erro", mensagem).apply(extra))
 
     /** [https]: chegou pela porta https (a conversa TLS acontece aqui, no primeiro read, não na thread do accept). */
@@ -1176,7 +1175,7 @@ object PainelWeb {
 
     // Sem "Secure" mesmo no HTTPS do Tailscale: o nome .ts.net também abre em http :8080, e um cookie Secure do mesmo
     // nome faria o navegador descartar o login por http (laço de PIN). Os dois caminhos já vão cifrados pelo Tailscale.
-    private fun cookieSessao(token: String) = mapOf("Set-Cookie" to "$COOKIE=$token; Path=/; HttpOnly; SameSite=Strict")
+    internal fun cookieSessao(token: String) = mapOf("Set-Cookie" to "$COOKIE=$token; Path=/; HttpOnly; SameSite=Strict")
     private fun cookieApagado() = mapOf("Set-Cookie" to "$COOKIE=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0")
 
     private fun estado(token: String?): Resposta {
@@ -1201,364 +1200,46 @@ object PainelWeb {
 
     // ---------------------------------------------------------------- eventos ao vivo (10/11/2026)
 
-    private const val MAX_EVENTOS = 2                   // janelas do painel recebendo ao mesmo tempo; a 3ª cai no polling
-    private const val EVENTOS_DURACAO_MS = 5 * 60_000L  // depois disso fecha; o navegador (EventSource) reconecta sozinho
-    private const val EVENTOS_PASSO_MS = 1_500L
-    private val eventosAbertos = java.util.concurrent.atomic.AtomicInteger(0)
+    internal const val MAX_EVENTOS = 2                   // janelas do painel recebendo ao mesmo tempo; a 3ª cai no polling
+    internal const val EVENTOS_DURACAO_MS = 5 * 60_000L  // depois disso fecha; o navegador (EventSource) reconecta sozinho
+    internal const val EVENTOS_PASSO_MS = 1_500L
+    internal val eventosAbertos = java.util.concurrent.atomic.AtomicInteger(0)
     // Fluxo mais novo de cada sessão: abrir de novo (a página voltou a ficar visível) encerra o anterior dessa sessão,
     // em vez de esperar o ping descobrir que a conexão velha morreu e ocupar uma das [MAX_EVENTOS] vagas até lá.
-    private val eventosDaSessao = java.util.concurrent.ConcurrentHashMap<String, Any>()
+    internal val eventosDaSessao = java.util.concurrent.ConcurrentHashMap<String, Any>()
 
-    /**
-     * Server-Sent Events: a página recebe "o que está na TV" na hora em que muda (abriu um app, a TV dormiu), em vez
-     * de perguntar a cada 30 s. Barato de propósito: a cada 1,5 s só olha se a tela está acesa e os eventos de uso dos
-     * últimos segundos (não as 6 h do [PainelApps.naTela]); só escreve quando algo mudou, mais um "ping" a cada 5 s.
-     * Como o /api/estado, usa existe() e não valida(): ficar com a página aberta não segura a sessão viva para sempre;
-     * quando ela vence, o fluxo fecha e a página vai para o PIN no próximo pedido.
-     */
-    private fun eventos(token: String?): Resposta {
-        if (token == null || !sessoes.existe(token)) return erro(401, "entre com o PIN")
-        val meu = Any()
-        eventosDaSessao[token] = meu   // o fluxo antigo desta sessão vê que não é mais o dela e sai no próximo passo
-        if (eventosAbertos.get() >= MAX_EVENTOS) Thread.sleep(EVENTOS_PASSO_MS + 200)   // dá tempo do antigo sair
-        if (eventosAbertos.incrementAndGet() > MAX_EVENTOS) {
-            eventosAbertos.decrementAndGet()
-            return erro(503, "muitas janelas do painel abertas; esta atualiza a cada 30 s")
-        }
-        return Resposta(200, null, ByteArray(0), fluxo = { saida ->
-            try { transmitirEventos(token, saida) { eventosDaSessao[token] === meu } }
-            finally { eventosAbertos.decrementAndGet(); eventosDaSessao.remove(token, meu) }
-        })
-    }
 
-    private fun transmitirEventos(token: String?, saida: java.io.OutputStream, atual: () -> Boolean) {
-        val cab = StringBuilder("HTTP/1.1 200 OK\r\n")
-        for ((k, v) in PainelHttp.CABECALHOS_SEGURANCA) cab.append(k).append(": ").append(v).append("\r\n")
-        cab.append("Content-Type: text/event-stream; charset=utf-8\r\nConnection: close\r\n\r\n")
-        saida.write(cab.toString().toByteArray(Charsets.ISO_8859_1))
-        // Reconectar depois de 3 s se cair (padrão do navegador, explícito).
-        saida.write("retry: 3000\n\n".toByteArray()); saida.flush()
 
-        val pm = app.getSystemService(android.os.PowerManager::class.java)
-        val usm = app.getSystemService(Context.USAGE_STATS_SERVICE) as android.app.usage.UsageStatsManager
-        val inicio = System.currentTimeMillis()
-        var desde = inicio
-        var naTela = PainelApps.naTela(app)
-        var enviado: String? = null
-        var ultimaEscrita = inicio
-        while (true) {
-            val agora = System.currentTimeMillis()
-            if (agora - inicio > EVENTOS_DURACAO_MS || !ligado() || !sessoes.existe(token) || !atual()) break
-            if (pm != null && !pm.isInteractive) naTela = "em espera"
-            else {
-                var ultimo: String? = null
-                try {
-                    // 3 s de sobra para trás: o Android às vezes grava o evento com um pouco de atraso.
-                    val ev = usm.queryEvents(desde - 3_000, agora)
-                    val e = android.app.usage.UsageEvents.Event()
-                    while (ev.hasNextEvent()) {
-                        ev.getNextEvent(e)
-                        if (e.eventType == android.app.usage.UsageEvents.Event.ACTIVITY_RESUMED) ultimo = e.packageName
-                    }
-                } catch (_: Exception) {}
-                naTela = when {
-                    ultimo != null -> PainelApps.rotuloNaTela(app, ultimo)
-                    naTela == "em espera" -> PainelApps.naTela(app)   // acordou sem abrir nada novo: recalcula inteiro
-                    else -> naTela
-                }
-            }
-            desde = agora
-            val json = JSONObject().put("naTela", naTela).toString()
-            if (json != enviado) {
-                saida.write("event: estado\ndata: $json\n\n".toByteArray()); saida.flush()
-                enviado = json; ultimaEscrita = agora
-            } else if (agora - ultimaEscrita > 5_000) {
-                saida.write(": ping\n\n".toByteArray()); saida.flush()   // a cada 5 s: descobre logo a conexão morta (a vaga volta)
-                ultimaEscrita = agora
-            }
-            try { Thread.sleep(EVENTOS_PASSO_MS) } catch (_: InterruptedException) { break }
-        }
-    }
-
-    /**
-     * Confere o PIN com o contador global. Devolve null se acertou, ou a resposta de erro pronta (PIN errado,
-     * bloqueado, painel desligado por excesso de erros).
-     */
-    private fun conferirPin(req: Requisicao, ip: String, acao: String): Resposta? {
-        val pin = try { JSONObject(req.corpoTexto()).optString("pin") } catch (e: Exception) { "" }
-        synchronized(travaPin) {
-            val ctl = controle()
-            // Painel desligado (por erros ou nas Configurações) ou contador esgotado: não confere mais nada, nem os
-            // pedidos que já estavam na fila quando a porta fechou.
-            if (ctl.esgotado() || !PainelArmazem.podeLigar(app)) return erro(403, "painel desligado. Religue nas Configurações do launcher, na TV.")
-            val espera = ctl.esperaMs()
-            if (espera > 0) return erro(429, "muitas tentativas erradas; espere ${(espera + 999) / 1000} s") { put("esperarSeg", (espera + 999) / 1000) }
-            if (PainelArmazem.conferirPin(app, pin)) { ctl.registrarSucesso(); return null }
-            PainelArmazem.registrar(app, ip, acao, "PIN errado")
-            return when (val r = ctl.registrarFalha()) {
-                is ControleTentativas.Resultado.Errou -> erro(401, "PIN errado") { put("restantes", r.restantes) }
-                is ControleTentativas.Resultado.Bloqueou -> erro(429, "PIN errado; bloqueado por ${r.ms / 60_000} min") { put("esperarSeg", r.ms / 1000) }
-                ControleTentativas.Resultado.Desligar -> { desligarPorErros(ip); erro(403, "PIN errado demais: o painel foi desligado. Religue nas Configurações do launcher, na TV.") }
-            }
-        }
-    }
 
     /** Senhas da unidade de rede já conferidas (ver DavLogica.CacheSenha): um PBKDF2 a cada 15 min, não a cada pedido. */
-    private val senhasDav = DavLogica.CacheSenha({ System.currentTimeMillis() })
+    internal val senhasDav = DavLogica.CacheSenha({ System.currentTimeMillis() })
 
-    /**
-     * A senha da unidade de rede (cabeçalho Basic) é o PIN do painel, com o MESMO contador de erros e o mesmo bloqueio
-     * crescente do login. null = pode entrar. O cache leva junto a marca do PIN: trocou o PIN, a senha velha cai.
-     */
-    private fun conferirSenhaDav(cabecalho: String?, ip: String): PainelDav.Recusa? {
-        val pin = DavLogica.senhaBasic(cabecalho) ?: return PainelDav.Recusa(401, "senha: o PIN do painel")
-        val chave = cabecalho + "\u0000" + PainelArmazem.marcaPin(app)
-        if (senhasDav.certo(chave)) return null
-        synchronized(travaPin) {
-            val ctl = controle()
-            if (ctl.esgotado() || !PainelArmazem.podeLigar(app)) return PainelDav.Recusa(403, "painel desligado. Religue nas Configurações do launcher, na TV.")
-            val espera = ctl.esperaMs()
-            if (espera > 0) return PainelDav.Recusa(429, "muitas tentativas erradas; espere ${(espera + 999) / 1000} s",
-                mapOf("Retry-After" to ((espera + 999) / 1000).toString()))
-            // A mesma senha errada repetida pelo cliente (o Windows e o davfs2 repetem sozinhos) conta uma vez só.
-            if (senhasDav.errado(chave)) return PainelDav.Recusa(401, "PIN errado")
-            if (PainelArmazem.conferirPin(app, pin)) {
-                ctl.registrarSucesso()
-                senhasDav.lembrarCerto(chave)
-                PainelArmazem.registrar(app, ip, "unidade de rede: entrar", "ok")
-                return null
-            }
-            senhasDav.lembrarErrado(chave)
-            PainelArmazem.registrar(app, ip, "unidade de rede", "PIN errado")
-            return when (val r = ctl.registrarFalha()) {
-                is ControleTentativas.Resultado.Errou -> PainelDav.Recusa(401, "PIN errado")
-                is ControleTentativas.Resultado.Bloqueou -> PainelDav.Recusa(429, "PIN errado; bloqueado por ${r.ms / 60_000} min",
-                    mapOf("Retry-After" to (r.ms / 1000).toString()))
-                ControleTentativas.Resultado.Desligar -> { desligarPorErros(ip); PainelDav.Recusa(403, "PIN errado demais: o painel foi desligado.") }
-            }
-        }
-    }
 
-    private fun desligarPorErros(ip: String) {
-        PainelArmazem.definirDesligadoPorErros(app, true)
-        PainelArmazem.registrar(app, ip, "painel", "desligado por PIN errado demais")
-        Log.w(TAG, "PIN errado ${ControleTentativas.LIMITE_DESLIGAR} vezes: painel desligado")
-        // Fecha a porta logo depois de responder (a conexão atual continua aberta até a resposta sair).
-        Handler(Looper.getMainLooper()).post {
-            ajustar(app)
-            try { Toast.makeText(app, app.getString(R.string.painel_desligado_pin), Toast.LENGTH_LONG).show() } catch (_: Exception) {}
-        }
-    }
 
-    private fun entrar(req: Requisicao, ip: String): Resposta {
-        conferirPin(req, ip, "entrar")?.let { return it }
-        if (!ligado()) return erro(503, "painel desligado")
-        val token = sessoes.criar()
-        PainelArmazem.registrar(app, ip, "entrar", "ok")
-        return json(200, JSONObject().put("ok", true), cookieSessao(token))
-    }
 
-    /**
-     * Entrar com o código do QR da TV, sem PIN. A sessão nasce SEM elevação: o que pede o PIN de novo (desinstalar,
-     * instalar, backup...) continua pedindo. Código errado não conta como tentativa de PIN (192 bits: não se adivinha).
-     */
-    private fun entrarPeloQr(req: Requisicao, ip: String): Resposta {
-        if (!ligado() || !PainelArmazem.podeLigar(app)) return erro(503, "painel desligado")
-        val codigo = try { JSONObject(req.corpoTexto()).optString("codigo") } catch (e: Exception) { "" }
-        if (!codigoEntrada.usar(codigo)) return erro(403, "código vencido ou já usado: gere outro na TV")
-        val token = sessoes.criar(elevada = false)
-        PainelArmazem.registrar(app, ip, "entrar pelo QR da TV", "ok")
-        return json(200, JSONObject().put("ok", true), cookieSessao(token))
-    }
 
-    /**
-     * Passo 1 do assistente da primeira configuração ([PrimeiraConfig]): com o código do QR da TV, cria o PIN, liga o
-     * painel e entra (sessão elevada: a pessoa acabou de digitar o PIN). Sem volta só no sentido de que, com PIN, este
-     * caminho fecha para sempre; trocar o PIN depois é pelas Configurações da TV, como sempre.
-     */
-    private fun primeiraConfig(req: Requisicao, ip: String): Resposta {
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val pin = o.optString("pin")
-        PrimeiraConfig.conferir(PainelArmazem.temPin(app), modoPrimeira, pin)?.let { return erro(it.status, it.mensagem) }
-        if (!codigoPrimeira.usar(o.optString("codigo"))) return erro(PrimeiraConfig.Recusa.CODIGO.status, PrimeiraConfig.Recusa.CODIGO.mensagem)
-        synchronized(travaPin) {
-            if (PainelArmazem.temPin(app)) return erro(409, PrimeiraConfig.Recusa.JA_TEM_PIN.mensagem)   // corrida: outro criou antes
-            PainelArmazem.definirPin(app, pin)   // PBKDF2 (~1 s): numa thread do pedido, não na da tela
-            tentativas?.zerar()
-        }
-        PainelArmazem.definirLigado(app, true)
-        val token = sessoes.criar(elevada = true)
-        PainelArmazem.registrar(app, ip, "primeira configuração: PIN criado pelo celular", "ok")
-        return json(200, JSONObject().put("ok", true), cookieSessao(token))
-    }
 
     // ---------------------------------------------------------------- digital do celular (ideia 99)
 
-    /** Só pelo https do Tailscale: é o único endereço com nome de domínio e certificado que o navegador aceita. */
-    private fun chaveDisponivel(host: String?): Boolean = ChecagensPainel.viaHttps(host, nomesHttps())
 
-    private fun chavesEstado(host: String?): JSONObject = JSONObject()
-        .put("disponivel", chaveDisponivel(host))
-        .put("endereco", nomesHttps().firstOrNull()?.let { "https://$it:${ChecagensPainel.PORTA_HTTPS}/" } ?: JSONObject.NULL)
-        .put("chaves", JSONArray().apply {
-            for (c in PainelArmazem.chaves(app)) put(JSONObject().put("id", c.id).put("nome", c.nome).put("criada", c.criada).put("usada", c.usadaEm))
-        })
 
-    private fun cadastrarChave(req: Requisicao, token: String?, host: String?, ip: String): Resposta {
-        if (!chaveDisponivel(host)) return erro(403, "a digital só funciona pelo endereço do Tailscale (https)")
-        if (!sessoes.elevada(token)) return precisaPin()
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val desafio = o.optString("desafio")
-        if (!desafiosChave.usar(desafio)) return erro(403, "o pedido venceu: tente de novo")
-        val nova = try {
-            ChaveAcesso.cadastrar(o.optString("id"), o.optString("chavePublica"), o.optInt("alg"), o.optString("authData"),
-                o.optString("clientData"), desafio, ChaveAcesso.rpId(host!!), ChaveAcesso.origem(host), o.optString("nome"), System.currentTimeMillis())
-        } catch (e: ChaveAcesso.Recusa) {
-            PainelArmazem.registrar(app, ip, "cadastrar digital", "recusado: ${e.message}")
-            return erro(400, "o celular mandou uma chave que a TV não aceita (${e.message})")
-        }
-        val lista = PainelArmazem.chaves(app).filter { it.id != nova.id }
-        if (lista.size >= ChaveAcesso.MAX_CHAVES) return erro(409, "já tem ${ChaveAcesso.MAX_CHAVES} digitais: apague uma antes")
-        PainelArmazem.gravarChaves(app, lista + nova)
-        PainelArmazem.registrar(app, ip, "cadastrar digital \"${nova.nome}\"", "ok")
-        return json(200, chavesEstado(host))
-    }
 
-    private fun apagarChave(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val id = corpoJson(req)?.optString("id").orEmpty()
-        val lista = PainelArmazem.chaves(app)
-        val sai = lista.firstOrNull { it.id == id } ?: return erro(404, "essa digital não existe")
-        PainelArmazem.gravarChaves(app, lista - sai)
-        PainelArmazem.registrar(app, ip, "apagar digital \"${sai.nome}\"", "ok")
-        return json(200, chavesEstado(req.cabecalho("host")))
-    }
 
-    /** Entrar com a digital: sessão SEM elevação, como a do QR (o que não tem volta ainda pede o PIN). */
-    private fun entrarComChave(req: Requisicao, host: String?, ip: String): Resposta {
-        if (!ligado() || !PainelArmazem.podeLigar(app)) return erro(503, "painel desligado")
-        if (!chaveDisponivel(host)) return erro(403, "a digital só funciona pelo endereço do Tailscale (https)")
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val desafio = o.optString("desafio")
-        if (!desafiosChave.usar(desafio)) return erro(403, "o pedido venceu: tente de novo")
-        val lista = PainelArmazem.chaves(app)
-        val chave = lista.firstOrNull { it.id == o.optString("id") }
-            ?: return erro(403, "esta digital não está cadastrada nesta TV: entre com o PIN e cadastre de novo")
-        val contador = try {
-            ChaveAcesso.conferirEntrada(chave, o.optString("authData"), o.optString("clientData"), o.optString("assinatura"), desafio, ChaveAcesso.rpId(host!!), ChaveAcesso.origem(host))
-        } catch (e: ChaveAcesso.Recusa) {
-            PainelArmazem.registrar(app, ip, "entrar com a digital \"${chave.nome}\"", "recusado: ${e.message}")
-            return erro(403, "a digital não confere: entre com o PIN")
-        }
-        PainelArmazem.gravarChaves(app, lista.map { if (it.id == chave.id) it.copy(contador = contador, usadaEm = System.currentTimeMillis()) else it })
-        val token = sessoes.criar(elevada = false)
-        PainelArmazem.registrar(app, ip, "entrar com a digital \"${chave.nome}\"", "ok")
-        return json(200, JSONObject().put("ok", true), cookieSessao(token))
-    }
 
-    private fun primeiraEstado(): JSONObject {
-        val loc = java.util.Locale.getDefault()
-        return JSONObject()
-            .put("idiomaTv", loc.getDisplayName(loc).replaceFirstChar { it.titlecase(loc) })
-            .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
-            .put("cidade", LocalClima.ler(app)?.let { LocalClima.descrever(it) } ?: JSONObject.NULL)
-            .put("contasTv", PlayerArmazem.fontes(app).size)
-    }
 
-    private fun estadoPoderes() = PrimeiraPoderes.Estado(
-        teclas = AutorizaShizukuService.instancia != null,
-        dev = Settings.Global.getInt(app.contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) == 1,
-        shell = SaudeAcesso.shellEsperado(app),
-        dono = PrivilegioDO.somosDonos(app))
 
-    /**
-     * Abre NA TV a tela do passo pedido (só abre telas: quem confirma é a pessoa, com o controle). O dono do aparelho
-     * nunca liga daqui: abre as boas-vindas, onde a pergunta (com o aviso das contas) é respondida na TV.
-     */
-    private fun fazerPoderNaTv(req: Requisicao, ip: String): Resposta {
-        val passo = PrimeiraPoderes.Passo.de(corpoJson(req)?.optString("passo")) ?: return erro(400, "passo desconhecido")
-        val i = { acao: String -> android.content.Intent(acao).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK) }
-        return try {
-            when (passo) {
-                PrimeiraPoderes.Passo.TECLAS -> app.startActivity(i(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                PrimeiraPoderes.Passo.DEV -> app.startActivity(i(Settings.ACTION_DEVICE_INFO_SETTINGS))
-                PrimeiraPoderes.Passo.PAREAR -> {
-                    // A janela do pareamento é do serviço de acessibilidade: monta na thread da tela.
-                    if (AutorizaShizukuService.instancia == null) return erro(409, "ligue antes as teclas do controle (passo 1)")
-                    android.os.Handler(android.os.Looper.getMainLooper()).post { PareamentoNaTv.comecar(app) }
-                }
-                PrimeiraPoderes.Passo.DONO -> app.startActivity(android.content.Intent(app, BoasVindasActivity::class.java)
-                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
-            }
-            PainelArmazem.registrar(app, ip, "abrir na TV: ${passo.id}", "ok")
-            json(200, JSONObject().put("ok", true))
-        } catch (e: Exception) {
-            erro(500, "não consegui abrir na TV; faça pelo controle, em Configurações")
-        }
-    }
 
-    private fun abrirIdiomaNaTv(ip: String): Resposta = try {
-        app.startActivity(android.content.Intent(Settings.ACTION_LOCALE_SETTINGS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
-        PainelArmazem.registrar(app, ip, "abrir o idioma da TV", "ok")
-        json(200, JSONObject().put("ok", true))
-    } catch (e: Exception) {
-        erro(500, "não consegui abrir: na TV, vá em Configurações > Sistema > Idioma")
-    }
 
-    /** PIN redigitado para uma ação sem volta: a sessão fica "elevada" por 5 min. */
-    private fun confirmar(req: Requisicao, token: String?, ip: String): Resposta {
-        conferirPin(req, ip, "confirmar PIN")?.let { return it }
-        sessoes.elevar(token)
-        return json(200, JSONObject().put("ok", true))
-    }
 
-    private fun precisaPin() = erro(403, "confirme o PIN") { put("precisaPin", true) }
 
     // ---------------------------------------------------------------- papéis e convites (elevação 18.1, PapeisPainel)
 
-    private fun prefsPapeis() = app.getSharedPreferences("painel_papeis", android.content.Context.MODE_PRIVATE)
-    @Synchronized private fun convites() = PapeisPainel.validos(PapeisPainel.deJson(prefsPapeis().getString("convites", null)), System.currentTimeMillis())
-    @Synchronized private fun salvarConvites(l: List<PapeisPainel.Convite>) { prefsPapeis().edit().putString("convites", PapeisPainel.paraJson(l)).commit() }
+    @Synchronized internal fun convites() = PapeisPainel.validos(PapeisPainel.deJson(prefsPapeis().getString("convites", null)), System.currentTimeMillis())
+    @Synchronized internal fun salvarConvites(l: List<PapeisPainel.Convite>) { prefsPapeis().edit().putString("convites", PapeisPainel.paraJson(l)).commit() }
 
-    private fun criarConvite(req: Requisicao, token: String?, ip: String, https: Boolean, host: String?): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val papel = PapeisPainel.Papel.de(corpoJson(req)?.optString("papel"))?.takeIf { it != PapeisPainel.Papel.DONO }
-            ?: return erro(400, "papel inválido")
-        val (codigo, lista) = synchronized(this) { PapeisPainel.criar(convites(), papel, System.currentTimeMillis()).also { salvarConvites(it.second) } }
-        val link = (if (https) "https://" else "http://") + host + "/#convite=" + codigo
-        PainelArmazem.registrar(app, ip, "convite criado", papel.chave)   // o código nunca vai para o registro
-        return json(200, JSONObject().put("link", link).put("papel", papel.chave)
-            .put("qr", java.util.Base64.getEncoder().encodeToString(QrCodigo.png(link, 480))), mapOf("Cache-Control" to "no-store"))
-    }
 
-    private fun revogarConvite(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        synchronized(this) { salvarConvites(if (o.optBoolean("todos")) emptyList() else PapeisPainel.revogar(convites(), o.optString("id"))) }
-        sessoes.encerrarConvidados()
-        PainelArmazem.registrar(app, ip, "convite revogado", if (o.optBoolean("todos")) "todos" else o.optString("id").take(8))
-        return json(200, JSONObject().put("ok", true))
-    }
 
-    /** Entrar pelo link do convite: sessão do papel do convite (convidado: cai quando o convite vence). */
-    private fun entrarPorConvite(req: Requisicao, ip: String): Resposta {
-        // Painel desligado pelo dono ou por erros de PIN (aberto só para "Trazer de outra TV"): convite não entra.
-        if (!ligado() || !PainelArmazem.podeLigar(app)) return erro(503, "painel desligado")
-        val c = PapeisPainel.usar(convites(), corpoJson(req)?.optString("codigo"), System.currentTimeMillis())
-            ?: return erro(401, "convite vencido ou revogado")
-        val token = sessoes.criar(elevada = false, papel = c.papel, venceEm = c.vence ?: Long.MAX_VALUE)
-        PainelArmazem.registrar(app, ip, "entrou por convite", c.papel.chave)
-        return json(200, JSONObject().put("ok", true).put("papel", c.papel.chave), cookieSessao(token))
-    }
 
-    /**
-     * Confirmações (ConfirmacoesTv): com o modo "Perguntar na TV", mostra a pergunta e espera até 60 s (esta requisição
-     * fica parada, numa thread do servidor, não na da tela). Null = pode seguir; senão, a resposta de recusa pronta.
-     */
-    private fun confirmarNaTv(a: Confirmacoes.Acao, oQue: String, ip: String): Resposta? =
-        if (ConfirmacoesTv.permitir(app, a, oQue, txt(R.string.cf_quem_painel, ip))) null
-        else erro(403, if (ConfirmacoesTv.modo(app, a) == Confirmacoes.Modo.BLOQUEAR)
-            "bloqueado na TV (Configurações › Sistema › Confirmações)" else "negado na TV, ou ninguém respondeu em 60 s") { put("negadoNaTv", true) }
 
     // ---------------------------------------------------------------- apps
 
@@ -1595,275 +1276,29 @@ object PainelWeb {
 
     // ---------------------------------------------------------------- backup
 
-    private fun restaurar(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        return restaurarTexto(req.corpoTexto(), token, ip, "restaurar backup")
-    }
 
-    private fun backupCompleto(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val senha = corpoJson(req)?.optString("senha") ?: return erro(400, "JSON inválido")
-        if (!CofreBackup.senhaValida(senha)) return erro(400, "a senha do backup precisa ter de 8 a 128 caracteres")
-        val texto = try { BackupCompleto.exportar(app, senha) } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, "baixar backup completo", "falhou: ${e.javaClass.simpleName}")
-            return erro(500, "não consegui montar o backup (${e.javaClass.simpleName})")
-        }
-        PainelArmazem.registrar(app, ip, "baixar backup completo", "ok")
-        return Resposta(200, "application/json; charset=utf-8", texto.toByteArray(),
-            mapOf("Content-Disposition" to "attachment; filename=\"launcher-backup-completo.json\""))
-    }
 
-    /**
-     * Elevação 19.6: chave de recuperação do backup. GET = se existe (data e digital, nunca o código). POST com PIN =
-     * cria uma nova e devolve o código e o QR UMA vez (a TV guarda só a parte pública; nada aparece na tela da TV).
-     * POST {"apagar":true} = a TV esquece a pública (backups novos voltam a abrir só com a senha).
-     */
-    private fun recuperacao(req: Requisicao, token: String?, ip: String): Resposta {
-        if (req.metodo == "GET") return json(200, JSONObject().put("tem", RecuperacaoTv.publica(app) != null)
-            .put("criadaEm", RecuperacaoTv.criadaEm(app)).put("digital", RecuperacaoTv.digital(app) ?: ""))
-        if (req.metodo != "POST") return erro(405, "método não aceito")
-        if (!sessoes.elevada(token)) return precisaPin()
-        if (corpoJson(req)?.optBoolean("apagar") == true) {
-            RecuperacaoTv.apagar(app)
-            PainelArmazem.registrar(app, ip, "chave de recuperação", "apagada")
-            return json(200, JSONObject().put("ok", true))
-        }
-        val codigo = RecuperacaoTv.criar(app)
-        val qr = java.util.Base64.getEncoder().encodeToString(QrCodigo.png(codigo, 480))
-        PainelArmazem.registrar(app, ip, "chave de recuperação", "criada (${RecuperacaoTv.digital(app)})")   // o código nunca vai para o registro
-        return json(200, JSONObject().put("codigo", codigo).put("qr", qr).put("digital", RecuperacaoTv.digital(app) ?: ""),
-            mapOf("Cache-Control" to "no-store"))
-    }
 
-    private fun restaurarCompleto(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val senha = o.optString("senha"); val arquivo = o.optString("arquivo")
-        return try {
-            restaurarTexto(arquivo, token, ip, "restaurar backup completo") { BackupCompleto.importar(app, it, senha) }
-        } catch (e: CofreBackup.SenhaErrada) {
-            PainelArmazem.registrar(app, ip, "restaurar backup completo", "senha errada")
-            erro(400, "senha do backup errada (ou o arquivo foi alterado)")
-        }
-    }
 
     // ---------------------------------------------------------------- backup noturno (BackupNoturno.kt)
 
-    /**
-     * Estado para a aba Backup. A senha NUNCA volta (só "temSenha"). As pastas de rede vêm com id e nome; ler as contas
-     * decifra pelo Keystore, por isso fica aqui (thread do servidor) e não na tela da TV.
-     */
-    private fun backupNoturnoEstado(): JSONObject {
-        val destino = BackupNoturno.destino(app)
-        val nas = JSONArray().apply {
-            for (c in runCatching { BackupNoturno.contasSmb(app) }.getOrDefault(emptyList()))
-                put(JSONObject().put("valor", BackupNoturnoRegras.destinoSmb(c.id)).put("nome", c.nome))
-        }
-        val copias = JSONArray().apply {
-            for (f in BackupNoturno.listar(app)) put(JSONObject().put("nome", f.name).put("tamanho", f.length()).put("quando", f.lastModified()))
-        }
-        return JSONObject()
-            .put("ligado", BackupNoturno.ligado(app))
-            .put("temSenha", BackupNoturno.temSenha(app))
-            .put("minutoDoDia", BackupNoturno.minutoDoDia(app))
-            .put("destino", destino)
-            .put("destinoRotulo", BackupNoturno.rotuloDestino(app, destino))
-            .put("nas", nas)
-            .put("nuvens", JSONArray().apply {   // OneDrive, Dropbox e Box de "Na rede" (ideia 98)
-                for (c in runCatching { BackupNoturno.contasNuvem(app) }.getOrDefault(emptyList()))
-                    put(JSONObject().put("valor", BackupNoturnoRegras.destinoNuvem(c.id)).put("nome", BackupNoturno.nomeNuvem(c)))
-            })
-            .put("drive", DriveBackup.email(app) ?: "")   // conta do Google Drive conectada na TV (só o e-mail)
-            .put("google", LoginGoogle.configurado(app))   // sem o cliente OAuth do dono não há login do Drive
-            .put("ultimo", BackupNoturno.ultimo(app))
-            .put("copias", copias)
-    }
 
-    /**
-     * Muda a configuração do backup noturno. Cada campo é opcional: {"ligado":true}, {"minutoDoDia":210},
-     * {"destino":"pendrive"}, {"senha":"..."}. Senha e destino pedem o PIN de novo (sessão elevada), como o backup
-     * completo: quem troca a senha decide quem abre as cópias; quem troca o destino decide para onde elas vão.
-     */
-    private fun backupNoturnoConfig(req: Requisicao, token: String?, ip: String): Resposta {
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        if ((o.has("senha") || o.has("destino")) && !sessoes.elevada(token)) return precisaPin()
-        // Confere TUDO antes de gravar qualquer coisa: um campo ruim não deixa a configuração pela metade.
-        val minuto = if (o.has("minutoDoDia")) o.optInt("minutoDoDia", -1).takeIf { it in 0 until 24 * 60 }
-            ?: return erro(400, "horário inválido") else null
-        var destinoNome = ""
-        val destino = if (o.has("destino")) {
-            val d = o.optString("destino")
-            when {
-                d == BackupNoturnoRegras.SO_TV || d == BackupNoturnoRegras.PENDRIVE -> d
-                // Google Drive: só com a conta já conectada NA TV (o login é pelo código no celular, na tela da TV).
-                d == BackupNoturnoRegras.DRIVE -> if (DriveBackup.conectado(app)) d
-                    else return erro(400, "conecte a conta do Google Drive primeiro (botão Conectar, logo acima)")
-                // Nuvem: só uma conta OneDrive/Dropbox/Box já cadastrada em "Na rede".
-                BackupNoturnoRegras.idNuvem(d) != null -> {
-                    val conta = runCatching { BackupNoturno.contasNuvem(app) }.getOrDefault(emptyList())
-                        .firstOrNull { it.id == BackupNoturnoRegras.idNuvem(d) } ?: return erro(400, "destino desconhecido")
-                    destinoNome = BackupNoturno.nomeNuvem(conta)
-                    d
-                }
-                // NAS: só uma pasta SMB que já está cadastrada em "Mídias na rede" (nada de endereço digitado aqui).
-                else -> {
-                    val conta = BackupNoturnoRegras.idSmb(d)?.let { id ->
-                        runCatching { BackupNoturno.contasSmb(app) }.getOrDefault(emptyList()).firstOrNull { it.id == id }
-                    } ?: return erro(400, "destino desconhecido")
-                    destinoNome = conta.nome
-                    d
-                }
-            }
-        } else null
-        val senha = if (o.has("senha")) o.optString("senha").takeIf { CofreBackup.senhaValida(it) }
-            ?: return erro(400, "a senha do backup precisa ter de 8 a 128 caracteres") else null
-        if (senha != null) {
-            if (!BackupNoturno.definirSenha(app, senha)) return erro(500, "não consegui guardar a senha na TV")
-            PainelArmazem.registrar(app, ip, "backup noturno: senha nova", "ok")   // nunca a senha no registro
-        }
-        if (destino != null) {
-            BackupNoturno.definirDestino(app, destino, destinoNome)
-            PainelArmazem.registrar(app, ip, "backup noturno: cópia extra", BackupNoturno.rotuloDestino(app, destino))
-        }
-        if (minuto != null) BackupNoturno.definirMinutoDoDia(app, minuto)
-        if (o.has("ligado")) {
-            val sim = o.optBoolean("ligado")
-            if (!BackupNoturno.definirLigado(app, sim)) return erro(400, "defina a senha antes de ligar")
-            PainelArmazem.registrar(app, ip, "backup noturno", if (sim) "ligado" else "desligado")
-        }
-        return json(200, backupNoturnoEstado())
-    }
 
-    /**
-     * "Fazer agora": roda já e espera até 60 s pelo resultado (o backup é pequeno; a cópia para o NAS é o que demora).
-     * Passou disso, solta a thread do servidor, responde "rodando" e o resultado aparece depois em "último".
-     */
-    private fun backupNoturnoAgora(ip: String): Resposta {
-        if (!BackupNoturno.temSenha(app)) return erro(400, "defina a senha antes")
-        val fila = ArrayBlockingQueue<String>(1)
-        BackupNoturno.fazerAgora(app) { r -> fila.offer(r) }
-        val r = fila.poll(60, java.util.concurrent.TimeUnit.SECONDS)
-        PainelArmazem.registrar(app, ip, "backup noturno: fazer agora", r ?: "rodando")
-        return json(200, backupNoturnoEstado().put("resultado", r ?: JSONObject.NULL))
-    }
 
     // ---------------------------------------------------------------- conta do Google Drive (DriveBackup.kt)
 
     /** O login do Drive começado pelo painel (um por vez: começar outro encerra este). Fica fora da lista do conector. */
-    @Volatile private var loginDrive: LoginGoogle.Sessao? = null
+    @Volatile internal var loginDrive: LoginGoogle.Sessao? = null
 
-    /**
-     * Começa o login do Drive: a TV pede ao Google um código curto, o painel mostra o código e o endereço
-     * (google.com/device) com QR, e a TV fica perguntando ao Google até a pessoa terminar no celular. Pede o PIN de novo:
-     * quem conecta a conta decide para onde as cópias da casa vão.
-     */
-    private fun driveConectar(token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        if (!LoginGoogle.configurado(app)) return erro(400, "falta o login Google da TV (id e segredo do cliente OAuth, aba Claude)")
-        loginDrive?.let { if (it.estado == LoginGoogle.Estado.ESPERANDO) it.estado = LoginGoogle.Estado.ERRO }
-        val s = try { LoginGoogle.iniciar(app, emptyMap(), LoginGoogle.Finalidade.DRIVE) } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, "Google Drive: conectar", "falhou: ${e.javaClass.simpleName}")
-            return erro(502, e.message ?: "o Google não respondeu")
-        }
-        loginDrive = s
-        PainelArmazem.registrar(app, ip, "Google Drive: conectar", "código pedido")
-        return json(200, driveLoginEstado())
-    }
 
-    /** Estado do login do painel: esperando (com código e endereço), ok (com o e-mail), recusado/erro (com o motivo). */
-    private fun driveLoginEstado(): JSONObject {
-        val s = loginDrive ?: return JSONObject().put("estado", "nenhum").put("drive", DriveBackup.email(app) ?: "")
-        val o = JSONObject().put("estado", s.estado.name.lowercase()).put("drive", DriveBackup.email(app) ?: "")
-        when (s.estado) {
-            LoginGoogle.Estado.ESPERANDO -> o.put("codigo", s.codigoUsuario).put("url", s.urlVerificacao)
-                .put("restaMs", (s.expira - System.currentTimeMillis()).coerceAtLeast(0))
-            LoginGoogle.Estado.OK -> o.put("email", s.email ?: "")
-            else -> o.put("mensagem", s.mensagem)
-        }
-        return o
-    }
 
-    /** "Restaurar do Drive": baixa a cópia escolhida e restaura com a senha do backup (o mesmo da tela da TV). */
-    private fun driveRestaurar(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val id = o.optString("id").takeIf { DriveRegras.idValido(it) } ?: return erro(400, "cópia inválida")
-        val senha = o.optString("senha")
-        if (!CofreBackup.senhaValida(senha)) return erro(400, "a senha do backup precisa ter de 8 a 128 caracteres")
-        val texto = try { DriveBackup.baixar(app, id) } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, "restaurar do Google Drive", "falhou: ${e.javaClass.simpleName}")
-            return erro(502, "o Drive não entregou a cópia: ${e.message ?: e.javaClass.simpleName}")
-        }
-        return try {
-            restaurarTexto(texto, token, ip, "restaurar do Google Drive") { BackupCompleto.importar(app, it, senha) }
-        } catch (e: CofreBackup.SenhaErrada) {
-            PainelArmazem.registrar(app, ip, "restaurar do Google Drive", "senha errada")
-            erro(400, "senha do backup errada (ou o arquivo foi alterado)")
-        }
-    }
 
-    /** Restaura um backup já lido (do arquivo enviado ou de uma cópia automática). [acao] vai para o registro. */
-    private fun restaurarTexto(texto: String, token: String?, ip: String, acao: String,
-                               importar: (String) -> Int = { BackupConfig.importar(app, it) }): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val n = try {
-            importar(texto)
-        } catch (e: CofreBackup.SenhaErrada) {
-            throw e
-        } catch (e: IllegalArgumentException) {
-            PainelArmazem.registrar(app, ip, acao, "recusado: ${e.message}")
-            return erro(400, "backup recusado: ${e.message}")
-        } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, acao, "falhou: $e")
-            return erro(500, "a restauração falhou na TV (${e.javaClass.simpleName}); as configurações de antes foram mantidas")
-        }
-        PainelArmazem.registrar(app, ip, acao, "ok, $n chaves")
-        // Reinicia o launcher depois de a resposta sair (várias telas leem as preferências só ao abrir). É o mesmo
-        // jeito do REINICIAR do adb. O sistema sobe o processo de novo para religar o serviço de acessibilidade, e é
-        // ele (AutorizaShizukuService.onServiceConnected) que reabre o painel mesmo sem a HOME na frente. As sessões caem.
-        Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 1500)
-        return json(200, JSONObject().put("ok", true).put("chaves", n).put("reiniciando", true))
-    }
 
-    /**
-     * Elevação 19.7, TV antiga: manda tudo (backup completo + lista de apps) para a TV nova do código. Leva os segredos
-     * da casa para outro aparelho: só com o PIN confirmado de novo, como baixar o backup completo.
-     */
-    private fun enviarParaTvNova(req: Requisicao, token: String?, ip: String): Resposta {
-        if (!sessoes.elevada(token)) return precisaPin()
-        val codigo = corpoJson(req)?.optString("codigo").orEmpty()
-        val de = try { MudarDeTv.enviar(app, codigo) } catch (e: IllegalArgumentException) {
-            PainelArmazem.registrar(app, ip, "levar para TV nova", "recusado: ${e.message}")
-            return erro(400, e.message ?: "não deu")
-        } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, "levar para TV nova", "falhou: $e")
-            return erro(500, "não deu para montar o envio (${e.javaClass.simpleName})")
-        }
-        PainelArmazem.registrar(app, ip, "levar para TV nova", "ok")
-        return json(200, JSONObject().put("ok", true).put("de", de))
-    }
 
-    /** Elevação 19.7, TV nova: o envelope chegou (segredo já conferido). Restaura e reinicia, como o restaurar. */
-    private fun receberDeOutraTv(req: Requisicao, ip: String): Resposta {
-        val de = try { MudarDeTv.receber(app, req.corpoTexto()) } catch (e: CofreBackup.SenhaErrada) {
-            return erro(400, "o envelope não abriu")
-        } catch (e: IllegalArgumentException) {
-            PainelArmazem.registrar(app, ip, "trazer de outra TV", "recusado: ${e.message}")
-            return erro(400, "a TV nova recusou: ${e.message}")
-        } catch (e: MudarDeTv.NaoEsperando) {
-            return erro(410, "esta TV não está esperando")
-        } catch (e: Exception) {
-            PainelArmazem.registrar(app, ip, "trazer de outra TV", "falhou: $e")
-            return erro(500, "a restauração falhou na TV nova (${e.javaClass.simpleName}); nada mudou")
-        }
-        PainelArmazem.registrar(app, ip, "trazer de outra TV", "ok")
-        Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 4000)   // a tela mostra "Pronto" antes
-        return json(200, JSONObject().put("ok", true).put("de", PainelVizinhos.nomeDaTv(app)))
-    }
 
     // ---------------------------------------------------------------- fase 2: permissões
 
-    private fun corpoJson(req: Requisicao): JSONObject? = try { JSONObject(req.corpoTexto()) } catch (e: Exception) { null }
+    internal fun corpoJson(req: Requisicao): JSONObject? = try { JSONObject(req.corpoTexto()) } catch (e: Exception) { null }
 
     private fun mudarPermissao(req: Requisicao, pacote: String, token: String?, ip: String): Resposta {
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
@@ -2161,183 +1596,18 @@ object PainelWeb {
     // ---------------------------------------------------------------- roteador UniFi (só leitura; ver UnifiCliente)
 
     /** Certificado lido no passo 1 e ainda não confirmado: (endereço, impressão). Só ele pode ser confirmado. */
-    @Volatile private var certificadoPendente: Pair<String, String>? = null
+    @Volatile internal var certificadoPendente: Pair<String, String>? = null
 
-    /** O que o painel mostra. A chave NUNCA vem inteira: só os 4 últimos caracteres. */
-    private fun roteadorEstado(): JSONObject = JSONObject()
-        .put("ligado", UnifiArmazem.ligado(app))
-        .put("endereco", UnifiArmazem.endereco(app) ?: JSONObject.NULL)
-        .put("chave", UnifiArmazem.finalDaChave(app) ?: JSONObject.NULL)
-        .put("certificado", UnifiArmazem.certificado(app) ?: JSONObject.NULL)
-        .put("avisoNovos", UnifiArmazem.avisoNovos(app))
-        .put("conhecidos", UnifiArmazem.conhecidos(app).size)
-        .put("pronto", UnifiArmazem.pronto(app))
 
-    /** Campos opcionais: endereco, chave, ligado, avisoNovos. Trocar o endereço apaga chave e certificado (ver UnifiArmazem). */
-    private fun roteadorConfig(req: Requisicao, ip: String): Resposta {
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val mudou = ArrayList<String>()
-        if (o.has("endereco")) {
-            val e = Unifi.enderecoValido(o.optString("endereco"))
-                ?: return erro(400, "endereço inválido: use o IP do roteador na rede de casa (ex.: 192.168.0.1)")
-            if (e != UnifiArmazem.endereco(app)) { UnifiArmazem.definirEndereco(app, e); certificadoPendente = null; mudou.add("endereço") }
-        }
-        if (o.has("chave")) {
-            val bruta = o.optString("chave")
-            if (bruta.isEmpty()) { UnifiArmazem.definirChave(app, null); mudou.add("chave apagada") } else {
-                val c = Unifi.chaveValida(bruta) ?: return erro(400, "chave inválida (cole a chave inteira criada em Integrações do UniFi)")
-                if (UnifiArmazem.endereco(app) == null) return erro(400, "salve o endereço do roteador antes da chave")
-                if (!UnifiArmazem.definirChave(app, c)) return erro(500, "não consegui guardar a chave cifrada")
-                mudou.add("chave")
-            }
-        }
-        if (o.has("ligado")) { UnifiArmazem.definirLigado(app, o.optBoolean("ligado")); mudou.add("ligado=${o.optBoolean("ligado")}") }
-        if (o.has("avisoNovos")) { UnifiArmazem.definirAvisoNovos(app, o.optBoolean("avisoNovos")); mudou.add("aviso=${o.optBoolean("avisoNovos")}") }
-        UnifiCliente.limparCache()
-        if (mudou.isNotEmpty()) PainelArmazem.registrar(app, ip, "roteador: ${mudou.joinToString(", ")}", "ok")
-        return json(200, roteadorEstado())
-    }
 
-    /** Passo 1 do certificado: lê do roteador SEM mandar a chave e devolve a impressão para o dono conferir. */
-    private fun roteadorCertificado(ip: String): Resposta {
-        val endereco = UnifiArmazem.endereco(app) ?: return erro(400, "salve o endereço do roteador primeiro")
-        val c = try { UnifiCliente.buscarCertificado(app, endereco) } catch (e: UnifiCliente.Falha) { return erro(502, e.message ?: "falhou") }
-        certificadoPendente = endereco to c.impressao
-        PainelArmazem.registrar(app, ip, "roteador: ler certificado", "ok")
-        return json(200, JSONObject().put("impressao", c.impressao).put("emitidoPara", c.emitidoPara).put("validoAte", c.validoAte)
-            .put("igualAoConfirmado", c.impressao == UnifiArmazem.certificado(app)))
-    }
 
-    /** Passo 2: o dono confirma a impressão que viu. Só vale a lida agora há pouco, do endereço atual. */
-    private fun roteadorConfiar(req: Requisicao, ip: String): Resposta {
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        val pendente = certificadoPendente
-        if (pendente == null || pendente.first != UnifiArmazem.endereco(app) || pendente.second != o.optString("impressao"))
-            return erro(409, "leia o certificado de novo antes de confirmar")
-        UnifiArmazem.definirCertificado(app, pendente.second)
-        certificadoPendente = null
-        UnifiCliente.limparCache()
-        PainelArmazem.registrar(app, ip, "roteador: confiar no certificado", "ok")
-        return json(200, roteadorEstado())
-    }
 
-    private fun roteadorAparelhos(req: Requisicao): Resposta {
-        val l = try { UnifiCliente.ler(app, forcar = req.consulta["atualizar"] == "1") } catch (e: UnifiCliente.Falha) {
-            return erro(502, e.message ?: "falhou")
-        }
-        val lista = org.json.JSONArray()
-        for (a in l.aparelhos) lista.put(JSONObject().put("nome", a.nome).put("ip", a.ip ?: JSONObject.NULL)
-            .put("mac", a.mac ?: JSONObject.NULL).put("tipo", a.tipo).put("desde", a.desde ?: JSONObject.NULL))
-        return json(200, JSONObject().put("versao", l.versao ?: JSONObject.NULL).put("respostaMs", l.respostaMs)
-            .put("em", l.em).put("aparelhos", lista))
-    }
 
-    private fun roteadorWifiTv(): Resposta {
-        val w = try { UnifiCliente.wifiDaTv(app) } catch (e: UnifiCliente.Falha) { return erro(502, e.message ?: "falhou") }
-        val o = JSONObject().put("noWifi", w.conectadaNoWifi).put("dbm", w.dbm).put("banda", Unifi.banda(w.mhz) ?: JSONObject.NULL)
-            .put("mbps", w.mbps).put("achadaNoRoteador", w.achadaNoRoteador).put("dicas", org.json.JSONArray(w.dicas))
-        w.ap?.let { ap ->
-            val radios = org.json.JSONArray()
-            for (r in ap.radios) radios.put(JSONObject().put("ghz", r.ghz).put("canal", r.canal ?: JSONObject.NULL)
-                .put("larguraMhz", r.larguraMhz ?: JSONObject.NULL).put("retransmissoesPct", r.retransmissoesPct ?: JSONObject.NULL))
-            o.put("pontoDeAcesso", JSONObject().put("nome", ap.nome).put("modelo", ap.modelo ?: JSONObject.NULL)
-                .put("cpuPct", ap.cpuPct ?: JSONObject.NULL).put("radios", radios))
-        }
-        w.peloRoteador?.let { r ->
-            o.put("peloRoteador", JSONObject().put("sinalDbm", r.sinalDbm ?: JSONObject.NULL)
-                .put("banda", Unifi.bandaDoRadio(r.radio) ?: JSONObject.NULL).put("canal", r.canal ?: JSONObject.NULL)
-                .put("txMbps", r.txMbps ?: JSONObject.NULL).put("rxMbps", r.rxMbps ?: JSONObject.NULL)
-                .put("satisfacao", r.satisfacao ?: JSONObject.NULL).put("rede", r.rede ?: JSONObject.NULL))
-        }
-        w.falhaApiAntiga?.let { o.put("falhaApiAntiga", it) }
-        return json(200, o)
-    }
 
-    private fun estadoReconectar(): JSONObject = JSONObject()
-        .put("estado", UnifiCliente.estadoReconectar.name.lowercase())
-        .put("detalhe", UnifiCliente.detalheReconectar ?: JSONObject.NULL)
 
-    /** Só ABRE a confirmação na TV: quem decide é quem está com o controle (ConfirmarRoteadorActivity). */
-    private fun roteadorReconectar(ip: String): Resposta {
-        UnifiCliente.pedirReconectar(app)?.let { return erro(409, it) }
-        PainelArmazem.registrar(app, ip, "roteador: reconectar a TV", "esperando OK na TV")
-        return json(200, estadoReconectar())
-    }
 
-    private fun roteadorEsquecer(ip: String): Resposta {
-        UnifiArmazem.esquecer(app)
-        certificadoPendente = null
-        UnifiCliente.limparCache()
-        PainelArmazem.registrar(app, ip, "roteador: esquecer", "ok")
-        return json(200, roteadorEstado())
-    }
 
     // ---------------------------------------------------------------- Claude pela internet (MCP + túnel Tailscale)
 
-    private fun mcpEstado(): JSONObject = JSONObject()
-        .put("ligado", McpServidor.ligado(app))
-        .put("tunelConfigurado", TunelTailscale.configurado(app))
-        .put("tunelRodando", TunelTailscale.rodando())
-        .put("temChave", TunelTailscale.temChave(app))
-        .put("endereco", TunelTailscale.nome(app)?.let { "https://$it/mcp" } ?: JSONObject.NULL)
-        .put("erro", TunelTailscale.ultimoErro(app) ?: JSONObject.NULL)
-        .put("logins", McpServidor.logins(app))
-        .put("google", LoginGoogle.configurado(app))
-        .put("binario", TunelTailscale.binario(app).exists())
-        .put("conta", TunelTailscale.conta(app) ?: JSONObject.NULL)
-        .put("rede", TunelTailscale.redeLigada(app))
-        .put("atalhos", TunelTailscale.atalhos(app))
-        .put("passo", ConectarClaudeActivity.Passo.agora(app).let {
-            JSONObject().put("id", it.id).put("titulo", it.titulo).put("texto", it.texto).put("qr", it.qr ?: JSONObject.NULL)
-        })
 
-    /** Ligar/desligar, colar a chave do Tailscale (PIN de novo), revogar logins, esquecer o Tailscale (PIN de novo). */
-    private fun mcpConfig(req: Requisicao, token: String?, ip: String): Resposta {
-        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
-        // Abrir a TV para fora (MCP na internet, painel na rede Tailscale, atalhos para aparelhos da casa) pede o PIN de
-        // novo, como instalar e desinstalar: um cookie roubado na Wi-Fi (o painel é HTTP) não pode publicar a TV
-        // (revisão 09/11/2026). Desligar e revogar continuam sem PIN: fechar nunca deve ser difícil.
-        val abre = o.optBoolean("ligado") || o.optBoolean("rede") || o.optString("atalhos").isNotBlank()
-        if (abre && !sessoes.elevada(token)) return precisaPin()
-        // Confirmações primeiro, antes de mudar qualquer coisa: abrir a TV para fora de casa.
-        if (o.optBoolean("ligado") && !McpServidor.ligado(app))
-            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, txt(R.string.cf_ligar_mcp), ip)?.let { return it }
-        if (o.optBoolean("rede") && !TunelTailscale.redeLigada(app))
-            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, txt(R.string.cf_ligar_tailscale), ip)?.let { return it }
-        val mudou = ArrayList<String>()
-        if (o.has("chave")) {
-            if (!sessoes.elevada(token)) return precisaPin()
-            val c = o.optString("chave").trim()
-            if (!TunelTailscale.chaveValida(c)) return erro(400, "chave inválida: cole a chave inteira, que começa com tskey-")
-            if (!TunelTailscale.definirChave(app, c)) return erro(500, "não consegui guardar a chave cifrada")
-            mudou.add("chave do Tailscale")
-        }
-        if (o.optBoolean("esquecer")) {
-            if (!sessoes.elevada(token)) return precisaPin()
-            TunelTailscale.esquecer(app); mudou.add("esquecer Tailscale")
-        }
-        if (o.has("google_id")) {
-            if (!sessoes.elevada(token)) return precisaPin()
-            val id = o.optString("google_id").trim(); val seg = o.optString("google_segredo").trim()
-            if (id.isEmpty()) { LoginGoogle.definir(app, null, null); mudou.add("login Google desligado") }
-            else {
-                if (!LoginGoogle.idValido(id)) return erro(400, "id inválido: termina em .apps.googleusercontent.com")
-                if (!LoginGoogle.segredoValido(seg)) return erro(400, "segredo do cliente inválido")
-                LoginGoogle.definir(app, id, seg); McpServidor.revogar(app); mudou.add("login Google ligado")
-            }
-        }
-        if (o.optBoolean("revogar")) { McpServidor.revogar(app); mudou.add("revogar logins") }
-        if (o.has("atalhos")) {
-            if (!TunelTailscale.definirAtalhos(app, o.optString("atalhos")))
-                return erro(400, "atalhos inválidos: use aparelho:porta separados por vírgula (máximo ${AtalhosTunel.MAXIMO}), ex.: nas:8096")
-            mudou.add("atalhos")
-        }
-        if (o.has("rede")) { TunelTailscale.definirRede(app, o.optBoolean("rede")); mudou.add("rede=${o.optBoolean("rede")}") }
-        if (o.has("ligado")) {
-            if (o.optBoolean("ligado") && !PainelArmazem.temPin(app)) return erro(400, "defina o PIN antes")
-            McpServidor.definirLigado(app, o.optBoolean("ligado")); mudou.add("ligado=${o.optBoolean("ligado")}")
-        } else if (mudou.isNotEmpty()) TunelTailscale.ajustar(app)
-        if (mudou.isNotEmpty()) PainelArmazem.registrar(app, ip, "mcp: ${mudou.joinToString(", ")}", "ok")
-        return json(200, mcpEstado())
-    }
 }
