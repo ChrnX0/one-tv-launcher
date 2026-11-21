@@ -133,6 +133,7 @@ object Podcasts {
 
     fun feedParaJson(f: PodcastFeed.Feed): String = JSONObject().put("titulo", f.titulo).put("autor", f.autor).put("descricao", f.descricao)
         .put("capa", f.capa).put("link", f.link).put("idioma", f.idioma).put("explicito", f.explicito)
+        .put("categorias", JSONArray(f.categorias))
         .put("episodios", JSONArray().apply {
             f.episodios.forEach { e -> put(JSONObject().put("guid", e.guid).put("titulo", e.titulo).put("resumo", e.resumo)
                 .put("data", e.dataMs).put("dur", e.duracaoS).put("url", e.url).put("tipo", e.tipo).put("tamanho", e.tamanho)
@@ -157,8 +158,12 @@ object Podcasts {
                 e.optString("capitulos"))
         }
         PodcastFeed.Feed(o.optString("titulo"), o.optString("autor"), o.optString("descricao"), o.optString("capa"), o.optString("link"),
-            o.optString("idioma"), o.optBoolean("explicito"), eps)
+            o.optString("idioma"), o.optBoolean("explicito"), eps,
+            o.optJSONArray("categorias")?.let { c -> (0 until c.length()).map { c.optString(it) }.filter { it.isNotEmpty() } }.orEmpty())
     }.getOrNull()
+
+    /** Cópia gravada antes dos assuntos (21/11/2026): relê o feed inteiro uma vez (sem etag) para ganhar os assuntos. */
+    private fun semAssuntos(ctx: Context, url: String) = runCatching { !arqFeed(ctx, url).readText().contains("\"categorias\"") }.getOrDefault(false)
 
     // ---------------------------------------------------------------- Android: arquivos
 
@@ -336,8 +341,9 @@ object Podcasts {
         var mudaram = 0
         val agora = System.currentTimeMillis()
         for (a in assinaturas(ctx)) {
-            if (agora - a.verificadoEm < intervaloMs && arqFeed(ctx, a.url).exists()) continue
-            val r = baixar(a.url, if (arqFeed(ctx, a.url).exists()) a.etag else "", if (arqFeed(ctx, a.url).exists()) a.modificado else "")
+            if (agora - a.verificadoEm < intervaloMs && arqFeed(ctx, a.url).exists() && !semAssuntos(ctx, a.url)) continue
+            val condicional = arqFeed(ctx, a.url).exists() && !semAssuntos(ctx, a.url)
+            val r = baixar(a.url, if (condicional) a.etag else "", if (condicional) a.modificado else "")
             when (r) {
                 is Leitura.Nova -> comTrava(ctx) {
                     // Removido enquanto baixava (painel, outra tela): não recria a cópia órfã.

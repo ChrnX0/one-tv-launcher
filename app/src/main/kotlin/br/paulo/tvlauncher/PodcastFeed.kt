@@ -44,7 +44,9 @@ object PodcastFeed {
     }
 
     data class Feed(val titulo: String, val autor: String, val descricao: String, val capa: String, val link: String,
-                    val idioma: String, val explicito: Boolean, val episodios: List<Episodio>)
+                    val idioma: String, val explicito: Boolean, val episodios: List<Episodio>,
+                    /** Os assuntos que o próprio podcast declara (itunes:category, em inglês: "News", "Comedy"...); [PodcastAssuntos]. */
+                    val categorias: List<String> = emptyList())
 
     /** Um podcast da lista OPML: o endereço do feed e o nome que o app do celular dava a ele. */
     data class ItemOpml(val url: String, val titulo: String)
@@ -60,6 +62,7 @@ object PodcastFeed {
         try { p.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false) } catch (_: Exception) {}
         var titulo = ""; var autor = ""; var descricao = ""; var capa = ""; var link = ""; var idioma = ""; var explicito = false
         var temCanal = false
+        val categorias = LinkedHashSet<String>()
         val episodios = ArrayList<Episodio>()
         val vistos = HashSet<String>()
         var e: MutableMap<String, String>? = null
@@ -81,6 +84,9 @@ object PodcastFeed {
                                 e["tamanho"] = p.getAttributeValue(null, "length").orEmpty().trim()
                             }
                         }
+                        // Assunto do canal: <itunes:category text="Society &amp; Culture"><itunes:category text="Documentary"/>
+                        n == "itunes:category" && e == null -> p.getAttributeValue(null, "text")?.trim()?.takeIf { it.isNotEmpty() && it.length <= 60 }
+                            ?.let { if (categorias.size < 8) categorias += it }
                         n == "itunes:image" -> {
                             val h = p.getAttributeValue(null, "href").orEmpty().trim()
                             if (e != null) { if (e["capa"].isNullOrEmpty()) e["capa"] = h } else if (capa.isEmpty()) capa = h
@@ -141,7 +147,7 @@ object PodcastFeed {
         if (!temCanal || episodios.isEmpty()) return null
         return Feed(limpar(titulo, 200), limpar(autor, 200), limpar(descricao, MAX_TEXTO), capa.takeIf { urlValida(it) }.orEmpty(),
             link.trim().takeIf { urlValida(it) }.orEmpty(), idioma.trim().take(10), explicito,
-            episodios.sortedByDescending { it.dataMs }.take(MAX_EPISODIOS))
+            episodios.sortedByDescending { it.dataMs }.take(MAX_EPISODIOS), categorias.toList())
     }
 
     private fun juntar(a: String, b: String) = if (a.length >= MAX_ACUMULADO) a else (a + b).take(MAX_ACUMULADO)

@@ -23,14 +23,17 @@ object PodcastBusca {
     const val SERVIDOR = "https://api.sofaly.tv"
     const val MAX = 30
 
-    data class Resultado(val url: String, val titulo: String, val autor: String, val capa: String, val explicito: Boolean)
+    data class Resultado(val url: String, val titulo: String, val autor: String, val capa: String, val explicito: Boolean,
+                         /** Nomes de categoria do Podcast Index ("News", "Comedy"): [PodcastAssuntos]. */
+                         val categorias: List<String> = emptyList())
 
     fun disponivel(servidor: String = SERVIDOR) = servidor.startsWith("https://")
 
     private fun q(s: String) = URLEncoder.encode(s, "UTF-8")
     fun urlBuscar(servidor: String, termo: String, idioma: String) =
         "${servidor.trimEnd('/')}/v1/podcasts/search?q=${q(termo.trim().take(100))}&lang=${q(idioma)}&max=$MAX"
-    fun urlEmAlta(servidor: String, idioma: String) = "${servidor.trimEnd('/')}/v1/podcasts/trending?lang=${q(idioma)}&max=$MAX"
+    fun urlEmAlta(servidor: String, idioma: String, assunto: PodcastAssuntos.Assunto? = null) =
+        "${servidor.trimEnd('/')}/v1/podcasts/trending?lang=${q(idioma)}&max=$MAX" + (assunto?.let { "&cat=${q(PodcastAssuntos.paraServidor(it))}" } ?: "")
 
     /** Lê a resposta; ignora feed sem endereço http(s) ou sem nome; sem repetir. */
     fun ler(json: String?): List<Resultado> = runCatching {
@@ -43,7 +46,8 @@ object PodcastBusca {
             else Resultado(url, t, PodcastFeed.limpar(o.optString("author"), 200), o.optString("image").takeIf { PodcastFeed.urlValida(it) }.orEmpty(),
                 // Sem o campo (o "Em alta" do Podcast Index não informa): conta como explícito. Só pesa com o modo
                 // protegido ligado, que antes deixava passar tudo do Em alta (debug 20/11/2026).
-                if (o.has("explicit") && !o.isNull("explicit")) o.optBoolean("explicit") else true)
+                if (o.has("explicit") && !o.isNull("explicit")) o.optBoolean("explicit") else true,
+                o.optJSONArray("categories")?.let { c -> (0 until c.length()).map { c.optString(it).trim() }.filter { it.isNotEmpty() } }.orEmpty())
         }.distinctBy { it.url }.take(MAX)
     }.getOrDefault(emptyList())
 
@@ -51,7 +55,8 @@ object PodcastBusca {
     fun buscar(termo: String, idioma: String): List<Resultado> =
         if (!disponivel() || termo.isBlank()) emptyList() else ler(get(urlBuscar(SERVIDOR, termo, idioma)))
 
-    fun emAlta(idioma: String): List<Resultado> = if (!disponivel()) emptyList() else ler(get(urlEmAlta(SERVIDOR, idioma)))
+    fun emAlta(idioma: String, assunto: PodcastAssuntos.Assunto? = null): List<Resultado> =
+        if (!disponivel()) emptyList() else ler(get(urlEmAlta(SERVIDOR, idioma, assunto)))
 
     private fun get(u: String): String? = runCatching {
         val c = URL(u).openConnection() as HttpURLConnection

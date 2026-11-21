@@ -22,6 +22,8 @@ class PodcastFeedTest {
   <description><![CDATA[<p>O jornal da manhã &amp; mais.</p>]]></description>
   <itunes:image href="https://exemplo.org/capa.jpg"/>
   <itunes:explicit>false</itunes:explicit>
+  <itunes:category text="News"><itunes:category text="Daily News"/></itunes:category>
+  <itunes:category text="Society &amp; Culture"/>
   <item>
     <title>Episódio velho</title>
     <guid>ep-1</guid>
@@ -237,5 +239,11 @@ class PodcastFeedTest {
         assertEquals("abc…", PodcastFeed.limpar("abcdefgh", 4))
         assertEquals("é ✓", PodcastFeed.limpar("&#233; &#10003;", 10))
         assertNotNull(PodcastFeed.limpar("", 10))
+    }
+
+    @Test fun assuntosDoCanal() {
+        val f = PodcastFeed.ler(parser(feed))
+        // Do canal, na ordem do feed, com o subassunto junto; os do episódio não entram.
+        assertEquals(listOf("News", "Daily News", "Society & Culture"), f!!.categorias)
     }
 }
