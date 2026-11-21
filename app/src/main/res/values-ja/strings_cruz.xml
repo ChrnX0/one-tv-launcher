@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">画面がゆっくり暗くなりテレビが消えます</string>
     <string name="cruz_desliga_as">%1$s にオフ</string>
     <string name="cruz_dormir_cancelar">OKで取り消し</string>
-    <string name="cruz_linha">ライン</string>
+    <string name="cruz_linha">エッセンシャル</string>
     <string name="cruz_mover">移動先…</string>
     <string name="cruz_mover_titulo">%1$s の移動先</string>
     <string name="cruz_central">ゲームハブ</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">再生中</string>
     <string name="cruz_canto_parou">停止位置</string>
     <string name="cruz_canto_conectado">接続中</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">ヴィンテージ</string>
+    <string name="cruz_joia">ジュエル</string>
+    <string name="cruz_foto">フォトリアル</string>
+    <string name="cruz_vintage2">ヴィンテージ 2.0</string>
+    <string name="cruz_icone_seguir">セットに合わせる（%1$s）</string>
+    <string name="cruz_icone_de">アイコン：%1$s</string>
+    <string name="cruz_icone_categoria">カテゴリ全体：%1$s</string>
 </resources>

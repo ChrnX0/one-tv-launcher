@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">화면이 천천히 어두워지고 TV가 꺼집니다</string>
     <string name="cruz_desliga_as">%1$s에 꺼짐</string>
     <string name="cruz_dormir_cancelar">OK를 눌러 취소</string>
-    <string name="cruz_linha">라인</string>
+    <string name="cruz_linha">에센셜</string>
     <string name="cruz_mover">이동…</string>
     <string name="cruz_mover_titulo">%1$s 이동</string>
     <string name="cruz_central">게임 허브</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">재생 중</string>
     <string name="cruz_canto_parou">멈춘 곳</string>
     <string name="cruz_canto_conectado">연결됨</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">빈티지</string>
+    <string name="cruz_joia">주얼</string>
+    <string name="cruz_foto">포토리얼</string>
+    <string name="cruz_vintage2">빈티지 2.0</string>
+    <string name="cruz_icone_seguir">세트 따르기(%1$s)</string>
+    <string name="cruz_icone_de">아이콘: %1$s</string>
+    <string name="cruz_icone_categoria">카테고리 전체: %1$s</string>
 </resources>

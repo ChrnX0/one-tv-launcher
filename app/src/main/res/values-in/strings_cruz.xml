@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">Layar meredup perlahan dan TV mati</string>
     <string name="cruz_desliga_as">Mati pukul %1$s</string>
     <string name="cruz_dormir_cancelar">OK untuk membatalkan</string>
-    <string name="cruz_linha">Garis</string>
+    <string name="cruz_linha">Esensial</string>
     <string name="cruz_mover">Pindahkan ke…</string>
     <string name="cruz_mover_titulo">Pindahkan %1$s ke</string>
     <string name="cruz_central">Pusat game</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">Diputar</string>
     <string name="cruz_canto_parou">Berhenti di</string>
     <string name="cruz_canto_conectado">Terhubung</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Vintage</string>
+    <string name="cruz_joia">Permata</string>
+    <string name="cruz_foto">Fotorealistis</string>
+    <string name="cruz_vintage2">Vintage 2.0</string>
+    <string name="cruz_icone_seguir">Ikuti set (%1$s)</string>
+    <string name="cruz_icone_de">Ikon: %1$s</string>
+    <string name="cruz_icone_categoria">Seluruh kategori: %1$s</string>
 </resources>

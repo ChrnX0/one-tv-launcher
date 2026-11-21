@@ -406,7 +406,7 @@ class MainActivity : Activity() {
 
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
     private fun assinaturaDoLayout() = "${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
-        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}"
+        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}"
 
     override fun onResume() {
         super.onResume()
@@ -1772,7 +1772,42 @@ class MainActivity : Activity() {
     /** Cópia do ícone de um app para a cruz: um Drawable não pode estar em duas views (o card da grade usa o original). */
     private val iconesAppCruz = java.util.WeakHashMap<Item, android.graphics.drawable.Drawable>()
 
-    internal fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, estiloCruz) }
+    /** Os tipos com desenho trocado à mão (Trocar ícone): vencem o conjunto de Aparência. */
+    private val iconesTrocados by lazy { LayoutHome.iconesTrocados(this) }
+    internal fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, iconesTrocados[tipo] ?: estiloCruz) }
+
+    /**
+     * "Trocar ícone" de um item do Sofaly na cruz (21/11/2026): primeiro o quê (o item ou a categoria dele, quando são
+     * desenhos diferentes), depois o desenho, com a prévia de cada conjunto na própria linha. "Seguir o conjunto" apaga a
+     * troca. A HOME se refaz para todos os lugares com esse tipo mudarem juntos.
+     */
+    internal fun trocarIconeSofaly(tipo: IconeCruz.Tipo, nome: String, tipoCat: IconeCruz.Tipo?, nomeCat: String?) {
+        fun escolherDesenho(t: IconeCruz.Tipo, rotulo: String) {
+            val lado = (40 * resources.displayMetrics.density).toInt()
+            fun comDesenho(e: IconeCruz.Estilo, texto: String): CharSequence {
+                val d = IconeCruz(t, e).apply { setBounds(0, 0, lado * 6 / 5, lado) }
+                return android.text.SpannableString("\u00A0  $texto").apply {
+                    setSpan(android.text.style.ImageSpan(d, android.text.style.DynamicDrawableSpan.ALIGN_BOTTOM), 0, 1, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+            val estilos = IconeCruz.Estilo.entries
+            val conjunto = LayoutHome.iconesCruz(this)
+            val nomes = listOf(comDesenho(conjunto, getString(R.string.cruz_icone_seguir, getString(LayoutHome.nomeIcones(conjunto))))) +
+                estilos.map { comDesenho(it, getString(LayoutHome.nomeIcones(it))) }
+            val atual = LayoutHome.iconeTrocado(this, t)
+            menuAberto = Estilo.lista(this, getString(R.string.cruz_icone_de, rotulo), nomes,
+                marcadas = listOf(if (atual == null) 0 else atual.ordinal + 1)) { i ->
+                val novo = if (i == 0) null else estilos[i - 1]
+                if (novo == atual) return@lista
+                LayoutHome.trocarIcone(this, t, novo)
+                recreate()
+            }
+        }
+        if (tipoCat == null || nomeCat == null || tipoCat == tipo) { escolherDesenho(tipo, nome); return }
+        menuAberto = Estilo.lista(this, getString(R.string.wp_trocar_icone), listOf(nome, getString(R.string.cruz_icone_categoria, nomeCat))) { i ->
+            if (i == 0) escolherDesenho(tipo, nome) else escolherDesenho(tipoCat, nomeCat)
+        }
+    }
     internal fun icApp(item: Item) = iconesAppCruz.getOrPut(item) {
         iconeCruzApp[item.pacote]?.takeIf { it.first == estiloAppCruz }?.second?.let { android.graphics.drawable.BitmapDrawable(resources, it) }
             ?: item.icone.constantState?.newDrawable(resources) ?: item.icone

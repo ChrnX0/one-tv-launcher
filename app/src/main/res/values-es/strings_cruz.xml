@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">La pantalla se oscurece despacio y la TV se apaga</string>
     <string name="cruz_desliga_as">Se apaga a las %1$s</string>
     <string name="cruz_dormir_cancelar">OK para cancelar</string>
-    <string name="cruz_linha">Línea</string>
+    <string name="cruz_linha">Esencial</string>
     <string name="cruz_mover">Mover a…</string>
     <string name="cruz_mover_titulo">Mover %1$s a</string>
     <string name="cruz_central">Centro de juegos</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">Sonando</string>
     <string name="cruz_canto_parou">Paró en</string>
     <string name="cruz_canto_conectado">Conectado</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Vintage</string>
+    <string name="cruz_joia">Joya</string>
+    <string name="cruz_foto">Fotorrealista</string>
+    <string name="cruz_vintage2">Vintage 2.0</string>
+    <string name="cruz_icone_seguir">Seguir el conjunto (%1$s)</string>
+    <string name="cruz_icone_de">Icono: %1$s</string>
+    <string name="cruz_icone_categoria">Toda la categoría: %1$s</string>
 </resources>

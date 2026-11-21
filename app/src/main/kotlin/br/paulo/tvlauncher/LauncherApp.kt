@@ -40,6 +40,7 @@ class LauncherApp : Application() {
         ObserverTv.publish(ObserverCore.Signal.MEMORY_PRESSURE, level.toLong())   // o Observador anota o aperto (só no processo principal)
         if (Memoria.soltarCaches(level)) {
             PlayerLogos.soltarMemoria()
+            br.paulo.tvlauncher.home.IconSetArt.soltar()   // arte dos conjuntos de ícones: volta do disco no próximo desenho
             android.util.Log.i("TvLauncher.Memoria", "onTrimMemory($level): caches soltos")
         }
     }
