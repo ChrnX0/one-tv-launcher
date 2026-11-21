@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { authHeaders, cleanLang, cleanMax, cleanQuery, upstreamUrl, shapeFeeds, handlePodcasts, PI_BASE } from '../src/podcasts.js';
+import { authHeaders, cleanCats, cleanLang, cleanMax, cleanQuery, upstreamUrl, shapeFeeds, handlePodcasts, PI_BASE } from '../src/podcasts.js';
 
 test('assinatura do Podcast Index = sha1(chave + segredo + hora)', async () => {
   const h = await authHeaders('KEY', 'SECRET', 1763500000);
@@ -30,6 +30,7 @@ test('endereços no Podcast Index', () => {
   assert.equal(upstreamUrl('trending', p('lang=pt-br&max=10')), `${PI_BASE}/podcasts/trending?max=10&lang=pt%2Cpt-br`);
   assert.equal(upstreamUrl('trending', p('lang=pt')), `${PI_BASE}/podcasts/trending?max=30&lang=pt`);
   assert.equal(upstreamUrl('trending', p('')), `${PI_BASE}/podcasts/trending?max=30`);
+  assert.equal(upstreamUrl('trending', p('lang=pt&cat=News,Society %26 Culture')), `${PI_BASE}/podcasts/trending?max=30&lang=pt&cat=News%2CSociety%20%26%20Culture`);
   assert.equal(upstreamUrl('outro', p('q=abc')), null);
 });
 
@@ -44,7 +45,7 @@ test('formato da resposta: só feed bom, sem repetir, idioma do pedido primeiro'
   ] };
   const r = shapeFeeds(data, 'pt', 30);
   assert.deepEqual(r.feeds.map((f) => f.title), ['Português', 'English']);
-  assert.deepEqual(r.feeds[0], { url: 'https://a/pt', title: 'Português', author: 'B', image: 'https://a/pt.jpg', explicit: true, language: 'pt-br' });
+  assert.deepEqual(r.feeds[0], { url: 'https://a/pt', title: 'Português', author: 'B', image: 'https://a/pt.jpg', explicit: true, language: 'pt-br', categories: [] });
   assert.equal(shapeFeeds(data, '', 1).feeds.length, 1);
   assert.deepEqual(shapeFeeds(null).feeds, []);
 });
@@ -106,4 +107,11 @@ test('limite por IP e global devolvem 429 sem chamar o Podcast Index', async () 
 test('feed sem o campo explicit volta explicit null (desconhecido)', () => {
   const r = shapeFeeds({ feeds: [{ url: 'https://a/x', title: 'X' }] });
   assert.equal(r.feeds[0].explicit, null);
+});
+
+test('assuntos: limpa o cat e devolve as categorias de cada feed', () => {
+  assert.equal(cleanCats(' News , Comedy,x,<script>,Society   & Culture,A,B,C,D'), 'News,Comedy,Society & Culture');
+  assert.equal(cleanCats(null), '');
+  const r = shapeFeeds({ feeds: [{ url: 'https://a/x', title: 'X', categories: { 55: 'News', 59: 'Politics' } }] });
+  assert.deepEqual(r.feeds[0].categories, ['News', 'Politics']);
 });
