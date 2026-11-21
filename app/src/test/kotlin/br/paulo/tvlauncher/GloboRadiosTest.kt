@@ -23,7 +23,7 @@ class GloboRadiosTest {
         val l = listOf(r("sp", "BR", -23.5, -46.6), r("rio", "BR", -22.9, -43.2), r("lis", "PT", 38.7, -9.1))
         assertEquals("rio", GloboLogica.maisPerto(l, -22.0, -43.0)?.id)
         assertNull(GloboLogica.maisPerto(l, -30.0, -20.0))   // no meio do Atlântico
-        assertEquals(-23.5 to -46.6, GloboLogica.centroDoPais(l, "br").let { it.first to it.second })
+        assertEquals(-22.9 to -43.2, GloboLogica.centroDoPais(l, "br"))   // a mediana (2 rádios: a de cima)
         assertEquals(0.0 to 0.0, GloboLogica.centroDoPais(l, "JP"))
         assertEquals(-170.0, GloboLogica.longitude(190.0), 1e-9)
     }
