@@ -121,7 +121,11 @@ class PrevisaoActivity : Activity() {
             addView(pontos, FrameLayout.LayoutParams(dp(24), -2, Gravity.END or Gravity.CENTER_VERTICAL).apply { marginEnd = dp(12) })
         }
         setContentView(raiz)
-        palco.addView(texto(18f, textoSuave).apply { text = getString(R.string.pv_carregando); setPaddingRelative(dp(Grade.MARGEM), dp(40), 0, 0) })
+        // "Carregando" fica com o foco (sem destaque): na TV não existe tela sem foco, senão o controle "não anda" (teste de telas).
+        val carregando = texto(18f, textoSuave).apply { text = getString(R.string.pv_carregando); setPaddingRelative(dp(Grade.MARGEM), dp(40), 0, 0)
+            isFocusable = true }
+        palco.addView(carregando)
+        if (!carregando.requestFocus()) carregando.post { carregando.requestFocus() }
 
         // Aberta pelo atalho "Boletim do Tempo" (action MAIN) ou com EXTRA_FALAR: prepara a voz enquanto busca os dados.
         // "Bom dia": o despertador (Parar) ou o atalho de voz "Bom dia" (alias .BomDia, ver o manifesto).
@@ -263,7 +267,7 @@ class PrevisaoActivity : Activity() {
             val tentar = Estilo.botao(this, getString(R.string.tentar_de_novo)).apply { setOnClickListener { recreate() } }
             palco.addView(Estilo.estadoVazio(this, null, getString(R.string.pv_sem_titulo), getString(R.string.pv_sem), tentar),
                 FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_VERTICAL))
-            tentar.requestFocus()
+            if (!tentar.requestFocus()) tentar.post { tentar.requestFocus() }   // na 1ª passada o botão pode ainda não estar medido
             // Sem rede o "Bom dia" ficava mudo: a saudação e a agenda não dependem da previsão, então fala o que tem.
             if (voz != null) falar(FalaBoletim.frase(bomDia, saudacao(), null, agendaHoje, getString(R.string.pv_sem)))
             return
@@ -344,11 +348,11 @@ class PrevisaoActivity : Activity() {
                 contentDescription = "$hora, $tempH°, ${d.hChuva[i]}%"
                 setOnFocusChangeListener { v, f -> v.background = itemFoco(f) }
             }
-            item.addView(texto(17f, textoSuave).apply { text = hora; gravity = Gravity.CENTER; maxLines = 1 })
+            item.addView(texto(18f, textoSuave).apply { text = hora; gravity = Gravity.CENTER; maxLines = 1 })
             item.addView(IconesClima.imagem(this, if (i == i0) iconeAgora else IconesClima.chave(d.hCodigo[i], eDiaNaHora(i), false)),
                 LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2); bottomMargin = dp(2) })
             item.addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$tempH°"; gravity = Gravity.CENTER })
-            item.addView(texto(17f, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
+            item.addView(texto(18f, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
             faixa.addView(item, LinearLayout.LayoutParams(dp(78), ViewGroup.LayoutParams.WRAP_CONTENT))
         }
         horas.addView(android.widget.HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(faixa) })
@@ -367,12 +371,12 @@ class PrevisaoActivity : Activity() {
             descricao.append("$nome $mx° $mn° ${d.dChuva[i]}%. ")
             linhaDias.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
-                addView(texto(17f, if (i == 0) Estilo.TEXTO else textoSuave, fonteMedia).apply { text = nome; maxLines = 1; gravity = Gravity.CENTER })
+                addView(texto(18f, if (i == 0) Estilo.TEXTO else textoSuave, fonteMedia).apply { text = nome; maxLines = 1; gravity = Gravity.CENTER })
                 addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.chave(d.dCodigo[i], true, false)),
                     LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2) })
                 addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$mx°"; gravity = Gravity.CENTER })
                 addView(texto(18f, textoSuave).apply { text = "$mn°"; gravity = Gravity.CENTER })
-                addView(texto(17f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.CENTER })
+                addView(texto(18f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.CENTER })
             }, LinearLayout.LayoutParams(0, -2, 1f))
         }
         dias.contentDescription = getString(R.string.pv_7d) + ". " + descricao
@@ -451,7 +455,7 @@ class PrevisaoActivity : Activity() {
             addView(LinearLayout(this@PrevisaoActivity).apply {
                 orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(10), 0, 0, 0)
                 addView(texto(19f, Estilo.TEXTO, fonteMedia).apply { text = partes[0].substringAfter("  ").trim() })
-                addView(texto(17f, textoSuave).apply { text = "${partes.getOrElse(1) { "" }} · ${partes.getOrElse(2) { "" }}" })
+                addView(texto(18f, textoSuave).apply { text = "${partes.getOrElse(1) { "" }} · ${partes.getOrElse(2) { "" }}" })
             })
         })
         trio.addView(ar, LinearLayout.LayoutParams(0, -1, 1f).apply { marginEnd = dp(Grade.VAO / 2) })
