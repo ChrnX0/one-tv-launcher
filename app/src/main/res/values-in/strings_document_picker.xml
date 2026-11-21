@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">Pilih folder</string>
+    <string name="dp_titulo_arquivo">Pilih file</string>
+    <string name="dp_titulo_salvar">Pilih tempat menyimpan</string>
+    <string name="dp_para">Untuk %1$s</string>
+    <string name="dp_usar_pasta">Gunakan folder ini</string>
+    <string name="dp_salvar_aqui">Simpan di sini</string>
+    <string name="dp_memoria">Penyimpanan TV</string>
+    <string name="dp_rede">Folder jaringan</string>
+    <string name="dp_livre">%1$s kosong</string>
+    <string name="dp_vazia">Tidak ada yang bisa dipilih di sini</string>
+    <string name="dp_abrindo">Membuka…</string>
+    <string name="dp_erro">Tempat ini tidak dapat dibuka. Pastikan terhubung lalu coba lagi.</string>
+    <string name="dp_arquivos">File di folder ini: %1$d</string>
+    <string name="dp_dicas">OK: buka · KEMBALI: kembali</string>
+    <string name="dp_diario">%1$s menerima %2$s dari pemilih</string>
+    <string name="dp_sem_nome">tanpa nama</string>
+</resources>
