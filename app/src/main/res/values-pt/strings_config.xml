@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV e filmes</string>
     <string name="cl_aba_conta_det">Conta de IPTV, serviços de filmes e séries, áudio e legenda</string>
     <string name="cl_aba_parental">Controle parental</string>
-    <string name="cl_aba_parental_det">Bloqueie canais com o PIN: eles somem da lista e não tocam</string>
-    <string name="cl_aba_aparencia">Aparência</string>
-    <string name="cl_aba_aparencia_det">Tema, pilhas de apps, clima e avisos na tela</string>
     <string name="cl_aba_energia">Tela e energia</string>
     <string name="cl_aba_energia_det">Protetor de tela e desligar sozinha</string>
-    <string name="cl_aba_visitas">Visitas e rotinas</string>
-    <string name="cl_aba_visitas_det">Modo visita e ações por horário</string>
     <string name="cl_aba_rede">Rede</string>
-    <string name="cl_aba_rede_det">DNS, VPN e velocidade da internet</string>
     <string name="cl_aba_remoto">Acesso remoto</string>
     <string name="cl_aba_remoto_det">Painel no navegador, PIN e o Claude pela internet</string>
     <string name="cl_aba_sistema">Sistema</string>
-    <string name="cl_aba_sistema_det">Diagnóstico, atualização, apps e permissões</string>
     <string name="cl_dica_aba">escolher a aba</string>
     <string name="cl_dica_entrar">entrar nas opções</string>
     <string name="cl_dica_sair">sair</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Atualização automática do launcher</string>
     <string name="cl_acao_atualizacao_det">Instala a versão nova sozinha com a tela apagada. Bloqueado = só avisa.</string>
     <string name="cl_tema">Tema</string>
-    <string name="cl_pilhas_det">Junta os apps soltos por categoria; as suas pilhas continuam</string>
     <string name="cl_clima">Clima</string>
     <string name="cl_end_nenhum">nenhum · a TV se acha pelo Wi-Fi; o endereço vale quando o Wi-Fi não acha</string>
     <string name="cl_end_clima">Endereço do clima</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Cartões</string>
     <string name="cl_widget_solto">Sem caixa</string>
     <string name="cl_linha_baixo">Widgets do protetor</string>
-    <string name="cl_linha_baixo_det">Faixa de vidro, cartões ou sem caixa · OK muda</string>
     <string name="cl_desligar">Desligar a TV sem uso</string>
     <string name="cl_desligar_det">Vídeo tocando conta como uso; avisa 60 s antes · OK muda</string>
     <string name="cl_visita_det">Esconde o perfil, a agenda e os apps marcados abaixo</string>
     <string name="cl_apps_visita">Apps escondidos no modo visita</string>
     <string name="cl_carregando_apps">Carregando os apps…</string>
-    <string name="cl_some_visita">some no modo visita quando ligado</string>
     <string name="cl_vpn_nao_fixa">o launcher não fixa VPN</string>
     <string name="cl_vpn_adguard">app AdGuard VPN, sempre ativa · OK abre o app</string>
     <string name="cl_painel_navegador">Painel no navegador</string>

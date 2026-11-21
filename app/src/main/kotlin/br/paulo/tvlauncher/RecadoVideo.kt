@@ -7,10 +7,16 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.privilege.SaudeAcesso
+import br.paulo.tvlauncher.weather.AvisoRegras
 import java.io.File
 import java.io.InputStream
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Recado em vídeo (degrau 4, 17/11/2026): a família conectada (FamiliaConectada.kt) ganha "Gravar vídeo" na página do

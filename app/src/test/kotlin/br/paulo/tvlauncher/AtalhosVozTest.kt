@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.input.AtalhosVoz
+import br.paulo.tvlauncher.player.item
+import java.io.File
+import javax.xml.parsers.DocumentBuilderFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * Atalhos de voz (ideia 8): cada activity-alias que aponta para a AtalhoVozActivity precisa de destino na tabela

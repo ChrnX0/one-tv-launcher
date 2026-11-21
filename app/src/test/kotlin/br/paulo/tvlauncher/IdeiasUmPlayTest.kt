@@ -1,12 +1,25 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.ContaIptv
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.FichaSerie
+import br.paulo.tvlauncher.player.FonteTv
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.PlayerDados
+import br.paulo.tvlauncher.player.PlayerImagem
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.Series
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.Xtream
+import java.util.Base64
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Base64
-import java.util.TimeZone
 
 /**
  * Ideias vistas no 1 Play (11/11/2026): TV de volta, proporção da imagem, servidor reserva, aviso de vencimento,

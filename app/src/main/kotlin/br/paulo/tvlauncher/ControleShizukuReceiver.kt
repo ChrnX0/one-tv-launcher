@@ -3,6 +3,27 @@ package br.paulo.tvlauncher
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import br.paulo.tvlauncher.alarm.AutoDesligar
+import br.paulo.tvlauncher.family.Diario
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.mcp.PedidoIa
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.panel.PinSeguro
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.privilege.Debloat
+import br.paulo.tvlauncher.privilege.DonoEmprestado
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.ServidorShizuku
+import br.paulo.tvlauncher.privilege.ShizukuEmbutido
+import br.paulo.tvlauncher.settings.ComandosExtras
+import br.paulo.tvlauncher.weather.AvisoChuva
+import br.paulo.tvlauncher.weather.AvisoRegras
+import br.paulo.tvlauncher.weather.LocalClima
 
 /**
  * Comandos do launcher por adb (o nome é histórico: até 12/11/2026 controlava o servidor do Shizuku embutido, que saiu).
@@ -213,13 +234,11 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
             //     -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver      (sem extras: só mostra o estado)
             HOME_TESTE -> if (this is ControleShizukuAdbReceiver) {
                 TesteHome.capa = intent.getBooleanExtra("capa", TesteHome.capa)
-                TesteHome.destaque = intent.getBooleanExtra("destaque", TesteHome.destaque)
-                TesteHome.faixa = intent.getBooleanExtra("faixa", TesteHome.faixa)
                 TesteHome.fundo = intent.getBooleanExtra("fundo", TesteHome.fundo)
                 TesteHome.capaAnima = intent.getBooleanExtra("capaAnima", TesteHome.capaAnima)
                 TesteHome.capaCamada = intent.getBooleanExtra("capaCamada", TesteHome.capaCamada)
                 TesteHome.aplicar?.invoke()
-                resultData = TesteHome.run { "capa=$capa destaque=$destaque faixa=$faixa fundo=$fundo capaAnima=$capaAnima capaCamada=$capaCamada" }
+                resultData = TesteHome.run { "capa=$capa fundo=$fundo capaAnima=$capaAnima capaCamada=$capaCamada" }
             }
             UNIFI -> if (this is ControleShizukuAdbReceiver) {
                 val pendente = goAsync()   // HTTP: fora da thread principal

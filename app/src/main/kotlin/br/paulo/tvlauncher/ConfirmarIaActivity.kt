@@ -2,17 +2,11 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import br.paulo.tvlauncher.mcp.PedidoIa
+import br.paulo.tvlauncher.mcp.PedidoPendente
 
 /**
  * A confirmação NA TV de um pedido de ações do catálogo (ComandosIa; hoje pelo adb, depois pelo MCP). Nada roda sem
@@ -45,8 +39,6 @@ class ConfirmarIaActivity : Activity() {
     /** Pedido vindo da notificação: (frase, origem, JSON das ações). */
     private var tardio: Triple<String, String, String>? = null
     private val ui = Handler(Looper.getMainLooper())
-
-    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
 
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)

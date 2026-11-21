@@ -2,23 +2,25 @@ package br.paulo.tvlauncher.telas
 
 import android.content.Intent
 import android.view.KeyEvent
-import org.robolectric.RuntimeEnvironment
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.OuvirServico
-import br.paulo.tvlauncher.PodcastFeed
 import br.paulo.tvlauncher.PodcastPlayerActivity
-import br.paulo.tvlauncher.Podcasts
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.Posicao
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.util.concurrent.TimeUnit
 
 /**
  * O player de podcast em tela cheia (18/11/2026): abre com um episódio pela metade (a posição guardada já aparece na

@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.listen.PodcastStarter
+import java.io.File
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
-import java.util.Locale
 
 /** Os podcasts que vêm no app ([PodcastStarter]): leitura, idioma, o que mostrar e o que seguir sozinho. */
 class PodcastStarterTest {

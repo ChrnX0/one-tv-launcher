@@ -6,6 +6,16 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.family.Recado
+import br.paulo.tvlauncher.family.RecadoImagem
+import br.paulo.tvlauncher.mcp.McpServidor
+import br.paulo.tvlauncher.mcp.TunelTailscale
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.screensaver.FotosProtetor
+import br.paulo.tvlauncher.weather.AvisoRegras
 import java.security.MessageDigest
 
 /**

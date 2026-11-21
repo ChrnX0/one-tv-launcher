@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugins</string>
-    <string name="plg_cfg_det">Cartões de outros apps na linha Assistir. Cada um precisa do seu OK.</string>
-    <string name="plg_det">Ligue só apps em que você confia. O plugin só manda um texto curto; ele não vê seus apps nem suas contas.</string>
     <string name="plg_nenhum">Nenhum plugin instalado. Plugins são apps de outros desenvolvedores que mostram um cartão aqui, como o placar de um jogo ou um preço.</string>
     <string name="plg_ligado">Ligado</string>
     <string name="plg_desligado">Desligado</string>

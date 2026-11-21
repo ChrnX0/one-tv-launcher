@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverCore.Kind
-import br.paulo.tvlauncher.ObserverCore.Severity
-import br.paulo.tvlauncher.ObserverCore.State
-import br.paulo.tvlauncher.ObserverCore.Step
-import br.paulo.tvlauncher.SofyPolicy.Expression
-import br.paulo.tvlauncher.SofyPolicy.Place
-import br.paulo.tvlauncher.SofyPolicy.Voice
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.ObserverCore.Kind
+import br.paulo.tvlauncher.observer.ObserverCore.Severity
+import br.paulo.tvlauncher.observer.ObserverCore.State
+import br.paulo.tvlauncher.observer.ObserverCore.Step
+import br.paulo.tvlauncher.observer.SofyPolicy
+import br.paulo.tvlauncher.observer.SofyPolicy.Expression
+import br.paulo.tvlauncher.observer.SofyPolicy.Place
+import br.paulo.tvlauncher.observer.SofyPolicy.Voice
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

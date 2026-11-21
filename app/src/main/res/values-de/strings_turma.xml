@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">Auf dem Sofa</string>
-    <string name="jogos_continuar">Weiterspielen</string>
     <string name="jogos_controle_pronto">bereit</string>
     <string name="jogos_controle_carregar">bald laden</string>
     <string name="jogos_parear_um">Controller koppeln</string>
-    <string name="jogos_todos">Alle</string>
     <string name="turma_titulo">Deine Crew</string>
     <string name="turma_online">%1$d online</string>
     <string name="turma_mais_online">+ %1$d online</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Das Server-Widget ist aus</string>
     <string name="turma_desligado_texto">In Discord: Servereinstellungen, Widget, Server-Widget aktivieren einschalten.</string>
     <string name="turma_qr_dica">Richte dein Handy hierauf, um dem Sprachkanal beizutreten. Gesprochen wird übers Handy.</string>
-    <string name="turma_aqui">%1$d aus deiner Crew hier</string>
     <string name="turma_jogando">%1$s spielt %2$s</string>
     <string name="turma_dois">%1$s und %2$s</string>
     <string name="turma_e_mais">%1$s und %2$d weitere</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Speichern</string>
     <string name="turma_config_tirar">Crew entfernen</string>
     <string name="turma_id_invalido">Das ist keine Discord-Server-ID (17 bis 20 Ziffern).</string>
-    <string name="cruz_sofa">Sofa</string>
     <string name="cruz_sofa_sub">Controller und deine Discord-Crew</string>
     <string name="cruz_sofa_voz">%1$d im Sprachkanal · %2$s</string>
 </resources>

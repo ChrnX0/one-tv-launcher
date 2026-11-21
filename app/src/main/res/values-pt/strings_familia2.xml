@@ -19,7 +19,6 @@
     <string name="mu_nao_lido_desc">Recado: %s. OK marca como lido.</string>
     <string name="mu_apagar">Apagar recado: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Sua TV no ano (em dezembro, no protetor)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Cartões de app transparentes fora do foco</string>
     <string name="extras_ENTRADAS_TV">Entradas HDMI na linha de apps (só em TV com entrada)</string>
     <string name="ra_titulo">Sua TV em %d</string>
     <string name="ra_canal">Canal favorito: %1$s (%2$s)</string>
@@ -27,7 +26,6 @@
     <string name="ra_dica_ouvir">ouvir</string>
     <string name="ra_dica_favoritar">favoritar</string>
     <string name="ra_carregando">Carregando as rádios…</string>
-    <string name="ra_subtitulo">Rádios do mundo todo · 1 a 9 no controle tocam as favoritas</string>
     <string name="ra_sem_catalogo">O catálogo de rádios não respondeu. As favoritas continuam funcionando.</string>
     <string name="ra_nada">Nenhuma rádio encontrada.</string>
     <string name="ra_continuar">continuar</string>
@@ -37,10 +35,7 @@
     <string name="ra_buscar">Buscar pelo nome</string>
     <string name="ra_buscar_det">Qualquer rádio do mundo</string>
     <string name="ra_generos">Gêneros</string>
-    <string name="ra_paises">Outro país</string>
-    <string name="ra_paises_det">Os países com mais rádios</string>
     <string name="ra_perto">Perto</string>
-    <string name="ra_mais_ouvidas">Mais ouvidas: %s</string>
     <string name="ra_mundo">Mais ouvidas no mundo</string>
     <string name="ra_resultado">Busca: %s</string>
     <string name="ra_favoritada">Entrou nas favoritas</string>

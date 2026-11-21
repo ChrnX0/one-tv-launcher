@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Голосовая команда</string>
     <string name="mcp_olhou_tela">Claude посмотрел на экран</string>
     <string name="pg_max_min">макс %1$d° · мин %2$d°</string>
-    <string name="pg_por_do_sol">закат %1$s</string>
     <string name="pg_compras">Список покупок</string>
     <string name="cf_negar">Запретить</string>
     <string name="cf_permitir">Разрешить</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Стереть</string>
     <string name="pn_parear">Сопрячь</string>
     <string name="pn_titulo">Сопряжение лаунчера (без ПК)</string>
-    <string name="pn_lido">код прочитан с экрана</string>
     <string name="pn_nao_achei">экран сопряжения ещё не найден</string>
     <string name="pn_6">код состоит из 6 цифр</string>
     <string name="pn_pareado">сопряжено! проверяю оболочку…</string>

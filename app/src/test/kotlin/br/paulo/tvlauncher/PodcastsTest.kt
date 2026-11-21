@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.Posicao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

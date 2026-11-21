@@ -8,6 +8,11 @@ import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import br.paulo.tvlauncher.home.FundoMeuDados
+import br.paulo.tvlauncher.home.Organizacao
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.settings.Tema
 import java.util.concurrent.Executors
 
 /**
@@ -31,7 +36,7 @@ class VindoDoProjectivyActivity : Activity() {
 
         /** Na HOME: mostra uma vez se o Projectivy estiver instalado. Barato: uma leitura de prefs (e só 1 IPC na 1ª vez). */
         fun talvezMostrar(ctx: Context) {
-            val prefs = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+            val prefs = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
             if (prefs.getBoolean(CHAVE, false)) return
             prefs.edit().putBoolean(CHAVE, true).apply()   // antes de abrir: se cair, não reabre em laço
             if (instalado(ctx)) ctx.startActivity(Intent(ctx, VindoDoProjectivyActivity::class.java))

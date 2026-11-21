@@ -20,15 +20,22 @@ import android.os.Looper
 import android.os.Process
 import android.os.SystemClock
 import android.util.Log
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import br.paulo.tvlauncher.alarm.TocandoAgora
+import br.paulo.tvlauncher.listen.OuvirEstado
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.irPara
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -291,15 +298,10 @@ class OuvirServico : Service() {
     }
 
     private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {
-        val http = DefaultHttpDataSource.Factory().setUserAgent(if (fala) "Sofaly/1 (TV podcast player)" else "onetv-launcher/1")
-            .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000)
-        val item = MediaItem.Builder().setUri(url).apply {
-            if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
-        }.build()
-        return ExoPlayer.Builder(this).build().also { p ->
-            // true = o ExoPlayer cuida do foco de áudio (pausa quando outro app toca, abaixa quando o Assistente fala).
-            p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
+        val http = PlayerEngine.data(this, userAgent = Http.USER_AGENT)
+        val item = PlayerEngine.item(url).build()
+        // O motor único (PlayerEngine), com o foco de áudio: pausa quando outro app toca, abaixa quando o Assistente fala.
+        return PlayerEngine.build(this, contentType = if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).also { p ->
             p.addListener(object : Player.Listener {
                 override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
                     val r = radio ?: return

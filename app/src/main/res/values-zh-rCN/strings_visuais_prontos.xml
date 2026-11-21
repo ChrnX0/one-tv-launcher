@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">现成外观</string>
-    <string name="vpr_det">每按一次 OK 切换到下一个外观：主题、文字和卡片大小一起变</string>
+    <string name="vpr_det">每按一次 OK 切换到下一个外观：主题、文字和背景颜色一起变</string>
     <string name="vpr_meu">你的设置</string>
     <string name="vpr_classico">经典</string>
     <string name="vpr_leitura">易读</string>
     <string name="vpr_galeria">画廊</string>
     <string name="vpr_galeria_grande">大画廊</string>
-    <string name="vpr_grade">网格</string>
-    <string name="vpr_grade_grande">大网格</string>
     <string name="vpr_cores">应用颜色</string>
-    <string name="vpr_cinema">影院</string>
 </resources>

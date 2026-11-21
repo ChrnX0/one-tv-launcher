@@ -1,9 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.SofyMotion
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** As frases da Sofy existem em todas as línguas do app, com os mesmos números (%1$s) que o inglês. */
 class SofyStringsTest {

@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Sesli kısayol</string>
     <string name="mcp_olhou_tela">Claude ekrana baktı</string>
     <string name="pg_max_min">en yüksek %1$d° · en düşük %2$d°</string>
-    <string name="pg_por_do_sol">gün batımı %1$s</string>
     <string name="pg_compras">Alışveriş listesi</string>
     <string name="cf_negar">Reddet</string>
     <string name="cf_permitir">İzin ver</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Sil</string>
     <string name="pn_parear">Eşleştir</string>
     <string name="pn_titulo">Launcher’ı eşleştir (PC olmadan)</string>
-    <string name="pn_lido">kod ekrandan okundu</string>
     <string name="pn_nao_achei">eşleme ekranı henüz bulunamadı</string>
     <string name="pn_6">kod 6 hanelidir</string>
     <string name="pn_pareado">eşleştirildi! kabuk denetleniyor…</string>

@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.PrimeiraConfig
+import br.paulo.tvlauncher.panel.QrDoApp
+import br.paulo.tvlauncher.panel.CodigoEntrada
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

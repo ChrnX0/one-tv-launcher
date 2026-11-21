@@ -21,6 +21,26 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.BibliotecaIndice
+import br.paulo.tvlauncher.home.BibliotecaUnica
+import br.paulo.tvlauncher.home.IconeMidia
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.input.SegurarOk
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.AddonInstallDialog
+import br.paulo.tvlauncher.player.AddonsProtocolo
+import br.paulo.tvlauncher.player.AddonsTv
+import br.paulo.tvlauncher.player.Conforto
+import br.paulo.tvlauncher.player.ConfortoRegras
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.RecommendedAddons
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.search.BuscaOutrosApps
 import java.util.concurrent.Executors
 
 /**
@@ -125,11 +145,11 @@ class AddonsActivity : Activity() {
         desenharRaiz()
         // Lista curada: no máximo 1 pergunta por dia ao servidor; se mudou e a tela ainda está na raiz, redesenha.
         // Thread à parte, não a fila `rede`: o servidor lento não atrasa o 1º catálogo.
-        Thread {
+        Fundo.rodar("addons-sugeridos") {
             val antes = AddonsTv.sugeridos(this)
             AddonsTv.atualizarSugeridos(this)
             if (AddonsTv.sugeridos(this) != antes) tela.post { if (!isDestroyed && pilha.size == 1) desenharRaiz() }
-        }.start()
+        }
         // Elevação 7.1: aberta pela busca única com um título que só um addon tem.
         intent.getStringExtra(BibliotecaUnica.EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { buscar(it) }
     }
@@ -234,7 +254,7 @@ class AddonsActivity : Activity() {
         }
         if (fontes.isEmpty()) return
         val app = applicationContext
-        Thread { BibliotecaIndice.anotar(app, fontes) }.start()
+        Fundo.rodar("biblioteca") { BibliotecaIndice.anotar(app, fontes) }
     }
 
     private fun abrirItem(d: ItemDe) {

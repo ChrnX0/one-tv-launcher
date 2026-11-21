@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QR 코드로 휴대폰에서 양식이 열리고 기술 정보는 이미 입력되어 있습니다</string>
     <string name="rel_texto">휴대폰 카메라를 코드에 비추세요. 무슨 일이 있었는지 적어 보내면 됩니다. 이름, 계정, 네트워크, 도시는 포함되지 않습니다.</string>
     <string name="rel_vai_junto">함께 보내는 내용</string>
+    <string name="rel_l_oque">무슨 일이 있었나요</string>
+    <string name="rel_l_versao">버전</string>
+    <string name="rel_l_uso">모드</string>
+    <string name="rel_l_quedas">강제 종료 / 멈춤 (7일)</string>
+    <string name="rel_l_erro">마지막 오류</string>
 </resources>

@@ -1,17 +1,11 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.panel.estadoReconectar
 
 /**
  * Confirmação NA TV do "Reconectar a TV" pedido pelo painel (a única ação que o launcher faz no roteador UniFi).
@@ -22,8 +16,6 @@ import android.widget.TextView
 class ConfirmarRoteadorActivity : Activity() {
     private var respondido = false
     private val ui = Handler(Looper.getMainLooper())
-
-    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
 
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)

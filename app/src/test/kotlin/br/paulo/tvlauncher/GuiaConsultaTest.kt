@@ -1,11 +1,18 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.FonteGuia
+import br.paulo.tvlauncher.player.Guia
+import br.paulo.tvlauncher.player.GuiaConsulta
+import br.paulo.tvlauncher.player.GuiaExtra
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.Xmltv
+import java.io.IOException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.kxml2.io.KXmlParser
-import java.io.IOException
 
 /**
  * Guia em banco (10/11/2026): leitura em fluxo do XMLTV, consultas puras (agora, próximos, janela) e o cache por canal

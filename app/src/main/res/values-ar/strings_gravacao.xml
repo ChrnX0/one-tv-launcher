@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s حتى %2$s</string>
     <string name="grv_ate_hora">حتى %1$s</string>
     <string name="grv_selo">يُسجَّل حتى %1$s</string>
-    <string name="grv_selo_home">جارٍ تسجيل %1$s</string>
     <string name="grv_sem_canal">القناة ليست في القائمة المحفوظة. افتح التلفزيون المباشر مرة وحاول مجددًا.</string>
     <string name="grv_sem_destino">لا مكان للتسجيل: صِل ذاكرة USB بالموزّع، أو اختر مجلد شبكة في التلفزيون › التسجيلات.</string>
     <string name="grv_pendrive_formato">ذاكرة USB “%1$s” تستخدم تنسيقًا لا يقرؤه التلفزيون (NTFS). استخدم ذاكرة exFAT أو FAT32، أو هيّئ هذه في الإعدادات › النظام › التخزين (يمحو ما عليها).</string>

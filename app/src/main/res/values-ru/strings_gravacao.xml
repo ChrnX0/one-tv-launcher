@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s до %2$s</string>
     <string name="grv_ate_hora">до %1$s</string>
     <string name="grv_selo">ЗАПИСЬ до %1$s</string>
-    <string name="grv_selo_home">Запись: %1$s</string>
     <string name="grv_sem_canal">Канала нет в сохранённом списке. Откройте ТВ один раз и попробуйте снова.</string>
     <string name="grv_sem_destino">Некуда записывать: подключите флешку к хабу или выберите сетевую папку в ТВ › Записи.</string>
     <string name="grv_pendrive_formato">Флешка «%1$s» в формате, который ТВ не читает (NTFS). Используйте флешку exFAT или FAT32 либо отформатируйте эту в Настройки › Система › Хранилище (это сотрёт её содержимое).</string>

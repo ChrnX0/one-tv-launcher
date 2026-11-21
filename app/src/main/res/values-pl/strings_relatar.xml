@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Kod QR otwiera formularz w telefonie z wypełnionymi danymi technicznymi</string>
     <string name="rel_texto">Skieruj aparat telefonu na kod. Opisz, co się stało, i wyślij. Imię, konto, sieć i miasto nie są dołączane.</string>
     <string name="rel_vai_junto">Co zostanie dołączone</string>
+    <string name="rel_l_oque">Co się stało</string>
+    <string name="rel_l_versao">Wersja</string>
+    <string name="rel_l_uso">Tryb</string>
+    <string name="rel_l_quedas">Awarie / zawieszenia (7 dni)</string>
+    <string name="rel_l_erro">Ostatni błąd</string>
 </resources>

@@ -21,6 +21,19 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.PodcastPlayerLogic
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.player.BarraTempo
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.irPara
 import java.util.Date
 
 /**

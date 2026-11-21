@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">वॉइस शॉर्टकट</string>
     <string name="mcp_olhou_tela">Claude ने स्क्रीन देखी</string>
     <string name="pg_max_min">अधिकतम %1$d° · न्यूनतम %2$d°</string>
-    <string name="pg_por_do_sol">सूर्यास्त %1$s</string>
     <string name="pg_compras">ख़रीदारी सूची</string>
     <string name="cf_negar">अस्वीकार</string>
     <string name="cf_permitir">अनुमति दें</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">हटाएँ</string>
     <string name="pn_parear">पेयर करें</string>
     <string name="pn_titulo">लॉन्चर पेयर करें (बिना PC)</string>
-    <string name="pn_lido">स्क्रीन से कोड पढ़ा</string>
     <string name="pn_nao_achei">अभी पेयरिंग स्क्रीन नहीं मिली</string>
     <string name="pn_6">कोड में 6 अंक हैं</string>
     <string name="pn_pareado">पेयर हो गया! शेल जाँचा जा रहा है…</string>

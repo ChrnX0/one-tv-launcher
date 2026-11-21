@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.HospedeRegras
+import java.util.Calendar
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Calendar
-import java.util.TimeZone
 
 /** Modo hóspede (degrau 2, 16/11/2026). */
 class HospedeRegrasTest {

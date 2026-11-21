@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (de) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="filmes_filtro">Filter</string>
     <string name="filmes_filtro_titulo">Filme filtern</string>
-    <string name="filmes_filtro_cabecalho">%1$s · FILTER: %2$s</string>
     <string name="filmes_filtro_genero">Genre: %1$s</string>
     <string name="filmes_filtro_epoca">Epoche: %1$s</string>
     <string name="filmes_filtro_nota">Mindestbewertung: %1$s</string>
@@ -18,7 +16,6 @@
     <string name="filmes_filtro_nao_vistos_curto">ungesehen</string>
     <string name="filmes_filtro_sem_genero">Keine Kategorie dieser Liste nennt ein Genre</string>
     <string name="filmes_filtro_vazio">Kein Film dieser Kategorie passt zu diesem Filter</string>
-    <string name="filmes_sorteio">Überrasch mich</string>
     <string name="filmes_sorteio_vazio">Hier gibt es keinen Film zum Auslosen</string>
     <string name="filmes_colecao">Sammlung dieses Films</string>
     <string name="filmes_colecao_cat">Sammlung: %1$s</string>

@@ -6,8 +6,14 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.util.Log
+import br.paulo.tvlauncher.family.HospedeRegras
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.family.PinNaTela
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelControle
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PrivilegioDO
 import java.util.TimeZone
 
 /**

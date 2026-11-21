@@ -1,5 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.ConsumoRede
+import br.paulo.tvlauncher.alarm.HoraDormir
+import br.paulo.tvlauncher.alarm.ModoLeve
+import br.paulo.tvlauncher.alarm.RecadoLink
+import br.paulo.tvlauncher.alarm.SomNavegacao
+import br.paulo.tvlauncher.alarm.TocandoAgora
+import br.paulo.tvlauncher.family.Uso
+import br.paulo.tvlauncher.network.Cenas
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

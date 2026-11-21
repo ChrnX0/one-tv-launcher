@@ -2,15 +2,8 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import br.paulo.tvlauncher.privilege.PareamentoNaTv
 
 /**
  * Aviso "Acesso remoto parado" (SaudeAcesso.kt): um cartão escuro no meio da tela, por cima da HOME, com o atalho para

@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.OndeAssistir
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

@@ -1,8 +1,12 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assert.fail
-import org.junit.Test
-import org.kxml2.io.KXmlParser
+import br.paulo.tvlauncher.panel.DavLogica
+import br.paulo.tvlauncher.panel.Mtp
+import br.paulo.tvlauncher.panel.PainelHttp
+import br.paulo.tvlauncher.panel.PtpIp
+import br.paulo.tvlauncher.player.GuiaExtra
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.Xmltv
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.util.Base64
@@ -10,6 +14,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import kotlin.random.Random
+import org.junit.Assert.fail
+import org.junit.Test
+import org.kxml2.io.KXmlParser
 
 /**
  * Elevação 2.5 (17/11/2026): fuzz dos leitores escritos à mão, os que recebem bytes de fora:

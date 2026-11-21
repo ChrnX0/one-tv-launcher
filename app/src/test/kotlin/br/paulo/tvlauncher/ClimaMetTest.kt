@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.FaixaDias
+import br.paulo.tvlauncher.weather.ClimaMet
+import java.util.TimeZone
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.TimeZone
 
 /** ClimaMet: a resposta real do MET Norway (Brasília, 16/11/2026 19:00 UTC) vira o formato da Open-Meteo que o resto lê. */
 class ClimaMetTest {

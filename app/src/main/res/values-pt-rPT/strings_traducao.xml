@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Atalho de voz</string>
     <string name="mcp_olhou_tela">O Claude olhou o ecrã</string>
     <string name="pg_max_min">máx %1$d° · mín %2$d°</string>
-    <string name="pg_por_do_sol">pôr %1$s</string>
     <string name="pg_compras">Lista de compras</string>
     <string name="cf_negar">Negar</string>
     <string name="cf_permitir">Permitir</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Apagar</string>
     <string name="pn_parear">Parear</string>
     <string name="pn_titulo">Parear o launcher (sem PC)</string>
-    <string name="pn_lido">código lido do ecrã</string>
     <string name="pn_nao_achei">ainda não achei o ecrã de pareamento</string>
     <string name="pn_6">o código tem 6 dígitos</string>
     <string name="pn_pareado">pareado! a conferir o shell…</string>

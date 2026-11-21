@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">ترجمة مترجمة على التلفزيون (ترجمة آلية). الباقي يُترجم تباعًا.</string>
     <string name="legenda_trad_pronta">انتهت ترجمة الترجمة</string>
     <string name="series_sinopse_mais">الملخص الكامل</string>
-    <string name="series_sinopse_menos">ملخص أقصر</string>
     <string name="series_continuar_curto">▶  متابعة %1$s</string>
     <string name="series_episodios">الحلقات</string>
     <string name="series_trocar_temporada">تغيير الموسم</string>

@@ -6,6 +6,13 @@ import android.text.format.Formatter
 import android.view.KeyEvent
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.backup.StorageBackup
+import br.paulo.tvlauncher.backup.StorageMode
+import br.paulo.tvlauncher.backup.StorageModeRules
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.home.AppStorage
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.player.ContaMidia
 
 /**
  * "Pen drive e armazenamento" (pedido do Paulo, 20/11/2026, proposta C). Abre pela linha das Configurações > Sistema.
@@ -23,6 +30,7 @@ class StorageActivity : Activity() {
     private lateinit var coluna: LinearLayout
     private var estado: StorageMode.Estado? = null
     private var velocidade = mutableMapOf<String, Double>()
+    private val medindo = mutableSetOf<String>()
     private val autoMedidos = mutableSetOf<String>()
     private var misto = 50
     private var ocupado = false
@@ -90,11 +98,14 @@ class StorageActivity : Activity() {
             pen.velocidade?.let { velocidade.putIfAbsent(pen.disco, it) }
             // Detecta sozinho: sem medida guardada, mede uma vez ao abrir (32 MB, alguns segundos) e recomenda por ela.
             if (velocidade[pen.disco] == null && pen.comum != null && autoMedidos.add(pen.disco)) {
-                mostrar(getString(R.string.st_medindo)); medir(pen.disco, pen.comum)
+                medir(pen.disco, pen.comum)   // o aviso de que mede e para quê vai na própria linha (abaixo)
             }
             val rec = StorageModeRules.recomendar(e.livreTv, pen.tamanho, velocidade[pen.disco])
             val textoRec = getString(R.string.st_recomendado, nomeModo(rec.modo), nomeMotivo(rec.motivo)) +
                 (velocidade[pen.disco]?.let { "  ·  " + getString(R.string.st_medido, "%.1f".format(it)) }
+                    // Medindo agora: a linha diz isso e para quê (antes dizia "OK mede" durante a medição, e um aviso
+                    // solto cobria o topo da tela; teste de 21/11/2026).
+                    ?: (if (pen.disco in medindo) "  ·  " + getString(R.string.st_medindo) else null)
                     ?: pen.comum?.let { "  ·  " + getString(R.string.st_medir_dica) } ?: "")
             // Medir só faz sentido com a parte comum montada (antes de formatar).
             val l = linha(textoRec, pen.comum?.let { c -> { medir(pen.disco, c) } })
@@ -146,10 +157,12 @@ class StorageActivity : Activity() {
     private fun medir(disco: String, comum: String, depois: (() -> Unit)? = null) {
         val app = applicationContext
         ocupado = true
+        medindo += disco
         Fundo.rodar("Storage") {
             val v = runCatching { StorageMode.medir(app, comum) }.getOrNull()
             runOnUiThread {
                 ocupado = false
+                medindo -= disco
                 if (isDestroyed) return@runOnUiThread
                 if (v != null) velocidade[disco] = v else mostrar(getString(R.string.st_falhou, "dd"))
                 montar()

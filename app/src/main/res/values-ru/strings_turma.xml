@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">На диване</string>
-    <string name="jogos_continuar">Продолжить</string>
     <string name="jogos_controle_pronto">готов</string>
     <string name="jogos_controle_carregar">скоро зарядить</string>
     <string name="jogos_parear_um">Подключить геймпад</string>
-    <string name="jogos_todos">Все</string>
     <string name="turma_titulo">Ваша компания</string>
     <string name="turma_online">В сети: %1$d</string>
     <string name="turma_mais_online">+ %1$d в сети</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Виджет сервера выключен</string>
     <string name="turma_desligado_texto">В Discord: Настройки сервера, Виджет, включите «Включить виджет сервера».</string>
     <string name="turma_qr_dica">Наведите телефон, чтобы зайти в голосовой канал. Разговор идёт через телефон.</string>
-    <string name="turma_aqui">Из компании здесь: %1$d</string>
     <string name="turma_jogando">%1$s играет в %2$s</string>
     <string name="turma_dois">%1$s и %2$s</string>
     <string name="turma_e_mais">%1$s и ещё %2$d</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Сохранить</string>
     <string name="turma_config_tirar">Убрать компанию</string>
     <string name="turma_id_invalido">Это не ID сервера Discord (от 17 до 20 цифр).</string>
-    <string name="cruz_sofa">Диван</string>
     <string name="cruz_sofa_sub">Геймпады и ваша компания из Discord</string>
     <string name="cruz_sofa_voz">В голосовом: %1$d · %2$s</string>
 </resources>

@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">सोफ़े पर</string>
-    <string name="jogos_continuar">जारी रखें</string>
     <string name="jogos_controle_pronto">तैयार</string>
     <string name="jogos_controle_carregar">जल्द चार्ज करें</string>
     <string name="jogos_parear_um">कंट्रोलर जोड़ें</string>
-    <string name="jogos_todos">सभी</string>
     <string name="turma_titulo">आपकी टोली</string>
     <string name="turma_online">%1$d ऑनलाइन</string>
     <string name="turma_mais_online">+ %1$d ऑनलाइन</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">सर्वर विजेट बंद है</string>
     <string name="turma_desligado_texto">Discord में: सर्वर सेटिंग्स, विजेट, सर्वर विजेट सक्षम करें चालू करें।</string>
     <string name="turma_qr_dica">वॉइस में जुड़ने के लिए फ़ोन यहाँ रखें। बातचीत फ़ोन से होती है।</string>
-    <string name="turma_aqui">टोली के %1$d लोग यहाँ</string>
     <string name="turma_jogando">%1$s %2$s खेल रहे हैं</string>
     <string name="turma_dois">%1$s और %2$s</string>
     <string name="turma_e_mais">%1$s और %2$d अन्य</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">सहेजें</string>
     <string name="turma_config_tirar">टोली हटाएँ</string>
     <string name="turma_id_invalido">यह Discord सर्वर ID नहीं है (17 से 20 अंक)।</string>
-    <string name="cruz_sofa">सोफ़ा</string>
     <string name="cruz_sofa_sub">कंट्रोलर और आपकी Discord टोली</string>
     <string name="cruz_sofa_voz">वॉइस में %1$d · %2$s</string>
 </resources>

@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">메시지: %s. OK로 읽음 표시.</string>
     <string name="mu_apagar">메시지 삭제: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">올해의 내 TV(12월에 화면 보호기에서)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">선택되지 않았을 때 앱 카드를 반투명하게</string>
     <string name="extras_ENTRADAS_TV">앱 줄에 HDMI 입력 표시(입력 단자가 있는 TV만)</string>
     <string name="ra_titulo">%d년 나의 TV</string>
     <string name="ra_canal">가장 많이 본 채널: %1$s(%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">듣기</string>
     <string name="ra_dica_favoritar">즐겨찾기</string>
     <string name="ra_carregando">방송국 로드 중…</string>
-    <string name="ra_subtitulo">전 세계 방송국 · 리모컨의 1–9로 즐겨찾기 재생</string>
     <string name="ra_sem_catalogo">라디오 카탈로그가 응답하지 않았습니다. 즐겨찾기는 계속 작동합니다.</string>
     <string name="ra_nada">방송국을 찾을 수 없습니다.</string>
     <string name="ra_continuar">계속</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">이름으로 검색</string>
     <string name="ra_buscar_det">전 세계 모든 방송국</string>
     <string name="ra_generos">장르</string>
-    <string name="ra_paises">다른 국가</string>
-    <string name="ra_paises_det">방송국이 가장 많은 국가</string>
     <string name="ra_perto">근처</string>
-    <string name="ra_mais_ouvidas">%s에서 가장 많이 듣는 방송국</string>
     <string name="ra_mundo">전 세계에서 가장 많이 듣는 방송국</string>
     <string name="ra_resultado">검색: %s</string>
     <string name="ra_favoritada">즐겨찾기에 추가됨</string>

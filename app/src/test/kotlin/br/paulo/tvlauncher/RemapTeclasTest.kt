@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
 import android.view.KeyEvent
-import br.paulo.tvlauncher.RemapTeclas.Gesto
+import br.paulo.tvlauncher.input.Gestos
+import br.paulo.tvlauncher.input.RemapTeclas
+import br.paulo.tvlauncher.input.RemapTeclas.Gesto
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

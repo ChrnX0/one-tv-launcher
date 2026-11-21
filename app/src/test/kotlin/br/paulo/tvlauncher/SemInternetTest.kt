@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.SemInternet.Estado
-import br.paulo.tvlauncher.SemInternet.Item
+import br.paulo.tvlauncher.network.SemInternet
+import br.paulo.tvlauncher.network.SemInternet.Estado
+import br.paulo.tvlauncher.network.SemInternet.Item
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

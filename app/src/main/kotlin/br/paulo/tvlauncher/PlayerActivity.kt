@@ -1,15 +1,11 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.content.res.ColorStateList
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.SurfaceView
@@ -19,7 +15,6 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -27,9 +22,62 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import br.paulo.tvlauncher.alarm.Cronometros
+import br.paulo.tvlauncher.alarm.Datas
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.family.RetrospectivaAno
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.home.tocandoAgora
+import br.paulo.tvlauncher.input.AvancoSegurado
+import br.paulo.tvlauncher.input.EfeitosSom
+import br.paulo.tvlauncher.listen.SomNoFone
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.observer.Falhas
+import br.paulo.tvlauncher.observer.FalhasTv
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Placar
+import br.paulo.tvlauncher.player.BarraTempo
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.CanalReserva
+import br.paulo.tvlauncher.player.FonteGravacao
+import br.paulo.tvlauncher.player.FontesPlayer
+import br.paulo.tvlauncher.player.GravacaoDestino
+import br.paulo.tvlauncher.player.GravacaoRegras
+import br.paulo.tvlauncher.player.Guia
+import br.paulo.tvlauncher.player.GuiaConsulta
+import br.paulo.tvlauncher.player.JuntoRegras
+import br.paulo.tvlauncher.player.PausaAoVivo
+import br.paulo.tvlauncher.player.PausaCurta
+import br.paulo.tvlauncher.player.PlayerAcessivel
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerBar
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerDados
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.PlayerFiltro
+import br.paulo.tvlauncher.player.PlayerGradeView
+import br.paulo.tvlauncher.player.PlayerImagem
+import br.paulo.tvlauncher.player.PlayerJanelas
+import br.paulo.tvlauncher.player.PlayerLista
+import br.paulo.tvlauncher.player.PlayerListaTela
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.player.PlayerMenu
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.QualidadeAuto
+import br.paulo.tvlauncher.player.QualidadeTv
+import br.paulo.tvlauncher.player.SessaoMidia
+import br.paulo.tvlauncher.player.TunnelGuard
+import br.paulo.tvlauncher.player.VariantesCanal
+import br.paulo.tvlauncher.player.Xtream
+import br.paulo.tvlauncher.player.Zapeio
+import br.paulo.tvlauncher.player.alternarSom
+import br.paulo.tvlauncher.player.escolherImagem
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.lembrarRecente
+import br.paulo.tvlauncher.settings.mostrarBusca
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -123,9 +171,7 @@ class PlayerActivity : Activity() {
     private val pausa = PausaCurta()
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
-    private val suave = Estilo.TEXTO_2
     private val ambar = Estilo.ATENCAO
-    private val fonteMedia = Fontes.nunito(500)
 
     private lateinit var video: SurfaceView
     private lateinit var info: LinearLayout
@@ -385,8 +431,7 @@ class PlayerActivity : Activity() {
         val item = MediaItem.Builder().setUri(if (deGravacao) FonteGravacao.URI else url).apply {
             // A gravação é sempre MPEG-TS (o gravador emenda os pedaços do HLS).
             if (deGravacao) setMimeType(MimeTypes.VIDEO_MP2T)
-            // .m3u8 = HLS. Sem extensão conhecida, o Media3 descobre sozinho pelo conteúdo (ex.: .ts do Xtream).
-            else if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
+            else if (PlayerEngine.isHls(url)) setMimeType(MimeTypes.APPLICATION_M3U8)
             // O que a sessão de mídia mostra: o canal e, se o guia souber, o programa de agora.
             val agora = System.currentTimeMillis()
             val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 1) }?.firstOrNull()?.takeIf { agora >= it.inicio }

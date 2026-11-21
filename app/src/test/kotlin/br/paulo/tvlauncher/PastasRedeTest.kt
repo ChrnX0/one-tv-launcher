@@ -1,13 +1,21 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.Nfs
+import br.paulo.tvlauncher.panel.PastaArquivos
+import br.paulo.tvlauncher.panel.Pastas
+import br.paulo.tvlauncher.panel.Sftp
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.player.ContaMidia
+import br.paulo.tvlauncher.player.FontesMidia
+import br.paulo.tvlauncher.player.MidiaContas
+import java.io.ByteArrayInputStream
+import java.io.IOException
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.ByteArrayInputStream
-import java.io.IOException
 
 /** FTP, FTPS, SFTP, NFS e pendrive em "Na rede" (14/11/2026): endereços, caminhos e o NFS por dentro. Sem rede. */
 class PastasRedeTest {

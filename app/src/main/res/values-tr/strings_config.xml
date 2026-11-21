@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV ve filmler</string>
     <string name="cl_aba_conta_det">IPTV hesabı, film ve dizi hizmetleri, ses ve altyazı</string>
     <string name="cl_aba_parental">Ebeveyn denetimi</string>
-    <string name="cl_aba_parental_det">Kanalları PIN ile kilitleyin: listeden kaybolur ve oynatılmazlar</string>
-    <string name="cl_aba_aparencia">Görünüm</string>
-    <string name="cl_aba_aparencia_det">Tema, uygulama yığınları, hava durumu ve ekran uyarıları</string>
     <string name="cl_aba_energia">Ekran ve güç</string>
     <string name="cl_aba_energia_det">Ekran koruyucu ve otomatik kapanma</string>
-    <string name="cl_aba_visitas">Misafirler ve rutinler</string>
-    <string name="cl_aba_visitas_det">Misafir modu ve zamanlanmış eylemler</string>
     <string name="cl_aba_rede">Ağ</string>
-    <string name="cl_aba_rede_det">DNS, VPN ve internet hızı</string>
     <string name="cl_aba_remoto">Uzaktan erişim</string>
     <string name="cl_aba_remoto_det">Tarayıcı paneli, PIN ve internet üzerinden Claude</string>
     <string name="cl_aba_sistema">Sistem</string>
-    <string name="cl_aba_sistema_det">Teşhis, güncellemeler, uygulamalar ve izinler</string>
     <string name="cl_dica_aba">bir sekme seçin</string>
     <string name="cl_dica_entrar">seçenekleri aç</string>
     <string name="cl_dica_sair">çık</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Otomatik launcher güncellemeleri</string>
     <string name="cl_acao_atualizacao_det">Yeni sürümü ekran kapalıyken kendisi yükler. Engelli = yalnızca bildirir.</string>
     <string name="cl_tema">Tema</string>
-    <string name="cl_pilhas_det">Tek başına duran uygulamaları kategoriye göre gruplar; kendi yığınlarınız kalır</string>
     <string name="cl_clima">Hava durumu</string>
     <string name="cl_end_nenhum">yok · TV kendini Wi-Fi ile bulur; Wi-Fi yetmezse adres kullanılır</string>
     <string name="cl_end_clima">Hava durumu adresi</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Kartlar</string>
     <string name="cl_widget_solto">Kutusuz</string>
     <string name="cl_linha_baixo">Ekran koruyucu widget’ları</string>
-    <string name="cl_linha_baixo_det">Cam şerit, kartlar veya kutusuz · OK değiştirir</string>
     <string name="cl_desligar">Boştayken kapat</string>
     <string name="cl_desligar_det">Oynatılan video kullanım sayılır; 60 sn önce uyarır · OK değiştirir</string>
     <string name="cl_visita_det">Profili, takvimi ve aşağıda işaretli uygulamaları gizler</string>
     <string name="cl_apps_visita">Misafir modunda gizlenen uygulamalar</string>
     <string name="cl_carregando_apps">Uygulamalar yükleniyor…</string>
-    <string name="cl_some_visita">misafir modu açıkken gizli</string>
     <string name="cl_vpn_nao_fixa">launcher VPN sabitlemiyor</string>
     <string name="cl_vpn_adguard">AdGuard VPN uygulaması, her zaman açık · OK uygulamayı açar</string>
     <string name="cl_painel_navegador">Tarayıcı paneli</string>

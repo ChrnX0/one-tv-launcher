@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.VitaisLocais.Saida
-import br.paulo.tvlauncher.VitaisLocais.Tipo
+import br.paulo.tvlauncher.observer.VitaisLocais
+import br.paulo.tvlauncher.observer.VitaisLocais.Saida
+import br.paulo.tvlauncher.observer.VitaisLocais.Tipo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

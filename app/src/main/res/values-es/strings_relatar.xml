@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Un QR abre el formulario en el móvil, con los datos técnicos ya rellenados</string>
     <string name="rel_texto">Apunta la cámara del móvil al código. Escribe lo que pasó y envía. Tu nombre, cuenta, red y ciudad no se incluyen.</string>
     <string name="rel_vai_junto">Lo que se incluye</string>
+    <string name="rel_l_oque">Qué pasó</string>
+    <string name="rel_l_versao">Versión</string>
+    <string name="rel_l_uso">Modo</string>
+    <string name="rel_l_quedas">Cierres / bloqueos (7 días)</string>
+    <string name="rel_l_erro">Último error</string>
 </resources>

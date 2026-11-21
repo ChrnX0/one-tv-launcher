@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Styles prêts</string>
-    <string name="vpr_det">Chaque OK passe au style suivant : thème, texte et taille des cartes ensemble</string>
+    <string name="vpr_det">Chaque OK passe au style suivant : thème, texte et couleur du fond ensemble</string>
     <string name="vpr_meu">Votre réglage</string>
     <string name="vpr_classico">Classique</string>
     <string name="vpr_leitura">Lecture facile</string>
     <string name="vpr_galeria">Galerie</string>
     <string name="vpr_galeria_grande">Grande galerie</string>
-    <string name="vpr_grade">Grille</string>
-    <string name="vpr_grade_grande">Grande grille</string>
     <string name="vpr_cores">Couleurs de l’app</string>
-    <string name="vpr_cinema">Cinéma</string>
 </resources>

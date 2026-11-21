@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.settings.CobrancaPlay
+import br.paulo.tvlauncher.settings.Planos
 
 /**
  * "Conhecer o Pro" (degrau 1, venda sem atrito, 15/11/2026): os três planos lado a lado e um QR que leva o celular à

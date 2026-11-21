@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.FotosRede
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.player.ContaMidia
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals

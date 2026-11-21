@@ -1,5 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.ColunaRegras
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.EtiquetaSerie
+import br.paulo.tvlauncher.player.FichaSerie
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.Serie
+import br.paulo.tvlauncher.player.Series
+import br.paulo.tvlauncher.player.Vod
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

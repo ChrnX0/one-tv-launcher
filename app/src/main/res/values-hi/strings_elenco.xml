@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">TV पर अनुवादित सबटाइटल (अपने-आप अनुवाद)। बाकी का अनुवाद जारी है।</string>
     <string name="legenda_trad_pronta">सबटाइटल अनुवाद पूरा</string>
     <string name="series_sinopse_mais">पूरा सारांश</string>
-    <string name="series_sinopse_menos">छोटा सारांश</string>
     <string name="series_continuar_curto">▶  %1$s जारी रखें</string>
     <string name="series_episodios">एपिसोड</string>
     <string name="series_trocar_temporada">सीज़न बदलें</string>

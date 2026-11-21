@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Nachricht: %s. OK markiert als gelesen.</string>
     <string name="mu_apagar">Nachricht löschen: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Dein Fernsehjahr (im Dezember, im Bildschirmschoner)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Durchsichtige App-Karten, wenn nicht ausgewählt</string>
     <string name="extras_ENTRADAS_TV">HDMI-Eingänge in der App-Reihe (nur bei Fernsehern mit Eingängen)</string>
     <string name="ra_titulo">Dein Fernsehen %d</string>
     <string name="ra_canal">Lieblingssender: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">hören</string>
     <string name="ra_dica_favoritar">Favorit</string>
     <string name="ra_carregando">Sender werden geladen …</string>
-    <string name="ra_subtitulo">Sender aus aller Welt · 1–9 auf der Fernbedienung spielen deine Favoriten</string>
     <string name="ra_sem_catalogo">Der Radiokatalog hat nicht geantwortet. Deine Favoriten funktionieren weiter.</string>
     <string name="ra_nada">Kein Sender gefunden.</string>
     <string name="ra_continuar">weiter</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Nach Name suchen</string>
     <string name="ra_buscar_det">Jeder Sender der Welt</string>
     <string name="ra_generos">Genres</string>
-    <string name="ra_paises">Anderes Land</string>
-    <string name="ra_paises_det">Die Länder mit den meisten Sendern</string>
     <string name="ra_perto">In der Nähe</string>
-    <string name="ra_mais_ouvidas">Meistgehört in %s</string>
     <string name="ra_mundo">Meistgehört weltweit</string>
     <string name="ra_resultado">Suche: %s</string>
     <string name="ra_favoritada">Zu Favoriten hinzugefügt</string>

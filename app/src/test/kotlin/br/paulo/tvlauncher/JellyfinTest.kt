@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.Upnp
+import br.paulo.tvlauncher.player.ContaMidia
+import br.paulo.tvlauncher.player.Jellyfin
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

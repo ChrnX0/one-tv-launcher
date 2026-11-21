@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.input.LeitorNomes
+import br.paulo.tvlauncher.player.CatalogoPasta
+import br.paulo.tvlauncher.player.InfoExterna
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

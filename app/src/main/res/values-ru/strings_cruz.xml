@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">Экран медленно темнеет, и ТВ выключается</string>
     <string name="cruz_desliga_as">Выключится в %1$s</string>
     <string name="cruz_dormir_cancelar">OK — отменить</string>
-    <string name="cruz_linha">Линия</string>
+    <string name="cruz_linha">Базовый</string>
     <string name="cruz_mover">Переместить в…</string>
     <string name="cruz_mover_titulo">Переместить %1$s в</string>
     <string name="cruz_central">Игровой центр</string>
@@ -61,7 +61,6 @@
     <string name="jogos_semana">На этой неделе</string>
     <string name="jogos_semana_jogado">игры за 7 дней</string>
     <string name="jogos_semana_mais">больше всего</string>
-    <string name="jogos_semana_controles">геймпадов подключено</string>
     <string name="jogos_menos_de_1_min">меньше 1 мин</string>
     <string name="jogos_min">%1$d мин</string>
     <string name="jogos_h_min">%1$d ч %2$d мин</string>
@@ -85,10 +84,16 @@
     <string name="casa_fora_texto">Проверьте, что его сервер включён. Телевизор сам повторяет попытку каждые несколько секунд.</string>
     <string name="cruz_barra_ilha">Остров</string>
     <string name="cruz_canto_no_ar">В эфире</string>
-    <string name="cruz_canto_buscar">Поиск</string>
-    <string name="cruz_canto_buscar_txt">▲ открывает панель с поиском</string>
     <string name="cruz_canto_gravando">Запись</string>
     <string name="cruz_canto_tocando">Играет</string>
     <string name="cruz_canto_parou">Остановлено на</string>
     <string name="cruz_canto_conectado">Подключено</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Винтаж</string>
+    <string name="cruz_joia">Самоцвет</string>
+    <string name="cruz_foto">Фотореализм</string>
+    <string name="cruz_vintage2">Винтаж 2.0</string>
+    <string name="cruz_icone_seguir">Как в наборе (%1$s)</string>
+    <string name="cruz_icone_de">Значок: %1$s</string>
+    <string name="cruz_icone_categoria">Вся категория: %1$s</string>
 </resources>

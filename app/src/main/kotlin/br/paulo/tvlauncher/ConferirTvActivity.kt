@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.settings.RoteiroConferencia
 
 /**
  * Tela "Conferir na TV" (14/11/2026, ideia 63; Configurações > Sistema > Esta versão). Lista o que conferir com o

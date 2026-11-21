@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverTrial.Check
-import br.paulo.tvlauncher.ObserverTrial.Verdict
+import br.paulo.tvlauncher.observer.ObserverTrial
+import br.paulo.tvlauncher.observer.ObserverTrial.Check
+import br.paulo.tvlauncher.observer.ObserverTrial.Verdict
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">Der Bildschirm wird langsam dunkel und der Fernseher geht aus</string>
     <string name="cruz_desliga_as">Schaltet um %1$s ab</string>
     <string name="cruz_dormir_cancelar">OK zum Abbrechen</string>
-    <string name="cruz_linha">Linie</string>
+    <string name="cruz_linha">Essenziell</string>
     <string name="cruz_mover">Verschieben nach…</string>
     <string name="cruz_mover_titulo">%1$s verschieben nach</string>
     <string name="cruz_central">Spielezentrale</string>
@@ -61,7 +61,6 @@
     <string name="jogos_semana">Diese Woche</string>
     <string name="jogos_semana_jogado">in 7 Tagen gespielt</string>
     <string name="jogos_semana_mais">am meisten gespielt</string>
-    <string name="jogos_semana_controles">Controller an</string>
     <string name="jogos_menos_de_1_min">unter 1 Min.</string>
     <string name="jogos_min">%1$d Min.</string>
     <string name="jogos_h_min">%1$d Std. %2$d Min.</string>
@@ -85,10 +84,16 @@
     <string name="casa_fora_texto">Prüfe, ob sein Server eingeschaltet ist. Der Fernseher versucht es alle paar Sekunden von selbst erneut.</string>
     <string name="cruz_barra_ilha">Insel</string>
     <string name="cruz_canto_no_ar">Läuft</string>
-    <string name="cruz_canto_buscar">Suchen</string>
-    <string name="cruz_canto_buscar_txt">▲ öffnet die Leiste mit der Suche</string>
     <string name="cruz_canto_gravando">Nimmt auf</string>
     <string name="cruz_canto_tocando">Läuft gerade</string>
     <string name="cruz_canto_parou">Gestoppt bei</string>
     <string name="cruz_canto_conectado">Verbunden</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Vintage</string>
+    <string name="cruz_joia">Juwel</string>
+    <string name="cruz_foto">Fotorealistisch</string>
+    <string name="cruz_vintage2">Vintage 2.0</string>
+    <string name="cruz_icone_seguir">Dem Satz folgen (%1$s)</string>
+    <string name="cruz_icone_de">Symbol: %1$s</string>
+    <string name="cruz_icone_categoria">Ganze Kategorie: %1$s</string>
 </resources>

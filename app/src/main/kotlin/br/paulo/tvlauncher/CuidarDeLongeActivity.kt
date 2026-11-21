@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.text.InputFilter
 import android.widget.EditText
 import android.widget.LinearLayout
+import br.paulo.tvlauncher.family.CuidarDeLonge
+import br.paulo.tvlauncher.panel.DestinoPainel
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.PainelWeb
 
 /**
  * Configurações > Família > Cuidar de longe (ideias 77, 78, 79). Tudo desligado de fábrica. Aqui se escolhe quem recebe,

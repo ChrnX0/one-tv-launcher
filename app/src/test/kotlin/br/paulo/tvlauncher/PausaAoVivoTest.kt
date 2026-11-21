@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PausaAoVivo.Decisao.CONTINUAR_ATRASADO
-import br.paulo.tvlauncher.PausaAoVivo.Decisao.VOLTAR_AO_VIVO
+import br.paulo.tvlauncher.player.PausaAoVivo
+import br.paulo.tvlauncher.player.PausaAoVivo.Decisao.CONTINUAR_ATRASADO
+import br.paulo.tvlauncher.player.PausaAoVivo.Decisao.VOLTAR_AO_VIVO
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -14,6 +14,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.PinNaTela
+import br.paulo.tvlauncher.privilege.ServidorShizuku
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Tema
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuApiConstants.REQUEST_PERMISSION_REPLY_ALLOWED
 import rikka.shizuku.ShizukuApiConstants.REQUEST_PERMISSION_REPLY_IS_ONETIME

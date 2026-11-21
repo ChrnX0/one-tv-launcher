@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.weather.ClimaFontes
+import java.util.TimeZone
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.TimeZone
 
 /** As horas da Open-Meteo (timezone=auto) vêm no fuso do lugar, não no da TV. */
 class ClimaFontesFusoTest {

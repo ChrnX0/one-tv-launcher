@@ -5,4 +5,9 @@
     <string name="rel_linha_det">A QR code opens the form on your phone, with the technical details already filled in</string>
     <string name="rel_texto">Point your phone camera at the code. Write what happened and send. Your name, account, network and city are not included.</string>
     <string name="rel_vai_junto">What goes along</string>
+    <string name="rel_l_oque">What happened</string>
+    <string name="rel_l_versao">Version</string>
+    <string name="rel_l_uso">Mode</string>
+    <string name="rel_l_quedas">Crashes / freezes (7 days)</string>
+    <string name="rel_l_erro">Last error</string>
 </resources>

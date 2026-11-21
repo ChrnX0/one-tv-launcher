@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Сообщение: %s. OK отмечает прочитанным.</string>
     <string name="mu_apagar">Удалить сообщение: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Ваш ТВ за год (в декабре, на заставке)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Прозрачные карточки приложений, когда они не выбраны</string>
     <string name="extras_ENTRADAS_TV">Входы HDMI в ряду приложений (только на ТВ с входами)</string>
     <string name="ra_titulo">Ваш ТВ в %d году</string>
     <string name="ra_canal">Любимый канал: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">слушать</string>
     <string name="ra_dica_favoritar">в избранное</string>
     <string name="ra_carregando">Загрузка станций…</string>
-    <string name="ra_subtitulo">Станции со всего мира · 1–9 на пульте включают избранные</string>
     <string name="ra_sem_catalogo">Каталог радио не ответил. Избранные по-прежнему работают.</string>
     <string name="ra_nada">Станции не найдены.</string>
     <string name="ra_continuar">продолжить</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Поиск по названию</string>
     <string name="ra_buscar_det">Любая станция мира</string>
     <string name="ra_generos">Жанры</string>
-    <string name="ra_paises">Другая страна</string>
-    <string name="ra_paises_det">Страны с наибольшим числом станций</string>
     <string name="ra_perto">Рядом</string>
-    <string name="ra_mais_ouvidas">Популярное: %s</string>
     <string name="ra_mundo">Популярное в мире</string>
     <string name="ra_resultado">Поиск: %s</string>
     <string name="ra_favoritada">Добавлено в избранное</string>

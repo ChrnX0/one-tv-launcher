@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (ja) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">ゲーム</string>
-    <string name="home_destaque_jogos_vazio">クラウド、PC、レトロゲームで遊ぶ</string>
-    <string name="home_linha_continuar_jogos">見る・遊ぶ</string>
-    <string name="home_jogos_ultimo">前回: %1$s</string>
     <string name="extras_CARD_JOGOS">ホーム画面にゲームカード（ゲームアプリはアプリの行から外れます）</string>
     <string name="extras_MODO_JOGO">ゲームモード: ゲームが開いている間、スクリーンセーバー、夜間フィルター、お知らせは待機</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">ゲームコントローラーの電源を入れるとゲーム画面を開く</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">レトロ</string>
     <string name="jogos_grupo_tv">TV のゲーム</string>
     <string name="jogos_para_comecar">はじめに</string>
-    <string name="jogos_vazio_dica">この TV にはまだゲームがありません。上から選ぶと Play ストアのページが開きます。</string>
-    <string name="jogos_dica_segurar">ゲームで OK を長押しすると、別のグループに移動するか、ここから外せます。</string>
     <string name="jogos_aviso_fraca_titulo">クラウドゲームにはネットワークが弱い</string>
     <string name="jogos_aviso_fraca">ゲームがカクついたり遅れたりする可能性があります。LAN ケーブルを使うか、TV をルーターに近づけると改善します。</string>
     <string name="jogos_jogar_assim">このままプレイ</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">PC でプレイするアプリは？</string>
     <string name="jogos_pc_acordando">PC を起動中… %1$d 秒</string>
     <string name="jogos_pc_nao_respondeu">PC が応答しませんでした。このままアプリを開きます。</string>
-    <string name="jogos_seus">あなたのゲーム</string>
     <string name="jogos_mais_jogos">その他のゲーム</string>
     <string name="jogos_mais_opcoes">その他</string>
-    <string name="jogos_por_tipo">種類別</string>
-    <string name="jogos_jogar">プレイ</string>
     <string name="jogos_ligar_pc_jogar">PC を起動してプレイ</string>
-    <string name="jogos_desc_nuvem">ゲームはインターネット上のコンピューターで動き、TV は映像を受け取ります。良好なネットワークが必要です。</string>
     <string name="jogos_desc_pc">家のパソコンやゲーム機のゲームを、ここ TV で遊べます。</string>
-    <string name="jogos_desc_retro">さまざまなゲーム機のクラシックゲーム。</string>
-    <string name="jogos_desc_tv">TV 本体にインストールされたゲーム。</string>
-    <string name="jogos_jogado">最後にプレイ: %1$s。</string>
-    <string name="jogos_nenhum_titulo">まだゲームがありません</string>
-    <string name="jogos_chip_sem_controle">コントローラーなし</string>
     <string name="jogos_chip_medindo">ネットワークを確認中…</string>
     <string name="jogos_chip_boa">ネットワーク良好</string>
     <string name="jogos_chip_ok">ネットワーク OK</string>
     <string name="jogos_chip_fraca">ネットワーク弱い</string>
     <string name="jogos_chip_sem">インターネットなし</string>
-    <string name="jogos_tecla_escolher">選択</string>
     <string name="jogos_tecla_jogar">プレイ</string>
-    <string name="jogos_tecla_mais">その他のオプション</string>
     <string name="jogos_tecla_segurar">OK 長押し</string>
     <string name="jogos_tecla_opcoes">グループを変更</string>
     <plurals name="jogos_qtd">

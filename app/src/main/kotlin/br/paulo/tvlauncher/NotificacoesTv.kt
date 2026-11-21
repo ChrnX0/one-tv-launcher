@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import br.paulo.tvlauncher.screensaver.ProtetorGaleria
 
 /**
  * As notificações que valem mostrar no protetor de tela (10/11/2026, dono: "sinto falta de notificações ali").

@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Pesan: %s. OK menandai sudah dibaca.</string>
     <string name="mu_apagar">Hapus pesan: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">TV Anda tahun ini (di bulan Desember, di screensaver)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Kartu aplikasi tembus pandang saat tidak dipilih</string>
     <string name="extras_ENTRADAS_TV">Input HDMI di baris aplikasi (hanya di TV yang punya input)</string>
     <string name="ra_titulo">TV Anda di %d</string>
     <string name="ra_canal">Saluran favorit: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">dengarkan</string>
     <string name="ra_dica_favoritar">favorit</string>
     <string name="ra_carregando">Memuat stasiun…</string>
-    <string name="ra_subtitulo">Stasiun dari seluruh dunia · 1–9 di remote memutar favorit Anda</string>
     <string name="ra_sem_catalogo">Katalog radio tidak menjawab. Favorit Anda tetap berfungsi.</string>
     <string name="ra_nada">Stasiun tidak ditemukan.</string>
     <string name="ra_continuar">lanjutkan</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Cari menurut nama</string>
     <string name="ra_buscar_det">Stasiun mana pun di dunia</string>
     <string name="ra_generos">Genre</string>
-    <string name="ra_paises">Negara lain</string>
-    <string name="ra_paises_det">Negara dengan stasiun terbanyak</string>
     <string name="ra_perto">Terdekat</string>
-    <string name="ra_mais_ouvidas">Paling banyak didengar di %s</string>
     <string name="ra_mundo">Paling banyak didengar di dunia</string>
     <string name="ra_resultado">Cari: %s</string>
     <string name="ra_favoritada">Ditambahkan ke favorit</string>

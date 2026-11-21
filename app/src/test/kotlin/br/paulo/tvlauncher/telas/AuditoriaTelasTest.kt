@@ -6,12 +6,16 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import br.paulo.tvlauncher.Estilo
 import br.paulo.tvlauncher.MainActivity
+import br.paulo.tvlauncher.home.SplashOverlay
+import java.io.File
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assume.assumeTrue
@@ -23,9 +27,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
-import kotlin.math.abs
-import kotlin.math.roundToInt
 
 /**
  * Auditoria de medidas (pente fino de 19/11/2026). Abre TODAS as telas do manifesto que abrem sem dados de fora,
@@ -62,7 +63,7 @@ class AuditoriaTelasTest {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()
         val app = RuntimeEnvironment.getApplication()
-        br.paulo.tvlauncher.SplashOverlay.setEnabled(app, false)
+        br.paulo.tvlauncher.home.SplashOverlay.setEnabled(app, false)
         val pm = app.packageManager
         val atividades = pm.getPackageInfo(app.packageName, PackageManager.GET_ACTIVITIES).activities.orEmpty()
             .map { it.name }.sorted()

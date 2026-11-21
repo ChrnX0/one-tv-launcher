@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">음성 바로가기</string>
     <string name="mcp_olhou_tela">Claude가 화면을 봤습니다</string>
     <string name="pg_max_min">최고 %1$d° · 최저 %2$d°</string>
-    <string name="pg_por_do_sol">일몰 %1$s</string>
     <string name="pg_compras">장보기 목록</string>
     <string name="cf_negar">거부</string>
     <string name="cf_permitir">허용</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">삭제</string>
     <string name="pn_parear">페어링</string>
     <string name="pn_titulo">런처 페어링(PC 없이)</string>
-    <string name="pn_lido">화면에서 코드를 읽음</string>
     <string name="pn_nao_achei">아직 페어링 화면을 찾지 못함</string>
     <string name="pn_6">코드는 6자리입니다</string>
     <string name="pn_pareado">페어링됨! 셸 확인 중…</string>

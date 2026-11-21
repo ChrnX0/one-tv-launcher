@@ -2,14 +2,19 @@ package br.paulo.tvlauncher
 
 import androidx.media3.common.C
 import androidx.media3.common.audio.AudioProcessor
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.listen.CorrenteComFone
+import br.paulo.tvlauncher.listen.ProcessadorFone
+import br.paulo.tvlauncher.listen.SomNoFoneRegras
+import br.paulo.tvlauncher.player.ProcessadorDialogo
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 /** Som no fone (degrau 4): rede de casa, limite de 4, rotas, PCM, pedaços, relógio e o processador na corrente. */
 class SomNoFoneTest {

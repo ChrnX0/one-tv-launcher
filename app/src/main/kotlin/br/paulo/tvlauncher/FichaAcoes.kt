@@ -10,10 +10,17 @@ import android.graphics.drawable.StateListDrawable
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.IconeFicha
+import br.paulo.tvlauncher.player.ServicosContas
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.ServicosSync
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.search.BuscaOutrosApps
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.weather.DataSources
 
 /**
  * Fichas de filme e série no estilo C "Botões grandes" (15/11/2026, maquete escolhida para quem vê de longe): à esquerda
@@ -151,8 +158,7 @@ object FichaAcoes {
         val d = Dialog(ctx)
         val fechar = Estilo.botao(ctx, ctx.getString(R.string.fechar))
         fechar.setOnClickListener { d.dismiss() }
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        d.setContentView(Estilo.dialogo(ctx, null, titulo, null, listOf(fechar), larguraDp = 820).also { tela ->
+        Estilo.vestir(d, Estilo.dialogo(ctx, null, titulo, null, listOf(fechar), larguraDp = 820).also { tela ->
             // O texto vai num ScrollView próprio (sinopse longa não passa da tela), alinhado à esquerda, letra de leitura.
             val cartao = tela.getChildAt(0) as LinearLayout
             cartao.addView(ScrollView(ctx).apply {
@@ -162,10 +168,6 @@ object FichaAcoes {
             (cartao.getChildAt(1) as ScrollView).layoutParams = LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = dp(ctx, 16) }
             cartao.layoutParams = (cartao.layoutParams as android.widget.FrameLayout.LayoutParams).apply { height = dp(ctx, 440) }
         })
-        d.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
         // ▲▼ rolam o texto (o botão Fechar é o único com foco; sem isto uma sinopse longa não teria como ser lida).
         d.setOnKeyListener { _, k, e ->
             val rol = ((d.window?.decorView as? ViewGroup)?.let { achar(it) })

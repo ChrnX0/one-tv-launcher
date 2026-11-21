@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.MidiaRecente.Registro
+import br.paulo.tvlauncher.home.MidiaRecente
+import br.paulo.tvlauncher.home.MidiaRecente.Registro
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

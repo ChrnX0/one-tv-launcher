@@ -1,11 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.FilmesFiltro
+import br.paulo.tvlauncher.player.Posicao
+import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import kotlin.random.Random
 
 /** Ideia 23 (14/11/2026): filtro combinado, coleção pelo nome e sorteio em Filmes (FilmesFiltro, pura). */
 class FilmesFiltroTest {

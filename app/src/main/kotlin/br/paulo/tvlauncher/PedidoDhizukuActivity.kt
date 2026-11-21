@@ -13,6 +13,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.PinNaTela
+import br.paulo.tvlauncher.privilege.DonoEmprestado
+import br.paulo.tvlauncher.privilege.RegrasDono
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Tema
 import com.rosan.dhizuku.aidl.IDhizukuRequestPermissionListener
 import com.rosan.dhizuku.shared.DhizukuVariables
 

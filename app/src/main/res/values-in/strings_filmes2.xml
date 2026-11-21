@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (in) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="filmes_filtro">Filter</string>
     <string name="filmes_filtro_titulo">Filter film</string>
-    <string name="filmes_filtro_cabecalho">%1$s · FILTER: %2$s</string>
     <string name="filmes_filtro_genero">Genre: %1$s</string>
     <string name="filmes_filtro_epoca">Periode: %1$s</string>
     <string name="filmes_filtro_nota">Rating minimum: %1$s</string>
@@ -18,7 +16,6 @@
     <string name="filmes_filtro_nao_vistos_curto">belum ditonton</string>
     <string name="filmes_filtro_sem_genero">Tidak ada kategori di daftar ini yang menyebut genre</string>
     <string name="filmes_filtro_vazio">Tidak ada film yang cocok dengan filter ini di kategori ini</string>
-    <string name="filmes_sorteio">Kejutkan saya</string>
     <string name="filmes_sorteio_vazio">Tidak ada film untuk dipilih di sini</string>
     <string name="filmes_colecao">Koleksi film ini</string>
     <string name="filmes_colecao_cat">Koleksi: %1$s</string>

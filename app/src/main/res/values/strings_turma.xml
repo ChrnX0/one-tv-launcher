@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">On the couch</string>
-    <string name="jogos_continuar">Continue</string>
     <string name="jogos_controle_pronto">ready</string>
     <string name="jogos_controle_carregar">charge soon</string>
     <string name="jogos_parear_um">Pair a controller</string>
-    <string name="jogos_todos">All</string>
     <string name="turma_titulo">Your crew</string>
     <string name="turma_online">%1$d online</string>
     <string name="turma_mais_online">+ %1$d online</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">The server widget is off</string>
     <string name="turma_desligado_texto">In Discord: Server Settings, Widget, turn on Enable Server Widget.</string>
     <string name="turma_qr_dica">Point your phone here to join the voice chat. The talking happens on the phone.</string>
-    <string name="turma_aqui">%1$d of your crew here</string>
     <string name="turma_jogando">%1$s playing %2$s</string>
     <string name="turma_dois">%1$s and %2$s</string>
     <string name="turma_e_mais">%1$s and %2$d more</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Save</string>
     <string name="turma_config_tirar">Remove the crew</string>
     <string name="turma_id_invalido">This is not a Discord server ID (17 to 20 digits).</string>
-    <string name="cruz_sofa">Couch</string>
     <string name="cruz_sofa_sub">Controllers and your Discord crew</string>
     <string name="cruz_sofa_voz">%1$d in voice · %2$s</string>
 </resources>

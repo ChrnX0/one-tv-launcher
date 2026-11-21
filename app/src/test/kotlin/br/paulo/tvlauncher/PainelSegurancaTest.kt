@@ -1,5 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.ChecagensPainel
+import br.paulo.tvlauncher.panel.CodigoEntrada
+import br.paulo.tvlauncher.panel.ControleTentativas
+import br.paulo.tvlauncher.panel.PinSeguro
+import br.paulo.tvlauncher.panel.Sessoes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals

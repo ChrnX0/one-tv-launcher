@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV i filmy</string>
     <string name="cl_aba_conta_det">Konto IPTV, serwisy z filmami i serialami, dźwięk i napisy</string>
     <string name="cl_aba_parental">Kontrola rodzicielska</string>
-    <string name="cl_aba_parental_det">Zablokuj kanały PIN-em: znikają z listy i nie są odtwarzane</string>
-    <string name="cl_aba_aparencia">Wygląd</string>
-    <string name="cl_aba_aparencia_det">Motyw, stosy aplikacji, pogoda i alerty na ekranie</string>
     <string name="cl_aba_energia">Ekran i zasilanie</string>
     <string name="cl_aba_energia_det">Wygaszacz i automatyczne wyłączanie</string>
-    <string name="cl_aba_visitas">Goście i harmonogramy</string>
-    <string name="cl_aba_visitas_det">Tryb gościa i zaplanowane działania</string>
     <string name="cl_aba_rede">Sieć</string>
-    <string name="cl_aba_rede_det">DNS, VPN i szybkość internetu</string>
     <string name="cl_aba_remoto">Dostęp zdalny</string>
     <string name="cl_aba_remoto_det">Panel w przeglądarce, PIN i Claude przez internet</string>
     <string name="cl_aba_sistema">System</string>
-    <string name="cl_aba_sistema_det">Diagnostyka, aktualizacje, aplikacje i uprawnienia</string>
     <string name="cl_dica_aba">wybierz zakładkę</string>
     <string name="cl_dica_entrar">otwórz opcje</string>
     <string name="cl_dica_sair">wyjdź</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Automatyczne aktualizacje launchera</string>
     <string name="cl_acao_atualizacao_det">Sam instaluje nową wersję przy wyłączonym ekranie. Zablokowane = tylko powiadamia.</string>
     <string name="cl_tema">Motyw</string>
-    <string name="cl_pilhas_det">Grupuje luźne aplikacje według kategorii; Twoje stosy zostają</string>
     <string name="cl_clima">Pogoda</string>
     <string name="cl_end_nenhum">brak · telewizor lokalizuje się przez Wi-Fi; adres jest używany, gdy Wi-Fi nie wystarcza</string>
     <string name="cl_end_clima">Adres dla pogody</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Karty</string>
     <string name="cl_widget_solto">Bez ramki</string>
     <string name="cl_linha_baixo">Widżety wygaszacza</string>
-    <string name="cl_linha_baixo_det">Szklany pasek, karty lub bez ramki · OK zmienia</string>
     <string name="cl_desligar">Wyłącz przy bezczynności</string>
     <string name="cl_desligar_det">Odtwarzane wideo liczy się jako użycie; ostrzega 60 s wcześniej · OK zmienia</string>
     <string name="cl_visita_det">Ukrywa profil, kalendarz i zaznaczone poniżej aplikacje</string>
     <string name="cl_apps_visita">Aplikacje ukryte w trybie gościa</string>
     <string name="cl_carregando_apps">Ładowanie aplikacji…</string>
-    <string name="cl_some_visita">ukryta w trybie gościa</string>
     <string name="cl_vpn_nao_fixa">launcher nie przypina VPN</string>
     <string name="cl_vpn_adguard">aplikacja AdGuard VPN, zawsze włączona · OK otwiera aplikację</string>
     <string name="cl_painel_navegador">Panel w przeglądarce</string>

@@ -13,7 +13,6 @@
     <string name="sv_desligado">로그인</string>
     <string name="sv_entrando">로그인 중…</string>
     <string name="sv_conectado">연결됨</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">켜짐</string>
     <string name="sv_sem_chave">이 빌드에는 아직 이 서비스들의 키가 없습니다. 다음 업데이트 후에 나타납니다.</string>
     <string name="sv_pedindo">%1$s에 코드 요청 중…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">비밀번호</string>
     <string name="sv_gravar">저장</string>
     <string name="sv_cancelar">취소</string>
-    <string name="sv_conferindo">%1$s에서 확인 중…</string>
     <string name="sv_limite_dia">오늘의 자막 한도가 끝났습니다. 24시간 후에 다시 채워집니다(OpenSubtitles 계정이 있으면 하루 20개).</string>
     <string name="sv_tmdb_atribuicao">이 제품은 TMDB API를 사용하지만 TMDB의 보증이나 인증을 받지 않았습니다.</string>
     <string name="ext_saga">%1$s · %3$d편 중 %2$d편이 내 목록에 있음</string>

@@ -6,7 +6,7 @@ import java.io.File
 
 /**
  * Elevação 16.8: o árabe só espelha se o código não fixar esquerda e direita. Varre o código: margem e recuo sempre
- * "start/end", gravidade START/END e o manifesto com supportsRtl. (GradeApps faz a própria conta espelhada.)
+ * "start/end", gravidade START/END e o manifesto com supportsRtl.
  */
 class RtlCodigoTest {
     private val pasta = File("src/main/kotlin/br/paulo/tvlauncher")
@@ -19,7 +19,7 @@ class RtlCodigoTest {
         assertTrue("rodar a partir da pasta app/", pasta.isDirectory)
         val proibidos = listOf(Regex("""\b(left|right)Margin\s*="""), Regex("""Gravity\.(LEFT|RIGHT)\b"""), Regex("""(?<![\w.])setPadding\(|\.setPadding\("""))
         val achados = mutableListOf<String>()
-        pasta.listFiles { f -> f.name.endsWith(".kt") && f.name != "GradeApps.kt" }!!.forEach { f ->
+        CodeSource.all().forEach { f ->
             f.readLines().forEachIndexed { i, l ->
                 val codigo = l.substringBefore("//")
                 if (proibidos.any { it.containsMatchIn(codigo) }) achados += "${f.name}:${i + 1}: ${l.trim().take(100)}"

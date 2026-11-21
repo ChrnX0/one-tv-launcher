@@ -14,8 +14,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import br.paulo.tvlauncher.ServicosContas.Situacao
-import br.paulo.tvlauncher.ServicosFilmes.Servico
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.PainelWeb
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.ServicosContas
+import br.paulo.tvlauncher.player.ServicosContas.Situacao
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.ServicosFilmes.Servico
 
 /**
  * Configurações > Conta > Serviços de filmes e séries (14/11/2026). Uma linha por serviço, com o que ele faz em uma

@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.TurmaDiscord.Status
+import br.paulo.tvlauncher.games.TurmaDiscord
+import br.paulo.tvlauncher.games.TurmaDiscord.Status
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

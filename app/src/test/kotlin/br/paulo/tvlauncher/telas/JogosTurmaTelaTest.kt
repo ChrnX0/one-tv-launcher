@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.CruzOuvir
 import br.paulo.tvlauncher.JogosActivity
-import br.paulo.tvlauncher.TurmaDiscord
-import br.paulo.tvlauncher.TurmaDiscordTv
+import br.paulo.tvlauncher.games.TurmaDiscord
+import br.paulo.tvlauncher.games.TurmaDiscordTv
+import br.paulo.tvlauncher.listen.CruzOuvir
+import java.io.File
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,8 +23,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 /**
  * Tela Jogos com a turma do Discord (17/11/2026; na cruz desde 18/11/2026): foto na 1ª prateleira e na turma (foco na sala de

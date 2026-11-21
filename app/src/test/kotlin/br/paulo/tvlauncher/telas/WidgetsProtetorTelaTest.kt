@@ -12,9 +12,9 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import br.paulo.tvlauncher.Estilo
 import br.paulo.tvlauncher.FonteVidro
-import br.paulo.tvlauncher.Protetor
-import br.paulo.tvlauncher.WidgetsProtetor
-import br.paulo.tvlauncher.WidgetsTempo
+import br.paulo.tvlauncher.screensaver.Protetor
+import br.paulo.tvlauncher.screensaver.WidgetsProtetor
+import br.paulo.tvlauncher.screensaver.WidgetsTempo
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith

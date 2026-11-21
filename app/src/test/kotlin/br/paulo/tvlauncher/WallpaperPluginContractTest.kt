@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.WallpaperPluginContract as W
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.screensaver.WallpaperPluginContract as W
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

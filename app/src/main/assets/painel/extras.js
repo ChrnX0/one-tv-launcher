@@ -24,7 +24,6 @@ const NOMES_CHAVES = {
   RETROSPECTIVA: 'Sua semana na TV (domingo, 20h)',
   RETROSPECTIVA_ANO: 'Sua TV no ano (em dezembro, no protetor)',
   ENTRADAS_TV: 'Entradas HDMI na linha de apps (só em TV com entrada)',
-  CARTOES_TRANSPARENTES: 'Cartões de app transparentes fora do foco',
   NAO_PERTURBE: 'Não perturbe (avisos esperam durante filme, madrugada ou visita)',
   ABERTURA_PRONTA: 'Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)',
   MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
@@ -729,6 +728,9 @@ $('btnConsumo').addEventListener('click', async () => {
 
 // ---------- casa (Home Assistant; PainelExtras "casa/*", CasaHA.kt) ----------
 
+/** Estados do Home Assistant que aparecem para todo aparelho; os outros (valor de sensor, "heat"...) ficam como vêm. */
+const ESTADO_CASA = { on: 'ligado', off: 'desligado', unavailable: 'fora do ar', unknown: 'sem leitura' };
+
 async function carregarCasa() {
   const r = await chamar('GET', '/api/extras/casa');
   $('casaEndereco').value = r.endereco || '';
@@ -744,7 +746,9 @@ async function carregarCasa() {
     // Ideia 51: sensor mostra o valor; ar-condicionado, a temperatura pedida e a do ambiente.
     let estado = a.valor || a.estado;
     if (d === 'climate' && a.estado !== 'off' && a.alvo != null) estado = `${a.estado} ${a.alvo}°` + (a.atual != null ? ` (ambiente ${a.atual}°)` : '');
-    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${estado}`;
+    // 21/11/2026: o estado cru do Home Assistant ("unavailable") vira palavra da casa, num span próprio (o i18n traduz).
+    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · `;
+    const est = document.createElement('span'); est.textContent = ESTADO_CASA[estado] || estado; nome.append(est);
     if (d === 'sensor' || d === 'binary_sensor') { linha.append(nome); lista.append(linha); continue; }
     const acao = d === 'camera' ? 'ver' : (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
     const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario';
@@ -788,3 +792,48 @@ $('btnCasaEsquecer').addEventListener('click', async () => {
 document.addEventListener('aba', (ev) => {
   if (ev.detail === 'extras') carregarCasa().catch((e) => mostrar($('statusCasa'), textoErro(e)));
 });
+
+// ---------- ícones da cruz (21/11/2026, PanelIcons.kt) ----------
+
+// Nome de cada ícone na tela (o texto em português é a chave da tradução).
+const NOMES_ICONES = {
+  CONTINUAR: 'Continuar', ASSISTIR: 'Assistir', TV: 'TV', OUVIR: 'Ouvir', JOGAR: 'Jogar', APLICATIVOS: 'Aplicativos',
+  SERIES: 'Séries', FILMES: 'Filmes', REDE: 'Na rede', ADDONS: 'Add-ons', RADIO: 'Rádio', PODCASTS: 'Podcasts',
+  JOGOS: 'Jogos', SOFA: 'Sofá', TODOS_APPS: 'Todos os apps', PLUGIN: 'Plugin', DORMIR: 'Dormir', CENTRAL: 'Central de jogos',
+};
+
+document.addEventListener('aba', (ev) => { if (ev.detail === 'telainicial') carregarIcones(); });
+
+async function carregarIcones() {
+  try { desenharIcones(await chamar('GET', '/api/extras/icons')); } catch (e) { mostrar($('statusIcones'), textoErro(e)); }
+}
+
+async function mudarIcones(corpo) {
+  try { desenharIcones(await chamar('POST', '/api/extras/icons', corpo)); mostrar($('statusIcones'), 'Salvo. A tela inicial muda quando voltar para ela.'); }
+  catch (e) { mostrar($('statusIcones'), textoErro(e)); }
+}
+
+function desenharIcones(r) {
+  const estilos = new Map(r.styles.map((s) => [s.id, s]));
+  const conjunto = $('cfgConjuntoIcones');
+  conjunto.replaceChildren(...r.styles.map((s) => { const o = document.createElement('option'); o.value = s.id; o.textContent = s.name; return o; }));
+  conjunto.value = r.set;
+  conjunto.onchange = () => mudarIcones({ set: conjunto.value });
+  const lista = $('listaIcones');
+  lista.replaceChildren();
+  for (const t of r.types) {
+    const vale = estilos.get(t.style || r.set);
+    const item = document.createElement('div'); item.className = 'icone-item' + (t.style ? ' trocado' : '');
+    const previa = document.createElement('div'); previa.className = 'previa';
+    if (vale && vale.image) {
+      const img = document.createElement('img'); img.alt = ''; img.loading = 'lazy';
+      img.src = `/api/extras/icons/image?style=${encodeURIComponent(vale.id)}&type=${encodeURIComponent(t.id)}`;
+      previa.append(img);
+    } else { const s = document.createElement('span'); s.textContent = vale ? vale.name : ''; previa.append(s); }
+    const nome = document.createElement('strong'); nome.textContent = NOMES_ICONES[t.id] || t.id;
+    const seguir = 'Seguir o conjunto';
+    item.append(previa, nome, menu(NOMES_ICONES[t.id] || t.id, [['', seguir], ...r.styles.map((s) => [s.id, s.name])], t.style,
+      (v) => mudarIcones({ type: t.id, style: v })));
+    lista.append(item);
+  }
+}

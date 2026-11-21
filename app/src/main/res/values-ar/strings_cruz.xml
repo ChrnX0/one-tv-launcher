@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">تخفت الشاشة ببطء ثم يُطفأ التلفزيون</string>
     <string name="cruz_desliga_as">يُطفأ الساعة %1$s</string>
     <string name="cruz_dormir_cancelar">OK للإلغاء</string>
-    <string name="cruz_linha">خط</string>
+    <string name="cruz_linha">أساسي</string>
     <string name="cruz_mover">نقل إلى…</string>
     <string name="cruz_mover_titulo">نقل %1$s إلى</string>
     <string name="cruz_central">مركز الألعاب</string>
@@ -61,7 +61,6 @@
     <string name="jogos_semana">هذا الأسبوع</string>
     <string name="jogos_semana_jogado">لعب خلال 7 أيام</string>
     <string name="jogos_semana_mais">الأكثر لعبًا</string>
-    <string name="jogos_semana_controles">أذرع تحكم متصلة</string>
     <string name="jogos_menos_de_1_min">أقل من دقيقة</string>
     <string name="jogos_min">%1$d د</string>
     <string name="jogos_h_min">%1$d س %2$d د</string>
@@ -85,10 +84,16 @@
     <string name="casa_fora_texto">تأكد من أن الخادم الخاص به يعمل. يعيد التلفاز المحاولة تلقائيًا كل بضع ثوانٍ.</string>
     <string name="cruz_barra_ilha">جزيرة</string>
     <string name="cruz_canto_no_ar">على الهواء</string>
-    <string name="cruz_canto_buscar">بحث</string>
-    <string name="cruz_canto_buscar_txt">▲ يفتح الشريط مع البحث</string>
     <string name="cruz_canto_gravando">يسجّل</string>
     <string name="cruz_canto_tocando">يُشغَّل</string>
     <string name="cruz_canto_parou">توقّف عند</string>
     <string name="cruz_canto_conectado">متصل</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">عتيق</string>
+    <string name="cruz_joia">جوهرة</string>
+    <string name="cruz_foto">واقعي</string>
+    <string name="cruz_vintage2">عتيق 2.0</string>
+    <string name="cruz_icone_seguir">اتباع المجموعة (%1$s)</string>
+    <string name="cruz_icone_de">الأيقونة: %1$s</string>
+    <string name="cruz_icone_categoria">الفئة كلها: %1$s</string>
 </resources>

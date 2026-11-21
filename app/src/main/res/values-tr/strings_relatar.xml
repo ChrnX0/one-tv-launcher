@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QR kod, teknik bilgileri doldurulmuş formu telefonda açar</string>
     <string name="rel_texto">Telefon kamerasını koda tutun. Ne olduğunu yazıp gönderin. Adınız, hesabınız, ağınız ve şehriniz eklenmez.</string>
     <string name="rel_vai_junto">Neler eklenir</string>
+    <string name="rel_l_oque">Ne oldu</string>
+    <string name="rel_l_versao">Sürüm</string>
+    <string name="rel_l_uso">Mod</string>
+    <string name="rel_l_quedas">Çökme / donma (7 gün)</string>
+    <string name="rel_l_erro">Son hata</string>
 </resources>

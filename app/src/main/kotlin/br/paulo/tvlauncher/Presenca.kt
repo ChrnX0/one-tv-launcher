@@ -7,6 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import android.util.Log
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.network.UnifiCliente
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.settings.Extras
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -119,7 +124,7 @@ object Presenca {
             INTERVALO_MS, pendente(ctx))
     }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("presenca", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.PRESENCA, Context.MODE_PRIVATE)
 
     /** Uma conferência. Chama o roteador: FORA da thread da tela. */
     fun conferir(ctx: Context): String {

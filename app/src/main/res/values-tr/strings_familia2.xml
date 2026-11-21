@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Mesaj: %s. OK okundu olarak işaretler.</string>
     <string name="mu_apagar">Mesajı sil: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Bu yıl TV’niz (aralıkta, ekran koruyucuda)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Seçili değilken saydam uygulama kartları</string>
     <string name="extras_ENTRADAS_TV">Uygulama sırasında HDMI girişleri (yalnızca girişi olan TV’lerde)</string>
     <string name="ra_titulo">%d yılında TV’niz</string>
     <string name="ra_canal">Favori kanal: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">dinle</string>
     <string name="ra_dica_favoritar">favori</string>
     <string name="ra_carregando">İstasyonlar yükleniyor…</string>
-    <string name="ra_subtitulo">Dünyanın her yerinden istasyonlar · kumandadaki 1–9 favorilerinizi çalar</string>
     <string name="ra_sem_catalogo">Radyo kataloğu yanıt vermedi. Favorileriniz yine çalışır.</string>
     <string name="ra_nada">İstasyon bulunamadı.</string>
     <string name="ra_continuar">devam et</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Ada göre ara</string>
     <string name="ra_buscar_det">Dünyadaki herhangi bir istasyon</string>
     <string name="ra_generos">Türler</string>
-    <string name="ra_paises">Başka ülke</string>
-    <string name="ra_paises_det">En çok istasyonu olan ülkeler</string>
     <string name="ra_perto">Yakında</string>
-    <string name="ra_mais_ouvidas">%s’de en çok dinlenenler</string>
     <string name="ra_mundo">Dünyada en çok dinlenenler</string>
     <string name="ra_resultado">Arama: %s</string>
     <string name="ra_favoritada">Favorilere eklendi</string>

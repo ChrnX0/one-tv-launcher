@@ -1,8 +1,10 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ServicosFilmes.Espera
-import br.paulo.tvlauncher.ServicosFilmes.Motivo
-import br.paulo.tvlauncher.ServicosFilmes.Servico
+import br.paulo.tvlauncher.player.LegendaExterna
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.ServicosFilmes.Espera
+import br.paulo.tvlauncher.player.ServicosFilmes.Motivo
+import br.paulo.tvlauncher.player.ServicosFilmes.Servico
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

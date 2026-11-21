@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Gotowe wyglądy</string>
-    <string name="vpr_det">Każde OK przełącza na następny wygląd: motyw, tekst i rozmiar kart naraz</string>
+    <string name="vpr_det">Każde OK przełącza na następny wygląd: motyw, tekst i kolor tła naraz</string>
     <string name="vpr_meu">Twój układ</string>
     <string name="vpr_classico">Klasyczny</string>
     <string name="vpr_leitura">Łatwe czytanie</string>
     <string name="vpr_galeria">Galeria</string>
     <string name="vpr_galeria_grande">Duża galeria</string>
-    <string name="vpr_grade">Siatka</string>
-    <string name="vpr_grade_grande">Duża siatka</string>
     <string name="vpr_cores">Kolory aplikacji</string>
-    <string name="vpr_cinema">Kino</string>
 </resources>

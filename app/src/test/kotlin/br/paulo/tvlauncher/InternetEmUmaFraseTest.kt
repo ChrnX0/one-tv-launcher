@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.network.InternetEmUmaFrase
+import br.paulo.tvlauncher.network.ResumoRede
+import java.time.LocalDateTime
+import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 /** "A internet caiu? Em uma frase" (InternetEmUmaFrase): cada cenário de casa vira a frase e a causa certas. */
 class InternetEmUmaFraseTest {

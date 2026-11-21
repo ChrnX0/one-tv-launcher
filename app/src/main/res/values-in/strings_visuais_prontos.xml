@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Tampilan siap pakai</string>
-    <string name="vpr_det">Setiap OK beralih ke tampilan berikutnya: tema, teks, dan ukuran kartu sekaligus</string>
+    <string name="vpr_det">Setiap OK beralih ke tampilan berikutnya: tema, teks, dan warna latar sekaligus</string>
     <string name="vpr_meu">Pengaturan Anda</string>
     <string name="vpr_classico">Klasik</string>
     <string name="vpr_leitura">Mudah dibaca</string>
     <string name="vpr_galeria">Galeri</string>
     <string name="vpr_galeria_grande">Galeri besar</string>
-    <string name="vpr_grade">Kisi</string>
-    <string name="vpr_grade_grande">Kisi besar</string>
     <string name="vpr_cores">Warna aplikasi</string>
-    <string name="vpr_cinema">Bioskop</string>
 </resources>

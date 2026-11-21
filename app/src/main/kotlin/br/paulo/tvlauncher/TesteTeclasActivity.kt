@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
+import br.paulo.tvlauncher.input.TesteTeclas
 
 /**
  * Tela do testador de teclas (ver [TesteTeclas]): mostra, ao vivo, cada tecla que o serviço de acessibilidade recebe.

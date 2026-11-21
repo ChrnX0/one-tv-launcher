@@ -1,12 +1,17 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.HoraDormir
+import br.paulo.tvlauncher.backup.BackupCompleto
+import br.paulo.tvlauncher.backup.BackupConfig
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.network.CasaHA
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** Auditoria de 10/11/2026 (grupo "tempo"): rotinas, hora de dormir, Home Assistant, fala do boletim e backup completo. */
 class AuditoriaTempoTest {
@@ -70,7 +75,7 @@ class AuditoriaTempoTest {
         assertTrue("rodar a partir da pasta app/", pasta.isDirectory)
         val nomes = HashSet<String>()
         val padroes = listOf(Regex("""getSharedPreferences\(\s*"([a-z_]+)""""), Regex("""const val (?:PREFS|ARQUIVO) = "([a-z_]+)""""))
-        pasta.listFiles { f -> f.name.endsWith(".kt") }!!.forEach { f ->
+        CodeSource.all().forEach { f ->
             val t = f.readText()
             for (r in padroes) r.findAll(t).forEach { nomes.add(it.groupValues[1]) }
         }

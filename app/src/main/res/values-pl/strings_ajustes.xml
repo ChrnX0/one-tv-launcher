@@ -93,10 +93,6 @@
     <string name="vq_det">Pokazuje kod QR z wyglądem tego telewizora: motyw, rozmiar tekstu, ikony.</string>
     <string name="vq_texto">Zeskanuj go telefonem, aby go zachować lub wysłać komuś z Sofaly.</string>
     <string name="vq_fechar">Zamknij</string>
-    <string name="lh_titulo">Rozmiar kart aplikacji</string>
-    <string name="lh_det">Większe karty lepiej widać z kanapy.</string>
-    <string name="lh_normal">Normalny</string>
-    <string name="lh_grande">Duży</string>
     <string name="pl_titulo">Plany</string>
     <string name="pl_texto">Wszystko jest darmowe, dopóki sprzedaż nie ruszy. Później Pro i Ultra kupuje się na telefonie.</string>
     <string name="pl_basico">Podstawowy</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Wszystko z Podstawowego\n• Wiele list IPTV, nagrywanie\n• Pełny panel WWW\n• Claude, rutyny, Home Assistant\n• Wszystkie motywy, kopia w chmurze</string>
     <string name="pl_ultra_itens">• Wszystko z Pro\n• Lepsza pogoda (3 modele)\n• Bogate karty filmów\n• Automatyczne napisy\n• Do 3 telewizorów</string>
     <string name="pl_qr">Zeskanuj telefonem, aby zobaczyć ceny i kupić.</string>
-    <string name="lh_arranjo">Układ aplikacji</string>
-    <string name="lh_arranjo_det">Rząd przewijany w bok albo siatka ze wszystkimi aplikacjami na widoku.</string>
-    <string name="lh_fileira">Rząd</string>
-    <string name="lh_grade">Siatka</string>
     <string name="pl_assinar">Subskrybuj</string>
     <string name="pl_assinar_preco">Subskrybuj · %1$s</string>
     <string name="pl_seu_plano">Twój plan</string>

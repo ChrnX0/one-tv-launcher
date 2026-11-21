@@ -1,9 +1,9 @@
 package br.paulo.tvlauncher
 
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * Confere a estrutura do index.html do painel. Motivo (05/11/2026): um merge local perdeu o </section> da aba Falar, e
@@ -60,8 +60,7 @@ class PainelHtmlTest {
      * chega como 404 na TV e a aba fica morta, sem erro nenhum no build (10/11/2026: ui.js e ia.js).
      */
     @Test fun todoArquivoDoIndexEstaNaListaDoServidor() {
-        val web = listOf("src/main/kotlin/br/paulo/tvlauncher/PainelWeb.kt", "app/src/main/kotlin/br/paulo/tvlauncher/PainelWeb.kt")
-            .map(::File).first { it.isFile }.readText()
+        val web = CodeSource.file("PainelWeb.kt").readText()
         val usados = Regex("""<(?:script[^>]+src|link[^>]+href)="([^":]+)"""").findAll(html).map { it.groupValues[1] }.toList()
         assertTrue(usados.isNotEmpty())
         for (u in usados) assertTrue("\"$u\" está no index.html mas não na lista TIPOS do PainelWeb.kt", "\"/$u\" to" in web)

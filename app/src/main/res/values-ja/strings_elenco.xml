@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">字幕を TV で翻訳しました（自動翻訳）。残りも翻訳を続けています。</string>
     <string name="legenda_trad_pronta">字幕の翻訳が完了しました</string>
     <string name="series_sinopse_mais">あらすじ全文</string>
-    <string name="series_sinopse_menos">あらすじを短く</string>
     <string name="series_continuar_curto">▶  %1$s の続きを見る</string>
     <string name="series_episodios">エピソード</string>
     <string name="series_trocar_temporada">シーズンを変更</string>

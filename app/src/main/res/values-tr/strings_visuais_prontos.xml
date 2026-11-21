@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Hazır görünümler</string>
-    <string name="vpr_det">Her OK bir sonraki görünüme geçer: tema, yazı ve kart boyutu birlikte</string>
+    <string name="vpr_det">Her OK bir sonraki görünüme geçer: tema, yazı ve arka plan rengi birlikte</string>
     <string name="vpr_meu">Sizin ayarınız</string>
     <string name="vpr_classico">Klasik</string>
     <string name="vpr_leitura">Kolay okuma</string>
     <string name="vpr_galeria">Galeri</string>
     <string name="vpr_galeria_grande">Büyük galeri</string>
-    <string name="vpr_grade">Izgara</string>
-    <string name="vpr_grade_grande">Büyük ızgara</string>
     <string name="vpr_cores">Uygulama renkleri</string>
-    <string name="vpr_cinema">Sinema</string>
 </resources>

@@ -11,8 +11,11 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import br.paulo.tvlauncher.ServicosFilmes.Servico
-import br.paulo.tvlauncher.SincronizarFilmes.ListaFora
+import br.paulo.tvlauncher.player.ServicosContas
+import br.paulo.tvlauncher.player.ServicosFilmes.Servico
+import br.paulo.tvlauncher.player.ServicosSync
+import br.paulo.tvlauncher.player.SincronizarFilmes
+import br.paulo.tvlauncher.player.SincronizarFilmes.ListaFora
 
 /**
  * A tela de uma conta conectada (esboço sincronizar.png, 14/11/2026): Configurações › TV e filmes › Serviços de filmes
@@ -73,7 +76,9 @@ class SincronizarActivity : Activity() {
             val outroPerfil = !ServicosSync.perfilCerto(this)
             ui.post {
                 if (isDestroyed) return@post
-                if (conta == null) { finish(); return@post }
+                if (conta == null) {   // a conta saiu (ou nunca entrou): diz o que falta em vez de fechar calada
+                    AvisoTv.rapido(this, getString(R.string.aviso_sync_titulo), getString(R.string.aviso_sync_texto, servico.nome)); finish(); return@post
+                }
                 lista.removeAllViews()
                 val nome = conta.usuario.ifBlank { servico.nome }
                 val sub = if (servico == Servico.MDBLIST) getString(R.string.sync_sub_mdblist, nome) else getString(R.string.sync_sub, nome) + " " +

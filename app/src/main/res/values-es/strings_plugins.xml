@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugins</string>
-    <string name="plg_cfg_det">Tarjetas de otras apps en la fila Ver. Cada una necesita tu OK.</string>
-    <string name="plg_det">Activa solo apps en las que confías. El plugin solo envía un texto corto; no ve tus apps ni tus cuentas.</string>
     <string name="plg_nenhum">Ningún plugin instalado. Los plugins son apps de otros desarrolladores que muestran una tarjeta aquí, como el marcador de un partido o un precio.</string>
     <string name="plg_ligado">Activado</string>
     <string name="plg_desligado">Desactivado</string>

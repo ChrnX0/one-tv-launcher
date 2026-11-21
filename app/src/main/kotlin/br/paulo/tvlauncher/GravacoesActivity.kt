@@ -5,6 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.Datas
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.Pastas
+import br.paulo.tvlauncher.panel.confirmar
+import br.paulo.tvlauncher.player.GravacaoDestino
+import br.paulo.tvlauncher.player.GravacaoRegras
+import br.paulo.tvlauncher.player.MidiaArmazem
+import br.paulo.tvlauncher.player.RecordingCloudCopy
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

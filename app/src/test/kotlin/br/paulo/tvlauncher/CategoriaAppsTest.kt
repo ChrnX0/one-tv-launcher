@@ -1,7 +1,8 @@
 package br.paulo.tvlauncher
 
 import android.content.pm.ApplicationInfo
-import br.paulo.tvlauncher.CruzLogica.Categoria
+import br.paulo.tvlauncher.home.CategoriaApps
+import br.paulo.tvlauncher.home.CruzLogica.Categoria
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

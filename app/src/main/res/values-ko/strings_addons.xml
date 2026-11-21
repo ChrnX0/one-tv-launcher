@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">소스 선택</string>
     <string name="ad_dica_voltar">뒤로</string>
     <string name="ad_cfg_det">설치된 애드온. 선택해 추가하거나 제거합니다.</string>
-    <string name="ad_cfg_remover_qual">어떤 애드온을 삭제할까요?</string>
     <string name="ad_cfg_remover">%1$s이(가) 이 TV에서 삭제됩니다.</string>
     <string name="ad_cfg_remover_sim">삭제</string>
     <string name="ad_add_titulo">애드온 추가</string>

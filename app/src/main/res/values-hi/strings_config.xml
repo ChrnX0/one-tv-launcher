@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV और फ़िल्में</string>
     <string name="cl_aba_conta_det">IPTV खाता, फ़िल्म और सीरीज़ सेवाएँ, ऑडियो और सबटाइटल</string>
     <string name="cl_aba_parental">पैरेंटल कंट्रोल</string>
-    <string name="cl_aba_parental_det">PIN से चैनल लॉक करें: वे सूची से गायब होते हैं और नहीं चलते</string>
-    <string name="cl_aba_aparencia">दिखावट</string>
-    <string name="cl_aba_aparencia_det">थीम, ऐप समूह, मौसम और स्क्रीन पर सूचनाएँ</string>
     <string name="cl_aba_energia">स्क्रीन और पावर</string>
     <string name="cl_aba_energia_det">स्क्रीन सेवर और अपने-आप बंद होना</string>
-    <string name="cl_aba_visitas">मेहमान और रूटीन</string>
-    <string name="cl_aba_visitas_det">मेहमान मोड और तय काम</string>
     <string name="cl_aba_rede">नेटवर्क</string>
-    <string name="cl_aba_rede_det">DNS, VPN और इंटरनेट स्पीड</string>
     <string name="cl_aba_remoto">रिमोट एक्सेस</string>
     <string name="cl_aba_remoto_det">ब्राउज़र पैनल, PIN और इंटरनेट पर Claude</string>
     <string name="cl_aba_sistema">सिस्टम</string>
-    <string name="cl_aba_sistema_det">जाँच, अपडेट, ऐप और अनुमतियाँ</string>
     <string name="cl_dica_aba">टैब चुनें</string>
     <string name="cl_dica_entrar">विकल्प खोलें</string>
     <string name="cl_dica_sair">बाहर</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">लॉन्चर के अपने-आप अपडेट</string>
     <string name="cl_acao_atualizacao_det">स्क्रीन बंद होने पर नया वर्शन खुद इंस्टॉल करता है। ब्लॉक = सिर्फ़ सूचना।</string>
     <string name="cl_tema">थीम</string>
-    <string name="cl_pilhas_det">अलग ऐप को श्रेणी के अनुसार समूह में रखता है; आपके अपने समूह बने रहते हैं</string>
     <string name="cl_clima">मौसम</string>
     <string name="cl_end_nenhum">कोई नहीं · TV Wi-Fi से अपनी जगह ढूँढता है; जब Wi-Fi न कर पाए तब पता इस्तेमाल होता है</string>
     <string name="cl_end_clima">मौसम पता</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">कार्ड</string>
     <string name="cl_widget_solto">बिना बॉक्स</string>
     <string name="cl_linha_baixo">स्क्रीन सेवर विजेट</string>
-    <string name="cl_linha_baixo_det">काँच की पट्टी, कार्ड या बिना बॉक्स · OK से बदलें</string>
     <string name="cl_desligar">निष्क्रिय होने पर बंद करें</string>
     <string name="cl_desligar_det">चलता वीडियो उपयोग माना जाता है; 60 s पहले चेतावनी · OK से बदलें</string>
     <string name="cl_visita_det">प्रोफ़ाइल, कैलेंडर और नीचे चुने ऐप छिपाता है</string>
     <string name="cl_apps_visita">मेहमान मोड में छिपे ऐप</string>
     <string name="cl_carregando_apps">ऐप लोड हो रहे हैं…</string>
-    <string name="cl_some_visita">मेहमान मोड चालू रहने पर छिपा</string>
     <string name="cl_vpn_nao_fixa">लॉन्चर कोई VPN स्थिर नहीं करता</string>
     <string name="cl_vpn_adguard">AdGuard VPN ऐप, हमेशा चालू · OK से ऐप खुलता है</string>
     <string name="cl_painel_navegador">ब्राउज़र पैनल</string>

@@ -1,13 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.ConectorWindows
+import java.security.MessageDigest
+import java.util.Base64
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.security.MessageDigest
-import java.util.Base64
 
 class ConectorWindowsTest {
     private val der = ByteArray(300) { (it * 7).toByte() }

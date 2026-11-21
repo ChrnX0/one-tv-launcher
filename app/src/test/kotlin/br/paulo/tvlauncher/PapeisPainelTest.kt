@@ -1,22 +1,22 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.PapeisPainel.Papel
+import br.paulo.tvlauncher.input.LeitorNomes
+import br.paulo.tvlauncher.panel.PapeisPainel
+import br.paulo.tvlauncher.panel.PapeisPainel.Papel
+import br.paulo.tvlauncher.panel.Sessoes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * Elevação 18.1: a trava dos papéis, conferida ROTA POR ROTA. As rotas saem do próprio código do painel (PainelWeb e
  * PainelExtras): rota nova que aparecer lá entra aqui sozinha e, sem estar na lista do papel, tem de ser negada.
  */
 class PapeisPainelTest {
-    private val fonte = listOf("PainelWeb.kt", "PainelExtras.kt", "PainelCuidar.kt", "PainelAddons.kt").map {
-        File("src/main/kotlin/br/paulo/tvlauncher/$it").takeIf { f -> f.exists() } ?: File("app/src/main/kotlin/br/paulo/tvlauncher/$it")
-    }
+    private val fonte = listOf("PainelWeb.kt", "PainelExtras.kt", "PainelCuidar.kt", "PainelAddons.kt").map { CodeSource.file(it) }
 
     /** Todas as rotas "/api/..." do painel, com GET e POST (o teste não sabe o método de cada uma: confere os dois). */
     private fun rotas(): Set<String> {
