@@ -586,7 +586,7 @@ class PrevisaoActivity : Activity() {
             if (animando) return true
             if (e.action == KeyEvent.ACTION_DOWN) {
                 val descendo = e.keyCode == KeyEvent.KEYCODE_DPAD_DOWN
-                val prox = currentFocus?.focusSearch(if (descendo) View.FOCUS_DOWN else View.FOCUS_UP)
+                val prox = window.decorView.findFocus()?.focusSearch(if (descendo) View.FOCUS_DOWN else View.FOCUS_UP)
                 if (prox == null || !dentro(paginas[atual], prox)) {
                     irPara(Math.floorMod(atual + if (descendo) 1 else -1, paginas.size), descendo); return true
                 }
