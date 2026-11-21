@@ -2,6 +2,7 @@ package br.paulo.tvlauncher.home
 
 import android.content.Context
 import br.paulo.tvlauncher.Estilo
+import br.paulo.tvlauncher.R
 import br.paulo.tvlauncher.settings.Extras
 
 /**
@@ -28,6 +29,31 @@ object LayoutHome {
     fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, e.ordinal)
     fun proximoIconesCruz(ctx: Context) = IconeCruz.Estilo.entries.let { it[(iconesCruz(ctx).ordinal + 1) % it.size] }
         .also { definirIconesCruz(ctx, it) }
+
+    /**
+     * Troca item a item (21/11/2026, Paulo: "aplica a proposta do trocar ícones"). Por quê: cada casa gosta de um desenho
+     * para cada coisa (a TV vintage, o rádio fotorrealista). Para quê: segurar OK num item do Sofaly (ou o painel web)
+     * escolhe o desenho DAQUELE tipo em qualquer conjunto, e a escolha vence o conjunto de Aparência. Como: um número
+     * por tipo nas Extras (o índice do estilo; sem número = segue o conjunto), então vai junto no backup.
+     */
+    fun chaveIcone(t: IconeCruz.Tipo) = "cruz_icone_" + t.name
+    fun iconeTrocado(ctx: Context, t: IconeCruz.Tipo): IconeCruz.Estilo? =
+        IconeCruz.Estilo.entries.getOrNull(Extras.numero(ctx, chaveIcone(t), -1))
+    fun trocarIcone(ctx: Context, t: IconeCruz.Tipo, e: IconeCruz.Estilo?) = Extras.definirNumero(ctx, chaveIcone(t), e?.ordinal ?: -1)
+    fun iconesTrocados(ctx: Context): Map<IconeCruz.Tipo, IconeCruz.Estilo> =
+        IconeCruz.Tipo.entries.mapNotNull { t -> iconeTrocado(ctx, t)?.let { t to it } }.toMap()
+
+    /** Nome de cada conjunto na tela (o mesmo texto em Aparência, no Trocar ícone e no painel). */
+    fun nomeIcones(e: IconeCruz.Estilo): Int = when (e) {
+        IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
+        IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
+        IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
+        IconeCruz.Estilo.LINHA -> R.string.cruz_linha
+        IconeCruz.Estilo.VINTAGE -> R.string.cruz_vintage
+        IconeCruz.Estilo.JOIA -> R.string.cruz_joia
+        IconeCruz.Estilo.FOTO -> R.string.cruz_foto
+        IconeCruz.Estilo.VINTAGE2 -> R.string.cruz_vintage2
+    }
 
     /**
      * Barra de cima na cruz (17/11/2026, Paulo: "quero todas as opções"):

@@ -99,12 +99,7 @@ internal fun ConfigLauncherActivity.abaAparencia(c: LinearLayout) {
         recreate()
     }, lp())
     // Tela inicial em cruz (17/11/2026), a única: ícones, apps, barra, arte, sons e a onda 3. A HOME se refaz ao voltar.
-    fun rotuloIcones() = getString(when (LayoutHome.iconesCruz(this)) {
-        IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
-        IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
-        IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
-        IconeCruz.Estilo.LINHA -> R.string.cruz_linha
-    })
+    fun rotuloIcones() = getString(LayoutHome.nomeIcones(LayoutHome.iconesCruz(this)))
     lateinit var linhaIcones: LinhaCfg
     linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
         LayoutHome.proximoIconesCruz(this)

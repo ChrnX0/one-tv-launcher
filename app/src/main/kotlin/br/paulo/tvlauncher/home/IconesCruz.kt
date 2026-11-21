@@ -21,16 +21,22 @@ import br.paulo.tvlauncher.R
  * Os desenhos vêm da amostra aprovada (home-grupos/amostra-a-b.html). Cores e traço ficam aqui, num lugar só, para o
  * dono refinar depois.
  */
-class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJETO) : Drawable() {
+class IconeCruz(val tipo: Tipo, val estilo: Estilo = Estilo.OBJETO) : Drawable() {
 
     enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN, DORMIR, CENTRAL }
     /**
      * [DUOTOM] (17/11/2026, 3º estilo embutido): o traço do Símbolo em branco quente sobre um halo suave na cor do grupo.
      * [LINHA] (18/11/2026, PADRÃO): o dono achou os desenhos "infantis". Traço fino de uma cor só (creme), desenho adulto
      * (TV de tela plana, rolo de filme), e só o item escolhido fica na cor da marca. Entrou no FIM do enum: o número já
-     * gravado nas Extras (0, 1, 2) continua apontando para o mesmo estilo.
+     * gravado nas Extras (0, 1, 2) continua apontando para o mesmo estilo. Na tela se chama "Essencial" (21/11/2026).
+     * [VINTAGE], [JOIA], [FOTO] e [VINTAGE2] (21/11/2026, escolhidos pelo Paulo na amostra): arte pronta em WebP
+     * ([pasta] em assets/icon-sets, ver [IconSetArt]), cada uma com a parte que se mexe. Também no FIM do enum.
      */
-    enum class Estilo { OBJETO, SIMBOLO, DUOTOM, LINHA }
+    enum class Estilo(val pasta: String? = null) {
+        OBJETO, SIMBOLO, DUOTOM, LINHA, VINTAGE("vintage"), JOIA("jewel"), FOTO("photoreal"), VINTAGE2("vintage2");
+        /** Tem animação própria (a Linha desenhada em código; os de arte pela camada que se mexe). */
+        val animado: Boolean get() = this == LINHA || pasta != null
+    }
 
     /** Linha: true = item escolhido com a cruz em foco (o ImageView avisa pelo estado "activated"). */
     private var aceso = false
@@ -50,7 +56,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
      * dos lados não tocam juntas). Quem chama já confere "Remover animações" (HomeCruz.semAnimacao).
      */
     fun animar(liga: Boolean, descanso: Long = DESCANSO_ESCOLHIDO_MS, atraso: Long = 0L) {
-        if (estilo != Estilo.LINHA) return
+        if (!estilo.animado) return
         if (liga == vivo && (!liga || descanso == descansoMs)) return
         vivo = liga
         descansoMs = descanso
@@ -97,7 +103,14 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             linhaFina(c)
             if (fase >= 0f) linhaViva(c, fase)
             if (faseFixa == null) agendar()
-        } else if (estilo == Estilo.OBJETO) {
+        } else if (estilo.pasta != null && IconSetArt.camada(estilo.pasta, tipo, false) != null) {
+            val esc = minOf(b.width() / 120f, b.height() / 100f)
+            c.translate((b.width() - 120f * esc) / 2f, (b.height() - 100f * esc) / 2f)
+            c.scale(esc, esc)
+            fase = faseAgora()
+            arte(c, estilo.pasta, fase)
+            if (faseFixa == null) agendar()
+        } else if (estilo == Estilo.OBJETO || estilo.pasta != null) {   // sem a arte (arquivo faltando): o Objeto
             // quadro 120 x 100 centrado, sem deformar
             val esc = minOf(b.width() / 120f, b.height() / 100f)
             c.translate((b.width() - 120f * esc) / 2f, (b.height() - 100f * esc) / 2f)
@@ -121,6 +134,39 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             } else corTraco = corDoGrupo()
             simbolo(c)
         }
+        c.restore()
+    }
+
+    // ------------------------------------------------------------------ arte pronta (Vintage, Joia, Fotorrealista, Vintage 2.0)
+
+    private val pintura = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
+    private val quadro = RectF(0f, 0f, 120f, 100f)
+
+    /**
+     * A camada parada e, por cima, a que se mexe em [f] (0..1; -1 parada = o desenho exato da amostra). Cada
+     * movimento começa e termina no lugar, sem salto: girar dá uma volta inteira com suavidade; balançar e sacudir
+     * oscilam e assentam; empurrar, subir e crescer vão e voltam; piscar apaga e acende duas vezes.
+     */
+    private fun arte(c: Canvas, pasta: String, f: Float) {
+        IconSetArt.camada(pasta, tipo, false)?.let { c.drawBitmap(it, null, quadro, pintura) }
+        val a = IconSetArt.camada(pasta, tipo, true) ?: return
+        val m = IconSetArt.movimento(pasta, tipo)
+        if (f < 0f || m == null) { c.drawBitmap(a, null, quadro, pintura); return }
+        val px = m.px * 120f
+        val py = m.py * 100f
+        val onda = kotlin.math.sin(f * Math.PI * 4).toFloat() * (1f - f)   // vai e volta duas vezes, cada vez menos
+        c.save()
+        when (m.m) {
+            "spin" -> c.rotate(360f * easeInOut(f), px, py)
+            "swing" -> c.rotate(12f * onda, px, py)
+            "wiggle" -> c.rotate(9f * onda, px, py)
+            "nudge" -> c.translate(7f * sino(f), 0f)
+            "bob" -> c.translate(0f, -6f * sino(f))
+            "pulse" -> { val e = 1f + 0.14f * sino(f); c.scale(e, e, px, py) }
+            "twinkle" -> pintura.alpha = (255 * (1f - 0.75f * kotlin.math.abs(kotlin.math.sin(f * Math.PI * 2).toFloat()))).toInt()
+        }
+        c.drawBitmap(a, null, quadro, pintura)
+        pintura.alpha = 255
         c.restore()
     }
 
@@ -480,7 +526,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     }
 
     override fun setAlpha(alpha: Int) { cheio.alpha = alpha; traco.alpha = alpha }
-    override fun setColorFilter(cf: ColorFilter?) { cheio.colorFilter = cf; traco.colorFilter = cf }
+    override fun setColorFilter(cf: ColorFilter?) { cheio.colorFilter = cf; traco.colorFilter = cf; pintura.colorFilter = cf }
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 

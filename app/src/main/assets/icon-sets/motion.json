@@ -1,0 +1,362 @@
+{
+ "jewel/addons": {
+  "m": "wiggle",
+  "px": 0.457,
+  "py": 0.568
+ },
+ "jewel/all-apps": {
+  "m": "pulse",
+  "px": 0.499,
+  "py": 0.498
+ },
+ "jewel/apps": {
+  "m": "spin",
+  "px": 0.665,
+  "py": 0.298
+ },
+ "jewel/continue": {
+  "m": "nudge",
+  "px": 0.532,
+  "py": 0.498
+ },
+ "jewel/games": {
+  "m": "twinkle",
+  "px": 0.499,
+  "py": 0.378
+ },
+ "jewel/hub": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.358
+ },
+ "jewel/listen": {
+  "m": "pulse",
+  "px": 0.499,
+  "py": 0.708
+ },
+ "jewel/movies": {
+  "m": "spin",
+  "px": 0.499,
+  "py": 0.498
+ },
+ "jewel/network": {
+  "m": "twinkle",
+  "px": 0.789,
+  "py": 0.638
+ },
+ "jewel/play": {
+  "m": "pulse",
+  "px": 0.715,
+  "py": 0.578
+ },
+ "jewel/plugin": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.208
+ },
+ "jewel/podcasts": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.338
+ },
+ "jewel/radio": {
+  "m": "swing",
+  "px": 0.474,
+  "py": 0.313
+ },
+ "jewel/series": {
+  "m": "bob",
+  "px": 0.582,
+  "py": 0.388
+ },
+ "jewel/sleep": {
+  "m": "twinkle",
+  "px": 0.506,
+  "py": 0.278
+ },
+ "jewel/sofa": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.448
+ },
+ "jewel/tv": {
+  "m": "twinkle",
+  "px": 0.303,
+  "py": 0.478
+ },
+ "jewel/watch": {
+  "m": "twinkle",
+  "px": 0.303,
+  "py": 0.478
+ },
+ "photoreal/addons": {
+  "m": "wiggle",
+  "px": 0.457,
+  "py": 0.568
+ },
+ "photoreal/all-apps": {
+  "m": "pulse",
+  "px": 0.499,
+  "py": 0.478
+ },
+ "photoreal/apps": {
+  "m": "bob",
+  "px": 0.674,
+  "py": 0.268
+ },
+ "photoreal/continue": {
+  "m": "nudge",
+  "px": 0.542,
+  "py": 0.488
+ },
+ "photoreal/games": {
+  "m": "twinkle",
+  "px": 0.457,
+  "py": 0.338
+ },
+ "photoreal/hub": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.358
+ },
+ "photoreal/listen": {
+  "m": "pulse",
+  "px": 0.499,
+  "py": 0.768
+ },
+ "photoreal/movies": {
+  "m": "swing",
+  "px": 0.463,
+  "py": 0.39
+ },
+ "photoreal/network": {
+  "m": "twinkle",
+  "px": 0.622,
+  "py": 0.638
+ },
+ "photoreal/play": {
+  "m": "pulse",
+  "px": 0.715,
+  "py": 0.558
+ },
+ "photoreal/plugin": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.208
+ },
+ "photoreal/podcasts": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.338
+ },
+ "photoreal/radio": {
+  "m": "nudge",
+  "px": 0.69,
+  "py": 0.498
+ },
+ "photoreal/series": {
+  "m": "nudge",
+  "px": 0.724,
+  "py": 0.818
+ },
+ "photoreal/sleep": {
+  "m": "twinkle",
+  "px": 0.517,
+  "py": 0.468
+ },
+ "photoreal/sofa": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.428
+ },
+ "photoreal/tv": {
+  "m": "pulse",
+  "px": 0.615,
+  "py": 0.548
+ },
+ "photoreal/watch": {
+  "m": "pulse",
+  "px": 0.615,
+  "py": 0.548
+ },
+ "vintage/addons": {
+  "m": "wiggle",
+  "px": 0.471,
+  "py": 0.585
+ },
+ "vintage/all-apps": {
+  "m": "pulse",
+  "px": 0.499,
+  "py": 0.478
+ },
+ "vintage/apps": {
+  "m": "bob",
+  "px": 0.682,
+  "py": 0.278
+ },
+ "vintage/continue": {
+  "m": "nudge",
+  "px": 0.499,
+  "py": 0.638
+ },
+ "vintage/games": {
+  "m": "twinkle",
+  "px": 0.499,
+  "py": 0.378
+ },
+ "vintage/hub": {
+  "m": "wiggle",
+  "px": 0.382,
+  "py": 0.598
+ },
+ "vintage/listen": {
+  "m": "nudge",
+  "px": 0.465,
+  "py": 0.778
+ },
+ "vintage/movies": {
+  "m": "spin",
+  "px": 0.332,
+  "py": 0.318
+ },
+ "vintage/network": {
+  "m": "twinkle",
+  "px": 0.789,
+  "py": 0.638
+ },
+ "vintage/play": {
+  "m": "pulse",
+  "px": 0.744,
+  "py": 0.568
+ },
+ "vintage/plugin": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.208
+ },
+ "vintage/podcasts": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.328
+ },
+ "vintage/radio": {
+  "m": "nudge",
+  "px": 0.682,
+  "py": 0.518
+ },
+ "vintage/series": {
+  "m": "nudge",
+  "px": 0.715,
+  "py": 0.858
+ },
+ "vintage/sleep": {
+  "m": "twinkle",
+  "px": 0.501,
+  "py": 0.298
+ },
+ "vintage/sofa": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.448
+ },
+ "vintage/tv": {
+  "m": "swing",
+  "px": 0.507,
+  "py": 0.233
+ },
+ "vintage/watch": {
+  "m": "swing",
+  "px": 0.507,
+  "py": 0.233
+ },
+ "vintage2/addons": {
+  "m": "wiggle",
+  "px": 0.457,
+  "py": 0.568
+ },
+ "vintage2/all-apps": {
+  "m": "pulse",
+  "px": 0.749,
+  "py": 0.798
+ },
+ "vintage2/apps": {
+  "m": "pulse",
+  "px": 0.682,
+  "py": 0.718
+ },
+ "vintage2/continue": {
+  "m": "spin",
+  "px": 0.299,
+  "py": 0.37
+ },
+ "vintage2/games": {
+  "m": "twinkle",
+  "px": 0.482,
+  "py": 0.498
+ },
+ "vintage2/hub": {
+  "m": "twinkle",
+  "px": 0.407,
+  "py": 0.438
+ },
+ "vintage2/listen": {
+  "m": "nudge",
+  "px": 0.515,
+  "py": 0.778
+ },
+ "vintage2/movies": {
+  "m": "twinkle",
+  "px": 0.9,
+  "py": 0.662
+ },
+ "vintage2/network": {
+  "m": "spin",
+  "px": 0.499,
+  "py": 0.718
+ },
+ "vintage2/play": {
+  "m": "swing",
+  "px": 0.515,
+  "py": 0.737
+ },
+ "vintage2/plugin": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.208
+ },
+ "vintage2/podcasts": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.378
+ },
+ "vintage2/radio": {
+  "m": "nudge",
+  "px": 0.707,
+  "py": 0.468
+ },
+ "vintage2/series": {
+  "m": "swing",
+  "px": 0.499,
+  "py": 0.217
+ },
+ "vintage2/sleep": {
+  "m": "wiggle",
+  "px": 0.499,
+  "py": 0.198
+ },
+ "vintage2/sofa": {
+  "m": "bob",
+  "px": 0.499,
+  "py": 0.408
+ },
+ "vintage2/tv": {
+  "m": "twinkle",
+  "px": 0.415,
+  "py": 0.503
+ },
+ "vintage2/watch": {
+  "m": "twinkle",
+  "px": 0.415,
+  "py": 0.503
+ }
+}

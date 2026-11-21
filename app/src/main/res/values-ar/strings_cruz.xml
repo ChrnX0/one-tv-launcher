@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">تخفت الشاشة ببطء ثم يُطفأ التلفزيون</string>
     <string name="cruz_desliga_as">يُطفأ الساعة %1$s</string>
     <string name="cruz_dormir_cancelar">OK للإلغاء</string>
-    <string name="cruz_linha">خط</string>
+    <string name="cruz_linha">أساسي</string>
     <string name="cruz_mover">نقل إلى…</string>
     <string name="cruz_mover_titulo">نقل %1$s إلى</string>
     <string name="cruz_central">مركز الألعاب</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">يُشغَّل</string>
     <string name="cruz_canto_parou">توقّف عند</string>
     <string name="cruz_canto_conectado">متصل</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">عتيق</string>
+    <string name="cruz_joia">جوهرة</string>
+    <string name="cruz_foto">واقعي</string>
+    <string name="cruz_vintage2">عتيق 2.0</string>
+    <string name="cruz_icone_seguir">اتباع المجموعة (%1$s)</string>
+    <string name="cruz_icone_de">الأيقونة: %1$s</string>
+    <string name="cruz_icone_categoria">الفئة كلها: %1$s</string>
 </resources>

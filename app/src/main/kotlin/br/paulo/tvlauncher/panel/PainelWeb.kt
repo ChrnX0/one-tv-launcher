@@ -830,6 +830,18 @@ object PainelWeb {
         if (req.caminho.startsWith("/api/extras/")) {   // ideias de 10/11/2026: PainelExtras.kt
             if (req.caminho == "/api/extras/video" && req.metodo == "GET")
                 return Resposta(200, null, ByteArray(0), fluxo = { PainelExtras.video(app, it) })
+            // Ícones da cruz (21/11/2026, PanelIcons.kt): conjunto, troca item a item e a prévia de cada desenho.
+            when {
+                req.caminho == "/api/extras/icons/image" && req.metodo == "GET" ->
+                    return PanelIcons.image(app, req.consulta["style"], req.consulta["type"])
+                        ?.let { Resposta(200, "image/webp", it) } ?: erro(404, "não existe")
+                req.caminho == "/api/extras/icons" && req.metodo == "GET" -> return json(200, PanelIcons.state(app).put("ok", true))
+                req.caminho == "/api/extras/icons" && req.metodo == "POST" -> {
+                    val r = corpoJson(req)?.let { PanelIcons.change(app, it) } ?: return erro(400, "conjunto ou ícone desconhecido")
+                    PainelArmazem.registrar(app, ip, "ícones da cruz: ${corpoJson(req)}", "ok")
+                    return json(200, r.put("ok", true))
+                }
+            }
             PainelExtras.rotear(app, req.metodo, req.caminho.removePrefix("/api/extras/"),
                 if (req.metodo == "POST") corpoJson(req) else null, req.consulta, sessoes.elevada(token), ip)
                 ?.let { return json(it.first, it.second) }
