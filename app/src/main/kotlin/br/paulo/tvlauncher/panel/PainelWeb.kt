@@ -1198,6 +1198,7 @@ object PainelWeb {
         // Favicon da marca (versão simplificada para tamanho pequeno, 20/11/2026). Nomes novos de propósito: o navegador
         // guarda o ícone da aba pelo endereço e não pedia de novo o icone-192.png (o Brave seguia com um ícone antigo).
         "/sofaly-favicon.svg" to ("sofaly-favicon.svg" to "image/svg+xml"),
+        "/lock.svg" to ("lock.svg" to "image/svg+xml"),   // cadeado dos apps protegidos (style.css; a CSP não aceita data:)
         "/sofaly-favicon-32.png" to ("sofaly-favicon-32.png" to "image/png"),
         "/sofaly-favicon-180.png" to ("sofaly-favicon-180.png" to "image/png"),
         "/favicon.ico" to ("sofaly-favicon-32.png" to "image/png"),   // o navegador pede sozinho; sem isso, 404 no registro

@@ -315,6 +315,14 @@ object ObserverCore {
         }.filter { it.expiresAt > now }
     }
 
+    /**
+     * Recado de um ESTADO que já acabou sai da fila (21/11/2026, teste da Sala): "Sem internet" ficava 6 h na faixa da
+     * Início do painel mesmo com a internet de volta, e o recado passava a mentir. O registro ("cleared") guarda o histórico.
+     * Só os recados OBSERVED (descrevem o agora); o que a Sofy FEZ (ex.: [freezeUndoneNote]) fica até expirar.
+     */
+    fun dropCleared(stored: String?, cleared: Collection<Kind>, now: Long): String =
+        toJson(readNotes(stored, now).filterNot { it.kind in cleared && it.step == Step.OBSERVED }).toString()
+
     fun markSeen(stored: String?, id: String, now: Long): String =
         toJson(readNotes(stored, now).map { if (it.id == id) it.copy(seen = true) else it }).toString()
 

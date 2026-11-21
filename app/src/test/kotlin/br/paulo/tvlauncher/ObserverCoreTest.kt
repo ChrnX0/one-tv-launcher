@@ -162,4 +162,14 @@ class ObserverCoreTest {
         assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy("", 0L, boot))
         assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy(null, boot + 1, boot))   // relógio torto: sem tempo fora
     }
+    // 21/11/2026 (teste da Sala): a internet voltou e a faixa da Início do painel seguia dizendo "Sem internet".
+    @Test fun recado_de_estado_que_acabou_sai_da_fila() {
+        val agora = 1_000_000L
+        val sem = ObserverCore.Finding(ObserverCore.Kind.NO_INTERNET, ObserverCore.Severity.CRITICAL, "x")
+        var fila = ObserverCore.enqueue(null, ObserverCore.noteFor(sem, agora), agora)
+        fila = ObserverCore.enqueue(fila, ObserverCore.freezeUndoneNote(agora, "App", "a voz"), agora)
+        fila = ObserverCore.dropCleared(fila, listOf(ObserverCore.Kind.NO_INTERNET, ObserverCore.Kind.FREEZE_UNDONE), agora + 1)
+        val ficou = ObserverCore.readNotes(fila, agora + 1)
+        assertEquals(listOf(ObserverCore.Kind.FREEZE_UNDONE), ficou.map { it.kind })   // o que a Sofy FEZ continua
+    }
 }

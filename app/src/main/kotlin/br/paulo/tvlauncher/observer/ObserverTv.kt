@@ -146,6 +146,7 @@ object ObserverTv {
             runCatching { Diario.anotar(ctx, "tv", "Observer: ${k.name}", "voltou ao normal") }
             active.remove(k)
         }
+        if (change.cleared.isNotEmpty()) notes = ObserverCore.dropCleared(notes, change.cleared, agora)   // o recado não fica mentindo
         p.edit().putString("log", log).putString("notes", notes).putString("active", active.joinToString(",") { it.name }).apply()
         Log.i(TAG, "apareceu=${change.appeared.map { it.kind }} sumiu=${change.cleared}")
         // A Sofy (rosto e voz) olha a fila: só o que a regra dela manda mostrar agora aparece (SofyTv/SofyPolicy).
