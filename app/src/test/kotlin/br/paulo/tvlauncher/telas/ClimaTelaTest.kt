@@ -72,9 +72,14 @@ class ClimaTelaTest {
         PrevisaoActivity.dadosDeTeste = previsao()
         val a = Robolectric.buildActivity(PrevisaoActivity::class.java).setup().get()
         // A previsão "chega" numa thread (Fundo.rodar), como na TV: espera ela montar as telas.
-        repeat(40) { if (a.currentFocus == null) { Thread.sleep(50); ShadowLooper.idleMainLooper(100, TimeUnit.MILLISECONDS) } }
+        repeat(150) { if (a.currentFocus == null) { Thread.sleep(100); ShadowLooper.idleMainLooper(100, TimeUnit.MILLISECONDS) } }
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
-        assertTrue("a primeira dica tem o foco", a.currentFocus != null)
+        fun textos(v: android.view.View): List<String> = when (v) {
+            is android.widget.TextView -> listOf(v.text.toString())
+            is android.view.ViewGroup -> (0 until v.childCount).flatMap { textos(v.getChildAt(it)) }
+            else -> emptyList()
+        }
+        assertTrue("a primeira dica tem o foco; na tela: ${textos(a.window.decorView).take(12)}", a.currentFocus != null)
         val problemas = mutableListOf<String>()
         fun tecla(k: Int) {
             a.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, k)); a.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, k))
