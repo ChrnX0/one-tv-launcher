@@ -36,7 +36,8 @@ android {
     testOptions { unitTests.isIncludeAndroidResources = true }
     // 36 (antes 34): veio com o Shizuku embutido em 04/11/2026 (androidx.core 1.16 pede compileSdk >= 35); ficou.
     // Não muda o comportamento na TV: quem manda nisso é o targetSdk, que continua 34.
-    compileSdk = 36
+    // 37 (21/11/2026): a hiddenapibypass 6.2 (#384) exige compilar contra a API 37. Só muda o compilar, não a TV.
+    compileSdk = 37
 
     defaultConfig {
         // 19/11/2026 (decisão do Paulo: nenhum pacote público com o nome dele): o app é tv.sofaly.launcher, no site e na

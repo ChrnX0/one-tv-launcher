@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "br.paulo.clienteshizuku"
-    compileSdk = 36
+    compileSdk = 37   // hiddenapibypass 6.2 exige API 37 (21/11/2026)
     defaultConfig {
         applicationId = "br.paulo.clienteshizuku"
         minSdk = 26
