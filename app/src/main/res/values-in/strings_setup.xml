@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Selesaikan pemasangan Sofaly</string>
+    <string name="setup_texto">Agar bisa masuk ke TV ini, Sofaly datang dalam versi ringan. Sekarang ia membawa versi lengkap, dengan tombol remote dan “Sedang diputar”. Butuh sekitar satu menit.</string>
+    <string name="setup_passos">Jika TV bertanya, izinkan Sofaly memasang aplikasi, kembali lalu ketuk Pasang.</string>
+    <string name="setup_instalar">Pasang versi lengkap</string>
+    <string name="setup_depois">Nanti</string>
+    <string name="setup_depois_det">Versi ringan tetap berjalan. Layar ini muncul lagi saat Anda membuka Sofaly berikutnya.</string>
+    <string name="setup_permitir">Izinkan Sofaly memasang aplikasi, lalu kembali ke sini.</string>
+    <string name="setup_baixando">Mengunduh versi lengkap…</string>
+</resources>

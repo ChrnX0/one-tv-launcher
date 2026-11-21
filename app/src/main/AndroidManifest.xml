@@ -945,6 +945,9 @@
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter><action android:name="android.service.notification.NotificationListenerService" /></intent-filter>
         </service>
+        <!-- "Terminar a instalação": só aparece no APK de instalação (-Psetup, src/setup/AndroidManifest.xml). -->
+        <activity android:name=".SetupActivity" android:exported="false" android:excludeFromRecents="true"
+            android:theme="@style/One.Tela" />
         <activity android:name=".CasaActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".TesteTeclasActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".ConferirTvActivity" android:exported="false" android:excludeFromRecents="true" />

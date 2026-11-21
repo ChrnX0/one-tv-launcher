@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  APK de instalação (`-Psetup`, 21/11/2026): entra por cima do manifesto principal e TIRA os dois serviços que fazem o
+  Play Protect bloquear a instalação vinda do navegador ou do Downloader ("O app foi bloqueado para proteger seu
+  dispositivo… dados sensíveis", só com o botão "Entendi"). A "proteção avançada contra fraude" olha o MANIFESTO na hora
+  de instalar: acessibilidade, ouvinte de notificações e SMS. Pedir a permissão depois não adianta; o serviço não pode
+  estar declarado. Sem eles este APK instala, e a SetupActivity traz a versão completa (mesmo pacote, mesma chave).
+  SetupManifestTest confere que os dois continuam aqui.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <service android:name=".AutorizaShizukuService" tools:node="remove" />
+        <service android:name=".OuvinteNotificacoes" tools:node="remove" />
+    </application>
+</manifest>

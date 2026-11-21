@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Sofaly इंस्टॉल करना पूरा करें</string>
+    <string name="setup_texto">इस TV पर आने के लिए Sofaly एक हल्के वर्ज़न में आई। अब यह पूरा वर्ज़न लाएगी, रिमोट की कुंजियों और “अभी चल रहा है” के साथ। इसमें लगभग एक मिनट लगता है।</string>
+    <string name="setup_passos">अगर TV पूछे, तो Sofaly को ऐप इंस्टॉल करने दें, वापस आएँ और इंस्टॉल दबाएँ।</string>
+    <string name="setup_instalar">पूरा वर्ज़न इंस्टॉल करें</string>
+    <string name="setup_depois">बाद में</string>
+    <string name="setup_depois_det">हल्का वर्ज़न चलता रहेगा। अगली बार Sofaly खोलने पर यह स्क्रीन फिर आएगी।</string>
+    <string name="setup_permitir">Sofaly को ऐप इंस्टॉल करने दें, फिर यहाँ लौटें।</string>
+    <string name="setup_baixando">पूरा वर्ज़न डाउनलोड हो रहा है…</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">أكمل تثبيت Sofaly</string>
+    <string name="setup_texto">لتدخل إلى هذا التلفاز، جاءت Sofaly بنسخة خفيفة. الآن ستجلب النسخة الكاملة، مع أزرار جهاز التحكم و«قيد التشغيل الآن». يستغرق ذلك نحو دقيقة.</string>
+    <string name="setup_passos">إذا سأل التلفاز، اسمح لـ Sofaly بتثبيت التطبيقات، ثم عد واضغط تثبيت.</string>
+    <string name="setup_instalar">تثبيت النسخة الكاملة</string>
+    <string name="setup_depois">لاحقًا</string>
+    <string name="setup_depois_det">تظل النسخة الخفيفة تعمل. ستعود هذه الشاشة في المرة القادمة التي تفتح فيها Sofaly.</string>
+    <string name="setup_permitir">اسمح لـ Sofaly بتثبيت التطبيقات ثم عد إلى هنا.</string>
+    <string name="setup_baixando">جارٍ تنزيل النسخة الكاملة…</string>
+</resources>

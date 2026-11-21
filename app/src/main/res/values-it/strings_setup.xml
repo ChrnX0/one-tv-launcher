@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Terminar a instalação" do APK de instalação (-Psetup, SetupActivity.kt). -->
+<resources>
+    <string name="setup_titulo">Completa l’installazione di Sofaly</string>
+    <string name="setup_texto">Per entrare in questa TV, Sofaly è arrivata in versione leggera. Ora porta la versione completa, con i tasti del telecomando e “In riproduzione”. Ci vuole circa un minuto.</string>
+    <string name="setup_passos">Se la TV lo chiede, consenti a Sofaly di installare app, torna qui e tocca Installa.</string>
+    <string name="setup_instalar">Installa la versione completa</string>
+    <string name="setup_depois">Più tardi</string>
+    <string name="setup_depois_det">La versione leggera continua a funzionare. Questa schermata torna la prossima volta che apri Sofaly.</string>
+    <string name="setup_permitir">Consenti a Sofaly di installare app, poi torna qui.</string>
+    <string name="setup_baixando">Download della versione completa…</string>
+</resources>
