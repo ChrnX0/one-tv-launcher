@@ -68,7 +68,7 @@ object HistoricoRede {
     @Volatile private var ultimaReligada = 0L
     /** O launcher desligou o Wi-Fi e ainda não o viu ligado de novo: religa mesmo que pareça "desligado de propósito". */
     @Volatile private var religando = false
-    private const val PREFS_REPARO = "reparo_wifi"
+    const val PREFS_REPARO = "reparo_wifi"
 
     /** Liga a coleta. Idempotente: chamar à vontade (HOME, boot, serviço de acessibilidade). */
     @Synchronized fun iniciar(ctx: Context) {

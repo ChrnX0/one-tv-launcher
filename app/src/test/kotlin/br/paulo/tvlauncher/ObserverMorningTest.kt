@@ -22,6 +22,13 @@ class ObserverMorningTest {
 
     private fun item(r: ObserverMorning.Report, s: Signal) = r.items.first { it.signal == s }
 
+    @Test fun noiteSemInternetNaoViraRegua() {
+        fun r(v: Long) = ObserverCore.Reading(agora, v)
+        assertEquals(false, ObserverMorning.usableNight(mapOf(Signal.INTERNET to r(0), Signal.WIFI_DBM to r(0))))
+        assertEquals(false, ObserverMorning.usableNight(mapOf(Signal.MEMORY_AVAILABLE_MB to r(600))))
+        assertEquals(true, ObserverMorning.usableNight(mapOf(Signal.INTERNET to r(1))))
+    }
+
     @Test fun primeiraNoiteNaoCompara() {
         val r = ObserverMorning.report(listOf(noite(0)), JSONArray(), agora)
         assertEquals(0, r.compared)
