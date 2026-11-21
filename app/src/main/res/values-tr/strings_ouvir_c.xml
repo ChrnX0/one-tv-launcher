@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Benzer radyolar</string>
     <string name="som_radio">Son dinlediğim radyo</string>
     <string name="som_podcast">En yeni podcast bölümü</string>
+    <string name="jor_titulo">Haberlerim</string>
+    <string name="jor_ouvir">Haberleri dinle</string>
+    <string name="jor_min">art arda %d dk</string>
 </resources>

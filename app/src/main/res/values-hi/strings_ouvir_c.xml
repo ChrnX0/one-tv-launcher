@@ -27,4 +27,7 @@
     <string name="ra_parecidas">मिलते-जुलते रेडियो</string>
     <string name="som_radio">पिछला सुना रेडियो</string>
     <string name="som_podcast">सबसे नया पॉडकास्ट एपिसोड</string>
+    <string name="jor_titulo">मेरी खबरें</string>
+    <string name="jor_ouvir">खबरें सुनें</string>
+    <string name="jor_min">लगातार %d मिनट</string>
 </resources>

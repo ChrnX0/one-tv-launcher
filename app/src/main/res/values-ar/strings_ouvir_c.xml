@@ -27,4 +27,7 @@
     <string name="ra_parecidas">محطات مشابهة</string>
     <string name="som_radio">آخر إذاعة استمعت إليها</string>
     <string name="som_podcast">أحدث حلقة بودكاست</string>
+    <string name="jor_titulo">أخباري</string>
+    <string name="jor_ouvir">استمع إلى الأخبار</string>
+    <string name="jor_min">%d دقيقة متتالية</string>
 </resources>

@@ -122,6 +122,20 @@ class OuvirServico : Service() {
         }
 
         /** Toca a rádio [r] (troca a que estiver tocando). Chame com a tela na frente: é ela que dá a licença de começar. */
+        /**
+         * A fila do "Meu jornal" ([MeuJornal]): o que toca depois do episódio atual, em ordem. Fica no companion porque o
+         * primeiro episódio pode precisar ligar o serviço (ainda não há instância). Escolher outro episódio ou rádio limpa.
+         */
+        @Volatile var fila: List<EpisodioTocando> = emptyList()
+            private set
+
+        /** Toca a lista em sequência, do começo de cada episódio. */
+        fun tocarFila(ctx: Context, l: List<EpisodioTocando>) {
+            if (l.isEmpty()) return
+            tocarEpisodio(ctx, l.first(), 0L)
+            fila = l.drop(1)   // depois: o tocarEp do primeiro limpa a fila antiga
+        }
+
         fun tocarRadio(ctx: Context, r: Radios.Radio) {
             instancia?.let { it.tocar(r); return }
             val i = Intent(ctx, OuvirServico::class.java).setAction(ACAO_RADIO).putExtra(EXTRA_RADIO, Radios.paraJson(listOf(r)).toString())
@@ -224,7 +238,8 @@ class OuvirServico : Service() {
         if (!emPrimeiroPlano) return START_NOT_STICKY
         when {
             r != null -> tocar(r)
-            e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR))
+            // daFila: o serviço ligou agora para o 1º do Meu jornal; a fila já está no companion (o parar limpa a velha).
+            e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR), daFila = true)
             !ativo -> parar()
         }
         // Se o Android matar o processo, não recria sozinho: o som não pode voltar sem ninguém pedir.
@@ -249,6 +264,7 @@ class OuvirServico : Service() {
     // ---------------------------------------------------------------- comandos
 
     fun tocar(r: Radios.Radio) {
+        fila = emptyList()
         if (radio?.id == r.id && player != null) { continuar(); return }
         pedidoEp++   // episódio pedido e ainda não começado não passa por cima da rádio
         // O timer de um podcast não passa para a rádio (ela pausava sozinha sem nada na tela dizendo por quê, debug
@@ -273,7 +289,8 @@ class OuvirServico : Service() {
      *  - o endereço do áudio vem do feed (de fora): apontando para a própria TV ou a rede da casa, não toca;
      *  - a posição é lida na fila dos podcasts, DEPOIS da gravação de onde o anterior parou (a ordem é garantida).
      */
-    fun tocarEp(e: EpisodioTocando, inicioMs: Long) {
+    fun tocarEp(e: EpisodioTocando, inicioMs: Long, daFila: Boolean = false) {
+        if (!daFila) fila = emptyList()
         val atual = episodio
         if (atual != null && atual.feed == e.feed && atual.ep.guid == e.ep.guid && player != null) {
             if (inicioMs >= 0) player?.seekTo(inicioMs)
@@ -563,11 +580,14 @@ class OuvirServico : Service() {
         }
         salvarPosicao(fim = true)
         episodio = null   // já gravado como ouvido: o parar() não grava de novo no meio
+        // Meu jornal: acabou um, vem o próximo da fila (do começo).
+        fila.firstOrNull()?.let { prox -> fila = fila.drop(1); tocarEp(prox, 0L, daFila = true); return }
         parar()
     }
 
     /** Para de vez: solta o player e a conexão, some da HOME e do protetor, e o serviço acaba. */
     fun parar() {
+        fila = emptyList()
         pedidoEp++   // episódio pedido e ainda não começado não começa mais
         ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico); ui.removeCallbacks(dormir); dormirAte = 0L
         if (episodio != null) salvarPosicao()

@@ -27,4 +27,7 @@
     <string name="ra_parecidas">似たラジオ局</string>
     <string name="som_radio">最後に聴いたラジオ</string>
     <string name="som_podcast">最新のポッドキャスト</string>
+    <string name="jor_titulo">マイニュース</string>
+    <string name="jor_ouvir">ニュースを聴く</string>
+    <string name="jor_min">続けて%d分</string>
 </resources>

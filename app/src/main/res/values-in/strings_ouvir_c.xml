@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Radio serupa</string>
     <string name="som_radio">Radio terakhir yang didengar</string>
     <string name="som_podcast">Episode podcast terbaru</string>
+    <string name="jor_titulo">Berita saya</string>
+    <string name="jor_ouvir">Dengarkan berita</string>
+    <string name="jor_min">%d mnt berturut-turut</string>
 </resources>

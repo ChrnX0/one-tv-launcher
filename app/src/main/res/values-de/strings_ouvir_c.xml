@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Ähnliche Sender</string>
     <string name="som_radio">Zuletzt gehörter Sender</string>
     <string name="som_podcast">Neueste Podcast-Folge</string>
+    <string name="jor_titulo">Meine Nachrichten</string>
+    <string name="jor_ouvir">Nachrichten hören</string>
+    <string name="jor_min">%d Min. am Stück</string>
 </resources>

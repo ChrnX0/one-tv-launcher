@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Radios similaires</string>
     <string name="som_radio">Dernière radio écoutée</string>
     <string name="som_podcast">Dernier épisode des podcasts</string>
+    <string name="jor_titulo">Mon journal</string>
+    <string name="jor_ouvir">Écouter mon journal</string>
+    <string name="jor_min">%d min d\'affilée</string>
 </resources>

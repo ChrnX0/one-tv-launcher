@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Radios parecidas</string>
     <string name="som_radio">Última radio que escuché</string>
     <string name="som_podcast">Episodio más nuevo de los pódcasts</string>
+    <string name="jor_titulo">Mi noticiero</string>
+    <string name="jor_ouvir">Escuchar el noticiero</string>
+    <string name="jor_min">%d min seguidos</string>
 </resources>

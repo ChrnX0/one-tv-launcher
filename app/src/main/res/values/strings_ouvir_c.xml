@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Similar stations</string>
     <string name="som_radio">Last radio station I listened to</string>
     <string name="som_podcast">Newest podcast episode</string>
+    <string name="jor_titulo">My news</string>
+    <string name="jor_ouvir">Play my news</string>
+    <string name="jor_min">%d min in a row</string>
 </resources>

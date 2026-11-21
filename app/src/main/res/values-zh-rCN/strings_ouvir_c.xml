@@ -27,4 +27,7 @@
     <string name="ra_parecidas">相似电台</string>
     <string name="som_radio">上次收听的电台</string>
     <string name="som_podcast">最新播客单集</string>
+    <string name="jor_titulo">我的新闻</string>
+    <string name="jor_ouvir">收听新闻</string>
+    <string name="jor_min">连续 %d 分钟</string>
 </resources>

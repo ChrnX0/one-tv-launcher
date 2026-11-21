@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Rádios parecidas</string>
     <string name="som_radio">Última rádio que ouvi</string>
     <string name="som_podcast">Episódio mais novo dos podcasts</string>
+    <string name="jor_titulo">Meu jornal</string>
+    <string name="jor_ouvir">Ouvir o jornal</string>
+    <string name="jor_min">%d min em sequência</string>
 </resources>

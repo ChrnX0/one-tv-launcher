@@ -27,4 +27,7 @@
     <string name="ra_parecidas">비슷한 라디오</string>
     <string name="som_radio">마지막으로 들은 라디오</string>
     <string name="som_podcast">최신 팟캐스트 에피소드</string>
+    <string name="jor_titulo">내 뉴스</string>
+    <string name="jor_ouvir">뉴스 듣기</string>
+    <string name="jor_min">연속 %d분</string>
 </resources>

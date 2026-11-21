@@ -14,6 +14,7 @@ import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.MeuJornal
 import br.paulo.tvlauncher.listen.MenuSom
 import br.paulo.tvlauncher.listen.PodcastAssuntos
 import br.paulo.tvlauncher.listen.PodcastBusca
@@ -315,6 +316,17 @@ class PodcastsActivity : Activity() {
     }
 
     private fun montarPrincipal(l: MutableList<CruzOuvir.Prateleira>) {
+        // Meu jornal (21/11/2026): o episódio mais novo de cada podcast de notícias seguido, tocados em sequência.
+        val jornal = MeuJornal.montar(feeds, posicoes, System.currentTimeMillis(), protegido)
+        if (jornal.isNotEmpty()) {
+            val min = jornal.sumOf { it.second.duracaoS } / 60
+            l += CruzOuvir.Prateleira("jornal", getString(R.string.jor_titulo), IconeOuvir.Tipo.EM_ALTA,
+                listOf(CruzOuvir.Item("jor:tudo", getString(R.string.jor_ouvir),
+                    CruzLogica.linhas(jornal.joinToString(" · ") { nomeDe(it.first) },
+                        if (min > 0) getString(R.string.jor_min, min) else null),
+                    IconeOuvir.Tipo.CONTINUAR, abrir = { tocarJornal(jornal) })) +
+                    jornal.map { (feed, ep) -> itemEp("jor:", feed, ep, comPodcast = true) })
+        }
         val cont = continuarLista()
         if (cont.isNotEmpty()) l += CruzOuvir.Prateleira("continuar", getString(R.string.pod_continuar), IconeOuvir.Tipo.CONTINUAR,
             cont.map { (feed, ep, _) -> itemEp("cont:", feed, ep, comPodcast = true) })
@@ -434,6 +446,13 @@ class PodcastsActivity : Activity() {
         val e = OuvirServico.EpisodioTocando(feed, nome, capa, ep)
         OuvirServico.tocarEpisodio(this, e, inicio)
         PodcastPlayerActivity.abrir(this, e)
+    }
+
+    /** Toca o Meu jornal inteiro, do começo de cada episódio, e abre o player no primeiro. */
+    private fun tocarJornal(l: List<Pair<String, PodcastFeed.Episodio>>) {
+        val fila = l.map { (feed, ep) -> OuvirServico.EpisodioTocando(feed, nomeDe(feed), capaDe(feed), ep) }
+        OuvirServico.tocarFila(this, fila)
+        PodcastPlayerActivity.abrir(this, fila.first())
     }
 
     private fun menuEpisodio(feed: String, ep: PodcastFeed.Episodio) {

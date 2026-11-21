@@ -27,4 +27,7 @@
     <string name="ra_parecidas">Похожие станции</string>
     <string name="som_radio">Последнее радио</string>
     <string name="som_podcast">Новейший выпуск подкастов</string>
+    <string name="jor_titulo">Мои новости</string>
+    <string name="jor_ouvir">Слушать новости</string>
+    <string name="jor_min">%d мин подряд</string>
 </resources>
