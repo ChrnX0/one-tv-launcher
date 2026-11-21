@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">One answer sets up the menu and the screen. You can change it later in Settings › System.</string>
+    <string name="pp_casa">For the whole house</string>
+    <string name="pp_vo_det">Big cards with names read aloud and larger text, and you help from your phone, from far away.</string>
+</resources>

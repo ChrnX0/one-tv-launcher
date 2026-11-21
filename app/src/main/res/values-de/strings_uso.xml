@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Wie dieser Fernseher genutzt wird</string>
-    <string name="uso_det">Einfach blendet die technischen Reiter aus (Zuhause, Fernzugriff, Erweitert). Nichts wird ausgeschaltet.</string>
-    <string name="uso_simples">Einfach</string>
+    <string name="uso_det">Wesentlich blendet die technischen Reiter aus (Zuhause, Fernzugriff, Erweitert). Nichts wird ausgeschaltet.</string>
+    <string name="uso_simples">Wesentlich</string>
     <string name="uso_completo">Vollständig</string>
     <string name="uso_cuida">Für jemanden, um den ich mich kümmere</string>
     <string name="uso_pergunta">Wie wird dieser Fernseher genutzt?</string>

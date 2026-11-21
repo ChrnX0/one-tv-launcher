@@ -14,7 +14,7 @@
     <string name="rec_desfazer">वापस करें</string>
     <string name="rec_desfazer_det">%1$s से पहले जैसा सब कुछ वापस करें।</string>
     <string name="rec_ja_esta">यह टीवी पहले से ऐसे ही सेट है।</string>
-    <string name="rec_aviso_prende">सरल मोड सिर्फ़ PIN से बंद होता है। पक्का करें कि घर में किसी को PIN पता हो।</string>
+    <string name="rec_aviso_prende">आसान स्क्रीन सिर्फ़ PIN से बंद होती है। पक्का करें कि घर में किसी को PIN पता हो।</string>
     <string name="rec_aviso_sem_pin">अभी PIN नहीं है, इसलिए कोई भी इसे बंद कर सकता है। फ़ोन पैनल में PIN बनाएँ।</string>
     <string name="rec_aviso_plano">पेड प्लान चाहिए, इसलिए बंद रहेगा: %1$s।</string>
     <string name="rec_voltar">वापस</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">बंद</string>
     <string name="rec_aj_hospede">मेहमान मोड</string>
     <string name="rec_aj_visita">विज़िटर मोड</string>
-    <string name="rec_aj_simples">सरल मोड</string>
+    <string name="rec_aj_simples">आसान स्क्रीन</string>
     <string name="rec_aj_infantil">बच्चों का मोड</string>
     <string name="rec_aj_dormir">सोने का समय</string>
     <string name="rec_aj_texto">अक्षरों का आकार</string>

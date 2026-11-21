@@ -858,7 +858,7 @@ AS\\Filmler).</string>
     <string name="home_arquivos_falhou">%1$s için izin verilemedi: %2$s</string>
     <string name="aviso_continuar_titulo">Devam edilecek bir şey yok</string>
     <string name="aviso_continuar_texto">Diğer TV\'den devam etme daveti sona erdi.</string>
-    <string name="aviso_simples_titulo">Basit mod kapalı</string>
+    <string name="aviso_simples_titulo">Kolay ekran kapalı</string>
     <string name="aviso_simples_texto">TV tam ana ekrana döndü.</string>
     <string name="aviso_sync_titulo">Bağlı hesap yok</string>
     <string name="aviso_sync_texto">Bu TV\'de %1$s hesabı yok. Ayarlar › TV ve filmler\'den bağlayın.</string>

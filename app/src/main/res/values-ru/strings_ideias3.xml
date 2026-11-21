@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Выключать, когда все ушли из дома (роутер UniFi)</string>
     <string name="extras_HOJE_NA_TV">«Сегодня по ТВ» на экране Поиска</string>
     <string name="extras_RETROSPECTIVA">Недельный итог (вечер воскресенья)</string>
-    <string name="extras_MODO_SIMPLES">Простой режим (крупные карточки, озвучка названий)</string>
+    <string name="extras_MODO_SIMPLES">Простой экран (крупные карточки, озвучка названий)</string>
 </resources>

@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Desligar quando todos saírem de casa (roteador UniFi)</string>
     <string name="extras_HOJE_NA_TV">\"Hoje na TV\" na tela Buscar</string>
     <string name="extras_RETROSPECTIVA">Retrospectiva da semana (domingo à noite)</string>
-    <string name="extras_MODO_SIMPLES">Modo simples (cards grandes e nome falado)</string>
+    <string name="extras_MODO_SIMPLES">Tela fácil (cards grandes e nome falado)</string>
 </resources>

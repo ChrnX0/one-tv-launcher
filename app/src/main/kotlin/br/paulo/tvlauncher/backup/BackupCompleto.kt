@@ -69,7 +69,8 @@ object BackupCompleto {
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
-    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
+    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "familia_vistos", "plugins",   // vistos: passageiros, números dos celulares
+          // plugins: o OK vale para o certificado desta TV
         "wallpaper_plugins",   // plugins de fundo (18/11/2026): o OK também é por certificado desta TV
         "icon_pack_frozen",   // pacotes que NÓS congelamos nesta TV (na outra o pacote nem está congelado)
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)

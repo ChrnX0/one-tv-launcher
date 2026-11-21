@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">全員が外出したら電源オフ（UniFi ルーター）</string>
     <string name="extras_HOJE_NA_TV">検索画面に「今日の TV」</string>
     <string name="extras_RETROSPECTIVA">週間まとめ（日曜の夜）</string>
-    <string name="extras_MODO_SIMPLES">シンプルモード（大きなカード、名前の読み上げ）</string>
+    <string name="extras_MODO_SIMPLES">かんたん画面（大きなカード、名前の読み上げ）</string>
 </resources>

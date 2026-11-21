@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">이 TV의 사용 방식</string>
-    <string name="uso_det">간단은 기술 탭(홈, 원격, 고급)을 숨깁니다. 꺼지는 것은 없습니다.</string>
-    <string name="uso_simples">간단</string>
+    <string name="uso_det">기본은 기술 탭(홈, 원격, 고급)을 숨깁니다. 꺼지는 것은 없습니다.</string>
+    <string name="uso_simples">기본</string>
     <string name="uso_completo">전체</string>
     <string name="uso_cuida">내가 돌보는 사람용</string>
     <string name="uso_pergunta">이 TV를 어떻게 쓰시나요?</string>

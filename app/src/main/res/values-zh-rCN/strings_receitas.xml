@@ -14,7 +14,7 @@
     <string name="rec_desfazer">撤销</string>
     <string name="rec_desfazer_det">全部恢复到“%1$s”之前的样子。</string>
     <string name="rec_ja_esta">这台电视已经是这样设置的。</string>
-    <string name="rec_aviso_prende">简易模式只能用 PIN 退出。请确认家里有人知道 PIN。</string>
+    <string name="rec_aviso_prende">简易屏幕只能用 PIN 退出。请确认家里有人知道 PIN。</string>
     <string name="rec_aviso_sem_pin">还没有 PIN，谁都能把它关掉。请在手机面板里设置 PIN。</string>
     <string name="rec_aviso_plano">需要付费方案，因此保持关闭：%1$s。</string>
     <string name="rec_voltar">返回</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">关</string>
     <string name="rec_aj_hospede">访客模式</string>
     <string name="rec_aj_visita">来客模式</string>
-    <string name="rec_aj_simples">简易模式</string>
+    <string name="rec_aj_simples">简易屏幕</string>
     <string name="rec_aj_infantil">儿童模式</string>
     <string name="rec_aj_dormir">睡觉时间</string>
     <string name="rec_aj_texto">文字大小</string>

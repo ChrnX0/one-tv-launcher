@@ -14,7 +14,7 @@
     <string name="rec_desfazer">تراجع</string>
     <string name="rec_desfazer_det">إعادة كل شيء كما كان قبل %1$s.</string>
     <string name="rec_ja_esta">هذا التلفاز مضبوط هكذا بالفعل.</string>
-    <string name="rec_aviso_prende">الوضع البسيط لا يُغلق إلا برمز PIN. تأكد أن أحدًا في البيت يعرفه.</string>
+    <string name="rec_aviso_prende">الشاشة السهلة لا تُغلق إلا برمز PIN. تأكد أن أحدًا في البيت يعرفه.</string>
     <string name="rec_aviso_sem_pin">لا يوجد رمز PIN بعد، لذا يستطيع أي شخص إيقاف هذا. أنشئ رمزًا من لوحة الهاتف.</string>
     <string name="rec_aviso_plano">يحتاج إلى خطة مدفوعة، لذا يبقى متوقفًا: %1$s.</string>
     <string name="rec_voltar">رجوع</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">متوقف</string>
     <string name="rec_aj_hospede">وضع الضيف</string>
     <string name="rec_aj_visita">وضع الزيارة</string>
-    <string name="rec_aj_simples">الوضع البسيط</string>
+    <string name="rec_aj_simples">الشاشة السهلة</string>
     <string name="rec_aj_infantil">وضع الأطفال</string>
     <string name="rec_aj_dormir">وقت النوم</string>
     <string name="rec_aj_texto">حجم النص</string>

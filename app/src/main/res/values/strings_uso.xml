@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">How this TV is used</string>
-    <string name="uso_det">Simple hides the technical tabs (Home, Remote, Advanced). Nothing is turned off.</string>
-    <string name="uso_simples">Simple</string>
+    <string name="uso_det">Essential hides the technical tabs (Home, Remote, Advanced). Nothing is turned off.</string>
+    <string name="uso_simples">Essential</string>
     <string name="uso_completo">Complete</string>
     <string name="uso_cuida">For someone I look after</string>
     <string name="uso_pergunta">How will this TV be used?</string>

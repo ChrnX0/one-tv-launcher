@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">Faz parte do plano %1$s</string>
+    <string name="plt_texto">Isto está no plano %1$s. Veja os planos na TV e compre no telemóvel.</string>
+    <string name="plt_ver">Ver os planos</string>
+    <string name="plt_agora_nao">Agora não</string>
+</resources>

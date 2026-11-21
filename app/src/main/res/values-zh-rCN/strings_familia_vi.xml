@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "❤ Vi" da família conectada (revisão dos degraus, 3a, 17/11/2026): AvisoTv.teclaOk, FamiliaVistos. -->
+<resources>
+    <string name="famc_ok_vi">按 OK：❤ 看到了</string>
+    <string name="famc_vi_ok">%1$s 会知道你看到了</string>
+</resources>

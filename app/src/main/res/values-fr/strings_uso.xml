@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Utilisation de cette TV</string>
-    <string name="uso_det">Simple masque les onglets techniques (Maison, À distance, Avancé). Rien n\'est désactivé.</string>
-    <string name="uso_simples">Simple</string>
+    <string name="uso_det">Essentiel masque les onglets techniques (Maison, À distance, Avancé). Rien n’est désactivé.</string>
+    <string name="uso_simples">Essentiel</string>
     <string name="uso_completo">Complet</string>
     <string name="uso_cuida">Pour un proche dont je m\'occupe</string>
     <string name="uso_pergunta">Comment cette TV sera-t-elle utilisée ?</string>

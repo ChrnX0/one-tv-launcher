@@ -861,7 +861,7 @@ AS\\Peliculas).</string>
     <string name="home_arquivos_falhou">No se pudo permitir %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Nada que continuar</string>
     <string name="aviso_continuar_texto">La invitación para continuar desde la otra TV ya venció.</string>
-    <string name="aviso_simples_titulo">Modo simple desactivado</string>
+    <string name="aviso_simples_titulo">Pantalla fácil desactivada</string>
     <string name="aviso_simples_texto">La TV volvió a la pantalla de inicio completa.</string>
     <string name="aviso_sync_titulo">Ninguna cuenta conectada</string>
     <string name="aviso_sync_texto">No hay cuenta de %1$s en esta TV. Conéctala en Ajustes › TV y películas.</string>

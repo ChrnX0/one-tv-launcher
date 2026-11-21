@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Come si usa questa TV</string>
-    <string name="uso_det">Semplice nasconde le schede tecniche (Casa, Remoto, Avanzate). Non si spegne nulla.</string>
-    <string name="uso_simples">Semplice</string>
+    <string name="uso_det">Essenziale nasconde le schede tecniche (Casa, Remoto, Avanzate). Non si spegne nulla.</string>
+    <string name="uso_simples">Essenziale</string>
     <string name="uso_completo">Completo</string>
     <string name="uso_cuida">Per una persona di cui mi prendo cura</string>
     <string name="uso_pergunta">Come verrà usata questa TV?</string>

@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Annulla</string>
     <string name="rec_desfazer_det">Rimettere tutto com\'era prima di %1$s.</string>
     <string name="rec_ja_esta">Questa TV è già impostata così.</string>
-    <string name="rec_aviso_prende">La modalità semplice si chiude solo con il PIN. Assicurati che qualcuno in casa lo conosca.</string>
+    <string name="rec_aviso_prende">La schermata facile si chiude solo con il PIN. Assicurati che qualcuno in casa lo conosca.</string>
     <string name="rec_aviso_sem_pin">Non c\'è ancora un PIN: chiunque può disattivarlo. Crealo nel pannello del telefono.</string>
     <string name="rec_aviso_plano">Richiede un piano a pagamento, quindi resta disattivato: %1$s.</string>
     <string name="rec_voltar">Indietro</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">disattivo</string>
     <string name="rec_aj_hospede">Modalità ospite</string>
     <string name="rec_aj_visita">Modalità visita</string>
-    <string name="rec_aj_simples">Modalità semplice</string>
+    <string name="rec_aj_simples">Schermata facile</string>
     <string name="rec_aj_infantil">Modalità bambini</string>
     <string name="rec_aj_dormir">Ora di dormire</string>
     <string name="rec_aj_texto">Dimensione del testo</string>

@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Cofnij</string>
     <string name="rec_desfazer_det">Przywróć wszystko sprzed: %1$s.</string>
     <string name="rec_ja_esta">Ten telewizor już jest tak ustawiony.</string>
-    <string name="rec_aviso_prende">Tryb prosty zamyka się tylko PIN-em. Upewnij się, że ktoś w domu go zna.</string>
+    <string name="rec_aviso_prende">Łatwy ekran zamyka się tylko PIN-em. Upewnij się, że ktoś w domu go zna.</string>
     <string name="rec_aviso_sem_pin">Nie ma jeszcze PIN-u, więc każdy może to wyłączyć. Utwórz go w panelu na telefonie.</string>
     <string name="rec_aviso_plano">Wymaga płatnego planu, więc zostaje wyłączone: %1$s.</string>
     <string name="rec_voltar">Wstecz</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">wył.</string>
     <string name="rec_aj_hospede">Tryb gościa</string>
     <string name="rec_aj_visita">Tryb wizyty</string>
-    <string name="rec_aj_simples">Tryb prosty</string>
+    <string name="rec_aj_simples">Łatwy ekran</string>
     <string name="rec_aj_infantil">Tryb dziecięcy</string>
     <string name="rec_aj_dormir">Pora snu</string>
     <string name="rec_aj_texto">Rozmiar tekstu</string>

@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Bu TV nasıl kullanılıyor</string>
-    <string name="uso_det">Basit, teknik sekmeleri (Ev, Uzaktan, Gelişmiş) gizler. Hiçbir şey kapatılmaz.</string>
-    <string name="uso_simples">Basit</string>
+    <string name="uso_det">Temel, teknik sekmeleri (Ev, Uzaktan, Gelişmiş) gizler. Hiçbir şey kapatılmaz.</string>
+    <string name="uso_simples">Temel</string>
     <string name="uso_completo">Tam</string>
     <string name="uso_cuida">Baktığım biri için</string>
     <string name="uso_pergunta">Bu TV nasıl kullanılacak?</string>

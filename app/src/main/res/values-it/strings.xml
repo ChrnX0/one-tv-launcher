@@ -858,7 +858,7 @@ AS\\Film).</string>
     <string name="home_arquivos_falhou">Impossibile consentire %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Niente da riprendere</string>
     <string name="aviso_continuar_texto">L\'invito a riprendere dall\'altra TV è scaduto.</string>
-    <string name="aviso_simples_titulo">Modalità semplice disattivata</string>
+    <string name="aviso_simples_titulo">Schermata facile disattivata</string>
     <string name="aviso_simples_texto">La TV è tornata alla schermata home completa.</string>
     <string name="aviso_sync_titulo">Nessun account collegato</string>
     <string name="aviso_sync_texto">Non c\'è un account %1$s su questa TV. Collegalo in Impostazioni › TV e film.</string>

@@ -102,7 +102,7 @@ jobs:
         run: |
           SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
           yes | "$SDKM" --licenses > /dev/null || true
-          "$SDKM" "platforms;android-36" "build-tools;36.0.0"
+          "$SDKM" "platforms;android-36" "platforms;android-37.0" "build-tools;36.0.0"   # 37: app (hiddenapibypass 6.2)
 
       # Go para o túnel do Tailscale (tunel/, vira libtsnet.so dentro do APK; ver compilarTunel em app/build.gradle.kts).
       - uses: actions/setup-go@v7

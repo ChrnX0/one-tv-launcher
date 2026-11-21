@@ -864,7 +864,7 @@ AS\\Filmy).</string>
     <string name="home_arquivos_falhou">Nie udało się zezwolić %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Nic do kontynuowania</string>
     <string name="aviso_continuar_texto">Zaproszenie do kontynuowania z drugiego telewizora wygasło.</string>
-    <string name="aviso_simples_titulo">Tryb prosty wyłączony</string>
+    <string name="aviso_simples_titulo">Łatwy ekran wyłączony</string>
     <string name="aviso_simples_texto">Telewizor wrócił do pełnego ekranu głównego.</string>
     <string name="aviso_sync_titulo">Brak połączonego konta</string>
     <string name="aviso_sync_texto">Na tym telewizorze nie ma konta %1$s. Połącz je w Ustawienia › TV i filmy.</string>

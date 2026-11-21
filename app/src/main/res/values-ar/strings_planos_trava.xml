@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">جزء من خطة %1$s</string>
+    <string name="plt_texto">هذه الميزة ضمن خطة %1$s. شاهد الخطط على التلفزيون واشترِ من هاتفك.</string>
+    <string name="plt_ver">عرض الخطط</string>
+    <string name="plt_agora_nao">ليس الآن</string>
+</resources>

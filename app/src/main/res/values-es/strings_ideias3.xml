@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Apagar cuando todos salen de casa (router UniFi)</string>
     <string name="extras_HOJE_NA_TV">\"Hoy en la TV\" en la pantalla Buscar</string>
     <string name="extras_RETROSPECTIVA">Resumen semanal (domingo por la noche)</string>
-    <string name="extras_MODO_SIMPLES">Modo simple (tarjetas grandes, nombres dichos en voz alta)</string>
+    <string name="extras_MODO_SIMPLES">Pantalla fácil (tarjetas grandes, nombres dichos en voz alta)</string>
 </resources>

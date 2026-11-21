@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.PlanosTv
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -96,23 +98,25 @@ object FamiliaConectada {
     }
 
     /** Recado (e foto opcional) que chegou. Devolve null se deu certo, ou o código do erro para a página. */
-    fun receber(ctx: Context, nomeBruto: String?, texto: String?, foto: ByteArray?): String? {
+    fun receber(ctx: Context, nomeBruto: String?, texto: String?, foto: ByteArray?, rid: String? = null): String? {
         val app = ctx.applicationContext
+        if (!Planos.permite(app, Planos.Recurso.FAMILIA_LINK)) return "desligado"   // plano: Pro (link de fora de casa)
         val quem = Regras.nome(nomeBruto).ifEmpty { app.getString(R.string.famc_alguem) }
         val t = texto?.let { Recado.limpar(it) }
         if (foto == null && t == null) return "vazio"
         if (foto != null && (foto.size > MAX_FOTO || RecadoImagem.tipo(foto) == null)) return "foto"
         if (!podeMandar(app)) return "limite"
         val titulo = app.getString(R.string.famc_de, quem)
+        val vistoId = FamiliaVistos.registrar(app, rid, quem, t, foto != null)   // "❤ Vi": OK no aviso avisa quem mandou
         if (foto != null) {
             val bmp = RecadoImagem.decodificar(foto) ?: return "foto"
             // Também nas fotos do protetor (a pasta tem limite: cheia, só não guarda; o cartão aparece mesmo assim).
             val nome = "familia-" + java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.US).format(java.util.Date()) +
                 when (RecadoImagem.tipo(foto)) { RecadoImagem.Tipo.PNG -> ".png"; RecadoImagem.Tipo.WEBP -> ".webp"; else -> ".jpg" }
             FotosProtetor.receber(app, nome, foto.size.toLong(), foto.inputStream())
-            AvisoTv.mostrar(app, titulo, t ?: "📷", 60, som = true, guardarSeApagada = true, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO)
+            AvisoTv.mostrar(app, titulo, t ?: "📷", 60, som = true, guardarSeApagada = true, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO, vistoId = vistoId)
         } else {
-            AvisoTv.mostrar(app, titulo, t!!, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+            AvisoTv.mostrar(app, titulo, t!!, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO, vistoId = vistoId)
         }
         Gatilhos.disparar(app, Gatilhos.Evento.RECADO_CHEGOU)   // elevação 10.6
         if (t != null) Mural.editar(app) { Mural.adicionar(it, Mural.Lista.RECADOS, "$quem: $t") }
@@ -145,7 +149,11 @@ class FamiliaConectadaActivity : Activity() {
         // Degrau 4: recado em vídeo. Opt-in de quem mora aqui (desligado de fábrica) e a lista dos que chegaram.
         col.addView(Estilo.linhaOpcao(this, getString(R.string.vid_aceitar), getString(R.string.vid_aceitar_det),
             Estilo.valor(this, getString(if (RecadoVideo.aceita(this)) R.string.rec_ligado else R.string.rec_desligado), seta = false)).apply {
-            setOnClickListener { RecadoVideo.definirAceita(this@FamiliaConectadaActivity, !RecadoVideo.aceita(this@FamiliaConectadaActivity)); recreate() }
+            setOnClickListener {
+                val a = this@FamiliaConectadaActivity
+                if (!RecadoVideo.aceita(a) && !PlanosTv.pedir(a, Planos.Recurso.RECADO_VIDEO)) return@setOnClickListener   // ligar: Pro
+                RecadoVideo.definirAceita(a, !RecadoVideo.aceita(a)); recreate()
+            }
         }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
         if (RecadoVideo.lista(this).isNotEmpty()) col.addView(Estilo.linhaOpcao(this, getString(R.string.vid_lista),
             getString(R.string.vid_quantos, RecadoVideo.lista(this).size)).apply {
@@ -154,7 +162,12 @@ class FamiliaConectadaActivity : Activity() {
         // Degrau 4: as TVs da mesma conta conversam (Sessão junto, Continuar em outra TV). Opt-in, desligado de fábrica.
         col.addView(Estilo.linhaOpcao(this, getString(R.string.junto_tvs), getString(R.string.junto_tvs_det),
             Estilo.valor(this, getString(if (EntreTvs.ligado(this)) R.string.rec_ligado else R.string.rec_desligado), seta = false)).apply {
-            setOnClickListener { EntreTvs.definir(this@FamiliaConectadaActivity, !EntreTvs.ligado(this@FamiliaConectadaActivity)); recreate() }
+            setOnClickListener {
+                val a = this@FamiliaConectadaActivity
+                // Ligar as TVs da família pede ao menos o Pro (Continuar em outra TV); o convite da sessão junto pede o Ultra.
+                if (!EntreTvs.ligado(a) && !PlanosTv.pedir(a, Planos.Recurso.CONTINUAR_OUTRA_TV)) return@setOnClickListener
+                EntreTvs.definir(a, !EntreTvs.ligado(a)); recreate()
+            }
         }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
         col.addView(Estilo.linhaOpcao(this, getString(R.string.famc_trocar), getString(R.string.famc_trocar_det)).apply {
             setOnClickListener { FamiliaConectada.novoLink(this@FamiliaConectadaActivity); recreate() }

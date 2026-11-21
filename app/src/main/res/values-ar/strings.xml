@@ -870,7 +870,7 @@ AS\\Movies).</string>
     <string name="home_arquivos_falhou">تعذر السماح لـ %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">لا شيء للمتابعة</string>
     <string name="aviso_continuar_texto">انتهت صلاحية دعوة المتابعة من التلفاز الآخر.</string>
-    <string name="aviso_simples_titulo">الوضع البسيط متوقف</string>
+    <string name="aviso_simples_titulo">الشاشة السهلة متوقفة</string>
     <string name="aviso_simples_texto">عاد التلفاز إلى الشاشة الرئيسية الكاملة.</string>
     <string name="aviso_sync_titulo">لا يوجد حساب متصل</string>
     <string name="aviso_sync_texto">لا يوجد حساب %1$s على هذا التلفاز. اربطه من الإعدادات › التلفاز والأفلام.</string>

@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Rückgängig</string>
     <string name="rec_desfazer_det">Alles so wie vor %1$s.</string>
     <string name="rec_ja_esta">Dieser Fernseher ist schon so eingerichtet.</string>
-    <string name="rec_aviso_prende">Der einfache Modus lässt sich nur mit der PIN beenden. Sorge dafür, dass jemand im Haus sie kennt.</string>
+    <string name="rec_aviso_prende">Die Einfache Ansicht lässt sich nur mit der PIN beenden. Sorge dafür, dass jemand im Haus sie kennt.</string>
     <string name="rec_aviso_sem_pin">Es gibt noch keine PIN, daher kann jeder das ausschalten. Lege eine im Handy-Panel an.</string>
     <string name="rec_aviso_plano">Braucht ein Bezahl-Abo und bleibt deshalb aus: %1$s.</string>
     <string name="rec_voltar">Zurück</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">aus</string>
     <string name="rec_aj_hospede">Gastmodus</string>
     <string name="rec_aj_visita">Besuchsmodus</string>
-    <string name="rec_aj_simples">Einfacher Modus</string>
+    <string name="rec_aj_simples">Einfache Ansicht</string>
     <string name="rec_aj_infantil">Kindermodus</string>
     <string name="rec_aj_dormir">Schlafenszeit</string>
     <string name="rec_aj_texto">Textgröße</string>
