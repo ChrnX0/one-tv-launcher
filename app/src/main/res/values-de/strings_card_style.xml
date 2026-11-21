@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Feinabstimmung</string>
+    <string name="ft_dica">OK oder ▶ ◀ ändert · ZURÜCK schließt</string>
+    <string name="ft_abrir">Mit Blick auf den Startbildschirm anpassen</string>
+    <string name="ft_abrir_det">Schrift, Uhr, Akzentfarbe, Ecken, Leuchten und Größe, live</string>
+    <string name="cs_destaque">Akzentfarbe</string>
+    <string name="cs_cantos">Ecken</string>
+    <string name="cs_brilho">Fokus-Leuchten</string>
+    <string name="cs_tamanho">Größe des Kreuzes</string>
+    <string name="cs_ceu">Himmel</string>
+    <string name="cs_lilas">Flieder</string>
+    <string name="cs_retos">Eckig</string>
+    <string name="cs_redondos">Rund</string>
+    <string name="cs_sem">Aus</string>
+    <string name="cs_suave">Sanft</string>
+    <string name="cs_forte">Stark</string>
+    <string name="cs_menor">Kleiner</string>
+    <string name="cs_maior">Größer</string>
+    <string name="bg_tintura">Farbe über dem Hintergrund</string>
+    <string name="bg_cor">Hintergrundfarbe</string>
+    <string name="bg_desfoque">Hintergrund-Unschärfe</string>
+    <string name="bg_transicao">Bildübergang</string>
+    <string name="bg_novo">Jetzt neuer Hintergrund</string>
+    <string name="bg_solida">Einfarbig</string>
+    <string name="bg_destaque">Akzent</string>
+    <string name="bg_noite">Nacht</string>
+    <string name="bg_mata">Wald</string>
+    <string name="bg_brasa">Glut</string>
+    <string name="bg_grafite">Graphit</string>
+    <string name="bg_corte">Schnitt</string>
+    <string name="bg_lenta">Langsam</string>
+    <string name="bg_trocado">Gewechselt</string>
+    <string name="bg_nao_troca">Dieser Hintergrund wechselt nicht</string>
+    <string name="bg_camera">Hauskamera als Hintergrund</string>
+    <string name="bg_campainha">Türklingel-Kamera als Hintergrund</string>
+    <string name="bg_nenhuma">Keine</string>
+    <string name="bg_ligado">An</string>
+</resources>

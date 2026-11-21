@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Letra</string>
+    <string name="fc_det">A fonte de todos os ecrãs. As do Google descarregam na primeira vez</string>
+    <string name="fc_baixando">a descarregar…</string>
+    <string name="fc_falhou">Não foi possível descarregar. Verifique a internet</string>
+    <string name="ck_formato">Formato da hora</string>
+    <string name="ck_formato_det">Na barra de cima, na ilha e no relógio grande</string>
+    <string name="ck_auto">Automático</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h com AM/PM</string>
+    <string name="ck_seg">Com segundos</string>
+    <string name="ck_cor">Cor da hora</string>
+    <string name="ck_cor_det">Na barra de cima, na ilha e no relógio grande</string>
+    <string name="ck_padrao">Predefinida</string>
+    <string name="ck_laranja">Laranja</string>
+    <string name="ck_creme">Creme</string>
+    <string name="ck_ambar">Âmbar</string>
+    <string name="ck_verde">Verde-água</string>
+</resources>

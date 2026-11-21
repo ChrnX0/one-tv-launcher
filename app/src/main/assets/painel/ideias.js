@@ -442,3 +442,45 @@ $('btnVisualCopiar').addEventListener('click', async () => {
     catch (_) { $('codigoVisual').value = r.link; mostrar($('statusVisual'), 'Copie o link do campo acima.'); }
   } catch (err) { mostrar($('statusVisual'), textoErro(err)); }
 });
+
+// ---------- ajuste fino pelo celular (21/11/2026) ----------
+// Lê o visual desta TV (o mesmo código do QR, VisualCodigo.kt), mostra letra e ajuste fino e, a cada troca, manda de
+// volta só essas duas partes pela rota "visual". A TV refaz a tela inicial sozinha (MainActivity.ouvinteAjuste).
+const FINO_PADRAO = { hf: 0, hc: 0, ac: 0, co: 1, gl: 0, sz: 1, bt: 0, bc: 0, bb: 0, bf: 1 };
+
+function lerCodigoVisual(codigo) {
+  const b64 = (codigo || '').replace(/^.*?visual:1:/, '').replace(/-/g, '+').replace(/_/g, '/');
+  try { return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b64 + '==='.slice((b64.length + 3) % 4)), c => c.charCodeAt(0)))); }
+  catch (_) { return null; }
+}
+
+function codigoVisual(j) {
+  const bytes = new TextEncoder().encode(JSON.stringify(j));
+  let bin = ''; bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return 'sofaly-visual:1:' + btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function carregarFino() {
+  if (!$('cartaoFino')) return;
+  try {
+    const r = await ideias('GET', 'visual');
+    const j = lerCodigoVisual(r.codigo) || {};
+    if (j.f) $('finoLetra').value = j.f;
+    const a = j.a || {};
+    document.querySelectorAll('[data-fino]').forEach(s => { s.value = String(a[s.dataset.fino] ?? FINO_PADRAO[s.dataset.fino]); });
+  } catch (err) { mostrar($('statusFino'), textoErro(err)); }
+}
+
+async function mandarFino() {
+  const a = {};
+  document.querySelectorAll('[data-fino]').forEach(s => { a[s.dataset.fino] = Number(s.value); });
+  try {
+    await ideias('POST', 'visual', { codigo: codigoVisual({ f: $('finoLetra').value, a }) });
+    mostrar($('statusFino'), 'Ajuste aplicado na TV.');
+  } catch (err) { mostrar($('statusFino'), textoErro(err)); }
+}
+
+if ($('cartaoFino')) {
+  $('cartaoFino').addEventListener('change', (ev) => { if (ev.target.matches('select')) mandarFino(); });
+  document.addEventListener('aba', (ev) => { if (ev.detail === 'telainicial') carregarFino(); });
+}

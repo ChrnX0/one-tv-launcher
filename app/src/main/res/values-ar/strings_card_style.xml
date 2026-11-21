@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">ضبط دقيق</string>
+    <string name="ft_dica">OK أو ▶ ◀ للتغيير · رجوع للإغلاق</string>
+    <string name="ft_abrir">اضبط وأنت ترى الشاشة الرئيسية</string>
+    <string name="ft_abrir_det">الخط والساعة ولون التمييز والزوايا والتوهج والحجم، مباشرة</string>
+    <string name="cs_destaque">لون التمييز</string>
+    <string name="cs_cantos">الزوايا</string>
+    <string name="cs_brilho">توهج التركيز</string>
+    <string name="cs_tamanho">حجم الصليب</string>
+    <string name="cs_ceu">سماوي</string>
+    <string name="cs_lilas">ليلكي</string>
+    <string name="cs_retos">حادة</string>
+    <string name="cs_redondos">مستديرة</string>
+    <string name="cs_sem">متوقف</string>
+    <string name="cs_suave">خفيف</string>
+    <string name="cs_forte">قوي</string>
+    <string name="cs_menor">أصغر</string>
+    <string name="cs_maior">أكبر</string>
+    <string name="bg_tintura">لون فوق الخلفية</string>
+    <string name="bg_cor">لون الخلفية</string>
+    <string name="bg_desfoque">تمويه الخلفية</string>
+    <string name="bg_transicao">انتقال الصور</string>
+    <string name="bg_novo">خلفية جديدة الآن</string>
+    <string name="bg_solida">مصمت</string>
+    <string name="bg_destaque">تمييز</string>
+    <string name="bg_noite">ليل</string>
+    <string name="bg_mata">غابة</string>
+    <string name="bg_brasa">جمر</string>
+    <string name="bg_grafite">جرافيت</string>
+    <string name="bg_corte">قطع</string>
+    <string name="bg_lenta">بطيء</string>
+    <string name="bg_trocado">تم التغيير</string>
+    <string name="bg_nao_troca">هذه الخلفية لا تتغير</string>
+    <string name="bg_camera">كاميرا المنزل كخلفية</string>
+    <string name="bg_campainha">كاميرا الجرس كخلفية</string>
+    <string name="bg_nenhuma">لا شيء</string>
+    <string name="bg_ligado">مفعّل</string>
+</resources>

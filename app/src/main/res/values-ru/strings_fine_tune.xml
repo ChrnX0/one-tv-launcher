@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Шрифт</string>
+    <string name="fc_det">Шрифт всех экранов. Шрифты Google скачиваются в первый раз</string>
+    <string name="fc_baixando">загрузка…</string>
+    <string name="fc_falhou">Не удалось скачать. Проверьте интернет</string>
+    <string name="ck_formato">Формат времени</string>
+    <string name="ck_formato_det">В верхней панели, на острове и на больших часах</string>
+    <string name="ck_auto">Автоматически</string>
+    <string name="ck_24">24 ч (15:40)</string>
+    <string name="ck_12">12 ч (3:40)</string>
+    <string name="ck_12ampm">12 ч с AM/PM</string>
+    <string name="ck_seg">С секундами</string>
+    <string name="ck_cor">Цвет времени</string>
+    <string name="ck_cor_det">В верхней панели, на острове и на больших часах</string>
+    <string name="ck_padrao">По умолчанию</string>
+    <string name="ck_laranja">Оранжевый</string>
+    <string name="ck_creme">Кремовый</string>
+    <string name="ck_ambar">Янтарный</string>
+    <string name="ck_verde">Бирюзовый</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">عند تشغيل التلفاز</string>
+    <string name="su_det">يفتح هذا مباشرة دون المرور بالشاشة الرئيسية</string>
+    <string name="su_home">الشاشة الرئيسية</string>
+    <string name="su_last">آخر تطبيق</string>
+    <string name="su_quem">لمن؟</string>
+    <string name="su_todos">التلفاز كله</string>
+    <string name="su_so">%1$s فقط</string>
+    <string name="su_segue_tv">اتباع اختيار التلفاز</string>
+    <string name="su_acordar">وعند الاستيقاظ أيضًا</string>
+    <string name="su_acordar_det">ليس بعد إعادة التشغيل فقط: أيضًا عندما يستيقظ التلفاز من وضع الاستعداد. لا يفتح أبدًا فوق Cast أو المنبه</string>
+    <string name="su_esperar">الانتظار عند إعادة التشغيل</string>
+    <string name="su_esperar_det">يمنح التلفاز وقتًا للاتصال قبل فتح التطبيق</string>
+    <string name="su_horario">تطبيق مختلف حسب الوقت</string>
+    <string name="su_horario_det">أتمتة بالمشغّل «تم تشغيل التلفاز» و«فقط إذا»</string>
+</resources>

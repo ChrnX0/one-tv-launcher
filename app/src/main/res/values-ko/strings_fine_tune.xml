@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">글꼴</string>
+    <string name="fc_det">모든 화면의 글꼴. Google 글꼴은 처음에 다운로드됩니다</string>
+    <string name="fc_baixando">다운로드 중…</string>
+    <string name="fc_falhou">다운로드하지 못했습니다. 인터넷을 확인하세요</string>
+    <string name="ck_formato">시간 형식</string>
+    <string name="ck_formato_det">상단 바, 아일랜드, 큰 시계</string>
+    <string name="ck_auto">자동</string>
+    <string name="ck_24">24시간 (15:40)</string>
+    <string name="ck_12">12시간 (3:40)</string>
+    <string name="ck_12ampm">오전/오후 12시간</string>
+    <string name="ck_seg">초 표시</string>
+    <string name="ck_cor">시간 색</string>
+    <string name="ck_cor_det">상단 바, 아일랜드, 큰 시계</string>
+    <string name="ck_padrao">기본</string>
+    <string name="ck_laranja">주황</string>
+    <string name="ck_creme">크림</string>
+    <string name="ck_ambar">호박색</string>
+    <string name="ck_verde">청록</string>
+</resources>

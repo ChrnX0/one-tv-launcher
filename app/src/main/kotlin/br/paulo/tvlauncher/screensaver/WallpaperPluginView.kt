@@ -150,6 +150,9 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
         postDelayed(trocar, WallpaperPluginContract.esperaMs(itens.size, SystemClock.elapsedRealtime() - listaEm, p.cacheMs))
     }
 
+    /** "Novo fundo agora" (BackgroundStyle): o próximo item do plugin. */
+    override fun proximo(): Boolean { if (provider == null) return false; mostrarProximo(); agendar(); return true }
+
     private fun mostrarProximo() {
         val p = provider ?: return
         // O cache do plugin venceu: pede a lista nova (e ela mesma mostra o 1º).
@@ -232,9 +235,10 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
         nova.scaleType = tipo
         nova.setImageDrawable(d)
         // Cruzamento: a nova acende enquanto a velha apaga (sem mexer na ordem das camadas: véu e crédito ficam por cima).
+        val ms = br.paulo.tvlauncher.settings.BackgroundStyle.fadeMs(context)   // transição escolhida (Ajuste fino)
         nova.alpha = 0f
-        nova.animate().alpha(1f).setDuration(800).start()
-        velha.animate().alpha(0f).setDuration(800).withEndAction { if (g == geracao) liberar(velha) }.start()
+        nova.animate().alpha(1f).setDuration(ms).start()
+        velha.animate().alpha(0f).setDuration(ms).withEndAction { if (g == geracao) liberar(velha) }.start()
         frente = 1 - frente
         if (windowVisibility == View.VISIBLE) animada?.start()
         credito.text = texto ?: ""
@@ -349,7 +353,7 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
                     isLooping = true
                     setVolume(0f, 0f)
                     setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
-                    setOnPreparedListener { if (g == geracao) { tv.animate().alpha(1f).setDuration(800).start(); if (windowVisibility == View.VISIBLE) it.start() } }
+                    setOnPreparedListener { if (g == geracao) { tv.animate().alpha(1f).setDuration(br.paulo.tvlauncher.settings.BackgroundStyle.fadeMs(app)).start(); if (windowVisibility == View.VISIBLE) it.start() } }
                     setOnErrorListener { _, _, _ -> true }   // vídeo que o aparelho não toca: fica a imagem anterior
                     prepareAsync()
                 }

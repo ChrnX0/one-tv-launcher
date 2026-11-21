@@ -49,6 +49,8 @@ data class EstadoCeu(val agoraMs: Long, val lat: Double, val lon: Double, val co
 /** Um fundo que se redesenha quando o tempo, o sol ou o clima mudam (a tela chama a cada minuto e a cada clima novo). */
 interface FundoVivo {
     fun atualizar(e: EstadoCeu)
+    /** "Novo fundo agora" (BackgroundStyle): troca a imagem se este fundo souber; false = este fundo não troca. */
+    fun proximo(): Boolean = false
 }
 
 private fun Context.dpf(v: Float) = v * resources.displayMetrics.density
@@ -294,14 +296,35 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
 
     /** Título e "artista, ano" da obra do dia, para quem mostra a etiqueta do seu jeito (o protetor). */
     fun legenda(agoraMs: Long): Pair<String, String> {
-        val o = obras[(Calendar.getInstance().apply { timeInMillis = agoraMs }.get(Calendar.DAY_OF_YEAR)) % obras.size]
+        val o = obras[br.paulo.tvlauncher.settings.BackgroundStyle.indiceObra(Calendar.getInstance().apply { timeInMillis = agoraMs }.get(Calendar.DAY_OF_YEAR), br.paulo.tvlauncher.settings.BackgroundStyle.gallerySkip(context), obras.size)]
         return o.titulo to "${o.artista}, ${o.ano}"
     }
 
+    private var ultimoEstado: EstadoCeu? = null
+
+    /** Pula para a próxima pintura (fica pulada no protetor e nos dias seguintes também: a ordem só anda). */
+    override fun proximo(): Boolean {
+        if (baixando) return true
+        br.paulo.tvlauncher.settings.Extras.definirNumero(context, br.paulo.tvlauncher.settings.BackgroundStyle.KEY_GALLERY_SKIP,
+            br.paulo.tvlauncher.settings.BackgroundStyle.gallerySkip(context) + 1)
+        diaCarregado = ""
+        atualizar(ultimoEstado ?: EstadoCeu(System.currentTimeMillis(), br.paulo.tvlauncher.Config.LATITUDE, br.paulo.tvlauncher.Config.LONGITUDE, 0, false))
+        return true
+    }
+
+    /** Pintura nova entra com a transição escolhida (BackgroundStyle.Fade); a primeira do dia também. */
+    private fun mostrar(bmp: android.graphics.Bitmap) {
+        imagem.setImageBitmap(bmp)
+        val ms = br.paulo.tvlauncher.settings.BackgroundStyle.fadeMs(context)
+        if (ms > 0) { imagem.alpha = 0f; imagem.animate().alpha(1f).setDuration(ms).start() }
+    }
+
     override fun atualizar(e: EstadoCeu) {
-        val dia = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(e.agoraMs)
+        ultimoEstado = e
+        val chaveDia = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(e.agoraMs)
+        val dia = chaveDia + "|" + br.paulo.tvlauncher.settings.BackgroundStyle.gallerySkip(context)
         if (dia == diaCarregado || baixando) return
-        val obra = obras[(Calendar.getInstance().apply { timeInMillis = e.agoraMs }.get(Calendar.DAY_OF_YEAR)) % obras.size]
+        val obra = obras[br.paulo.tvlauncher.settings.BackgroundStyle.indiceObra(Calendar.getInstance().apply { timeInMillis = e.agoraMs }.get(Calendar.DAY_OF_YEAR), br.paulo.tvlauncher.settings.BackgroundStyle.gallerySkip(context), obras.size)]
         mostrarEtiqueta(obra)
         val arquivo = File(context.filesDir, "galeria-${obra.id}.jpg")
         if (arquivo.exists()) {
@@ -311,7 +334,7 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
                 val bmp = BitmapFactory.decodeFile(arquivo.path)?.let { BordaEscura.aparar(it) }   // sem a moldura escura da foto
                 if (bmp == null) arquivo.delete()   // arquivo estragado: apaga, e o próximo atualizar() baixa de novo
                 if (bmp != null) CorDoFundo.guardar(context, bmp)   // cor de destaque que segue a pintura (CorDoFundo.kt)
-                post { baixando = false; if (bmp != null) { imagem.setImageBitmap(bmp); diaCarregado = dia; aoTrocarImagem?.invoke(bmp) } }
+                post { baixando = false; if (bmp != null) { mostrar(bmp); diaCarregado = dia; aoTrocarImagem?.invoke(bmp) } }
             }
             return
         }
@@ -324,7 +347,7 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
             if (bmp != null) CorDoFundo.guardar(context, bmp)
             post {
                 baixando = false
-                if (bmp != null) { imagem.setImageBitmap(bmp); diaCarregado = dia; aoTrocarImagem?.invoke(bmp) }
+                if (bmp != null) { mostrar(bmp); diaCarregado = dia; aoTrocarImagem?.invoke(bmp) }
             }
         }
     }

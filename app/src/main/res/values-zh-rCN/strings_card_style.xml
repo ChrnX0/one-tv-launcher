@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">微调</string>
+    <string name="ft_dica">OK 或 ▶ ◀ 切换 · 返回关闭</string>
+    <string name="ft_abrir">边看主屏幕边调整</string>
+    <string name="ft_abrir_det">字体、时钟、强调色、圆角、光晕和大小，实时预览</string>
+    <string name="cs_destaque">强调色</string>
+    <string name="cs_cantos">圆角</string>
+    <string name="cs_brilho">焦点光晕</string>
+    <string name="cs_tamanho">十字大小</string>
+    <string name="cs_ceu">天蓝</string>
+    <string name="cs_lilas">淡紫</string>
+    <string name="cs_retos">直角</string>
+    <string name="cs_redondos">圆润</string>
+    <string name="cs_sem">关闭</string>
+    <string name="cs_suave">柔和</string>
+    <string name="cs_forte">强烈</string>
+    <string name="cs_menor">更小</string>
+    <string name="cs_maior">更大</string>
+    <string name="bg_tintura">背景叠加色</string>
+    <string name="bg_cor">背景颜色</string>
+    <string name="bg_desfoque">背景模糊</string>
+    <string name="bg_transicao">图片过渡</string>
+    <string name="bg_novo">立即换背景</string>
+    <string name="bg_solida">纯色</string>
+    <string name="bg_destaque">强调色</string>
+    <string name="bg_noite">夜色</string>
+    <string name="bg_mata">森林</string>
+    <string name="bg_brasa">余烬</string>
+    <string name="bg_grafite">石墨</string>
+    <string name="bg_corte">直切</string>
+    <string name="bg_lenta">缓慢</string>
+    <string name="bg_trocado">已更换</string>
+    <string name="bg_nao_troca">此背景不会更换</string>
+    <string name="bg_camera">家庭摄像头作背景</string>
+    <string name="bg_campainha">门铃摄像头作背景</string>
+    <string name="bg_nenhuma">无</string>
+    <string name="bg_ligado">开启</string>
+</resources>

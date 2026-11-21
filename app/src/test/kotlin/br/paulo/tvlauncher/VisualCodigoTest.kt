@@ -65,4 +65,17 @@ class VisualCodigoTest {
         val codigos = Regex("""data-codigo="([^"]+)"""").findAll(html).map { it.groupValues[1] }.distinct().toList()
         assertEquals(VisualCodigo.PRONTOS.map { it.visual }, codigos.map { VisualCodigo.decodificar(it) })
     }
+
+    /** Letra e ajuste fino (21/11/2026): vão e voltam; valor fora da faixa ou chave estranha não aplica. */
+    @Test fun letraEAjusteFino() {
+        val x = VisualCodigo.Visual(letra = "atkinson", fino = mapOf("ac" to 3, "co" to 2, "bt" to 1))
+        val volta = VisualCodigo.decodificar(VisualCodigo.codificar(x))!!
+        org.junit.Assert.assertEquals("atkinson", volta.letra)
+        org.junit.Assert.assertEquals(mapOf("ac" to 3, "co" to 2, "bt" to 1), volta.fino)
+        val ruim = "sofaly-visual:1:" + java.util.Base64.getUrlEncoder().withoutPadding()
+            .encodeToString("""{"f":"../x","a":{"ac":9,"zz":1,"gl":2}}""".toByteArray())
+        val r = VisualCodigo.decodificar(ruim)!!
+        org.junit.Assert.assertNull(r.letra)
+        org.junit.Assert.assertEquals(mapOf("gl" to 2), r.fino)
+    }
 }

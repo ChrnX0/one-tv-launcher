@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">बारीक समायोजन</string>
+    <string name="ft_dica">OK या ▶ ◀ बदलें · BACK बंद करें</string>
+    <string name="ft_abrir">होम स्क्रीन देखते हुए समायोजित करें</string>
+    <string name="ft_abrir_det">फ़ॉन्ट, घड़ी, हाइलाइट रंग, कोने, चमक और आकार, लाइव</string>
+    <string name="cs_destaque">हाइलाइट रंग</string>
+    <string name="cs_cantos">कोने</string>
+    <string name="cs_brilho">फ़ोकस की चमक</string>
+    <string name="cs_tamanho">क्रॉस का आकार</string>
+    <string name="cs_ceu">आसमानी</string>
+    <string name="cs_lilas">बकाइनी</string>
+    <string name="cs_retos">सीधे</string>
+    <string name="cs_redondos">गोल</string>
+    <string name="cs_sem">बंद</string>
+    <string name="cs_suave">हल्की</string>
+    <string name="cs_forte">तेज़</string>
+    <string name="cs_menor">छोटा</string>
+    <string name="cs_maior">बड़ा</string>
+    <string name="bg_tintura">बैकग्राउंड पर रंग</string>
+    <string name="bg_cor">बैकग्राउंड का रंग</string>
+    <string name="bg_desfoque">बैकग्राउंड धुंधला</string>
+    <string name="bg_transicao">चित्र बदलाव</string>
+    <string name="bg_novo">अभी नया बैकग्राउंड</string>
+    <string name="bg_solida">ठोस</string>
+    <string name="bg_destaque">हाइलाइट</string>
+    <string name="bg_noite">रात</string>
+    <string name="bg_mata">जंगल</string>
+    <string name="bg_brasa">अंगार</string>
+    <string name="bg_grafite">ग्रेफ़ाइट</string>
+    <string name="bg_corte">कट</string>
+    <string name="bg_lenta">धीमा</string>
+    <string name="bg_trocado">बदल गया</string>
+    <string name="bg_nao_troca">यह बैकग्राउंड नहीं बदलता</string>
+    <string name="bg_camera">घर का कैमरा बैकग्राउंड में</string>
+    <string name="bg_campainha">डोरबेल कैमरा बैकग्राउंड में</string>
+    <string name="bg_nenhuma">कोई नहीं</string>
+    <string name="bg_ligado">चालू</string>
+</resources>

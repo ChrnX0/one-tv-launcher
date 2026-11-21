@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Тонкая настройка</string>
+    <string name="ft_dica">OK или ▶ ◀ меняет · НАЗАД закрывает</string>
+    <string name="ft_abrir">Настроить, глядя на главный экран</string>
+    <string name="ft_abrir_det">Шрифт, часы, цвет акцента, углы, свечение и размер — сразу</string>
+    <string name="cs_destaque">Цвет акцента</string>
+    <string name="cs_cantos">Углы</string>
+    <string name="cs_brilho">Свечение фокуса</string>
+    <string name="cs_tamanho">Размер креста</string>
+    <string name="cs_ceu">Небо</string>
+    <string name="cs_lilas">Сирень</string>
+    <string name="cs_retos">Прямые</string>
+    <string name="cs_redondos">Круглые</string>
+    <string name="cs_sem">Выкл.</string>
+    <string name="cs_suave">Мягкое</string>
+    <string name="cs_forte">Сильное</string>
+    <string name="cs_menor">Меньше</string>
+    <string name="cs_maior">Больше</string>
+    <string name="bg_tintura">Цвет поверх фона</string>
+    <string name="bg_cor">Цвет фона</string>
+    <string name="bg_desfoque">Размытие фона</string>
+    <string name="bg_transicao">Смена изображений</string>
+    <string name="bg_novo">Новый фон сейчас</string>
+    <string name="bg_solida">Сплошной</string>
+    <string name="bg_destaque">Акцент</string>
+    <string name="bg_noite">Ночь</string>
+    <string name="bg_mata">Лес</string>
+    <string name="bg_brasa">Угли</string>
+    <string name="bg_grafite">Графит</string>
+    <string name="bg_corte">Резко</string>
+    <string name="bg_lenta">Медленно</string>
+    <string name="bg_trocado">Сменён</string>
+    <string name="bg_nao_troca">Этот фон не меняется</string>
+    <string name="bg_camera">Домашняя камера на фоне</string>
+    <string name="bg_campainha">Камера звонка на фоне</string>
+    <string name="bg_nenhuma">Нет</string>
+    <string name="bg_ligado">Вкл.</string>
+</resources>

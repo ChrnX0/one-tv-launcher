@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">TV चालू होने पर</string>
+    <string name="su_det">होम स्क्रीन के बिना इसे सीधे खोलता है</string>
+    <string name="su_home">होम स्क्रीन</string>
+    <string name="su_last">आखिरी ऐप</string>
+    <string name="su_quem">किसके लिए?</string>
+    <string name="su_todos">पूरा TV</string>
+    <string name="su_so">सिर्फ़ %1$s</string>
+    <string name="su_segue_tv">TV की पसंद मानें</string>
+    <string name="su_acordar">जागने पर भी</string>
+    <string name="su_acordar_det">सिर्फ़ रीस्टार्ट के बाद नहीं: TV के स्टैंडबाय से जागने पर भी। कभी किसी Cast या अलार्म के ऊपर नहीं</string>
+    <string name="su_esperar">रीस्टार्ट पर रुकें</string>
+    <string name="su_esperar_det">ऐप खोलने से पहले TV को कनेक्ट होने का समय देता है</string>
+    <string name="su_horario">समय के हिसाब से अलग ऐप</string>
+    <string name="su_horario_det">“TV चालू हुआ” ट्रिगर और “सिर्फ़ अगर” वाला ऑटोमेशन</string>
+</resources>

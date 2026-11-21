@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">İnce ayar</string>
+    <string name="ft_dica">OK veya ▶ ◀ değiştirir · GERİ kapatır</string>
+    <string name="ft_abrir">Ana ekranı görerek ayarla</string>
+    <string name="ft_abrir_det">Yazı tipi, saat, vurgu rengi, köşeler, parıltı ve boyut, canlı</string>
+    <string name="cs_destaque">Vurgu rengi</string>
+    <string name="cs_cantos">Köşeler</string>
+    <string name="cs_brilho">Odak parıltısı</string>
+    <string name="cs_tamanho">Haç boyutu</string>
+    <string name="cs_ceu">Gök</string>
+    <string name="cs_lilas">Leylak</string>
+    <string name="cs_retos">Düz</string>
+    <string name="cs_redondos">Yuvarlak</string>
+    <string name="cs_sem">Kapalı</string>
+    <string name="cs_suave">Hafif</string>
+    <string name="cs_forte">Güçlü</string>
+    <string name="cs_menor">Daha küçük</string>
+    <string name="cs_maior">Daha büyük</string>
+    <string name="bg_tintura">Arka plan üstü renk</string>
+    <string name="bg_cor">Arka plan rengi</string>
+    <string name="bg_desfoque">Arka plan bulanıklığı</string>
+    <string name="bg_transicao">Görsel geçişi</string>
+    <string name="bg_novo">Şimdi yeni arka plan</string>
+    <string name="bg_solida">Düz</string>
+    <string name="bg_destaque">Vurgu</string>
+    <string name="bg_noite">Gece</string>
+    <string name="bg_mata">Orman</string>
+    <string name="bg_brasa">Köz</string>
+    <string name="bg_grafite">Grafit</string>
+    <string name="bg_corte">Kesme</string>
+    <string name="bg_lenta">Yavaş</string>
+    <string name="bg_trocado">Değişti</string>
+    <string name="bg_nao_troca">Bu arka plan değişmez</string>
+    <string name="bg_camera">Ev kamerası arka planda</string>
+    <string name="bg_campainha">Kapı zili kamerası arka planda</string>
+    <string name="bg_nenhuma">Yok</string>
+    <string name="bg_ligado">Açık</string>
+</resources>

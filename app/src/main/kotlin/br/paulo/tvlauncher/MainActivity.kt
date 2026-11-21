@@ -366,6 +366,7 @@ class MainActivity : Activity() {
         assinaturaFundo = FundoMeuDados.assinatura(this) + "|" + WallpaperPlugins.escolhidoId(this)
         idiomaMontado = idiomaAtual()
         assinaturaLayout = assinaturaDoLayout()
+        br.paulo.tvlauncher.settings.Extras.ouvir(this, ouvinteAjuste)   // prévia ao vivo do Ajuste fino (FineTuneActivity)
         setContentView(montarTela())
         // Logo Sofaly ao ligar (18/11/2026): no boot, uma vez por processo, por cima da HOME já montada (SplashRules).
         if (!splashBootDecidido) {
@@ -406,7 +407,9 @@ class MainActivity : Activity() {
 
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
     private fun assinaturaDoLayout() = "${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
-        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}"
+        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}|" +
+        "${br.paulo.tvlauncher.settings.FontChoice.currentId(this)}|${br.paulo.tvlauncher.settings.ClockStyle.format(this)}|${br.paulo.tvlauncher.settings.ClockStyle.color(this)}|" +
+        "${br.paulo.tvlauncher.settings.CardStyle.assinatura(this)}|${br.paulo.tvlauncher.settings.BackgroundStyle.assinatura(this)}"   // ajuste fino (21/11/2026)
 
     override fun onResume() {
         super.onResume()
@@ -425,9 +428,10 @@ class MainActivity : Activity() {
             }
         }
         SonsCruz.naFrente = true
+        // A campainha entra na Ilha na hora e, se pedido no Ajuste fino, a câmera dela vira o fundo por 2 min.
+        CasaHA.aoTocarCampainha = { ui.post { if (ilhaPilula != null) atualizarIlha(); fundoDaCampainha() } }
         if (ilhaPilula != null) {
             ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)
-            CasaHA.aoTocarCampainha = { ui.post { atualizarIlha() } }   // a campainha entra na Ilha na hora
             ui.removeCallbacks(tarefaIlhaGira); if (ilhaFila.size > 1) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
         }
         // A tela acendeu com a HOME ainda pausada (o Android retoma a HOME logo depois do SCREEN_ON): a logo entra agora.
@@ -542,7 +546,36 @@ class MainActivity : Activity() {
         if (Memoria.soltarCapasDaHome(level, hasWindowFocus())) { capas.clear(); arteAtalho.clear() }
     }
 
+    /**
+     * Prévia ao vivo (21/11/2026): com o painel do Ajuste fino aberto por cima, a HOME continua visível atrás; cada troca
+     * de letra/hora/cor/cantos/brilho/tamanho refaz a HOME na hora (um quadro de espera junta trocas seguidas).
+     */
+    private val refazerAjuste = Runnable { if (!isDestroyed && assinaturaDoLayout() != assinaturaLayout) recreate() }
+    private val ouvinteAjuste = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        window?.decorView?.let { it.removeCallbacks(refazerAjuste); it.postDelayed(refazerAjuste, 120) }
+    }
+
+    /**
+     * Campainha com "câmera no fundo" ligada (BackgroundStyle.doorbell): troca o fundo da tela inicial pela câmera da
+     * campainha por 2 min e depois refaz a HOME (volta o fundo de sempre). O aviso por cima continua igual.
+     */
+    private fun fundoDaCampainha() {
+        if (isDestroyed || !br.paulo.tvlauncher.settings.BackgroundStyle.doorbell(this)) return
+        val cam = CasaHA.texto(this, CasaHA.CHAVE_CAMERA).takeIf { it.isNotEmpty() } ?: return
+        val atual = fundo ?: return
+        if (atual is br.paulo.tvlauncher.home.CameraBackground) return
+        val pai = atual.parent as? android.view.ViewGroup ?: return
+        val i = pai.indexOfChild(atual)
+        val novo = br.paulo.tvlauncher.home.CameraBackground(this, cam) { bloco -> rede.execute { bloco() } }
+        pai.removeViewAt(i)
+        pai.addView(novo, i, FrameLayout.LayoutParams(MATCH, MATCH))
+        fundo = novo
+        ui.postDelayed({ if (!isDestroyed) recreate() }, CAMPAINHA_FUNDO_MS)
+    }
+
     override fun onDestroy() {
+        br.paulo.tvlauncher.settings.Extras.parar(this, ouvinteAjuste)
+        br.paulo.tvlauncher.settings.BackgroundStyle.proximoFundo = null
         vigiaTela?.let { runCatching { unregisterReceiver(it) } }; vigiaTela = null
         rede.shutdownNow()
         // Cada recreate() (troca de tema) cria uma Activity nova com a sua própria fila: sem isto a thread "Apps"
@@ -882,8 +915,15 @@ class MainActivity : Activity() {
         topoRaiz = topo
 
         // Sem decoração (arco do sol/lua, etiqueta da obra): o lugar dela é da cruz.
-        val vivo = criarFundo(this, tema, decoracao = false) { bloco -> rede.execute { bloco() } }
+        // Fundo mais rico (BackgroundStyle, 21/11/2026): "cor sólida" troca o fundo inteiro; senão, cor por cima e desfoque.
+        val camera = br.paulo.tvlauncher.settings.BackgroundStyle.camera(this).takeIf { it.isNotEmpty() && CasaHA.configurado(this) }
+        val vivo = if (br.paulo.tvlauncher.settings.BackgroundStyle.tint(this) == br.paulo.tvlauncher.settings.BackgroundStyle.Tint.SOLID)
+            br.paulo.tvlauncher.settings.BackgroundStyle.solido(this)
+        else (if (camera != null) br.paulo.tvlauncher.home.CameraBackground(this, camera) { bloco -> rede.execute { bloco() } }
+              else criarFundo(this, tema, decoracao = false) { bloco -> rede.execute { bloco() } })
+            .also { br.paulo.tvlauncher.settings.BackgroundStyle.vestir(this, it) }
         fundo = vivo
+        br.paulo.tvlauncher.settings.BackgroundStyle.proximoFundo = { (fundo as? FundoVivo)?.proximo() ?: false }
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
         capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || tema == Tema.PLUGIN || !LayoutHome.arteCruz(this@MainActivity) }   // Galeria: a obra é o fundo, sem brilho por cima
@@ -1047,6 +1087,8 @@ class MainActivity : Activity() {
 
     /** pacote -> (APK|activity, Item). Vive enquanto o processo da HOME viver (sobrevive à troca de tema). */
     companion object {
+        /** Quanto tempo a câmera da campainha fica no fundo da tela inicial (fundoDaCampainha). */
+        const val CAMPAINHA_FUNDO_MS = 120_000L
         @Volatile var homeFriaMedida = false   // placar (elevação 2.1): a HOME "fria" é medida uma vez por processo
         /** A abertura com a logo do boot já foi decidida neste processo (recriar a HOME não mostra de novo). */
         @Volatile var splashBootDecidido = false
@@ -1912,6 +1954,12 @@ class MainActivity : Activity() {
             ui.post { bolinhaPerfil?.requestFocus() }   // ▲ no 1º item: o perfil, 1º da barra
         }
         c.aoPasso = { t -> deslizarArte(t) }
+        // Ajuste fino (CardStyle): brilho atrás do escolhido e tamanho da cruz, com o centro no cruzamento (não sai do lugar).
+        c.brilho = br.paulo.tvlauncher.settings.CardStyle.glow(this).alpha
+        br.paulo.tvlauncher.settings.CardStyle.size(this).scale.takeIf { it != 1f }?.let { k ->
+            val d = resources.displayMetrics.density
+            c.pivotX = HomeCruz.COLUNA * d; c.pivotY = HomeCruz.LINHA * d; c.scaleX = k; c.scaleY = k
+        }
         raizCruz = raiz
         vigiarTela()
         montarBarraCruz(raiz, c)

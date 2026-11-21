@@ -524,6 +524,25 @@
         <button type="button" class="botao-secundario" id="btnSimplesSalvar">Salvar apps</button>
         <p id="statusSimples" class="aviso" hidden></p>
       </div>
+      <!-- Ajuste fino pelo celular (21/11/2026, ideias.js): o mesmo do painel da TV (FineTuneActivity); muda na hora na TV -->
+      <div class="cartao" id="cartaoFino">
+        <h2>Ajuste fino</h2>
+        <p class="aviso">Muda na hora na tela da TV. A letra nova é baixada do Google Fonts na primeira vez.</p>
+        <div class="grade-fino">
+          <label class="linha-fino"><span>Letra</span><select id="finoLetra" aria-label="Letra"><option value="nunito">Nunito</option><option value="atkinson">Atkinson Hyperlegible</option><option value="lexend">Lexend</option><option value="inter">Inter</option><option value="roboto">Roboto</option><option value="figtree">Figtree</option><option value="outfit">Outfit</option><option value="dmsans">DM Sans</option><option value="jakarta">Plus Jakarta Sans</option><option value="manrope">Manrope</option><option value="rubik">Rubik</option><option value="quicksand">Quicksand</option><option value="comfortaa">Comfortaa</option><option value="fredoka">Fredoka</option><option value="spacegrotesk">Space Grotesk</option><option value="montserrat">Montserrat</option><option value="lora">Lora</option></select></label>
+          <label class="linha-fino"><span>Formato da hora</span><select data-fino="hf" aria-label="Formato da hora"><option value="0">Automático</option><option value="1">24 h (15:40)</option><option value="2">12 h (3:40)</option><option value="3">12 h com AM/PM</option><option value="4">Com segundos</option></select></label>
+          <label class="linha-fino"><span>Cor da hora</span><select data-fino="hc" aria-label="Cor da hora"><option value="0">Padrão</option><option value="1">Laranja</option><option value="2">Creme</option><option value="3">Âmbar</option><option value="4">Verde-água</option></select></label>
+          <label class="linha-fino"><span>Cor de destaque</span><select data-fino="ac" aria-label="Cor de destaque"><option value="0">Laranja</option><option value="1">Âmbar</option><option value="2">Verde-água</option><option value="3">Céu</option><option value="4">Lilás</option></select></label>
+          <label class="linha-fino"><span>Cantos</span><select data-fino="co" aria-label="Cantos"><option value="0">Retos</option><option value="1">Padrão</option><option value="2">Redondos</option></select></label>
+          <label class="linha-fino"><span>Brilho do foco</span><select data-fino="gl" aria-label="Brilho do foco"><option value="0">Desligado</option><option value="1">Suave</option><option value="2">Forte</option></select></label>
+          <label class="linha-fino"><span>Tamanho da cruz</span><select data-fino="sz" aria-label="Tamanho da cruz"><option value="0">Menor</option><option value="1">Padrão</option><option value="2">Maior</option></select></label>
+          <label class="linha-fino"><span>Cor por cima do fundo</span><select data-fino="bt" aria-label="Cor por cima do fundo"><option value="0">Desligado</option><option value="1">Suave</option><option value="2">Forte</option><option value="3">Sólida</option></select></label>
+          <label class="linha-fino"><span>Cor do fundo</span><select data-fino="bc" aria-label="Cor do fundo"><option value="0">Destaque</option><option value="1">Noite</option><option value="2">Mata</option><option value="3">Brasa</option><option value="4">Grafite</option></select></label>
+          <label class="linha-fino"><span>Desfoque do fundo</span><select data-fino="bb" aria-label="Desfoque do fundo"><option value="0">Desligado</option><option value="1">Suave</option><option value="2">Forte</option></select></label>
+          <label class="linha-fino"><span>Transição das imagens</span><select data-fino="bf" aria-label="Transição das imagens"><option value="0">Corte</option><option value="1">Suave</option><option value="2">Lenta</option></select></label>
+        </div>
+        <p id="statusFino" class="aviso" hidden></p>
+      </div>
       <!-- Tema por QR (degrau 1, VisualCodigo.kt): o visual de outra TV, lido pelo QR "Compartilhar visual" (site/visual.html) -->
       <div class="cartao">
         <h2>Visual de outra TV</h2>

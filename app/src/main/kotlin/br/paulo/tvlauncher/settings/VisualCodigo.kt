@@ -9,7 +9,7 @@ import java.util.Base64
  * copiar; na outra TV, o código entra pelo painel web ou pelo adb. A comunidade pode trocar visuais como links.
  *
  * O que entra: só ajustes (tema, tamanho do texto, pacote de ícones, cor do fundo, brilho e contraste do
- * "Meu fundo"). 21/11/2026: cartões (s), transparência (v), grade (g) e pilhas (p) saíram com a HOME antiga; um código
+ * "Meu fundo"; desde 21/11/2026 também a letra e o ajuste fino). 21/11/2026: cartões (s), transparência (v), grade (g) e pilhas (p) saíram com a HOME antiga; um código
  * antigo que os traga continua válido, essas chaves só são ignoradas. Arquivo de foto ou vídeo NÃO entra: não cabe num QR e é da pessoa. Nada de nome, conta ou rede.
  *
  * Formato: "sofaly-visual:1:" + Base64 URL-safe (sem "=") do JSON. Leitura tolerante: chave desconhecida é ignorada e
@@ -31,13 +31,25 @@ object VisualCodigo {
         val corDoFundo: Boolean? = null,
         val brilho: Int? = null,
         val contraste: Int? = null,
+        /** Letra (FontChoice: id da fonte; a outra TV baixa do Google Fonts). 21/11/2026. */
+        val letra: String? = null,
+        /** Ajuste fino (CardStyle, ClockStyle, BackgroundStyle): chave curta -> posição na lista. Ver [FINO]. */
+        val fino: Map<String, Int>? = null,
     )
+
+    /**
+     * As chaves do ajuste fino no código e quantas opções cada uma tem (valor fora vira "não aplica"). Curtas para caber no
+     * QR: hora (formato, cor), destaque, cantos, brilho, tamanho da cruz, fundo (tintura, cor, desfoque, transição).
+     */
+    val FINO = linkedMapOf("hf" to 5, "hc" to 5, "ac" to 5, "co" to 3, "gl" to 3, "sz" to 3, "bt" to 4, "bc" to 5, "bb" to 3, "bf" to 3)
 
     fun codificar(v: Visual): String {
         val j = JSONObject()
         v.tema?.let { j.put("t", it) }; v.texto?.let { j.put("x", it) }; v.icones?.let { j.put("i", it) }
         v.corDoFundo?.let { j.put("c", it) }
         v.brilho?.let { j.put("b", it) }; v.contraste?.let { j.put("k", it) }
+        v.letra?.let { j.put("f", it) }
+        v.fino?.takeIf { it.isNotEmpty() }?.let { m -> j.put("a", JSONObject().apply { m.forEach { (k, n) -> put(k, n) } }) }
         return PREFIXO + Base64.getUrlEncoder().withoutPadding().encodeToString(j.toString().toByteArray(Charsets.UTF_8))
     }
 
@@ -58,6 +70,11 @@ object VisualCodigo {
             corDoFundo = bool("c"),
             brilho = int("b") { it in -100..100 },
             contraste = int("k") { it in -100..100 },
+            letra = j.optString("f", "").takeIf { Regex("[a-z0-9]{2,20}").matches(it) },
+            fino = j.optJSONObject("a")?.let { a ->
+                FINO.mapNotNull { (k, n) -> if (a.has(k)) a.optInt(k, -1).takeIf { it in 0 until n }?.let { k to it } else null }.toMap()
+                    .takeIf { it.isNotEmpty() }
+            },
         )
     }
 

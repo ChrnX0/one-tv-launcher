@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">Saat TV dinyalakan</string>
+    <string name="su_det">Langsung membuka ini, tanpa lewat layar utama</string>
+    <string name="su_home">Layar utama</string>
+    <string name="su_last">Aplikasi terakhir</string>
+    <string name="su_quem">Untuk siapa?</string>
+    <string name="su_todos">Seluruh TV</string>
+    <string name="su_so">Hanya %1$s</string>
+    <string name="su_segue_tv">Ikuti pilihan TV</string>
+    <string name="su_acordar">Juga saat bangun</string>
+    <string name="su_acordar_det">Bukan hanya setelah mulai ulang: juga saat TV bangun dari siaga. Tidak pernah di atas Cast atau alarm</string>
+    <string name="su_esperar">Tunggu saat mulai ulang</string>
+    <string name="su_esperar_det">Memberi TV waktu terhubung sebelum membuka aplikasi</string>
+    <string name="su_horario">Aplikasi berbeda menurut jam</string>
+    <string name="su_horario_det">Otomasi dengan pemicu “TV menyala” dan “Hanya jika”</string>
+</resources>

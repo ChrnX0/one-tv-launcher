@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">テレビをつけたとき</string>
+    <string name="su_det">ホーム画面を通らずに、これをすぐ開きます</string>
+    <string name="su_home">ホーム画面</string>
+    <string name="su_last">最後のアプリ</string>
+    <string name="su_quem">誰のため？</string>
+    <string name="su_todos">テレビ全体</string>
+    <string name="su_so">%1$s のみ</string>
+    <string name="su_segue_tv">テレビの設定に従う</string>
+    <string name="su_acordar">スリープ復帰時も</string>
+    <string name="su_acordar_det">再起動のあとだけでなく、スタンバイから復帰したときも。キャストやアラームの上には開きません</string>
+    <string name="su_esperar">再起動後に待つ</string>
+    <string name="su_esperar_det">アプリを開く前にテレビが接続する時間をとります</string>
+    <string name="su_horario">時間帯で別のアプリ</string>
+    <string name="su_horario_det">トリガー「テレビがついた」と「条件」を使った自動化</string>
+</resources>

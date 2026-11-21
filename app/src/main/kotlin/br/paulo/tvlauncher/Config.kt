@@ -46,9 +46,6 @@ object Config {
     // --- Pacote das Configurações do sistema (abre pelo menu da bolinha do perfil, no canto superior direito).
     const val PACOTE_CONFIG = "com.android.tv.settings"
 
-    // --- App aberto automaticamente quando a TV REINICIA (não quando acorda do standby). "" desliga.
-    const val ABRIR_AO_LIGAR = ""   // desligado: o OneStream tem opcao propria de abrir ao reiniciar; ponha o pacote aqui so se quiser que o launcher faca isso
-
     // --- Serviço de acessibilidade (AutorizaShizukuService, hoje só trata teclas do controle remoto): true = o
     //     launcher RELIGA o serviço sozinho se o Android o desligar (ver Privilegio.religarAcessibilidade).
     //     Até 03/11/2026 esta chave também controlava a aprovação automática dos diálogos do Shizuku; esse app
@@ -104,7 +101,10 @@ object Config {
         "android.permission.GET_ACCOUNTS") +
         (if (android.os.Build.VERSION.SDK_INT >= 33) listOf("android.permission.POST_NOTIFICATIONS") else emptyList()) +
         // BLUETOOTH_CONNECT (Android 12+, 21/11/2026): sem ela a tela de parear do sistema recusa abrir pelo painel rápido.
-        (if (android.os.Build.VERSION.SDK_INT >= 31) listOf("android.permission.BLUETOOTH_CONNECT") else emptyList())
+        (if (android.os.Build.VERSION.SDK_INT >= 31) listOf("android.permission.BLUETOOTH_CONNECT") else emptyList()) +
+        // READ_TV_LISTINGS (Android 11+, 21/11/2026): ler as fileiras (canais de prévia) que os outros apps publicam.
+        // Medido na Sala: concedida, 10 canais de YouTube, Prime Video, Max e Play Filmes (WatchNextTv.canais).
+        (if (android.os.Build.VERSION.SDK_INT >= 30) listOf("android.permission.READ_TV_LISTINGS") else emptyList())
 
     // --- Painel no navegador (PainelWeb.kt): liga/desliga e PIN em Configurações do launcher > Painel no navegador.
     // Porta: abaixo de 1024 (ex.: 80) o Android não deixa um app abrir (medido na TV em 04/11/2026), por isso 8080.

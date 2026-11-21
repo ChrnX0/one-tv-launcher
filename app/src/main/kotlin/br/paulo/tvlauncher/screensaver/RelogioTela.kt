@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.widget.TextClock
+import br.paulo.tvlauncher.settings.ClockStyle
 import br.paulo.tvlauncher.settings.Fontes
 
 /**
@@ -15,6 +16,17 @@ import br.paulo.tvlauncher.settings.Fontes
  * O TextClock do Android atualiza sozinho a cada minuto chamando setText; aqui a gente só "veste" o texto que ele manda.
  */
 class RelogioTela(ctx: Context, private val data: Boolean) : TextClock(ctx) {
+    // Formato e cor escolhidos em Aparência (ClockStyle): aplicados ao entrar na tela, depois do que quem criou o
+    // relógio definiu. Só na hora (a data tem o formato dela). Cor padrão = a que a tela escolheu.
+    override fun onAttachedToWindow() {
+        if (!data) {
+            val p = ClockStyle.pattern(context)
+            format12Hour = p; format24Hour = p
+            ClockStyle.color(context).argb?.let { setTextColor(it) }
+        }
+        super.onAttachedToWindow()
+    }
+
     override fun setText(texto: CharSequence?, tipo: BufferType?) {
         if (texto == null || texto.isEmpty()) return super.setText(texto, tipo)
         if (data) return super.setText(texto.toString().replaceFirstChar { it.titlecase() }, tipo)

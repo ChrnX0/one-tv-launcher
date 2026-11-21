@@ -67,8 +67,12 @@ class LauncherApp : Application() {
             override fun onActivityPreCreated(a: android.app.Activity, salvo: android.os.Bundle?) {
                 TamanhoTexto.aplicar(a)
                 AltoContraste.aplicar(a)   // elevação 16.3
+                br.paulo.tvlauncher.settings.CardStyle.aplicar(a)   // cor de destaque e cantos (Ajuste fino)
             }
-            override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) { if (salvo == null) UsoLocal.contarTela(a) }   // ideia 67
+            override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) {
+                if (salvo == null) UsoLocal.contarTela(a)   // ideia 67
+                br.paulo.tvlauncher.settings.FontChoice.aplicarNaTela(a)   // fonte escolhida também nos textos que só herdam a do tema
+            }
             override fun onActivityResumed(a: android.app.Activity) {
                 VozFoco.aoRetomar(a)   // ideia 48 (VozFoco.kt)
                 if (a is MainActivity) SugestoesTv.aoRetomarHome(a)   // ideia 44 (SugestoesTv.kt): no máximo 1 vez por dia

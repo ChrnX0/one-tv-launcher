@@ -91,6 +91,9 @@
     <!-- Android 11+ só deixa um app enxergar outros apps se isso for declarado aqui -->
     <!-- Watch Next dos outros apps (WatchNextTv, degrau 1): só leitura; diz se a fileira "Continuar" é possível. -->
     <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
+    <!-- Canais e "continuar" dos outros apps (21/11/2026, item 4 contra o Projectivy, que usa a mesma): Android 11+,
+         permissão de tempo de execução; o Device Owner concede sozinho. Só leitura. WatchNextTv.diagnostico mede. -->
+    <uses-permission android:name="android.permission.READ_TV_LISTINGS" />
     <queries>
         <!-- Busca por voz (estudo global 20/11): saber se a TV tem o reconhecimento de voz do sistema. -->
         <intent><action android:name="android.speech.action.RECOGNIZE_SPEECH" /></intent>
@@ -278,6 +281,12 @@
             android:name=".DiagnosticoActivity"
             android:exported="false"
             android:label="@string/lbl_diagnostico" />
+        <!-- Ajuste fino com prévia ao vivo (21/11/2026): painel de vidro por cima da HOME (FineTuneActivity.kt). -->
+        <activity
+            android:name=".FineTuneActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@style/One.Translucido" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

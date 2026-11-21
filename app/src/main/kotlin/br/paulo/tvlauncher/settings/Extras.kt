@@ -121,7 +121,7 @@ object Extras {
     fun precisaPinNaTv(c: Chave, ligadoAgora: Boolean, temPin: Boolean): Boolean =
         temPin && c in CHAVES_COM_PIN && (c !in CHAVES_FAMILIA || ligadoAgora)   // as de família: só desligar pede
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
+    internal fun prefs(ctx: Context) = ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
 
     /** Avisa quando alguma chave muda (o Android guarda o ouvinte fraco: quem chama segura a referência). */
     fun ouvir(ctx: Context, o: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">Po włączeniu TV</string>
+    <string name="su_det">Otwiera to od razu, bez ekranu głównego</string>
+    <string name="su_home">Ekran główny</string>
+    <string name="su_last">Ostatnia aplikacja</string>
+    <string name="su_quem">Dla kogo?</string>
+    <string name="su_todos">Cały telewizor</string>
+    <string name="su_so">Tylko %1$s</string>
+    <string name="su_segue_tv">Jak telewizor</string>
+    <string name="su_acordar">Także po wybudzeniu</string>
+    <string name="su_acordar_det">Nie tylko po restarcie: także gdy TV wybudza się z czuwania. Nigdy na Cast ani na budzik</string>
+    <string name="su_esperar">Czekaj po restarcie</string>
+    <string name="su_esperar_det">Daje TV czas na połączenie przed otwarciem aplikacji</string>
+    <string name="su_horario">Inna aplikacja o różnych porach</string>
+    <string name="su_horario_det">Automatyzacja z wyzwalaczem „TV włączony” i „Tylko jeśli”</string>
+</resources>

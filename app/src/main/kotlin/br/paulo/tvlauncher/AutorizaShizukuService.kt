@@ -56,6 +56,7 @@ class AutorizaShizukuService : AccessibilityService() {
         ManutencaoNoturna.vigiar(this); ManutencaoNoturna.agendar(this)   // manutenção de madrugada + resumo de manhã
         CuidarDeLongeTv.iniciar(this)   // Cuidar de longe: lê a tecla de ajuda e agenda o próximo lembrete/aviso
         Gatilhos.iniciar(this)   // eventos como gatilho de cena (ideia 7): tela acesa e sessões de mídia
+        br.paulo.tvlauncher.home.StartupApp.iniciar(this)   // "Ao ligar a TV": abre o app escolhido ao acordar do standby
         TecladoCelular.ajustar(this)   // ideia 57: foco de campo de texto só com o aviso ligado
         JogosTv.iniciarControles(this)   // card Jogos: ligar um controle abre a tela Jogos (só com a chave ligada)
         CasaHA.iniciar(this)   // Home Assistant: publica o estado da TV e vigia a campainha (só se configurado)   // película âmbar à noite (só com a chave ligada em Extras)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Penyesuaian halus</string>
+    <string name="ft_dica">OK atau ▶ ◀ mengubah · KEMBALI menutup</string>
+    <string name="ft_abrir">Sesuaikan sambil melihat layar utama</string>
+    <string name="ft_abrir_det">Font, jam, warna sorotan, sudut, cahaya, dan ukuran, langsung</string>
+    <string name="cs_destaque">Warna sorotan</string>
+    <string name="cs_cantos">Sudut</string>
+    <string name="cs_brilho">Cahaya fokus</string>
+    <string name="cs_tamanho">Ukuran salib</string>
+    <string name="cs_ceu">Langit</string>
+    <string name="cs_lilas">Lila</string>
+    <string name="cs_retos">Siku</string>
+    <string name="cs_redondos">Bulat</string>
+    <string name="cs_sem">Mati</string>
+    <string name="cs_suave">Lembut</string>
+    <string name="cs_forte">Kuat</string>
+    <string name="cs_menor">Lebih kecil</string>
+    <string name="cs_maior">Lebih besar</string>
+    <string name="bg_tintura">Warna di atas latar</string>
+    <string name="bg_cor">Warna latar</string>
+    <string name="bg_desfoque">Buram latar</string>
+    <string name="bg_transicao">Transisi gambar</string>
+    <string name="bg_novo">Latar baru sekarang</string>
+    <string name="bg_solida">Solid</string>
+    <string name="bg_destaque">Sorotan</string>
+    <string name="bg_noite">Malam</string>
+    <string name="bg_mata">Hutan</string>
+    <string name="bg_brasa">Bara</string>
+    <string name="bg_grafite">Grafit</string>
+    <string name="bg_corte">Potong</string>
+    <string name="bg_lenta">Lambat</string>
+    <string name="bg_trocado">Diganti</string>
+    <string name="bg_nao_troca">Latar ini tidak berganti</string>
+    <string name="bg_camera">Kamera rumah sebagai latar</string>
+    <string name="bg_campainha">Kamera bel pintu sebagai latar</string>
+    <string name="bg_nenhuma">Tidak ada</string>
+    <string name="bg_ligado">Aktif</string>
+</resources>

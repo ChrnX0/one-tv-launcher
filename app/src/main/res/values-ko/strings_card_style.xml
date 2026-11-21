@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">세부 조정</string>
+    <string name="ft_dica">OK 또는 ▶ ◀ 변경 · 뒤로 닫기</string>
+    <string name="ft_abrir">홈 화면을 보면서 조정</string>
+    <string name="ft_abrir_det">글꼴, 시계, 강조 색, 모서리, 빛, 크기를 실시간으로</string>
+    <string name="cs_destaque">강조 색</string>
+    <string name="cs_cantos">모서리</string>
+    <string name="cs_brilho">포커스 빛</string>
+    <string name="cs_tamanho">십자 크기</string>
+    <string name="cs_ceu">하늘</string>
+    <string name="cs_lilas">라일락</string>
+    <string name="cs_retos">각진</string>
+    <string name="cs_redondos">둥근</string>
+    <string name="cs_sem">끔</string>
+    <string name="cs_suave">은은하게</string>
+    <string name="cs_forte">강하게</string>
+    <string name="cs_menor">작게</string>
+    <string name="cs_maior">크게</string>
+    <string name="bg_tintura">배경 위 색</string>
+    <string name="bg_cor">배경 색</string>
+    <string name="bg_desfoque">배경 흐림</string>
+    <string name="bg_transicao">이미지 전환</string>
+    <string name="bg_novo">지금 새 배경</string>
+    <string name="bg_solida">단색</string>
+    <string name="bg_destaque">강조</string>
+    <string name="bg_noite">밤</string>
+    <string name="bg_mata">숲</string>
+    <string name="bg_brasa">잉걸불</string>
+    <string name="bg_grafite">흑연</string>
+    <string name="bg_corte">컷</string>
+    <string name="bg_lenta">느리게</string>
+    <string name="bg_trocado">바뀜</string>
+    <string name="bg_nao_troca">이 배경은 바뀌지 않음</string>
+    <string name="bg_camera">집 카메라를 배경으로</string>
+    <string name="bg_campainha">초인종 카메라를 배경으로</string>
+    <string name="bg_nenhuma">없음</string>
+    <string name="bg_ligado">켜짐</string>
+</resources>

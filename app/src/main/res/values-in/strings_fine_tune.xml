@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Huruf</string>
+    <string name="fc_det">Huruf di semua layar. Huruf Google diunduh saat pertama kali</string>
+    <string name="fc_baixando">mengunduh…</string>
+    <string name="fc_falhou">Gagal mengunduh. Periksa internet</string>
+    <string name="ck_formato">Format jam</string>
+    <string name="ck_formato_det">Di bilah atas, pulau, dan jam besar</string>
+    <string name="ck_auto">Otomatis</string>
+    <string name="ck_24">24 jam (15:40)</string>
+    <string name="ck_12">12 jam (3:40)</string>
+    <string name="ck_12ampm">12 jam dengan AM/PM</string>
+    <string name="ck_seg">Dengan detik</string>
+    <string name="ck_cor">Warna jam</string>
+    <string name="ck_cor_det">Di bilah atas, pulau, dan jam besar</string>
+    <string name="ck_padrao">Bawaan</string>
+    <string name="ck_laranja">Oranye</string>
+    <string name="ck_creme">Krem</string>
+    <string name="ck_ambar">Amber</string>
+    <string name="ck_verde">Hijau toska</string>
+</resources>

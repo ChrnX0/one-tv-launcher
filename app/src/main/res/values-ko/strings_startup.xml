@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">TV를 켤 때</string>
+    <string name="su_det">홈 화면을 거치지 않고 바로 엽니다</string>
+    <string name="su_home">홈 화면</string>
+    <string name="su_last">마지막 앱</string>
+    <string name="su_quem">누구를 위해?</string>
+    <string name="su_todos">TV 전체</string>
+    <string name="su_so">%1$s만</string>
+    <string name="su_segue_tv">TV 설정 따르기</string>
+    <string name="su_acordar">깨어날 때도</string>
+    <string name="su_acordar_det">재시작 후뿐 아니라 대기 모드에서 깨어날 때도 엽니다. 캐스트나 알람 위에는 절대 열지 않습니다</string>
+    <string name="su_esperar">재시작 후 대기</string>
+    <string name="su_esperar_det">앱을 열기 전에 TV가 연결할 시간을 줍니다</string>
+    <string name="su_horario">시간대별 다른 앱</string>
+    <string name="su_horario_det">“TV 켜짐” 트리거와 “조건”을 쓰는 자동화</string>
+</resources>

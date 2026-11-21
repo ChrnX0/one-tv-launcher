@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">微調整</string>
+    <string name="ft_dica">OK または ▶ ◀ で変更 · 戻るで閉じる</string>
+    <string name="ft_abrir">ホーム画面を見ながら調整</string>
+    <string name="ft_abrir_det">フォント、時計、アクセント色、角、光彩、サイズをその場で</string>
+    <string name="cs_destaque">アクセント色</string>
+    <string name="cs_cantos">角</string>
+    <string name="cs_brilho">フォーカスの光彩</string>
+    <string name="cs_tamanho">十字のサイズ</string>
+    <string name="cs_ceu">スカイ</string>
+    <string name="cs_lilas">ライラック</string>
+    <string name="cs_retos">角型</string>
+    <string name="cs_redondos">丸型</string>
+    <string name="cs_sem">オフ</string>
+    <string name="cs_suave">弱</string>
+    <string name="cs_forte">強</string>
+    <string name="cs_menor">小さく</string>
+    <string name="cs_maior">大きく</string>
+    <string name="bg_tintura">背景に重ねる色</string>
+    <string name="bg_cor">背景の色</string>
+    <string name="bg_desfoque">背景のぼかし</string>
+    <string name="bg_transicao">画像の切り替え</string>
+    <string name="bg_novo">今すぐ新しい背景</string>
+    <string name="bg_solida">単色</string>
+    <string name="bg_destaque">アクセント</string>
+    <string name="bg_noite">夜</string>
+    <string name="bg_mata">森</string>
+    <string name="bg_brasa">残り火</string>
+    <string name="bg_grafite">グラファイト</string>
+    <string name="bg_corte">カット</string>
+    <string name="bg_lenta">ゆっくり</string>
+    <string name="bg_trocado">変更しました</string>
+    <string name="bg_nao_troca">この背景は変わりません</string>
+    <string name="bg_camera">家のカメラを背景に</string>
+    <string name="bg_campainha">ドアベルのカメラを背景に</string>
+    <string name="bg_nenhuma">なし</string>
+    <string name="bg_ligado">オン</string>
+</resources>

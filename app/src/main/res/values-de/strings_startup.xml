@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">Beim Einschalten des Fernsehers</string>
+    <string name="su_det">Öffnet dies direkt, ohne den Startbildschirm</string>
+    <string name="su_home">Startbildschirm</string>
+    <string name="su_last">Letzte App</string>
+    <string name="su_quem">Für wen?</string>
+    <string name="su_todos">Der ganze Fernseher</string>
+    <string name="su_so">Nur %1$s</string>
+    <string name="su_segue_tv">Wie der Fernseher</string>
+    <string name="su_acordar">Auch beim Aufwachen</string>
+    <string name="su_acordar_det">Nicht nur nach einem Neustart: auch wenn der Fernseher aus dem Standby aufwacht. Nie über einem Cast oder dem Wecker</string>
+    <string name="su_esperar">Nach Neustart warten</string>
+    <string name="su_esperar_det">Lässt dem Fernseher Zeit zum Verbinden, bevor die App öffnet</string>
+    <string name="su_horario">Andere App je nach Uhrzeit</string>
+    <string name="su_horario_det">Eine Automation mit dem Auslöser „Fernseher an“ und „Nur wenn“</string>
+</resources>

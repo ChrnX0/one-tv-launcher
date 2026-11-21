@@ -69,9 +69,13 @@ object Estilo {
     val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA6121528.toInt()
 
     /** O ÚNICO acento: "ligado", valor escolhido, progresso. Foco NÃO usa acento: foco é branco. */
-    val ACENTO: Int get() = if (altoContraste) DesignTokens.ORANGE_HIGH else DesignTokens.ORANGE
+    val ACENTO: Int get() = if (altoContraste) acentoAlto else acentoBase
     /** Acento legível sobre o foco branco. */
-    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else DesignTokens.ORANGE_ON_LIGHT
+    val ACENTO_NO_FOCO: Int get() = if (altoContraste && acentoBase == DesignTokens.ORANGE) 0xFF8A2900.toInt() else acentoNoFocoBase
+    /** A cor de destaque escolhida no Ajuste fino (CardStyle.aplicar); laranja da marca de fábrica. */
+    @Volatile var acentoBase = DesignTokens.ORANGE
+    @Volatile var acentoAlto = DesignTokens.ORANGE_HIGH
+    @Volatile var acentoNoFocoBase = DesignTokens.ORANGE_ON_LIGHT
     /** Semânticas: atenção (chuva, vencimento) e erro/ao vivo. Não contam como acento. */
     const val ATENCAO = DesignTokens.ATTENTION
     val ERRO: Int get() = if (altoContraste) 0xFFFFA08C.toInt() else DesignTokens.ERROR
@@ -146,8 +150,10 @@ object Estilo {
     // ------------------------------------------------------------------ forma, espaço, movimento
 
     /** Só 3 raios: chip pequeno, card/painel e pílula (botão, foco de lista, avisos). */
-    const val RAIO_PEQUENO = DesignTokens.RADIUS_SMALL
-    const val RAIO = DesignTokens.RADIUS_MEDIUM
+    /** Cantos do Ajuste fino (CardStyle.Corners): multiplica os raios abaixo. A pílula continua pílula. */
+    @Volatile var escalaRaio = 1f
+    val RAIO_PEQUENO: Int get() = br.paulo.tvlauncher.settings.CardStyle.raio(DesignTokens.RADIUS_SMALL, escalaRaio)
+    val RAIO: Int get() = br.paulo.tvlauncher.settings.CardStyle.raio(DesignTokens.RADIUS_MEDIUM, escalaRaio)
     const val RAIO_PILULA = DesignTokens.RADIUS_PILL
 
     /** Grade de 8 dp. */

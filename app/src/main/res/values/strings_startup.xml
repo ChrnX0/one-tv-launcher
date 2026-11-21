@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Ao ligar a TV" (StartupApp.kt, 21/11/2026) -->
+<resources>
+    <string name="su_titulo">When the TV turns on</string>
+    <string name="su_det">Opens this right away, skipping the home screen</string>
+    <string name="su_home">Home screen</string>
+    <string name="su_last">Last app</string>
+    <string name="su_quem">For whom?</string>
+    <string name="su_todos">The whole TV</string>
+    <string name="su_so">Only %1$s</string>
+    <string name="su_segue_tv">Follow the TV\'s choice</string>
+    <string name="su_acordar">Also when it wakes up</string>
+    <string name="su_acordar_det">Not only after a restart: also when the TV wakes from standby. Never over a Cast or the alarm</string>
+    <string name="su_esperar">Wait after a restart</string>
+    <string name="su_esperar_det">Gives the TV time to connect before opening the app</string>
+    <string name="su_horario">Different app by time of day</string>
+    <string name="su_horario_det">An automation with the trigger “TV turned on” and “Only if”</string>
+    <string name="su_seg" translatable="false">%1$d s</string>
+</resources>

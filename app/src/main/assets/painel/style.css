@@ -1319,3 +1319,8 @@ label[data-atalho] > .estrela { margin: -8px -8px -8px auto; }
 .icone-item strong { font-size: 17px; }
 .icone-item select { width: 100%; }
 .icone-item.trocado { outline: 2px solid var(--acento); }
+
+/* Ajuste fino pelo celular (21/11/2026): rótulo em cima, seleção embaixo; 2 colunas onde cabe. */
+.grade-fino { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 16px; margin-top: 12px; }
+.linha-fino { display: flex; flex-direction: column; gap: 6px; }
+.linha-fino select { width: 100%; }

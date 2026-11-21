@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Ajuste fino</string>
+    <string name="ft_dica">OK ou ▶ ◀ troca · VOLTAR fecha</string>
+    <string name="ft_abrir">Ajustar vendo a tela inicial</string>
+    <string name="ft_abrir_det">Letra, hora, cor de destaque, cantos, brilho e tamanho, ao vivo</string>
+    <string name="cs_destaque">Cor de destaque</string>
+    <string name="cs_cantos">Cantos</string>
+    <string name="cs_brilho">Brilho do foco</string>
+    <string name="cs_tamanho">Tamanho da cruz</string>
+    <string name="cs_ceu">Céu</string>
+    <string name="cs_lilas">Lilás</string>
+    <string name="cs_retos">Retos</string>
+    <string name="cs_redondos">Redondos</string>
+    <string name="cs_sem">Desligado</string>
+    <string name="cs_suave">Suave</string>
+    <string name="cs_forte">Forte</string>
+    <string name="cs_menor">Menor</string>
+    <string name="cs_maior">Maior</string>
+    <string name="bg_tintura">Cor por cima do fundo</string>
+    <string name="bg_cor">Cor do fundo</string>
+    <string name="bg_desfoque">Desfoque do fundo</string>
+    <string name="bg_transicao">Transição das imagens</string>
+    <string name="bg_novo">Novo fundo agora</string>
+    <string name="bg_solida">Sólida</string>
+    <string name="bg_destaque">Destaque</string>
+    <string name="bg_noite">Noite</string>
+    <string name="bg_mata">Mata</string>
+    <string name="bg_brasa">Brasa</string>
+    <string name="bg_grafite">Grafite</string>
+    <string name="bg_corte">Corte</string>
+    <string name="bg_lenta">Lenta</string>
+    <string name="bg_trocado">Trocado</string>
+    <string name="bg_nao_troca">Este fundo não troca</string>
+    <string name="bg_camera">Câmera da casa no fundo</string>
+    <string name="bg_campainha">Câmera da campainha no fundo</string>
+    <string name="bg_nenhuma">Nenhuma</string>
+    <string name="bg_ligado">Ligado</string>
+</resources>

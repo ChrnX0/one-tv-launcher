@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_titulo">При включении ТВ</string>
+    <string name="su_det">Сразу открывает это, без главного экрана</string>
+    <string name="su_home">Главный экран</string>
+    <string name="su_last">Последнее приложение</string>
+    <string name="su_quem">Для кого?</string>
+    <string name="su_todos">Весь ТВ</string>
+    <string name="su_so">Только %1$s</string>
+    <string name="su_segue_tv">Как у ТВ</string>
+    <string name="su_acordar">И при пробуждении</string>
+    <string name="su_acordar_det">Не только после перезагрузки: и когда ТВ выходит из режима ожидания. Никогда поверх Cast или будильника</string>
+    <string name="su_esperar">Ждать после перезагрузки</string>
+    <string name="su_esperar_det">Даёт ТВ время подключиться перед открытием приложения</string>
+    <string name="su_horario">Разное приложение по времени</string>
+    <string name="su_horario_det">Автоматизация с триггером «ТВ включён» и «Только если»</string>
+</resources>

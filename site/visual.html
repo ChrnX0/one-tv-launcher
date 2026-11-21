@@ -93,10 +93,12 @@ background color). No photo, name, account or network goes in it.</p>
 const T = {
   en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", CEU: "Real sky", MEU: "My background",
        texto: "Text", t100: "normal", t110: "large", t120: "larger", cor: "Background in the app's color",
-       sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", brilho: "Brightness", contraste: "Contrast"},
+       sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", brilho: "Brightness", contraste: "Contrast",
+       letra: "Font", fino: "Fine-tune", ajustes: "settings"},
   pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", CEU: "Céu de verdade", MEU: "Meu fundo",
        texto: "Texto", t100: "normal", t110: "grande", t120: "maior", cor: "Fundo na cor do app",
        sim: "ligado", nao: "desligado", icones: "Pacote de ícones", nenhum: "nenhum", brilho: "Brilho", contraste: "Contraste",
+       letra: "Letra", fino: "Ajuste fino", ajustes: "ajustes",
        recebido_titulo: "A TV mandou este visual para você", titulo: "Visuais prontos",
        como_colar: "Para usar em outra TV: abra o painel da TV no celular, vá em <b>Tela inicial › Visual de outra TV</b> e cole.",
        invalido: "Este link não traz um visual válido. Peça o QR de novo na TV: Configurações › Aparência › Compartilhar visual.",
@@ -129,6 +131,8 @@ function linhas(j) {
   if (typeof j.i === "string") r.push(t("icones") + ": " + (j.i || t("nenhum")));
   if (Number.isInteger(j.b)) r.push(t("brilho") + ": " + j.b);
   if (Number.isInteger(j.k)) r.push(t("contraste") + ": " + j.k);
+  if (typeof j.f === "string" && /^[a-z0-9]{2,20}$/.test(j.f)) r.push(t("letra") + ": " + j.f);
+  if (j.a && typeof j.a === "object") r.push(t("fino") + ": " + Object.keys(j.a).length + " " + t("ajustes"));
   return r;
 }
 function preencher(ul, j) { ul.textContent = ""; linhas(j).forEach(x => { const li = document.createElement("li"); li.textContent = x; ul.append(li); }); }

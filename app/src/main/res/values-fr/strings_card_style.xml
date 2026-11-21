@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Réglage fin</string>
+    <string name="ft_dica">OK ou ▶ ◀ change · RETOUR ferme</string>
+    <string name="ft_abrir">Régler en voyant l\'écran d\'accueil</string>
+    <string name="ft_abrir_det">Police, heure, couleur d\'accent, coins, halo et taille, en direct</string>
+    <string name="cs_destaque">Couleur d\'accent</string>
+    <string name="cs_cantos">Coins</string>
+    <string name="cs_brilho">Halo du focus</string>
+    <string name="cs_tamanho">Taille de la croix</string>
+    <string name="cs_ceu">Ciel</string>
+    <string name="cs_lilas">Lilas</string>
+    <string name="cs_retos">Droits</string>
+    <string name="cs_redondos">Arrondis</string>
+    <string name="cs_sem">Désactivé</string>
+    <string name="cs_suave">Doux</string>
+    <string name="cs_forte">Fort</string>
+    <string name="cs_menor">Plus petite</string>
+    <string name="cs_maior">Plus grande</string>
+    <string name="bg_tintura">Couleur sur le fond</string>
+    <string name="bg_cor">Couleur du fond</string>
+    <string name="bg_desfoque">Flou du fond</string>
+    <string name="bg_transicao">Transition des images</string>
+    <string name="bg_novo">Nouveau fond maintenant</string>
+    <string name="bg_solida">Unie</string>
+    <string name="bg_destaque">Accent</string>
+    <string name="bg_noite">Nuit</string>
+    <string name="bg_mata">Forêt</string>
+    <string name="bg_brasa">Braise</string>
+    <string name="bg_grafite">Graphite</string>
+    <string name="bg_corte">Coupure</string>
+    <string name="bg_lenta">Lente</string>
+    <string name="bg_trocado">Changé</string>
+    <string name="bg_nao_troca">Ce fond ne change pas</string>
+    <string name="bg_camera">Caméra de la maison en fond</string>
+    <string name="bg_campainha">Caméra de la sonnette en fond</string>
+    <string name="bg_nenhuma">Aucune</string>
+    <string name="bg_ligado">Activé</string>
+</resources>

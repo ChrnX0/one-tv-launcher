@@ -73,6 +73,7 @@ object BackupCompleto {
           // plugins: o OK vale para o certificado desta TV
         "wallpaper_plugins",   // plugins de fundo (18/11/2026): o OK também é por certificado desta TV
         "icon_pack_frozen",   // pacotes que NÓS congelamos nesta TV (na outra o pacote nem está congelado)
+        "seletor_docs",   // seletor de pastas (#380): últimas pastas abertas NESTA TV (pendrive e rede de outra casa não existem lá)
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "fichas",   // 19/11/2026: só a marca "buscas antigas já liberadas" do cache de fichas desta TV

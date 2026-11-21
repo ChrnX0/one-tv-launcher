@@ -7,7 +7,7 @@ import android.util.Log
 import br.paulo.tvlauncher.alarm.AutoDesligar
 import br.paulo.tvlauncher.alarm.Despertador
 import br.paulo.tvlauncher.backup.BackupAutomatico
-import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.home.StartupApp
 import br.paulo.tvlauncher.mcp.McpServidor
 import br.paulo.tvlauncher.mcp.TunelTailscale
 import br.paulo.tvlauncher.network.AcordarComLg
@@ -19,7 +19,7 @@ import br.paulo.tvlauncher.privilege.Privilegio
 
 /**
  * Roda quando a TV termina de REINICIAR: religa a Depuração sem fio (Privilegio.religarDepuracaoSemFio) e abre o app
- * definido em Config.ABRIR_AO_LIGAR, se houver.
+ * escolhido em "Ao ligar a TV" (StartupApp), se houver.
  * Não dispara quando o Chromecast só acorda do standby: nesse caso o Android não reinicia.
  *
  * ACAO_TESTE existe só para testar por adb sem reiniciar a TV (o shell não pode enviar BOOT_COMPLETED):
@@ -57,14 +57,6 @@ class BootReceiver : BroadcastReceiver() {
         AcordarComLg.iniciar(context)
         val app = context.applicationContext
         Fundo.rodar { DebloatPosOta.talvezReaplicar(app) }   // a OTA desfez a limpeza? oculta de novo (DebloatPosOta.kt)
-        if (Config.ABRIR_AO_LIGAR.isEmpty()) return
-        val abrir = context.packageManager.getLeanbackLaunchIntentForPackage(Config.ABRIR_AO_LIGAR)
-        if (abrir == null) {
-            Log.w(TAG, "app ${Config.ABRIR_AO_LIGAR} não encontrado")
-            return
-        }
-        abrir.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        Log.i(TAG, "abrindo ${Config.ABRIR_AO_LIGAR}")
-        context.startActivity(abrir)
+        StartupApp.aoReiniciar(context)   // "Ao ligar a TV": o app escolhido em Tela e energia (StartupApp.kt)
     }
 }

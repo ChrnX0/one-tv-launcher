@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuste fino com prévia (FineTuneActivity, CardStyle), 21/11/2026 -->
+<resources>
+    <string name="ft_titulo">Dostrajanie</string>
+    <string name="ft_dica">OK lub ▶ ◀ zmienia · WSTECZ zamyka</string>
+    <string name="ft_abrir">Dostosuj, widząc ekran główny</string>
+    <string name="ft_abrir_det">Czcionka, zegar, kolor akcentu, rogi, poświata i rozmiar, na żywo</string>
+    <string name="cs_destaque">Kolor akcentu</string>
+    <string name="cs_cantos">Rogi</string>
+    <string name="cs_brilho">Poświata fokusu</string>
+    <string name="cs_tamanho">Rozmiar krzyża</string>
+    <string name="cs_ceu">Niebo</string>
+    <string name="cs_lilas">Liliowy</string>
+    <string name="cs_retos">Proste</string>
+    <string name="cs_redondos">Zaokrąglone</string>
+    <string name="cs_sem">Wyłączona</string>
+    <string name="cs_suave">Delikatna</string>
+    <string name="cs_forte">Mocna</string>
+    <string name="cs_menor">Mniejszy</string>
+    <string name="cs_maior">Większy</string>
+    <string name="bg_tintura">Kolor na tle</string>
+    <string name="bg_cor">Kolor tła</string>
+    <string name="bg_desfoque">Rozmycie tła</string>
+    <string name="bg_transicao">Przejście obrazów</string>
+    <string name="bg_novo">Nowe tło teraz</string>
+    <string name="bg_solida">Jednolity</string>
+    <string name="bg_destaque">Akcent</string>
+    <string name="bg_noite">Noc</string>
+    <string name="bg_mata">Las</string>
+    <string name="bg_brasa">Żar</string>
+    <string name="bg_grafite">Grafit</string>
+    <string name="bg_corte">Cięcie</string>
+    <string name="bg_lenta">Wolne</string>
+    <string name="bg_trocado">Zmieniono</string>
+    <string name="bg_nao_troca">To tło się nie zmienia</string>
+    <string name="bg_camera">Kamera domowa jako tło</string>
+    <string name="bg_campainha">Kamera dzwonka jako tło</string>
+    <string name="bg_nenhuma">Brak</string>
+    <string name="bg_ligado">Włączone</string>
+</resources>
