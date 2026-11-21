@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Проверить геймпад</string>
+    <string name="teste_controle_sub">Достаточно ли он быстрый для игр?</string>
+    <string name="teste_controle_mexa">Вращайте левый стик по кругу 10 секунд.</string>
+    <string name="teste_controle_bom">Отлично для игр: сигнал каждые %1$d мс.</string>
+    <string name="teste_controle_ok">Играть можно: сигнал каждые %1$d мс. В быстрых играх может ощущаться задержка.</string>
+    <string name="teste_controle_ruim">Медленно: сигнал каждые %1$d мс и %2$d пауз. Поможет проводной геймпад или геймпад ближе к телевизору.</string>
+    <string name="teste_controle_parado">Геймпад не двигался. Попробуйте снова и продолжайте вращать стик.</string>
+</resources>

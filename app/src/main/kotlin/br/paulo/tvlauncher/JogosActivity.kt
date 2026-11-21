@@ -12,6 +12,8 @@ import android.text.InputType
 import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.KeyEvent
+import android.view.InputDevice
+import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -279,6 +281,8 @@ class JogosActivity : Activity() {
         }
         itens += CruzOuvir.Item("parear", getString(R.string.jogos_parear_um),
             if (c.isEmpty()) getString(R.string.jogos_sem_controle) else "", icone = IconeOuvir.Tipo.ADICIONAR, abrir = { parear() })
+        if (c.isNotEmpty()) itens += CruzOuvir.Item("teste-controle", getString(R.string.teste_controle),
+            getString(R.string.teste_controle_sub), icone = IconeOuvir.Tipo.CONTROLE, cor = COR_JOGAR, abrir = { testarControle() })
         return CruzOuvir.Prateleira(P_SOFA, getString(R.string.jogos_no_sofa), IconeOuvir.Tipo.SOFA, itens)
     }
 
@@ -645,6 +649,40 @@ class JogosActivity : Activity() {
                 abrirOuAvisar(app)   // abre mesmo sem resposta: o app de PC mostra o próprio erro e deixa tentar de novo
             }
         }
+    }
+
+    /** Hora (ms) de cada sinal do analógico durante o "teste do controle"; null = teste desligado. */
+    private var sinaisTeste: ArrayList<Long>? = null
+
+    /** Teste do controle: 10 s girando o analógico, depois o veredito ([ControleLatencia]). */
+    private fun testarControle() {
+        if (sinaisTeste != null) return
+        sinaisTeste = ArrayList()
+        AvisoTv.rapido(this, getString(R.string.teste_controle), getString(R.string.teste_controle_mexa), segundos = 10)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val t = sinaisTeste ?: return@postDelayed
+            sinaisTeste = null
+            if (isDestroyed) return@postDelayed
+            val r = ControleLatencia.resumo(t)
+            val texto = when (r.veredito) {
+                ControleLatencia.Veredito.BOM -> getString(R.string.teste_controle_bom, r.media)
+                ControleLatencia.Veredito.JOGAVEL -> getString(R.string.teste_controle_ok, r.media)
+                ControleLatencia.Veredito.LENTO -> getString(R.string.teste_controle_ruim, r.media, r.pausas)
+                ControleLatencia.Veredito.PARADO -> getString(R.string.teste_controle_parado)
+            }
+            AvisoTv.rapido(this, getString(R.string.teste_controle), texto, segundos = 12)
+        }, 10_000)
+    }
+
+    override fun dispatchGenericMotionEvent(ev: MotionEvent): Boolean {
+        // O Android junta vários sinais num MotionEvent: o histórico guarda a hora de cada um.
+        sinaisTeste?.let { t ->
+            if (ev.isFromSource(InputDevice.SOURCE_JOYSTICK)) {
+                for (h in 0 until ev.historySize) t += ev.getHistoricalEventTime(h)
+                t += ev.eventTime
+            }
+        }
+        return super.dispatchGenericMotionEvent(ev)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {

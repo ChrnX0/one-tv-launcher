@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Controller testen</string>
+    <string name="teste_controle_sub">Ist er schnell genug zum Spielen?</string>
+    <string name="teste_controle_mexa">Dreh den linken Stick 10 Sekunden lang im Kreis.</string>
+    <string name="teste_controle_bom">Super zum Spielen: alle %1$d ms ein Signal.</string>
+    <string name="teste_controle_ok">Spielbar: alle %1$d ms ein Signal. Schnelle Spiele können etwas verzögert wirken.</string>
+    <string name="teste_controle_ruim">Langsam: alle %1$d ms ein Signal und %2$d Pausen. Ein Kabel-Controller oder der Controller näher am Fernseher hilft.</string>
+    <string name="teste_controle_parado">Der Controller hat sich nicht bewegt. Versuch es noch einmal und dreh den Stick weiter.</string>
+</resources>

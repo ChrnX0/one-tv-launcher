@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">कंट्रोलर जाँचें</string>
+    <string name="teste_controle_sub">क्या यह खेलने के लिए काफ़ी तेज़ है?</string>
+    <string name="teste_controle_mexa">बाएँ स्टिक को 10 सेकंड तक गोल घुमाएँ।</string>
+    <string name="teste_controle_bom">खेलने के लिए बढ़िया: हर %1$d ms में एक सिग्नल।</string>
+    <string name="teste_controle_ok">खेल सकते हैं: हर %1$d ms में एक सिग्नल। तेज़ गेम थोड़े देर से लग सकते हैं।</string>
+    <string name="teste_controle_ruim">धीमा: हर %1$d ms में एक सिग्नल और %2$d रुकावटें। तार वाला कंट्रोलर, या कंट्रोलर को टीवी के पास रखना मदद करता है।</string>
+    <string name="teste_controle_parado">कंट्रोलर नहीं हिला। फिर से कोशिश करें और स्टिक घुमाते रहें।</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Uji kontroler</string>
+    <string name="teste_controle_sub">Apakah cukup cepat untuk bermain?</string>
+    <string name="teste_controle_mexa">Putar stik kiri melingkar selama 10 detik.</string>
+    <string name="teste_controle_bom">Bagus untuk bermain: satu sinyal setiap %1$d ms.</string>
+    <string name="teste_controle_ok">Bisa dimainkan: satu sinyal setiap %1$d ms. Game cepat mungkin terasa sedikit terlambat.</string>
+    <string name="teste_controle_ruim">Lambat: satu sinyal setiap %1$d ms dan %2$d jeda. Kontroler kabel, atau kontroler lebih dekat ke TV, membantu.</string>
+    <string name="teste_controle_parado">Kontroler tidak bergerak. Coba lagi dan terus putar stiknya.</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">コントローラーをテスト</string>
+    <string name="teste_controle_sub">ゲームに十分な速さですか？</string>
+    <string name="teste_controle_mexa">左スティックを10秒間ぐるぐる回してください。</string>
+    <string name="teste_controle_bom">ゲームに最適：%1$d ミリ秒ごとに信号。</string>
+    <string name="teste_controle_ok">プレイ可能：%1$d ミリ秒ごとに信号。速いゲームでは少し遅れを感じるかもしれません。</string>
+    <string name="teste_controle_ruim">遅い：%1$d ミリ秒ごとに信号、途切れ %2$d 回。有線コントローラーか、テレビの近くで使うと改善します。</string>
+    <string name="teste_controle_parado">コントローラーが動きませんでした。スティックを回し続けてもう一度お試しください。</string>
+</resources>

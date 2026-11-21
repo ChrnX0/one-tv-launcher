@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Tester la manette</string>
+    <string name="teste_controle_sub">Est-elle assez rapide pour jouer ?</string>
+    <string name="teste_controle_mexa">Faites tourner le stick gauche pendant 10 secondes.</string>
+    <string name="teste_controle_bom">Parfait pour jouer : un signal toutes les %1$d ms.</string>
+    <string name="teste_controle_ok">Jouable : un signal toutes les %1$d ms. Les jeux rapides peuvent sembler un peu en retard.</string>
+    <string name="teste_controle_ruim">Lent : un signal toutes les %1$d ms et %2$d pauses. Une manette filaire, ou la manette plus près de la TV, aide.</string>
+    <string name="teste_controle_parado">La manette n’a pas bougé. Réessayez en continuant à tourner le stick.</string>
+</resources>

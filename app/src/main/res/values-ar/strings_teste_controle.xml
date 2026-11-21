@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">اختبار ذراع التحكم</string>
+    <string name="teste_controle_sub">هل هو سريع بما يكفي للعب؟</string>
+    <string name="teste_controle_mexa">أدر العصا اليسرى في دوائر لمدة 10 ثوانٍ.</string>
+    <string name="teste_controle_bom">ممتاز للألعاب: إشارة كل %1$d مللي ثانية.</string>
+    <string name="teste_controle_ok">يمكن اللعب: إشارة كل %1$d مللي ثانية. قد تبدو الألعاب السريعة متأخرة قليلًا.</string>
+    <string name="teste_controle_ruim">بطيء: إشارة كل %1$d مللي ثانية و%2$d توقفات. يساعد ذراع سلكي أو تقريب الذراع من التلفاز.</string>
+    <string name="teste_controle_parado">لم يتحرك ذراع التحكم. حاول مرة أخرى واستمر في تدوير العصا.</string>
+</resources>

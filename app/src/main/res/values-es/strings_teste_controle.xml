@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Probar el mando</string>
+    <string name="teste_controle_sub">¿Es rápido para jugar?</string>
+    <string name="teste_controle_mexa">Gira el stick izquierdo en círculos durante 10 segundos.</string>
+    <string name="teste_controle_bom">Genial para jugar: una señal cada %1$d ms.</string>
+    <string name="teste_controle_ok">Se puede jugar: una señal cada %1$d ms. Los juegos rápidos pueden sentirse un poco tarde.</string>
+    <string name="teste_controle_ruim">Lento: una señal cada %1$d ms y %2$d pausas. Un mando con cable, o el mando más cerca de la TV, ayuda.</string>
+    <string name="teste_controle_parado">El mando no se movió. Inténtalo de nuevo y sigue girando el stick.</string>
+</resources>
