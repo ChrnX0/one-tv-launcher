@@ -147,6 +147,16 @@ object ObserverCore {
     fun diff(before: Collection<Kind>, now: List<Finding>): Change =
         Change(now.filter { it.kind !in before }, before.filter { k -> now.none { it.kind == k } })
 
+    /**
+     * Do que sumiu do julgamento, só o que tem leitura NOVA do seu sinal fecha (21/11/2026, Sala): o [judge] ignora
+     * leitura com mais de [STALE_MS], e com a TV dormindo a medida de quadros envelhecia e o registro dizia "voltou ao
+     * normal" ainda com 38-49% de quadros lentos. O resto continua aberto até chegar uma medida boa.
+     */
+    fun confirmedCleared(cleared: List<Kind>, snapshot: Map<Signal, Reading>, now: Long): List<Kind> = cleared.filter { k ->
+        val s = if (k == Kind.NO_INTERNET) Signal.INTERNET else signalOf(k)
+        s == null || snapshot[s]?.let { now - it.at <= STALE_MS } == true
+    }
+
     // ---------------------------------------------------------------- política de degraus (usada a partir da fase 3)
 
     /** Degraus de autonomia. Paulo, 20/11/2026: "poder total" de fábrica = [FULL]. */
@@ -199,11 +209,16 @@ object ObserverCore {
      * 17:10Z: o system_server caiu no meio de um `pm move-package` e ninguém soube pelo Observador). [reason] = o motivo
      * que o Android guardou (vazio quando não dá para ler); [aliveAt] = a última batida da rede antes de cair (0 = nunca).
      */
-    fun bootWhy(reason: String?, aliveAt: Long, bootAt: Long): String {
+    fun bootWhy(reason: String?, aliveAt: Long, bootAt: Long, wifiRepairAt: Long = 0L): String {
         val r = reason?.trim()?.takeIf { it.isNotEmpty() } ?: "desconhecido"
         val fora = if (aliveAt in 1 until bootAt) "; sem sinal desde ${(bootAt - aliveAt) / 60_000} min antes de ligar" else ""
-        return "ligou de novo (motivo: $r)$fora"
+        // 21/11/2026: o reparo do Wi-Fi (HistoricoRede/ReparoWifi) reinicia a TV quando religar não basta; sem isto o
+        // registro mostrava só "reboot,deviceowner" e não dizia que fomos nós, nem por quê.
+        val quem = if (wifiRepairAt in (bootAt - WIFI_REPAIR_WINDOW_MS)..bootAt) "; quem reiniciou foi o reparo do Wi-Fi (sem Wi-Fi e religar não bastou)" else ""
+        return "ligou de novo (motivo: $r)$quem$fora"
     }
+    /** O reparo grava a hora e reinicia logo; o boot conta a partir de quando o kernel subiu, uns segundos depois. */
+    const val WIFI_REPAIR_WINDOW_MS = 10 * 60_000L
 
     /** O registro como está guardado, sem o que passou de [LOG_DAYS] (o corte do [appendLog] só roda quando entra linha nova). */
     fun readLog(stored: String?, now: Long): JSONArray {
