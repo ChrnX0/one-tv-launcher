@@ -64,6 +64,13 @@ object ObserverMorning {
     /** A noite mais nova só vale para "esta manhã" se tiver menos de 20 h (senão a sonda não rodou ontem). */
     const val FRESH_MS = 20 * 3_600_000L
 
+    /**
+     * A noite só entra na comparação com internet: em 21/11/2026 a sonda da Sala rodou no meio de uma queda do Wi-Fi
+     * (INTERNET 0, Wi-Fi 0 dBm) e esse retrato virou a primeira noite, a régua das seguintes.
+     */
+    fun usableNight(snapshot: Map<ObserverCore.Signal, ObserverCore.Reading>): Boolean =
+        snapshot[ObserverCore.Signal.INTERNET]?.value == 1L
+
     fun nightOf(at: Long, snapshot: Map<ObserverCore.Signal, ObserverCore.Reading>) =
         Night(at, snapshot.mapValues { it.value.value })
 

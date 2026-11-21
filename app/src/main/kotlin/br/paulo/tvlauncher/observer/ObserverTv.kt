@@ -11,6 +11,8 @@ import br.paulo.tvlauncher.Rotinas
 import br.paulo.tvlauncher.family.Diario
 import br.paulo.tvlauncher.player.OnDemand
 import br.paulo.tvlauncher.player.OnDemandTv
+import br.paulo.tvlauncher.network.HistoricoRede
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
 import br.paulo.tvlauncher.privilege.PrivilegioDO
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -62,8 +64,13 @@ object ObserverTv {
         // Motivo guardado pelo Android ("reboot,deviceowner", "kernel_panic", ...). O SELinux pode negar a leitura: fica vazio.
         val motivo = runCatching {
             Class.forName("android.os.SystemProperties").getMethod("get", String::class.java).invoke(null, "sys.boot.reason") as? String
-        }.getOrNull()
-        val why = ObserverCore.bootWhy(motivo, p.getLong("alive_at", 0L), bootAt)
+        }.getOrNull()?.trim()?.takeIf { it.isNotEmpty() }
+            // 21/11/2026: na Sala o app lê vazio, e o shell (uid 2000) lê "reboot,deviceowner". Logo após ligar o shell
+            // pode demorar a conectar: espera até 1 min (este caminho já roda fora da tela).
+            ?: runCatching { GuardiaoShizuku.comando(ctx, "getprop sys.boot.reason", 60_000) }.getOrNull()
+                ?.lineSequence()?.map { it.trim() }?.firstOrNull { it.isNotEmpty() }
+        val reparo = ctx.getSharedPreferences(HistoricoRede.PREFS_REPARO, Context.MODE_PRIVATE).getLong("reinicio", 0L)
+        val why = ObserverCore.bootWhy(motivo, p.getLong("alive_at", 0L), bootAt, reparo)
         synchronized(this) {
             val log = ObserverCore.appendLog(p.getString("log", null), ObserverCore.logEntry(bootAt, "boot", null, null, why, emptyMap()), agora)
             p.edit().putString("log", log).putInt("boot_count", count).apply()
@@ -122,7 +129,8 @@ object ObserverTv {
         // Julga ANTES de aprender: a leitura de agora não pode puxar a base na própria direção e se esconder (Codex, #329).
         val findings = ObserverCore.judge(snap, agora, base, hw, hd)
         learn(p, base, snap, hw, hd, agora)
-        val change = ObserverCore.diff(active.toList(), findings)
+        val raw = ObserverCore.diff(active.toList(), findings)
+        val change = raw.copy(cleared = ObserverCore.confirmedCleared(raw.cleared, snap, agora))
         if (change.appeared.isEmpty() && change.cleared.isEmpty()) return
         var log = p.getString("log", null)
         var notes = p.getString("notes", null)
@@ -237,11 +245,13 @@ object ObserverTv {
         }
         runCatching { blackBox.put(ObserverCore.Signal.DISK_FREE_MB, app.filesDir.usableSpace / 1_048_576, agora) }
         val snap = blackBox.snapshot().filterValues { agora - it.at <= ObserverCore.STALE_MS }
+        val usable = ObserverMorning.usableNight(snap)
         synchronized(this) {
+            val why = "${quietStart(app)}h" + if (usable) "" else "; sem internet: fora da comparação"
             val log = ObserverCore.appendLog(p.getString("log", null),
-                ObserverCore.logEntry(agora, "night", null, null, "${quietStart(app)}h", snap), agora)
+                ObserverCore.logEntry(agora, "night", null, null, why, snap), agora)
             val e = p.edit().putString("log", log)
-                .putString("nights", ObserverMorning.appendNight(p.getString("nights", null), ObserverMorning.nightOf(agora, snap)))
+            if (usable) e.putString("nights", ObserverMorning.appendNight(p.getString("nights", null), ObserverMorning.nightOf(agora, snap)))
             base?.let { e.putString("baseline", it.toJson().toString()) }
             habit?.let { e.putString("habit", it.toJson().toString()) }
             e.apply()
