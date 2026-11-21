@@ -847,7 +847,7 @@ AS\\Films).</string>
     <string name="st_trazendo">Retour de %1$s sur la TV…</string>
     <string name="st_sumiram">La clé USB est retirée : %1$s sont masquées jusqu\'à son retour.</string>
     <string name="st_sugestao">Mémoire de la TV presque pleine. Mettez %1$s (%2$s) sur la clé USB : maintenez OK sur l\'app.</string>
-    <string name="st_medindo">Mesure de la vitesse de la clé USB…</string>
+    <string name="st_medindo">Mesure de la vitesse de la clé USB pour recommander le meilleur usage…</string>
     <string name="st_lento_titulo">Clé USB trop lente</string>
     <string name="st_lento_bloqueado">Cette clé écrit à %1$s Mo/s. Pour devenir mémoire de la TV il faut au moins %2$d Mo/s : en dessous les apps se figent et la TV peut ne plus démarrer. Utilisez-la comme clé normale.</string>
     <string name="st_aviso_boot">Laissez-la toujours branchée : si elle tombe en panne ou est retirée, la TV peut ne plus démarrer tant qu\'elle n\'est pas débranchée.</string>
@@ -856,4 +856,10 @@ AS\\Films).</string>
     <string name="home_liberar_arquivos">Autoriser l\'accès aux clés USB et fichiers</string>
     <string name="home_arquivos_liberado">%1$s ouvre maintenant les clés USB et tous les fichiers</string>
     <string name="home_arquivos_falhou">Impossible d\'autoriser %1$s : %2$s</string>
+    <string name="aviso_continuar_titulo">Rien à reprendre</string>
+    <string name="aviso_continuar_texto">L\'invitation à reprendre depuis l\'autre TV a expiré.</string>
+    <string name="aviso_simples_titulo">Mode simple désactivé</string>
+    <string name="aviso_simples_texto">La TV est revenue à l\'écran d\'accueil complet.</string>
+    <string name="aviso_sync_titulo">Aucun compte connecté</string>
+    <string name="aviso_sync_texto">Aucun compte %1$s sur cette TV. Connectez-le dans Réglages › TV et films.</string>
 </resources>

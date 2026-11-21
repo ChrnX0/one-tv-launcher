@@ -274,6 +274,8 @@ class SeriesActivity : CatalogActivity<Serie>("series", isSeries = true) {
             val s = cache.ifEmpty { PlayerCarga.series(this) }
             if (cache.isNotEmpty() && PlayerCarga.catalogoVelho(this, series = true))
                 Fundo.rodar("series-atualizar") { runCatching { PlayerCarga.series(this) } }
+            // A outra tela do catálogo (Filmes/Séries) vai para a memória agora: trocar de uma para a outra abre sem espera.
+            Fundo.rodar("catalogo-aquecer") { PlayerCarga.aquecer(applicationContext) }
             // Categorias ocultas: a mesma regra do player (adultas, escondidas) + as bloqueadas no controle parental.
             val oc = VodFiltro.ocultas(s.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))

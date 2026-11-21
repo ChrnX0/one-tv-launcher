@@ -885,7 +885,7 @@
     <string name="st_trazendo">Bringing %1$s back to the TV…</string>
     <string name="st_sumiram">The USB drive is out: %1$s are hidden until it\'s back.</string>
     <string name="st_sugestao">TV storage is almost full. Move %1$s (%2$s) to the USB drive: hold OK on the app.</string>
-    <string name="st_medindo">Measuring the drive\'s speed…</string>
+    <string name="st_medindo">Measuring the drive\'s speed to recommend the best use…</string>
     <string name="st_lento_titulo">Drive too slow</string>
     <string name="st_lento_bloqueado">This drive writes at %1$s MB/s. To become TV storage it needs at least %2$d MB/s: below that apps freeze and the TV may not start. Use it as a regular drive.</string>
     <string name="st_aviso_boot">Keep it plugged in for good: if it fails or is removed, the TV may not start until you unplug it.</string>
@@ -894,4 +894,10 @@
     <string name="home_liberar_arquivos">Let it open USB drives and files</string>
     <string name="home_arquivos_liberado">%1$s can now open USB drives and all files</string>
     <string name="home_arquivos_falhou">Couldn\'t allow %1$s: %2$s</string>
+    <string name="aviso_continuar_titulo">Nothing to continue</string>
+    <string name="aviso_continuar_texto">The invitation to continue from the other TV has expired.</string>
+    <string name="aviso_simples_titulo">Simple mode is off</string>
+    <string name="aviso_simples_texto">The TV is back to the full home screen.</string>
+    <string name="aviso_sync_titulo">No account connected</string>
+    <string name="aviso_sync_texto">There is no %1$s account on this TV. Connect it in Settings › TV and movies.</string>
 </resources>

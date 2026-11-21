@@ -844,7 +844,7 @@ AS\\Movies).</string>
     <string name="st_trazendo">%1$s을(를) TV로 되돌리는 중…</string>
     <string name="st_sumiram">USB 드라이브가 빠졌습니다: 다시 꽂을 때까지 %1$s이(가) 숨겨집니다.</string>
     <string name="st_sugestao">TV 저장공간이 거의 찼습니다. %1$s(%2$s)을(를) USB 드라이브로 옮기세요: 앱에서 OK를 길게 누르세요.</string>
-    <string name="st_medindo">USB 메모리 속도 측정 중…</string>
+    <string name="st_medindo">가장 좋은 사용 방법을 추천하려고 USB 메모리 속도 측정 중…</string>
     <string name="st_lento_titulo">USB 메모리가 너무 느립니다</string>
     <string name="st_lento_bloqueado">이 USB 메모리의 쓰기 속도는 %1$s MB/s입니다. TV 저장소가 되려면 최소 %2$d MB/s가 필요합니다. 그보다 느리면 앱이 멈추고 TV가 켜지지 않을 수 있습니다. 일반 USB 메모리로 사용하세요.</string>
     <string name="st_aviso_boot">항상 꽂아 두세요. 고장 나거나 빠지면 뽑을 때까지 TV가 켜지지 않을 수 있습니다.</string>
@@ -853,4 +853,10 @@ AS\\Movies).</string>
     <string name="home_liberar_arquivos">USB 메모리와 파일 열기 허용</string>
     <string name="home_arquivos_liberado">이제 %1$s에서 USB 메모리와 모든 파일을 열 수 있습니다</string>
     <string name="home_arquivos_falhou">%1$s 허용 실패: %2$s</string>
+    <string name="aviso_continuar_titulo">이어 볼 것이 없음</string>
+    <string name="aviso_continuar_texto">다른 TV에서 이어 보기 초대가 만료되었습니다.</string>
+    <string name="aviso_simples_titulo">간단 모드 꺼짐</string>
+    <string name="aviso_simples_texto">TV가 전체 홈 화면으로 돌아왔습니다.</string>
+    <string name="aviso_sync_titulo">연결된 계정 없음</string>
+    <string name="aviso_sync_texto">이 TV에 %1$s 계정이 없습니다. 설정 › TV 및 영화에서 연결하세요.</string>
 </resources>

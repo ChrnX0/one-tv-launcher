@@ -847,7 +847,7 @@ AS\\Filmler).</string>
     <string name="st_trazendo">%1$s TV\'ye geri alınıyor…</string>
     <string name="st_sumiram">USB bellek çıkarıldı: %1$s geri takılana kadar gizli.</string>
     <string name="st_sugestao">TV belleği neredeyse dolu. %1$s (%2$s) uygulamasını USB belleğe taşıyın: uygulamada OK\'a basılı tutun.</string>
-    <string name="st_medindo">USB belleğin hızı ölçülüyor…</string>
+    <string name="st_medindo">En iyi kullanımı önermek için USB belleğin hızı ölçülüyor…</string>
     <string name="st_lento_titulo">USB bellek çok yavaş</string>
     <string name="st_lento_bloqueado">Bu bellek %1$s MB/sn yazıyor. TV belleği olmak için en az %2$d MB/sn gerekir: altında uygulamalar takılır ve TV açılmayabilir. Normal USB bellek olarak kullanın.</string>
     <string name="st_aviso_boot">Hep takılı bırakın: bozulur veya çıkarılırsa, siz çıkarana kadar TV açılmayabilir.</string>
@@ -856,4 +856,10 @@ AS\\Filmler).</string>
     <string name="home_liberar_arquivos">USB bellekleri ve dosyaları açabilsin</string>
     <string name="home_arquivos_liberado">%1$s artık USB bellekleri ve tüm dosyaları açabilir</string>
     <string name="home_arquivos_falhou">%1$s için izin verilemedi: %2$s</string>
+    <string name="aviso_continuar_titulo">Devam edilecek bir şey yok</string>
+    <string name="aviso_continuar_texto">Diğer TV\'den devam etme daveti sona erdi.</string>
+    <string name="aviso_simples_titulo">Basit mod kapalı</string>
+    <string name="aviso_simples_texto">TV tam ana ekrana döndü.</string>
+    <string name="aviso_sync_titulo">Bağlı hesap yok</string>
+    <string name="aviso_sync_texto">Bu TV\'de %1$s hesabı yok. Ayarlar › TV ve filmler\'den bağlayın.</string>
 </resources>

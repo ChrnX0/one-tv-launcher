@@ -205,14 +205,41 @@ object PlayerCarga {
         return canaisDaFonte(ctx, fonte).firstOrNull { it.id == id }?.let { it.url to it.agenteUsuario }
     }
 
+    /**
+     * Catálogo guardado no disco, lido uma vez por processo (21/11/2026, regra da inteligência global: Filmes ficava
+     * ~2,5 s em "Carregando" a cada abertura, relendo 21 mil filmes do JSON). A cópia na memória vale enquanto o arquivo
+     * não muda (data + tamanho) e é uma SoftReference: se a TV precisar de memória, o Android a solta e a próxima
+     * abertura lê o disco de novo, como antes.
+     */
+    private class Guardado(val data: Long, val tamanho: Long, val lista: java.lang.ref.SoftReference<List<Any>>)
+    private val guardados = java.util.concurrent.ConcurrentHashMap<String, Guardado>()
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Any> lerGuardado(arq: File, ler: (String) -> List<T>): List<T> {
+        if (!arq.exists()) return emptyList()
+        val data = arq.lastModified(); val tamanho = arq.length()
+        guardados[arq.path]?.takeIf { it.data == data && it.tamanho == tamanho }?.lista?.get()?.let { return it as List<T> }
+        val t0 = android.os.SystemClock.elapsedRealtime()
+        val lista = ler(arq.readText())
+        Log.i(TAG, "catálogo ${arq.name}: ${lista.size} itens lidos do disco em ${android.os.SystemClock.elapsedRealtime() - t0} ms")
+        if (lista.isNotEmpty()) guardados[arq.path] = Guardado(data, tamanho, java.lang.ref.SoftReference(lista))
+        return lista
+    }
+
+    /** Lê os catálogos de filmes e séries para a memória (fora da tela), para a outra tela abrir sem espera. */
+    fun aquecer(ctx: Context) {
+        runCatching { filmes(ctx, soCache = true) }
+        runCatching { series(ctx, soCache = true) }
+    }
+
     /** Filmes de todas as contas Xtream. Cache de 12 h por conta; sem rede, o cache velho. */
     fun filmes(ctx: Context, forcar: Boolean = false, soCache: Boolean = false): List<Filme> = PlayerArmazem.fontes(ctx).flatMap { fonte ->
         val conta = fonte.xtream ?: return@flatMap catalogoM3u(ctx, fonte, soCache, forcar).filmes
         val cache = arquivoFilmes(ctx, fonte.id)
         // soCache: quem chama não pode baixar (ex.: a HOME montando a lista de categorias infantis)
-        if (soCache) return@flatMap if (cache.exists()) Vod.filmesDeJson(cache.readText(), fonte.id) else emptyList()
+        if (soCache) return@flatMap lerGuardado(cache) { Vod.filmesDeJson(it, fonte.id) }
         val fresco = cache.exists() && System.currentTimeMillis() - cache.lastModified() < VALIDADE_LISTA
-        if (fresco && !forcar) Vod.filmesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
+        if (fresco && !forcar) lerGuardado(cache) { Vod.filmesDeJson(it, fonte.id) }.takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixados = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Vod.urlCategoriasFilmes(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
             abrir(Vod.urlFilmes(conta), MAX_FLUXO).use { Vod.lerFilmes(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }
@@ -273,9 +300,9 @@ object PlayerCarga {
     fun series(ctx: Context, forcar: Boolean = false, soCache: Boolean = false): List<Serie> = PlayerArmazem.fontes(ctx).flatMap { fonte ->
         val conta = fonte.xtream ?: return@flatMap catalogoM3u(ctx, fonte, soCache, forcar).series
         val cache = File(PlayerArmazem.pasta(ctx), "${fonte.id}.series.json")
-        if (soCache) return@flatMap if (cache.exists()) Series.seriesDeJson(cache.readText(), fonte.id) else emptyList()
+        if (soCache) return@flatMap lerGuardado(cache) { Series.seriesDeJson(it, fonte.id) }
         val fresco = cache.exists() && System.currentTimeMillis() - cache.lastModified() < VALIDADE_LISTA
-        if (fresco && !forcar) Series.seriesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
+        if (fresco && !forcar) lerGuardado(cache) { Series.seriesDeJson(it, fonte.id) }.takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixadas = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Series.urlCategorias(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
             abrir(Series.urlSeries(conta), MAX_FLUXO).use { Series.lerSeries(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }

@@ -223,6 +223,7 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
         PlayerArmazem.gruposEscondidos(this), PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
 
     private fun carregar() {
+        val t0 = android.os.SystemClock.elapsedRealtime()
         Fundo.rodar {
             // Abre pelo cache na hora; se ele venceu, baixa em segundo plano para a próxima vez (sem trocar a grade na mão
             // de quem já está navegando). Sem cache nenhum, espera o download como antes.
@@ -230,6 +231,8 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
             val f = cache.ifEmpty { PlayerCarga.filmes(this) }
             if (cache.isNotEmpty() && PlayerCarga.catalogoVelho(this, series = false))
                 Fundo.rodar("filmes-atualizar") { runCatching { PlayerCarga.filmes(this) } }
+            // A outra tela do catálogo (Filmes/Séries) vai para a memória agora: trocar de uma para a outra abre sem espera.
+            Fundo.rodar("catalogo-aquecer") { PlayerCarga.aquecer(applicationContext) }
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = false)
             val oc = lerOcultas(f)
@@ -253,7 +256,10 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
                 // Aberta pela busca única da HOME (12/11/2026): já entra com o termo buscado.
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
-                recalcular(ModoGrade.NOVA, inicialPedido = true) { aviso.visibility = View.GONE; grade.requestFocus() }
+                recalcular(ModoGrade.NOVA, inicialPedido = true) {
+                    aviso.visibility = View.GONE; grade.requestFocus()
+                    android.util.Log.i("TvLauncher.Filmes", "grade na tela em ${android.os.SystemClock.elapsedRealtime() - t0} ms")
+                }
                 sincronizarFora(f, forcar = false)
                 classificarIdades(f)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).

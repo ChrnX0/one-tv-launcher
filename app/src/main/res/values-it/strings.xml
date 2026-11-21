@@ -847,7 +847,7 @@ AS\\Film).</string>
     <string name="st_trazendo">%1$s torna sulla TV…</string>
     <string name="st_sumiram">Chiavetta scollegata: %1$s restano nascoste finché non torna.</string>
     <string name="st_sugestao">Memoria della TV quasi piena. Sposta %1$s (%2$s) sulla chiavetta: tieni premuto OK sull\'app.</string>
-    <string name="st_medindo">Misuro la velocità della chiavetta…</string>
+    <string name="st_medindo">Misuro la velocità della chiavetta per consigliare l\'uso migliore…</string>
     <string name="st_lento_titulo">Chiavetta troppo lenta</string>
     <string name="st_lento_bloqueado">Questa chiavetta scrive a %1$s MB/s. Per diventare memoria della TV servono almeno %2$d MB/s: sotto, le app si bloccano e la TV potrebbe non avviarsi. Usala come chiavetta normale.</string>
     <string name="st_aviso_boot">Lasciala sempre collegata: se si guasta o viene tolta, la TV potrebbe non avviarsi finché non la scolleghi.</string>
@@ -856,4 +856,10 @@ AS\\Film).</string>
     <string name="home_liberar_arquivos">Consenti di aprire chiavette e file</string>
     <string name="home_arquivos_liberado">%1$s ora apre chiavette USB e tutti i file</string>
     <string name="home_arquivos_falhou">Impossibile consentire %1$s: %2$s</string>
+    <string name="aviso_continuar_titulo">Niente da riprendere</string>
+    <string name="aviso_continuar_texto">L\'invito a riprendere dall\'altra TV è scaduto.</string>
+    <string name="aviso_simples_titulo">Modalità semplice disattivata</string>
+    <string name="aviso_simples_texto">La TV è tornata alla schermata home completa.</string>
+    <string name="aviso_sync_titulo">Nessun account collegato</string>
+    <string name="aviso_sync_texto">Non c\'è un account %1$s su questa TV. Collegalo in Impostazioni › TV e film.</string>
 </resources>

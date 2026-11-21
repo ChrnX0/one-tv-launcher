@@ -844,7 +844,7 @@ AS\\Movies）。</string>
     <string name="st_trazendo">正在把 %1$s 移回电视…</string>
     <string name="st_sumiram">U 盘已拔出：%1$s 会隐藏，直到插回。</string>
     <string name="st_sugestao">电视存储快满了。把 %1$s（%2$s）移到 U 盘：在应用上长按 OK。</string>
-    <string name="st_medindo">正在测量U盘速度…</string>
+    <string name="st_medindo">正在测量U盘速度，以推荐最佳用法…</string>
     <string name="st_lento_titulo">U盘太慢</string>
     <string name="st_lento_bloqueado">此U盘写入速度为 %1$s MB/s。要作为电视存储，至少需要 %2$d MB/s：低于此值应用会卡顿，电视可能无法启动。请将它用作普通U盘。</string>
     <string name="st_aviso_boot">请一直插着：如果它损坏或被拔出，在拔下之前电视可能无法启动。</string>
@@ -853,4 +853,10 @@ AS\\Movies）。</string>
     <string name="home_liberar_arquivos">允许打开U盘和文件</string>
     <string name="home_arquivos_liberado">%1$s 现在可以打开U盘和所有文件</string>
     <string name="home_arquivos_falhou">无法允许 %1$s：%2$s</string>
+    <string name="aviso_continuar_titulo">没有可继续的内容</string>
+    <string name="aviso_continuar_texto">从另一台电视继续的邀请已过期。</string>
+    <string name="aviso_simples_titulo">简单模式已关闭</string>
+    <string name="aviso_simples_texto">电视已回到完整主屏幕。</string>
+    <string name="aviso_sync_titulo">未连接账号</string>
+    <string name="aviso_sync_texto">这台电视没有 %1$s 账号。请在 设置 › 电视和电影 中连接。</string>
 </resources>

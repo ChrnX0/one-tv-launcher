@@ -92,7 +92,10 @@ class ModoSimplesActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        if (!ModoSimples.ligado(this)) { finish(); return }
+        // Desligaram o modo simples (painel, celular, Configurações): a tela some e diz por quê.
+        if (!ModoSimples.ligado(this)) {
+            AvisoTv.rapido(this, getString(R.string.aviso_simples_titulo), getString(R.string.aviso_simples_texto)); finish(); return
+        }
         Fundo.rodar("simples") {
             val instalados = ModoSimples.instalados(this)
             val temTv = PlayerArmazem.fontes(this).isNotEmpty()

@@ -844,7 +844,7 @@ AS\\Film).</string>
     <string name="st_trazendo">Mengembalikan %1$s ke TV…</string>
     <string name="st_sumiram">Flashdisk dicabut: %1$s tersembunyi sampai dicolok lagi.</string>
     <string name="st_sugestao">Penyimpanan TV hampir penuh. Pindahkan %1$s (%2$s) ke flashdisk: tahan OK pada aplikasi.</string>
-    <string name="st_medindo">Mengukur kecepatan flashdisk…</string>
+    <string name="st_medindo">Mengukur kecepatan flashdisk untuk menyarankan penggunaan terbaik…</string>
     <string name="st_lento_titulo">Flashdisk terlalu lambat</string>
     <string name="st_lento_bloqueado">Flashdisk ini menulis %1$s MB/dtk. Untuk menjadi memori TV perlu minimal %2$d MB/dtk: di bawah itu aplikasi macet dan TV mungkin tidak menyala. Gunakan sebagai flashdisk biasa.</string>
     <string name="st_aviso_boot">Biarkan selalu terpasang: jika rusak atau dicabut, TV mungkin tidak menyala sampai Anda mencabutnya.</string>
@@ -853,4 +853,10 @@ AS\\Film).</string>
     <string name="home_liberar_arquivos">Izinkan membuka flashdisk dan file</string>
     <string name="home_arquivos_liberado">%1$s kini bisa membuka flashdisk dan semua file</string>
     <string name="home_arquivos_falhou">Tidak dapat mengizinkan %1$s: %2$s</string>
+    <string name="aviso_continuar_titulo">Tidak ada yang dilanjutkan</string>
+    <string name="aviso_continuar_texto">Undangan untuk melanjutkan dari TV lain sudah kedaluwarsa.</string>
+    <string name="aviso_simples_titulo">Mode sederhana mati</string>
+    <string name="aviso_simples_texto">TV kembali ke layar utama lengkap.</string>
+    <string name="aviso_sync_titulo">Tidak ada akun terhubung</string>
+    <string name="aviso_sync_texto">Tidak ada akun %1$s di TV ini. Hubungkan di Setelan › TV dan film.</string>
 </resources>

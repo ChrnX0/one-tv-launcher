@@ -847,7 +847,7 @@ AS\\Filme).</string>
     <string name="st_trazendo">%1$s kommt zurück auf den Fernseher…</string>
     <string name="st_sumiram">USB-Stick entfernt: %1$s sind ausgeblendet, bis er zurück ist.</string>
     <string name="st_sugestao">TV-Speicher fast voll. Verschiebe %1$s (%2$s) auf den USB-Stick: OK auf der App gedrückt halten.</string>
-    <string name="st_medindo">Geschwindigkeit des USB-Sticks wird gemessen…</string>
+    <string name="st_medindo">Geschwindigkeit des USB-Sticks wird gemessen, um die beste Nutzung zu empfehlen…</string>
     <string name="st_lento_titulo">USB-Stick zu langsam</string>
     <string name="st_lento_bloqueado">Dieser Stick schreibt mit %1$s MB/s. Als TV-Speicher braucht er mindestens %2$d MB/s: darunter hängen Apps und der Fernseher startet eventuell nicht. Nutze ihn als normalen Stick.</string>
     <string name="st_aviso_boot">Lass ihn immer eingesteckt: fällt er aus oder wird er entfernt, startet der Fernseher eventuell erst, wenn du ihn abziehst.</string>
@@ -856,4 +856,10 @@ AS\\Filme).</string>
     <string name="home_liberar_arquivos">USB-Sticks und Dateien öffnen lassen</string>
     <string name="home_arquivos_liberado">%1$s kann jetzt USB-Sticks und alle Dateien öffnen</string>
     <string name="home_arquivos_falhou">%1$s konnte nicht freigegeben werden: %2$s</string>
+    <string name="aviso_continuar_titulo">Nichts fortzusetzen</string>
+    <string name="aviso_continuar_texto">Die Einladung zum Fortsetzen vom anderen Fernseher ist abgelaufen.</string>
+    <string name="aviso_simples_titulo">Einfacher Modus aus</string>
+    <string name="aviso_simples_texto">Der Fernseher zeigt wieder den vollen Startbildschirm.</string>
+    <string name="aviso_sync_titulo">Kein Konto verbunden</string>
+    <string name="aviso_sync_texto">Auf diesem Fernseher gibt es kein %1$s-Konto. Verbinde es unter Einstellungen › TV und Filme.</string>
 </resources>

@@ -76,7 +76,9 @@ class SincronizarActivity : Activity() {
             val outroPerfil = !ServicosSync.perfilCerto(this)
             ui.post {
                 if (isDestroyed) return@post
-                if (conta == null) { finish(); return@post }
+                if (conta == null) {   // a conta saiu (ou nunca entrou): diz o que falta em vez de fechar calada
+                    AvisoTv.rapido(this, getString(R.string.aviso_sync_titulo), getString(R.string.aviso_sync_texto, servico.nome)); finish(); return@post
+                }
                 lista.removeAllViews()
                 val nome = conta.usuario.ifBlank { servico.nome }
                 val sub = if (servico == Servico.MDBLIST) getString(R.string.sync_sub_mdblist, nome) else getString(R.string.sync_sub, nome) + " " +
