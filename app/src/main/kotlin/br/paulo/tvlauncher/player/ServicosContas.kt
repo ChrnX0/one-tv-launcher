@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.player
 
+import br.paulo.tvlauncher.Fundo
 import android.content.Context
 import android.util.Log
 import br.paulo.tvlauncher.BuildConfig
@@ -139,7 +140,7 @@ object ServicosContas {
         }
         val sessao = Sessao(s, codigo, System.currentTimeMillis() + codigo.expiraEmS * 1000L)
         sessoes[s] = sessao
-        Thread({ esperar(app, sessao, k) }, "Servicos-${s.id}").apply { isDaemon = true; start() }
+        Fundo.rodar("Servicos-${s.id}") { esperar(app, sessao, k) }
         return sessao
     }
 

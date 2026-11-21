@@ -144,14 +144,14 @@ object MtpNaRede {
                 override fun onChange(selfChange: Boolean) {
                     if (PainelVizinhos.nomeDaTv(app) == nomeAnunciado || servico == null) return
                     // fora da thread que avisou: religar fecha portas e escreve na rede
-                    Thread({
+                    Fundo.rodar("Mtp-nome") {
                         Log.i(TAG, "nome da TV mudou: anunciando de novo")
                         // Confere na trava: o dono pode ter desligado a unidade entre o aviso e esta thread.
                         val religou = synchronized(MtpNaRede) {
                             if (!querLigado || servico == null) false else { desligarJa(); ligarJa(app); true }
                         }
                         if (religou) { AnuncioUpnp.desligar(); AnuncioUpnp.ligar(app) }   // o adeus + o olá fazem o Windows reler a descrição
-                    }, "Mtp-nome").apply { isDaemon = true }.start()
+                    }
                 }
             }
             try { app.contentResolver.registerContentObserver(Settings.Global.getUriFor("device_name"), false, v); vigiaNome = v }

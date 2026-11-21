@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.screensaver
 
+import br.paulo.tvlauncher.Fundo
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent

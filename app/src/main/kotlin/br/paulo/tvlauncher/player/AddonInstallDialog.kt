@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.player
 
+import br.paulo.tvlauncher.Fundo
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
@@ -74,14 +75,14 @@ object AddonInstallDialog {
     /** Instala fora da thread da tela; [falhou] recebe o motivo já em texto. */
     private fun instalar(tela: Activity, url: String, aoMudar: () -> Unit, falhou: (String) -> Unit) {
         val ui = Handler(Looper.getMainLooper())
-        Thread {
+        Fundo.rodar("addon-instalar") {
             val r = AddonsTv.instalar(tela, url)
             ui.post {
                 if (tela.isDestroyed) return@post
                 if (r is AddonsTv.Resultado.Ok) { aoMudar(); aviso(tela, r.i.m.nome, tela.getString(R.string.ad_add_ok, r.i.m.nome)) }
                 else falhou(motivo(tela, r))
             }
-        }.start()
+        }
     }
 
     private fun campo(tela: Activity, erro: String?, antes: String, aoMudar: () -> Unit) {

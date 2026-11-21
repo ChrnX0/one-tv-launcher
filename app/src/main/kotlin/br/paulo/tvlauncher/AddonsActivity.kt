@@ -145,11 +145,11 @@ class AddonsActivity : Activity() {
         desenharRaiz()
         // Lista curada: no máximo 1 pergunta por dia ao servidor; se mudou e a tela ainda está na raiz, redesenha.
         // Thread à parte, não a fila `rede`: o servidor lento não atrasa o 1º catálogo.
-        Thread {
+        Fundo.rodar("addons-sugeridos") {
             val antes = AddonsTv.sugeridos(this)
             AddonsTv.atualizarSugeridos(this)
             if (AddonsTv.sugeridos(this) != antes) tela.post { if (!isDestroyed && pilha.size == 1) desenharRaiz() }
-        }.start()
+        }
         // Elevação 7.1: aberta pela busca única com um título que só um addon tem.
         intent.getStringExtra(BibliotecaUnica.EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { buscar(it) }
     }

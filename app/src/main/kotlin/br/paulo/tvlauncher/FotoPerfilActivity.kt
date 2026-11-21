@@ -64,7 +64,7 @@ class FotoPerfilActivity : Activity() {
         if (!LoginGoogle.configurado(this)) { terminou = true; texto.text = getString(if (drive) R.string.drv_sem_google else R.string.fp_sem_google); return }
         texto.text = getString(R.string.fp_pedindo)
         // Pedir o código é uma chamada de rede: o Android proíbe rede na thread da tela, então vai numa thread à parte.
-        Thread({
+        Fundo.rodar("FotoPerfil") {
             val r = runCatching { LoginGoogle.iniciar(applicationContext, emptyMap(), finalidade) }
             ui.post {
                 if (isDestroyed) { r.getOrNull()?.let { cancelar(it) }; return@post }
@@ -75,7 +75,7 @@ class FotoPerfilActivity : Activity() {
                 qr.visibility = View.VISIBLE
                 ui.post(volta)
             }
-        }, "FotoPerfil").apply { isDaemon = true; start() }
+        }
     }
 
     private fun atualizar() {

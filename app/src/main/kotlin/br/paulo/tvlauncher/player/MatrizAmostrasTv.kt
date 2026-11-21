@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.player
 
+import br.paulo.tvlauncher.Fundo
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -45,8 +46,7 @@ object MatrizAmostrasTv {
         if (rodando) return "rodando: $andamento"
         rodando = true; andamento = "lendo a matriz"
         val app = ctx.applicationContext
-        Thread({ try { rodar(app, base) } catch (e: Throwable) { Log.w(TAG, "matriz: $e"); andamento = "erro: ${e.javaClass.simpleName}" } finally { rodando = false } },
-            "matriz").start()
+        Fundo.rodar("matriz") { try { rodar(app, base) } catch (e: Throwable) { Log.w(TAG, "matriz: $e"); andamento = "erro: ${e.javaClass.simpleName}" } finally { rodando = false } }
         return "começou"
     }
 

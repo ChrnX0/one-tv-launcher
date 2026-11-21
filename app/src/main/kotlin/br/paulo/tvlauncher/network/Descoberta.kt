@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.network
 
+import br.paulo.tvlauncher.Fundo
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.nsd.NsdManager
@@ -29,9 +30,8 @@ object Descoberta {
     /** Os dois caminhos juntos, sem repetir IP. Leva ~3 s. */
     fun pastas(ctx: Context): List<Maquina> {
         var dns: List<Maquina> = emptyList()
-        val t = Thread { dns = runCatching { mdns(ctx) }.getOrDefault(emptyList()) }.apply { start() }
-        val nb = runCatching { netbios(ctx) }.getOrDefault(emptyList())
-        t.join(5000)
+        var nb: List<Maquina> = emptyList()
+        Fundo.juntos(5000, { dns = mdns(ctx) }, { nb = netbios(ctx) })
         return (nb + dns.filter { d -> nb.none { it.ip == d.ip } }).sortedBy { it.nome.lowercase() }
     }
 

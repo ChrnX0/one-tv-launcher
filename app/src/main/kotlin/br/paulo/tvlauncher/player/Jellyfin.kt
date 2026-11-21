@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.player
 
+import br.paulo.tvlauncher.Fundo
 import br.paulo.tvlauncher.panel.Upnp
 import br.paulo.tvlauncher.panel.entrar
 import java.io.InputStream
@@ -40,9 +41,8 @@ object Jellyfin {
     /** Jellyfin e Emby ao mesmo tempo (cada um responde ao seu grito). Se um endereço responder aos dois, fica Jellyfin. */
     fun procurarTodos(esperaMs: Int = 2500): List<Achado> {
         var emby: List<Achado> = emptyList()
-        val t = Thread { emby = runCatching { procurar(esperaMs, true) }.getOrDefault(emptyList()) }.apply { start() }
-        val jelly = runCatching { procurar(esperaMs, false) }.getOrDefault(emptyList())
-        t.join(esperaMs + 1500L)
+        var jelly: List<Achado> = emptyList()
+        Fundo.juntos(esperaMs + 1500L, { emby = procurar(esperaMs, true) }, { jelly = procurar(esperaMs, false) })
         return jelly + emby.filter { e -> jelly.none { it.endereco == e.endereco } }
     }
 

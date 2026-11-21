@@ -83,11 +83,11 @@ class AlarmeTocandoActivity : Activity() {
             tentativasTv++
             val app = applicationContext
             val n = tentativasTv
-            Thread {
+            Fundo.rodar("alarme-cec") {
                 // Fila do nosso shell (uid 2000): o app sozinho não tem a permissão HDMI_CEC.
                 val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
                 Log.i("TvLauncher.Alarme", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
-            }.start()
+            }
             TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
         }
     }

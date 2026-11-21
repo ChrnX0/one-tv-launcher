@@ -279,10 +279,10 @@ class LembreteActivity : Activity() {
             tentativasTv++
             val app = applicationContext
             val n = tentativasTv
-            Thread {
+            Fundo.rodar("lembrete-cec") {
                 val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
                 Log.i("TvLauncher.Lembrete", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
-            }.start()
+            }
             TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
         }
     }

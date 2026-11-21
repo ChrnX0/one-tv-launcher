@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.home
 
+import br.paulo.tvlauncher.Fundo
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.ColorMatrix

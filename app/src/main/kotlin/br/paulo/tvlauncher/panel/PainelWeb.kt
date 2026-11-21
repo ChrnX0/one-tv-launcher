@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.panel
 
+import br.paulo.tvlauncher.Fundo
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -283,19 +284,19 @@ object PainelWeb {
      * Sem certificado (Keystore com defeito), o painel segue só em http.
      */
     private fun iniciarTls(minha: Int) {
-        Thread({
+        Fundo.rodar("Painel-https") {
             // O IP entra no certificado: espera a rede aparecer (até ~5 min) se o painel ligou antes do Wi-Fi.
             var rede = redes().entries.minByOrNull { it.key }
             var tentativas = 0
             while (rede == null && tentativas++ < 10) {
-                try { Thread.sleep(30_000) } catch (_: InterruptedException) { return@Thread }
-                if (geracao != minha) return@Thread
+                try { Thread.sleep(30_000) } catch (_: InterruptedException) { return@rodar }
+                if (geracao != minha) return@rodar
                 redeCache = 0L to emptyMap()
                 rede = redes().entries.minByOrNull { it.key }
             }
-            val e = PainelTls.garantir(app, rede?.key, rede?.value ?: 24) ?: return@Thread
+            val e = PainelTls.garantir(app, rede?.key, rede?.value ?: 24) ?: return@rodar
             abrirTls(minha, e)
-        }, "Painel-https").apply { priority = Thread.MIN_PRIORITY; isDaemon = true }.start()
+        }
     }
 
     /** Abre a porta https com este certificado e fica no accept() até parar() ou uma renovação fechar a porta. */
