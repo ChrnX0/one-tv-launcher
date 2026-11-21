@@ -20,24 +20,24 @@ object RetroLibrary {
     /**
      * Consoles reconhecidos. [extensoes] só valem sozinhas quando são exclusivas do console; as genéricas (.bin, .iso,
      * .zip, .chd, .cue, .7z) precisam de uma pasta com o nome do console. [nucleo] = núcleo do RetroArch para Android
-     * da Play (vem como módulo da Play: `lib<nucleo>.so` na pasta de bibliotecas do app; conferido na Sala em 21/11/2026,
+     * da Play, em ordem de preferência (vem como módulo da Play: `lib<nucleo>.so` na pasta de bibliotecas do app; conferido na Sala em 21/11/2026,
      * 50 núcleos instalados), escolhido pelo desempenho no Chromecast 32 bits.
      */
-    enum class Console(val nome: String, val extensoes: Set<String>, val pastas: Set<String>, val nucleo: String) {
-        NES("NES", setOf("nes", "fds", "unf", "unif"), setOf("nes", "nintendo", "famicom", "fc"), "fceumm"),
-        SNES("Super Nintendo", setOf("sfc", "smc", "swc", "fig"), setOf("snes", "sfc", "super nintendo", "supernintendo", "super famicom"), "snes9x"),
-        N64("Nintendo 64", setOf("n64", "z64", "v64"), setOf("n64", "nintendo 64", "nintendo64"), "mupen64plus_next_gles3"),
-        GB("Game Boy", setOf("gb"), setOf("gb", "game boy", "gameboy"), "gambatte"),
-        GBC("Game Boy Color", setOf("gbc"), setOf("gbc", "game boy color", "gameboy color"), "gambatte"),
-        GBA("Game Boy Advance", setOf("gba"), setOf("gba", "game boy advance", "gameboy advance"), "mgba"),
-        NDS("Nintendo DS", setOf("nds"), setOf("nds", "nintendo ds", "ds"), "melondsds"),
-        MD("Mega Drive", setOf("md", "gen", "smd"), setOf("megadrive", "mega drive", "genesis", "md"), "genesis_plus_gx"),
-        SMS("Master System", setOf("sms"), setOf("mastersystem", "master system", "sms"), "genesis_plus_gx"),
-        GG("Game Gear", setOf("gg"), setOf("gamegear", "game gear", "gg"), "genesis_plus_gx"),
-        PS1("PlayStation", setOf("pbp"), setOf("psx", "ps1", "playstation", "playstation 1"), "pcsx_rearmed"),
-        PSP("PSP", setOf("cso"), setOf("psp"), "ppsspp"),
-        ATARI2600("Atari 2600", setOf("a26"), setOf("atari2600", "atari 2600", "a2600"), "stella"),
-        PCE("PC Engine", setOf("pce"), setOf("pce", "pc engine", "pcengine", "turbografx"), "geargrafx"),
+    enum class Console(val nome: String, val extensoes: Set<String>, val pastas: Set<String>, val nucleos: List<String>) {
+        NES("NES", setOf("nes", "fds", "unf", "unif"), setOf("nes", "nintendo", "famicom", "fc"), listOf("fceumm", "nestopia")),
+        SNES("Super Nintendo", setOf("sfc", "smc", "swc", "fig"), setOf("snes", "sfc", "super nintendo", "supernintendo", "super famicom"), listOf("snes9x", "bsnes")),
+        N64("Nintendo 64", setOf("n64", "z64", "v64"), setOf("n64", "nintendo 64", "nintendo64"), listOf("mupen64plus_next_gles3")),
+        GB("Game Boy", setOf("gb"), setOf("gb", "game boy", "gameboy"), listOf("gambatte", "sameboy", "mgba")),
+        GBC("Game Boy Color", setOf("gbc"), setOf("gbc", "game boy color", "gameboy color"), listOf("gambatte", "sameboy", "mgba")),
+        GBA("Game Boy Advance", setOf("gba"), setOf("gba", "game boy advance", "gameboy advance"), listOf("mgba")),
+        NDS("Nintendo DS", setOf("nds"), setOf("nds", "nintendo ds", "ds"), listOf("melondsds")),
+        MD("Mega Drive", setOf("md", "gen", "smd"), setOf("megadrive", "mega drive", "genesis", "md"), listOf("genesis_plus_gx", "picodrive")),
+        SMS("Master System", setOf("sms"), setOf("mastersystem", "master system", "sms"), listOf("genesis_plus_gx", "picodrive")),
+        GG("Game Gear", setOf("gg"), setOf("gamegear", "game gear", "gg"), listOf("genesis_plus_gx", "picodrive")),
+        PS1("PlayStation", setOf("pbp"), setOf("psx", "ps1", "playstation", "playstation 1"), listOf("pcsx_rearmed", "mednafen_psx_hw")),
+        PSP("PSP", setOf("cso"), setOf("psp"), listOf("ppsspp")),
+        ATARI2600("Atari 2600", setOf("a26"), setOf("atari2600", "atari 2600", "a2600"), listOf("stella")),
+        PCE("PC Engine", setOf("pce"), setOf("pce", "pc engine", "pcengine", "turbografx"), listOf("geargrafx")),
     }
 
     /** Extensões que só contam com a pasta do console (sozinhas não dizem nada). */
@@ -169,9 +169,19 @@ object RetroLibrary {
      * vêm da Play (ex.: `libsnes9x.so`, conferido na Sala em 21/11/2026). Sem CONFIGFILE: um caminho errado faria o
      * RetroArch criar outra configuração e "perder" a da pessoa. Abrir o jogo ainda não foi testado na TV.
      */
-    fun extrasRetroArch(rom: String, console: Console, dirNucleos: String): Map<String, String> = mapOf(
+    fun extrasRetroArch(rom: String, nucleo: String, dirNucleos: String): Map<String, String> = mapOf(
         "ROM" to rom,
-        "LIBRETRO" to "$dirNucleos/lib${console.nucleo}.so",
+        "LIBRETRO" to "$dirNucleos/lib$nucleo.so",
         "QUITFOCUS" to "",
     )
+
+    /**
+     * O primeiro núcleo de [console] que o RetroArch tem instalado. [modulos] = `ApplicationInfo.splitNames` do RetroArch
+     * (módulos da Play: "core_snes9x", "core_snes9x.config.armeabi_v7a"...). Null = nenhum: a pessoa baixa no RetroArch
+     * (só o próprio app pode pedir os módulos dele à Play).
+     */
+    fun nucleoInstalado(console: Console, modulos: Collection<String>): String? {
+        val tem = modulos.filter { it.startsWith("core_") && '.' !in it }.map { it.removePrefix("core_") }.toSet()
+        return console.nucleos.firstOrNull { it in tem }
+    }
 }

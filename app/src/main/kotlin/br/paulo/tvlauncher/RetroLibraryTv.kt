@@ -54,26 +54,36 @@ object RetroLibraryTv {
             .putString(CHAVE_ULTIMA, org.json.JSONObject(m as Map<*, *>).toString()).apply()
     }
 
+    enum class Resultado { ABRIU, SEM_NUCLEO, FALHOU }
+
     /**
      * Abre [jogo] no RetroArch. Caminho 2 (escolha do dono): copia o jogo para a pasta do próprio RetroArch NO MESMO
-     * pen drive (o RetroArch da Play só lê a pasta dele) e abre com ROM + núcleo. Bloqueia (cópia pelo shell): chamar
-     * fora da thread da tela. Devolve false se não deu para preparar ou abrir.
+     * pen drive (o RetroArch da Play só lê a pasta dele) e abre com ROM + o primeiro núcleo do console que ele tem
+     * instalado. Sem núcleo nenhum: abre o RetroArch para a pessoa baixar (o download é dele, pela Play).
+     * Bloqueia (cópia pelo shell): chamar fora da thread da tela.
      * Não verificado na TV até o teste da Sala (21/11/2026); o caminho 1 (abrir direto do pen drive) entra aqui se o
      * teste mostrar que o RetroArch aceita.
      */
-    fun abrir(ctx: Context, jogo: RetroLibrary.Jogo): Boolean {
-        val destino = RetroLibrary.destinoNoEmulador(jogo.caminho) ?: return false
-        // Pasta onde o RetroArch da Play guarda os núcleos (muda a cada atualização dele: perguntar sempre).
-        val nucleos = try {
-            ctx.packageManager.getApplicationInfo(RetroLibrary.RETROARCH, 0).nativeLibraryDir
-        } catch (_: Exception) { return false }
+    fun abrir(ctx: Context, jogo: RetroLibrary.Jogo): Resultado {
+        val destino = RetroLibrary.destinoNoEmulador(jogo.caminho) ?: return Resultado.FALHOU
+        // Pasta dos núcleos e módulos instalados (mudam a cada atualização do RetroArch: perguntar sempre).
+        val info = try { ctx.packageManager.getApplicationInfo(RetroLibrary.RETROARCH, 0) }
+            catch (_: Exception) { return Resultado.FALHOU }
+        val nucleo = RetroLibrary.nucleoInstalado(jogo.console, info.splitNames?.toList().orEmpty())
+        if (nucleo == null) {
+            val i = ctx.packageManager.getLaunchIntentForPackage(RetroLibrary.RETROARCH)
+                ?: ctx.packageManager.getLeanbackLaunchIntentForPackage(RetroLibrary.RETROARCH)
+            try { i?.let { ctx.startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } } catch (_: Exception) {}
+            return Resultado.SEM_NUCLEO
+        }
         val r = GuardiaoShizuku.comando(ctx, RetroLibrary.comandoCopiar(jogo.caminho, destino), 40_000)
-        if (r?.contains("ok") != true) return false
+        if (r?.contains("ok") != true) return Resultado.FALHOU
         val i = Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(RetroLibrary.RETROARCH, RetroLibrary.RETROARCH_ATIVIDADE)
-            for ((k, v) in RetroLibrary.extrasRetroArch(destino, jogo.console, nucleos)) putExtra(k, v)
+            for ((k, v) in RetroLibrary.extrasRetroArch(destino, nucleo, info.nativeLibraryDir)) putExtra(k, v)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
-        return try { ctx.startActivity(i); marcarJogado(ctx, jogo.caminho); true } catch (_: Exception) { false }
+        return try { ctx.startActivity(i); marcarJogado(ctx, jogo.caminho); Resultado.ABRIU }
+            catch (_: Exception) { Resultado.FALHOU }
     }
 }

@@ -5,7 +5,7 @@
     <string name="retro_vazio">Nenhum jogo na pen USB. Coloque os seus jogos numa pasta com o nome da consola (ex.: SNES).</string>
     <string name="retro_portugues">em português</string>
     <string name="retro_abrindo">A abrir no RetroArch…</string>
-    <string name="retro_nao_abriu">O RetroArch não abriu este jogo. Abra o RetroArch uma vez e transfira o núcleo de %1$s (Atualizador online).</string>
+    <string name="retro_nao_abriu">O RetroArch não abriu este jogo. Abra o RetroArch uma vez e transfira o núcleo de %1$s.</string>
     <string name="retro_sem_retroarch">Instale o RetroArch (grátis na Play Store) para jogar estes jogos.</string>
     <string name="retro_aviso_legal">O Sofaly não inclui jogos. Use os que são seus.</string>
     <string name="retro_procurando">A procurar jogos na pen USB…</string>

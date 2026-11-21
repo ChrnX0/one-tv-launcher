@@ -238,11 +238,12 @@ class JogosActivity : Activity() {
         AvisoTv.rapido(this, j.nome, getString(R.string.retro_abrindo), segundos = 3)
         val app = applicationContext
         Fundo.rodar("jogos-retro") {
-            val ok = RetroLibraryTv.abrir(app, j)
+            val r = RetroLibraryTv.abrir(app, j)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                if (ok) { retroUltima = RetroLibraryTv.ultimaVez(app); montar() }
-                else AvisoTv.rapido(this, j.nome, getString(R.string.retro_nao_abriu, j.console.nome))
+                if (r == RetroLibraryTv.Resultado.ABRIU) { retroUltima = RetroLibraryTv.ultimaVez(app); montar() }
+                // Sem núcleo o RetroArch já abriu: o aviso diz o que baixar lá (vai para a frente dele).
+                else AvisoTv.rapido(app, j.nome, getString(R.string.retro_nao_abriu, j.console.nome), segundos = 8)
             }
         }
     }

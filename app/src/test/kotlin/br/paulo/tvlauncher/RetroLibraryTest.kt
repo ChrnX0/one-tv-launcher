@@ -84,9 +84,20 @@ class RetroLibraryTest {
 
     @Test fun extrasDoRetroArch() {
         // Pasta real da Sala (21/11/2026): os núcleos da Play ficam em lib/arm do app, como lib<nucleo>.so.
-        val e = RetroLibrary.extrasRetroArch("/x/a.sfc", Console.SNES, "/data/app/~~x/com.retroarch-y/lib/arm")
+        val e = RetroLibrary.extrasRetroArch("/x/a.sfc", "snes9x", "/data/app/~~x/com.retroarch-y/lib/arm")
         assertEquals("/data/app/~~x/com.retroarch-y/lib/arm/libsnes9x.so", e["LIBRETRO"])
         assertNull(e["CONFIGFILE"])
         assertEquals("/x/a.sfc", e["ROM"])
+    }
+
+    /** Módulos reais do RetroArch da Play na Sala (21/11/2026): pega o primeiro núcleo instalado da lista do console. */
+    @Test fun nucleoPelosModulosInstalados() {
+        val sala = listOf("config.armeabi_v7a", "core_bsnes", "core_bsnes.config.armeabi_v7a", "core_snes9x",
+            "core_snes9x.config.armeabi_v7a", "core_picodrive", "core_mgba")
+        assertEquals("snes9x", RetroLibrary.nucleoInstalado(Console.SNES, sala))
+        assertEquals("picodrive", RetroLibrary.nucleoInstalado(Console.MD, sala))      // sem genesis_plus_gx: o próximo
+        assertEquals("mgba", RetroLibrary.nucleoInstalado(Console.GB, sala))
+        assertNull(RetroLibrary.nucleoInstalado(Console.PS1, sala))                    // nenhum: baixar no RetroArch
+        assertNull(RetroLibrary.nucleoInstalado(Console.SNES, listOf("core_snes9x.config.armeabi_v7a")))
     }
 }
