@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">トピック</string>
+    <string name="pod_ass_seus">フォロー中: %d</string>
+    <string name="pod_ass_em_alta">このトピックで人気</string>
+    <string name="pod_parecidos">似ている番組: %s</string>
+    <string name="pod_ass_noticias">ニュース</string>
+    <string name="pod_ass_humor">お笑い</string>
+    <string name="pod_ass_ciencia">科学</string>
+    <string name="pod_ass_tecnologia">テクノロジー</string>
+    <string name="pod_ass_historia">歴史</string>
+    <string name="pod_ass_negocios">ビジネス</string>
+    <string name="pod_ass_saude">健康</string>
+    <string name="pod_ass_esportes">スポーツ</string>
+    <string name="pod_ass_cultura">カルチャー</string>
+    <string name="pod_ass_crimes">実録犯罪</string>
+    <string name="pod_ass_tv_filmes">テレビと映画</string>
+    <string name="pod_ass_musica">音楽</string>
+    <string name="pod_ass_educacao">教育</string>
+    <string name="pod_ass_infantil">キッズとファミリー</string>
+    <string name="pod_ass_fe">信仰</string>
+    <string name="pod_ass_lazer">レジャー</string>
+</resources>

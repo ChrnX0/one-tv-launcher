@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">주제</string>
+    <string name="pod_ass_seus">팔로우 중: %d</string>
+    <string name="pod_ass_em_alta">이 주제의 인기</string>
+    <string name="pod_parecidos">비슷한 프로그램: %s</string>
+    <string name="pod_ass_noticias">뉴스</string>
+    <string name="pod_ass_humor">코미디</string>
+    <string name="pod_ass_ciencia">과학</string>
+    <string name="pod_ass_tecnologia">기술</string>
+    <string name="pod_ass_historia">역사</string>
+    <string name="pod_ass_negocios">비즈니스</string>
+    <string name="pod_ass_saude">건강</string>
+    <string name="pod_ass_esportes">스포츠</string>
+    <string name="pod_ass_cultura">문화</string>
+    <string name="pod_ass_crimes">실화 범죄</string>
+    <string name="pod_ass_tv_filmes">TV와 영화</string>
+    <string name="pod_ass_musica">음악</string>
+    <string name="pod_ass_educacao">교육</string>
+    <string name="pod_ass_infantil">어린이와 가족</string>
+    <string name="pod_ass_fe">신앙</string>
+    <string name="pod_ass_lazer">여가</string>
+</resources>

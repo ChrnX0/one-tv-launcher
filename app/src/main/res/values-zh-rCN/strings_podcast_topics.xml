@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">主题</string>
+    <string name="pod_ass_seus">已关注：%d</string>
+    <string name="pod_ass_em_alta">此主题热门</string>
+    <string name="pod_parecidos">相似：%s</string>
+    <string name="pod_ass_noticias">新闻</string>
+    <string name="pod_ass_humor">喜剧</string>
+    <string name="pod_ass_ciencia">科学</string>
+    <string name="pod_ass_tecnologia">科技</string>
+    <string name="pod_ass_historia">历史</string>
+    <string name="pod_ass_negocios">商业</string>
+    <string name="pod_ass_saude">健康</string>
+    <string name="pod_ass_esportes">体育</string>
+    <string name="pod_ass_cultura">文化</string>
+    <string name="pod_ass_crimes">真实罪案</string>
+    <string name="pod_ass_tv_filmes">影视</string>
+    <string name="pod_ass_musica">音乐</string>
+    <string name="pod_ass_educacao">教育</string>
+    <string name="pod_ass_infantil">儿童与家庭</string>
+    <string name="pod_ass_fe">信仰</string>
+    <string name="pod_ass_lazer">休闲</string>
+</resources>
