@@ -72,6 +72,18 @@ object FimDoVideo {
      */
     fun erroDoTunel(codigo: Int): Boolean = codigo in 4000..4999 || codigo in 5000..5999
 
+    /** Hora de preparar o episódio seguinte: faltando 10 min, e nunca antes da metade (episódio curto). */
+    fun horaDePreparar(posMs: Long, duracaoMs: Long): Boolean =
+        duracaoMs > 0 && posMs >= maxOf(duracaoMs - 10 * 60_000L, duracaoMs / 2)
+
+    /** "id|temporada|número" -> (id, temporada, número); qualquer coisa fora disso = null. */
+    fun lerProximo(s: String?): Triple<String, Int, Int>? {
+        val p = s?.split('|')?.takeIf { it.size == 3 } ?: return null
+        val t = p[1].toIntOrNull()?.takeIf { it > 0 } ?: return null
+        val e = p[2].toIntOrNull()?.takeIf { it >= 0 } ?: return null
+        return if (p[0].isBlank()) null else Triple(p[0], t, e)
+    }
+
     /** Quanto tempo "carregando" com o túnel ligado antes de desconfiar dele. */
     const val TUNEL_PRESO_MS = 8_000L
 

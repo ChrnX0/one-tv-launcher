@@ -111,6 +111,8 @@ class VodActivity : Activity() {
          * principal); ausente = não há próximo episódio, 0 = só oferece, sem começar sozinho.
          */
         const val EXTRA_PROXIMO_CONTAGEM = "proximo_contagem"
+        /** Proposta C, item 11: o episódio seguinte ("id|temporada|número", mesma fonte), para preparar antes do fim. */
+        const val EXTRA_PROXIMO_EP = "proximo_ep"
         /** Cortina de abertura (zero tela preta, 20/11/2026): imagem e linha de cima enquanto o primeiro quadro não chega. */
         const val EXTRA_CORTINA_IMAGEM = "cortina_imagem"
         const val EXTRA_CORTINA_LINHA = "cortina_linha"
@@ -920,7 +922,36 @@ class VodActivity : Activity() {
     }
 
     private val salvarDepois: Runnable = object : Runnable {
-        override fun run() { salvar(); tela.postDelayed(this, SALVAR_MS) }
+        override fun run() { salvar(); prepararProximo(); tela.postDelayed(this, SALVAR_MS) }
+    }
+
+    /**
+     * Proposta C, item 11 (pré-carregar): perto do fim do episódio, deixa pronto o que o seguinte vai precisar, para
+     * ele abrir já com tudo. O VÍDEO não: o IPTV aceita uma conexão só, e abrir a segunda derrubaria este.
+     *  - as marcas do IntroDB (abertura, resumo, créditos) do seguinte, que ficam no cache;
+     *  - a legenda: só se ESTE episódio precisou de uma baixada (a série é no idioma de fora), pelo nome, sem o hash
+     *    do arquivo (ler pedaços do vídeo seguinte seria a segunda conexão). A legenda que se acerta pela fala e o
+     *    atraso da série cuidam do resto. Gasta um download do OpenSubtitles só nesse caso.
+     */
+    private var preparouProximo = false
+
+    private fun prepararProximo() {
+        if (preparouProximo || !serie) return
+        val p = player ?: return
+        if (!FimDoVideo.horaDePreparar(p.currentPosition, p.duration)) return
+        preparouProximo = true
+        val (id, t, e) = FimDoVideo.lerProximo(intent.getStringExtra(EXTRA_PROXIMO_EP)) ?: return
+        val fonte = intent.getStringExtra(EXTRA_FONTE).orEmpty()
+        val b = runCatching { buscaLegenda() }.getOrNull() ?: return
+        val k = chave(TIPO_EPISODIO, fonte, id)
+        val legenda = legendaArquivo != null && !legendaTraduzida
+        Fundo.rodar("proximo-ep") {
+            b.tmdb?.let { runCatching { AberturaProntaTv.buscar(this, it, t, e) } }
+            if (legenda && LegendaBaixar.guardada(this, k) == null && !LegendaBaixar.tentouAuto(this, k) && LegendaBaixar.contaEmUso(this) != null) {
+                val r = LegendaBaixar.automatica(this, k, null, b.copy(temporada = t, episodio = e))
+                android.util.Log.i("TvLauncher.Vod", "próximo episódio T${t}E$e: legenda ${if (r.isSuccess) "pronta" else "não achada"}")
+            }
+        }
     }
 
     /** Grava onde parou. Terminou = posição igual à duração (sai do "continuar assistindo"). */

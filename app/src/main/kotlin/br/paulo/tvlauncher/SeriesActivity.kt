@@ -1264,7 +1264,10 @@ class SeriesActivity : Activity() {
         val vEsta = outra?.let { Idioma.versaoComPar(s.nome, s.grupo, it.first.nome, it.first.grupo) } ?: Idioma.versao(s.nome, s.grupo)
         val naOutra = epOutra != null && prefsIdioma.titulos[s.chave]?.let { Idioma.versaoDesejada(it) == vOutra } == true
         val (srcSerie, srcEp) = if (naOutra) outra!!.first to epOutra!! else s to ep
-        val temProximo = fichaAberta?.let { Series.proximo(it, ep) } != null
+        val prox = fichaAberta?.let { Series.proximo(it, ep) }
+        val temProximo = prox != null
+        // Na outra versão (dublado/legendado), o id do seguinte é o daquela ficha: sem ele à mão, não prepara.
+        val proximoEp = prox?.takeIf { !naOutra }
         val contagem = Conforto.contagem(this)
         VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, srcSerie.fonteId, srcEp.id, srcEp.extensao,
             titulo, doComeco, chaveIdioma = s.chave,
@@ -1272,6 +1275,8 @@ class SeriesActivity : Activity() {
                 tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = if (naOutra) vOutra else vEsta)) { i ->
             // Proposta C, etapa 1: com episódio seguinte, o player oferece "Próximo episódio" já nos créditos.
             if (temProximo) i.putExtra(VodActivity.EXTRA_PROXIMO_CONTAGEM, contagem)
+            // Item 11: o seguinte vai junto para o player preparar marcas e legenda antes do fim (mesma versão/fonte).
+            proximoEp?.let { n -> i.putExtra(VodActivity.EXTRA_PROXIMO_EP, "${n.id}|${n.temporada}|${n.numero}") }
             // Zero tela preta: abre sobre a cena da série com "Série · T1 E2" e o nome do episódio, não sobre o preto.
             VodActivity.comCortina(i, cenas.firstOrNull() ?: capa, "${Vod.nomeLimpo(s.nome)} · T${ep.temporada} E${ep.numero}",
                 Series.tituloCurto(s.nome, ep.titulo))
