@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Bucato fuori</string>
     <string name="cl_d_sair">Ora buona per uscire</string>
     <string name="cl_v_agora">Adesso</string>
-    <string name="cl_v_sim_as">Dalle %1$s</string>
+    <string name="cl_v_sim_as">Sì, alle %1$s</string>
     <string name="cl_v_talvez">Forse</string>
     <string name="cl_v_nao">Non serve</string>
     <string name="cl_v_ate">Fino alle %1$s</string>

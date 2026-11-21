@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Wäsche draußen</string>
     <string name="cl_d_sair">Gute Zeit zum Rausgehen</string>
     <string name="cl_v_agora">Jetzt</string>
-    <string name="cl_v_sim_as">Ab %1$s</string>
+    <string name="cl_v_sim_as">Ja, ab %1$s</string>
     <string name="cl_v_talvez">Vielleicht</string>
     <string name="cl_v_nao">Nicht nötig</string>
     <string name="cl_v_ate">Bis %1$s</string>

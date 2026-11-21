@@ -289,8 +289,8 @@ class PrevisaoActivity : Activity() {
         // O lugar escolhido no painel (LocalClima.kt), para não haver dúvida de onde é a previsão. Na linha do relógio.
         p1.addView(Estilo.texto(this, Estilo.Papel.CORPO, d.ponto.nome ?: "").apply {
             setTextColor(textoSuave); gravity = Gravity.CENTER_VERTICAL; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
-            setPaddingRelative(0, 0, dp(300), 0)
-        }, LinearLayout.LayoutParams(-1, dp(48)))
+            maxWidth = dp(480)   // o relógio ocupa o canto direito desta linha
+        }, LinearLayout.LayoutParams(-2, dp(48)))
         val hero = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         hero.addView(IconesClima.imagem(this, iconeAgora), LinearLayout.LayoutParams(dp(132), dp(132)))
         hero.addView(texto(104f, Estilo.TEXTO, fonteLeve).apply { text = "$tempAgora°"; includeFontPadding = false; setPaddingRelative(dp(14), 0, dp(18), 0) })
@@ -516,8 +516,10 @@ class PrevisaoActivity : Activity() {
             addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.PREFIXO + "3d/" + icone), LinearLayout.LayoutParams(dp(30), dp(30)))
             addView(texto(18f, textoSuave).apply { text = rotulo; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END; setPaddingRelative(dp(8), 0, 0, 0) })
         })
-        addView(texto(30f, Estilo.TEXTO, Estilo.fonte(700)).apply { text = valor; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
-            setPaddingRelative(0, dp(6), 0, 0) })
+        // A resposta encolhe até 22 sp se não couber (línguas com palavras longas), em vez de cortar.
+        addView(texto(30f, Estilo.TEXTO, Estilo.fonte(700)).apply { text = valor; maxLines = 1; gravity = Gravity.CENTER_VERTICAL
+            setAutoSizeTextTypeUniformWithConfiguration(22, 30, 1, TypedValue.COMPLEX_UNIT_SP) },
+            LinearLayout.LayoutParams(-1, dp(44)).apply { topMargin = dp(4) })
     }
 
     private fun tile(rotulo: String, valor: String, icone: String, extra: String): View = LinearLayout(this).apply {

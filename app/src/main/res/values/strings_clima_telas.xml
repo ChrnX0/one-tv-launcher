@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Laundry outside</string>
     <string name="cl_d_sair">Good time to go out</string>
     <string name="cl_v_agora">Now</string>
-    <string name="cl_v_sim_as">From %1$s</string>
+    <string name="cl_v_sim_as">Yes, at %1$s</string>
     <string name="cl_v_talvez">Maybe</string>
     <string name="cl_v_nao">Not needed</string>
     <string name="cl_v_ate">Until %1$s</string>

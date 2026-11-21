@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Pranie na dworze</string>
     <string name="cl_d_sair">Dobra pora na wyjście</string>
     <string name="cl_v_agora">Teraz</string>
-    <string name="cl_v_sim_as">Od %1$s</string>
+    <string name="cl_v_sim_as">Tak, od %1$s</string>
     <string name="cl_v_talvez">Może</string>
     <string name="cl_v_nao">Niepotrzebny</string>
     <string name="cl_v_ate">Do %1$s</string>

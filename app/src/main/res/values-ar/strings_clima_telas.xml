@@ -17,7 +17,7 @@
     <string name="cl_d_varal">الغسيل في الخارج</string>
     <string name="cl_d_sair">وقت مناسب للخروج</string>
     <string name="cl_v_agora">الآن</string>
-    <string name="cl_v_sim_as">من %1$s</string>
+    <string name="cl_v_sim_as">نعم، %1$s</string>
     <string name="cl_v_talvez">ربما</string>
     <string name="cl_v_nao">لا داعي</string>
     <string name="cl_v_ate">حتى %1$s</string>

@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Jemuran di luar</string>
     <string name="cl_d_sair">Waktu baik keluar</string>
     <string name="cl_v_agora">Sekarang</string>
-    <string name="cl_v_sim_as">Mulai %1$s</string>
+    <string name="cl_v_sim_as">Ya, pukul %1$s</string>
     <string name="cl_v_talvez">Mungkin</string>
     <string name="cl_v_nao">Tidak perlu</string>
     <string name="cl_v_ate">Sampai %1$s</string>

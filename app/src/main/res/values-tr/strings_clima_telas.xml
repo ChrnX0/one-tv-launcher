@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Dışarıda çamaşır</string>
     <string name="cl_d_sair">Dışarı çıkmak için iyi saat</string>
     <string name="cl_v_agora">Şimdi</string>
-    <string name="cl_v_sim_as">%1$s itibarıyla</string>
+    <string name="cl_v_sim_as">Evet, %1$s</string>
     <string name="cl_v_talvez">Belki</string>
     <string name="cl_v_nao">Gerek yok</string>
     <string name="cl_v_ate">%1$s kadar</string>

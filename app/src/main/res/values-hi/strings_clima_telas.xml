@@ -17,7 +17,7 @@
     <string name="cl_d_varal">बाहर कपड़े सुखाना</string>
     <string name="cl_d_sair">बाहर जाने का अच्छा समय</string>
     <string name="cl_v_agora">अभी</string>
-    <string name="cl_v_sim_as">%1$s से</string>
+    <string name="cl_v_sim_as">हाँ, %1$s से</string>
     <string name="cl_v_talvez">शायद</string>
     <string name="cl_v_nao">ज़रूरत नहीं</string>
     <string name="cl_v_ate">%1$s तक</string>

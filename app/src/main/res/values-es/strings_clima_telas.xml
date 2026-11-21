@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Ropa tendida</string>
     <string name="cl_d_sair">Buena hora para salir</string>
     <string name="cl_v_agora">Ahora</string>
-    <string name="cl_v_sim_as">Desde las %1$s</string>
+    <string name="cl_v_sim_as">Sí, a las %1$s</string>
     <string name="cl_v_talvez">Quizá</string>
     <string name="cl_v_nao">No hace falta</string>
     <string name="cl_v_ate">Hasta las %1$s</string>

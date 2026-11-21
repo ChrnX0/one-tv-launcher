@@ -17,7 +17,7 @@
     <string name="cl_d_varal">晾衣服</string>
     <string name="cl_d_sair">适合出门的时间</string>
     <string name="cl_v_agora">现在</string>
-    <string name="cl_v_sim_as">%1$s起</string>
+    <string name="cl_v_sim_as">需要，%1$s起</string>
     <string name="cl_v_talvez">也许</string>
     <string name="cl_v_nao">不需要</string>
     <string name="cl_v_ate">到%1$s</string>

@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Бельё на улице</string>
     <string name="cl_d_sair">Время выйти из дома</string>
     <string name="cl_v_agora">Сейчас</string>
-    <string name="cl_v_sim_as">С %1$s</string>
+    <string name="cl_v_sim_as">Да, с %1$s</string>
     <string name="cl_v_talvez">Возможно</string>
     <string name="cl_v_nao">Не нужен</string>
     <string name="cl_v_ate">До %1$s</string>

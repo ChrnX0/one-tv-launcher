@@ -17,7 +17,7 @@
     <string name="cl_d_varal">Linge dehors</string>
     <string name="cl_d_sair">Bon moment pour sortir</string>
     <string name="cl_v_agora">Maintenant</string>
-    <string name="cl_v_sim_as">Dès %1$s</string>
+    <string name="cl_v_sim_as">Oui, à %1$s</string>
     <string name="cl_v_talvez">Peut-être</string>
     <string name="cl_v_nao">Inutile</string>
     <string name="cl_v_ate">Jusqu\'à %1$s</string>

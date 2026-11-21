@@ -17,7 +17,7 @@
     <string name="cl_d_varal">빨래 밖에 널기</string>
     <string name="cl_d_sair">외출하기 좋은 시간</string>
     <string name="cl_v_agora">지금</string>
-    <string name="cl_v_sim_as">%1$s부터</string>
+    <string name="cl_v_sim_as">%1$s부터 필요</string>
     <string name="cl_v_talvez">아마도</string>
     <string name="cl_v_nao">필요 없음</string>
     <string name="cl_v_ate">%1$s까지</string>
