@@ -262,6 +262,8 @@ object PainelExtras {
             }
             get && rota == "consumo" -> ok(ConsumoRedeTv.json(app, consulta["dias"]?.toIntOrNull()?.coerceIn(1, 30) ?: 1))
             get && rota == "tocando" -> ok(TocandoAgoraTv.json(app))
+            // Ouvir no celular (21/11/2026): o que a TV tocou por último no Ouvir, para o celular continuar.
+            get && rota == "ouvir" -> ok(br.paulo.tvlauncher.listen.OuvirNoCelular.json(app))
             post && rota == "tocando" -> {
                 val a = corpo?.optString("acao") ?: ""
                 if (TocandoAgoraTv.controlar(app, a)) ok() else erro(409, "nada tocando (ou a chave está desligada)")

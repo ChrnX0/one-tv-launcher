@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.ObserverCore
 import br.paulo.tvlauncher.observer.ObserverCore.Signal
 import br.paulo.tvlauncher.observer.ObserverMorning
 import br.paulo.tvlauncher.observer.ObserverMorning.Change

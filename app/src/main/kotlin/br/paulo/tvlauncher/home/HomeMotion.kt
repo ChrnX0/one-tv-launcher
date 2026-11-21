@@ -289,7 +289,15 @@ internal fun MainActivity.atualizarCruz() {
     }
     categoria(CruzLogica.Categoria.APLICATIVOS, R.string.cruz_aplicativos, IconeCruz.Tipo.APLICATIVOS, apps)
 
-    c.definir(cats)
+    // Trocar ícone item a item (21/11/2026): segurar OK num item do Sofaly que não tem menu próprio troca o desenho dele
+    // ou o da categoria (MainActivity.trocarIconeSofaly). Itens de app e de mídia continuam com o menu deles.
+    c.definir(cats.map { cat ->
+        val tipoCat = (cat.icone as? IconeCruz)?.tipo
+        HomeCruz.Categoria(cat.cat, cat.nome, cat.icone, cat.itens.map { item ->
+            val ic = item.icone as? IconeCruz
+            if (item.opcoes != null || ic == null) item else item.comOpcoes { trocarIconeSofaly(ic.tipo, item.nome, tipoCat, cat.nome) }
+        })
+    })
     if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
     else if (currentFocus == null && !todosAbertos) c.requestFocus()
 }

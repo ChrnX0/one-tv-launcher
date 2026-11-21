@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">サウンド</string>
+    <string name="som_titulo_pod">サウンド · %1$s</string>
+    <string name="som_voz_clara">声をはっきり</string>
+    <string name="som_so_este">このポッドキャストだけ</string>
+    <string name="som_abertura">オープニングを飛ばす</string>
+    <string name="som_fim">エンディングを飛ばす</string>
+    <string name="som_segundos">%1$d 秒</string>
+    <string name="som_rodape_proprio">この設定は %1$s だけに使われます。</string>
+    <string name="som_rodape_geral">速度・無音・声の設定はすべての番組に使われます。%1$s だけ変えるには「このポッドキャストだけ」をオンに。</string>
+    <string name="som_det">速度・声・タイマー</string>
+    <string name="som_det_radio">声をはっきり・スリープタイマー</string>
+    <string name="cap_titulo">チャプター</string>
+    <string name="cap_de">チャプター %1$d/%2$d</string>
+    <string name="cap_barra_dica">◀ ▶ で10秒移動 · OK：チャプター</string>
+    <string name="tx_titulo">会話テキスト</string>
+    <string name="tx_carregando">読み込み中</string>
+    <string name="tx_nao_tem">このエピソードにはありません</string>
+    <string name="tx_nao_tem_det">このポッドキャストはこのエピソードのテキストを公開していません。</string>
+    <string name="tx_pe_busca">%2$d 件中 %1$d 件目 · ◀ ▶ 前 / 次 · ▼ 再検索 · OK：閉じる</string>
+    <string name="tx_buscar">話した内容を検索</string>
+    <string name="tx_nada">このエピソードではその言葉は出てきません。</string>
+    <string name="ra_ja_tocou">再生済み</string>
+    <string name="ra_parecidas">似たラジオ局</string>
+    <string name="som_radio">最後に聴いたラジオ</string>
+    <string name="som_podcast">最新のポッドキャスト</string>
+    <string name="jor_titulo">マイニュース</string>
+    <string name="jor_ouvir">ニュースを聴く</string>
+    <string name="jor_min">続けて%d分</string>
+    <string name="tx_pe">◀ ▶ 前 / 次の文 · ▲ 要約 · ▼ 検索 · OK：閉じる</string>
+    <string name="tx_gerando">作成中</string>
+    <string name="tx_gerando_det">テキストを作成中… 最初の部分は約1分かかります。</string>
+    <string name="tx_gerar">OKで作成（無料）</string>
+    <string name="tx_cota">明日また</string>
+    <string name="tx_cota_det">今日の無料テキスト枠は終わりました。明日また使えます。</string>
+    <string name="tx_pulei">広告をスキップ</string>
+    <string name="tx_pulei_det">%d秒 · ◀で戻る</string>
+    <string name="tx_resumo">Sofyの要約</string>
+    <string name="tx_resumo_de">要約 · %s</string>
+    <string name="tx_resumindo">話した内容を読んでいます… 少々お待ちを。</string>
+    <string name="tx_resumo_falhou">今回は要約が届きませんでした。少ししてからもう一度。</string>
+    <string name="ra_globo">地球儀で探す</string>
+    <string name="ra_globo_det">地球を回して世界中のラジオへ</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ 回す · OK：再生 · 戻る：閉じる</string>
+    <string name="ra_globo_mar">海の上… もう少し回して</string>
+    <string name="ra_voltar">30秒戻る</string>
+    <string name="ra_voltar_det">聞き逃した？ もう一度（リモコンの⏪）</string>
+    <string name="ra_ao_vivo">ライブに戻る</string>
+    <string name="ra_atras">ライブから%s遅れ</string>
+</resources>

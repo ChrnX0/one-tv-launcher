@@ -16,6 +16,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -24,10 +25,13 @@ import android.widget.TextView
 import br.paulo.tvlauncher.home.HomeCruz
 import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.Capitulos
 import br.paulo.tvlauncher.listen.CruzOuvir
 import br.paulo.tvlauncher.listen.IconeOuvir
 import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.MenuSom
 import br.paulo.tvlauncher.listen.PodcastPlayerLogic
+import br.paulo.tvlauncher.listen.Transcricao
 import br.paulo.tvlauncher.listen.Podcasts
 import br.paulo.tvlauncher.player.BarraTempo
 import br.paulo.tvlauncher.player.Episodio
@@ -43,7 +47,8 @@ import java.util.Date
  *  - capa grande à esquerda, com a própria capa desfocada e escurecida de fundo;
  *  - à direita: TOCANDO AGORA, o podcast, o título (até 2 linhas), data e duração;
  *  - a barra de tempo larga com o tempo passado, quando termina ("termina às 12:58") e quanto falta;
- *  - os controles numa fileira: −15 s, ⏯ grande, +30 s, velocidade, pular silêncios e timer para dormir;
+ *  - os controles numa fileira: −15 s, ⏯ grande, +30 s, Texto da fala ([Transcricao], tela de letra grande), velocidade, Som ([MenuSom]: silêncios, voz clara, ajustes
+ *    deste podcast) e timer para dormir;
  *  - ▼ abre "A seguir": os próximos episódios do mesmo podcast ([PodcastPlayerLogic.aSeguir]); OK toca um deles.
  *
  * Foco em três andares, sem o foco do Android (como a cruz): 0 = barra (◀ ▶ andam 10 s), 1 = controles (◀ ▶ trocam),
@@ -67,9 +72,10 @@ class PodcastPlayerActivity : Activity() {
         const val TOPO = 70
         const val TEXTO_X = MARGEM + CAPA + 44
         const val TEXTO_L = 960 - TEXTO_X - MARGEM
-        const val BOTAO = 60
+        // 52 (era 60): com o "Texto da fala" são 7 botões na coluna de 472 dp (21/11/2026).
+        const val BOTAO = 52
         const val BOTAO_GRANDE = 84
-        const val ESPACO_BOTOES = 16
+        const val ESPACO_BOTOES = 12
         const val FONTE_TITULO = 30f
         const val FONTE_PODCAST = 19f
         const val FONTE_INFO = 18f
@@ -81,11 +87,12 @@ class PodcastPlayerActivity : Activity() {
         const val ANDAR_BARRA = 0; const val ANDAR_BOTOES = 1; const val ANDAR_SEGUIR = 2
     }
 
-    private enum class Acao { VOLTAR, ALTERNAR, AVANCAR, VELOCIDADE, SILENCIO, DORMIR }
+    private enum class Acao { VOLTAR, ALTERNAR, AVANCAR, TEXTO, VELOCIDADE, SOM, DORMIR }
 
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
     private val relogio = object : Runnable {
-        override fun run() { atualizarTempo(); ui.postDelayed(this, 500) }
+        // Com o texto da fala aberto, 4x por segundo: a frase troca junto com a voz.
+        override fun run() { atualizarTempo(); if (palcoAberto) desenharPalco(); ui.postDelayed(this, if (palcoAberto) 250 else 500) }
     }
     private val mudou: () -> Unit = { ui.post { atualizar() } }
 
@@ -122,6 +129,9 @@ class PodcastPlayerActivity : Activity() {
     private var esperado: String? = null
     private val desistir = Runnable { if (!jaTocou) finish() }
     private var tituloVisto = ""
+    /** Data, temporada e duração; o capítulo de agora entra depois, em [atualizarTempo]. */
+    private var infoBase = ""
+    private var capVisto = -2
 
     private val dm by lazy { resources.displayMetrics }
     private fun dp(v: Float) = v * dm.density
@@ -273,11 +283,12 @@ class PodcastPlayerActivity : Activity() {
             tituloVisto = e.ep.titulo
             titulo.text = caber(e.ep.titulo, titulo, dpi(TEXTO_L), 2)
         }
-        info.text = listOfNotNull(
+        infoBase = listOfNotNull(
             e.ep.dataMs.takeIf { it > 0 }?.let { java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(Date(it)) },
             e.ep.temporada.takeIf { it > 0 && e.ep.numero > 0 }?.let { getString(R.string.pod_temp_ep, it, e.ep.numero) },
             e.ep.duracaoS.takeIf { it > 0 }?.let { getString(R.string.pod_minutos, maxOf(1, (it + 59) / 60)) },
         ).joinToString(" · ")
+        info.text = infoBase; capVisto = -2
         val endereco = e.capaPodcast.ifEmpty { e.ep.capa }
         capa.monograma = CapaOuvir.iniciais(e.podcast)
         capa.cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST)
@@ -291,8 +302,10 @@ class PodcastPlayerActivity : Activity() {
         vistas[Acao.ALTERNAR]?.icone(if (pausado) IconeOuvir.Tipo.CONTINUAR else IconeOuvir.Tipo.PAUSAR)
         vistas[Acao.VOLTAR]?.icone(IconeOuvir.Tipo.VOLTAR)
         vistas[Acao.AVANCAR]?.icone(IconeOuvir.Tipo.AVANCAR)
-        vistas[Acao.VELOCIDADE]?.escrito(PodcastPlayerLogic.rotuloVelocidade(OuvirServico.velocidade(this)))
-        vistas[Acao.SILENCIO]?.apply { icone(IconeOuvir.Tipo.SILENCIO); ligado = OuvirServico.pularSilencio(this@PodcastPlayerActivity) }
+        val ef = OuvirServico.efetivo(this, e.feed)
+        vistas[Acao.VELOCIDADE]?.escrito(PodcastPlayerLogic.rotuloVelocidade(ef.velocidade))
+        vistas[Acao.SOM]?.apply { icone(IconeOuvir.Tipo.OPCOES); ligado = true }
+        vistas[Acao.TEXTO]?.apply { escrito("Aa"); ligado = s?.texto?.isNotEmpty() == true || s?.textoGerando == true }
         vistas[Acao.DORMIR]?.apply { icone(IconeOuvir.Tipo.DORMIR); ligado = (s?.dormirAte ?: 0L) > 0L }
 
         carregarFila(e)
@@ -307,8 +320,17 @@ class PodcastPlayerActivity : Activity() {
         val tocando = s?.episodio?.ep?.guid == e.ep.guid
         val pos = if (tocando) s!!.posicaoMs else guardadaMs
         val dur = if (tocando) s!!.duracaoMs else e.ep.duracaoS * 1000L
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, e.feed).velocidade
         barra.valor = if (dur > 0) (pos.toFloat() / dur).coerceIn(0f, 1f) else 0f
+        // Capítulos (21/11/2026): marcas na barra e o capítulo de agora ao lado da data ("Capítulo 3 de 8 · Entrevista").
+        val caps = if (tocando) s!!.capitulos else emptyList()
+        barra.marcas = if (dur > 0 && caps.isNotEmpty()) FloatArray(caps.size) { caps[it].inicioMs.toFloat() / dur } else FloatArray(0)
+        val ci = Capitulos.atual(caps, pos)
+        if (ci != capVisto) {
+            capVisto = ci
+            info.text = if (ci >= 0) caber(listOf(infoBase, getString(R.string.cap_de, ci + 1, caps.size), caps[ci].titulo)
+                .filter { it.isNotEmpty() }.joinToString(" · "), info, dpi(TEXTO_L), 1) else infoBase
+        }
         passou.text = PodcastPlayerLogic.tempo(pos)
         falta.text = PodcastPlayerLogic.falta(pos, dur, v)
         val fim = PodcastPlayerLogic.terminaEm(System.currentTimeMillis(), pos, dur, v)
@@ -327,9 +349,24 @@ class PodcastPlayerActivity : Activity() {
         Acao.VOLTAR -> getString(R.string.ouv_voltar)
         Acao.ALTERNAR -> getString(if (OuvirServico.instancia?.pausado == true) R.string.ouv_continuar else R.string.ouv_pausar)
         Acao.AVANCAR -> getString(R.string.ouv_avancar)
-        Acao.VELOCIDADE -> getString(R.string.pod_velocidade) + " · " + PodcastPlayerLogic.rotuloVelocidade(OuvirServico.velocidade(this))
-        Acao.SILENCIO -> getString(R.string.pod_silencio) + " · " +
-            getString(if (OuvirServico.pularSilencio(this)) R.string.pod_ligado else R.string.pod_desligado)
+        Acao.VELOCIDADE -> getString(R.string.pod_velocidade) + " · " + PodcastPlayerLogic.rotuloVelocidade(OuvirServico.efetivo(this, ep?.feed).velocidade)
+        Acao.TEXTO -> {
+            val s = OuvirServico.instancia
+            getString(R.string.tx_titulo) + when {
+                s?.textoGerando == true -> " · " + getString(R.string.tx_gerando)
+                s?.texto?.isNotEmpty() == true -> ""
+                s?.textoCarregando == true -> " · " + getString(R.string.tx_carregando)
+                s?.textoErro == "cota" -> " · " + getString(R.string.tx_cota)
+                s?.podeGerarTexto() == true -> " · " + getString(R.string.tx_gerar)
+                else -> " · " + getString(R.string.tx_nao_tem)
+            }
+        }
+        Acao.SOM -> {
+            val ef = OuvirServico.efetivo(this, ep?.feed)
+            listOfNotNull(getString(R.string.som_titulo),
+                getString(R.string.som_voz_clara).takeIf { ef.vozClara },
+                getString(R.string.pod_silencio).takeIf { ef.pularSilencio }).joinToString(" · ")
+        }
         Acao.DORMIR -> {
             val m = PodcastPlayerLogic.minutosParaDormir(OuvirServico.instancia?.dormirAte ?: 0L, SystemClock.elapsedRealtime())
             getString(R.string.pl_dormir) + " · " + (if (m > 0) getString(R.string.pl_dorme_em, m) else getString(R.string.pod_desligado))
@@ -421,7 +458,7 @@ class PodcastPlayerActivity : Activity() {
         for ((i, a) in Acao.entries.withIndex()) vistas[a]?.focado = andar == ANDAR_BOTOES && i == botao
         rotuloBotao.text = when (andar) {
             ANDAR_BOTOES -> rotuloDoBotao(Acao.entries[botao])
-            ANDAR_BARRA -> getString(R.string.pl_barra_dica)
+            ANDAR_BARRA -> getString(if (OuvirServico.instancia?.capitulos.isNullOrEmpty()) R.string.pl_barra_dica else R.string.cap_barra_dica)
             else -> ""
         }
         for (i in 0 until fila.childCount) {
@@ -456,6 +493,7 @@ class PodcastPlayerActivity : Activity() {
         if (e.keyCode !in teclasDaTela) return super.dispatchKeyEvent(e)
         if (e.action != KeyEvent.ACTION_DOWN) return if (e.keyCode == KeyEvent.KEYCODE_BACK) super.dispatchKeyEvent(e) else true
         val s = OuvirServico.instancia
+        if (palcoAberto && teclaNoPalco(e)) return true
         when (e.keyCode) {
             KeyEvent.KEYCODE_MEDIA_REWIND -> { s?.pular(-OuvirServico.VOLTAR_MS); atualizarTempo(); return true }
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { s?.pular(OuvirServico.AVANCAR_MS); atualizarTempo(); return true }
@@ -479,7 +517,8 @@ class PodcastPlayerActivity : Activity() {
                     sv.irPara(PodcastPlayerLogic.andar(sv.posicaoMs, d * vezes, sv.duracaoMs)); atualizarTempo()
                 }
                 KeyEvent.KEYCODE_DPAD_DOWN -> { andar = ANDAR_BOTOES; desenharFoco(true) }
-                else -> if (ok && e.repeatCount == 0) s?.alternar()   // segurar OK não liga/desliga sem parar
+                // Com capítulos, OK na barra abre a lista deles; sem, pausa/continua. Segurar OK não repete.
+                else -> if (ok && e.repeatCount == 0) { if (s?.capitulos.isNullOrEmpty()) s?.alternar() else escolherCapitulo() }
             }
             ANDAR_BOTOES -> when (e.keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> if (botao > 0) { botao--; desenharFoco(true) }
@@ -505,11 +544,18 @@ class PodcastPlayerActivity : Activity() {
             Acao.AVANCAR -> { s?.pular(OuvirServico.AVANCAR_MS); atualizarTempo() }
             Acao.ALTERNAR -> s?.alternar()
             Acao.VELOCIDADE -> {
-                val v = OuvirServico.velocidade(this)
+                val v = OuvirServico.efetivo(this, ep?.feed).velocidade
                 Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { PodcastPlayerLogic.rotuloVelocidade(it) },
                     listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); atualizar() }
             }
-            Acao.SILENCIO -> { s?.definirPularSilencio(!OuvirServico.pularSilencio(this)); atualizar() }
+            Acao.SOM -> MenuSom.abrir(this) { atualizar() }
+            Acao.TEXTO -> if (s != null && (s.texto.isNotEmpty() || s.textoGerando)) {
+                // Já tem texto mas a parte de agora ainda não foi gerada: continua gerando (do ponto em que está).
+                if (s.textoGerado && !s.textoGerando) s.gerarTexto()
+                abrirPalco()
+            } else if (s?.podeGerarTexto() == true && s.textoErro != "cota") { s.gerarTexto(); abrirPalco() }
+                else if (s?.textoErro == "cota") AvisoTv.rapido(this, getString(R.string.tx_titulo), getString(R.string.tx_cota_det), 6)
+                else AvisoTv.rapido(this, getString(R.string.tx_titulo), getString(if (s?.textoCarregando == true) R.string.tx_carregando else R.string.tx_nao_tem_det), 4)
             Acao.DORMIR -> {
                 val ops = PodcastPlayerLogic.DORMIR_MIN.map { if (it == 0) getString(R.string.pod_desligado).replaceFirstChar { c -> c.titlecase() } else getString(R.string.pl_dormir_min, it) }
                 val atual = PodcastPlayerLogic.minutosParaDormir(s?.dormirAte ?: 0L, SystemClock.elapsedRealtime())
@@ -517,6 +563,17 @@ class PodcastPlayerActivity : Activity() {
                     OuvirServico.instancia?.definirDormir(PodcastPlayerLogic.DORMIR_MIN[i] * 60_000L); atualizar()
                 }
             }
+        }
+    }
+
+    /** A lista dos capítulos, com o tempo de cada um à direita e o de agora marcado. */
+    private fun escolherCapitulo() {
+        val s = OuvirServico.instancia ?: return
+        val c = s.capitulos; if (c.isEmpty()) return
+        val i = Capitulos.atual(c, s.posicaoMs)
+        Estilo.lista(this, getString(R.string.cap_titulo), c.map { it.titulo }, if (i >= 0) listOf(i) else emptyList(),
+            valores = c.map { PodcastPlayerLogic.tempo(it.inicioMs) }) { j ->
+            OuvirServico.instancia?.irPara(c[j].inicioMs); atualizarTempo()
         }
     }
 
@@ -529,6 +586,146 @@ class PodcastPlayerActivity : Activity() {
         atualizar()
     }
 
+    // ---------------------------------------------------------------- texto da fala (21/11/2026)
+
+    /**
+     * O "Texto da fala": a tela inteira vira o que está sendo dito, em letra grande, como letra de música. A frase de
+     * agora em destaque, a anterior apagada em cima e as próximas embaixo. ◀ ▶ vão à frase anterior/seguinte, ▼ busca
+     * na fala, OK ou VOLTAR fecham. Só existe quando o feed traz a transcrição ([OuvirServico.texto]).
+     */
+    private var palco: FrameLayout? = null
+    private val palcoAberto get() = palco?.visibility == View.VISIBLE
+    private val linhasPalco = ArrayList<TextView>()
+    private var palcoVisto = -2
+    /** Resultado da busca na fala: os trechos achados e em qual deles se está (◀ ▶ andam neles). */
+    private var achados: List<Int> = emptyList()
+    private var noAchado = -1
+
+    private fun abrirPalco() {
+        val p = palco ?: FrameLayout(this).apply {
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xF5121528.toInt(), 0xFA0E1020.toInt()))
+            val col = LinearLayout(this@PodcastPlayerActivity).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_VERTICAL }
+            val topo = texto(15f, Estilo.TEXTO_2, forte = true).apply { letterSpacing = 0.16f; tag = "topo" }
+            col.addView(topo, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dpi(26) })
+            linhasPalco.clear()
+            // 0 = anterior, 1 = agora, 2 e 3 = próximas.
+            for (i in 0..3) {
+                val tv = texto(if (i == 1) 38f else 26f, if (i == 1) Estilo.TEXTO else HomeCruz.COR_SUB, forte = i == 1, linhas = if (i == 1) 3 else 2)
+                    .apply { alpha = if (i == 1) 1f else if (i == 0) 0.4f else 0.6f; setLineSpacing(dp(4f), 1f) }
+                linhasPalco += tv
+                col.addView(tv, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dpi(if (i == 1 || i == 2) 22 else 12) })
+            }
+            addView(col, FrameLayout.LayoutParams(dpi(960 - 2 * MARGEM - 60), -1).apply { marginStart = dpi(MARGEM) })
+            val pe = texto(FONTE_INFO, HomeCruz.COR_SUB).apply { tag = "pe" }
+            addView(pe, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { marginStart = dpi(MARGEM); bottomMargin = dpi(28) })
+            (window.decorView.findViewById<ViewGroup>(android.R.id.content)).addView(this, FrameLayout.LayoutParams(-1, -1))
+            palco = this
+        }
+        achados = emptyList(); noAchado = -1; palcoVisto = -2
+        p.visibility = View.VISIBLE; p.alpha = 0f; p.animate().alpha(1f).setDuration(220).start()
+        desenharPalco()
+        ui.removeCallbacks(relogio); ui.post(relogio)
+    }
+
+    private fun fecharPalco() {
+        val p = palco ?: return
+        p.animate().alpha(0f).setDuration(160).withEndAction { p.visibility = View.GONE }.start()
+        p.visibility = View.GONE
+        desenharFoco(true)
+    }
+
+    private fun desenharPalco() {
+        val p = palco ?: return
+        val s = OuvirServico.instancia ?: return
+        val l = s.texto
+        val pos = s.posicaoMs
+        if (l.isEmpty() && !s.textoGerando) { fecharPalco(); return }
+        // Gerando na nuvem e a parte de agora ainda não chegou (ou o texto todo): "Gerando o texto…" no lugar da frase.
+        val longe = l.isEmpty() || Transcricao.atual(l, pos).let { k -> k < 0 || pos - l[k].fimMs > 15_000 }
+        if (longe && s.textoGerando) {
+            if (palcoVisto != -3) {
+                palcoVisto = -3
+                linhasPalco.forEachIndexed { k, tv -> tv.text = if (k == 1) getString(R.string.tx_gerando_det) else "" }
+                p.findViewWithTag<TextView>("topo")?.text = (getString(R.string.tx_titulo) + " · " + (ep?.podcast ?: "")).uppercase()
+            }
+            return
+        }
+        if (l.isEmpty()) { fecharPalco(); return }
+        val i = Transcricao.atual(l, pos)
+        p.findViewWithTag<TextView>("topo")?.text = (getString(R.string.tx_titulo) + " · " + (ep?.podcast ?: "")).uppercase()
+        p.findViewWithTag<TextView>("pe")?.text = if (achados.isNotEmpty()) getString(R.string.tx_pe_busca, noAchado + 1, achados.size) else getString(R.string.tx_pe)
+        if (i == palcoVisto) return
+        palcoVisto = i
+        fun frase(k: Int): String = l.getOrNull(k)?.let { x -> if (x.quem.isNotEmpty() && (k == 0 || l[k - 1].quem != x.quem)) x.quem + ": " + x.texto else x.texto }.orEmpty()
+        linhasPalco.getOrNull(0)?.text = frase(i - 1)
+        linhasPalco.getOrNull(1)?.let { tv -> tv.text = if (i < 0) "…" else frase(i); tv.translationY = dp(10f); tv.animate().translationY(0f).setDuration(180).start() }
+        linhasPalco.getOrNull(2)?.text = frase(i + 1)
+        linhasPalco.getOrNull(3)?.text = frase(i + 2)
+        val raiz = window.decorView.findFocus()
+        raiz?.contentDescription = linhasPalco.getOrNull(1)?.text
+    }
+
+    /** Teclas com o texto da fala aberto. true = tratada. */
+    private fun teclaNoPalco(e: KeyEvent): Boolean {
+        val s = OuvirServico.instancia ?: return false
+        val l = s.texto
+        when (e.keyCode) {
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                if (e.repeatCount == 0) fecharPalco(); return true
+            }
+            KeyEvent.KEYCODE_DPAD_UP -> { if (e.repeatCount == 0) mostrarResumo(); return true }
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                val frente = e.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
+                val alvo = if (achados.isNotEmpty()) {
+                    noAchado = (noAchado + if (frente) 1 else -1).coerceIn(0, achados.size - 1); achados[noAchado]
+                } else (Transcricao.atual(l, s.posicaoMs) + if (frente) 1 else -1).coerceIn(0, maxOf(0, l.size - 1))
+                l.getOrNull(alvo)?.let { s.irPara(it.inicioMs) }
+                palcoVisto = -2; desenharPalco(); atualizarTempo(); return true
+            }
+            KeyEvent.KEYCODE_DPAD_DOWN -> { if (e.repeatCount == 0) buscarNaFala(); return true }
+        }
+        return false
+    }
+
+    /**
+     * ▲ no texto da fala: o resumo da Sofy (3 a 5 frases) do que já há de texto, e de quebra as propagandas, que o player
+     * passa a pular. Uma chamada ao servidor por episódio, só quando alguém pede (cota grátis).
+     */
+    private fun mostrarResumo() {
+        val s = OuvirServico.instancia ?: return
+        if (s.texto.isEmpty()) return
+        if (s.resumo.isEmpty()) AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_resumindo), 4)
+        s.pedirResumo { erro ->
+            if (isDestroyed) return@pedirResumo
+            val r = OuvirServico.instancia?.resumo.orEmpty()
+            when {
+                r.isNotEmpty() -> CaixaTv(this).setTitle(getString(R.string.tx_resumo_de, ep?.ep?.titulo.orEmpty()))
+                    .setView(texto(24f, Estilo.TEXTO, linhas = 12).apply { text = r; setPaddingRelative(dpi(24), dpi(8), dpi(24), dpi(8)); setLineSpacing(dp(4f), 1f) })
+                    .setPositiveButton(android.R.string.ok, null).create().show()
+                erro == "cota" -> AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_cota_det), 6)
+                else -> AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_resumo_falhou), 5)
+            }
+        }
+    }
+
+    /** "Onde falaram de…?": acha as frases com todas as palavras e vai à primeira; ◀ ▶ andam entre as achadas. */
+    private fun buscarNaFala() {
+        val campo = android.widget.EditText(this).apply { inputType = android.text.InputType.TYPE_CLASS_TEXT; isSingleLine = true; textSize = 20f }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(dpi(20), dpi(8), dpi(20), 0); addView(campo) }
+        val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.tx_buscar)).setView(moldura)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val s = OuvirServico.instancia ?: return@setPositiveButton
+                achados = Transcricao.buscar(s.texto, campo.text.toString())
+                if (achados.isEmpty()) { noAchado = -1; AvisoTv.rapido(this, getString(R.string.tx_buscar), getString(R.string.tx_nada), 3) }
+                else { noAchado = 0; s.irPara(s.texto[achados[0]].inicioMs) }
+                palcoVisto = -2; desenharPalco()
+            }
+            .setNegativeButton(android.R.string.cancel, null).create()
+        CampoTv.enterConfirma(campo, d)
+        d.setOnShowListener { campo.requestFocus() }
+        d.show()
+    }
+
     // ---------------------------------------------------------------- peças
 
     /** A barra de tempo: trilho largo, parte ouvida na cor da marca e, com foco, um pino e o trilho mais alto. */
@@ -537,6 +734,10 @@ class PodcastPlayerActivity : Activity() {
             set(v) { if (field != v) { field = v; invalidate() } }
         var focada = false
             set(v) { if (field != v) { field = v; invalidate() } }
+        /** Onde começa cada capítulo (0..1): um corte fino no trilho. */
+        var marcas = FloatArray(0)
+            set(v) { if (!field.contentEquals(v)) { field = v; invalidate() } }
+        private val corte = Paint().apply { color = 0xFF121528.toInt() }
         private val trilho = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x40FFFFFF }
         private val cheio = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.ACENTO }
         private val pino = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.TEXTO }
@@ -547,6 +748,7 @@ class PodcastPlayerActivity : Activity() {
             r.set(0f, y - a / 2, width.toFloat(), y + a / 2); c.drawRoundRect(r, a / 2, a / 2, trilho)
             val x = width * valor
             if (valor > 0f) { r.right = maxOf(a, x); c.drawRoundRect(r, a / 2, a / 2, cheio) }
+            for (m in marcas) if (m > 0.005f && m < 0.995f) { val mx = width * m; c.drawRect(mx - dp(1.5f), y - a, mx + dp(1.5f), y + a, corte) }
             if (focada) c.drawCircle(x.coerceIn(dp(10f), width - dp(10f)), y, dp(10f), pino)
         }
     }

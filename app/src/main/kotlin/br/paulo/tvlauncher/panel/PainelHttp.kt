@@ -262,10 +262,12 @@ object PainelHttp {
      * connect-src também aceita o https da porta 8444 em qualquer nome (16/11/2026, cadeado.js): o painel aberto em http testa se o aparelho
      * já confia no certificado da TV pedindo um ícone ao https dela, e só então leva para lá. Script de fora continua
      * proibido (script-src 'self'), então isto não abre caminho para mandar dados a outro lugar.
+     * media-src aceita http(s) de fora desde 21/11/2026 ("Ouvir no celular", OuvirNoCelular): o celular toca a rádio ou o
+     * episódio direto da fonte, com a busca de posição (Range) do próprio servidor do podcast. Mídia não executa código.
      */
     val CABECALHOS_SEGURANCA = linkedMapOf(
         "Content-Security-Policy" to "default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; " +
-            "connect-src 'self' https://*:${ChecagensPainel.PORTA_HTTPS_CASA}; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+            "connect-src 'self' https://*:${ChecagensPainel.PORTA_HTTPS_CASA}; media-src 'self' blob: https: http:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
         "X-Content-Type-Options" to "nosniff",
         "X-Frame-Options" to "DENY",
         "Referrer-Policy" to "no-referrer",

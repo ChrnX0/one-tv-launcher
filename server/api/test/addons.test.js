@@ -19,7 +19,7 @@ test('lista curada: https, manifest.json, ids únicos, nada de torrent', () => {
 });
 
 test('a lista do servidor é a mesma embutida no app (RecommendedAddons.BUILT_IN)', () => {
-  const kt = readFileSync(new URL('../../../app/src/main/kotlin/br/paulo/tvlauncher/RecommendedAddons.kt', import.meta.url), 'utf8');
+  const kt = readFileSync(new URL('../../../app/src/main/kotlin/br/paulo/tvlauncher/player/RecommendedAddons.kt', import.meta.url), 'utf8');
   const noApp = [...kt.matchAll(/Entry\("([^"]+)", "([^"]+)", "([^"]+)", "([^"]+)"\)/g)].map((m) => ({ id: m[1], url: m[2], kind: m[3], group: m[4] }));
   assert.deepEqual(noApp, RECOMMENDED.map(({ id, url, kind, group }) => ({ id, url, kind, group })));
 });

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">Assuntos</string>
+    <string name="pod_ass_seus">Você segue: %d</string>
+    <string name="pod_ass_em_alta">Em alta neste assunto</string>
+    <string name="pod_parecidos">Parecidos: %s</string>
+    <string name="pod_ass_noticias">Notícias</string>
+    <string name="pod_ass_humor">Humor</string>
+    <string name="pod_ass_ciencia">Ciência</string>
+    <string name="pod_ass_tecnologia">Tecnologia</string>
+    <string name="pod_ass_historia">História</string>
+    <string name="pod_ass_negocios">Negócios</string>
+    <string name="pod_ass_saude">Saúde</string>
+    <string name="pod_ass_esportes">Esportes</string>
+    <string name="pod_ass_cultura">Cultura</string>
+    <string name="pod_ass_crimes">Crimes reais</string>
+    <string name="pod_ass_tv_filmes">TV e cinema</string>
+    <string name="pod_ass_musica">Música</string>
+    <string name="pod_ass_educacao">Educação</string>
+    <string name="pod_ass_infantil">Infantil</string>
+    <string name="pod_ass_fe">Fé</string>
+    <string name="pod_ass_lazer">Lazer</string>
+</resources>

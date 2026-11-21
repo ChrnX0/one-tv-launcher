@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">Sekarang dan saran</string>
+    <string name="cl_pg_horas">Jam dan hari berikutnya</string>
+    <string name="cl_pg_detalhes">Detail, udara, matahari, dan bulan</string>
+    <string name="cl_hora">%1$d.00</string>
+    <string name="cl_f_parar">Sedang hujan. Diperkirakan berhenti sekitar %1$s.</string>
+    <string name="cl_f_segue">Sedang hujan, dan diperkirakan berlanjut beberapa jam ke depan.</string>
+    <string name="cl_f_chuva">Kemungkinan hujan sekitar %1$s (%2$d%%).</string>
+    <string name="cl_f_calor">Hari panas: hingga %1$d° sekitar %2$s. Minum air.</string>
+    <string name="cl_f_frio">Dingin datang: hingga %1$d°. Pakai baju hangat.</string>
+    <string name="cl_f_sol">Matahari terik %1$s sampai %2$s. Pakai tabir surya.</string>
+    <string name="cl_f_amanha">Tidak hujan hari ini. Besok kemungkinan hujan (%1$d%%).</string>
+    <string name="cl_f_calmo">Tidak ada hujan hari ini. Tertinggi %1$d°.</string>
+    <string name="cl_d_guarda">Payung</string>
+    <string name="cl_d_varal">Jemuran di luar</string>
+    <string name="cl_d_sair">Waktu baik keluar</string>
+    <string name="cl_v_agora">Sekarang</string>
+    <string name="cl_v_sim_as">Ya, pukul %1$s</string>
+    <string name="cl_v_talvez">Mungkin</string>
+    <string name="cl_v_nao">Tidak perlu</string>
+    <string name="cl_v_ate">Sampai %1$s</string>
+    <string name="cl_v_seca">Kering hari ini</string>
+    <string name="cl_v_melhor_nao">Sebaiknya jangan</string>
+    <string name="cl_v_amanha_sim">Besok, ya</string>
+    <string name="cl_v_amanha_nao">Besok, tidak</string>
+    <string name="cl_v_as">Pukul %1$s</string>
+    <string name="cl_v_amanha_as">Besok %1$s</string>
+    <string name="cl_v_hoje_nao">Tidak hari ini</string>
+</resources>

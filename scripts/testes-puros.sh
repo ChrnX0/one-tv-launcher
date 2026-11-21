@@ -25,6 +25,7 @@ CP="$CACHE/junit-4.13.2.jar:$CACHE/hamcrest-core-1.3.jar:$CACHE/json-20240303.ja
 declare -A FONTES=(
   [FimDoVideoTest]="FimDoVideo"
   [DocumentIdsTest]="DocumentIds"
+  [DicasClimaTest]="DicasClima"
   [AppStorageTest]="AppStorageRules MenuApp AppIdentity"
   [MenuAppTest]="MenuApp AppIdentity"
   [BarraIlhaTest]="BarraIlha CruzLogica"

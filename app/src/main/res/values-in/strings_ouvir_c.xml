@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Suara</string>
+    <string name="som_titulo_pod">Suara · %1$s</string>
+    <string name="som_voz_clara">Suara jernih</string>
+    <string name="som_so_este">Hanya untuk podcast ini</string>
+    <string name="som_abertura">Lewati pembuka</string>
+    <string name="som_fim">Lewati penutup</string>
+    <string name="som_segundos">%1$d dtk</string>
+    <string name="som_rodape_proprio">Pengaturan ini hanya untuk %1$s.</string>
+    <string name="som_rodape_geral">Kecepatan, jeda, dan suara jernih berlaku untuk semua podcast. Aktifkan \"Hanya untuk podcast ini\" agar %1$s punya pengaturan sendiri.</string>
+    <string name="som_det">Kecepatan, suara jernih, timer</string>
+    <string name="som_det_radio">Suara jernih dan timer tidur</string>
+    <string name="cap_titulo">Bab</string>
+    <string name="cap_de">Bab %1$d dari %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ geser 10 dtk · OK: bab</string>
+    <string name="tx_titulo">Teks ucapan</string>
+    <string name="tx_carregando">memuat</string>
+    <string name="tx_nao_tem">tidak ada di episode ini</string>
+    <string name="tx_nao_tem_det">Podcast ini tidak menerbitkan teks episode ini.</string>
+    <string name="tx_pe_busca">Hasil %1$d dari %2$d · ◀ ▶ sebelumnya / berikutnya · ▼ cari lagi · OK: tutup</string>
+    <string name="tx_buscar">Cari dalam ucapan</string>
+    <string name="tx_nada">Tidak ada yang mengatakan itu di episode ini.</string>
+    <string name="ra_ja_tocou">Sudah diputar</string>
+    <string name="ra_parecidas">Radio serupa</string>
+    <string name="som_radio">Radio terakhir yang didengar</string>
+    <string name="som_podcast">Episode podcast terbaru</string>
+    <string name="jor_titulo">Berita saya</string>
+    <string name="jor_ouvir">Dengarkan berita</string>
+    <string name="jor_min">%d mnt berturut-turut</string>
+    <string name="tx_pe">◀ ▶ kalimat sebelumnya / berikutnya · ▲ ringkasan · ▼ cari · OK: tutup</string>
+    <string name="tx_gerando">membuat</string>
+    <string name="tx_gerando_det">Membuat teks… bagian pertama butuh sekitar 1 menit.</string>
+    <string name="tx_gerar">OK membuatnya (gratis)</string>
+    <string name="tx_cota">kembali besok</string>
+    <string name="tx_cota_det">Kuota teks gratis hari ini habis. Kembali besok.</string>
+    <string name="tx_pulei">Iklan dilewati</string>
+    <string name="tx_pulei_det">%d dtk · ◀ kembali</string>
+    <string name="tx_resumo">Ringkasan Sofy</string>
+    <string name="tx_resumo_de">Ringkasan · %s</string>
+    <string name="tx_resumindo">Membaca yang dikatakan… sebentar.</string>
+    <string name="tx_resumo_falhou">Ringkasan belum datang. Coba lagi sebentar lagi.</string>
+    <string name="ra_globo">Jelajahi globe</string>
+    <string name="ra_globo_det">Putar dunia dan temukan radio dari mana saja</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ putar · OK: putar radio · Kembali: tutup</string>
+    <string name="ra_globo_mar">Laut lepas… putar sedikit lagi</string>
+    <string name="ra_voltar">Mundur 30 dtk</string>
+    <string name="ra_voltar_det">Ada yang terlewat? Dengar lagi (⏪ di remote)</string>
+    <string name="ra_ao_vivo">Kembali ke siaran langsung</string>
+    <string name="ra_atras">%s di belakang siaran langsung</string>
+</resources>

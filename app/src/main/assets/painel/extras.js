@@ -637,6 +637,23 @@ for (const b of document.querySelectorAll('[data-tocando]')) {
   });
 }
 
+// Ouvir no celular (21/11/2026): toca no celular a rádio ou o episódio que a TV tocou por último, do mesmo ponto.
+$('btnOuvirCelular').addEventListener('click', async () => {
+  const audio = $('audioCelular');
+  try {
+    const o = await chamar('GET', '/api/extras/ouvir');
+    if (o.nada || !o.url) { $('ouvirCelular').textContent = 'Nada tocou na TV ainda.'; return; }
+    $('ouvirCelularTipo').textContent = o.tipo === 'radio' ? 'Rádio' : 'Podcast';
+    $('ouvirCelularTitulo').textContent = o.nome + (o.de ? ' · ' + o.de : '');
+    $('ouvirCelularNome').hidden = false;
+    audio.hidden = false;
+    audio.src = o.url;
+    // Podcast: pula para onde a TV parou assim que o celular souber a duração.
+    if (o.tipo === 'podcast' && o.ms > 0) audio.addEventListener('loadedmetadata', () => { audio.currentTime = o.ms / 1000; }, { once: true });
+    await audio.play();
+  } catch (e) { $('ouvirCelular').textContent = textoErro(e); }
+});
+
 $('btnRecadoLink').addEventListener('click', async () => {
   try {
     const r = await comPin('Recado por link', 'Gerar um link novo (o anterior para de funcionar)', 'Gerar',
@@ -792,3 +809,48 @@ $('btnCasaEsquecer').addEventListener('click', async () => {
 document.addEventListener('aba', (ev) => {
   if (ev.detail === 'extras') carregarCasa().catch((e) => mostrar($('statusCasa'), textoErro(e)));
 });
+
+// ---------- ícones da cruz (21/11/2026, PanelIcons.kt) ----------
+
+// Nome de cada ícone na tela (o texto em português é a chave da tradução).
+const NOMES_ICONES = {
+  CONTINUAR: 'Continuar', ASSISTIR: 'Assistir', TV: 'TV', OUVIR: 'Ouvir', JOGAR: 'Jogar', APLICATIVOS: 'Aplicativos',
+  SERIES: 'Séries', FILMES: 'Filmes', REDE: 'Na rede', ADDONS: 'Add-ons', RADIO: 'Rádio', PODCASTS: 'Podcasts',
+  JOGOS: 'Jogos', SOFA: 'Sofá', TODOS_APPS: 'Todos os apps', PLUGIN: 'Plugin', DORMIR: 'Dormir', CENTRAL: 'Central de jogos',
+};
+
+document.addEventListener('aba', (ev) => { if (ev.detail === 'telainicial') carregarIcones(); });
+
+async function carregarIcones() {
+  try { desenharIcones(await chamar('GET', '/api/extras/icons')); } catch (e) { mostrar($('statusIcones'), textoErro(e)); }
+}
+
+async function mudarIcones(corpo) {
+  try { desenharIcones(await chamar('POST', '/api/extras/icons', corpo)); mostrar($('statusIcones'), 'Salvo. A tela inicial muda quando voltar para ela.'); }
+  catch (e) { mostrar($('statusIcones'), textoErro(e)); }
+}
+
+function desenharIcones(r) {
+  const estilos = new Map(r.styles.map((s) => [s.id, s]));
+  const conjunto = $('cfgConjuntoIcones');
+  conjunto.replaceChildren(...r.styles.map((s) => { const o = document.createElement('option'); o.value = s.id; o.textContent = s.name; return o; }));
+  conjunto.value = r.set;
+  conjunto.onchange = () => mudarIcones({ set: conjunto.value });
+  const lista = $('listaIcones');
+  lista.replaceChildren();
+  for (const t of r.types) {
+    const vale = estilos.get(t.style || r.set);
+    const item = document.createElement('div'); item.className = 'icone-item' + (t.style ? ' trocado' : '');
+    const previa = document.createElement('div'); previa.className = 'previa';
+    if (vale && vale.image) {
+      const img = document.createElement('img'); img.alt = ''; img.loading = 'lazy';
+      img.src = `/api/extras/icons/image?style=${encodeURIComponent(vale.id)}&type=${encodeURIComponent(t.id)}`;
+      previa.append(img);
+    } else { const s = document.createElement('span'); s.textContent = vale ? vale.name : ''; previa.append(s); }
+    const nome = document.createElement('strong'); nome.textContent = NOMES_ICONES[t.id] || t.id;
+    const seguir = 'Seguir o conjunto';
+    item.append(previa, nome, menu(NOMES_ICONES[t.id] || t.id, [['', seguir], ...r.styles.map((s) => [s.id, s.name])], t.style,
+      (v) => mudarIcones({ type: t.id, style: v })));
+    lista.append(item);
+  }
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filtro de assunto dos podcasts (21/11/2026): PodcastsActivity + listen/PodcastAssuntos. -->
+<resources>
+    <string name="pod_assuntos">विषय</string>
+    <string name="pod_ass_seus">आप फ़ॉलो करते हैं: %d</string>
+    <string name="pod_ass_em_alta">इस विषय में ट्रेंडिंग</string>
+    <string name="pod_parecidos">मिलते-जुलते: %s</string>
+    <string name="pod_ass_noticias">समाचार</string>
+    <string name="pod_ass_humor">कॉमेडी</string>
+    <string name="pod_ass_ciencia">विज्ञान</string>
+    <string name="pod_ass_tecnologia">तकनीक</string>
+    <string name="pod_ass_historia">इतिहास</string>
+    <string name="pod_ass_negocios">बिज़नेस</string>
+    <string name="pod_ass_saude">स्वास्थ्य</string>
+    <string name="pod_ass_esportes">खेल</string>
+    <string name="pod_ass_cultura">संस्कृति</string>
+    <string name="pod_ass_crimes">सच्चे अपराध</string>
+    <string name="pod_ass_tv_filmes">टीवी और फ़िल्म</string>
+    <string name="pod_ass_musica">संगीत</string>
+    <string name="pod_ass_educacao">शिक्षा</string>
+    <string name="pod_ass_infantil">बच्चे और परिवार</string>
+    <string name="pod_ass_fe">आस्था</string>
+    <string name="pod_ass_lazer">फ़ुर्सत</string>
+</resources>

@@ -7,8 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
@@ -20,7 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
+import android.view.KeyEvent
 import android.widget.TextView
 import br.paulo.tvlauncher.alarm.Agenda
 import br.paulo.tvlauncher.alarm.FaixaDias
@@ -28,7 +26,10 @@ import br.paulo.tvlauncher.home.EstadoCeu
 import br.paulo.tvlauncher.home.FundoVivo
 import br.paulo.tvlauncher.home.Grade
 import br.paulo.tvlauncher.home.Moldura
+import br.paulo.tvlauncher.home.MovimentoAdaptativo
 import br.paulo.tvlauncher.home.criarFundo
+import br.paulo.tvlauncher.observer.SofyDrawable
+import br.paulo.tvlauncher.observer.SofyPolicy
 import br.paulo.tvlauncher.player.item
 import br.paulo.tvlauncher.settings.Extras
 import br.paulo.tvlauncher.settings.Fontes
@@ -51,8 +52,10 @@ import org.json.JSONObject
 /**
  * A previsão do tempo em tela cheia (abre com OK no bloco do clima, no topo da tela inicial). Voltar fecha.
  *
- * Uma coluna que rola com as setas: cada cartão é um "ponto de parada" do foco (cima/baixo), e o cartão focado sobe para o
- * topo da tela. Na faixa de horas, esquerda/direita andam hora a hora. Fonte: Open-Meteo (previsão) e a API de qualidade do ar
+ * Três telas em carrossel (21/11/2026, pedido do Paulo): 1) agora, a frase do dia e três dicas (guarda-chuva, varal, hora
+ * de sair; [DicasClima]); 2) hora a hora e os próximos dias; 3) detalhes, ar, sol e lua. Baixo passa para a próxima e da
+ * última volta à primeira. Antes era uma coluna de cartões que rolava, como app de celular, ruim de ler do sofá.
+ * Na faixa de horas, esquerda/direita andam hora a hora. Fonte: Open-Meteo (previsão) e a API de qualidade do ar
  * da própria Open-Meteo, no ponto da Localizacao. Tudo é desenhado em código (Views), sem XML.
  */
 class PrevisaoActivity : Activity() {
@@ -63,6 +66,9 @@ class PrevisaoActivity : Activity() {
         const val EXTRA_UMIDADE = "umidade"      // a umidade medida que o topo usa (-1 = sem medida)
         const val EXTRA_FALAR = "falar"          // ler a previsão em voz alta ao abrir
         const val EXTRA_BOM_DIA = "bom_dia"      // falar "Bom dia", a hora e a agenda de hoje junto (despertador)
+
+        /** Teste de telas (ClimaTelaTest): uma previsão fixa no formato da Open-Meteo, para desenhar as 3 telas sem rede. */
+        @Volatile internal var dadosDeTeste: JSONObject? = null
     }
 
     // Voz: o TextToSpeech do Android (motor do Google, já instalado na TV). Liga só quando a tela foi aberta para falar
@@ -80,38 +86,42 @@ class PrevisaoActivity : Activity() {
     private val fonteLeve = Fontes.nunito(200)
 
     private lateinit var raiz: FrameLayout
-    private lateinit var rolagem: ScrollView
-    private lateinit var coluna: LinearLayout
+    private lateinit var palco: FrameLayout          // onde as telas do carrossel ficam, uma por cima da outra
+    private lateinit var seta: TextView              // "▼ Próximas horas e dias": o que vem embaixo
+    private lateinit var pontos: LinearLayout        // os pontinhos de página, na direita
+    private val paginas = mutableListOf<LinearLayout>()
+    private var entraDescendo: List<View> = emptyList()
+    private var entraSubindo: List<View> = emptyList()
+    private var atual = 0
+    private var animando = false
+    /** A tela do carrossel que está à mostra (0 = agora e dicas), para o teste de telas. */
+    internal val paginaAtual: Int get() = atual
     private lateinit var fundoVivo: View   // o mesmo fundo do launcher (FundoEscuro/FundoGaleria, ver Fundos.kt), para as duas telas ficarem coerentes
 
-    /** ScrollView que NÃO rola sozinho para o filho focado: quem rola é [focarCartao], de forma previsível. */
-    private class Rolagem(ctx: Context) : ScrollView(ctx) {
-        override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int = 0
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
-        coluna = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            clipChildren = false
-            setPaddingRelative(dp(Grade.MARGEM), dp(28), dp(Grade.MARGEM), dp(60))
-        }
-        rolagem = Rolagem(this).apply {
-            isVerticalScrollBarEnabled = false
-            clipChildren = false
-            clipToPadding = false
-            addView(coluna, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-        }
+        // Três telas em carrossel vertical (21/11/2026, pedido do Paulo): baixo avança, da última volta à primeira; cima
+        // faz o caminho de volta. Cada tela cabe inteira na TV (nada rola), e o relógio, a seta de baixo e os pontinhos
+        // de página ficam fixos por cima delas.
+        palco = FrameLayout(this).apply { clipChildren = false }
         // Mesmo fundo do launcher (criarFundo(), ver Fundos.kt): acompanha o tema configurado (Escuro/Galeria) em
         // vez de uma cor fixa só desta tela — pedido do dono para as duas ficarem coerentes.
         fundoVivo = criarFundo(this, Tema.atual(this), decoracao = false) { bloco -> Fundo.rodar("previsao-fundo") { bloco() } }
+        seta = Estilo.texto(this, Estilo.Papel.CORPO).apply { setTextColor(textoSuave); gravity = Gravity.CENTER; visibility = View.GONE }
+        pontos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         raiz = FrameLayout(this).apply {
             addView(fundoVivo, FrameLayout.LayoutParams(-1, -1))
-            addView(rolagem, FrameLayout.LayoutParams(-1, -1))
+            addView(palco, FrameLayout.LayoutParams(-1, -1))
+            // Hora e data no canto, iguais às da HOME e das outras telas (Moldura). 48 dp de altura = a mesma linha da HOME.
+            addView(Moldura.relogio(this@PrevisaoActivity), FrameLayout.LayoutParams(-2, dp(48), Gravity.TOP or Gravity.END).apply {
+                topMargin = dp(28); marginEnd = dp(Grade.MARGEM) })
+            addView(seta, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { bottomMargin = dp(14) })
+            addView(pontos, FrameLayout.LayoutParams(dp(24), -2, Gravity.END or Gravity.CENTER_VERTICAL).apply { marginEnd = dp(12) })
         }
         setContentView(raiz)
-        coluna.addView(texto(18f, textoSuave).apply { text = getString(R.string.pv_carregando) })
+        palco.addView(texto(18f, textoSuave).apply { text = getString(R.string.pv_carregando); setPaddingRelative(dp(Grade.MARGEM), dp(40), 0, 0) })
 
         // Aberta pelo atalho "Boletim do Tempo" (action MAIN) ou com EXTRA_FALAR: prepara a voz enquanto busca os dados.
         // "Bom dia": o despertador (Parar) ou o atalho de voz "Bom dia" (alias .BomDia, ver o manifesto).
@@ -201,6 +211,7 @@ class PrevisaoActivity : Activity() {
     )
 
     private fun carregar(): Dados? {
+        dadosDeTeste?.let { return dados(it, Localizacao.Ponto(-23.55, -46.63, "teste", "Bairro de exemplo"), 42) }
         val ponto = Localizacao.atual(this) { Http.getText(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
         val openMeteo = DataSources.weather(this) == DataSources.Weather.OPEN_METEO
@@ -211,13 +222,18 @@ class PrevisaoActivity : Activity() {
                 "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,precipitation_sum" +
                 "&timezone=auto&forecast_days=${FaixaDias.DIAS}$unidade"
         ) ?: return null)
-        val c = j.getJSONObject("current"); val h = j.getJSONObject("hourly"); val d = j.getJSONObject("daily")
-        fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
         // Qualidade do ar: Open-Meteo (Ultra) ou WeatherAPI (Pro, já no JSON convertido); no MET (Básico) o cartão some.
         val aqi = if (!openMeteo) j.optJSONObject("air_quality")?.optInt("us_aqi", -1)?.takeIf { it >= 0 } else try {
             JSONObject(Http.getText("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: "{}").optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { null }
+        return dados(j, ponto, aqi)
+    }
+
+    /** O JSON no formato da Open-Meteo (o MET e a WeatherAPI já chegam convertidos nele) vira [Dados]. */
+    private fun dados(j: JSONObject, ponto: Localizacao.Ponto, aqi: Int?): Dados {
+        val c = j.getJSONObject("current"); val h = j.getJSONObject("hourly"); val d = j.getJSONObject("daily")
+        fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
         return Dados(
             ponto, c.getString("time"),
             c.getDouble("temperature_2m"), c.getDouble("apparent_temperature"), c.getInt("relative_humidity_2m"), c.getInt("weather_code"),
@@ -241,12 +257,12 @@ class PrevisaoActivity : Activity() {
     // ---------------------------------------------------------------- tela
 
     private fun montar(d: Dados?, tempTopo: Int?, chovendo: Boolean) {
-        coluna.removeAllViews()
+        palco.removeAllViews(); paginas.clear()
         if (d == null) {
             // Erro com saída (crítica de design 19/11/2026) e com o mascote no meio da tela (estudo global 20/11, ideia 6).
             val tentar = Estilo.botao(this, getString(R.string.tentar_de_novo)).apply { setOnClickListener { recreate() } }
-            coluna.addView(Estilo.estadoVazio(this, null, getString(R.string.pv_sem_titulo), getString(R.string.pv_sem), tentar),
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            palco.addView(Estilo.estadoVazio(this, null, getString(R.string.pv_sem_titulo), getString(R.string.pv_sem), tentar),
+                FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_VERTICAL))
             tentar.requestFocus()
             // Sem rede o "Bom dia" ficava mudo: a saudação e a agenda não dependem da previsão, então fala o que tem.
             if (voz != null) falar(FalaBoletim.frase(bomDia, saudacao(), null, agendaHoje, getString(R.string.pv_sem)))
@@ -259,88 +275,112 @@ class PrevisaoActivity : Activity() {
 
         (fundoVivo as? FundoVivo)?.atualizar(EstadoCeu(System.currentTimeMillis(), d.ponto.lat, d.ponto.lon, d.codigo, chovendo))
 
-        // ---- cabeçalho
         val maxHoje = max(Math.round(d.dMax[0]).toInt(), tempAgora)
         val minHoje = min(Math.round(d.dMin[0]).toInt(), tempAgora)
         // O modelo erra a temperatura de agora (hoje: modelo 25°, aeroporto 20°). Corrige a sensação pela mesma diferença,
         // para "20°, sensação 28° mais quente" não aparecer.
         val sensacao = Math.round(d.sensacao + (tempAgora - d.temp)).toInt()
         val iconeAgora = IconesClima.chave(d.codigo, d.eDia, chovendo)
-        val cabecalho = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-        cabecalho.addView(IconesClima.imagem(this, iconeAgora), LinearLayout.LayoutParams(dp(132), dp(132)))
-        val txt = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(18), 0, 0, 0) }
-        txt.addView(texto(84f, Estilo.TEXTO, fonteLeve).apply { text = "$tempAgora°"; includeFontPadding = false })
-        txt.addView(texto(24f, Estilo.TEXTO, fonteMedia).apply { text = IconesClima.texto(d.codigo, chovendo) })
-        txt.addView(texto(16f, textoSuave).apply {
-            text = getString(R.string.pv_max_min, maxHoje, minHoje, sensacao)
-            setPaddingRelative(0, dp(4), 0, 0)
-        })
-        // O lugar escolhido no painel (LocalClima.kt), para não haver dúvida de onde é a previsão.
-        d.ponto.nome?.let { nome -> txt.addView(texto(16f, textoSuave).apply { text = nome; setPaddingRelative(0, dp(4), 0, 0) }) }
-        cabecalho.addView(txt, LinearLayout.LayoutParams(0, -2, 1f))
-        // Hora e data no canto, iguais às da HOME e das outras telas (Moldura). Ficam DENTRO do cabeçalho: a tela inteira
-        // rola, e um relógio fixo por cima ficaria em cima dos cartões. 48 dp de altura = a mesma linha da HOME.
-        cabecalho.addView(Moldura.relogio(this), LinearLayout.LayoutParams(-2, dp(48)).apply { gravity = Gravity.TOP })
-        coluna.addView(cabecalho)
+        val fim = min(d.hTempo.size, i0 + 24)
 
-        // ---- hora a hora
+        // ================================================================ tela 1: agora, a frase do dia e as dicas
+        val hojeData = d.agoraTexto.substring(0, 10)
+        val entrada = DicasClima.Entrada(chovendo,
+            (i0 until fim).map { i -> DicasClima.Hora(d.hTempo[i].substring(11, 13).toInt(), if (i == i0) tempAgora.toDouble() else d.hTemp[i],
+                d.hChuva[i], d.hUv.getOrElse(i) { 0.0 }, if (i == i0) d.eDia else eDiaNaHora(i), d.hTempo[i].startsWith(hojeData)) },
+            maxHoje, d.dChuva.getOrNull(1))
+        val frase = DicasClima.frase(entrada)
+        val p1 = pagina(28)
+        // O lugar escolhido no painel (LocalClima.kt), para não haver dúvida de onde é a previsão. Na linha do relógio.
+        p1.addView(Estilo.texto(this, Estilo.Papel.CORPO, d.ponto.nome ?: "").apply {
+            setTextColor(textoSuave); gravity = Gravity.CENTER_VERTICAL; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
+            maxWidth = dp(480)   // o relógio ocupa o canto direito desta linha
+        }, LinearLayout.LayoutParams(-2, dp(48)))
+        val hero = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        hero.addView(IconesClima.imagem(this, iconeAgora), LinearLayout.LayoutParams(dp(132), dp(132)))
+        hero.addView(texto(104f, Estilo.TEXTO, fonteLeve).apply { text = "$tempAgora°"; includeFontPadding = false; setPaddingRelative(dp(14), 0, dp(18), 0) })
+        hero.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            addView(texto(30f, Estilo.TEXTO, fonteMedia).apply { text = IconesClima.texto(d.codigo, chovendo); maxLines = 1 })
+            addView(texto(20f, textoSuave).apply { text = getString(R.string.pv_max_min, maxHoje, minHoje, sensacao); setPaddingRelative(0, dp(4), 0, 0) })
+        }, LinearLayout.LayoutParams(0, -2, 1f))
+        // A Sofy reage ao tempo (como o sapo do Google Weather): preocupada com chuva, feliz com dia bom, dormindo de noite.
+        val sofy = SofyDrawable(this, when {
+            chovendo || frase.tipo == DicasClima.TipoFrase.CHUVA_AS -> SofyPolicy.Expression.WORRIED
+            frase.tipo == DicasClima.TipoFrase.CALOR || frase.tipo == DicasClima.TipoFrase.FRIO -> SofyPolicy.Expression.SURPRISED
+            !d.eDia -> SofyPolicy.Expression.SLEEPING
+            else -> SofyPolicy.Expression.HAPPY
+        })
+        hero.addView(android.widget.ImageView(this).apply { setImageDrawable(sofy); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO },
+            LinearLayout.LayoutParams(dp(150), dp(140)))
+        p1.addView(hero, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
+        p1.addView(texto(30f, Estilo.TEXTO, fonteMedia).apply { text = textoFrase(frase); maxLines = 2; setLineSpacing(0f, 1.1f) },
+            LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(18); marginEnd = dp(40) })
+        val linhaDicas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
+        val dicas = listOf(
+            dicaTile("cloud_with_rain", getString(R.string.cl_d_guarda), textoDica(DicasClima.guardaChuva(entrada))),
+            dicaTile("wind_face", getString(R.string.cl_d_varal), textoDica(DicasClima.varal(entrada))),
+            dicaTile("sun", getString(R.string.cl_d_sair), textoDica(DicasClima.sair(entrada))),
+        )
+        dicas.forEachIndexed { i, t ->
+            linhaDicas.addView(t, LinearLayout.LayoutParams(0, -2, 1f).apply {
+                if (i > 0) marginStart = dp(Grade.VAO / 2); if (i < dicas.size - 1) marginEnd = dp(Grade.VAO / 2) })
+        }
+        p1.addView(linhaDicas, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(22); marginEnd = dp(28) })
+
+        // ================================================================ tela 2: hora a hora e os próximos dias
+        val p2 = pagina(84)
         val horas = cartao(getString(R.string.pv_24h), focavel = false)
         val faixa = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        val fim = min(d.hTempo.size, i0 + 24)
         for (i in i0 until fim) {
-            val hora = if (i == i0) getString(R.string.pv_agora) else "${d.hTempo[i].substring(11, 13).toInt()}h"
+            val hora = if (i == i0) getString(R.string.pv_agora) else getString(R.string.cl_hora, d.hTempo[i].substring(11, 13).toInt())
+            val tempH = if (i == i0) tempAgora else Math.round(d.hTemp[i]).toInt()
             val item = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER_HORIZONTAL
-                setPaddingRelative(dp(4), dp(8), dp(4), dp(8))
+                setPaddingRelative(dp(4), dp(6), dp(4), dp(6))
                 isFocusable = true
                 background = itemFoco(false)
-                setOnFocusChangeListener { v, f -> v.background = itemFoco(f); if (f) focarCartao(horas) }
+                contentDescription = "$hora, $tempH°, ${d.hChuva[i]}%"
+                setOnFocusChangeListener { v, f -> v.background = itemFoco(f) }
             }
-            item.addView(texto(14f, textoSuave).apply { text = hora; gravity = Gravity.CENTER })
+            item.addView(texto(17f, textoSuave).apply { text = hora; gravity = Gravity.CENTER; maxLines = 1 })
             item.addView(IconesClima.imagem(this, if (i == i0) iconeAgora else IconesClima.chave(d.hCodigo[i], eDiaNaHora(i), false)),
-                LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(6); bottomMargin = dp(6) })
-            item.addView(texto(18f, Estilo.TEXTO, fonteMedia).apply { text = "${if (i == i0) tempAgora else Math.round(d.hTemp[i]).toInt()}°"; gravity = Gravity.CENTER })
-            item.addView(texto(Estilo.Papel.LEGENDA.sp, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
-            item.addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = "${Math.round(d.hVento[i]).toInt()} km/h"; gravity = Gravity.CENTER })
-            faixa.addView(item, LinearLayout.LayoutParams(dp(66), ViewGroup.LayoutParams.WRAP_CONTENT))
+                LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2); bottomMargin = dp(2) })
+            item.addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$tempH°"; gravity = Gravity.CENTER })
+            item.addView(texto(17f, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
+            faixa.addView(item, LinearLayout.LayoutParams(dp(78), ViewGroup.LayoutParams.WRAP_CONTENT))
         }
-        horas.addView(android.widget.HorizontalScrollView(this).apply {
-            isHorizontalScrollBarEnabled = false
-            addView(faixa)
-        })
-        coluna.addView(horas, lpCartao())
+        horas.addView(android.widget.HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(faixa) })
+        p2.addView(horas, LinearLayout.LayoutParams(-1, -2))
 
-        // ---- gráfico de chuva
-        val grafico = cartao(getString(R.string.pv_chance))
-        grafico.addView(GraficoChuva(this, (i0 until fim).map { d.hChuva[it] }, (i0 until fim).map { d.hTempo[it].substring(11, 13).toInt() }),
-            LinearLayout.LayoutParams(-1, dp(120)).apply { topMargin = dp(6) })
-        coluna.addView(grafico, lpCartao())
-
-        // ---- 7 dias
-        val gMin = d.dMin.minOrNull() ?: 0.0; val gMax = d.dMax.maxOrNull() ?: 1.0
         val dias = cartao(getString(R.string.pv_7d))
-        val entrada = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        val saida = SimpleDateFormat("EEEE", Locale.getDefault())
+        val linhaDias = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val entradaData = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        val nomeDia = SimpleDateFormat("EEE", Locale.getDefault())
+        val descricao = StringBuilder()
         for (i in d.dData.indices) {
-            val nome = if (i == 0) getString(R.string.pv_hoje) else saida.format(entrada.parse(d.dData[i])!!).replaceFirstChar { it.uppercase() }.substringBefore("-feira")
+            val nome = if (i == 0) getString(R.string.pv_hoje)
+                else nomeDia.format(entradaData.parse(d.dData[i])!!).trimEnd('.').replaceFirstChar { it.uppercase() }
             val mx = if (i == 0) maxHoje else Math.round(d.dMax[i]).toInt()
             val mn = if (i == 0) minHoje else Math.round(d.dMin[i]).toInt()
-            dias.addView(LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-                setPaddingRelative(0, dp(3), 0, dp(3))
-                addView(texto(17f, Estilo.TEXTO, fonteMedia).apply { text = nome }, LinearLayout.LayoutParams(dp(110), -2))
-                addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.chave(d.dCodigo[i], true, false)), LinearLayout.LayoutParams(dp(34), dp(34)))
-                addView(texto(15f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.END }, LinearLayout.LayoutParams(dp(56), -2))
-                addView(texto(17f, textoSuave).apply { text = "$mn°"; gravity = Gravity.END }, LinearLayout.LayoutParams(dp(48), -2))
-                addView(BarraTemp(this@PrevisaoActivity, mn.toDouble(), mx.toDouble(), gMin, gMax), LinearLayout.LayoutParams(0, dp(8), 1f).apply { marginStart = dp(12); marginEnd = dp(12) })
-                addView(texto(17f, Estilo.TEXTO, fonteMedia).apply { text = "$mx°" }, LinearLayout.LayoutParams(dp(44), -2))
-            })
+            descricao.append("$nome $mx° $mn° ${d.dChuva[i]}%. ")
+            linhaDias.addView(LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
+                addView(texto(17f, if (i == 0) Estilo.TEXTO else textoSuave, fonteMedia).apply { text = nome; maxLines = 1; gravity = Gravity.CENTER })
+                addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.chave(d.dCodigo[i], true, false)),
+                    LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(2) })
+                addView(texto(22f, Estilo.TEXTO, fonteMedia).apply { text = "$mx°"; gravity = Gravity.CENTER })
+                addView(texto(18f, textoSuave).apply { text = "$mn°"; gravity = Gravity.CENTER })
+                addView(texto(17f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.CENTER })
+            }, LinearLayout.LayoutParams(0, -2, 1f))
         }
-        coluna.addView(dias, lpCartao())
+        dias.contentDescription = getString(R.string.pv_7d) + ". " + descricao
+        dias.addView(linhaDias, LinearLayout.LayoutParams(-1, -2))   // sem folga extra: a linha da chance cabia cortada (21/11)
+        p2.addView(dias, lpCartao())
 
-        // ---- detalhes (2 linhas x 4)
+        // ================================================================ tela 3: detalhes, ar, sol e lua
+        val p3 = pagina(84)
         val uv = d.hUv.getOrElse(i0) { 0.0 }
         val sensTexto = when { sensacao > tempAgora + 1 -> getString(R.string.pv_mais_quente); sensacao < tempAgora - 1 -> getString(R.string.pv_mais_frio); else -> getString(R.string.pv_igual) }
         val vis = d.hVisib.getOrElse(i0) { 10000.0 } / 1000
@@ -360,58 +400,68 @@ class PrevisaoActivity : Activity() {
                 Triple(getString(R.string.pv_chuva_hoje), "${"%.1f".format(Locale.getDefault(), d.dChuvaMm)} mm", "cloud_with_rain" to ""),
             ),
         )
+        val descDetalhes = StringBuilder(getString(R.string.pv_detalhes)).append(". ")
         linhas.forEach { l ->
             detalhes.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
-                setPaddingRelative(0, dp(8), 0, dp(4))
-                l.forEach { (rot, valor, extra) -> addView(tile(rot, valor, extra.first, extra.second), LinearLayout.LayoutParams(0, -2, 1f)) }
+                setPaddingRelative(0, dp(8), 0, dp(2))
+                l.forEach { (rot, valor, extra) ->
+                    descDetalhes.append("$rot $valor ${extra.second}. ")
+                    addView(tile(rot, valor, extra.first, extra.second), LinearLayout.LayoutParams(0, -2, 1f))
+                }
             })
         }
-        coluna.addView(detalhes, lpCartao())
+        detalhes.contentDescription = descDetalhes
+        p3.addView(detalhes, LinearLayout.LayoutParams(-1, -2))
 
-        // ---- ar, sol e lua (lado a lado)
         val trio = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         val ar = cartao(getString(R.string.pv_ar))
         if (d.aqi != null) {
             val (rot, cor) = rotuloAqi(d.aqi)
+            ar.contentDescription = "${getString(R.string.pv_ar)}: ${d.aqi}, $rot"
             ar.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(6), 0, dp(6))
                 addView(texto(44f, cor, fonteLeve).apply { text = "${d.aqi}"; includeFontPadding = false })
-                addView(texto(18f, Estilo.TEXTO, fonteMedia).apply { text = rot; setPaddingRelative(dp(12), 0, 0, 0) })
+                addView(texto(20f, Estilo.TEXTO, fonteMedia).apply { text = rot; setPaddingRelative(dp(12), 0, 0, 0) })
             })
             ar.addView(BarraAqi(this, d.aqi), LinearLayout.LayoutParams(-1, dp(8)))
-        } else ar.addView(texto(15f, textoSuave).apply { text = getString(R.string.pv_sem_dados); setPaddingRelative(0, dp(10), 0, 0) })
+        } else {
+            ar.contentDescription = "${getString(R.string.pv_ar)}: ${getString(R.string.pv_sem_dados)}"
+            ar.addView(texto(18f, textoSuave).apply { text = getString(R.string.pv_sem_dados); setPaddingRelative(0, dp(10), 0, 0) })
+        }
 
         val sol = cartao(getString(R.string.pt_sol))
         val nascerMin = minutos(d.dNascer[0]); val poenteMin = minutos(d.dPoente[0])
+        sol.contentDescription = "${getString(R.string.pt_sol)}: ↑ ${d.dNascer[0].substring(11)}, ↓ ${d.dPoente[0].substring(11)}"
         sol.addView(ArcoSol(this, ((agoraMin - nascerMin).toFloat() / (poenteMin - nascerMin)).coerceIn(-0.05f, 1.05f)),
             LinearLayout.LayoutParams(-1, dp(70)).apply { topMargin = dp(4) })
         sol.addView(LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            addView(texto(15f, textoSuave).apply { text = "↑ ${d.dNascer[0].substring(11)}" }, LinearLayout.LayoutParams(0, -2, 1f))
-            addView(texto(15f, textoSuave).apply { text = "↓ ${d.dPoente[0].substring(11)}"; gravity = Gravity.END }, LinearLayout.LayoutParams(0, -2, 1f))
+            addView(texto(18f, textoSuave).apply { text = "↑ ${d.dNascer[0].substring(11)}" }, LinearLayout.LayoutParams(0, -2, 1f))
+            addView(texto(18f, textoSuave).apply { text = "↓ ${d.dPoente[0].substring(11)}"; gravity = Gravity.END }, LinearLayout.LayoutParams(0, -2, 1f))
         })
 
         val lua = cartao(getString(R.string.pt_lua))
         val agoraMs = System.currentTimeMillis()
         val partes = Lua.resumo(agoraMs, d.ponto.lat).split("  ·  ")
+        lua.contentDescription = "${getString(R.string.pt_lua)}: ${partes.joinToString(", ") { it.trim() }}"
         lua.addView(LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(6), 0, 0)
             addView(IconesClima.imagem(this@PrevisaoActivity, Lua.chaveIcone(agoraMs, d.ponto.lat)), LinearLayout.LayoutParams(dp(60), dp(60)))
             addView(LinearLayout(this@PrevisaoActivity).apply {
                 orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(10), 0, 0, 0)
-                addView(texto(17f, Estilo.TEXTO, fonteMedia).apply { text = partes[0].substringAfter("  ").trim() })
-                addView(texto(14f, textoSuave).apply { text = "${partes.getOrElse(1) { "" }} · ${partes.getOrElse(2) { "" }}" })
+                addView(texto(19f, Estilo.TEXTO, fonteMedia).apply { text = partes[0].substringAfter("  ").trim() })
+                addView(texto(17f, textoSuave).apply { text = "${partes.getOrElse(1) { "" }} · ${partes.getOrElse(2) { "" }}" })
             })
         })
         trio.addView(ar, LinearLayout.LayoutParams(0, -1, 1f).apply { marginEnd = dp(Grade.VAO / 2) })
         trio.addView(sol, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2); marginEnd = dp(Grade.VAO / 2) })
         if (Extras.ligado(this, Extras.Chave.CARTAO_LUA))   // chave CARTAO_LUA (HomeCards, 18/11/2026)
             trio.addView(lua, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2) })
-        coluna.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
+        p3.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
         // Crédito exigido pelo plano Free da WeatherAPI (Pro, 19/11/2026).
         if (d.fonte == WeatherApiSource.FONTE)
-            coluna.addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
+            p3.addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
                 LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
 
         if (voz != null) {
@@ -419,8 +469,62 @@ class PrevisaoActivity : Activity() {
             falar(FalaBoletim.frase(bomDia, saudacao(), previsao, agendaHoje, getString(R.string.pv_sem)))
         }
 
-        // O primeiro ponto de parada: a faixa de horas (item "Agora").
-        faixa.getChildAt(0)?.post { faixa.getChildAt(0).requestFocus() }
+        // Por onde o foco entra em cada tela: descendo, pelo alto; subindo, pelo que fica embaixo.
+        paginas += listOf(p1, p2, p3)
+        entraDescendo = listOf(dicas[0], faixa.getChildAt(0) ?: dias, detalhes)
+        entraSubindo = listOf(dicas[0], dias, ar)
+        paginas.forEach { palco.addView(it, FrameLayout.LayoutParams(-1, -1)); it.visibility = View.GONE }
+        mostrar(0, descendo = true, animar = false)
+        sofy.start()
+    }
+
+    /** A frase do dia (ver [DicasClima.frase]) no idioma da TV. */
+    private fun textoFrase(f: DicasClima.Frase): String = when (f.tipo) {
+        DicasClima.TipoFrase.PARA_AS -> getString(R.string.cl_f_parar, hora(f.a))
+        DicasClima.TipoFrase.CHUVA_SEGUE -> getString(R.string.cl_f_segue)
+        DicasClima.TipoFrase.CHUVA_AS -> getString(R.string.cl_f_chuva, hora(f.a), f.b)
+        DicasClima.TipoFrase.CALOR -> getString(R.string.cl_f_calor, f.a, hora(f.b))
+        DicasClima.TipoFrase.FRIO -> getString(R.string.cl_f_frio, f.a)
+        DicasClima.TipoFrase.SOL_FORTE -> getString(R.string.cl_f_sol, hora(f.a), hora(f.b))
+        DicasClima.TipoFrase.AMANHA_CHUVA -> getString(R.string.cl_f_amanha, f.a)
+        DicasClima.TipoFrase.CALMO -> getString(R.string.cl_f_calmo, f.a)
+    }
+
+    private fun textoDica(d: DicasClima.Dica): String = when (d.resposta) {
+        DicasClima.Resposta.AGORA -> getString(R.string.cl_v_agora)
+        DicasClima.Resposta.SIM_AS -> getString(R.string.cl_v_sim_as, hora(d.hora))
+        DicasClima.Resposta.TALVEZ -> getString(R.string.cl_v_talvez)
+        DicasClima.Resposta.NAO -> getString(R.string.cl_v_nao)
+        DicasClima.Resposta.ATE -> getString(R.string.cl_v_ate, hora(d.hora))
+        DicasClima.Resposta.SECA_HOJE -> getString(R.string.cl_v_seca)
+        DicasClima.Resposta.MELHOR_NAO -> getString(R.string.cl_v_melhor_nao)
+        DicasClima.Resposta.AMANHA_SIM -> getString(R.string.cl_v_amanha_sim)
+        DicasClima.Resposta.AMANHA_NAO -> getString(R.string.cl_v_amanha_nao)
+        DicasClima.Resposta.AS -> getString(R.string.cl_v_as, hora(d.hora))
+        DicasClima.Resposta.AMANHA_AS -> getString(R.string.cl_v_amanha_as, hora(d.hora))
+        DicasClima.Resposta.HOJE_NAO -> getString(R.string.cl_v_hoje_nao)
+    }
+
+    private fun hora(h: Int) = getString(R.string.cl_hora, h)
+
+    /** Uma dica da tela 1: ícone e pergunta pequenos, a resposta grande. OK leva às horas (a conta por trás da dica). */
+    private fun dicaTile(icone: String, rotulo: String, valor: String) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPaddingRelative(dp(20), dp(14), dp(20), dp(16))
+        background = fundoCartao(false)
+        isFocusable = true
+        contentDescription = "$rotulo: $valor"
+        setOnFocusChangeListener { v, f -> v.background = fundoCartao(f) }
+        setOnClickListener { irPara(1, descendo = true) }
+        addView(LinearLayout(this@PrevisaoActivity).apply {
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
+            addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.PREFIXO + "3d/" + icone), LinearLayout.LayoutParams(dp(30), dp(30)))
+            addView(texto(18f, textoSuave).apply { text = rotulo; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END; setPaddingRelative(dp(8), 0, 0, 0) })
+        })
+        // A resposta encolhe até 22 sp se não couber (línguas com palavras longas), em vez de cortar.
+        addView(texto(30f, Estilo.TEXTO, Estilo.fonte(700)).apply { text = valor; maxLines = 1; gravity = Gravity.CENTER_VERTICAL
+            setAutoSizeTextTypeUniformWithConfiguration(22, 30, 1, TypedValue.COMPLEX_UNIT_SP) },
+            LinearLayout.LayoutParams(-1, dp(44)).apply { topMargin = dp(4) })
     }
 
     private fun tile(rotulo: String, valor: String, icone: String, extra: String): View = LinearLayout(this).apply {
@@ -462,21 +566,95 @@ class PrevisaoActivity : Activity() {
         background = fundoCartao(false)
         if (focavel) {
             isFocusable = true
-            setOnFocusChangeListener { v, f -> v.background = fundoCartao(f); if (f) focarCartao(v) }
+            setOnFocusChangeListener { v, f -> v.background = fundoCartao(f) }
         }
         addView(Estilo.texto(context, Estilo.Papel.SECAO, titulo))   // nome de grupo no papel padrão
     }
 
-    /**
-     * Leva o cartão focado para perto do topo. A posição é medida em relação à coluna (os cartões de Ar/Sol/Lua ficam
-     * dentro de uma linha, e o top deles é relativo a ela). Os primeiros cartões mostram a tela desde o topo (cabeçalho junto).
-     */
-    private fun focarCartao(c: View) {
-        val r = Rect(0, 0, c.width, c.height)
-        coluna.offsetDescendantRectToMyCoords(c, r)
-        val alvo = if (r.top < dp(300)) 0 else r.top - dp(20)
-        rolagem.smoothScrollTo(0, alvo)
+    // ---------------------------------------------------------------- carrossel de telas
+
+    /** Uma tela do carrossel: ocupa a TV inteira, sem rolar. [topo] = 28 na 1ª (a linha do relógio é dela), 84 nas outras. */
+    private fun pagina(topo: Int) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        clipChildren = false; clipToPadding = false
+        setPaddingRelative(dp(Grade.MARGEM), dp(topo), dp(Grade.MARGEM), dp(48))
     }
+
+    /** O nome de cada tela: a seta de baixo diz o da próxima (na última, o da primeira) e o leitor de tela fala o da atual. */
+    private val nomes = intArrayOf(R.string.cl_pg_agora, R.string.cl_pg_horas, R.string.cl_pg_detalhes)
+
+    /**
+     * Baixo/cima andam dentro da tela enquanto houver para onde; na borda, trocam de tela (da 3ª, baixo volta à 1ª; da
+     * 1ª, cima vai à 3ª). Durante a troca as setas esperam, para o foco não cair numa tela que está saindo.
+     */
+    override fun dispatchKeyEvent(e: KeyEvent): Boolean {
+        val vertical = e.keyCode == KeyEvent.KEYCODE_DPAD_DOWN || e.keyCode == KeyEvent.KEYCODE_DPAD_UP
+        if (vertical && paginas.size > 1) {
+            if (animando) return true
+            if (e.action == KeyEvent.ACTION_DOWN) {
+                val descendo = e.keyCode == KeyEvent.KEYCODE_DPAD_DOWN
+                val prox = window.decorView.findFocus()?.focusSearch(if (descendo) View.FOCUS_DOWN else View.FOCUS_UP)
+                if (prox == null || !dentro(paginas[atual], prox)) {
+                    irPara(Math.floorMod(atual + if (descendo) 1 else -1, paginas.size), descendo); return true
+                }
+                // Dentro da tela, o próprio carrossel anda (o mesmo que o sistema faria), para teclas e teste baterem.
+                prox.requestFocus(); return true
+            }
+        }
+        return super.dispatchKeyEvent(e)
+    }
+
+    private fun dentro(pai: View, v: View): Boolean {
+        var p: android.view.ViewParent? = v.parent
+        while (p != null) { if (p === pai) return true; p = p.parent }
+        return false
+    }
+
+    private fun irPara(nova: Int, descendo: Boolean) {
+        if (nova == atual || animando || nova !in paginas.indices) return
+        mostrar(nova, descendo, animar = !semMovimento())
+    }
+
+    /** Página deslizando 250 ms com a curva suave (tokens do transitions.dev: "page slide"); sem movimento, troca seca. */
+    private fun mostrar(nova: Int, descendo: Boolean, animar: Boolean) {
+        val sai = paginas[atual].takeIf { it.visibility == View.VISIBLE && atual != nova }
+        val entra = paginas[nova]
+        atual = nova
+        val dist = dp(56).toFloat() * if (descendo) 1 else -1
+        entra.visibility = View.VISIBLE
+        // Recém-mostrada, a tela ainda não passou pelo layout e o pedido de foco pode não pegar: repete depois dele.
+        (if (descendo) entraDescendo else entraSubindo).getOrNull(nova)?.let { alvo -> if (!alvo.requestFocus()) alvo.post { alvo.requestFocus() } }
+        seta.text = "▼  " + getString(nomes[(nova + 1) % nomes.size]); seta.visibility = View.VISIBLE
+        desenharPontos()
+        entra.announceForAccessibility(getString(nomes[nova]))
+        if (!animar || sai == null) { sai?.visibility = View.GONE; return }
+        animando = true
+        val curva = android.view.animation.PathInterpolator(0.22f, 1f, 0.36f, 1f)
+        entra.alpha = 0f; entra.translationY = dist
+        sai.animate().alpha(0f).translationY(-dist).setDuration(250).setInterpolator(curva)
+            .withEndAction { sai.visibility = View.GONE; sai.alpha = 1f; sai.translationY = 0f }.start()
+        entra.animate().alpha(1f).translationY(0f).setDuration(250).setInterpolator(curva).withEndAction { animando = false }.start()
+    }
+
+    /** Os pontinhos da direita: onde estou entre as 3 telas (o atual maior e branco). */
+    private fun desenharPontos() {
+        pontos.removeAllViews()
+        paginas.indices.forEach { i ->
+            val on = i == atual
+            pontos.addView(View(this).apply { background = Estilo.fundo(this@PrevisaoActivity, if (on) Estilo.TEXTO else 0x59FFFFFF, 6) },
+                LinearLayout.LayoutParams(dp(if (on) 10 else 8), dp(if (on) 22 else 8)).apply { topMargin = dp(5); bottomMargin = dp(5) })
+        }
+    }
+
+    /** Mesmo critério do resto do app: sistema sem animação, alto contraste, ou o aparelho no PARADO. */
+    private fun semMovimento(): Boolean {
+        val sistema = runCatching {
+            android.provider.Settings.Global.getFloat(contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+        }.getOrDefault(false)
+        if (sistema || Estilo.altoContraste) return true
+        return runCatching { MovimentoAdaptativo.atual(this, sistema) == MovimentoAdaptativo.Nivel.PARADO }.getOrDefault(false)
+    }
+
 
     // Os cartões ficam por cima do céu/da pintura do fundo: vidro do sistema de design (Estilo.vidro). Foco = anel branco,
     // o mesmo dos cards da HOME (o cartão tem gráficos desenhados, então não vira pílula branca como uma linha de lista).
@@ -497,50 +675,6 @@ class PrevisaoActivity : Activity() {
 
     // ---------------------------------------------------------------- desenhos
 
-    /** Área azul da chance de chuva (0-100%) nas próximas horas, com linhas em 0/50/100% e a hora a cada 4 pontos. */
-    private class GraficoChuva(ctx: Context, val valores: List<Int>, val horas: List<Int>) : View(ctx) {
-        private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
-        private fun desenhar(c: Canvas) {
-            val rtl = Rtl.ehRtl(this)
-            val d = resources.displayMetrics.density
-            val esq = 34 * d; val dir = width - 6 * d; val topo = 6 * d; val base = height - 20 * d
-            p.textSize = 11 * d; p.strokeWidth = d
-            for (v in intArrayOf(0, 50, 100)) {
-                val y = base - (base - topo) * v / 100f
-                p.color = 0x33FFFFFF; p.style = Paint.Style.STROKE; c.drawLine(esq, y, dir, y, p)
-                p.color = 0xB3FFFFFF.toInt(); p.style = Paint.Style.FILL; Rtl.texto(c, rtl, "$v%", 0f, y + 4 * d, p)
-            }
-            if (valores.size < 2) return
-            val passo = (dir - esq) / (valores.size - 1)
-            val linha = Path(); val area = Path()
-            valores.forEachIndexed { i, v ->
-                val x = esq + passo * i; val y = base - (base - topo) * v / 100f
-                if (i == 0) { linha.moveTo(x, y); area.moveTo(x, base); area.lineTo(x, y) } else { linha.lineTo(x, y); area.lineTo(x, y) }
-            }
-            area.lineTo(esq + passo * (valores.size - 1), base); area.close()
-            p.style = Paint.Style.FILL
-            p.shader = LinearGradient(0f, topo, 0f, base, 0xAA8EC5FF.toInt(), 0x108EC5FF, Shader.TileMode.CLAMP)
-            c.drawPath(area, p); p.shader = null
-            p.style = Paint.Style.STROKE; p.strokeWidth = 2.5f * d; p.color = 0xFF8EC5FF.toInt(); c.drawPath(linha, p)
-            p.style = Paint.Style.FILL; p.color = 0xB3FFFFFF.toInt(); p.textAlign = Paint.Align.CENTER
-            for (i in valores.indices step 4) Rtl.texto(c, rtl, "${horas[i]}h", esq + passo * i, height - 4 * d, p)
-            p.textAlign = Paint.Align.LEFT
-        }
-    }
-
-    /** Barra da faixa mín–máx do dia, na escala da semana toda (azul-frio na esquerda, laranja-quente na direita). */
-    private class BarraTemp(ctx: Context, val mn: Double, val mx: Double, val gMin: Double, val gMax: Double) : View(ctx) {
-        private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
-        private fun desenhar(c: Canvas) {
-            val h = height.toFloat(); val esc = max(1.0, gMax - gMin)
-            p.color = 0x28FFFFFF; c.drawRoundRect(RectF(0f, 0f, width.toFloat(), h), h / 2, h / 2, p)
-            val x1 = (((mn - gMin) / esc) * width).toFloat(); val x2 = max(x1 + h, (((mx - gMin) / esc) * width).toFloat())
-            p.shader = LinearGradient(0f, 0f, width.toFloat(), 0f, intArrayOf(0xFF6FC3FF.toInt(), 0xFFFFD36B.toInt(), 0xFFFF8A4C.toInt()), null, Shader.TileMode.CLAMP)
-            c.drawRoundRect(RectF(x1, 0f, x2, h), h / 2, h / 2, p); p.shader = null
-        }
-    }
 
     /** Escala de 0 a 300+ do índice de qualidade do ar (verde a vinho) com um marcador onde o valor está. */
     private class BarraAqi(ctx: Context, val aqi: Int) : View(ctx) {

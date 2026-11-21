@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather screen in three pages: the line of the day and the three everyday tips (DicasClima, 21/11/2026). -->
+<resources>
+    <string name="cl_pg_agora">지금과 팁</string>
+    <string name="cl_pg_horas">다음 시간과 날</string>
+    <string name="cl_pg_detalhes">상세, 공기, 해와 달</string>
+    <string name="cl_hora">%1$d시</string>
+    <string name="cl_f_parar">지금 비가 옵니다. %1$s쯤 그칠 것 같습니다.</string>
+    <string name="cl_f_segue">지금 비가 오며, 앞으로 몇 시간 계속될 것 같습니다.</string>
+    <string name="cl_f_chuva">%1$s쯤 비 가능성 (%2$d%%).</string>
+    <string name="cl_f_calor">더운 날: %2$s쯤 최고 %1$d°. 물을 드세요.</string>
+    <string name="cl_f_frio">추워집니다: 최저 %1$d°. 따뜻하게 입으세요.</string>
+    <string name="cl_f_sol">%1$s부터 %2$s까지 햇볕이 강합니다. 자외선 차단제를 바르세요.</string>
+    <string name="cl_f_amanha">오늘은 비 없음. 내일 비 가능성 (%1$d%%).</string>
+    <string name="cl_f_calmo">오늘 비 예보 없음. 최고 %1$d°.</string>
+    <string name="cl_d_guarda">우산</string>
+    <string name="cl_d_varal">빨래 밖에 널기</string>
+    <string name="cl_d_sair">외출하기 좋은 시간</string>
+    <string name="cl_v_agora">지금</string>
+    <string name="cl_v_sim_as">%1$s부터 필요</string>
+    <string name="cl_v_talvez">아마도</string>
+    <string name="cl_v_nao">필요 없음</string>
+    <string name="cl_v_ate">%1$s까지</string>
+    <string name="cl_v_seca">오늘 마름</string>
+    <string name="cl_v_melhor_nao">안 하는 게 좋음</string>
+    <string name="cl_v_amanha_sim">내일은 좋음</string>
+    <string name="cl_v_amanha_nao">내일은 안 됨</string>
+    <string name="cl_v_as">%1$s</string>
+    <string name="cl_v_amanha_as">내일 %1$s</string>
+    <string name="cl_v_hoje_nao">오늘은 없음</string>
+</resources>

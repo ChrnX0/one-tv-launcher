@@ -18,8 +18,13 @@ import br.paulo.tvlauncher.home.CruzLogica
 import br.paulo.tvlauncher.home.SonsCruz
 import br.paulo.tvlauncher.home.abrir
 import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.AtrasoRadio
 import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.GloboLogica
+import br.paulo.tvlauncher.listen.GloboRadiosView
 import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.MenuSom
+import br.paulo.tvlauncher.listen.PodcastPlayerLogic
 import br.paulo.tvlauncher.listen.Radios
 import br.paulo.tvlauncher.settings.Fontes
 import br.paulo.tvlauncher.weather.Localizacao
@@ -64,7 +69,7 @@ class RadioActivity : Activity() {
     private lateinit var veuMusica: TextView
     private val tocando: Radios.Radio? get() = OuvirServico.instancia?.radio
     /** O que a tela mostrou por último (id, música, pausado): só refaz quando muda. */
-    private var visto: Triple<String?, String, Boolean>? = null
+    private var visto: List<Any?>? = null
     private val mudou: () -> Unit = { aoMudarSom() }
     private var favoritas: List<Radios.Radio> = emptyList()
     private var recentes: List<Radios.Radio> = emptyList()
@@ -164,7 +169,8 @@ class RadioActivity : Activity() {
         if (s?.tocando == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (r == null) { ui.removeCallbacks(escurecer); veuLigado(false) }
-        val agora = Triple(r?.id, s?.musica.orEmpty(), s?.pausado == true)
+        // + voltar 30 s: o botão aparece quando a gravação começa, e o "−0:30" muda ao voltar/ir ao vivo.
+        val agora = listOf(r?.id, s?.musica.orEmpty(), s?.pausado == true, s?.podeVoltar == true, (s?.atrasoS ?: 0) / AtrasoRadio.PASSO_S)
         if (agora != visto) {
             // Começou a tocar (OK numa rádio): o foco fica onde está; o cartão de cima à direita já mostra o que toca.
             visto = agora
@@ -189,6 +195,9 @@ class RadioActivity : Activity() {
                 KeyEvent.KEYCODE_MEDIA_PLAY -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.continuar(); return true }
                 KeyEvent.KEYCODE_MEDIA_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.pausar(); return true }
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.alternar(); return true }
+                // ⏪ volta 30 s no ao vivo; ⏩ volta ao ao vivo ([AtrasoRadio]).
+                KeyEvent.KEYCODE_MEDIA_REWIND -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.voltarRadio(); return true }
+                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> if (tocando != null) { if (e.repeatCount == 0) OuvirServico.instancia?.aoVivo(); return true }
             }
         }
         return super.dispatchKeyEvent(e)
@@ -238,10 +247,40 @@ class RadioActivity : Activity() {
 
     // ---------------------------------------------------------------- tela
 
+    /** "Voz clara · dorme em 20 min", ou a explicação do menu quando nada está ligado. */
+    private fun somDetalhe(s: OuvirServico): String {
+        val m = PodcastPlayerLogic.minutosParaDormir(s.dormirAte, android.os.SystemClock.elapsedRealtime())
+        return listOfNotNull(getString(R.string.som_voz_clara).takeIf { OuvirServico.vozClara(this) },
+            m.takeIf { it > 0 }?.let { getString(R.string.pl_dorme_em, it) }).joinToString(" · ").ifEmpty { getString(R.string.som_det_radio) }
+    }
+
+    /** Rádios parecidas com a que toca (id da que toca → lista; vazia = carregando). */
+    private var parecidas: Pair<String, List<Radios.Radio>>? = null
+
+    /** Busca as parecidas no Radio Browser: os 2 primeiros gêneros, no país da rádio e no mundo, e ordena por afinidade. */
+    private fun carregarParecidas(r: Radios.Radio) {
+        val tags = Radios.tagsDe(r).take(2)
+        if (tags.isEmpty()) { parecidas = r.id to emptyList(); return }
+        parecidas = r.id to emptyList()
+        Fundo.rodar("radios-parecidas") {
+            val todas = tags.flatMap { t ->
+                (if (r.pais.length == 2) Radios.estacoes(Radios.pedir { Radios.urlGenero(it, t, r.pais, 40) }) else emptyList()) +
+                    Radios.estacoes(Radios.pedir { Radios.urlGenero(it, t, null, 40) })
+            }
+            val l = Radios.parecidas(r, todas)
+            runOnUiThread {
+                if (isDestroyed || tocando?.id != r.id) return@runOnUiThread
+                parecidas = r.id to l
+                if (l.isNotEmpty()) montar()
+            }
+        }
+    }
+
     private fun montar(focar: Pair<String, String?>? = null, focarInicio: Boolean = false) {
         val l = ArrayList<CruzOuvir.Prateleira>()
         val s = OuvirServico.instancia
         val r = tocando
+        if (r != null && parecidas?.first != r.id) carregarParecidas(r)
         if (r != null && s != null) {
             val fav = favoritas.any { it.id == r.id }
             l += CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
@@ -252,6 +291,16 @@ class RadioActivity : Activity() {
                     if (fav) getString(R.string.ouv_tecla, favoritas.indexOfFirst { it.id == r.id } + 1).takeIf { favoritas.indexOfFirst { it.id == r.id } < 9 }.orEmpty()
                     else getString(R.string.ouv_favoritar_det),
                     IconeOuvir.Tipo.FAVORITAS, abrir = { favoritar(r) }),
+                // Voltar 30 s / Ao vivo (21/11/2026, [AtrasoRadio]): só quando a gravação paralela está de pé.
+                *listOfNotNull(
+                    CruzOuvir.Item("voltar30", getString(R.string.ra_voltar), if (s.atrasoS > 0) getString(R.string.ra_atras, tempo(s.atrasoS)) else getString(R.string.ra_voltar_det),
+                        IconeOuvir.Tipo.VOLTAR, abrir = { OuvirServico.instancia?.voltarRadio() }).takeIf { s.podeVoltar },
+                    CruzOuvir.Item("aovivo", getString(R.string.ra_ao_vivo), getString(R.string.ra_atras, tempo(s.atrasoS)),
+                        IconeOuvir.Tipo.AVANCAR, abrir = { OuvirServico.instancia?.aoVivo() }).takeIf { s.atrasoS > 0 },
+                ).toTypedArray(),
+                // Som (21/11/2026): voz clara e timer para dormir, como no player de podcast ([MenuSom]).
+                CruzOuvir.Item("som", getString(R.string.som_titulo), somDetalhe(s), IconeOuvir.Tipo.OPCOES,
+                    abrir = { MenuSom.abrir(this) { montar() } }),
                 CruzOuvir.Item("parar", getString(R.string.ra_parar),
                     getString(if (continuarFora(this)) R.string.ra_parar_det else R.string.ra_parar_det_antigo), IconeOuvir.Tipo.PARAR,
                     abrir = { OuvirServico.instancia?.parar() }),
@@ -262,6 +311,21 @@ class RadioActivity : Activity() {
                         montar()
                     }),
             ))
+        }
+        // Já tocou (21/11/2026): as músicas que esta rádio anunciou desde que começou a tocar, a mais nova primeiro.
+        if (r != null && s != null) {
+            val jt = s.tocadas(r.id)
+            if (jt.isNotEmpty()) {
+                val hora = android.text.format.DateFormat.getTimeFormat(this)
+                l += CruzOuvir.Prateleira("ja_tocou", getString(R.string.ra_ja_tocou), IconeOuvir.Tipo.RECENTES, jt.mapIndexed { i, t ->
+                    CruzOuvir.Item("jt:$i:${t.horaMs}", t.texto,
+                        CruzLogica.linhas(if (i == 0 && !s.pausado) "● " + getString(R.string.ouv_tocando_agora) else null, hora.format(java.util.Date(t.horaMs))),
+                        IconeOuvir.Tipo.RECENTES)
+                })
+            }
+            parecidas?.takeIf { it.first == r.id && it.second.isNotEmpty() }?.let { (_, lista) ->
+                l += CruzOuvir.Prateleira("parecidas", getString(R.string.ra_parecidas), IconeOuvir.Tipo.GENEROS, lista.map { itemRadio("par:", it) })
+            }
         }
         resultado?.let { (titulo, lista) ->
             l += CruzOuvir.Prateleira("res", titulo, IconeOuvir.Tipo.BUSCAR,
@@ -300,7 +364,8 @@ class RadioActivity : Activity() {
             })
         }
         l += CruzOuvir.Prateleira("buscar", getString(R.string.ra_procurar), IconeOuvir.Tipo.BUSCAR, listOf(
-            CruzOuvir.Item("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), IconeOuvir.Tipo.BUSCAR, abrir = { pedirNome() })))
+            CruzOuvir.Item("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), IconeOuvir.Tipo.BUSCAR, abrir = { pedirNome() }),
+            CruzOuvir.Item("globo", getString(R.string.ra_globo), getString(R.string.ra_globo_det), IconeOuvir.Tipo.PAIS, abrir = { abrirGlobo() })))
         // Abrindo: o que toca (se toca), senão as favoritas (se há), senão as mais ouvidas do país.
         val inicio = when {
             !focarInicio -> null
@@ -318,10 +383,13 @@ class RadioActivity : Activity() {
         val r = s.radio ?: return null
         return CruzOuvir.Tocando(r.nome, CruzLogica.linhas(s.musica, detalhe(r)), r.logo, corDe(r.id), CapaOuvir.iniciais(r.nome),
             cobrir = false, progresso = null, tempo = null, pausado = s.pausado,
-            aoVivo = if (s.pausado) null else getString(R.string.ouv_ao_vivo).uppercase(), chave = r.id)
+            aoVivo = if (s.pausado) null else if (s.atrasoS > 0) "−" + tempo(s.atrasoS) else getString(R.string.ouv_ao_vivo).uppercase(), chave = r.id)
     }
 
     private fun aviso(id: String, nome: String, sub: String, icone: IconeOuvir.Tipo) = CruzOuvir.Item(id, nome, sub, icone)
+
+    /** 90 → "1:30". */
+    private fun tempo(s: Int) = "%d:%02d".format(s / 60, s % 60)
 
     /** "Brasil": só o país (o "128 kbps" saiu: jargão que não ajuda a escolher a rádio; crítica de design 19/11/2026). */
     private fun detalhe(r: Radios.Radio): String =
@@ -371,6 +439,58 @@ class RadioActivity : Activity() {
     }
 
     // ---------------------------------------------------------------- som (quem toca é o OuvirServico)
+
+    // ---------------------------------------------------------------- globo (21/11/2026)
+
+    private var globo: FrameLayout? = null
+
+    /** Abre o globo das rádios ([GloboRadiosView]) por cima da tela: busca as ~1.500 mais ouvidas com lugar no mapa. */
+    private fun abrirGlobo() {
+        if (globo != null) return
+        AvisoTv.rapido(this, getString(R.string.ra_globo), getString(R.string.ra_carregando), 3)
+        Fundo.rodar("radios-globo") {
+            val l = Radios.estacoes(Radios.pedir { Radios.urlGlobo(it) }).filter { !it.lat.isNaN() }
+            runOnUiThread {
+                if (isDestroyed || globo != null) return@runOnUiThread
+                if (l.isEmpty()) { AvisoTv.rapido(this, getString(R.string.ra_globo), getString(R.string.ra_nada), 5); return@runOnUiThread }
+                mostrarGlobo(l)
+            }
+        }
+    }
+
+    private fun mostrarGlobo(l: List<Radios.Radio>) {
+        val raiz = FrameLayout(this)
+        val nome = TextView(this).apply {
+            setTextColor(Estilo.TEXTO); textSize = 30f; typeface = android.graphics.Typeface.DEFAULT_BOLD; gravity = Gravity.CENTER
+            maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
+        }
+        val sub = TextView(this).apply { setTextColor(Estilo.TEXTO_2); textSize = 20f; gravity = Gravity.CENTER; maxLines = 1 }
+        val dica = TextView(this).apply { setTextColor(0x99FFFFFF.toInt()); textSize = 18f; gravity = Gravity.CENTER; text = getString(R.string.ra_globo_dica) }
+        val v = GloboRadiosView(this, l, GloboLogica.centroDoPais(l, pais), aoTocar = { r -> tocar(r) }, aoFechar = { fecharGlobo() })
+        v.aoMirar = { r ->
+            nome.text = r?.nome ?: getString(R.string.ra_globo_mar)
+            sub.text = r?.let { CruzLogica.linhas(if (tocando?.id == it.id) "● " + getString(R.string.ouv_tocando_agora) else null, detalhe(it), it.tags.ifEmpty { null }) }.orEmpty()
+        }
+        raiz.addView(v, FrameLayout.LayoutParams(-1, -1))
+        val baixo = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            addView(nome); addView(sub); addView(dica, LinearLayout.LayoutParams(-1, -2).apply { topMargin = Estilo.dp(this@RadioActivity, 10) })
+        }
+        raiz.addView(baixo, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply {
+            val m = Estilo.dp(this@RadioActivity, 48); setMargins(m, 0, m, Estilo.dp(this@RadioActivity, 24))
+        })
+        (window.decorView.findViewById<android.view.ViewGroup>(android.R.id.content)).addView(raiz, FrameLayout.LayoutParams(-1, -1))
+        globo = raiz
+        raiz.alpha = 0f; raiz.animate().alpha(1f).setDuration(220).start()
+        v.requestFocus()
+    }
+
+    private fun fecharGlobo() {
+        val g = globo ?: return
+        globo = null
+        (g.parent as? android.view.ViewGroup)?.removeView(g)
+        montar()
+    }
 
     private fun tocar(r: Radios.Radio) {
         if (tocando?.id == r.id) { OuvirServico.instancia?.alternar(); return }

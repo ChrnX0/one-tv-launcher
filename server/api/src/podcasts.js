@@ -1,7 +1,8 @@
 // Busca de podcasts e "Em alta no seu país" pelo Podcast Index (19/11/2026). Rotas públicas:
 //   GET /v1/podcasts/search?q=<termo>&lang=<pt>&max=30
-//   GET /v1/podcasts/trending?lang=<pt>&max=30
-// Resposta: {"feeds":[{url,title,author,image,explicit,language}]} (o PodcastBusca.kt do app lê isso).
+//   GET /v1/podcasts/trending?lang=<pt>&max=30&cat=<News,Comedy>
+// Resposta: {"feeds":[{url,title,author,image,explicit,language,categories}]} (o PodcastBusca.kt do app lê isso).
+// "cat" (21/11/2026, filtro de assunto da TV): nomes de categoria do Podcast Index, os mesmos do itunes:category.
 // A chave e o segredo ficam só nos secrets do Worker (PODCASTINDEX_API_KEY, PODCASTINDEX_API_SECRET), nunca no git
 // nem no APK: cada pedido ao Podcast Index é assinado aqui. Sem os secrets, as rotas respondem 503 e a TV esconde a busca.
 // A mesma pergunta fica guardada na borda da Cloudflare (busca 6 h, em alta 1 h): menos pedidos ao Podcast Index.
@@ -36,6 +37,12 @@ export function cleanMax(max) {
 }
 
 /** Termo da busca: sem espaço sobrando, até 100 letras. Vazio = pedido inválido. */
+/** Assuntos do "Em alta": até 5 nomes de categoria ("News", "Society & Culture"), separados por vírgula. */
+export function cleanCats(cat) {
+  return String(cat ?? '').split(',').map((c) => c.replace(/\s+/g, ' ').trim())
+    .filter((c) => /^[A-Za-z][A-Za-z &-]{1,39}$/.test(c)).slice(0, 5).join(',');
+}
+
 export function cleanQuery(q) {
   return String(q ?? '').replace(/\s+/g, ' ').trim().slice(0, 100);
 }
@@ -54,7 +61,8 @@ export function upstreamUrl(kind, params) {
     // "lang" do trending aceita o código curto; "pt-br" e "pt" entram juntos.
     const base = lang.split('-')[0];
     const langs = [...new Set([base, lang].filter(Boolean))].join(',');
-    return `${PI_BASE}/podcasts/trending?max=${max}${langs ? `&lang=${encodeURIComponent(langs)}` : ''}`;
+    const cats = cleanCats(params.get('cat'));
+    return `${PI_BASE}/podcasts/trending?max=${max}${langs ? `&lang=${encodeURIComponent(langs)}` : ''}${cats ? `&cat=${encodeURIComponent(cats)}` : ''}`;
   }
   return null;
 }
@@ -79,6 +87,9 @@ export function shapeFeeds(data, lang = '', max = MAX) {
       url, title, author: String(f.author ?? f.ownerName ?? '').trim(), image,
       // O trending do Podcast Index não manda "explicit": null = não sei (a TV com modo protegido esconde; 20/11/2026).
       explicit: f?.explicit == null ? null : (f.explicit === true || f.explicit === 1), language: String(f.language ?? '').trim().toLowerCase(),
+      // {"55":"News","59":"Politics"} do Podcast Index vira ["News","Politics"] (a TV junta com os assuntos dela).
+      categories: f?.categories && typeof f.categories === 'object'
+        ? Object.values(f.categories).map((c) => String(c ?? '').trim()).filter(Boolean).slice(0, 8) : [],
     });
   }
   const base = cleanLang(lang).split('-')[0];

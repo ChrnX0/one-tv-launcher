@@ -52,3 +52,13 @@ simple = { limit = 30, period = 60 }
 name = "PODCASTS_UPSTREAM_LIMITER"
 namespace_id = "1004"
 simple = { limit = 60, period = 60 }
+
+# Texto da fala e resumo (src/transcribe.js, 21/11/2026): Workers AI. No plano Free, 10 mil neurônios/dia e para (não cobra).
+[ai]
+binding = "AI"
+
+# Por IP: uma TV manda um pedaço de ~2 min de áudio por vez; 12/min sobra e segura quem quiser gastar a cota de todos.
+[[ratelimits]]
+name = "TRANSCRIBE_IP_LIMITER"
+namespace_id = "1005"
+simple = { limit = 12, period = 60 }

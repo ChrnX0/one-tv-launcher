@@ -36,7 +36,9 @@ object Radios {
 
     /** [logo]: o "favicon" do catálogo (endereço da imagem da rádio, às vezes vazio); a tela Rádio mostra no lugar da capa. */
     data class Radio(val id: String, val nome: String, val url: String, val pais: String = "", val tags: String = "",
-                     val bitrate: Int = 0, val codec: String = "", val logo: String = "")
+                     val bitrate: Int = 0, val codec: String = "", val logo: String = "",
+                     /** Onde fica (só do catálogo, para o globo; NaN = sem lugar). Não vai para as favoritas. */
+                     val lat: Double = Double.NaN, val lon: Double = Double.NaN)
 
     // ---------------------------------------------------------------- puro: o que está tocando
 
@@ -47,6 +49,39 @@ object Radios {
     /** O texto do ICY serve para "tocando agora"? Não vale vazio, o próprio nome da rádio nem texto de espera. */
     fun musicaUtil(t: String?, nomeRadio: String): Boolean =
         !t.isNullOrBlank() && !t.trim().equals(nomeRadio.trim(), ignoreCase = true) && !SEM_MUSICA.matches(t)
+
+    // ---------------------------------------------------------------- puro: já tocou e parecidas (21/11/2026)
+
+    /** Uma música que a rádio anunciou (ICY), com a hora em que começou. */
+    data class Tocada(val horaMs: Long, val texto: String)
+    const val MAX_TOCADAS = 30
+
+    /** Põe a música nova no topo do "Já tocou"; repetida seguida (a rádio reenvia o título) ou vazia não entra. */
+    fun comTocada(l: List<Tocada>, texto: String, agoraMs: Long): List<Tocada> =
+        if (texto.isBlank() || l.firstOrNull()?.texto == texto) l else (listOf(Tocada(agoraMs, texto)) + l).take(MAX_TOCADAS)
+
+    /** Os gêneros da rádio ("pop,rock, MPB" → pop, rock, mpb), sem os genéricos que não dizem nada. */
+    fun tagsDe(r: Radio): List<String> = r.tags.split(',').map { it.trim().lowercase() }
+        .filter { it.length in 2..30 && it !in TAGS_VAZIAS }.distinct()
+    private val TAGS_VAZIAS = setOf("radio", "fm", "am", "online", "music", "musica", "música", "internet", "web", "live", "stream")
+
+    /**
+     * Rádios parecidas com [base]: quantos gêneros dividem (o que mais pesa), depois o mesmo país; a ordem do catálogo
+     * (mais ouvidas primeiro) desempata. Fica de fora a própria rádio, a mesma com outro id (mesmo nome) e quem não
+     * divide nenhum gênero.
+     */
+    fun parecidas(base: Radio, candidatas: List<Radio>, max: Int = 20): List<Radio> {
+        val tags = tagsDe(base).toSet()
+        if (tags.isEmpty()) return emptyList()
+        val nomeBase = base.nome.trim().lowercase()
+        return candidatas.asSequence()
+            .filter { it.id != base.id && it.url != base.url && it.nome.trim().lowercase() != nomeBase }
+            .distinctBy { it.nome.trim().lowercase() }
+            .map { c -> c to tagsDe(c).count { it in tags } * 10 + (if (base.pais.isNotEmpty() && c.pais == base.pais) 3 else 0) }
+            .filter { it.second >= 10 }
+            .sortedByDescending { it.second }   // estável: empate mantém a ordem de cliques do catálogo
+            .take(max).map { it.first }.toList()
+    }
 
     // ---------------------------------------------------------------- puro: endereços
 
@@ -61,6 +96,9 @@ object Radios {
         "https://$servidor/json/stations/search?name=${q(nome.trim())}&$COMUM&limit=$limite"
     fun urlGenero(servidor: String, tag: String, pais: String? = null, limite: Int = LIMITE) =
         "https://$servidor/json/stations/search?tag=${q(tag)}&tagExact=true" + (pais?.let { "&countrycode=${q(it.uppercase())}" } ?: "") + "&$COMUM&limit=$limite"
+    /** As rádios com lugar no mapa, as mais ouvidas do mundo primeiro (o globo, 21/11/2026). */
+    fun urlGlobo(servidor: String, limite: Int = 1500) =
+        "https://$servidor/json/stations/search?has_geo_info=true&$COMUM&limit=$limite"
     fun urlPaises(servidor: String) = "https://$servidor/json/countries?order=stationcount&reverse=true&hidebroken=true"
     fun urlClique(servidor: String, id: String) = "https://$servidor/json/url/${q(id)}"
 
@@ -89,7 +127,9 @@ object Radios {
             if (!vistos.add("$n|$url") or !vistos.add("$n|pais:" + o.optString("countrycode").lowercase())) return@mapNotNull null
             Radio(o.optString("stationuuid").ifBlank { "url:" + url.hashCode() }, nome.take(80), url, o.optString("countrycode"),
                 o.optString("tags").split(',').map { it.trim() }.filter { it.isNotEmpty() }.take(3).joinToString(", "),
-                o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("favicon")))
+                o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("favicon")),
+                o.optDouble("geo_lat", Double.NaN).takeIf { it in -90.0..90.0 } ?: Double.NaN,
+                o.optDouble("geo_long", Double.NaN).takeIf { it in -180.0..180.0 } ?: Double.NaN)
         }
     }.getOrDefault(emptyList())
 

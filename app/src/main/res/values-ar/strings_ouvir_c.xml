@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">الصوت</string>
+    <string name="som_titulo_pod">الصوت · %1$s</string>
+    <string name="som_voz_clara">صوت واضح</string>
+    <string name="som_so_este">لهذا البودكاست فقط</string>
+    <string name="som_abertura">تخطي المقدمة</string>
+    <string name="som_fim">تخطي النهاية</string>
+    <string name="som_segundos">%1$d ث</string>
+    <string name="som_rodape_proprio">هذه الإعدادات خاصة بـ %1$s فقط.</string>
+    <string name="som_rodape_geral">السرعة والصمت والصوت الواضح تسري على كل البودكاست. فعّل \"لهذا البودكاست فقط\" لحفظ إعدادات أخرى لـ %1$s.</string>
+    <string name="som_det">السرعة، صوت واضح، مؤقت</string>
+    <string name="som_det_radio">صوت واضح ومؤقت النوم</string>
+    <string name="cap_titulo">الفصول</string>
+    <string name="cap_de">الفصل %1$d من %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ تحريك 10 ث · OK: الفصول</string>
+    <string name="tx_titulo">نص الكلام</string>
+    <string name="tx_carregando">جارٍ التحميل</string>
+    <string name="tx_nao_tem">غير متوفر في هذه الحلقة</string>
+    <string name="tx_nao_tem_det">لا ينشر هذا البودكاست نص هذه الحلقة.</string>
+    <string name="tx_pe_busca">النتيجة %1$d من %2$d · ◀ ▶ السابق / التالي · ▼ بحث جديد · OK: إغلاق</string>
+    <string name="tx_buscar">ابحث فيما قيل</string>
+    <string name="tx_nada">لم يقل أحد ذلك في هذه الحلقة.</string>
+    <string name="ra_ja_tocou">تم تشغيله</string>
+    <string name="ra_parecidas">محطات مشابهة</string>
+    <string name="som_radio">آخر إذاعة استمعت إليها</string>
+    <string name="som_podcast">أحدث حلقة بودكاست</string>
+    <string name="jor_titulo">أخباري</string>
+    <string name="jor_ouvir">استمع إلى الأخبار</string>
+    <string name="jor_min">%d دقيقة متتالية</string>
+    <string name="tx_pe">◀ ▶ الجملة السابقة / التالية · ▲ ملخص · ▼ بحث · OK: إغلاق</string>
+    <string name="tx_gerando">جارٍ الإنشاء</string>
+    <string name="tx_gerando_det">جارٍ إنشاء النص… يستغرق الجزء الأول نحو دقيقة.</string>
+    <string name="tx_gerar">OK ينشئه (مجانًا)</string>
+    <string name="tx_cota">يعود غدًا</string>
+    <string name="tx_cota_det">انتهت حصة النص المجانية اليوم. ستعود غدًا.</string>
+    <string name="tx_pulei">تم تخطي الإعلان</string>
+    <string name="tx_pulei_det">%d ث · ◀ للعودة إليه</string>
+    <string name="tx_resumo">ملخص Sofy</string>
+    <string name="tx_resumo_de">ملخص · %s</string>
+    <string name="tx_resumindo">أقرأ ما قيل… لحظة.</string>
+    <string name="tx_resumo_falhou">لم يصل الملخص هذه المرة. حاول بعد قليل.</string>
+    <string name="ra_globo">استكشف الكرة الأرضية</string>
+    <string name="ra_globo_det">أدر العالم واهبط على إذاعة من أي مكان</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ تدوير · OK: تشغيل · رجوع: إغلاق</string>
+    <string name="ra_globo_mar">بحر مفتوح… أدر قليلًا بعد</string>
+    <string name="ra_voltar">رجوع 30 ث</string>
+    <string name="ra_voltar_det">فاتك شيء؟ استمع مجددًا (⏪ في جهاز التحكم)</string>
+    <string name="ra_ao_vivo">العودة إلى البث المباشر</string>
+    <string name="ra_atras">متأخر %s عن البث المباشر</string>
+</resources>

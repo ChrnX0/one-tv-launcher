@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">स्क्रीन धीरे-धीरे धुंधली होती है और टीवी बंद हो जाता है</string>
     <string name="cruz_desliga_as">%1$s बजे बंद होगा</string>
     <string name="cruz_dormir_cancelar">रद्द करने के लिए OK</string>
-    <string name="cruz_linha">रेखा</string>
+    <string name="cruz_linha">बुनियादी</string>
     <string name="cruz_mover">यहाँ ले जाएँ…</string>
     <string name="cruz_mover_titulo">%1$s को यहाँ ले जाएँ</string>
     <string name="cruz_central">गेम हब</string>
@@ -88,4 +88,12 @@
     <string name="cruz_canto_tocando">चल रहा</string>
     <string name="cruz_canto_parou">यहाँ रुका</string>
     <string name="cruz_canto_conectado">जुड़ा है</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">विंटेज</string>
+    <string name="cruz_joia">रत्न</string>
+    <string name="cruz_foto">फ़ोटो-जैसा</string>
+    <string name="cruz_vintage2">विंटेज 2.0</string>
+    <string name="cruz_icone_seguir">सेट जैसा (%1$s)</string>
+    <string name="cruz_icone_de">आइकन: %1$s</string>
+    <string name="cruz_icone_categoria">पूरी श्रेणी: %1$s</string>
 </resources>
