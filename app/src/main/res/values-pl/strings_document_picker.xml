@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">Wybierz folder</string>
+    <string name="dp_titulo_arquivo">Wybierz plik</string>
+    <string name="dp_titulo_salvar">Wybierz miejsce zapisu</string>
+    <string name="dp_para">Dla %1$s</string>
+    <string name="dp_usar_pasta">Użyj tego folderu</string>
+    <string name="dp_salvar_aqui">Zapisz tutaj</string>
+    <string name="dp_memoria">Pamięć telewizora</string>
+    <string name="dp_rede">Folder sieciowy</string>
+    <string name="dp_livre">Wolne: %1$s</string>
+    <string name="dp_vazia">Nie ma tu nic do wybrania</string>
+    <string name="dp_abrindo">Otwieranie…</string>
+    <string name="dp_erro">Nie udało się otworzyć tego miejsca. Sprawdź połączenie i spróbuj ponownie.</string>
+    <string name="dp_arquivos">Pliki w tym folderze: %1$d</string>
+    <string name="dp_dicas">OK: otwórz · WSTECZ: wróć</string>
+    <string name="dp_diario">%1$s otrzymał %2$s z wyboru plików</string>
+    <string name="dp_sem_nome">bez nazwy</string>
+</resources>
