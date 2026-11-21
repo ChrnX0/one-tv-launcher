@@ -13,7 +13,7 @@ import android.content.Context
  *   (sem --es cep = apaga o endereço)
  */
 object LocalClima {
-    private const val PREFS = "launcher"
+    private const val PREFS = Prefs.LAUNCHER
     const val CHAVE_NOME = "clima_local_nome"
     const val CHAVE_LAT = "clima_local_lat"
     const val CHAVE_LON = "clima_local_lon"

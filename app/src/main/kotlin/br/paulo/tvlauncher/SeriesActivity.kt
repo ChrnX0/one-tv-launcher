@@ -121,7 +121,7 @@ class SeriesActivity : Activity() {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         perfilCarregado = Perfil.chaveDados(this)
-        ordem = runCatching { Vod.Ordem.valueOf(getSharedPreferences("player", MODE_PRIVATE).getString("ordem_series", "")!!) }.getOrDefault(Vod.Ordem.RECENTES)
+        ordem = runCatching { Vod.Ordem.valueOf(getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getString("ordem_series", "")!!) }.getOrDefault(Vod.Ordem.RECENTES)
         // Coerência visual parte 2 (12/11/2026): o grafite e a margem da HOME (eram FUNDO liso e 32/26 dp).
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(context) }
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(18)) }
@@ -252,7 +252,7 @@ class SeriesActivity : Activity() {
     }
 
     // Preferências por perfil (ideia 11): a última categoria e o marco dos "novos" são de cada pessoa.
-    private fun prefsPlayer() = getSharedPreferences("player", MODE_PRIVATE)
+    private fun prefsPlayer() = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
     private fun chavePref(nome: String) = "${nome}_series_" + Perfil.chaveDados(this)
 
     private fun guardarMarco() {
@@ -680,7 +680,7 @@ class SeriesActivity : Activity() {
             }
             if (ordem == Vod.Ordem.NOME) pular() else {
                 ordem = Vod.Ordem.NOME
-                getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
+                getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
                 recalcular(ModoGrade.NOVA) { pular() }
             }
         }
@@ -697,7 +697,7 @@ class SeriesActivity : Activity() {
         val todas = Vod.Ordem.values()
         Estilo.lista(this, getString(R.string.filmes_ordem_titulo), todas.map { nomeOrdem(it) }, listOf(todas.indexOf(ordem))) { i ->
             ordem = todas[i]
-            getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
+            getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
             recalcular(ModoGrade.NOVA)
         }
     }

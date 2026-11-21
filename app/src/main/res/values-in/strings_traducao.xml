@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">Pintasan suara</string>
     <string name="mcp_olhou_tela">Claude melihat layar</string>
     <string name="pg_max_min">tertinggi %1$d° · terendah %2$d°</string>
-    <string name="pg_por_do_sol">terbenam %1$s</string>
     <string name="pg_compras">Daftar belanja</string>
     <string name="cf_negar">Tolak</string>
     <string name="cf_permitir">Izinkan</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">Hapus</string>
     <string name="pn_parear">Pasangkan</string>
     <string name="pn_titulo">Pasangkan launcher (tanpa PC)</string>
-    <string name="pn_lido">kode dibaca dari layar</string>
     <string name="pn_nao_achei">belum menemukan layar pemasangan</string>
     <string name="pn_6">kodenya 6 digit</string>
     <string name="pn_pareado">terpasang! memeriksa shell…</string>

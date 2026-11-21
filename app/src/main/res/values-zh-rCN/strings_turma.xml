@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">沙发上</string>
-    <string name="jogos_continuar">继续</string>
     <string name="jogos_controle_pronto">就绪</string>
     <string name="jogos_controle_carregar">该充电了</string>
     <string name="jogos_parear_um">配对手柄</string>
-    <string name="jogos_todos">全部</string>
     <string name="turma_titulo">你的伙伴</string>
     <string name="turma_online">%1$d 人在线</string>
     <string name="turma_mais_online">+ %1$d 人在线</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">服务器小部件已关闭</string>
     <string name="turma_desligado_texto">在 Discord 中：服务器设置，小部件，打开“启用服务器小部件”。</string>
     <string name="turma_qr_dica">用手机对准这里加入语音。聊天在手机上进行。</string>
-    <string name="turma_aqui">%1$d 位伙伴在这里</string>
     <string name="turma_jogando">%1$s 正在玩 %2$s</string>
     <string name="turma_dois">%1$s 和 %2$s</string>
     <string name="turma_e_mais">%1$s 等 %2$d 人</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">保存</string>
     <string name="turma_config_tirar">移除伙伴</string>
     <string name="turma_id_invalido">这不是 Discord 服务器 ID（17 到 20 位数字）。</string>
-    <string name="cruz_sofa">沙发</string>
     <string name="cruz_sofa_sub">手柄和你的 Discord 伙伴</string>
     <string name="cruz_sofa_voz">%1$d 人语音中 · %2$s</string>
 </resources>

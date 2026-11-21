@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (zh-rCN) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">游戏</string>
-    <string name="home_destaque_jogos_vazio">玩云游戏、电脑游戏和复古游戏</string>
-    <string name="home_linha_continuar_jogos">观看和游戏</string>
-    <string name="home_jogos_ultimo">上次：%1$s</string>
     <string name="extras_CARD_JOGOS">主屏幕上的游戏卡片（游戏应用离开应用行）</string>
     <string name="extras_MODO_JOGO">游戏模式：游戏打开期间，屏保、夜间滤镜和提醒会等待</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">打开游戏手柄时打开游戏界面</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">复古</string>
     <string name="jogos_grupo_tv">电视上的游戏</string>
     <string name="jogos_para_comecar">入门推荐</string>
-    <string name="jogos_vazio_dica">此电视上还没有游戏。从上方选择一个即可在 Play 商店中打开其页面。</string>
-    <string name="jogos_dica_segurar">在游戏上长按 OK 可将其移到其他分组或从这里移除。</string>
     <string name="jogos_aviso_fraca_titulo">网络较弱，不适合云游戏</string>
     <string name="jogos_aviso_fraca">游戏可能卡顿或延迟。使用网线或将电视靠近路由器会有帮助。</string>
     <string name="jogos_jogar_assim">仍然开始</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">用哪个应用在电脑上玩？</string>
     <string name="jogos_pc_acordando">正在唤醒电脑… %1$d 秒</string>
     <string name="jogos_pc_nao_respondeu">电脑无响应。仍将打开应用。</string>
-    <string name="jogos_seus">你的游戏</string>
     <string name="jogos_mais_jogos">更多游戏</string>
     <string name="jogos_mais_opcoes">更多</string>
-    <string name="jogos_por_tipo">按类型</string>
-    <string name="jogos_jogar">开始游戏</string>
     <string name="jogos_ligar_pc_jogar">打开电脑并开始游戏</string>
-    <string name="jogos_desc_nuvem">游戏在互联网上的电脑中运行，电视接收画面。需要良好的网络。</string>
     <string name="jogos_desc_pc">在电视上玩家中电脑或主机上的游戏。</string>
-    <string name="jogos_desc_retro">来自多种主机的经典游戏。</string>
-    <string name="jogos_desc_tv">安装在电视本机上的游戏。</string>
-    <string name="jogos_jogado">上次玩：%1$s。</string>
-    <string name="jogos_nenhum_titulo">还没有游戏</string>
-    <string name="jogos_chip_sem_controle">无手柄</string>
     <string name="jogos_chip_medindo">正在检查网络…</string>
     <string name="jogos_chip_boa">网络良好</string>
     <string name="jogos_chip_ok">网络正常</string>
     <string name="jogos_chip_fraca">网络较弱</string>
     <string name="jogos_chip_sem">无网络</string>
-    <string name="jogos_tecla_escolher">选择</string>
     <string name="jogos_tecla_jogar">开始游戏</string>
-    <string name="jogos_tecla_mais">更多选项</string>
     <string name="jogos_tecla_segurar">长按 OK</string>
     <string name="jogos_tecla_opcoes">更换分组</string>
     <plurals name="jogos_qtd">

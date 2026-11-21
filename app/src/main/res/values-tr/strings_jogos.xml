@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (tr) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">Oyunlar</string>
-    <string name="home_destaque_jogos_vazio">Bulutta, bilgisayarınızdan ve retro oyunlar oynayın</string>
-    <string name="home_linha_continuar_jogos">İZLE VE OYNA</string>
-    <string name="home_jogos_ultimo">Son: %1$s</string>
     <string name="extras_CARD_JOGOS">Ana ekranda Oyunlar kartı (oyun uygulamaları uygulamalar satırından çıkar)</string>
     <string name="extras_MODO_JOGO">Oyun modu: bir oyun açıkken ekran koruyucu, gece filtresi ve uyarılar bekler</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">Bir oyun kumandasını açmak Oyunlar ekranını açar</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">Retro</string>
     <string name="jogos_grupo_tv">TV’de oyunlar</string>
     <string name="jogos_para_comecar">Başlamak için</string>
-    <string name="jogos_vazio_dica">Bu TV’de henüz oyun yok. Play Store sayfasını açmak için yukarıdan birini seçin.</string>
-    <string name="jogos_dica_segurar">Bir oyunu başka gruba taşımak veya buradan çıkarmak için üzerinde OK’yi basılı tutun.</string>
     <string name="jogos_aviso_fraca_titulo">Bulut oyunu için zayıf ağ</string>
     <string name="jogos_aviso_fraca">Oyun takılabilir veya gecikebilir. Ağ kablosu veya TV’nin yönlendiriciye daha yakın olması yardımcı olur.</string>
     <string name="jogos_jogar_assim">Yine de oyna</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">PC’de hangi uygulama oynatsın?</string>
     <string name="jogos_pc_acordando">PC uyandırılıyor… %1$d sn</string>
     <string name="jogos_pc_nao_respondeu">PC yanıt vermedi. Uygulama yine de açılıyor.</string>
-    <string name="jogos_seus">Oyunlarınız</string>
     <string name="jogos_mais_jogos">Daha fazla oyun</string>
     <string name="jogos_mais_opcoes">Daha fazla</string>
-    <string name="jogos_por_tipo">Türe göre</string>
-    <string name="jogos_jogar">Oyna</string>
     <string name="jogos_ligar_pc_jogar">PC’yi aç ve oyna</string>
-    <string name="jogos_desc_nuvem">Oyun internetteki bir bilgisayarda çalışır ve TV görüntüyü alır. İyi bir ağ gerekir.</string>
     <string name="jogos_desc_pc">Evdeki bilgisayar veya konsoldaki oyunları burada, TV’de oynayın.</string>
-    <string name="jogos_desc_retro">Birçok konsoldan klasik oyunlar.</string>
-    <string name="jogos_desc_tv">TV’nin kendisine yüklü bir oyun.</string>
-    <string name="jogos_jogado">Son oynanma: %1$s.</string>
-    <string name="jogos_nenhum_titulo">Henüz oyun yok</string>
-    <string name="jogos_chip_sem_controle">Kumanda yok</string>
     <string name="jogos_chip_medindo">Ağ denetleniyor…</string>
     <string name="jogos_chip_boa">İyi ağ</string>
     <string name="jogos_chip_ok">Ağ tamam</string>
     <string name="jogos_chip_fraca">Zayıf ağ</string>
     <string name="jogos_chip_sem">İnternet yok</string>
-    <string name="jogos_tecla_escolher">seç</string>
     <string name="jogos_tecla_jogar">oyna</string>
-    <string name="jogos_tecla_mais">diğer seçenekler</string>
     <string name="jogos_tecla_segurar">OK’yi basılı tut</string>
     <string name="jogos_tecla_opcoes">grup değiştir</string>
     <plurals name="jogos_qtd">

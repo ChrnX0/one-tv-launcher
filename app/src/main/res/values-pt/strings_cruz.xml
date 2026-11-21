@@ -61,7 +61,6 @@
     <string name="jogos_semana">Esta semana</string>
     <string name="jogos_semana_jogado">jogados em 7 dias</string>
     <string name="jogos_semana_mais">mais jogado</string>
-    <string name="jogos_semana_controles">controles ligados</string>
     <string name="jogos_menos_de_1_min">menos de 1 min</string>
     <string name="jogos_min">%1$d min</string>
     <string name="jogos_h_min">%1$d h %2$d min</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Confira se o servidor dele está ligado. A TV tenta de novo sozinha a cada poucos segundos.</string>
     <string name="cruz_barra_ilha">Ilha</string>
     <string name="cruz_canto_no_ar">No ar</string>
-    <string name="cruz_canto_buscar">Buscar</string>
-    <string name="cruz_canto_buscar_txt">▲ abre a barra com a busca</string>
     <string name="cruz_canto_gravando">Gravando</string>
     <string name="cruz_canto_tocando">Tocando</string>
     <string name="cruz_canto_parou">Parou em</string>

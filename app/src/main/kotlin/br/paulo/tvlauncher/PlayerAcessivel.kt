@@ -9,7 +9,7 @@ package br.paulo.tvlauncher
  * dono escolhe no menu ▼ do player ou nas Configurações.
  */
 object PlayerAcessivel {
-    const val PREFS = "player"
+    const val PREFS = Prefs.PLAYER
     const val LEGENDA_FUNDO = "legenda_fundo"       // fundo preto opaco atrás da letra
     const val LEGENDA_AMARELA = "legenda_amarela"   // letra amarela no lugar da branca
     const val LEGENDA_ALTO = "legenda_alto"         // elevação 6.5: legenda em cima (placar de jogo, letreiro embaixo)

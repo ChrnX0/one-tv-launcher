@@ -37,7 +37,7 @@ object BotoesControle {
 
     fun botao(tecla: Int) = BOTOES.firstOrNull { it.tecla == tecla }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
 
     fun appDo(ctx: Context, b: Botao): String = prefs(ctx).getString("botao_${b.tecla}", b.padrao) ?: b.padrao
 

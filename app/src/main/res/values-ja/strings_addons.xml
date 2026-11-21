@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">ソースを選択</string>
     <string name="ad_dica_voltar">戻る</string>
     <string name="ad_cfg_det">インストール済みのアドオン。選んで追加または削除します。</string>
-    <string name="ad_cfg_remover_qual">どのアドオンを削除しますか？</string>
     <string name="ad_cfg_remover">%1$s をこのテレビから削除します。</string>
     <string name="ad_cfg_remover_sim">削除</string>
     <string name="ad_add_titulo">アドオンを追加</string>

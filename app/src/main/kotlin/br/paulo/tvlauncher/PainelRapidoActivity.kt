@@ -353,7 +353,7 @@ class PainelRapidoActivity : Activity() {
 
     /** O clima que a HOME guardou (prefs "clima"): ícone, temperatura e condição. Velho (> 3 h) some. */
     private fun mostrarClima() {
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val codigo = c.getInt("codigo", -1)
         if (codigo < 0 || System.currentTimeMillis() - c.getLong("em", 0) > 3 * 3600_000L) {
             sepClima.visibility = View.GONE; imgClima.visibility = View.GONE; txtClima.visibility = View.GONE; return

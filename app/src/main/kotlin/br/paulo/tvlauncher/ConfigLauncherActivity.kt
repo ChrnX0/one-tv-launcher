@@ -106,7 +106,7 @@ class ConfigLauncherActivity : Activity() {
     private var liberadoHospede = false   // modo hóspede: o PIN já foi acertado nesta visita às Configurações
     // Erros do PIN guardados (TentativasPin, como no player): fechar e abrir as Configurações não dá mais 5 tentativas.
     // Preferência própria do processo da HOME ("config_pin"); a do player ("player_pin") é do processo ":player".
-    private val prefsPin by lazy { getSharedPreferences("config_pin", MODE_PRIVATE) }
+    private val prefsPin by lazy { getSharedPreferences(Prefs.CONFIG_PIN, MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

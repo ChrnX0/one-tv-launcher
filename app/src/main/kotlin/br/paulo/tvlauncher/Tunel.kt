@@ -13,7 +13,7 @@ import android.util.Log
  * versão. Só uma atualização do sistema (que pode trazer o decodificador consertado) dá nova chance.
  */
 object Tunel {
-    private const val PREFS = "player"
+    private const val PREFS = Prefs.PLAYER
     private const val CHAVE = "tunel_falhou_sistema"
 
     fun permitido(ctx: Context): Boolean =

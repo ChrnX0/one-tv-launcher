@@ -31,7 +31,7 @@ class VindoDoProjectivyActivity : Activity() {
 
         /** Na HOME: mostra uma vez se o Projectivy estiver instalado. Barato: uma leitura de prefs (e só 1 IPC na 1ª vez). */
         fun talvezMostrar(ctx: Context) {
-            val prefs = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+            val prefs = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
             if (prefs.getBoolean(CHAVE, false)) return
             prefs.edit().putBoolean(CHAVE, true).apply()   // antes de abrir: se cair, não reabre em laço
             if (instalado(ctx)) ctx.startActivity(Intent(ctx, VindoDoProjectivyActivity::class.java))

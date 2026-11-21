@@ -20,10 +20,10 @@ object SplashOverlay {
     private const val TAG_VIEW = "sofaly_splash"
 
     fun enabled(ctx: Context): Boolean =
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getBoolean(SplashRules.PREF, true)
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getBoolean(SplashRules.PREF, true)
 
     fun setEnabled(ctx: Context, on: Boolean) {
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putBoolean(SplashRules.PREF, on).apply()
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putBoolean(SplashRules.PREF, on).apply()
     }
 
     /** Põe a logo por cima da [a]. Já aberta: só recomeça a contagem. */

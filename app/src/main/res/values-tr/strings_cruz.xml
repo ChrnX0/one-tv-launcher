@@ -61,7 +61,6 @@
     <string name="jogos_semana">Bu hafta</string>
     <string name="jogos_semana_jogado">7 günde oynandı</string>
     <string name="jogos_semana_mais">en çok oynanan</string>
-    <string name="jogos_semana_controles">açık kumanda</string>
     <string name="jogos_menos_de_1_min">1 dk’dan az</string>
     <string name="jogos_min">%1$d dk</string>
     <string name="jogos_h_min">%1$d sa %2$d dk</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Sunucusunun açık olduğunu kontrol edin. TV birkaç saniyede bir kendisi yeniden dener.</string>
     <string name="cruz_barra_ilha">Ada</string>
     <string name="cruz_canto_no_ar">Yayında</string>
-    <string name="cruz_canto_buscar">Ara</string>
-    <string name="cruz_canto_buscar_txt">▲ arama çubuğunu açar</string>
     <string name="cruz_canto_gravando">Kaydediliyor</string>
     <string name="cruz_canto_tocando">Çalıyor</string>
     <string name="cruz_canto_parou">Kaldığı yer</string>

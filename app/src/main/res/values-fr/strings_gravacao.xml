@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s jusqu’à %2$s</string>
     <string name="grv_ate_hora">jusqu’à %1$s</string>
     <string name="grv_selo">ENREGISTREMENT jusqu’à %1$s</string>
-    <string name="grv_selo_home">Enregistrement de %1$s</string>
     <string name="grv_sem_canal">La chaîne n’est pas dans la liste enregistrée. Ouvrez la TV en direct une fois et réessayez.</string>
     <string name="grv_sem_destino">Nulle part où enregistrer : branchez une clé USB sur le hub, ou choisissez un dossier réseau dans TV › Enregistrements.</string>
     <string name="grv_pendrive_formato">La clé USB « %1$s » utilise un format que la TV ne lit pas (NTFS). Utilisez une clé en exFAT ou FAT32, ou formatez celle-ci dans Paramètres › Système › Stockage (cela efface son contenu).</string>

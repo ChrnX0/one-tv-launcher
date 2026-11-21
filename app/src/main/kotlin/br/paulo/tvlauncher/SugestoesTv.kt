@@ -17,7 +17,7 @@ object SugestoesTv {
     private const val DISPENSADAS = "sugestao_dispensadas"
     private const val DIA_MS = 24 * 60 * 60_000L
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("extras", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.EXTRAS, Context.MODE_PRIVATE)
 
     fun aoRetomarHome(a: Activity) {
         val p = prefs(a)

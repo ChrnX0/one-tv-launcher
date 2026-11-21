@@ -61,7 +61,6 @@
     <string name="jogos_semana">Esta semana</string>
     <string name="jogos_semana_jogado">jugados en 7 días</string>
     <string name="jogos_semana_mais">más jugado</string>
-    <string name="jogos_semana_controles">mandos encendidos</string>
     <string name="jogos_menos_de_1_min">menos de 1 min</string>
     <string name="jogos_min">%1$d min</string>
     <string name="jogos_h_min">%1$d h %2$d min</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Comprueba que su servidor esté encendido. La TV vuelve a intentarlo sola cada pocos segundos.</string>
     <string name="cruz_barra_ilha">Isla</string>
     <string name="cruz_canto_no_ar">En el aire</string>
-    <string name="cruz_canto_buscar">Buscar</string>
-    <string name="cruz_canto_buscar_txt">▲ abre la barra con la búsqueda</string>
     <string name="cruz_canto_gravando">Grabando</string>
     <string name="cruz_canto_tocando">Sonando</string>
     <string name="cruz_canto_parou">Paró en</string>

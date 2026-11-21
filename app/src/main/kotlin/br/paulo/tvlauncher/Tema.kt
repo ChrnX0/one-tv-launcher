@@ -26,7 +26,7 @@ enum class Tema(private val rotulo: Int) {
         private const val CHAVE = "tema"
 
         fun atual(ctx: Context): Tema = try {
-            valueOf(ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE, ESCURO.name) ?: ESCURO.name)
+            valueOf(ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getString(CHAVE, ESCURO.name) ?: ESCURO.name)
                 // "Meu fundo" sem arquivo (apagado do pendrive, por exemplo) volta ao Escuro em vez de tela preta.
                 .let { if (it == MEU && FundoMeuDados.arquivo(ctx) == null) ESCURO else it }
                 // Plugin de fundo sem plugin escolhido (desinstalado, desligado): Escuro. O OK (certificado) a view confere.
@@ -35,14 +35,14 @@ enum class Tema(private val rotulo: Int) {
 
         /** Grava o tema escolhido (painel web, aba Configurações). */
         fun definir(ctx: Context, t: Tema) {
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, t.name).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putString(CHAVE, t.name).apply()
         }
 
         /** Passa para o próximo tema da lista (dá a volta). */
         fun proximo(ctx: Context): Tema {
             val opcoes = values().filter { (it != MEU || FundoMeuDados.arquivo(ctx) != null) && (it != PLUGIN || WallpaperPlugins.escolhidoId(ctx) != null) }
             val novo = opcoes[(opcoes.indexOf(atual(ctx)) + 1).coerceAtLeast(0) % opcoes.size]
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, novo.name).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putString(CHAVE, novo.name).apply()
             return novo
         }
     }

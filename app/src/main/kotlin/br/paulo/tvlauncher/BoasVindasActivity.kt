@@ -26,14 +26,14 @@ class BoasVindasActivity : Activity() {
 
         /** Mostra o assistente se for a primeira vez e o launcher não for Device Owner. Barato: uma leitura de prefs. */
         fun talvezMostrar(ctx: Context) {
-            val prefs = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+            val prefs = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
             if (prefs.getBoolean(CHAVE, false)) return
             if (PrivilegioDO.somosDonos(ctx)) { prefs.edit().putBoolean(CHAVE, true).apply(); return }
             ctx.startActivity(Intent(ctx, BoasVindasActivity::class.java))
         }
 
         fun marcarVista(ctx: Context) =
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putBoolean(CHAVE, true).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putBoolean(CHAVE, true).apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

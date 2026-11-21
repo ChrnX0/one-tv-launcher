@@ -30,7 +30,7 @@ import java.io.File
  */
 object Perfil {
     private const val TAG = "TvLauncher.Perfil"
-    private const val PREFS = "launcher"
+    private const val PREFS = Prefs.LAUNCHER
     private const val CHAVE_ATIVO = "perfil_ativo"
 
     /** Os e-mails das contas Google da TV, na ordem do Android. Vazio se não houver conta (ou sem permissão). */

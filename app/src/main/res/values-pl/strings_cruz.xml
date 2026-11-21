@@ -61,7 +61,6 @@
     <string name="jogos_semana">W tym tygodniu</string>
     <string name="jogos_semana_jogado">grania w 7 dni</string>
     <string name="jogos_semana_mais">najczęściej grane</string>
-    <string name="jogos_semana_controles">włączone pady</string>
     <string name="jogos_menos_de_1_min">poniżej 1 min</string>
     <string name="jogos_min">%1$d min</string>
     <string name="jogos_h_min">%1$d godz. %2$d min</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Sprawdź, czy jego serwer jest włączony. Telewizor sam ponawia próbę co kilka sekund.</string>
     <string name="cruz_barra_ilha">Wyspa</string>
     <string name="cruz_canto_no_ar">Na antenie</string>
-    <string name="cruz_canto_buscar">Szukaj</string>
-    <string name="cruz_canto_buscar_txt">▲ otwiera pasek z wyszukiwaniem</string>
     <string name="cruz_canto_gravando">Nagrywa</string>
     <string name="cruz_canto_tocando">Odtwarzane</string>
     <string name="cruz_canto_parou">Zatrzymano na</string>

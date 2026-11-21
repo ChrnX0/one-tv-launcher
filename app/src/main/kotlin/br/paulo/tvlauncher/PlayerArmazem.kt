@@ -31,7 +31,7 @@ object PlayerArmazem {
 
     // internal: o backup completo guarda uma cópia para desfazer, se a restauração falhar no meio
     internal fun arquivoContas(ctx: Context) = File(pasta(ctx), "contas.json")
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("player", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE)
 
     fun pasta(ctx: Context): File = File(ctx.filesDir, "player").apply { mkdirs() }
 

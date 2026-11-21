@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">प्लगइन</string>
-    <string name="plg_cfg_det">देखें पंक्ति में दूसरे ऐप्स के कार्ड। हर एक को आपकी अनुमति चाहिए।</string>
-    <string name="plg_det">केवल भरोसेमंद ऐप्स चालू करें। प्लगइन सिर्फ़ छोटा टेक्स्ट भेजता है; वह आपके ऐप्स या खाते नहीं देख सकता।</string>
     <string name="plg_nenhum">कोई प्लगइन इंस्टॉल नहीं है। प्लगइन दूसरे डेवलपर्स के ऐप हैं जो यहाँ कार्ड दिखाते हैं, जैसे मैच का स्कोर या कोई कीमत।</string>
     <string name="plg_ligado">चालू</string>
     <string name="plg_desligado">बंद</string>

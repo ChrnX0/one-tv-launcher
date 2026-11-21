@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">Subtítulos traducidos en la TV (traducción automática). El resto se sigue traduciendo.</string>
     <string name="legenda_trad_pronta">Traducción de subtítulos terminada</string>
     <string name="series_sinopse_mais">Sinopsis completa</string>
-    <string name="series_sinopse_menos">Sinopsis más corta</string>
     <string name="series_continuar_curto">▶  Continuar %1$s</string>
     <string name="series_episodios">Episodios</string>
     <string name="series_trocar_temporada">Cambiar temporada</string>

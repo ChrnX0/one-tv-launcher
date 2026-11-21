@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Плагины</string>
-    <string name="plg_cfg_det">Карточки других приложений в ряду «Смотреть». Каждой нужно ваше разрешение.</string>
-    <string name="plg_det">Включайте только приложения, которым доверяете. Плагин передаёт лишь короткий текст и не видит ваши приложения и аккаунты.</string>
     <string name="plg_nenhum">Плагины не установлены. Плагины — это приложения других разработчиков, которые показывают здесь карточку, например счёт матча или цену.</string>
     <string name="plg_ligado">Вкл.</string>
     <string name="plg_desligado">Выкл.</string>

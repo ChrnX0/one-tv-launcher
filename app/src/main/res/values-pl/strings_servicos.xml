@@ -13,7 +13,6 @@
     <string name="sv_desligado">Zaloguj się</string>
     <string name="sv_entrando">logowanie…</string>
     <string name="sv_conectado">połączono</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">wł.</string>
     <string name="sv_sem_chave">Ta wersja nie ma jeszcze kluczy tych serwisów. Pojawią się po następnej aktualizacji.</string>
     <string name="sv_pedindo">Pobieranie kodu z %1$s…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">Hasło</string>
     <string name="sv_gravar">Zapisz</string>
     <string name="sv_cancelar">Anuluj</string>
-    <string name="sv_conferindo">Sprawdzanie w %1$s…</string>
     <string name="sv_limite_dia">Dzienny limit napisów wyczerpany. Odnowi się za 24 h (z kontem OpenSubtitles – 20 dziennie).</string>
     <string name="sv_tmdb_atribuicao">Ten produkt używa API TMDB, ale nie jest zatwierdzony ani certyfikowany przez TMDB.</string>
     <string name="ext_saga">%1$s · %2$d z %3$d na Twojej liście</string>

@@ -55,7 +55,7 @@ object RemapTeclas {
             put(tecla.toString(), JSONObject().apply { for ((g, a) in gestos) put(g.chave, a) })
     }.toString()
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
 
     fun todas(ctx: Context): Map<Int, Map<Gesto, String>> = lerJson(prefs(ctx).getString(CHAVE, null))
 

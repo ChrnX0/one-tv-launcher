@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (in) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">Game</string>
-    <string name="home_destaque_jogos_vazio">Main di cloud, dari PC, dan game retro</string>
-    <string name="home_linha_continuar_jogos">TONTON DAN MAIN</string>
-    <string name="home_jogos_ultimo">Terakhir: %1$s</string>
     <string name="extras_CARD_JOGOS">Kartu Game di layar utama (aplikasi game keluar dari baris aplikasi)</string>
     <string name="extras_MODO_JOGO">Mode game: selama game terbuka, screensaver, filter malam, dan pemberitahuan menunggu</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">Menyalakan pengontrol game membuka layar Game</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">Retro</string>
     <string name="jogos_grupo_tv">Game di TV</string>
     <string name="jogos_para_comecar">Untuk memulai</string>
-    <string name="jogos_vazio_dica">Belum ada game di TV ini. Pilih salah satu di atas untuk membuka halamannya di Play Store.</string>
-    <string name="jogos_dica_segurar">Tahan OK pada game untuk memindahkannya ke grup lain atau mengeluarkannya dari sini.</string>
     <string name="jogos_aviso_fraca_titulo">Jaringan lemah untuk cloud gaming</string>
     <string name="jogos_aviso_fraca">Game bisa tersendat atau lambat. Kabel jaringan, atau TV lebih dekat ke router, membantu.</string>
     <string name="jogos_jogar_assim">Tetap main</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">Aplikasi mana yang memutar dari PC?</string>
     <string name="jogos_pc_acordando">Membangunkan PC… %1$d dtk</string>
     <string name="jogos_pc_nao_respondeu">PC tidak menjawab. Tetap membuka aplikasi.</string>
-    <string name="jogos_seus">Game Anda</string>
     <string name="jogos_mais_jogos">Game lain</string>
     <string name="jogos_mais_opcoes">Lainnya</string>
-    <string name="jogos_por_tipo">Menurut jenis</string>
-    <string name="jogos_jogar">Main</string>
     <string name="jogos_ligar_pc_jogar">Nyalakan PC dan main</string>
-    <string name="jogos_desc_nuvem">Game berjalan di komputer di internet dan TV menerima gambarnya. Perlu jaringan yang baik.</string>
     <string name="jogos_desc_pc">Mainkan game dari komputer atau konsol di rumah langsung di TV ini.</string>
-    <string name="jogos_desc_retro">Game klasik dari banyak konsol.</string>
-    <string name="jogos_desc_tv">Game yang terpasang di TV itu sendiri.</string>
-    <string name="jogos_jogado">Terakhir dimainkan %1$s.</string>
-    <string name="jogos_nenhum_titulo">Belum ada game</string>
-    <string name="jogos_chip_sem_controle">Tidak ada pengontrol</string>
     <string name="jogos_chip_medindo">Memeriksa jaringan…</string>
     <string name="jogos_chip_boa">Jaringan baik</string>
     <string name="jogos_chip_ok">Jaringan oke</string>
     <string name="jogos_chip_fraca">Jaringan lemah</string>
     <string name="jogos_chip_sem">Tidak ada internet</string>
-    <string name="jogos_tecla_escolher">pilih</string>
     <string name="jogos_tecla_jogar">main</string>
-    <string name="jogos_tecla_mais">opsi lain</string>
     <string name="jogos_tecla_segurar">tahan OK</string>
     <string name="jogos_tecla_opcoes">ganti grup</string>
     <plurals name="jogos_qtd">

@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">Pilih sumber</string>
     <string name="ad_dica_voltar">kembali</string>
     <string name="ad_cfg_det">Addon terpasang. Pilih untuk menambah atau menghapus.</string>
-    <string name="ad_cfg_remover_qual">Hapus add-on yang mana?</string>
     <string name="ad_cfg_remover">%1$s akan dihapus dari TV ini.</string>
     <string name="ad_cfg_remover_sim">Hapus</string>
     <string name="ad_add_titulo">Tambah addon</string>

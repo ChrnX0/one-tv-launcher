@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">слушать</string>
     <string name="ra_dica_favoritar">в избранное</string>
     <string name="ra_carregando">Загрузка станций…</string>
-    <string name="ra_subtitulo">Станции со всего мира · 1–9 на пульте включают избранные</string>
     <string name="ra_sem_catalogo">Каталог радио не ответил. Избранные по-прежнему работают.</string>
     <string name="ra_nada">Станции не найдены.</string>
     <string name="ra_continuar">продолжить</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Поиск по названию</string>
     <string name="ra_buscar_det">Любая станция мира</string>
     <string name="ra_generos">Жанры</string>
-    <string name="ra_paises">Другая страна</string>
-    <string name="ra_paises_det">Страны с наибольшим числом станций</string>
     <string name="ra_perto">Рядом</string>
-    <string name="ra_mais_ouvidas">Популярное: %s</string>
     <string name="ra_mundo">Популярное в мире</string>
     <string name="ra_resultado">Поиск: %s</string>
     <string name="ra_favoritada">Добавлено в избранное</string>

@@ -13,7 +13,6 @@
     <string name="sv_desligado">साइन इन करें</string>
     <string name="sv_entrando">साइन इन हो रहा है…</string>
     <string name="sv_conectado">कनेक्टेड</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">चालू</string>
     <string name="sv_sem_chave">इस बिल्ड में अभी इन सेवाओं की कुंजियाँ नहीं हैं। अगले अपडेट के बाद दिखेंगी।</string>
     <string name="sv_pedindo">%1$s से कोड माँगा जा रहा है…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">पासवर्ड</string>
     <string name="sv_gravar">सेव करें</string>
     <string name="sv_cancelar">रद्द करें</string>
-    <string name="sv_conferindo">%1$s से जाँचा जा रहा है…</string>
     <string name="sv_limite_dia">आज की सबटाइटल सीमा ख़त्म। यह 24 घंटे में फिर भरती है (OpenSubtitles खाते से दिन में 20)।</string>
     <string name="sv_tmdb_atribuicao">यह उत्पाद TMDB API इस्तेमाल करता है पर TMDB द्वारा समर्थित या प्रमाणित नहीं है।</string>
     <string name="ext_saga">%1$s · आपकी सूची में %3$d में से %2$d</string>

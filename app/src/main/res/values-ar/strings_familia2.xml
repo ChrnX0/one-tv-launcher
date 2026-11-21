@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">استماع</string>
     <string name="ra_dica_favoritar">مفضلة</string>
     <string name="ra_carregando">جارٍ تحميل المحطات…</string>
-    <string name="ra_subtitulo">محطات من كل أنحاء العالم · 1–9 على جهاز التحكم تشغّل مفضلاتك</string>
     <string name="ra_sem_catalogo">كتالوج الراديو لم يستجب. مفضلاتك ما زالت تعمل.</string>
     <string name="ra_nada">لم يُعثر على محطة.</string>
     <string name="ra_continuar">متابعة</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">البحث بالاسم</string>
     <string name="ra_buscar_det">أي محطة في العالم</string>
     <string name="ra_generos">الأنواع</string>
-    <string name="ra_paises">بلد آخر</string>
-    <string name="ra_paises_det">البلدان ذات المحطات الأكثر</string>
     <string name="ra_perto">بالقرب</string>
-    <string name="ra_mais_ouvidas">الأكثر استماعًا في %s</string>
     <string name="ra_mundo">الأكثر استماعًا في العالم</string>
     <string name="ra_resultado">بحث: %s</string>
     <string name="ra_favoritada">أُضيفت إلى المفضلة</string>

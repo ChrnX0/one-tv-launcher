@@ -24,18 +24,18 @@ enum class UsoTv {
         val ABAS_TECNICAS = setOf(4, 5, 8)   // Casa, Remoto, Avançado
 
         fun escolhido(ctx: Context): UsoTv? =
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE, null)
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getString(CHAVE, null)
                 ?.let { n -> entries.firstOrNull { it.name == n } }
 
         /** O que vale agora: sem escolha (instalação antiga ou TV com Device Owner) = Completo. */
         fun atual(ctx: Context): UsoTv = escolhido(ctx) ?: COMPLETO
 
         fun escolher(ctx: Context, uso: UsoTv) =
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, uso.name).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putString(CHAVE, uso.name).apply()
 
         /** Apaga a escolha: o assistente volta a perguntar. */
         fun limpar(ctx: Context) =
-            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().remove(CHAVE).apply()
+            ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().remove(CHAVE).apply()
 
         /** A aba [indice] aparece no menu das Configurações? */
         fun mostraAba(uso: UsoTv, indice: Int) = uso == COMPLETO || indice !in ABAS_TECNICAS

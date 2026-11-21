@@ -61,7 +61,6 @@
     <string name="jogos_semana">今週</string>
     <string name="jogos_semana_jogado">7日間のプレイ</string>
     <string name="jogos_semana_mais">最もプレイ</string>
-    <string name="jogos_semana_controles">接続中のコントローラー</string>
     <string name="jogos_menos_de_1_min">1分未満</string>
     <string name="jogos_min">%1$d分</string>
     <string name="jogos_h_min">%1$d時間%2$d分</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">サーバーの電源が入っているか確認してください。テレビは数秒ごとに自動で再接続します。</string>
     <string name="cruz_barra_ilha">アイランド</string>
     <string name="cruz_canto_no_ar">放送中</string>
-    <string name="cruz_canto_buscar">検索</string>
-    <string name="cruz_canto_buscar_txt">▲ で検索のあるバーを開く</string>
     <string name="cruz_canto_gravando">録画中</string>
     <string name="cruz_canto_tocando">再生中</string>
     <string name="cruz_canto_parou">停止位置</string>

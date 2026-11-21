@@ -127,7 +127,7 @@ class MainActivity : Activity() {
             // Clima instantâneo (auditoria 10/11/2026): o salvo já está na tela (mostrarClimaSalvo, no onResume). Só busca
             // se ele tem mais de CLIMA_A_CADA_MIN; senão espera o que falta. Antes buscava a cada volta à HOME.
             val ciclo = Config.CLIMA_A_CADA_MIN * 60_000L
-            val prefs = getSharedPreferences("clima", MODE_PRIVATE)
+            val prefs = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
             val idade = System.currentTimeMillis() - prefs.getLong("em", 0)
             // A linha salva vem pronta no idioma da busca: trocou o idioma, busca já (senão ficava no antigo até o ciclo).
             if (idade in 0 until ciclo && prefs.getString("idioma", null) == idiomaAtual()) { ui.postDelayed(this, ciclo - idade); return }
@@ -154,7 +154,7 @@ class MainActivity : Activity() {
         vigiaRede = object : android.net.ConnectivityManager.NetworkCallback() {
             override fun onAvailable(rede: android.net.Network) {
                 // Clima fresco (< 2 min)? Entao nao precisa; senao, busca agora, fora da fila dos 5 min.
-                val em = getSharedPreferences("clima", MODE_PRIVATE).getLong("em", 0)
+                val em = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).getLong("em", 0)
                 if (System.currentTimeMillis() - em > 2 * 60_000L) ui.post { buscarClima() }
                 ui.post { avaliarSemInternet() }
             }
@@ -366,9 +366,9 @@ class MainActivity : Activity() {
         atualizarPilulaJogo()
         atualizarPilulaAniversario()
         atualizarPilulasCartoes(buscar = true)
-        getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
-        getSharedPreferences("despertador", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
-        getSharedPreferences("timer", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
+        getSharedPreferences(Prefs.LAUNCHER, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences(Prefs.DESPERTADOR, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences(Prefs.TIMER, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
@@ -414,9 +414,9 @@ class MainActivity : Activity() {
         ui.removeCallbacks(tarefaTimer)
         ui.removeCallbacks(tarefaTocando)
         vigiaTocando.desligar()
-        getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
-        getSharedPreferences("despertador", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
-        getSharedPreferences("timer", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
+        getSharedPreferences(Prefs.LAUNCHER, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences(Prefs.DESPERTADOR, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences(Prefs.TIMER, MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
         pararVigiaRede()
         ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()
@@ -872,7 +872,7 @@ class MainActivity : Activity() {
             .putExtra(PrevisaoActivity.EXTRA_TEMP, ultimaTemp ?: Int.MIN_VALUE)
             .putExtra(PrevisaoActivity.EXTRA_CHOVENDO, ultimoChovendo)
             .putExtra(PrevisaoActivity.EXTRA_CODIGO, ultimoCodigo)
-            .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences("clima", MODE_PRIVATE).getInt("umidade", -1)))
+            .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).getInt("umidade", -1)))
     }
 
     /** ▲ que saiu da cruz para a barra (Ilha); se ele for SEGURADO, abre a Central em vez de ficar na barra. */
@@ -3340,7 +3340,7 @@ class MainActivity : Activity() {
                     ultimaTemp = r.temp
                     // Guarda o que o topo mostra: a previsão aberta por voz ("Boletim do Tempo") e o protetor de tela
                     // (ProtetorTela.kt, sem rede própria) não passam por aqui e leem isto.
-                    getSharedPreferences("clima", MODE_PRIVATE).edit()
+                    getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE).edit()
                         .putInt("temp", r.temp).putBoolean("chovendo", r.chovendo)
                         .putInt("codigo", r.codigo).putBoolean("eDia", r.eDia)
                         .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.chuvaHoje)
@@ -3374,7 +3374,7 @@ class MainActivity : Activity() {
      */
     private fun mostrarClimaSalvo() {
         if (ultimaTemp != null) return   // a tela já mostra um clima desta Activity
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val em = c.getLong("em", 0)
         if (!c.contains("linha") || System.currentTimeMillis() - em > 3 * 3600_000L) return
         val codigo = c.getInt("codigo", -1).takeIf { it >= 0 } ?: return
@@ -3407,7 +3407,7 @@ class MainActivity : Activity() {
     private var ultimoEDia: Boolean? = null
     private fun recalcularDiaNoite() {
         if (ultimoCodigo < 0) return
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val lat = pontoAtual?.lat ?: c.getFloat("lat", Config.LATITUDE.toFloat()).toDouble()
         val lon = pontoAtual?.lon ?: c.getFloat("lon", Config.LONGITUDE.toFloat()).toDouble()
         val eDia = Astronomia.eDia(System.currentTimeMillis(), lat, lon, ultimoEDia ?: true)

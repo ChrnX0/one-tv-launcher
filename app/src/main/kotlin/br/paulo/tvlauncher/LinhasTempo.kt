@@ -22,7 +22,7 @@ import java.util.Locale
  */
 class FonteTempoGuardado(private val ctx: Context) : FonteTempo {
     override fun ler(agora: Long): TempoAgora? {
-        val c = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val c = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         // Mesma regra dos widgets: medida de até 3 h. Mais velha que isso, melhor calar.
         if (!c.contains("temp") || agora - c.getLong("em", 0) >= 3 * 60 * 60_000L) return null
         fun int(k: String) = if (c.contains(k)) c.getInt(k, 0) else null

@@ -231,7 +231,7 @@ class ProtetorTela : DreamService() {
         android.util.Log.i("TvLauncher.Protetor", "dados do protetor (re)montados")
         val coluna = blocoDados   // o código abaixo era da coluna principal; agora escreve no bloco
         // ---- clima: ícone + temperatura (só com medida de até 3h; "melhor calar que mentir um número velho")
-        val clima = getSharedPreferences("clima", MODE_PRIVATE)
+        val clima = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val frescoMs = System.currentTimeMillis() - clima.getLong("em", 0)
         val temClima = clima.contains("temp") && frescoMs < 3 * 60 * 60_000L
         if (temClima) {

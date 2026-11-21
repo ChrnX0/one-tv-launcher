@@ -100,7 +100,7 @@ object TimerRegras {
  */
 object Timer {
     private const val TAG = "TvLauncher.Timer"
-    private const val PREFS = "timer"
+    private const val PREFS = Prefs.TIMER
 
     data class Ativo(val fimMs: Long, val nome: String)
 

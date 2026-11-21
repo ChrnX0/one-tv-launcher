@@ -415,7 +415,7 @@ class ProtetorGaleria(
         val agora = System.currentTimeMillis()
         DescansoFase.agora().let { if (it != fase) { fase = it; aplicarFase(animar = true) } }
         val (lat, lon) = lugar()
-        val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val clima = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         val estado = EstadoCeu(agora, lat, lon, clima.getInt("codigo", 0), clima.getBoolean("chovendo", false))
         fundo?.atualizar(estado)
         fundoTerra?.atualizar(estado)
@@ -459,13 +459,13 @@ class ProtetorGaleria(
     }
 
     private fun lugar(): Pair<Double, Double> {
-        val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val clima = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         return clima.getFloat("lat", Config.LATITUDE.toFloat()).toDouble() to clima.getFloat("lon", Config.LONGITUDE.toFloat()).toDouble()
     }
 
     private fun montarBarra(agora: Long, lat: Double, lon: Double) {
         barra.removeAllViews()
-        val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val clima = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         // Só com medida de até 3 h, como no protetor clássico: melhor calar que mostrar um número velho.
         val temClima = clima.contains("temp") && agora - clima.getLong("em", 0) < 3 * 60 * 60_000L
         val horas = if (temClima) WidgetsTempo.lerHoras(clima.getString("horas", "").orEmpty()) else emptyList()

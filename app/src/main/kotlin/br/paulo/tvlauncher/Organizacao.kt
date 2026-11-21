@@ -9,7 +9,7 @@ import android.content.Context
  * backup sem efeito, para um backup velho continuar restaurando sem erro.
  */
 object Organizacao {
-    private const val PREFS = "launcher"
+    private const val PREFS = Prefs.LAUNCHER
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 

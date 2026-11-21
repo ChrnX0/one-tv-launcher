@@ -28,7 +28,7 @@ object LegendaTraduzida {
     fun suporta(idiomaTv: String): Boolean =
         idiomaTv != TraducaoLegenda.ORIGEM && TranslateLanguage.fromLanguageTag(idiomaTv) != null
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("player", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE)
 
     /** A legenda deste vídeo é tradução automática (para o rótulo da faixa). */
     fun ehTraducao(ctx: Context, chave: String) = prefs(ctx).getBoolean("legtrad:$chave", false)

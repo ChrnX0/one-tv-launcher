@@ -61,7 +61,6 @@
     <string name="jogos_semana">Minggu ini</string>
     <string name="jogos_semana_jogado">dimainkan dalam 7 hari</string>
     <string name="jogos_semana_mais">paling sering dimainkan</string>
-    <string name="jogos_semana_controles">kontroler menyala</string>
     <string name="jogos_menos_de_1_min">kurang dari 1 mnt</string>
     <string name="jogos_min">%1$d mnt</string>
     <string name="jogos_h_min">%1$d j %2$d mnt</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">Pastikan servernya menyala. TV mencoba lagi sendiri setiap beberapa detik.</string>
     <string name="cruz_barra_ilha">Pulau</string>
     <string name="cruz_canto_no_ar">Sedang tayang</string>
-    <string name="cruz_canto_buscar">Cari</string>
-    <string name="cruz_canto_buscar_txt">▲ membuka bilah dengan pencarian</string>
     <string name="cruz_canto_gravando">Merekam</string>
     <string name="cruz_canto_tocando">Diputar</string>
     <string name="cruz_canto_parou">Berhenti di</string>

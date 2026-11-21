@@ -23,7 +23,7 @@ object AlarmeGarantia {
     private const val TAG = "TvLauncher.Alarme"
     private const val PREFS = "despertador_estado"
     /** O volume mínimo fica nas prefs do despertador (essas vão no backup: é uma escolha do dono). */
-    private const val PREFS_DESPERTADOR = "despertador"
+    private const val PREFS_DESPERTADOR = Prefs.DESPERTADOR
     const val CHAVE_VOLUME = "volume_minimo"
     const val EXTRA_PREVISTO = "alarme_previsto_em"
     /** A tela foi aberta pela conferência, que já decidiu tocar (dentro da tolerância): a tela não confere o atraso. */

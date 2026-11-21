@@ -63,11 +63,11 @@ object AutoDesligar {
     private var engolirSubida = -1
     @Volatile var ultimoDesligamento = 0L; private set
 
-    fun minutos(ctx: Context): Int = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getInt(CHAVE, PADRAO_MIN)
+    fun minutos(ctx: Context): Int = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getInt(CHAVE, PADRAO_MIN)
 
     fun definir(ctx: Context, min: Int): Boolean {
         if (min !in OPCOES) return false
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putInt(CHAVE, min).apply()
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putInt(CHAVE, min).apply()
         atividade()
         principal.post { reagendar() }
         Log.i(TAG, "desligar sozinha: ${if (min == 0) "nunca" else "$min min"}")

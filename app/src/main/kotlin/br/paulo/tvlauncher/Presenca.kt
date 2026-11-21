@@ -119,7 +119,7 @@ object Presenca {
             INTERVALO_MS, pendente(ctx))
     }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("presenca", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.PRESENCA, Context.MODE_PRIVATE)
 
     /** Uma conferência. Chama o roteador: FORA da thread da tela. */
     fun conferir(ctx: Context): String {

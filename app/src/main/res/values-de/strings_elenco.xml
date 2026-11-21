@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">Untertitel auf dem Fernseher übersetzt (automatische Übersetzung). Der Rest wird weiter übersetzt.</string>
     <string name="legenda_trad_pronta">Übersetzung der Untertitel abgeschlossen</string>
     <string name="series_sinopse_mais">Vollständiger Inhalt</string>
-    <string name="series_sinopse_menos">Kürzerer Inhalt</string>
     <string name="series_continuar_curto">▶  %1$s fortsetzen</string>
     <string name="series_episodios">Folgen</string>
     <string name="series_trocar_temporada">Staffel wechseln</string>

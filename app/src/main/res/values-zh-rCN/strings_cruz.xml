@@ -61,7 +61,6 @@
     <string name="jogos_semana">本周</string>
     <string name="jogos_semana_jogado">7 天内游玩</string>
     <string name="jogos_semana_mais">玩得最多</string>
-    <string name="jogos_semana_controles">已连接手柄</string>
     <string name="jogos_menos_de_1_min">不到 1 分钟</string>
     <string name="jogos_min">%1$d 分钟</string>
     <string name="jogos_h_min">%1$d 小时 %2$d 分钟</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">请确认它的服务器已开启。电视会每隔几秒自动重试。</string>
     <string name="cruz_barra_ilha">岛</string>
     <string name="cruz_canto_no_ar">正在播出</string>
-    <string name="cruz_canto_buscar">搜索</string>
-    <string name="cruz_canto_buscar_txt">▲ 打开带搜索的栏</string>
     <string name="cruz_canto_gravando">正在录制</string>
     <string name="cruz_canto_tocando">正在播放</string>
     <string name="cruz_canto_parou">停在</string>

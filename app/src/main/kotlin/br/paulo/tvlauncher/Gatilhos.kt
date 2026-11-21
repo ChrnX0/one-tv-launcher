@@ -53,7 +53,7 @@ object Gatilhos {
 
     fun paraJson(m: Map<Evento, String>): String = JSONObject().apply { for ((e, c) in m) put(e.chave, c) }.toString()
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
     fun todos(ctx: Context): Map<Evento, String> = lerJson(prefs(ctx).getString(CHAVE, null))
     fun salvar(ctx: Context, m: Map<Evento, String>) = prefs(ctx).edit().putString(CHAVE, paraJson(m)).apply()
 

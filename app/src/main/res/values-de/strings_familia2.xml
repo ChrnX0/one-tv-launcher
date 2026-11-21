@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">hören</string>
     <string name="ra_dica_favoritar">Favorit</string>
     <string name="ra_carregando">Sender werden geladen …</string>
-    <string name="ra_subtitulo">Sender aus aller Welt · 1–9 auf der Fernbedienung spielen deine Favoriten</string>
     <string name="ra_sem_catalogo">Der Radiokatalog hat nicht geantwortet. Deine Favoriten funktionieren weiter.</string>
     <string name="ra_nada">Kein Sender gefunden.</string>
     <string name="ra_continuar">weiter</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Nach Name suchen</string>
     <string name="ra_buscar_det">Jeder Sender der Welt</string>
     <string name="ra_generos">Genres</string>
-    <string name="ra_paises">Anderes Land</string>
-    <string name="ra_paises_det">Die Länder mit den meisten Sendern</string>
     <string name="ra_perto">In der Nähe</string>
-    <string name="ra_mais_ouvidas">Meistgehört in %s</string>
     <string name="ra_mundo">Meistgehört weltweit</string>
     <string name="ra_resultado">Suche: %s</string>
     <string name="ra_favoritada">Zu Favoriten hinzugefügt</string>

@@ -106,11 +106,11 @@ object Home {
     }
 
     private fun marcarGoogleHome(ctx: Context, tem: Boolean) =
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putBoolean("google_home_sem_casa", !tem).apply()
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putBoolean("google_home_sem_casa", !tem).apply()
 
     /** O painel do Google já foi aberto e não tinha o Google Home (conta sem casa)? */
     fun googleHomeSemCasa(ctx: Context): Boolean =
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getBoolean("google_home_sem_casa", false)
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getBoolean("google_home_sem_casa", false)
 
     /**
      * Chamado quando uma janela aparece: se for a HOME do launcherx, traz a nossa por cima; se for o painel dele

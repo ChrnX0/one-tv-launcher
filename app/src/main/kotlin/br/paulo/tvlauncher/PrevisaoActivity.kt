@@ -110,7 +110,7 @@ class PrevisaoActivity : Activity() {
             }
         }
         // A medida do topo vem no Intent (OK no clima) ou, aberta por voz, do que a tela inicial guardou (se tiver até 90 min).
-        val guardado = getSharedPreferences("clima", MODE_PRIVATE)
+        val guardado = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val recente = System.currentTimeMillis() - guardado.getLong("em", 0) < 90 * 60_000L
         val tempTopo = intent.getIntExtra(EXTRA_TEMP, Int.MIN_VALUE).takeIf { it != Int.MIN_VALUE }
             ?: if (recente && guardado.contains("temp")) guardado.getInt("temp", 0) else null

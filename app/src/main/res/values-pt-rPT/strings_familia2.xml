@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">ouvir</string>
     <string name="ra_dica_favoritar">favoritar</string>
     <string name="ra_carregando">A carregar as rádios…</string>
-    <string name="ra_subtitulo">Rádios do mundo todo · 1 a 9 no comando tocam as favoritas</string>
     <string name="ra_sem_catalogo">O catálogo de rádios não respondeu. As favoritas continuam a funcionar.</string>
     <string name="ra_nada">Nenhuma rádio encontrada.</string>
     <string name="ra_continuar">continuar</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Pesquisar pelo nome</string>
     <string name="ra_buscar_det">Qualquer rádio do mundo</string>
     <string name="ra_generos">Géneros</string>
-    <string name="ra_paises">Outro país</string>
-    <string name="ra_paises_det">Os países com mais rádios</string>
     <string name="ra_perto">Perto</string>
-    <string name="ra_mais_ouvidas">Mais ouvidas: %s</string>
     <string name="ra_mundo">Mais ouvidas no mundo</string>
     <string name="ra_resultado">Pesquisa: %s</string>
     <string name="ra_favoritada">Entrou nas favoritas</string>

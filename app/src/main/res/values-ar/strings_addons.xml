@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">اختر مصدرًا</string>
     <string name="ad_dica_voltar">رجوع</string>
     <string name="ad_cfg_det">الملحقات المثبتة. اختر للإضافة أو الإزالة.</string>
-    <string name="ad_cfg_remover_qual">أي إضافة تريد إزالتها؟</string>
     <string name="ad_cfg_remover">ستُزال %1$s من هذا التلفزيون.</string>
     <string name="ad_cfg_remover_sim">إزالة</string>
     <string name="ad_add_titulo">إضافة ملحق</string>

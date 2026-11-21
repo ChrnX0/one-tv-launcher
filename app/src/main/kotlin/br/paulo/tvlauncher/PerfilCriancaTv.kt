@@ -13,11 +13,11 @@ import android.content.Context
  * Quem chama é sempre o processo do launcher (painel rápido): o ":player" não lê nada disto.
  */
 object PerfilCriancaTv {
-    private const val PREFS = "launcher"
+    private const val PREFS = Prefs.LAUNCHER
     private const val CHAVE_CRIANCAS = "perfis_crianca"
     private const val CHAVE_ANTES = "crianca_antes"
     /** As mesmas tentativas do PIN das Configurações (TentativasPin): errar aqui também conta lá, e vice-versa. */
-    private const val PREFS_PIN = "config_pin"
+    private const val PREFS_PIN = Prefs.CONFIG_PIN
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 

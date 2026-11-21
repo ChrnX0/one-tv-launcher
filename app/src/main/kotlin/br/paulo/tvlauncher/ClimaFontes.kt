@@ -251,7 +251,7 @@ object ClimaFontes {
         val agora = System.currentTimeMillis()
         // ultimaComparacaoMs zerava a cada abertura do app -> gravava linha repetida a cada boot. Agora o carimbo
         // persiste em SharedPreferences, entao vale o intervalo de 30 min mesmo apos reiniciar o launcher.
-        val prefs = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val prefs = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         if (ultimaComparacaoMs == 0L) ultimaComparacaoMs = prefs.getLong("ultima_comparacao", 0)
         if (agora - ultimaComparacaoMs < 30 * 60_000L) return
         try {

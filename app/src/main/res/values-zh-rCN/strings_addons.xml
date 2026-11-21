@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">选择来源</string>
     <string name="ad_dica_voltar">返回</string>
     <string name="ad_cfg_det">已安装的插件。选择以添加或移除。</string>
-    <string name="ad_cfg_remover_qual">要移除哪个插件？</string>
     <string name="ad_cfg_remover">将从这台电视移除 %1$s。</string>
     <string name="ad_cfg_remover_sim">移除</string>
     <string name="ad_add_titulo">添加插件</string>

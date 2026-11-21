@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">音声ショートカット</string>
     <string name="mcp_olhou_tela">Claude が画面を見ました</string>
     <string name="pg_max_min">最高 %1$d° · 最低 %2$d°</string>
-    <string name="pg_por_do_sol">日の入り %1$s</string>
     <string name="pg_compras">買い物リスト</string>
     <string name="cf_negar">拒否</string>
     <string name="cf_permitir">許可</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">削除</string>
     <string name="pn_parear">ペアリング</string>
     <string name="pn_titulo">ランチャーをペアリング（PC なし）</string>
-    <string name="pn_lido">画面からコードを読み取りました</string>
     <string name="pn_nao_achei">まだペアリング画面が見つかりません</string>
     <string name="pn_6">コードは 6 桁です</string>
     <string name="pn_pareado">ペアリングしました！ シェルを確認中…</string>

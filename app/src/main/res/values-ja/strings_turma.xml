@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">ソファに</string>
-    <string name="jogos_continuar">続きから</string>
     <string name="jogos_controle_pronto">準備OK</string>
     <string name="jogos_controle_carregar">そろそろ充電</string>
     <string name="jogos_parear_um">コントローラーをペア設定</string>
-    <string name="jogos_todos">すべて</string>
     <string name="turma_titulo">あなたの仲間</string>
     <string name="turma_online">%1$d人オンライン</string>
     <string name="turma_mais_online">+ %1$d人オンライン</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">サーバーウィジェットがオフです</string>
     <string name="turma_desligado_texto">Discord で：サーバー設定、ウィジェット、「サーバーウィジェットを有効化」をオンに。</string>
     <string name="turma_qr_dica">スマホを向けるとボイスに参加できます。会話はスマホで。</string>
-    <string name="turma_aqui">仲間が%1$d人ここに</string>
     <string name="turma_jogando">%1$sが%2$sをプレイ中</string>
     <string name="turma_dois">%1$sと%2$s</string>
     <string name="turma_e_mais">%1$sとほか%2$d人</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">保存</string>
     <string name="turma_config_tirar">仲間を外す</string>
     <string name="turma_id_invalido">Discord のサーバー ID ではありません（17〜20桁）。</string>
-    <string name="cruz_sofa">ソファ</string>
     <string name="cruz_sofa_sub">コントローラーと Discord の仲間</string>
     <string name="cruz_sofa_voz">ボイス中 %1$d人 · %2$s</string>
 </resources>

@@ -18,7 +18,7 @@ object SoSeTv {
 
     /** Alguém em casa, pela última conferência da presença (Presenca.kt). null = não sei. */
     fun emCasa(ctx: Context, agora: Long): Boolean? {
-        val p = ctx.getSharedPreferences("presenca", Context.MODE_PRIVATE)
+        val p = ctx.getSharedPreferences(Prefs.PRESENCA, Context.MODE_PRIVATE)
         if (!p.contains("em_casa") || agora - p.getLong("em_casa_em", 0) > PRESENCA_VALE_MS) return null
         return p.getBoolean("em_casa", false)
     }

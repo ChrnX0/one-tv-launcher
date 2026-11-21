@@ -35,7 +35,7 @@ object PlayerImagem {
 
     // ---- preferência (uma para o player todo; o player roda no processo ":player", prefs simples bastam)
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("player", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE)
 
     fun modo(ctx: Context): Modo = runCatching { Modo.valueOf(prefs(ctx).getString("proporcao", null) ?: "AJUSTAR") }.getOrDefault(Modo.AJUSTAR)
     fun definirModo(ctx: Context, m: Modo) = prefs(ctx).edit().putString("proporcao", m.name).apply()

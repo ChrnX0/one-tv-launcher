@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">Sur le canapé</string>
-    <string name="jogos_continuar">Continuer</string>
     <string name="jogos_controle_pronto">prête</string>
     <string name="jogos_controle_carregar">à recharger</string>
     <string name="jogos_parear_um">Associer une manette</string>
-    <string name="jogos_todos">Tous</string>
     <string name="turma_titulo">Votre bande</string>
     <string name="turma_online">%1$d en ligne</string>
     <string name="turma_mais_online">+ %1$d en ligne</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Le widget du serveur est désactivé</string>
     <string name="turma_desligado_texto">Dans Discord : Paramètres du serveur, Widget, activez Activer le widget du serveur.</string>
     <string name="turma_qr_dica">Visez ici avec votre téléphone pour rejoindre le vocal. On parle sur le téléphone.</string>
-    <string name="turma_aqui">%1$d de votre bande ici</string>
     <string name="turma_jogando">%1$s joue à %2$s</string>
     <string name="turma_dois">%1$s et %2$s</string>
     <string name="turma_e_mais">%1$s et %2$d autres</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Enregistrer</string>
     <string name="turma_config_tirar">Retirer la bande</string>
     <string name="turma_id_invalido">Ce n’est pas un ID de serveur Discord (17 à 20 chiffres).</string>
-    <string name="cruz_sofa">Canapé</string>
     <string name="cruz_sofa_sub">Manettes et votre bande Discord</string>
     <string name="cruz_sofa_voz">%1$d en vocal · %2$s</string>
 </resources>

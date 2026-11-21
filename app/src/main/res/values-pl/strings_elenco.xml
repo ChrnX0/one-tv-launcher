@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">Napisy przetłumaczone na telewizorze (tłumaczenie automatyczne). Reszta wciąż się tłumaczy.</string>
     <string name="legenda_trad_pronta">Tłumaczenie napisów zakończone</string>
     <string name="series_sinopse_mais">Pełny opis</string>
-    <string name="series_sinopse_menos">Krótszy opis</string>
     <string name="series_continuar_curto">▶  Kontynuuj %1$s</string>
     <string name="series_episodios">Odcinki</string>
     <string name="series_trocar_temporada">Zmień sezon</string>

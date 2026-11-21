@@ -27,7 +27,6 @@
     <string name="ra_dica_ouvir">listen</string>
     <string name="ra_dica_favoritar">favorite</string>
     <string name="ra_carregando">Loading stations…</string>
-    <string name="ra_subtitulo">Stations from all over the world · 1–9 on the remote play your favorites</string>
     <string name="ra_sem_catalogo">The radio catalog didn\'t answer. Your favorites still work.</string>
     <string name="ra_nada">No station found.</string>
     <string name="ra_continuar">continue</string>
@@ -37,10 +36,7 @@
     <string name="ra_buscar">Search by name</string>
     <string name="ra_buscar_det">Any station in the world</string>
     <string name="ra_generos">Genres</string>
-    <string name="ra_paises">Other country</string>
-    <string name="ra_paises_det">The countries with the most stations</string>
     <string name="ra_perto">Nearby</string>
-    <string name="ra_mais_ouvidas">Most listened in %s</string>
     <string name="ra_mundo">Most listened in the world</string>
     <string name="ra_resultado">Search: %s</string>
     <string name="ra_favoritada">Added to favorites</string>

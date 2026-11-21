@@ -61,7 +61,6 @@
     <string name="jogos_semana">इस हफ़्ते</string>
     <string name="jogos_semana_jogado">7 दिन में खेला</string>
     <string name="jogos_semana_mais">सबसे ज़्यादा खेला</string>
-    <string name="jogos_semana_controles">कंट्रोलर चालू</string>
     <string name="jogos_menos_de_1_min">1 मिनट से कम</string>
     <string name="jogos_min">%1$d मिनट</string>
     <string name="jogos_h_min">%1$d घं %2$d मि</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">देखें कि उसका सर्वर चालू है। टीवी हर कुछ सेकंड में खुद फिर से कोशिश करता है।</string>
     <string name="cruz_barra_ilha">द्वीप</string>
     <string name="cruz_canto_no_ar">अभी प्रसारण</string>
-    <string name="cruz_canto_buscar">खोजें</string>
-    <string name="cruz_canto_buscar_txt">▲ खोज वाली पट्टी खोलता है</string>
     <string name="cruz_canto_gravando">रिकॉर्ड हो रहा</string>
     <string name="cruz_canto_tocando">चल रहा</string>
     <string name="cruz_canto_parou">यहाँ रुका</string>

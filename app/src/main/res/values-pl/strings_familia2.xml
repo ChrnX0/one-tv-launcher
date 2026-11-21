@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">słuchaj</string>
     <string name="ra_dica_favoritar">ulubione</string>
     <string name="ra_carregando">Ładowanie stacji…</string>
-    <string name="ra_subtitulo">Stacje z całego świata · 1–9 na pilocie odtwarzają ulubione</string>
     <string name="ra_sem_catalogo">Katalog radiowy nie odpowiedział. Ulubione nadal działają.</string>
     <string name="ra_nada">Nie znaleziono stacji.</string>
     <string name="ra_continuar">wznów</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Szukaj po nazwie</string>
     <string name="ra_buscar_det">Dowolna stacja na świecie</string>
     <string name="ra_generos">Gatunki</string>
-    <string name="ra_paises">Inny kraj</string>
-    <string name="ra_paises_det">Kraje z największą liczbą stacji</string>
     <string name="ra_perto">W pobliżu</string>
-    <string name="ra_mais_ouvidas">Najczęściej słuchane: %s</string>
     <string name="ra_mundo">Najczęściej słuchane na świecie</string>
     <string name="ra_resultado">Wyszukiwanie: %s</string>
     <string name="ra_favoritada">Dodano do ulubionych</string>

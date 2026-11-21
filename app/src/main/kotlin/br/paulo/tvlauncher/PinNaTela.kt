@@ -12,7 +12,7 @@ import android.widget.Toast
  * Sem PIN definido não dá para liberar poder: avisa onde definir e não roda nada.
  */
 object PinNaTela {
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("config_pin", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.CONFIG_PIN, Context.MODE_PRIVATE)
     private fun ler(ctx: Context) = prefs(ctx).let { TentativasPin.Estado(it.getInt("erros", 0), it.getLong("ate", 0), it.getLong("ultimo", 0)) }
     private fun gravar(ctx: Context, e: TentativasPin.Estado) =
         prefs(ctx).edit().putInt("erros", e.erros).putLong("ate", e.bloqueadoAte).putLong("ultimo", e.ultimoErro).apply()

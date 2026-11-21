@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugin</string>
-    <string name="plg_cfg_det">Kartu dari aplikasi lain di baris Tonton. Masing-masing perlu izin Anda.</string>
-    <string name="plg_det">Aktifkan hanya aplikasi tepercaya. Plugin hanya mengirim teks singkat; tidak bisa melihat aplikasi atau akun Anda.</string>
     <string name="plg_nenhum">Belum ada plugin. Plugin adalah aplikasi dari pengembang lain yang menampilkan kartu di sini, seperti skor pertandingan atau harga.</string>
     <string name="plg_ligado">Aktif</string>
     <string name="plg_desligado">Nonaktif</string>

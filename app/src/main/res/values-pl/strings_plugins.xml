@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Wtyczki</string>
-    <string name="plg_cfg_det">Karty innych aplikacji w rzędzie Oglądaj. Każda wymaga Twojej zgody.</string>
-    <string name="plg_det">Włączaj tylko zaufane aplikacje. Wtyczka wysyła tylko krótki tekst; nie widzi Twoich aplikacji ani kont.</string>
     <string name="plg_nenhum">Brak wtyczek. Wtyczki to aplikacje innych twórców, które pokazują tu kartę, np. wynik meczu albo cenę.</string>
     <string name="plg_ligado">Wł.</string>
     <string name="plg_desligado">Wył.</string>

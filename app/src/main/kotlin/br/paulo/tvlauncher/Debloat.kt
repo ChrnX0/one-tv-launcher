@@ -70,7 +70,7 @@ object Debloat {
         (ai.flags and ApplicationInfo.FLAG_INSTALLED) != 0
     } catch (e: Exception) { false }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
     fun ocultosPorAqui(ctx: Context): Set<String> = prefs(ctx).getStringSet(CHAVE, emptySet()) ?: emptySet()
 
     /** Oculta (true) ou mostra de volta (false). Recusa o que não está liberado. Devolve se mudou. */

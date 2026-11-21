@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (ko) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">게임</string>
-    <string name="home_destaque_jogos_vazio">클라우드, PC, 레트로 게임 플레이</string>
-    <string name="home_linha_continuar_jogos">시청 및 플레이</string>
-    <string name="home_jogos_ultimo">마지막: %1$s</string>
     <string name="extras_CARD_JOGOS">홈 화면의 게임 카드(게임 앱이 앱 줄에서 빠짐)</string>
     <string name="extras_MODO_JOGO">게임 모드: 게임이 열려 있는 동안 화면 보호기, 야간 필터, 알림이 대기</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">게임 컨트롤러를 켜면 게임 화면 열기</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">레트로</string>
     <string name="jogos_grupo_tv">TV 게임</string>
     <string name="jogos_para_comecar">시작하기 좋은 게임</string>
-    <string name="jogos_vazio_dica">이 TV에는 아직 게임이 없습니다. 위에서 하나를 고르면 Play 스토어 페이지가 열립니다.</string>
-    <string name="jogos_dica_segurar">게임에서 OK를 길게 누르면 다른 그룹으로 옮기거나 여기서 뺍니다.</string>
     <string name="jogos_aviso_fraca_titulo">클라우드 게임에 약한 네트워크</string>
     <string name="jogos_aviso_fraca">게임이 끊기거나 지연될 수 있습니다. 네트워크 케이블을 쓰거나 TV를 라우터 가까이 두면 도움이 됩니다.</string>
     <string name="jogos_jogar_assim">그래도 플레이</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">어떤 앱으로 PC에서 플레이할까요?</string>
     <string name="jogos_pc_acordando">PC 깨우는 중… %1$d초</string>
     <string name="jogos_pc_nao_respondeu">PC가 응답하지 않았습니다. 그래도 앱을 엽니다.</string>
-    <string name="jogos_seus">내 게임</string>
     <string name="jogos_mais_jogos">더 많은 게임</string>
     <string name="jogos_mais_opcoes">더보기</string>
-    <string name="jogos_por_tipo">유형별</string>
-    <string name="jogos_jogar">플레이</string>
     <string name="jogos_ligar_pc_jogar">PC 켜고 플레이</string>
-    <string name="jogos_desc_nuvem">게임은 인터넷의 컴퓨터에서 실행되고 TV는 화면을 받습니다. 좋은 네트워크가 필요합니다.</string>
     <string name="jogos_desc_pc">집에 있는 컴퓨터나 콘솔의 게임을 여기 TV에서 플레이합니다.</string>
-    <string name="jogos_desc_retro">여러 콘솔의 고전 게임.</string>
-    <string name="jogos_desc_tv">TV에 직접 설치된 게임.</string>
-    <string name="jogos_jogado">마지막 플레이: %1$s.</string>
-    <string name="jogos_nenhum_titulo">아직 게임 없음</string>
-    <string name="jogos_chip_sem_controle">컨트롤러 없음</string>
     <string name="jogos_chip_medindo">네트워크 확인 중…</string>
     <string name="jogos_chip_boa">네트워크 좋음</string>
     <string name="jogos_chip_ok">네트워크 보통</string>
     <string name="jogos_chip_fraca">네트워크 약함</string>
     <string name="jogos_chip_sem">인터넷 없음</string>
-    <string name="jogos_tecla_escolher">선택</string>
     <string name="jogos_tecla_jogar">플레이</string>
-    <string name="jogos_tecla_mais">더 많은 옵션</string>
     <string name="jogos_tecla_segurar">OK 길게</string>
     <string name="jogos_tecla_opcoes">그룹 변경</string>
     <plurals name="jogos_qtd">

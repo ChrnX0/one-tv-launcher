@@ -409,21 +409,21 @@ class VodActivity : Activity() {
             val leg = LegendaBaixar.guardada(this, chave)
             val trad = leg != null && LegendaTraduzida.ehTraducao(this, chave)
             val aoLado = direto?.let { runCatching { acharAoLado(it) }.getOrNull() }.orEmpty()
-            var atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
+            var atraso = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getLong("atraso:$chave", 0L)
             val mem = if (serie) MemoriaSerieTv.ler(this, chaveIdioma) else null
             // Elevação 6.4: episódio novo da série, com legenda baixada e sem atraso próprio: vale o atraso da série.
             var legFinal = leg
             if (leg != null && atraso == 0L) mem?.atrasoLegendaMs?.takeIf { it != 0L }?.let { ms ->
                 LegendaBaixar.ajustar(this, chave, ms)?.let { f ->
                     legFinal = f; atraso = ms
-                    getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$chave", ms).apply()
+                    getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putLong("atraso:$chave", ms).apply()
                 }
             }
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
-            val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
+            val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
             val pos = intent.getLongExtra("inicio_ms", -1L).takeIf { it >= 0 }
                 ?: if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
-            val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
+            val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
                 .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
                 if (isDestroyed) return@post
@@ -1177,7 +1177,7 @@ class VodActivity : Activity() {
         val voltar = { menuAjustesLegenda() }
         PlayerMenu.abrir(this, getString(R.string.pm_leg_ajustes), voltar = { menuLegenda() }) {
             val p = player
-            val prefs = getSharedPreferences("player", MODE_PRIVATE)
+            val prefs = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
             val itens = ArrayList<PlayerMenu.Item>()
             itens += PlayerMenu.abre(getString(R.string.pm_leg_tamanho), rotuloTamanho(tamLegendaSp)) { escolherTamanhoLegenda(voltar) }
             // Elevação 6.5: três estilos prontos (as mesmas duas chaves de antes); cada OK passa para o próximo.
@@ -1360,7 +1360,7 @@ class VodActivity : Activity() {
     private fun gravarAbertura(m: AberturaSerie.Marca?) {
         val k = AberturaSerie.chave(chaveIdioma)
         Fundo.rodar {
-            val e = getSharedPreferences("player", MODE_PRIVATE).edit()
+            val e = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit()
             if (m == null) e.remove(k) else e.putString(k, AberturaSerie.paraTexto(m))
             e.apply()
         }
@@ -1528,7 +1528,7 @@ class VodActivity : Activity() {
      */
     private fun talvezLegendaAuto(t: Tracks) {
         if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
-        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
+        if (!getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
         if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao, prefAcesso.audiodescricao)) return
         autoTentada = true
         val k = chave; val u = url; val b = buscaLegenda()
@@ -1562,7 +1562,7 @@ class VodActivity : Activity() {
      * primeiro (a legenda aparece em uns 20 s), o resto à frente da cena. Bloqueia: chamar fora da thread da tela.
      */
     private fun traduzirLegenda(k: String, u: String?, b: LegendaExterna.Busca, pos: Long) {
-        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)) return
+        if (!getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)) return
         if (!LegendaTraduzida.suporta(idiomaTv) || pararTraducao.get()) return
         val origem = LegendaTraduzida.origem(this, k, u, b).getOrElse { return }
         tela.post { if (!isDestroyed && chave == k && legendaArquivo == null) avisoBreve(getString(R.string.legenda_trad_traduzindo)) }
@@ -1612,7 +1612,7 @@ class VodActivity : Activity() {
         val k = chave
         Fundo.rodar {
             val r = LegendaBaixar.baixar(this, k, c)
-            getSharedPreferences("player", MODE_PRIVATE).edit().remove("atraso:$k").apply()
+            getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().remove("atraso:$k").apply()
             tela.post {
                 if (isDestroyed) return@post
                 r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
@@ -1637,7 +1637,7 @@ class VodActivity : Activity() {
             atrasoManual = true   // a pessoa escolheu: o acerto automático não mexe mais neste vídeo
             Fundo.rodar {
                 val f = LegendaBaixar.ajustar(this, k, ms)
-                getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", ms).apply()
+                getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putLong("atraso:$k", ms).apply()
                 tela.post { lembrarSerie { it.copy(atrasoLegendaMs = ms) } }
                 tela.post { if (!isDestroyed && f != null) { legendaArquivo = f; atrasoLegenda = ms; recarregarComLegenda() } }
             }
@@ -1703,7 +1703,7 @@ class VodActivity : Activity() {
         Estilo.lista(this, getString(R.string.vod_legenda_tamanho_titulo), resources.getStringArray(R.array.vod_legenda_tamanhos).toList(),
             listOf(atual), aoVoltar = voltar) { i ->
             tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat(); legenda2.textSize = t[i].toFloat(); assAjustes.escala(FimDoVideo.escalaAss(t[i]))
-            getSharedPreferences("player", MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
+            getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
         }
     }
 
@@ -1790,7 +1790,7 @@ class VodActivity : Activity() {
             }.getOrNull()
             val total = atual + (r?.atrasoMs ?: 0L)
             val f = if (SubtitleSync.aplicar(r)) LegendaBaixar.ajustar(this, k, total) else null
-            if (f != null) getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", total).apply()
+            if (f != null) getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putLong("atraso:$k", total).apply()
             tela.post {
                 acertando = false
                 if (isDestroyed || atrasoManual || legendaArquivo?.path != arq.path || atrasoLegenda != atual) return@post

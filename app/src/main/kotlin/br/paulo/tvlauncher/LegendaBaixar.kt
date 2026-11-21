@@ -220,14 +220,14 @@ object LegendaBaixar {
      * travaria por 7 dias justamente os filmes que já tinham sido tentados.
      */
     fun tentouAuto(ctx: Context, chaveVideo: String): Boolean =
-        System.currentTimeMillis() - ctx.getSharedPreferences("player", Context.MODE_PRIVATE).getLong("legauto2:$chaveVideo", 0) < 7L * 24 * 3_600_000
+        System.currentTimeMillis() - ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE).getLong("legauto2:$chaveVideo", 0) < 7L * 24 * 3_600_000
 
     /**
      * Ideia 89: busca (pelo hash do arquivo, se der, e pelo nome) e baixa a melhor legenda no idioma da TV. Gasta um
      * download do limite diário. Bloqueia (rede).
      */
     fun automatica(ctx: Context, chaveVideo: String, url: String?, b: LegendaExterna.Busca): Result<Pair<File, Boolean>> = runCatching {
-        ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto2:$chaveVideo", System.currentTimeMillis()).apply()
+        ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE).edit().putLong("legauto2:$chaveVideo", System.currentTimeMillis()).apply()
         val hash = url?.let { runCatching { hashDoVideo(it) }.getOrNull() }
         val lista = buscar(ctx, b.copy(hash = hash)).getOrThrow()
         val c = LegendaExterna.escolherAuto(lista) ?: throw Falha(ctx.getString(R.string.legenda_nenhuma))

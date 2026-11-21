@@ -20,7 +20,7 @@ object Protetor {
     fun estilo(ctx: Context): String = GALERIA
 
     fun definir(ctx: Context, estilo: String) {
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, normalizar(estilo)).apply()
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putString(CHAVE, normalizar(estilo)).apply()
     }
 
     /**
@@ -42,10 +42,10 @@ object Protetor {
     val WIDGETS = listOf(WIDGET_FAIXA, WIDGET_CARTOES, WIDGET_SOLTO, WIDGET_LINHA, WIDGET_GRANDE)
 
     fun widget(ctx: Context): String =
-        normalizarWidget(ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE_WIDGET, null))
+        normalizarWidget(ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getString(CHAVE_WIDGET, null))
 
     fun definirWidget(ctx: Context, v: String) {
-        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE_WIDGET, normalizarWidget(v)).apply()
+        ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().putString(CHAVE_WIDGET, normalizarWidget(v)).apply()
     }
 
     /** O próximo da lista (a linha das Configurações troca com OK). */
@@ -166,5 +166,5 @@ object Protetor {
         prefs(ctx).edit().putString(CHAVE_OCULTOS, escreverOcultos(s)).apply()
     }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
 }

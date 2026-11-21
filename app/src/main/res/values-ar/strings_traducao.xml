@@ -46,7 +46,6 @@
     <string name="dl_atalho_voz">اختصار صوتي</string>
     <string name="mcp_olhou_tela">نظر Claude إلى الشاشة</string>
     <string name="pg_max_min">العظمى %1$d° · الصغرى %2$d°</string>
-    <string name="pg_por_do_sol">الغروب %1$s</string>
     <string name="pg_compras">قائمة التسوق</string>
     <string name="cf_negar">رفض</string>
     <string name="cf_permitir">سماح</string>
@@ -222,7 +221,6 @@
     <string name="pn_apagar">حذف</string>
     <string name="pn_parear">إقران</string>
     <string name="pn_titulo">إقران المشغّل (بدون كمبيوتر)</string>
-    <string name="pn_lido">قُرئ الرمز من الشاشة</string>
     <string name="pn_nao_achei">لم أجد شاشة الإقران بعد</string>
     <string name="pn_6">الرمز من 6 أرقام</string>
     <string name="pn_pareado">تم الإقران! جارٍ فحص الصدفة…</string>

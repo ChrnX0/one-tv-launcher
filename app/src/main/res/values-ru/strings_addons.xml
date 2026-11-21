@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">Выберите источник</string>
     <string name="ad_dica_voltar">назад</string>
     <string name="ad_cfg_det">Установленные аддоны. Выберите, чтобы добавить или удалить.</string>
-    <string name="ad_cfg_remover_qual">Какой аддон удалить?</string>
     <string name="ad_cfg_remover">%1$s будет удалён с этого телевизора.</string>
     <string name="ad_cfg_remover_sim">Удалить</string>
     <string name="ad_add_titulo">Добавить аддон</string>

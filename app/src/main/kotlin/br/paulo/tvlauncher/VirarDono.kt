@@ -67,7 +67,7 @@ object VirarDono {
         }
     }
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
 
     /**
      * Tentativa em andamento NESTE processo. A marca gravada não distingue "morreu no meio" de "está rodando agora":

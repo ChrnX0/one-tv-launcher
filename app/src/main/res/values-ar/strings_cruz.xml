@@ -61,7 +61,6 @@
     <string name="jogos_semana">هذا الأسبوع</string>
     <string name="jogos_semana_jogado">لعب خلال 7 أيام</string>
     <string name="jogos_semana_mais">الأكثر لعبًا</string>
-    <string name="jogos_semana_controles">أذرع تحكم متصلة</string>
     <string name="jogos_menos_de_1_min">أقل من دقيقة</string>
     <string name="jogos_min">%1$d د</string>
     <string name="jogos_h_min">%1$d س %2$d د</string>
@@ -85,8 +84,6 @@
     <string name="casa_fora_texto">تأكد من أن الخادم الخاص به يعمل. يعيد التلفاز المحاولة تلقائيًا كل بضع ثوانٍ.</string>
     <string name="cruz_barra_ilha">جزيرة</string>
     <string name="cruz_canto_no_ar">على الهواء</string>
-    <string name="cruz_canto_buscar">بحث</string>
-    <string name="cruz_canto_buscar_txt">▲ يفتح الشريط مع البحث</string>
     <string name="cruz_canto_gravando">يسجّل</string>
     <string name="cruz_canto_tocando">يُشغَّل</string>
     <string name="cruz_canto_parou">توقّف عند</string>

@@ -2120,7 +2120,7 @@ object PainelWeb {
     /** O endereço do clima (ou null) e o ponto que a última busca usou. */
     private fun estadoClima(): JSONObject {
         val fixo = LocalClima.ler(app)
-        val c = app.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val c = app.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         return JSONObject()
             .put("fixo", fixo?.let { JSONObject().put("nome", it.nome).put("cep", it.cep).put("numero", it.numero).put("descricao", LocalClima.descrever(it)) } ?: JSONObject.NULL)
             .put("usado", if (c.contains("lat")) JSONObject().put("lat", c.getFloat("lat", 0f).toDouble()).put("lon", c.getFloat("lon", 0f).toDouble()) else JSONObject.NULL)

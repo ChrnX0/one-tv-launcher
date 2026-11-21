@@ -17,7 +17,7 @@ object AberturaProntaTv {
     private fun limparAntigas(ctx: Context) {
         if (limpou) return
         limpou = true
-        val p = ctx.getSharedPreferences("player", Context.MODE_PRIVATE)
+        val p = ctx.getSharedPreferences(Prefs.PLAYER, Context.MODE_PRIVATE)
         val velhas = p.all.keys.filter { it.startsWith("abertura_pronta:") }
         if (velhas.isNotEmpty()) p.edit().apply { velhas.forEach { remove(it) } }.apply()
     }

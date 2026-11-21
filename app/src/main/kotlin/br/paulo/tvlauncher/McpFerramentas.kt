@@ -78,7 +78,7 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
 
     /** O que a HOME mostrou por último (ela grava em "clima" a cada atualização). */
     private fun clima(): JSONObject {
-        val c = app.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val c = app.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         if (!c.contains("em")) throw McpProtocolo.ErroFerramenta("a TV ainda não buscou o clima")
         return JSONObject()
             .put("temperatura_c", c.getInt("temp", 0))

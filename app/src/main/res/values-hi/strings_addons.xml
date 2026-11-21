@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">स्रोत चुनें</string>
     <string name="ad_dica_voltar">वापस</string>
     <string name="ad_cfg_det">इंस्टॉल किए गए ऐडऑन। जोड़ने या हटाने के लिए चुनें।</string>
-    <string name="ad_cfg_remover_qual">कौन-सा ऐड-ऑन हटाएँ?</string>
     <string name="ad_cfg_remover">%1$s इस टीवी से हटा दिया जाएगा।</string>
     <string name="ad_cfg_remover_sim">हटाएँ</string>
     <string name="ad_add_titulo">ऐडऑन जोड़ें</string>

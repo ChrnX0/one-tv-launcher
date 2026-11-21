@@ -40,7 +40,7 @@ object Localizacao {
 
     /** O último ponto usado pela tela inicial (prefs "clima"), para seguir funcionando sem Wi-Fi/IP por um tempo. */
     private fun ultimo(ctx: Context): Ponto? {
-        val c = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val c = ctx.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         if (!c.contains("lat") || !c.contains("lon")) return null
         val lat = c.getFloat("lat", 0f).toDouble(); val lon = c.getFloat("lon", 0f).toDouble()
         return if (LocalClima.coordenadaValida(lat, lon)) Ponto(lat, lon, "último ponto conhecido") else null

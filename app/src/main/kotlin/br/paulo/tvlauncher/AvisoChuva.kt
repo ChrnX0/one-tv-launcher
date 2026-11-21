@@ -80,7 +80,7 @@ object AvisoChuva {
         val ultimo = p.getLong("ultimo_aviso", 0)
         if (System.currentTimeMillis() - ultimo < SILENCIO_H * 3_600_000L) return "já avisou há menos de $SILENCIO_H h"
         // Já chovendo pelo aeroporto (o que a HOME viu nos últimos 40 min): não há o que avisar.
-        val clima = app.getSharedPreferences("clima", Context.MODE_PRIVATE)
+        val clima = app.getSharedPreferences(Prefs.CLIMA, Context.MODE_PRIVATE)
         if (clima.getBoolean("chovendo", false) && System.currentTimeMillis() - clima.getLong("em", 0) < 40 * 60_000L)
             return "já está chovendo"
 

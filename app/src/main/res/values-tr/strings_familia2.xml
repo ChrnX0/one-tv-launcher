@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">dinle</string>
     <string name="ra_dica_favoritar">favori</string>
     <string name="ra_carregando">İstasyonlar yükleniyor…</string>
-    <string name="ra_subtitulo">Dünyanın her yerinden istasyonlar · kumandadaki 1–9 favorilerinizi çalar</string>
     <string name="ra_sem_catalogo">Radyo kataloğu yanıt vermedi. Favorileriniz yine çalışır.</string>
     <string name="ra_nada">İstasyon bulunamadı.</string>
     <string name="ra_continuar">devam et</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Ada göre ara</string>
     <string name="ra_buscar_det">Dünyadaki herhangi bir istasyon</string>
     <string name="ra_generos">Türler</string>
-    <string name="ra_paises">Başka ülke</string>
-    <string name="ra_paises_det">En çok istasyonu olan ülkeler</string>
     <string name="ra_perto">Yakında</string>
-    <string name="ra_mais_ouvidas">%s’de en çok dinlenenler</string>
     <string name="ra_mundo">Dünyada en çok dinlenenler</string>
     <string name="ra_resultado">Arama: %s</string>
     <string name="ra_favoritada">Favorilere eklendi</string>

@@ -23,7 +23,6 @@
     <string name="ra_dica_ouvir">ascolta</string>
     <string name="ra_dica_favoritar">preferita</string>
     <string name="ra_carregando">Caricamento delle stazioni…</string>
-    <string name="ra_subtitulo">Stazioni da tutto il mondo · 1–9 sul telecomando riproducono le tue preferite</string>
     <string name="ra_sem_catalogo">Il catalogo radio non ha risposto. Le tue preferite funzionano comunque.</string>
     <string name="ra_nada">Nessuna stazione trovata.</string>
     <string name="ra_continuar">continua</string>
@@ -33,10 +32,7 @@
     <string name="ra_buscar">Cerca per nome</string>
     <string name="ra_buscar_det">Qualsiasi stazione del mondo</string>
     <string name="ra_generos">Generi</string>
-    <string name="ra_paises">Altro paese</string>
-    <string name="ra_paises_det">I paesi con più stazioni</string>
     <string name="ra_perto">Vicino</string>
-    <string name="ra_mais_ouvidas">Più ascoltate in %s</string>
     <string name="ra_mundo">Più ascoltate nel mondo</string>
     <string name="ra_resultado">Ricerca: %s</string>
     <string name="ra_favoritada">Aggiunta alle preferite</string>
