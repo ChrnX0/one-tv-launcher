@@ -340,8 +340,8 @@ object GuardiaoShizuku {
      */
     private fun tique(app: Context) {
         garantir(app, "periodico")
-        Thread { PrivilegioDO.reforcarVpn(app) }.start()   // e a VPN fixa (AdGuard), se o túnel caiu
-        Thread { Dns.voltarAoAutomaticoSeQuebrado(app) }.start()   // e o DNS fixo, se parou de responder
+        Fundo.rodar("vpn-reforco") { PrivilegioDO.reforcarVpn(app) }   // e a VPN fixa (AdGuard), se o túnel caiu
+        Fundo.rodar("dns-conferir") { Dns.voltarAoAutomaticoSeQuebrado(app) }   // e o DNS fixo, se parou de responder
         Atualizador.talvezVerificar(app)   // e uma versão nova no GitHub (a cada 6 h, só com a tela apagada)
     }
 

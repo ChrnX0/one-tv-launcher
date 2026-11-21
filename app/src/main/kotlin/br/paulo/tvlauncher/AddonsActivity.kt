@@ -234,7 +234,7 @@ class AddonsActivity : Activity() {
         }
         if (fontes.isEmpty()) return
         val app = applicationContext
-        Thread { BibliotecaIndice.anotar(app, fontes) }.start()
+        Fundo.rodar("biblioteca") { BibliotecaIndice.anotar(app, fontes) }
     }
 
     private fun abrirItem(d: ItemDe) {

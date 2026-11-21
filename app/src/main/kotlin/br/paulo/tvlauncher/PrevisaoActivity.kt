@@ -88,7 +88,7 @@ class PrevisaoActivity : Activity() {
         }
         // Mesmo fundo do launcher (criarFundo(), ver Fundos.kt): acompanha o tema configurado (Escuro/Galeria) em
         // vez de uma cor fixa só desta tela — pedido do dono para as duas ficarem coerentes.
-        fundoVivo = criarFundo(this, Tema.atual(this), decoracao = false) { bloco -> Thread(bloco).start() }
+        fundoVivo = criarFundo(this, Tema.atual(this), decoracao = false) { bloco -> Fundo.rodar("previsao-fundo") { bloco() } }
         raiz = FrameLayout(this).apply {
             addView(fundoVivo, FrameLayout.LayoutParams(-1, -1))
             addView(rolagem, FrameLayout.LayoutParams(-1, -1))

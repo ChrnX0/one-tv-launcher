@@ -123,7 +123,7 @@ object MtpNaRede {
         val r = object : BroadcastReceiver() {
             override fun onReceive(c: Context, i: Intent) {
                 // fora da thread da tela: o aviso ao computador escreve na rede
-                Thread({ conferirArmazens(app) }, "Mtp-pendrive").apply { isDaemon = true }.start()
+                Fundo.rodar("Mtp-pendrive") { conferirArmazens(app) }
             }
         }
         val filtro = IntentFilter().apply {
