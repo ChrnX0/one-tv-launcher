@@ -19,7 +19,6 @@
     <string name="tx_carregando">読み込み中</string>
     <string name="tx_nao_tem">このエピソードにはありません</string>
     <string name="tx_nao_tem_det">このポッドキャストはこのエピソードのテキストを公開していません。</string>
-    <string name="tx_pe">◀ ▶ 前 / 次の文 · ▼ 検索 · OK：閉じる</string>
     <string name="tx_pe_busca">%2$d 件中 %1$d 件目 · ◀ ▶ 前 / 次 · ▼ 再検索 · OK：閉じる</string>
     <string name="tx_buscar">話した内容を検索</string>
     <string name="tx_nada">このエピソードではその言葉は出てきません。</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">マイニュース</string>
     <string name="jor_ouvir">ニュースを聴く</string>
     <string name="jor_min">続けて%d分</string>
+    <string name="tx_pe">◀ ▶ 前 / 次の文 · ▲ 要約 · ▼ 検索 · OK：閉じる</string>
+    <string name="tx_gerando">作成中</string>
+    <string name="tx_gerando_det">テキストを作成中… 最初の部分は約1分かかります。</string>
+    <string name="tx_gerar">OKで作成（無料）</string>
+    <string name="tx_cota">明日また</string>
+    <string name="tx_cota_det">今日の無料テキスト枠は終わりました。明日また使えます。</string>
+    <string name="tx_pulei">広告をスキップ</string>
+    <string name="tx_pulei_det">%d秒 · ◀で戻る</string>
+    <string name="tx_resumo">Sofyの要約</string>
+    <string name="tx_resumo_de">要約 · %s</string>
+    <string name="tx_resumindo">話した内容を読んでいます… 少々お待ちを。</string>
+    <string name="tx_resumo_falhou">今回は要約が届きませんでした。少ししてからもう一度。</string>
 </resources>

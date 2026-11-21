@@ -34,6 +34,7 @@ import br.paulo.tvlauncher.listen.PodcastFeed
 import br.paulo.tvlauncher.listen.Podcasts
 import br.paulo.tvlauncher.listen.Radios
 import br.paulo.tvlauncher.listen.Transcricao
+import br.paulo.tvlauncher.listen.TranscricaoNuvem
 import br.paulo.tvlauncher.player.Episodio
 import br.paulo.tvlauncher.player.PlayerEngine
 import br.paulo.tvlauncher.player.Posicao
@@ -365,8 +366,16 @@ class OuvirServico : Service() {
 
     /** Baixa a transcrição que o próprio feed oferece (a melhor para sincronizar), fora da thread da tela. */
     private fun carregarTexto(e: EpisodioTocando) {
-        texto = emptyList()
-        val tr = Transcricao.escolher(e.ep.transcricoes) ?: return
+        texto = emptyList(); textoGerado = false
+        val tr = Transcricao.escolher(e.ep.transcricoes) ?: run {
+            // Sem texto no feed: o que já foi gerado na nuvem antes (fica guardado; o mesmo episódio nunca vai de novo).
+            val guid = e.ep.guid
+            Fundo.rodar("transcricao-guardada") {
+                val g = TranscricaoNuvem.carregar(this, e.feed, guid)
+                if (g != null) ui.post { if (episodio?.ep?.guid == guid) { texto = g.trechos; textoGerado = true; publicar() } }
+            }
+            return
+        }
         val guid = e.ep.guid
         textoCarregando = true
         Fundo.rodar("transcricao") {
@@ -374,6 +383,95 @@ class OuvirServico : Service() {
             val l = if (ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }) emptyList()
                 else Transcricao.ler(runCatching { Http.getText(tr.url, readMs = 15_000, maxBytes = 3 * 1024 * 1024, followRedirects = false) }.getOrNull(), tr.tipo)
             ui.post { if (episodio?.ep?.guid == guid) { texto = l; textoCarregando = false; publicar() } }
+        }
+    }
+
+    /** O texto veio da nuvem (gerado aqui), não do feed. */
+    @Volatile var textoGerado = false
+        private set
+    /** Gerando o texto na nuvem agora, e o motivo de ter parado ("" = sem erro; "cota", "falhou"). */
+    @Volatile var textoGerando = false
+        private set
+    @Volatile var textoErro = ""
+        private set
+
+    /** Dá para pedir o texto à nuvem neste episódio (MP3, sem texto no feed)? */
+    fun podeGerarTexto(): Boolean {
+        val e = episodio ?: return false
+        return Transcricao.escolher(e.ep.transcricoes) == null && TranscricaoNuvem.podeGerar(e.ep)
+    }
+
+    /**
+     * Gera o texto da fala na nuvem ([TranscricaoNuvem]), a partir de onde está tocando, pedaço por pedaço: cada pedaço
+     * que volta já aparece na tela. Para sozinho ao trocar de episódio, ao acabar a cota do dia ou num erro.
+     */
+    fun gerarTexto() {
+        val e = episodio ?: return
+        if (textoGerando || !podeGerarTexto()) return
+        textoGerando = true; textoErro = ""; publicar()
+        val app = applicationContext
+        val guid = e.ep.guid
+        val dur = duracaoMs.takeIf { it > 0 } ?: (e.ep.duracaoS * 1000L)
+        val pos = posicaoMs
+        val idioma = java.util.Locale.getDefault().language
+        Fundo.rodar("transcricao-nuvem") {
+            var erro = ""
+            var g = TranscricaoNuvem.carregar(app, e.feed, guid)
+            val total = g?.total?.takeIf { it > 0 } ?: TranscricaoNuvem.tamanho(e.ep.url)
+            if (total <= 0 || dur <= 0) erro = "falhou"
+            else {
+                var feitos = g?.feitos.orEmpty()
+                var trechos = g?.trechos.orEmpty()
+                for (i in TranscricaoNuvem.ordem(total, TranscricaoNuvem.byteDe(pos, total, dur))) {
+                    if (episodio?.ep?.guid != guid) break
+                    if (i in feitos) continue
+                    val de = i * TranscricaoNuvem.PEDACO
+                    val ate = minOf(total - 1, de + TranscricaoNuvem.PEDACO - 1)
+                    val bytes = runCatching { TranscricaoNuvem.baixar(e.ep.url, de, ate) }.getOrNull()
+                    if (bytes == null) { erro = "falhou"; break }
+                    val ini = TranscricaoNuvem.msDe(de, total, dur)
+                    val seg = (TranscricaoNuvem.msDe(ate + 1, total, dur) - ini) / 1000f
+                    val resp = try { TranscricaoNuvem.transcrever(app, bytes, seg, idioma) }
+                        catch (x: TranscricaoNuvem.SemCota) { erro = "cota"; break }
+                        catch (x: Exception) { null }
+                    if (resp == null) { erro = "falhou"; break }
+                    trechos = Transcricao.unir(trechos, TranscricaoNuvem.ler(resp, ini))
+                    feitos = feitos + i
+                    g = TranscricaoNuvem.Guardado(trechos, feitos, total)
+                    TranscricaoNuvem.gravar(app, e.feed, guid, g)
+                    val agora = trechos
+                    ui.post { if (episodio?.ep?.guid == guid) { texto = agora; textoGerado = true; publicar() } }
+                }
+            }
+            ui.post { if (episodio?.ep?.guid == guid) { textoGerando = false; textoErro = erro; publicar() } }
+        }
+    }
+
+    /** O resumo da Sofy do episódio tocando ("" = ainda não pedido) e as propagandas achadas junto. */
+    @Volatile var resumo: String = ""
+        private set
+    @Volatile var resumindo = false
+        private set
+    private var propagandas: List<LongRange> = emptyList()
+    private val puladas = HashSet<Long>()
+
+    /** Pede o resumo e as propagandas do texto que já existe; [aoTerminar] na thread da tela ("cota" = acabou a de hoje). */
+    fun pedirResumo(aoTerminar: (erro: String) -> Unit) {
+        val e = episodio ?: return
+        if (resumo.isNotEmpty()) { aoTerminar(""); return }
+        if (resumindo || texto.isEmpty()) return
+        resumindo = true
+        val l = texto; val guid = e.ep.guid
+        val idioma = java.util.Locale.getDefault().language
+        Fundo.rodar("resumo-sofy") {
+            var erro = ""
+            val r = try { TranscricaoNuvem.resumir(e.ep.titulo, l, idioma) } catch (x: TranscricaoNuvem.SemCota) { erro = "cota"; null } catch (x: Exception) { null }
+            ui.post {
+                resumindo = false
+                if (episodio?.ep?.guid != guid) return@post
+                if (r != null && r.first.isNotEmpty()) { resumo = r.first; propagandas = r.second } else if (erro.isEmpty()) erro = "falhou"
+                aoTerminar(erro)
+            }
         }
     }
 
@@ -390,6 +488,8 @@ class OuvirServico : Service() {
         ui.removeCallbacks(salvarPeriodico)
         soltarPlayer()
         radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L; capitulos = emptyList(); texto = emptyList(); textoCarregando = false
+        textoGerando = false; textoErro = ""; textoGerado = false
+        resumo = ""; resumindo = false; propagandas = emptyList(); puladas.clear()
     }
 
     private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {
@@ -534,7 +634,7 @@ class OuvirServico : Service() {
         val ef = efetivo(this, e.feed)
         player?.setPlaybackSpeed(ef.velocidade); player?.skipSilenceEnabled = ef.pularSilencio
         aplicarEfeito()
-        ui.removeCallbacks(vigiaFim); if (ef.fimS > 0) ui.postDelayed(vigiaFim, 1_000)
+        ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
         publicar()
     }
 
@@ -617,9 +717,15 @@ class OuvirServico : Service() {
         override fun run() {
             val e = episodio ?: return
             val fim = efetivo(this@OuvirServico, e.feed).fimS
-            if (fim <= 0) return
             val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
             if (tocando && AjustesPodcast.noFim(posicaoMs, dur, fim)) { Log.i(TAG, "pulei o fim (${fim}s)"); terminouEpisodio(); return }
+            // Pular propaganda (texto da fala + Sofy): cada uma uma vez só; ◀ para voltar a ela não pula de novo.
+            if (tocando) TranscricaoNuvem.propagandaEm(propagandas, posicaoMs, puladas)?.let { ad ->
+                puladas += ad.first
+                Log.i(TAG, "pulei propaganda (${(ad.last - ad.first) / 1000}s)")
+                irPara(ad.last)
+                AvisoTv.rapido(this@OuvirServico, getString(R.string.tx_pulei), getString(R.string.tx_pulei_det, ((ad.last - ad.first) / 1000).toInt()), 3)
+            }
             ui.postDelayed(this, 1_000)
         }
     }

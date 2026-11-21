@@ -19,7 +19,6 @@
     <string name="tx_carregando">caricamento</string>
     <string name="tx_nao_tem">non disponibile per questo episodio</string>
     <string name="tx_nao_tem_det">Questo podcast non pubblica il testo di questo episodio.</string>
-    <string name="tx_pe">◀ ▶ frase precedente / successiva · ▼ cerca · OK: chiudi</string>
     <string name="tx_pe_busca">Risultato %1$d di %2$d · ◀ ▶ precedente / successivo · ▼ nuova ricerca · OK: chiudi</string>
     <string name="tx_buscar">Cerca in ciò che è stato detto</string>
     <string name="tx_nada">Nessuno l\'ha detto in questo episodio.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Il mio notiziario</string>
     <string name="jor_ouvir">Ascolta il notiziario</string>
     <string name="jor_min">%d min di fila</string>
+    <string name="tx_pe">◀ ▶ frase precedente / successiva · ▲ riassunto · ▼ cerca · OK: chiudi</string>
+    <string name="tx_gerando">in creazione</string>
+    <string name="tx_gerando_det">Creazione del testo… la prima parte richiede circa 1 minuto.</string>
+    <string name="tx_gerar">OK lo crea (gratis)</string>
+    <string name="tx_cota">torna domani</string>
+    <string name="tx_cota_det">La quota gratuita di testo di oggi è finita. Torna domani.</string>
+    <string name="tx_pulei">Pubblicità saltata</string>
+    <string name="tx_pulei_det">%d s · ◀ per tornarci</string>
+    <string name="tx_resumo">Riassunto di Sofy</string>
+    <string name="tx_resumo_de">Riassunto · %s</string>
+    <string name="tx_resumindo">Leggo ciò che è stato detto… un attimo.</string>
+    <string name="tx_resumo_falhou">Il riassunto non è arrivato. Riprova tra poco.</string>
 </resources>

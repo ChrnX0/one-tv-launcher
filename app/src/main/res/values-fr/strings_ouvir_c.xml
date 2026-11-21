@@ -19,7 +19,6 @@
     <string name="tx_carregando">chargement</string>
     <string name="tx_nao_tem">absent de cet épisode</string>
     <string name="tx_nao_tem_det">Ce podcast ne publie pas le texte de cet épisode.</string>
-    <string name="tx_pe">◀ ▶ phrase précédente / suivante · ▼ chercher · OK : fermer</string>
     <string name="tx_pe_busca">Résultat %1$d sur %2$d · ◀ ▶ précédent / suivant · ▼ nouvelle recherche · OK : fermer</string>
     <string name="tx_buscar">Chercher dans ce qui est dit</string>
     <string name="tx_nada">Personne n\'a dit cela dans cet épisode.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Mon journal</string>
     <string name="jor_ouvir">Écouter mon journal</string>
     <string name="jor_min">%d min d\'affilée</string>
+    <string name="tx_pe">◀ ▶ phrase précédente / suivante · ▲ résumé · ▼ chercher · OK : fermer</string>
+    <string name="tx_gerando">en cours</string>
+    <string name="tx_gerando_det">Création du texte… la première partie prend environ 1 minute.</string>
+    <string name="tx_gerar">OK le crée (gratuit)</string>
+    <string name="tx_cota">de retour demain</string>
+    <string name="tx_cota_det">Le quota gratuit de texte du jour est épuisé. Il revient demain.</string>
+    <string name="tx_pulei">Pub passée</string>
+    <string name="tx_pulei_det">%d s · ◀ pour y revenir</string>
+    <string name="tx_resumo">Résumé de Sofy</string>
+    <string name="tx_resumo_de">Résumé · %s</string>
+    <string name="tx_resumindo">Lecture de ce qui a été dit… un instant.</string>
+    <string name="tx_resumo_falhou">Le résumé n\'est pas arrivé cette fois. Réessayez plus tard.</string>
 </resources>

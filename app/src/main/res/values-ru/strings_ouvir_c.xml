@@ -19,7 +19,6 @@
     <string name="tx_carregando">загрузка</string>
     <string name="tx_nao_tem">нет в этом выпуске</string>
     <string name="tx_nao_tem_det">Этот подкаст не публикует текст этого выпуска.</string>
-    <string name="tx_pe">◀ ▶ предыдущая / следующая фраза · ▼ поиск · OK: закрыть</string>
     <string name="tx_pe_busca">Найдено %1$d из %2$d · ◀ ▶ назад / вперёд · ▼ новый поиск · OK: закрыть</string>
     <string name="tx_buscar">Поиск по сказанному</string>
     <string name="tx_nada">Этого не говорили в этом выпуске.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Мои новости</string>
     <string name="jor_ouvir">Слушать новости</string>
     <string name="jor_min">%d мин подряд</string>
+    <string name="tx_pe">◀ ▶ предыдущая / следующая фраза · ▲ кратко · ▼ поиск · OK: закрыть</string>
+    <string name="tx_gerando">создаётся</string>
+    <string name="tx_gerando_det">Создаём текст… первая часть займёт около минуты.</string>
+    <string name="tx_gerar">OK создаст (бесплатно)</string>
+    <string name="tx_cota">завтра снова</string>
+    <string name="tx_cota_det">Бесплатный лимит текста на сегодня исчерпан. Завтра он вернётся.</string>
+    <string name="tx_pulei">Реклама пропущена</string>
+    <string name="tx_pulei_det">%d с · ◀ вернуться</string>
+    <string name="tx_resumo">Кратко от Sofy</string>
+    <string name="tx_resumo_de">Кратко · %s</string>
+    <string name="tx_resumindo">Читаю сказанное… минутку.</string>
+    <string name="tx_resumo_falhou">Краткое изложение не пришло. Попробуйте чуть позже.</string>
 </resources>

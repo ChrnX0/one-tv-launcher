@@ -305,7 +305,7 @@ class PodcastPlayerActivity : Activity() {
         val ef = OuvirServico.efetivo(this, e.feed)
         vistas[Acao.VELOCIDADE]?.escrito(PodcastPlayerLogic.rotuloVelocidade(ef.velocidade))
         vistas[Acao.SOM]?.apply { icone(IconeOuvir.Tipo.OPCOES); ligado = true }
-        vistas[Acao.TEXTO]?.apply { escrito("Aa"); ligado = s?.texto?.isNotEmpty() == true }
+        vistas[Acao.TEXTO]?.apply { escrito("Aa"); ligado = s?.texto?.isNotEmpty() == true || s?.textoGerando == true }
         vistas[Acao.DORMIR]?.apply { icone(IconeOuvir.Tipo.DORMIR); ligado = (s?.dormirAte ?: 0L) > 0L }
 
         carregarFila(e)
@@ -353,8 +353,11 @@ class PodcastPlayerActivity : Activity() {
         Acao.TEXTO -> {
             val s = OuvirServico.instancia
             getString(R.string.tx_titulo) + when {
+                s?.textoGerando == true -> " · " + getString(R.string.tx_gerando)
                 s?.texto?.isNotEmpty() == true -> ""
                 s?.textoCarregando == true -> " · " + getString(R.string.tx_carregando)
+                s?.textoErro == "cota" -> " · " + getString(R.string.tx_cota)
+                s?.podeGerarTexto() == true -> " · " + getString(R.string.tx_gerar)
                 else -> " · " + getString(R.string.tx_nao_tem)
             }
         }
@@ -546,7 +549,12 @@ class PodcastPlayerActivity : Activity() {
                     listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); atualizar() }
             }
             Acao.SOM -> MenuSom.abrir(this) { atualizar() }
-            Acao.TEXTO -> if (s?.texto?.isNotEmpty() == true) abrirPalco()
+            Acao.TEXTO -> if (s?.texto?.isNotEmpty() == true || s?.textoGerando == true) {
+                // Já tem texto mas a parte de agora ainda não foi gerada: continua gerando (do ponto em que está).
+                if (s.textoGerado && !s.textoGerando) s.gerarTexto()
+                abrirPalco()
+            } else if (s?.podeGerarTexto() == true && s.textoErro != "cota") { s.gerarTexto(); abrirPalco() }
+                else if (s?.textoErro == "cota") AvisoTv.rapido(this, getString(R.string.tx_titulo), getString(R.string.tx_cota_det), 6)
                 else AvisoTv.rapido(this, getString(R.string.tx_titulo), getString(if (s?.textoCarregando == true) R.string.tx_carregando else R.string.tx_nao_tem_det), 4)
             Acao.DORMIR -> {
                 val ops = PodcastPlayerLogic.DORMIR_MIN.map { if (it == 0) getString(R.string.pod_desligado).replaceFirstChar { c -> c.titlecase() } else getString(R.string.pl_dormir_min, it) }
@@ -630,8 +638,20 @@ class PodcastPlayerActivity : Activity() {
         val p = palco ?: return
         val s = OuvirServico.instancia ?: return
         val l = s.texto
+        val pos = s.posicaoMs
+        if (l.isEmpty() && !s.textoGerando) { fecharPalco(); return }
+        // Gerando na nuvem e a parte de agora ainda não chegou (ou o texto todo): "Gerando o texto…" no lugar da frase.
+        val longe = l.isEmpty() || Transcricao.atual(l, pos).let { k -> k < 0 || pos - l[k].fimMs > 15_000 }
+        if (longe && s.textoGerando) {
+            if (palcoVisto != -3) {
+                palcoVisto = -3
+                linhasPalco.forEachIndexed { k, tv -> tv.text = if (k == 1) getString(R.string.tx_gerando_det) else "" }
+                p.findViewWithTag<TextView>("topo")?.text = (getString(R.string.tx_titulo) + " · " + (ep?.podcast ?: "")).uppercase()
+            }
+            return
+        }
         if (l.isEmpty()) { fecharPalco(); return }
-        val i = Transcricao.atual(l, s.posicaoMs)
+        val i = Transcricao.atual(l, pos)
         p.findViewWithTag<TextView>("topo")?.text = (getString(R.string.tx_titulo) + " · " + (ep?.podcast ?: "")).uppercase()
         p.findViewWithTag<TextView>("pe")?.text = if (achados.isNotEmpty()) getString(R.string.tx_pe_busca, noAchado + 1, achados.size) else getString(R.string.tx_pe)
         if (i == palcoVisto) return
@@ -650,9 +670,10 @@ class PodcastPlayerActivity : Activity() {
         val s = OuvirServico.instancia ?: return false
         val l = s.texto
         when (e.keyCode) {
-            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_UP -> {
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 if (e.repeatCount == 0) fecharPalco(); return true
             }
+            KeyEvent.KEYCODE_DPAD_UP -> { if (e.repeatCount == 0) mostrarResumo(); return true }
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 val frente = e.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
                 val alvo = if (achados.isNotEmpty()) {
@@ -664,6 +685,27 @@ class PodcastPlayerActivity : Activity() {
             KeyEvent.KEYCODE_DPAD_DOWN -> { if (e.repeatCount == 0) buscarNaFala(); return true }
         }
         return false
+    }
+
+    /**
+     * ▲ no texto da fala: o resumo da Sofy (3 a 5 frases) do que já há de texto, e de quebra as propagandas, que o player
+     * passa a pular. Uma chamada ao servidor por episódio, só quando alguém pede (cota grátis).
+     */
+    private fun mostrarResumo() {
+        val s = OuvirServico.instancia ?: return
+        if (s.texto.isEmpty()) return
+        if (s.resumo.isEmpty()) AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_resumindo), 4)
+        s.pedirResumo { erro ->
+            if (isDestroyed) return@pedirResumo
+            val r = OuvirServico.instancia?.resumo.orEmpty()
+            when {
+                r.isNotEmpty() -> CaixaTv(this).setTitle(getString(R.string.tx_resumo_de, ep?.ep?.titulo.orEmpty()))
+                    .setView(texto(24f, Estilo.TEXTO, linhas = 12).apply { text = r; setPaddingRelative(dpi(24), dpi(8), dpi(24), dpi(8)); setLineSpacing(dp(4f), 1f) })
+                    .setPositiveButton(android.R.string.ok, null).create().show()
+                erro == "cota" -> AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_cota_det), 6)
+                else -> AvisoTv.rapido(this, getString(R.string.tx_resumo), getString(R.string.tx_resumo_falhou), 5)
+            }
+        }
     }
 
     /** "Onde falaram de…?": acha as frases com todas as palavras e vai à primeira; ◀ ▶ andam entre as achadas. */

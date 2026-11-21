@@ -19,7 +19,6 @@
     <string name="tx_carregando">memuat</string>
     <string name="tx_nao_tem">tidak ada di episode ini</string>
     <string name="tx_nao_tem_det">Podcast ini tidak menerbitkan teks episode ini.</string>
-    <string name="tx_pe">◀ ▶ kalimat sebelumnya / berikutnya · ▼ cari · OK: tutup</string>
     <string name="tx_pe_busca">Hasil %1$d dari %2$d · ◀ ▶ sebelumnya / berikutnya · ▼ cari lagi · OK: tutup</string>
     <string name="tx_buscar">Cari dalam ucapan</string>
     <string name="tx_nada">Tidak ada yang mengatakan itu di episode ini.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Berita saya</string>
     <string name="jor_ouvir">Dengarkan berita</string>
     <string name="jor_min">%d mnt berturut-turut</string>
+    <string name="tx_pe">◀ ▶ kalimat sebelumnya / berikutnya · ▲ ringkasan · ▼ cari · OK: tutup</string>
+    <string name="tx_gerando">membuat</string>
+    <string name="tx_gerando_det">Membuat teks… bagian pertama butuh sekitar 1 menit.</string>
+    <string name="tx_gerar">OK membuatnya (gratis)</string>
+    <string name="tx_cota">kembali besok</string>
+    <string name="tx_cota_det">Kuota teks gratis hari ini habis. Kembali besok.</string>
+    <string name="tx_pulei">Iklan dilewati</string>
+    <string name="tx_pulei_det">%d dtk · ◀ kembali</string>
+    <string name="tx_resumo">Ringkasan Sofy</string>
+    <string name="tx_resumo_de">Ringkasan · %s</string>
+    <string name="tx_resumindo">Membaca yang dikatakan… sebentar.</string>
+    <string name="tx_resumo_falhou">Ringkasan belum datang. Coba lagi sebentar lagi.</string>
 </resources>

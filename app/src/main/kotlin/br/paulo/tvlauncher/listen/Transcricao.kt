@@ -99,6 +99,9 @@ object Transcricao {
         return out
     }
 
+    /** Junta trechos novos (de um pedaço gerado na nuvem) aos que já havia, em ordem e sem repetir o mesmo começo. */
+    fun unir(a: List<Trecho>, b: List<Trecho>): List<Trecho> = (a + b).sortedBy { it.inicioMs }.distinctBy { it.inicioMs }.take(MAX_TRECHOS)
+
     /** O trecho falado em [posMs] (o último que começou), ou -1 antes do primeiro. Busca binária: chamado 4x por segundo. */
     fun atual(l: List<Trecho>, posMs: Long): Int {
         var lo = 0; var hi = l.size - 1; var r = -1

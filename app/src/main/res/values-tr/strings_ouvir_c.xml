@@ -19,7 +19,6 @@
     <string name="tx_carregando">yükleniyor</string>
     <string name="tx_nao_tem">bu bölümde yok</string>
     <string name="tx_nao_tem_det">Bu podcast bu bölümün metnini yayınlamıyor.</string>
-    <string name="tx_pe">◀ ▶ önceki / sonraki cümle · ▼ ara · OK: kapat</string>
     <string name="tx_pe_busca">Sonuç %1$d / %2$d · ◀ ▶ önceki / sonraki · ▼ yeni arama · OK: kapat</string>
     <string name="tx_buscar">Söylenenlerde ara</string>
     <string name="tx_nada">Bu bölümde bu söylenmedi.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Haberlerim</string>
     <string name="jor_ouvir">Haberleri dinle</string>
     <string name="jor_min">art arda %d dk</string>
+    <string name="tx_pe">◀ ▶ önceki / sonraki cümle · ▲ özet · ▼ ara · OK: kapat</string>
+    <string name="tx_gerando">oluşturuluyor</string>
+    <string name="tx_gerando_det">Metin oluşturuluyor… ilk bölüm yaklaşık 1 dakika sürer.</string>
+    <string name="tx_gerar">OK oluşturur (ücretsiz)</string>
+    <string name="tx_cota">yarın yine</string>
+    <string name="tx_cota_det">Bugünkü ücretsiz metin kotası bitti. Yarın yenilenir.</string>
+    <string name="tx_pulei">Reklam atlandı</string>
+    <string name="tx_pulei_det">%d sn · ◀ geri döner</string>
+    <string name="tx_resumo">Sofy\'nin özeti</string>
+    <string name="tx_resumo_de">Özet · %s</string>
+    <string name="tx_resumindo">Söylenenleri okuyorum… bir saniye.</string>
+    <string name="tx_resumo_falhou">Özet bu sefer gelmedi. Biraz sonra tekrar deneyin.</string>
 </resources>

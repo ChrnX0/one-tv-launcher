@@ -19,7 +19,6 @@
     <string name="tx_carregando">wird geladen</string>
     <string name="tx_nao_tem">nicht in dieser Folge</string>
     <string name="tx_nao_tem_det">Dieser Podcast veröffentlicht für diese Folge keinen Text.</string>
-    <string name="tx_pe">◀ ▶ vorheriger / nächster Satz · ▼ suchen · OK: schließen</string>
     <string name="tx_pe_busca">Treffer %1$d von %2$d · ◀ ▶ vorheriger / nächster · ▼ neue Suche · OK: schließen</string>
     <string name="tx_buscar">Im Gesagten suchen</string>
     <string name="tx_nada">Das wurde in dieser Folge nicht gesagt.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Meine Nachrichten</string>
     <string name="jor_ouvir">Nachrichten hören</string>
     <string name="jor_min">%d Min. am Stück</string>
+    <string name="tx_pe">◀ ▶ vorheriger / nächster Satz · ▲ Zusammenfassung · ▼ suchen · OK: schließen</string>
+    <string name="tx_gerando">wird erstellt</string>
+    <string name="tx_gerando_det">Text wird erstellt … der erste Teil dauert etwa 1 Minute.</string>
+    <string name="tx_gerar">OK erstellt ihn (kostenlos)</string>
+    <string name="tx_cota">morgen wieder</string>
+    <string name="tx_cota_det">Das kostenlose Textkontingent für heute ist aufgebraucht. Morgen gibt es wieder welches.</string>
+    <string name="tx_pulei">Werbung übersprungen</string>
+    <string name="tx_pulei_det">%d s · ◀ geht zurück</string>
+    <string name="tx_resumo">Sofys Zusammenfassung</string>
+    <string name="tx_resumo_de">Zusammenfassung · %s</string>
+    <string name="tx_resumindo">Lese das Gesagte … einen Moment.</string>
+    <string name="tx_resumo_falhou">Die Zusammenfassung kam diesmal nicht. Versuche es gleich noch einmal.</string>
 </resources>

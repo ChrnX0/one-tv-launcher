@@ -19,7 +19,6 @@
     <string name="tx_carregando">लोड हो रहा है</string>
     <string name="tx_nao_tem">इस एपिसोड में नहीं</string>
     <string name="tx_nao_tem_det">यह पॉडकास्ट इस एपिसोड का टेक्स्ट प्रकाशित नहीं करता।</string>
-    <string name="tx_pe">◀ ▶ पिछला / अगला वाक्य · ▼ खोजें · OK: बंद</string>
     <string name="tx_pe_busca">परिणाम %1$d / %2$d · ◀ ▶ पिछला / अगला · ▼ नई खोज · OK: बंद</string>
     <string name="tx_buscar">कही गई बातों में खोजें</string>
     <string name="tx_nada">इस एपिसोड में यह नहीं कहा गया।</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">मेरी खबरें</string>
     <string name="jor_ouvir">खबरें सुनें</string>
     <string name="jor_min">लगातार %d मिनट</string>
+    <string name="tx_pe">◀ ▶ पिछला / अगला वाक्य · ▲ सारांश · ▼ खोजें · OK: बंद</string>
+    <string name="tx_gerando">बन रहा है</string>
+    <string name="tx_gerando_det">टेक्स्ट बन रहा है… पहला हिस्सा लगभग 1 मिनट लेता है।</string>
+    <string name="tx_gerar">OK से बनाएँ (मुफ़्त)</string>
+    <string name="tx_cota">कल फिर</string>
+    <string name="tx_cota_det">आज का मुफ़्त टेक्स्ट कोटा ख़त्म हो गया। कल फिर मिलेगा।</string>
+    <string name="tx_pulei">विज्ञापन छोड़ा</string>
+    <string name="tx_pulei_det">%d से · ◀ वापस जाएँ</string>
+    <string name="tx_resumo">Sofy का सारांश</string>
+    <string name="tx_resumo_de">सारांश · %s</string>
+    <string name="tx_resumindo">कही गई बातें पढ़ रही हूँ… एक पल।</string>
+    <string name="tx_resumo_falhou">इस बार सारांश नहीं आया। थोड़ी देर बाद फिर कोशिश करें।</string>
 </resources>

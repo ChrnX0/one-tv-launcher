@@ -19,7 +19,6 @@
     <string name="tx_carregando">cargando</string>
     <string name="tx_nao_tem">este episodio no lo tiene</string>
     <string name="tx_nao_tem_det">Este pódcast no publica el texto de lo que se dice en este episodio.</string>
-    <string name="tx_pe">◀ ▶ frase anterior / siguiente · ▼ buscar · OK: cerrar</string>
     <string name="tx_pe_busca">Resultado %1$d de %2$d · ◀ ▶ anterior / siguiente · ▼ nueva búsqueda · OK: cerrar</string>
     <string name="tx_buscar">Buscar en lo que se dijo</string>
     <string name="tx_nada">Nadie dijo eso en este episodio.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Mi noticiero</string>
     <string name="jor_ouvir">Escuchar el noticiero</string>
     <string name="jor_min">%d min seguidos</string>
+    <string name="tx_pe">◀ ▶ frase anterior / siguiente · ▲ resumen · ▼ buscar · OK: cerrar</string>
+    <string name="tx_gerando">generando</string>
+    <string name="tx_gerando_det">Generando el texto… la primera parte tarda cerca de 1 minuto.</string>
+    <string name="tx_gerar">OK lo genera (gratis)</string>
+    <string name="tx_cota">vuelve mañana</string>
+    <string name="tx_cota_det">Se acabó la cuota gratis de texto de hoy. Vuelve mañana.</string>
+    <string name="tx_pulei">Anuncio saltado</string>
+    <string name="tx_pulei_det">%d s · ◀ vuelve a él</string>
+    <string name="tx_resumo">Resumen de Sofy</string>
+    <string name="tx_resumo_de">Resumen · %s</string>
+    <string name="tx_resumindo">Leyendo lo que se dijo… un momento.</string>
+    <string name="tx_resumo_falhou">El resumen no llegó esta vez. Inténtalo en un rato.</string>
 </resources>

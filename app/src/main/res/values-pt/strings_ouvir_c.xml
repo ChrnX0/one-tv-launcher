@@ -19,7 +19,6 @@
     <string name="tx_carregando">carregando</string>
     <string name="tx_nao_tem">este episódio não tem</string>
     <string name="tx_nao_tem_det">Este podcast não publica o texto do que é falado neste episódio.</string>
-    <string name="tx_pe">◀ ▶ frase anterior / seguinte · ▼ buscar · OK: fechar</string>
     <string name="tx_pe_busca">Achado %1$d de %2$d · ◀ ▶ anterior / seguinte · ▼ nova busca · OK: fechar</string>
     <string name="tx_buscar">Buscar no que foi falado</string>
     <string name="tx_nada">Ninguém falou isso neste episódio.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">Meu jornal</string>
     <string name="jor_ouvir">Ouvir o jornal</string>
     <string name="jor_min">%d min em sequência</string>
+    <string name="tx_pe">◀ ▶ frase anterior / seguinte · ▲ resumo · ▼ buscar · OK: fechar</string>
+    <string name="tx_gerando">gerando</string>
+    <string name="tx_gerando_det">Gerando o texto… a primeira parte leva cerca de 1 minuto.</string>
+    <string name="tx_gerar">OK gera (grátis)</string>
+    <string name="tx_cota">volta amanhã</string>
+    <string name="tx_cota_det">A cota grátis de texto de hoje acabou. Ela volta amanhã.</string>
+    <string name="tx_pulei">Pulei a propaganda</string>
+    <string name="tx_pulei_det">%d s · ◀ volta a ela</string>
+    <string name="tx_resumo">Resumo da Sofy</string>
+    <string name="tx_resumo_de">Resumo · %s</string>
+    <string name="tx_resumindo">Lendo o que foi falado… um instante.</string>
+    <string name="tx_resumo_falhou">O resumo não veio desta vez. Tente de novo daqui a pouco.</string>
 </resources>

@@ -19,7 +19,6 @@
     <string name="tx_carregando">加载中</string>
     <string name="tx_nao_tem">本集没有</string>
     <string name="tx_nao_tem_det">该播客未发布本集的文字。</string>
-    <string name="tx_pe">◀ ▶ 上一句 / 下一句 · ▼ 搜索 · OK：关闭</string>
     <string name="tx_pe_busca">第 %1$d / %2$d 处 · ◀ ▶ 上一处 / 下一处 · ▼ 重新搜索 · OK：关闭</string>
     <string name="tx_buscar">在讲话内容中搜索</string>
     <string name="tx_nada">本集没有人说过这句话。</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">我的新闻</string>
     <string name="jor_ouvir">收听新闻</string>
     <string name="jor_min">连续 %d 分钟</string>
+    <string name="tx_pe">◀ ▶ 上一句 / 下一句 · ▲ 摘要 · ▼ 搜索 · OK：关闭</string>
+    <string name="tx_gerando">生成中</string>
+    <string name="tx_gerando_det">正在生成文字… 第一部分约需 1 分钟。</string>
+    <string name="tx_gerar">按 OK 生成（免费）</string>
+    <string name="tx_cota">明天恢复</string>
+    <string name="tx_cota_det">今天的免费文字额度已用完，明天恢复。</string>
+    <string name="tx_pulei">已跳过广告</string>
+    <string name="tx_pulei_det">%d 秒 · ◀ 返回</string>
+    <string name="tx_resumo">Sofy 的摘要</string>
+    <string name="tx_resumo_de">摘要 · %s</string>
+    <string name="tx_resumindo">正在阅读讲话内容… 请稍候。</string>
+    <string name="tx_resumo_falhou">这次没有收到摘要，请稍后再试。</string>
 </resources>

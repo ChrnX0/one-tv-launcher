@@ -19,7 +19,6 @@
     <string name="tx_carregando">loading</string>
     <string name="tx_nao_tem">not in this episode</string>
     <string name="tx_nao_tem_det">This podcast does not publish the text of what is said in this episode.</string>
-    <string name="tx_pe">◀ ▶ previous / next sentence · ▼ search · OK: close</string>
     <string name="tx_pe_busca">Found %1$d of %2$d · ◀ ▶ previous / next · ▼ new search · OK: close</string>
     <string name="tx_buscar">Search in what was said</string>
     <string name="tx_nada">Nobody said that in this episode.</string>
@@ -30,4 +29,16 @@
     <string name="jor_titulo">My news</string>
     <string name="jor_ouvir">Play my news</string>
     <string name="jor_min">%d min in a row</string>
+    <string name="tx_pe">◀ ▶ previous / next sentence · ▲ summary · ▼ search · OK: close</string>
+    <string name="tx_gerando">generating</string>
+    <string name="tx_gerando_det">Generating the text… the first part takes about a minute.</string>
+    <string name="tx_gerar">OK generates it (free)</string>
+    <string name="tx_cota">back tomorrow</string>
+    <string name="tx_cota_det">Today\'s free text quota is used up. It comes back tomorrow.</string>
+    <string name="tx_pulei">Ad skipped</string>
+    <string name="tx_pulei_det">%d s · ◀ goes back to it</string>
+    <string name="tx_resumo">Sofy\'s summary</string>
+    <string name="tx_resumo_de">Summary · %s</string>
+    <string name="tx_resumindo">Reading what was said… one moment.</string>
+    <string name="tx_resumo_falhou">The summary did not come this time. Try again in a while.</string>
 </resources>
