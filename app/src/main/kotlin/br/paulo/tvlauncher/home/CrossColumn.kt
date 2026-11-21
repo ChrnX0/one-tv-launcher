@@ -205,6 +205,12 @@ class TimeWheel(ctx: Context, private val maximo: Int) : FrameLayout(ctx) {
         private set
     var ativo = false
         set(v) { field = v; pintar() }
+    /**
+     * Só o número do meio, sem os vizinhos (editor de alarme, 21/11/2026: na foto do Paulo os vizinhos "espalhados" não
+     * pareciam um seletor). As setas ficam à vista também sem foco, mais fracas, para dizer "isto muda".
+     */
+    var soCentro = false
+        set(v) { field = v; pintar() }
 
     private val numeros = List(5) { i ->
         TextView(ctx).apply {
@@ -213,11 +219,19 @@ class TimeWheel(ctx: Context, private val maximo: Int) : FrameLayout(ctx) {
         }
     }
     private val pilha = FrameLayout(ctx)
+    /** Moldura laranja atrás do número em foco, só no modo [soCentro] (deixa claro qual dos dois números as setas mudam). */
+    private val caixa = View(ctx).apply {
+        background = android.graphics.drawable.GradientDrawable().apply {
+            setColor(0x29FF6A2B); setStroke(dpi(3), Estilo.ACENTO); cornerRadius = dpi(14).toFloat()
+        }
+        alpha = 0f
+    }
     private val setaCima = Seta(ctx, true)
     private val setaBaixo = Seta(ctx, false)
 
     init {
         clipChildren = false
+        addView(caixa, LayoutParams(-1, dpi(10), Gravity.CENTER))
         numeros.forEach { pilha.addView(it, LayoutParams(-1, -2, Gravity.CENTER)) }
         addView(pilha, LayoutParams(-1, -1))
         addView(setaCima, LayoutParams(dpi(30), dpi(14), Gravity.CENTER))
@@ -237,6 +251,8 @@ class TimeWheel(ctx: Context, private val maximo: Int) : FrameLayout(ctx) {
         val pos = floatArrayOf(-d2, -d1, 0f, d1, d2)
         val esc = floatArrayOf(ESCALA_2, ESCALA_1, 1f, ESCALA_1, ESCALA_2)
         for ((i, t) in numeros.withIndex()) { t.translationY = pos[i]; t.scaleX = esc[i]; t.scaleY = esc[i] }
+        val alturaCaixa = (h * 1.3f).toInt()
+        if (caixa.layoutParams.height != alturaCaixa) caixa.layoutParams = (caixa.layoutParams as LayoutParams).apply { height = alturaCaixa }
         setaCima.translationY = -(h / 2 + vao + seta / 2)
         setaBaixo.translationY = h / 2 + vao + seta / 2
         pintar()
@@ -244,9 +260,11 @@ class TimeWheel(ctx: Context, private val maximo: Int) : FrameLayout(ctx) {
 
     private fun pintar() {
         val alfas = floatArrayOf(0.22f, 0.5f, 1f, 0.5f, 0.22f)
-        for ((i, t) in numeros.withIndex()) t.alpha = if (i == 2) (if (ativo) 1f else 0.82f) else alfas[i] * (if (ativo) 1f else 0.7f)
-        setaCima.alpha = if (ativo) 1f else 0f
-        setaBaixo.alpha = if (ativo) 1f else 0f
+        for ((i, t) in numeros.withIndex()) t.alpha = if (i == 2) (if (ativo) 1f else 0.82f) else if (soCentro) 0f else alfas[i] * (if (ativo) 1f else 0.7f)
+        val seta = if (ativo) 1f else if (soCentro) 0.3f else 0f
+        caixa.alpha = if (soCentro && ativo) 1f else 0f
+        setaCima.alpha = seta
+        setaBaixo.alpha = seta
     }
 
     /**

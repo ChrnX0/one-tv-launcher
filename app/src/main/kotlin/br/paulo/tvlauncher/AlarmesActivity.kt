@@ -27,6 +27,7 @@ import br.paulo.tvlauncher.home.HomeCruz
 import br.paulo.tvlauncher.home.MolaViews
 import br.paulo.tvlauncher.home.SonsCruz
 import br.paulo.tvlauncher.home.TimeWheel
+import br.paulo.tvlauncher.alarm.OptionList
 import br.paulo.tvlauncher.network.Cenas
 import br.paulo.tvlauncher.network.LgNetcast
 import br.paulo.tvlauncher.network.VolumeLg
@@ -388,7 +389,7 @@ class AlarmesActivity : Activity() {
     }
 
     /** As opções da coluna da direita do editor, na ordem em que aparecem. */
-    private enum class Op { SALVAR, REPETIR, SOM, RAMPA, BOM_DIA, CENA, NOME, LIGADO, APAGAR, SAIR }
+    private enum class Op { LIGADO, REPETIR, SOM, RAMPA, BOM_DIA, CENA, NOME, SALVAR, APAGAR, SAIR }
 
     /** Editor de um alarme ([orig] null = novo). Zona 0 = rolete da hora, 1 = do minuto, 2 = coluna de opções. */
     private inner class Editor(val orig: Despertador.Alarme?) {
@@ -407,22 +408,34 @@ class AlarmesActivity : Activity() {
         }
         var zona = 0
         val cab = novoCabecalho()
-        val resumo = texto(24f, Estilo.TEXTO, 600)
-        val hora = TimeWheel(this@AlarmesActivity, 24)
-        val minuto = TimeWheel(this@AlarmesActivity, 60)
-        val coluna = CrossColumn(this@AlarmesActivity)
+        // Mistura das propostas A e B (Paulo, 21/11/2026): à esquerda a hora (só o número, com ▲▼), embaixo "Toca hoje às
+        // 7:30" e a explicação da opção em foco; à direita a lista "nome cinza · valor branco", todas as opções à vista.
+        // "Desligado" aparece UMA vez: na linha "Alarme" (antes também no resumo do topo).
+        val resumo = texto(24f, Estilo.TEXTO, 700)
+        val explica = texto(19f, Estilo.TEXTO_2, 600)
+        val hora = TimeWheel(this@AlarmesActivity, 24).apply { soCentro = true }
+        val minuto = TimeWheel(this@AlarmesActivity, 60).apply { soCentro = true }
+        val doisPontos = texto(TimeWheel.FONTE, Estilo.TEXTO, 600)
+        val coluna = OptionList(this@AlarmesActivity)
 
         init {
             cab.text = getString(if (orig == null) R.string.al_novo else R.string.al_editar)
             conteudo.addView(cab, lp(-2, -2, 48, 36))
-            conteudo.addView(resumo, lp(dp(820), -2, 48, 84))
-            conteudo.addView(hora, lp(dp(150), dp(370), 56, 116))
-            // ":" entre os roletes, na altura do número do meio
-            conteudo.addView(texto(TimeWheel.FONTE, Estilo.TEXTO, 600).apply { text = ":"; gravity = Gravity.CENTER; translationY = -dp(6).toFloat() },
-                lp(dp(40), dp(370), 206, 116))
-            conteudo.addView(minuto, lp(dp(150), dp(370), 246, 116))
-            conteudo.addView(coluna, lp(dp(450), dp(356), 462, 122))
-            coluna.topo = dp(110).toFloat()
+            conteudo.addView(hora, lp(dp(150), dp(210), 48, 96))
+            // ":" entre os números, na altura do número
+            conteudo.addView(doisPontos.apply { text = ":"; gravity = Gravity.CENTER; translationY = -dp(6).toFloat() },
+                lp(dp(40), dp(210), 198, 96))
+            conteudo.addView(minuto, lp(dp(150), dp(210), 238, 96))
+            conteudo.addView(resumo, lp(dp(380), -2, 56, 322))
+            conteudo.addView(explica, lp(dp(370), -2, 56, 392))
+            conteudo.addView(coluna, lp(dp(470), -2, 450, 92))
+            coluna.aoMudar = {
+                explica.text = when (zona) {
+                    2 -> it?.info ?: ""
+                    0 -> getString(R.string.al_op_hora) + ":  ▲▼ " + getString(R.string.al_dica_mudar)
+                    else -> getString(R.string.al_op_minuto) + ":  ▲▼ " + getString(R.string.al_dica_mudar)
+                }
+            }
             conteudo.addView(CrossColumn.dicas(this@AlarmesActivity,
                 "▲▼" to getString(R.string.al_dica_mudar), "◀▶" to getString(R.string.al_dica_andar),
                 getString(R.string.grv_dica_ok) to getString(R.string.lista_dica_escolher),
@@ -441,24 +454,26 @@ class AlarmesActivity : Activity() {
 
         fun zona(z: Int) {
             zona = z
-            hora.ativo = z == 0; minuto.ativo = z == 1; coluna.ativa = z == 2
+            hora.ativo = z == 0; minuto.ativo = z == 1; coluna.ativa = z == 2   // ativa repinta e chama aoMudar
         }
 
         fun nomeDia(i: Int): String = java.text.DateFormatSymbols.getInstance().weekdays[i + 1].replaceFirstChar { it.uppercase() }
 
-        fun item(op: Op): CrossColumn.Item {
+        fun item(op: Op): OptionList.Item {
             val sim = getString(R.string.al_sim); val nao = getString(R.string.al_nao)
+            fun o(rot: Int, valor: String, det: Int) = OptionList.Item(getString(rot), valor, getString(det))
+            fun acao(rot: Int, det: Int) = OptionList.Item("", getString(rot), getString(det))
             return when (op) {
-                Op.SALVAR -> CrossColumn.Item(getString(R.string.rot_salvar), getString(R.string.al_op_salvar_det))
-                Op.REPETIR -> CrossColumn.Item(opcao(getString(R.string.al_op_repetir), Despertador.diasTexto(this@AlarmesActivity, v.dias)), getString(R.string.al_op_repetir_det))
-                Op.SOM -> CrossColumn.Item(opcao(getString(R.string.al_op_som), SomAlarme.NOMES.getOrElse(v.som) { SomAlarme.NOMES[0] }), getString(R.string.al_op_som_det))
-                Op.RAMPA -> CrossColumn.Item(opcao(getString(R.string.al_op_rampa), SomAlarme.rampaTexto(v.rampa)), getString(R.string.al_op_rampa_det))
-                Op.BOM_DIA -> CrossColumn.Item(opcao(getString(R.string.al_op_bom_dia), if (v.bomDia) sim else nao), getString(R.string.al_op_bom_dia_det))
-                Op.CENA -> CrossColumn.Item(opcao(getString(R.string.al_op_cena), v.cena.ifBlank { getString(R.string.rot_nenhum) }), getString(R.string.al_op_cena_det))
-                Op.NOME -> CrossColumn.Item(opcao(getString(R.string.al_op_nome), v.nome.ifBlank { getString(R.string.rot_nenhum) }), getString(R.string.al_op_nome_det))
-                Op.LIGADO -> CrossColumn.Item(opcao(getString(R.string.al_op_alarme), getString(if (v.ativo) R.string.al_ligado else R.string.al_desligado)), getString(R.string.al_op_ligado_det))
-                Op.APAGAR -> CrossColumn.Item(getString(R.string.al_op_apagar), getString(R.string.al_op_apagar_det))
-                Op.SAIR -> CrossColumn.Item(getString(R.string.al_op_sair), getString(R.string.al_op_sair_det))
+                Op.LIGADO -> o(R.string.al_op_alarme, getString(if (v.ativo) R.string.al_ligado else R.string.al_desligado), R.string.al_op_ligado_det)
+                Op.REPETIR -> o(R.string.al_op_repetir, Despertador.diasTexto(this@AlarmesActivity, v.dias), R.string.al_op_repetir_det)
+                Op.SOM -> o(R.string.al_op_som, SomAlarme.NOMES.getOrElse(v.som) { SomAlarme.NOMES[0] }, R.string.al_op_som_det)
+                Op.RAMPA -> o(R.string.al_op_rampa, SomAlarme.rampaTexto(v.rampa), R.string.al_op_rampa_det)
+                Op.BOM_DIA -> o(R.string.al_op_bom_dia, if (v.bomDia) sim else nao, R.string.al_op_bom_dia_det)
+                Op.CENA -> o(R.string.al_op_cena, v.cena.ifBlank { getString(R.string.rot_nenhum) }, R.string.al_op_cena_det)
+                Op.NOME -> o(R.string.al_op_nome, v.nome.ifBlank { getString(R.string.rot_nenhum) }, R.string.al_op_nome_det)
+                Op.SALVAR -> acao(R.string.rot_salvar, R.string.al_op_salvar_det)
+                Op.APAGAR -> acao(R.string.al_op_apagar, R.string.al_op_apagar_det)
+                Op.SAIR -> acao(R.string.al_op_sair, R.string.al_op_sair_det)
             }
         }
 
@@ -470,8 +485,10 @@ class AlarmesActivity : Activity() {
         fun atualizarResumo() {
             val a = alarme()
             val prox = Despertador.proximaVez(a)
-            resumo.text = if (prox == null) getString(R.string.al_resumo_desligado)
-                else getString(R.string.al_resumo, quando(prox)) + "  ·  " + Despertador.diasTexto(this@AlarmesActivity, v.dias)
+            // Desligado: o resumo some e a hora fica apagada; a palavra "Desligado" já está na linha "Alarme".
+            resumo.text = if (prox == null) "" else getString(R.string.al_resumo, quando(prox))
+            val a2 = if (v.ativo) 1f else 0.45f
+            hora.alpha = a2; minuto.alpha = a2; doisPontos.alpha = a2
         }
 
         fun alarme() = Despertador.Alarme(orig?.id ?: 0, v.hora, v.minuto, v.dias, v.nome.trim(), v.ativo, v.som, v.rampa, v.bomDia, v.cena)
