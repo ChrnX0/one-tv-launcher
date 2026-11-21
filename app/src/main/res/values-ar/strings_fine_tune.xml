@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">الخط</string>
+    <string name="fc_det">خط كل الشاشات. خطوط Google تُنزَّل في المرة الأولى</string>
+    <string name="fc_baixando">جارٍ التنزيل…</string>
+    <string name="fc_falhou">تعذّر التنزيل. تحقّق من الإنترنت</string>
+    <string name="ck_formato">تنسيق الوقت</string>
+    <string name="ck_formato_det">في الشريط العلوي والجزيرة والساعة الكبيرة</string>
+    <string name="ck_auto">تلقائي</string>
+    <string name="ck_24">24 ساعة (15:40)</string>
+    <string name="ck_12">12 ساعة (3:40)</string>
+    <string name="ck_12ampm">12 ساعة مع ص/م</string>
+    <string name="ck_seg">مع الثواني</string>
+    <string name="ck_cor">لون الوقت</string>
+    <string name="ck_cor_det">في الشريط العلوي والجزيرة والساعة الكبيرة</string>
+    <string name="ck_padrao">الافتراضي</string>
+    <string name="ck_laranja">برتقالي</string>
+    <string name="ck_creme">كريمي</string>
+    <string name="ck_ambar">كهرماني</string>
+    <string name="ck_verde">أخضر مزرق</string>
+</resources>

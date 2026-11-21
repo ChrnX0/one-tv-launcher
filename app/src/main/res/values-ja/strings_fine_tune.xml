@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">フォント</string>
+    <string name="fc_det">すべての画面の文字。Google フォントは最初にダウンロードされます</string>
+    <string name="fc_baixando">ダウンロード中…</string>
+    <string name="fc_falhou">ダウンロードできませんでした。インターネットを確認してください</string>
+    <string name="ck_formato">時刻の形式</string>
+    <string name="ck_formato_det">上のバー、アイランド、大きな時計</string>
+    <string name="ck_auto">自動</string>
+    <string name="ck_24">24 時間 (15:40)</string>
+    <string name="ck_12">12 時間 (3:40)</string>
+    <string name="ck_12ampm">12 時間 (午前/午後)</string>
+    <string name="ck_seg">秒あり</string>
+    <string name="ck_cor">時刻の色</string>
+    <string name="ck_cor_det">上のバー、アイランド、大きな時計</string>
+    <string name="ck_padrao">標準</string>
+    <string name="ck_laranja">オレンジ</string>
+    <string name="ck_creme">クリーム</string>
+    <string name="ck_ambar">アンバー</string>
+    <string name="ck_verde">ティール</string>
+</resources>

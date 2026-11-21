@@ -46,6 +46,7 @@ internal fun ConfigLauncherActivity.abaAparencia(c: LinearLayout) {
         // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
     }
     c.addView(linhaTema, lp())
+    linhasAjusteFino(c)   // letra, formato e cor da hora (ConfigFineTuneRows.kt)
     // "Meu fundo" (degrau 1, 15/11/2026; FundoMeu.kt): escolher o arquivo já põe o tema; brilho e contraste em degraus.
     fun rotuloMeu() = FundoMeuDados.arquivo(this)?.name ?: getString(R.string.pi_nenhum)
     lateinit var linhaMeu: LinhaCfg

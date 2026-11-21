@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Police</string>
+    <string name="fc_det">La police de tous les écrans. Celles de Google se téléchargent la première fois</string>
+    <string name="fc_baixando">téléchargement…</string>
+    <string name="fc_falhou">Téléchargement impossible. Vérifiez Internet</string>
+    <string name="ck_formato">Format de l’heure</string>
+    <string name="ck_formato_det">Dans la barre du haut, l’îlot et la grande horloge</string>
+    <string name="ck_auto">Automatique</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h avec AM/PM</string>
+    <string name="ck_seg">Avec secondes</string>
+    <string name="ck_cor">Couleur de l’heure</string>
+    <string name="ck_cor_det">Dans la barre du haut, l’îlot et la grande horloge</string>
+    <string name="ck_padrao">Par défaut</string>
+    <string name="ck_laranja">Orange</string>
+    <string name="ck_creme">Crème</string>
+    <string name="ck_ambar">Ambre</string>
+    <string name="ck_verde">Bleu-vert</string>
+</resources>

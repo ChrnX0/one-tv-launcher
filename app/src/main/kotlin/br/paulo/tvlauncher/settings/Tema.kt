@@ -79,7 +79,18 @@ object Fontes {
      * degrau acima, porque a Nunito do Cinema+ é mais encorpada: texto comum (até 450) = 600, médio (até 550) = 700,
      * destaque = 800. Arquivos estáticos (um por peso) tirados da variável oficial: o Android 9+ só lê variável por XML.
      */
-    fun nunito(ctx: Context, peso: Int): Typeface = cache.getOrPut("nunito|$peso") {
+    fun nunito(ctx: Context, peso: Int): Typeface = FontChoice.typeface(ctx, peso) ?: nunitoEmbutida(ctx, peso)
+
+    /** Esquece as fontes carregadas (a fonte escolhida mudou: FontChoice). As telas abertas trocam ao recriar. */
+    fun limpar() = synchronized(cache) { cache.keys.removeAll { it.startsWith("nunito|") } }
+
+    /**
+     * Esta letra é a "do texto" (Nunito ou a do tema), e não uma das especiais (Fraunces do protetor, ícones)? Usado por
+     * FontChoice.aplicarNaTela para saber o que pode trocar.
+     */
+    fun ehNunito(t: Typeface): Boolean = synchronized(cache) { cache.entries.none { !it.key.startsWith("nunito|") && it.value == t } }
+
+    private fun nunitoEmbutida(ctx: Context, peso: Int): Typeface = cache.getOrPut("nunito|$peso") {
         // Os arquivos moram em res/font (não em assets) para o tema do app usar a mesma família como fonte padrão.
         val id = when {
             peso <= 450 -> R.font.nunito_600

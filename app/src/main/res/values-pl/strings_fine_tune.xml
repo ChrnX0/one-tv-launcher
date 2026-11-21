@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Czcionka</string>
+    <string name="fc_det">Czcionka wszystkich ekranów. Czcionki Google pobierają się za pierwszym razem</string>
+    <string name="fc_baixando">pobieranie…</string>
+    <string name="fc_falhou">Nie udało się pobrać. Sprawdź internet</string>
+    <string name="ck_formato">Format godziny</string>
+    <string name="ck_formato_det">Na górnym pasku, na wyspie i na dużym zegarze</string>
+    <string name="ck_auto">Automatyczny</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h z AM/PM</string>
+    <string name="ck_seg">Z sekundami</string>
+    <string name="ck_cor">Kolor godziny</string>
+    <string name="ck_cor_det">Na górnym pasku, na wyspie i na dużym zegarze</string>
+    <string name="ck_padrao">Domyślny</string>
+    <string name="ck_laranja">Pomarańczowy</string>
+    <string name="ck_creme">Kremowy</string>
+    <string name="ck_ambar">Bursztynowy</string>
+    <string name="ck_verde">Morski</string>
+</resources>

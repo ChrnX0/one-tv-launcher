@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">फ़ॉन्ट</string>
+    <string name="fc_det">हर स्क्रीन का फ़ॉन्ट। Google फ़ॉन्ट पहली बार डाउनलोड होते हैं</string>
+    <string name="fc_baixando">डाउनलोड हो रहा है…</string>
+    <string name="fc_falhou">डाउनलोड नहीं हुआ। इंटरनेट देखें</string>
+    <string name="ck_formato">समय का फ़ॉर्मैट</string>
+    <string name="ck_formato_det">ऊपर की पट्टी, आइलैंड और बड़ी घड़ी में</string>
+    <string name="ck_auto">अपने-आप</string>
+    <string name="ck_24">24 घंटे (15:40)</string>
+    <string name="ck_12">12 घंटे (3:40)</string>
+    <string name="ck_12ampm">AM/PM के साथ 12 घंटे</string>
+    <string name="ck_seg">सेकंड के साथ</string>
+    <string name="ck_cor">समय का रंग</string>
+    <string name="ck_cor_det">ऊपर की पट्टी, आइलैंड और बड़ी घड़ी में</string>
+    <string name="ck_padrao">डिफ़ॉल्ट</string>
+    <string name="ck_laranja">नारंगी</string>
+    <string name="ck_creme">क्रीम</string>
+    <string name="ck_ambar">एम्बर</string>
+    <string name="ck_verde">हरा-नीला</string>
+</resources>

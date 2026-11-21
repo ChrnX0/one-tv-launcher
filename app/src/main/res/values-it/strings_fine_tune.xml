@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Carattere</string>
+    <string name="fc_det">Il carattere di tutte le schermate. Quelli di Google si scaricano la prima volta</string>
+    <string name="fc_baixando">download in corso…</string>
+    <string name="fc_falhou">Impossibile scaricare. Controlla internet</string>
+    <string name="ck_formato">Formato dell’ora</string>
+    <string name="ck_formato_det">Nella barra in alto, nell’isola e nell’orologio grande</string>
+    <string name="ck_auto">Automatico</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h con AM/PM</string>
+    <string name="ck_seg">Con secondi</string>
+    <string name="ck_cor">Colore dell’ora</string>
+    <string name="ck_cor_det">Nella barra in alto, nell’isola e nell’orologio grande</string>
+    <string name="ck_padrao">Predefinito</string>
+    <string name="ck_laranja">Arancione</string>
+    <string name="ck_creme">Crema</string>
+    <string name="ck_ambar">Ambra</string>
+    <string name="ck_verde">Verde acqua</string>
+</resources>

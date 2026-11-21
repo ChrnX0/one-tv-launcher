@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Schrift</string>
+    <string name="fc_det">Die Schrift aller Bildschirme. Google-Schriften werden beim ersten Mal geladen</string>
+    <string name="fc_baixando">wird geladen…</string>
+    <string name="fc_falhou">Laden fehlgeschlagen. Internet prüfen</string>
+    <string name="ck_formato">Uhrzeitformat</string>
+    <string name="ck_formato_det">In der oberen Leiste, der Insel und der großen Uhr</string>
+    <string name="ck_auto">Automatisch</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h mit AM/PM</string>
+    <string name="ck_seg">Mit Sekunden</string>
+    <string name="ck_cor">Farbe der Uhrzeit</string>
+    <string name="ck_cor_det">In der oberen Leiste, der Insel und der großen Uhr</string>
+    <string name="ck_padrao">Standard</string>
+    <string name="ck_laranja">Orange</string>
+    <string name="ck_creme">Creme</string>
+    <string name="ck_ambar">Bernstein</string>
+    <string name="ck_verde">Türkis</string>
+</resources>

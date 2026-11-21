@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">字体</string>
+    <string name="fc_det">所有屏幕的字体。Google 字体首次使用时下载</string>
+    <string name="fc_baixando">正在下载…</string>
+    <string name="fc_falhou">无法下载。请检查网络</string>
+    <string name="ck_formato">时间格式</string>
+    <string name="ck_formato_det">在顶部栏、岛和大时钟中</string>
+    <string name="ck_auto">自动</string>
+    <string name="ck_24">24 小时 (15:40)</string>
+    <string name="ck_12">12 小时 (3:40)</string>
+    <string name="ck_12ampm">12 小时（上午/下午）</string>
+    <string name="ck_seg">显示秒</string>
+    <string name="ck_cor">时间颜色</string>
+    <string name="ck_cor_det">在顶部栏、岛和大时钟中</string>
+    <string name="ck_padrao">默认</string>
+    <string name="ck_laranja">橙色</string>
+    <string name="ck_creme">奶油色</string>
+    <string name="ck_ambar">琥珀色</string>
+    <string name="ck_verde">青色</string>
+</resources>

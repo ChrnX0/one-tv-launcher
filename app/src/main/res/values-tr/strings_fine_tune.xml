@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Yazı tipi</string>
+    <string name="fc_det">Tüm ekranların yazı tipi. Google yazı tipleri ilk seferde indirilir</string>
+    <string name="fc_baixando">indiriliyor…</string>
+    <string name="fc_falhou">İndirilemedi. İnterneti kontrol edin</string>
+    <string name="ck_formato">Saat biçimi</string>
+    <string name="ck_formato_det">Üst çubukta, adada ve büyük saatte</string>
+    <string name="ck_auto">Otomatik</string>
+    <string name="ck_24">24 sa (15:40)</string>
+    <string name="ck_12">12 sa (3:40)</string>
+    <string name="ck_12ampm">ÖÖ/ÖS ile 12 sa</string>
+    <string name="ck_seg">Saniyeli</string>
+    <string name="ck_cor">Saat rengi</string>
+    <string name="ck_cor_det">Üst çubukta, adada ve büyük saatte</string>
+    <string name="ck_padrao">Varsayılan</string>
+    <string name="ck_laranja">Turuncu</string>
+    <string name="ck_creme">Krem</string>
+    <string name="ck_ambar">Kehribar</string>
+    <string name="ck_verde">Camgöbeği</string>
+</resources>

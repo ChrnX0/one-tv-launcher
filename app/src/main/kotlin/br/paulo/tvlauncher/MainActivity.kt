@@ -406,7 +406,8 @@ class MainActivity : Activity() {
 
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
     private fun assinaturaDoLayout() = "${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
-        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}"
+        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}|${LayoutHome.iconesTrocados(this)}|" +
+        "${br.paulo.tvlauncher.settings.FontChoice.currentId(this)}|${br.paulo.tvlauncher.settings.ClockStyle.format(this)}|${br.paulo.tvlauncher.settings.ClockStyle.color(this)}"   // ajuste fino (21/11/2026)
 
     override fun onResume() {
         super.onResume()

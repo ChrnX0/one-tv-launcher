@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fc_titulo">Font</string>
+    <string name="fc_det">The lettering on every screen. Google fonts download the first time</string>
+    <string name="fc_baixando">downloading…</string>
+    <string name="fc_falhou">Couldn\'t download it. Check the internet</string>
+    <string name="ck_formato">Time format</string>
+    <string name="ck_formato_det">In the top bar, the Island and the big clock</string>
+    <string name="ck_auto">Automatic</string>
+    <string name="ck_24">24 h (15:40)</string>
+    <string name="ck_12">12 h (3:40)</string>
+    <string name="ck_12ampm">12 h with AM/PM</string>
+    <string name="ck_seg">With seconds</string>
+    <string name="ck_cor">Time color</string>
+    <string name="ck_cor_det">In the top bar, the Island and the big clock</string>
+    <string name="ck_padrao">Default</string>
+    <string name="ck_laranja">Orange</string>
+    <string name="ck_creme">Cream</string>
+    <string name="ck_ambar">Amber</string>
+    <string name="ck_verde">Teal</string>
+</resources>
