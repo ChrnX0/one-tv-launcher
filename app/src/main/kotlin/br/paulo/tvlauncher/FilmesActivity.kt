@@ -370,6 +370,8 @@ class FilmesActivity : Activity() {
     private class Estado(val filmes: List<Filme>, val resultados: List<Filme>, val acoes: List<ColunaCategorias.Linha>,
                          val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
+                         /** "Todos" como botão ao lado de LISTAS, igual na TV (Paulo, 21/11/2026). */
+                         val botoesListas: List<ColunaCategorias.Linha>,
                          val grade: List<Filme>?, val deLista: Pair<Int, Int>? = null)
 
     private val calculo = CalculoTela(tela, "filmes-conta")
@@ -464,7 +466,8 @@ class FilmesActivity : Activity() {
                 // A coleção vem da ficha; filme de categoria oculta não entra (o PIN pode ter trancado de novo).
                 val col = colecaoS?.let { (n, fs) -> n to fs.filter { mostrar || it.grupo.trim() !in ocultasS } }?.takeIf { it.second.isNotEmpty() }
                 if (col != null) fixas += L(COLECAO, getString(R.string.filmes_colecao_cat, col.first), col.second.size, null, 0, false, "")
-                fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
+                // Todos é botão ao lado de "LISTAS", como na TV (pedido do Paulo, 21/11/2026), não mais uma linha fixa.
+                val botoesListas = listOf(L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, ""))
                 // Listas de fora, na parte que rola, em ordem alfabética com as categorias: só os títulos que a lista de IPTV tem, na ordem da lista.
                 val fora = HashMap<String, Pair<List<String>, Int>>()
                 // 19/11/2026 (Paulo: "o MDBList não roda com a lista"): as listas de fora iam nas FIXAS e, com várias,
@@ -487,7 +490,7 @@ class FilmesActivity : Activity() {
                     L("g:$g", PlayerLista.nomeExibido(g).ifEmpty { rotulo(R.string.player_cat_outros) }, n,
                         if (mostrar && g in ocultas) IconePlayer.Tipo.CADEADO else null, novos[g] ?: 0, false, "")
                 }, linhasFora) { if (it.chave.startsWith("g:")) it.chave.removePrefix("g:") else it.nome }   // categoria: o grupo cru (como ordenarAZ)
-                val todasChaves = (acoes + fixas + rola).mapTo(HashSet()) { it.chave }
+                val todasChaves = (acoes + fixas + rola + botoesListas).mapTo(HashSet()) { it.chave }
                 // Entrada: a última categoria aberta; sem ela, Continuar (se houver) ou Todos.
                 val ch0 = if (inicial && simples) PlayerAcessivel.entradaSimples(listOf(CONTINUAR to cont.size, INTERESSES to ints.size), TODOS)
                     else if (inicial && chaveS != BUSCA) ColunaRegras.categoriaInicial(ultimaS?.takeIf { it != BUSCA && it != COLECAO },
@@ -508,13 +511,14 @@ class FilmesActivity : Activity() {
                         else -> ordenados()
                     }.let { FilmesFiltro.filtrar(it, filtroS, posS, notasS, filtroS.lista?.let { k -> fora[k]?.first?.toHashSet() }) }   // o filtro combinado vale sobre qualquer categoria
                 }
-                Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
+                Estado(vis, res, acoes, botoes, fixas, rola, ch, botoesListas, g, fora[ch]?.let { it.first.size to it.second })
             },
             aplicar = { e ->
                 pedidoPendente = null
                 if (!isDestroyed) {
-                    filmes = e.filmes; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola; chave = e.chave
+                    filmes = e.filmes; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola + e.botoesListas; chave = e.chave
                     coluna.mostrarBotoes(e.botoes)
+                    coluna.mostrarBotoesListas(e.botoesListas)
                     coluna.mostrar(e.acoes, e.fixas, e.rola, chave)
                     if (e.grade != null) {
                         naGrade = e.grade

@@ -444,6 +444,8 @@ class SeriesActivity : Activity() {
     private class Estado(val series: List<Serie>, val resultados: List<Serie>, val acoes: List<ColunaCategorias.Linha>,
                          val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
+                         /** "Todos" como botão ao lado de LISTAS, igual na TV (Paulo, 21/11/2026). */
+                         val botoesListas: List<ColunaCategorias.Linha>,
                          val grade: List<Serie>?, val deLista: Pair<Int, Int>? = null)
 
     private val calculo = CalculoTela(tela, "series-conta")
@@ -521,7 +523,8 @@ class SeriesActivity : Activity() {
                     .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(INTERESSES, CONTINUAR)) else a }
                 val fixas = ArrayList<ColunaCategorias.Linha>()
                 if (termoS.isNotEmpty()) fixas += L(BUSCA, getString(R.string.player_cat_busca, termoS), res.size, IconeMidia.Tipo.LUPA, 0, false, "")
-                fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
+                // Todos é botão ao lado de "LISTAS", como na TV (pedido do Paulo, 21/11/2026), não mais uma linha fixa.
+                val botoesListas = listOf(L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, ""))
                 // Listas de fora, na parte que rola, em ordem alfabética com as categorias: só as séries que a lista de IPTV tem, na ordem da lista.
                 val fora = HashMap<String, Pair<List<String>, Int>>()
                 // 19/11/2026 (Paulo: "o MDBList não roda com a lista"): as listas de fora iam nas FIXAS e, com várias,
@@ -543,7 +546,7 @@ class SeriesActivity : Activity() {
                     L("g:$g", PlayerLista.nomeExibido(g).ifEmpty { rotulo(R.string.player_cat_outros) }, n,
                         if (mostrar && g in ocultasTodas) IconePlayer.Tipo.CADEADO else null, novos[g] ?: 0, false, "")
                 }, linhasFora) { if (it.chave.startsWith("g:")) it.chave.removePrefix("g:") else it.nome }   // categoria: o grupo cru (como ordenarAZ)
-                val todasChaves = (acoes + fixas + rola).mapTo(HashSet()) { it.chave }
+                val todasChaves = (acoes + fixas + rola + botoesListas).mapTo(HashSet()) { it.chave }
                 val ch0 = if (inicial && simples) PlayerAcessivel.entradaSimples(listOf(CONTINUAR to cont.size, INTERESSES to ints.size), TODOS)
                     else if (inicial && chaveS != BUSCA) ColunaRegras.categoriaInicial(ultimaS?.takeIf { it != BUSCA }, todasChaves,
                     if (cont.isNotEmpty()) CONTINUAR else TODOS) else chaveS
@@ -562,13 +565,14 @@ class SeriesActivity : Activity() {
                         else -> ordenadas()
                     }.let { lista -> if (naoVistasS) lista.filter { it.chave !in ultS && (progS[it.chave]?.vistos ?: 0) == 0 } else lista }
                 }
-                Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
+                Estado(vis, res, acoes, botoes, fixas, rola, ch, botoesListas, g, fora[ch]?.let { it.first.size to it.second })
             },
             aplicar = { e ->
                 pedidoPendente = null
                 if (!isDestroyed) {
-                    series = e.series; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola; chave = e.chave
+                    series = e.series; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola + e.botoesListas; chave = e.chave
                     coluna.mostrarBotoes(e.botoes)
+                    coluna.mostrarBotoesListas(e.botoesListas)
                     coluna.mostrar(e.acoes, e.fixas, e.rola, chave)
                     if (e.grade != null) {
                         naGrade = e.grade
