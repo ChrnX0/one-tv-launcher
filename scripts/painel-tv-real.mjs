@@ -23,7 +23,7 @@ const arg = (n) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : nu
 const BASE = arg('--tv');
 const FOTOS = arg('--fotos');
 const PIN = process.env.PAINEL_PIN;
-if (!BASE || !PIN) { console.error('uso: PAINEL_PIN=... node scripts/painel-tv-real.mjs --tv http://<tv>:8080/ [--fotos pasta]'); process.exit(2); }
+if (!BASE || !PIN) { console.error('uso: PAINEL_PIN=... node scripts/painel-tv-real.mjs --tv http://<tv>:8080/ [--fotos pasta] [--chrome caminho]'); process.exit(2); }
 if (FOTOS) fs.mkdirSync(FOTOS, { recursive: true });
 
 const VISOES = [
@@ -31,7 +31,8 @@ const VISOES = [
   { nome: 'celular', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 },
 ];
 
-const navegador = await pw.chromium.launch();
+const chrome = arg('--chrome');   // um Chromium já instalado (playwright-core não baixa navegador)
+const navegador = await pw.chromium.launch(chrome ? { executablePath: chrome } : {});
 const achados = [];
 let paginasVistas = 0;
 
