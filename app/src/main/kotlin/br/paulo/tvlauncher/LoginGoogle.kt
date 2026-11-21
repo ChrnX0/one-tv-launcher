@@ -2,12 +2,18 @@ package br.paulo.tvlauncher
 
 import android.content.Context
 import android.util.Log
-import org.json.JSONObject
+import br.paulo.tvlauncher.backup.DriveBackup
+import br.paulo.tvlauncher.backup.DriveRegras
+import br.paulo.tvlauncher.family.FotoPerfil
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.mcp.McpAutorizacao
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.security.SecureRandom
 import java.util.concurrent.ConcurrentHashMap
+import org.json.JSONObject
 
 /**
  * Login do conector (MCP) pela conta Google (09/11/2026, pedido do dono: "a conta Google que coincida com a do perfil
@@ -125,9 +131,9 @@ object LoginGoogle {
         if (!s.soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora, novaPrioritaria = s.prioritaria); sessoes[s.id] = s }
         val deviceCode = r.getString("device_code")
         var intervalo = r.optLong("interval", 5).coerceIn(2, 30) * 1000
-        Thread({
+        Fundo.rodar("LoginGoogle") {
             while (s.estado == Estado.ESPERANDO && System.currentTimeMillis() < s.expira) {
-                try { Thread.sleep(intervalo) } catch (_: InterruptedException) { return@Thread }
+                try { Thread.sleep(intervalo) } catch (_: InterruptedException) { return@rodar }
                 try {
                     val t = postar("https://oauth2.googleapis.com/token", mapOf(
                         "client_id" to id, "client_secret" to (segredo(app) ?: ""), "device_code" to deviceCode,
@@ -140,17 +146,17 @@ object LoginGoogle {
                                 Log.w(TAG, "login feito, mas não li a conta: ${e.javaClass.simpleName}")
                                 if (s.estado == Estado.ESPERANDO) { s.estado = Estado.ERRO; s.mensagem = "o Google não respondeu agora; tente de novo" }
                             }
-                            return@Thread
+                            return@rodar
                         }
                         "authorization_pending" -> {}
                         "slow_down" -> intervalo += 5000
-                        "access_denied" -> { s.estado = Estado.RECUSADO; s.mensagem = "o login foi negado no Google"; return@Thread }
-                        else -> { s.estado = Estado.ERRO; s.mensagem = "Google respondeu: ${t.optString("error").take(60)}"; return@Thread }
+                        "access_denied" -> { s.estado = Estado.RECUSADO; s.mensagem = "o login foi negado no Google"; return@rodar }
+                        else -> { s.estado = Estado.ERRO; s.mensagem = "Google respondeu: ${t.optString("error").take(60)}"; return@rodar }
                     }
                 } catch (e: Exception) { Log.w(TAG, "consulta ao Google falhou: ${e.javaClass.simpleName}") }
             }
             if (s.estado == Estado.ESPERANDO) { s.estado = Estado.ERRO; s.mensagem = "o código venceu; comece de novo" }
-        }, "LoginGoogle").apply { isDaemon = true; start() }
+        }
         return s
     }
 

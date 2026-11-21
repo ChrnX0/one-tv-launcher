@@ -3,6 +3,7 @@ package br.paulo.tvlauncher.telas
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.ReceitasActivity
+import br.paulo.tvlauncher.panel.confirmar
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Sound</string>
+    <string name="som_titulo_pod">Sound · %1$s</string>
+    <string name="som_voz_clara">Clear voice</string>
+    <string name="som_so_este">Only for this podcast</string>
+    <string name="som_abertura">Skip the intro</string>
+    <string name="som_fim">Skip the ending</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">These settings are kept only for %1$s.</string>
+    <string name="som_rodape_geral">Speed, silences and clear voice apply to every podcast. Turn on \"Only for this podcast\" to keep different ones for %1$s.</string>
+    <string name="som_det">Speed, clear voice, sleep timer</string>
+    <string name="som_det_radio">Clear voice and sleep timer</string>
+    <string name="cap_titulo">Chapters</string>
+    <string name="cap_de">Chapter %1$d of %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ move 10 s · OK: chapters</string>
+    <string name="tx_titulo">Speech text</string>
+    <string name="tx_carregando">loading</string>
+    <string name="tx_nao_tem">not in this episode</string>
+    <string name="tx_nao_tem_det">This podcast does not publish the text of what is said in this episode.</string>
+    <string name="tx_pe_busca">Found %1$d of %2$d · ◀ ▶ previous / next · ▼ new search · OK: close</string>
+    <string name="tx_buscar">Search in what was said</string>
+    <string name="tx_nada">Nobody said that in this episode.</string>
+    <string name="ra_ja_tocou">Already played</string>
+    <string name="ra_parecidas">Similar stations</string>
+    <string name="som_radio">Last radio station I listened to</string>
+    <string name="som_podcast">Newest podcast episode</string>
+    <string name="jor_titulo">My news</string>
+    <string name="jor_ouvir">Play my news</string>
+    <string name="jor_min">%d min in a row</string>
+    <string name="tx_pe">◀ ▶ previous / next sentence · ▲ summary · ▼ search · OK: close</string>
+    <string name="tx_gerando">generating</string>
+    <string name="tx_gerando_det">Generating the text… the first part takes about a minute.</string>
+    <string name="tx_gerar">OK generates it (free)</string>
+    <string name="tx_cota">back tomorrow</string>
+    <string name="tx_cota_det">Today\'s free text quota is used up. It comes back tomorrow.</string>
+    <string name="tx_pulei">Ad skipped</string>
+    <string name="tx_pulei_det">%d s · ◀ goes back to it</string>
+    <string name="tx_resumo">Sofy\'s summary</string>
+    <string name="tx_resumo_de">Summary · %s</string>
+    <string name="tx_resumindo">Reading what was said… one moment.</string>
+    <string name="tx_resumo_falhou">The summary did not come this time. Try again in a while.</string>
+    <string name="ra_globo">Explore the globe</string>
+    <string name="ra_globo_det">Spin the world and land on a radio station from anywhere</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ spin · OK: play · Back: close</string>
+    <string name="ra_globo_mar">Open sea… spin a little more</string>
+    <string name="ra_voltar">Back 30 s</string>
+    <string name="ra_voltar_det">Missed something? Hear it again (⏪ on the remote)</string>
+    <string name="ra_ao_vivo">Back to live</string>
+    <string name="ra_atras">%s behind live</string>
+</resources>

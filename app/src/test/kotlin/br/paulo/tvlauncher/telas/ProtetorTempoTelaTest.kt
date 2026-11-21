@@ -10,14 +10,16 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import br.paulo.tvlauncher.CeuNoturno
-import br.paulo.tvlauncher.Curiosidades
-import br.paulo.tvlauncher.DesenhoCeu
-import br.paulo.tvlauncher.EstadoCeu
-import br.paulo.tvlauncher.FraseTempo
-import br.paulo.tvlauncher.Fontes
-import br.paulo.tvlauncher.LinhasTempo
-import br.paulo.tvlauncher.TempoAgora
+import br.paulo.tvlauncher.home.EstadoCeu
+import br.paulo.tvlauncher.player.LinhasTempo
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.screensaver.TempoAgora
+import br.paulo.tvlauncher.settings.Curiosidades
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.weather.CeuNoturno
+import br.paulo.tvlauncher.weather.DesenhoCeu
+import br.paulo.tvlauncher.weather.FraseTempo
+import java.io.File
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,7 +29,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /**
  * Protetor que reage ao tempo (caminho 2, 17/11/2026): a frase e CADA curiosidade desenhadas de verdade sobre o fundo

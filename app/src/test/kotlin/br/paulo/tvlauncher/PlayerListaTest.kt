@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.PlayerDados
+import br.paulo.tvlauncher.player.PlayerLista
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue

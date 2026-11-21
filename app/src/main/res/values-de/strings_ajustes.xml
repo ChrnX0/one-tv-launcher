@@ -93,10 +93,6 @@
     <string name="vq_det">Zeigt einen QR-Code mit dem Look dieses Fernsehers: Design, Textgröße, Symbole.</string>
     <string name="vq_texto">Scanne ihn mit dem Handy, um ihn zu behalten oder an jemanden mit Sofaly zu schicken.</string>
     <string name="vq_fechar">Schließen</string>
-    <string name="lh_titulo">Größe der App-Karten</string>
-    <string name="lh_det">Größere Karten sieht man vom Sofa aus besser.</string>
-    <string name="lh_normal">Normal</string>
-    <string name="lh_grande">Groß</string>
     <string name="pl_titulo">Tarife</string>
     <string name="pl_texto">Alles ist kostenlos, solange der Verkauf nicht begonnen hat. Später werden Pro und Ultra auf dem Handy gekauft.</string>
     <string name="pl_basico">Basis</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Alles aus Basis\n• Viele IPTV-Listen, Aufnahme\n• Volles Web-Panel\n• Claude, Routinen, Home Assistant\n• Alle Designs, Cloud-Backup</string>
     <string name="pl_ultra_itens">• Alles aus Pro\n• Besseres Wetter (3 Modelle)\n• Ausführliche Filmseiten\n• Automatische Untertitel\n• Bis zu 3 Fernseher</string>
     <string name="pl_qr">Mit dem Handy scannen, um Preise zu sehen und zu kaufen.</string>
-    <string name="lh_arranjo">App-Anordnung</string>
-    <string name="lh_arranjo_det">Eine Reihe, die seitlich scrollt, oder ein Raster mit allen Apps im Blick.</string>
-    <string name="lh_fileira">Reihe</string>
-    <string name="lh_grade">Raster</string>
     <string name="pl_assinar">Abonnieren</string>
     <string name="pl_assinar_preco">Abonnieren · %1$s</string>
     <string name="pl_seu_plano">Ihr Tarif</string>

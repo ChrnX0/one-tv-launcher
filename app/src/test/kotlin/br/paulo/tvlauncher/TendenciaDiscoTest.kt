@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.TendenciaDisco
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.LocalDate
 
 /** Ideia 41: quando o armazenamento enche, por uma medida de espaço livre por dia. */
 class TendenciaDiscoTest {

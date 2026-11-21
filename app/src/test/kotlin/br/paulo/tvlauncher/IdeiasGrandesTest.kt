@@ -1,11 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.McpProtocolo
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.observer.ErrosFiltrados
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.json.JSONArray
-import org.json.JSONObject
 import org.junit.Test
 
 /** Ideias grandes de 10/11/2026: casa (CasaHA), erros sem dado pessoal (ErrosFiltrados), texto da tela, MCP com imagem. */
@@ -53,17 +56,17 @@ class IdeiasGrandesTest {
             Erro: IOException: falhou ao ligar em 192.168.1.50 rede MinhaCasa
 
             java.lang.RuntimeException: java.io.IOException: falhou em 192.168.1.50
-            	at br.paulo.tvlauncher.UnifiCliente.ler(UnifiCliente.kt:120)
+            	at br.paulo.tvlauncher.network.UnifiCliente.ler(UnifiCliente.kt:120)
             	at java.lang.Thread.run(Thread.java:1012)
             Caused by: java.io.IOException: falhou em /sdcard/Download/foto-familia.jpg
-            	at br.paulo.tvlauncher.Rede.x(Unknown Source)
+            	at br.paulo.tvlauncher.network.Rede.x(Unknown Source)
         """.trimIndent()
         val f = ErrosFiltrados.filtrar(texto)
         assertEquals("10/11/2026", f.dia)
         assertEquals("1.2.3", f.versao)
         assertEquals("IOException", f.tipo)
-        assertEquals(listOf("at br.paulo.tvlauncher.UnifiCliente.ler(UnifiCliente.kt:120)", "at java.lang.Thread.run(Thread.java:1012)",
-            "Caused by: IOException", "at br.paulo.tvlauncher.Rede.x(Unknown Source)"), f.pilha)
+        assertEquals(listOf("at br.paulo.tvlauncher.network.UnifiCliente.ler(UnifiCliente.kt:120)", "at java.lang.Thread.run(Thread.java:1012)",
+            "Caused by: IOException", "at br.paulo.tvlauncher.network.Rede.x(Unknown Source)"), f.pilha)
         val tudo = f.json().toString()
         for (pessoal in listOf("192.168", "MinhaCasa", "foto-familia", "Sala (", "03:12")) assertFalse(pessoal, pessoal in tudo)
     }

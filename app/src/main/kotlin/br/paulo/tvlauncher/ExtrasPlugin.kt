@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Binder
 import android.os.Bundle
 import android.util.Log
+import br.paulo.tvlauncher.family.CuidarDeLonge
 
 /**
  * Plugin "Sofaly Extras" (16/11/2026, decisão da venda nº 4): um APP SEPARADO (módulo :extras, pacote [PACOTE]), grátis,

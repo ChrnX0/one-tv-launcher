@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.AberturaPronta
+import br.paulo.tvlauncher.player.AberturaSerie
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

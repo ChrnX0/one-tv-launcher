@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (tr) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="filmes_filtro">Filtre</string>
     <string name="filmes_filtro_titulo">Filmleri filtrele</string>
-    <string name="filmes_filtro_cabecalho">%1$s · FİLTRE: %2$s</string>
     <string name="filmes_filtro_genero">Tür: %1$s</string>
     <string name="filmes_filtro_epoca">Dönem: %1$s</string>
     <string name="filmes_filtro_nota">En düşük puan: %1$s</string>
@@ -18,7 +16,6 @@
     <string name="filmes_filtro_nao_vistos_curto">izlenmemiş</string>
     <string name="filmes_filtro_sem_genero">Bu listenin hiçbir kategorisi bir tür adı içermiyor</string>
     <string name="filmes_filtro_vazio">Bu kategoride bu filtreye uyan film yok</string>
-    <string name="filmes_sorteio">Beni şaşırt</string>
     <string name="filmes_sorteio_vazio">Burada seçilecek film yok</string>
     <string name="filmes_colecao">Bu filmin serisi</string>
     <string name="filmes_colecao_cat">Seri: %1$s</string>

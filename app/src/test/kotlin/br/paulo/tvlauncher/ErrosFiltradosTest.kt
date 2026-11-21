@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.ErrosFiltrados
+import br.paulo.tvlauncher.observer.RegistroErros
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

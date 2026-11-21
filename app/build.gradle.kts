@@ -206,6 +206,9 @@ dependencies {
     // O src/main/baseline-prof.txt vai dentro do APK, e este pacote grava o perfil na pasta do app quando ele abre
     // (ou pelo broadcast INSTALL_PROFILE, usado pelo build3.ps1). Depois o compile -m speed-profile passa a valer.
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    // Corrotinas (21/11/2026, refatoração C): o trabalho de fundo (Fundo.kt) roda nelas. Já vinham no APK por tabela
+    // (media3/mlkit puxam a 1.7.3); declarar a MESMA versão deixa explícito sem crescer o APK.
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     // Cobrança da Play (16/11/2026, CobrancaPlay.kt): só é usada no build -Pplay; no APK do site o cliente nunca liga.
     // A Play exige a versão 8 ou mais nova da biblioteca nos apps novos.
     implementation("com.android.billingclient:billing:8.3.0")

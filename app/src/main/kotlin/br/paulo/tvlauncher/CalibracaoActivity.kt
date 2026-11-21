@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * Padrões de calibração da imagem (10/11/2026, ideia J; li no Projectivy: "Calibration Patterns"). Servem para acertar

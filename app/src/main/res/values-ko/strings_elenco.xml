@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">TV에서 번역한 자막(자동 번역). 나머지도 계속 번역 중입니다.</string>
     <string name="legenda_trad_pronta">자막 번역 완료</string>
     <string name="series_sinopse_mais">전체 줄거리</string>
-    <string name="series_sinopse_menos">짧은 줄거리</string>
     <string name="series_continuar_curto">▶  %1$s 이어서 보기</string>
     <string name="series_episodios">에피소드</string>
     <string name="series_trocar_temporada">시즌 변경</string>

@@ -1,13 +1,18 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.Classificacao
+import br.paulo.tvlauncher.player.InfoExterna
+import br.paulo.tvlauncher.player.ServicosFilmes
+import br.paulo.tvlauncher.player.TraktDetails
+import br.paulo.tvlauncher.player.item
+import java.util.Locale
+import java.util.TimeZone
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Locale
-import java.util.TimeZone
 
 /**
  * TraktDetails (plano Básico, 19/11/2026). Amostras no formato da documentação do Trakt (developer.trakt.tv), não

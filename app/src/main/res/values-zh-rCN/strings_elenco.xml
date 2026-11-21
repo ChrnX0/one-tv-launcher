@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">字幕已在电视上翻译（自动翻译）。其余部分继续翻译中。</string>
     <string name="legenda_trad_pronta">字幕翻译完成</string>
     <string name="series_sinopse_mais">完整简介</string>
-    <string name="series_sinopse_menos">简短简介</string>
     <string name="series_continuar_curto">▶  继续 %1$s</string>
     <string name="series_episodios">剧集列表</string>
     <string name="series_trocar_temporada">切换季</string>

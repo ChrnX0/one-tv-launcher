@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">संदेश: %s। OK से पढ़ा चिह्नित करें।</string>
     <string name="mu_apagar">संदेश हटाएँ: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">इस साल आपका TV (दिसंबर में, स्क्रीन सेवर पर)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">चुने न होने पर पारदर्शी ऐप कार्ड</string>
     <string name="extras_ENTRADAS_TV">ऐप पंक्ति में HDMI इनपुट (केवल इनपुट वाले टीवी पर)</string>
     <string name="ra_titulo">%d में आपका TV</string>
     <string name="ra_canal">पसंदीदा चैनल: %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">सुनें</string>
     <string name="ra_dica_favoritar">पसंदीदा</string>
     <string name="ra_carregando">स्टेशन लोड हो रहे हैं…</string>
-    <string name="ra_subtitulo">दुनिया भर के स्टेशन · रिमोट पर 1–9 आपके पसंदीदा चलाते हैं</string>
     <string name="ra_sem_catalogo">रेडियो कैटलॉग ने जवाब नहीं दिया। आपके पसंदीदा अब भी चलते हैं।</string>
     <string name="ra_nada">कोई स्टेशन नहीं मिला।</string>
     <string name="ra_continuar">जारी रखें</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">नाम से खोजें</string>
     <string name="ra_buscar_det">दुनिया का कोई भी स्टेशन</string>
     <string name="ra_generos">शैलियाँ</string>
-    <string name="ra_paises">दूसरा देश</string>
-    <string name="ra_paises_det">सबसे ज़्यादा स्टेशनों वाले देश</string>
     <string name="ra_perto">पास में</string>
-    <string name="ra_mais_ouvidas">%s में सबसे ज़्यादा सुने गए</string>
     <string name="ra_mundo">दुनिया में सबसे ज़्यादा सुने गए</string>
     <string name="ra_resultado">खोज: %s</string>
     <string name="ra_favoritada">पसंदीदा में जोड़ा</string>

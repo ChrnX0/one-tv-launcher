@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.DavLogica
+import java.io.IOException
+import java.util.Base64
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.IOException
-import java.util.Base64
 
 /** A parte pura da unidade de rede (DavLogica.kt): caminhos, senha, XML e o corpo chunked do Finder. */
 class DavLogicaTest {

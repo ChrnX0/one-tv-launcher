@@ -12,6 +12,11 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
+import br.paulo.tvlauncher.alarm.SonoSuave
+import br.paulo.tvlauncher.network.AcordarComLg
+import br.paulo.tvlauncher.network.LgNetcast
+import br.paulo.tvlauncher.network.VolumeLg
+import br.paulo.tvlauncher.settings.irPara
 
 /**
  * "Desligar em X min" (05/11/2026, bloco 5 do brainstorm): o timer de sono da TV. Diferente do "desligar sozinha
@@ -34,7 +39,7 @@ object Desligamento {
     const val ACAO_SUAVE = "br.paulo.tvlauncher.DESLIGAR_SUAVE"
     private const val AVISO_MS = 60_000L
 
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
+    private fun prefs(ctx: Context) = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE)
 
     /** Quando a TV vai desligar (ms desde 1970), ou null se não há timer de sono. */
     fun marcado(ctx: Context): Long? = prefs(ctx).getLong(CHAVE, 0).takeIf { it > System.currentTimeMillis() }
@@ -186,7 +191,7 @@ object Desligamento {
 class DesligamentoReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         // Desmarcado entre o agendamento e agora (ou trocado por outro horário): ignora o alarme velho.
-        val marcado = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getLong(Desligamento.CHAVE, 0)
+        val marcado = ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).getLong(Desligamento.CHAVE, 0)
         if (marcado == 0L) return
         if (intent.action == Desligamento.ACAO_DESLIGAR && marcado - System.currentTimeMillis() > 30_000) return
         when (intent.action) {
@@ -194,7 +199,7 @@ class DesligamentoReceiver : BroadcastReceiver() {
                 AvisoTv.rapido(ctx, ctx.getString(R.string.dl_um_minuto), ctx.getString(R.string.dl_para_nao, ctx.getString(R.string.lbl_nao_desligar)), 20)
             Desligamento.ACAO_SUAVE -> if (Desligamento.telaAcesa(ctx)) SonoSuave.comecar(ctx, marcado)
             Desligamento.ACAO_DESLIGAR -> {
-                ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().remove(Desligamento.CHAVE).apply()
+                ctx.getSharedPreferences(Prefs.LAUNCHER, Context.MODE_PRIVATE).edit().remove(Desligamento.CHAVE).apply()
                 Desligamento.desligarTudo(ctx)   // LG primeiro (pela rede), depois o Chromecast
             }
         }

@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">Plugins</string>
-    <string name="plg_cfg_det">Cartes d\'autres apps dans la ligne Regarder. Chacune demande votre accord.</string>
-    <string name="plg_det">N\'activez que des apps de confiance. Un plugin n\'envoie qu\'un court texte ; il ne voit ni vos apps ni vos comptes.</string>
     <string name="plg_nenhum">Aucun plugin installé. Les plugins sont des apps d\'autres développeurs qui affichent une carte ici, comme un score ou un prix.</string>
     <string name="plg_ligado">Activé</string>
     <string name="plg_desligado">Désactivé</string>

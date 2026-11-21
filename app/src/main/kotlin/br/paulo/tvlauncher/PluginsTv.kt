@@ -6,7 +6,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
+import br.paulo.tvlauncher.home.PacoteIcones
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.player.LojaCurada
+import br.paulo.tvlauncher.screensaver.PluginCartao
+import br.paulo.tvlauncher.screensaver.PluginCatalog
+import br.paulo.tvlauncher.screensaver.WallpaperPlugins
+import br.paulo.tvlauncher.settings.Planos
+import br.paulo.tvlauncher.settings.Tema
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -255,9 +262,7 @@ class PluginsActivity : Activity() {
                 bottomMargin = Estilo.dp(this@PluginsActivity, 16)
             })
         }
-        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
-        d.setContentView(tela)
-        d.window?.apply { setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)); setLayout(-1, -1) }
+        Estilo.vestir(d, tela)
         d.show()
         aberto = d
         botoes.last().requestFocus()

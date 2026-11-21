@@ -1,12 +1,15 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.Xtream
+import br.paulo.tvlauncher.player.item
+import java.io.IOException
+import java.io.Reader
+import java.io.StringReader
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
-import java.io.IOException
-import java.io.Reader
-import java.io.StringReader
 
 class JsonEmFluxoTest {
     private fun lista(t: String) = JsonEmFluxo.objetos(StringReader(t)).map { it.optString("n") }.toList()

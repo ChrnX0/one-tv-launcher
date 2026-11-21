@@ -20,15 +20,28 @@ import android.os.Looper
 import android.os.Process
 import android.os.SystemClock
 import android.util.Log
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import br.paulo.tvlauncher.alarm.TocandoAgora
+import br.paulo.tvlauncher.input.EfeitosSom
+import br.paulo.tvlauncher.listen.AjustesPodcast
+import br.paulo.tvlauncher.listen.AtrasoRadio
+import br.paulo.tvlauncher.listen.Capitulos
+import br.paulo.tvlauncher.listen.OuvirEstado
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.listen.Transcricao
+import br.paulo.tvlauncher.listen.TranscricaoNuvem
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.settings.irPara
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -83,6 +96,20 @@ class OuvirServico : Service() {
         private const val CHAVE_SILENCIO = "pular_silencio"
         fun velocidade(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getFloat(CHAVE_VELOCIDADE, 1f).takeIf { it in VELOCIDADES } ?: 1f
         fun pularSilencio(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_SILENCIO, false)
+        private const val CHAVE_VOZ = "voz_clara"
+        /** Voz clara (equalizador da fala + compressor, o mesmo efeito do vídeo): vale para a rádio e para os podcasts sem ajuste próprio. */
+        fun vozClara(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_VOZ, false)
+        /** O ajuste próprio do podcast [feed] ([AjustesPodcast]), ou null (vale o geral). */
+        fun ajuste(ctx: Context, feed: String): AjustesPodcast.Ajuste? =
+            AjustesPodcast.deJson(ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getString(AjustesPodcast.chave(feed), null))
+        fun gravarAjuste(ctx: Context, feed: String, a: AjustesPodcast.Ajuste?) {
+            val ed = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+            if (a == null || a.vazio) ed.remove(AjustesPodcast.chave(feed)) else ed.putString(AjustesPodcast.chave(feed), AjustesPodcast.paraJson(a))
+            ed.apply()
+        }
+        /** O que vale para o podcast [feed]: o ajuste dele ou o geral. */
+        fun efetivo(ctx: Context, feed: String?): AjustesPodcast.Efetivo =
+            AjustesPodcast.efetivo(feed?.let { ajuste(ctx, it) }, velocidade(ctx), vozClara(ctx), pularSilencio(ctx))
 
         /** [tocarEpisodio] com isto = de onde parou (o serviço lê a posição gravada, depois de gravar a do anterior). */
         const val RETOMAR = -1L
@@ -97,6 +124,20 @@ class OuvirServico : Service() {
         }
 
         /** Toca a rádio [r] (troca a que estiver tocando). Chame com a tela na frente: é ela que dá a licença de começar. */
+        /**
+         * A fila do "Meu jornal" ([MeuJornal]): o que toca depois do episódio atual, em ordem. Fica no companion porque o
+         * primeiro episódio pode precisar ligar o serviço (ainda não há instância). Escolher outro episódio ou rádio limpa.
+         */
+        @Volatile var fila: List<EpisodioTocando> = emptyList()
+            private set
+
+        /** Toca a lista em sequência, do começo de cada episódio. */
+        fun tocarFila(ctx: Context, l: List<EpisodioTocando>) {
+            if (l.isEmpty()) return
+            tocarEpisodio(ctx, l.first(), 0L)
+            fila = l.drop(1)   // depois: o tocarEp do primeiro limpa a fila antiga
+        }
+
         fun tocarRadio(ctx: Context, r: Radios.Radio) {
             instancia?.let { it.tocar(r); return }
             val i = Intent(ctx, OuvirServico::class.java).setAction(ACAO_RADIO).putExtra(EXTRA_RADIO, Radios.paraJson(listOf(r)).toString())
@@ -122,6 +163,8 @@ class OuvirServico : Service() {
 
     private val ui = Handler(Looper.getMainLooper())
     private var player: ExoPlayer? = null
+    /** Voz clara no som do Ouvir (o efeito fica preso à sessão de áudio do player da vez). */
+    private val efeitos = EfeitosSom()
     private var sessao: MediaSession? = null
     /** A rádio tocando (ou pausada), ou null. */
     var radio: Radios.Radio? = null
@@ -133,6 +176,9 @@ class OuvirServico : Service() {
     /** A música que a rádio manda (ICY), "" se não manda. */
     var musica: String = ""
         private set
+    /** "Já tocou" de cada rádio desta vez (id → mais nova primeiro). Só na memória: some quando o player fecha. */
+    private val tocadas = HashMap<String, List<Radios.Tocada>>()
+    fun tocadas(radioId: String): List<Radios.Tocada> = tocadas[radioId].orEmpty()
     private var tentativas = 0
     private var emPrimeiroPlano = false
     /** O último pedido de começar: [parar] encerra só até ele (um pedido novo que chegou no meio não é cortado). */
@@ -194,7 +240,8 @@ class OuvirServico : Service() {
         if (!emPrimeiroPlano) return START_NOT_STICKY
         when {
             r != null -> tocar(r)
-            e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR))
+            // daFila: o serviço ligou agora para o 1º do Meu jornal; a fila já está no companion (o parar limpa a velha).
+            e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR), daFila = true)
             !ativo -> parar()
         }
         // Se o Android matar o processo, não recria sozinho: o som não pode voltar sem ninguém pedir.
@@ -219,14 +266,21 @@ class OuvirServico : Service() {
     // ---------------------------------------------------------------- comandos
 
     fun tocar(r: Radios.Radio) {
+        fila = emptyList()
         if (radio?.id == r.id && player != null) { continuar(); return }
         pedidoEp++   // episódio pedido e ainda não começado não passa por cima da rádio
+        // O timer de um podcast não passa para a rádio (ela pausava sozinha sem nada na tela dizendo por quê, debug
+        // 20/11/2026). Trocar de uma rádio para outra mantém o timer: ele foi marcado na tela da rádio (21/11/2026).
+        if (episodio != null || radio == null) { ui.removeCallbacks(dormir); dormirAte = 0L }
         largarAtual()
-        // O timer para dormir é do player de podcast: sem isto a rádio pausava sozinha depois, sem nada na tela dizendo
-        // por quê (debug 20/11/2026).
-        ui.removeCallbacks(dormir); dormirAte = 0L
         radio = r; musica = ""
-        player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
+        player = novoPlayer(r.url, fala = false).also { p ->
+            // MP3/AAC: uma conexão só, gravada numa fita que o player lê ([AtrasoRadio]); dá para voltar 30 s.
+            usarFita = AtrasoRadio.suporta(r)
+            if (usarFita) ligarFita(p, r)
+            p.prepare(); p.playWhenReady = true
+        }
+        aplicarEfeito()
         garantirSessao()
         primeiroPlano(r.nome, "")
         publicar()
@@ -242,7 +296,8 @@ class OuvirServico : Service() {
      *  - o endereço do áudio vem do feed (de fora): apontando para a própria TV ou a rede da casa, não toca;
      *  - a posição é lida na fila dos podcasts, DEPOIS da gravação de onde o anterior parou (a ordem é garantida).
      */
-    fun tocarEp(e: EpisodioTocando, inicioMs: Long) {
+    fun tocarEp(e: EpisodioTocando, inicioMs: Long, daFila: Boolean = false) {
+        if (!daFila) fila = emptyList()
         val atual = episodio
         if (atual != null && atual.feed == e.feed && atual.ep.guid == e.ep.guid && player != null) {
             if (inicioMs >= 0) player?.seekTo(inicioMs)
@@ -270,16 +325,254 @@ class OuvirServico : Service() {
     private fun comecarEp(e: EpisodioTocando, inicioMs: Long) {
         episodio = e
         if (e.ep.video) Log.w(TAG, "episódio em vídeo tocado só como áudio: ${e.ep.titulo}")   // a tela abre o vídeo no player
+        val ef = efetivo(this, e.feed)
         player = novoPlayer(e.ep.url, fala = true).also { p ->
-            p.setPlaybackSpeed(velocidade(this))
-            p.skipSilenceEnabled = pularSilencio(this)
-            if (inicioMs > 0) p.seekTo(inicioMs)
+            p.setPlaybackSpeed(ef.velocidade)
+            p.skipSilenceEnabled = ef.pularSilencio
+            // Começando do zero, pula a abertura que o dono marcou para este podcast.
+            val inicio = AjustesPodcast.inicio(inicioMs, ef.aberturaS, e.ep.duracaoS * 1000L)
+            if (inicio > 0) p.seekTo(inicio)
             p.prepare(); p.playWhenReady = true
         }
+        aplicarEfeito()
         ui.removeCallbacks(salvarPeriodico); ui.postDelayed(salvarPeriodico, SALVAR_MS)
+        ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
+        carregarCapitulos(e)
+        carregarTexto(e)
         garantirSessao()
         primeiroPlano(e.podcast, e.ep.titulo)
         publicar()
+    }
+
+    /** Os capítulos do episódio tocando ([Capitulos]); vazio = o episódio não tem (ou ainda está baixando). */
+    @Volatile var capitulos: List<Capitulos.Capitulo> = emptyList()
+        private set
+
+    /** Capítulos: os do feed (Podlove) na hora; os do JSON (Podcasting 2.0) baixados fora da thread da tela. */
+    private fun carregarCapitulos(e: EpisodioTocando) {
+        val campo = e.ep.capitulos
+        capitulos = Capitulos.doCampo(campo)
+        if (!Capitulos.precisaBaixar(campo)) return
+        val guid = e.ep.guid
+        Fundo.rodar("capitulos") {
+            // O endereço vem do feed (de fora): apontando para a própria rede da casa, não baixa.
+            val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(campo).host).toList() }.getOrNull()
+            if (ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }) return@rodar
+            val c = Capitulos.doJson(runCatching { Http.getText(campo, maxBytes = 512 * 1024, followRedirects = false) }.getOrNull())
+            ui.post { if (episodio?.ep?.guid == guid && c.isNotEmpty()) { capitulos = c; publicar() } }
+        }
+    }
+
+    /** O texto da fala do episódio tocando ([Transcricao]); vazio = não tem (ou ainda está baixando). */
+    @Volatile var texto: List<Transcricao.Trecho> = emptyList()
+        private set
+    /** Ainda baixando o texto da fala (a tela diz "carregando" em vez de "não tem"). */
+    @Volatile var textoCarregando = false
+        private set
+
+    /** Baixa a transcrição que o próprio feed oferece (a melhor para sincronizar), fora da thread da tela. */
+    private fun carregarTexto(e: EpisodioTocando) {
+        texto = emptyList(); textoGerado = false
+        val tr = Transcricao.escolher(e.ep.transcricoes) ?: run {
+            // Sem texto no feed: o que já foi gerado na nuvem antes (fica guardado; o mesmo episódio nunca vai de novo).
+            val guid = e.ep.guid
+            Fundo.rodar("transcricao-guardada") {
+                val g = TranscricaoNuvem.carregar(this, e.feed, guid)
+                if (g != null) ui.post { if (episodio?.ep?.guid == guid) { texto = g.trechos; textoGerado = true; publicar() } }
+            }
+            return
+        }
+        val guid = e.ep.guid
+        textoCarregando = true
+        Fundo.rodar("transcricao") {
+            val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(tr.url).host).toList() }.getOrNull()
+            val l = if (ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }) emptyList()
+                else Transcricao.ler(runCatching { Http.getText(tr.url, readMs = 15_000, maxBytes = 3 * 1024 * 1024, followRedirects = false) }.getOrNull(), tr.tipo)
+            ui.post { if (episodio?.ep?.guid == guid) { texto = l; textoCarregando = false; publicar() } }
+        }
+    }
+
+    /** O texto veio da nuvem (gerado aqui), não do feed. */
+    @Volatile var textoGerado = false
+        private set
+    /** Gerando o texto na nuvem agora, e o motivo de ter parado ("" = sem erro; "cota", "falhou"). */
+    @Volatile var textoGerando = false
+        private set
+    @Volatile var textoErro = ""
+        private set
+
+    /** Dá para pedir o texto à nuvem neste episódio (MP3, sem texto no feed)? */
+    fun podeGerarTexto(): Boolean {
+        val e = episodio ?: return false
+        return Transcricao.escolher(e.ep.transcricoes) == null && TranscricaoNuvem.podeGerar(e.ep)
+    }
+
+    /**
+     * Gera o texto da fala na nuvem ([TranscricaoNuvem]), a partir de onde está tocando, pedaço por pedaço: cada pedaço
+     * que volta já aparece na tela. Para sozinho ao trocar de episódio, ao acabar a cota do dia ou num erro.
+     */
+    fun gerarTexto() {
+        val e = episodio ?: return
+        if (textoGerando || !podeGerarTexto()) return
+        textoGerando = true; textoErro = ""; publicar()
+        val app = applicationContext
+        val guid = e.ep.guid
+        val dur = duracaoMs.takeIf { it > 0 } ?: (e.ep.duracaoS * 1000L)
+        val pos = posicaoMs
+        val idioma = java.util.Locale.getDefault().language
+        Fundo.rodar("transcricao-nuvem") {
+            var erro = ""
+            var g = TranscricaoNuvem.carregar(app, e.feed, guid)
+            val total = g?.total?.takeIf { it > 0 } ?: TranscricaoNuvem.tamanho(e.ep.url)
+            if (total <= 0 || dur <= 0) erro = "falhou"
+            else {
+                var feitos = g?.feitos.orEmpty()
+                var trechos = g?.trechos.orEmpty()
+                for (i in TranscricaoNuvem.ordem(total, TranscricaoNuvem.byteDe(pos, total, dur))) {
+                    if (episodio?.ep?.guid != guid) break
+                    if (i in feitos) continue
+                    val de = i * TranscricaoNuvem.PEDACO
+                    val ate = minOf(total - 1, de + TranscricaoNuvem.PEDACO - 1)
+                    val bytes = runCatching { TranscricaoNuvem.baixar(e.ep.url, de, ate) }.getOrNull()
+                    if (bytes == null) { erro = "falhou"; break }
+                    val ini = TranscricaoNuvem.msDe(de, total, dur)
+                    val seg = (TranscricaoNuvem.msDe(ate + 1, total, dur) - ini) / 1000f
+                    val resp = try { TranscricaoNuvem.transcrever(app, bytes, seg, idioma) }
+                        catch (x: TranscricaoNuvem.SemCota) { erro = "cota"; break }
+                        catch (x: Exception) { null }
+                    if (resp == null) { erro = "falhou"; break }
+                    trechos = Transcricao.unir(trechos, TranscricaoNuvem.ler(resp, ini))
+                    feitos = feitos + i
+                    g = TranscricaoNuvem.Guardado(trechos, feitos, total)
+                    TranscricaoNuvem.gravar(app, e.feed, guid, g)
+                    val agora = trechos
+                    ui.post { if (episodio?.ep?.guid == guid) { texto = agora; textoGerado = true; publicar() } }
+                }
+            }
+            ui.post { if (episodio?.ep?.guid == guid) { textoGerando = false; textoErro = erro; publicar() } }
+        }
+    }
+
+    // ---------------------------------------------------------------- voltar 30 s na rádio (21/11/2026)
+
+    private var gravador: AtrasoRadio.Gravador? = null
+    private var leitor: AtrasoRadio.Leitor? = null
+    private var inicioLeitor = 0L        // de que byte da fita o player começou a ler (posição 0 dele)
+    private var usarFita = false         // esta rádio toca pela fita (MP3/AAC e a gravação conseguiu começar)
+    @Volatile private var atrasado = false   // o ouvinte voltou (ou pausou): mostra "−m:ss"
+
+    /** Dá para voltar agora (gravando, e já há algo gravado)? */
+    val podeVoltar: Boolean get() = radio != null && gravador?.let { !it.falhou && it.anel.escrito > 0 } == true
+
+    /** Fita no pendrive (até 1 h) ou na RAM (~4 min). */
+    val fitaNoPendrive: Boolean get() = gravador?.anel?.armazem?.noPendrive == true
+
+    private fun taxaRadio(): Long = AtrasoRadio.taxa(radio?.bitrate ?: 0, gravador?.medidoBps ?: 0)
+
+    /** O byte da fita que está SAINDO no som agora (o player lê adiantado; a posição dele diz o que já tocou). */
+    private fun tocandoNaFita(): Long {
+        val p = player ?: return 0
+        return inicioLeitor + p.currentPosition.coerceAtLeast(0) * taxaRadio() / 1000
+    }
+
+    /** Segundos atrás do ao vivo (0 = ao vivo). */
+    val atrasoS: Int get() {
+        if (!atrasado) return 0
+        val g = gravador ?: return 0
+        return AtrasoRadio.atrasoS(tocandoNaFita(), g.anel.escrito, taxaRadio()).coerceAtLeast(1)
+    }
+
+    private fun direto(r: Radios.Radio) =
+        DefaultMediaSourceFactory(PlayerEngine.data(this, userAgent = Http.USER_AGENT)).createMediaSource(PlayerEngine.item(r.url).build())
+
+    /** Começa a gravação da rádio [r] e põe o player para ler a fita desde o começo (= o ao vivo). */
+    private fun ligarFita(p: ExoPlayer, r: Radios.Radio) {
+        pararGravador()
+        val g = AtrasoRadio.Gravador(r.url, AtrasoRadio.armazem(this, AtrasoRadio.taxa(r.bitrate, 0))) { ui.post { publicar() } }
+        gravador = g; g.comecar()
+        lerDaFita(p, g, 0); atrasado = false
+        ui.removeCallbacks(vigiaTitulo); ui.postDelayed(vigiaTitulo, 2_000)
+    }
+
+    /** Reconecta a rádio que caiu: fita nova (a velha parou de crescer) ou o endereço direto. */
+    private fun reconectar(p: ExoPlayer) {
+        val r = radio ?: return
+        p.stop()
+        if (usarFita) ligarFita(p, r)
+    }
+
+    @androidx.annotation.OptIn(markerClass = [androidx.media3.common.util.UnstableApi::class])
+    private fun lerDaFita(p: ExoPlayer, g: AtrasoRadio.Gravador, de: Long) {
+        val l = AtrasoRadio.Leitor(g.anel, de)
+        leitor = l; inicioLeitor = de
+        p.setMediaSource(androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory { l }
+            .createMediaSource(androidx.media3.common.MediaItem.fromUri("sofaly://radio-atraso")))
+    }
+
+    /** A cada 2 s: o título da música que está saindo no som (anotado na fita pela gravação). */
+    private val vigiaTitulo = object : Runnable {
+        override fun run() {
+            val g = gravador ?: return
+            g.tituloEm(tocandoNaFita())?.let { novoTitulo(listOf(it)) }
+            if (atrasado && atrasoS <= 1) { atrasado = false; publicar() }   // alcançou o ao vivo
+            ui.postDelayed(this, 2_000)
+        }
+    }
+
+    /** Volta [AtrasoRadio.PASSO_S] segundos na fita. */
+    fun voltarRadio() {
+        val g = gravador ?: return; val p = player ?: return
+        if (!podeVoltar) return
+        val de = AtrasoRadio.destino(tocandoNaFita(), AtrasoRadio.PASSO_S, taxaRadio(), g.anel.maisVelho)
+        lerDaFita(p, g, de); atrasado = true
+        p.prepare(); p.playWhenReady = true
+        publicar()
+    }
+
+    /** De volta ao ao vivo: lê da ponta da fita (3 s antes, para o player ter de onde começar). */
+    fun aoVivo() {
+        val g = gravador ?: return; val p = player ?: return
+        if (!atrasado) return
+        lerDaFita(p, g, maxOf(g.anel.maisVelho, g.anel.escrito - 3 * taxaRadio())); atrasado = false
+        p.prepare(); p.playWhenReady = true
+        publicar()
+    }
+
+    private fun pararGravador() { ui.removeCallbacks(vigiaTitulo); gravador?.parar(); gravador = null; leitor = null; atrasado = false }
+
+    /** O resumo da Sofy do episódio tocando ("" = ainda não pedido) e as propagandas achadas junto. */
+    @Volatile var resumo: String = ""
+        private set
+    @Volatile var resumindo = false
+        private set
+    private var propagandas: List<LongRange> = emptyList()
+    private val puladas = HashSet<Long>()
+
+    /** Pede o resumo e as propagandas do texto que já existe; [aoTerminar] na thread da tela ("cota" = acabou a de hoje). */
+    fun pedirResumo(aoTerminar: (erro: String) -> Unit) {
+        val e = episodio ?: return
+        if (resumo.isNotEmpty()) { aoTerminar(""); return }
+        if (resumindo || texto.isEmpty()) return
+        resumindo = true
+        val l = texto; val guid = e.ep.guid
+        val idioma = java.util.Locale.getDefault().language
+        Fundo.rodar("resumo-sofy") {
+            var erro = ""
+            val r = try { TranscricaoNuvem.resumir(e.ep.titulo, l, idioma) } catch (x: TranscricaoNuvem.SemCota) { erro = "cota"; null } catch (x: Exception) { null }
+            ui.post {
+                resumindo = false
+                if (episodio?.ep?.guid != guid) return@post
+                if (r != null && r.first.isNotEmpty()) { resumo = r.first; propagandas = r.second } else if (erro.isEmpty()) erro = "falhou"
+                aoTerminar(erro)
+            }
+        }
+    }
+
+    /** Vai para o próximo capítulo (+1) ou volta ao começo deste/anterior (-1). Sem capítulos, não faz nada. */
+    fun irCapitulo(delta: Int) {
+        val c = capitulos; if (c.isEmpty() || episodio == null) return
+        val alvo = if (delta > 0) Capitulos.proximo(c, posicaoMs) else Capitulos.anterior(c, posicaoMs)
+        alvo?.let { irPara(it) }
     }
 
     /** Antes de trocar de rádio/episódio: grava onde o episódio parou e solta o player. */
@@ -287,26 +580,20 @@ class OuvirServico : Service() {
         if (episodio != null) salvarPosicao()
         ui.removeCallbacks(salvarPeriodico)
         soltarPlayer()
-        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L
+        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L; capitulos = emptyList(); texto = emptyList(); textoCarregando = false
+        textoGerando = false; textoErro = ""; textoGerado = false
+        resumo = ""; resumindo = false; propagandas = emptyList(); puladas.clear()
     }
 
     private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {
-        val http = DefaultHttpDataSource.Factory().setUserAgent(if (fala) "Sofaly/1 (TV podcast player)" else "onetv-launcher/1")
-            .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000)
-        val item = MediaItem.Builder().setUri(url).apply {
-            if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
-        }.build()
-        return ExoPlayer.Builder(this).build().also { p ->
-            // true = o ExoPlayer cuida do foco de áudio (pausa quando outro app toca, abaixa quando o Assistente fala).
-            p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
-                .setContentType(if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
+        val http = PlayerEngine.data(this, userAgent = Http.USER_AGENT)
+        val item = PlayerEngine.item(url).build()
+        // O motor único (PlayerEngine), com o foco de áudio: pausa quando outro app toca, abaixa quando o Assistente fala.
+        return PlayerEngine.build(this, contentType = if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).also { p ->
             p.addListener(object : Player.Listener {
                 override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
-                    val r = radio ?: return
-                    // ICY "StreamTitle" (Artista - Música) chega como título; texto de espera não vale (Radios.musicaUtil).
-                    val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
-                        .distinct().joinToString(" · ")
-                    if (t != musica) { musica = t; publicar() }
+                    // ICY "StreamTitle" (Artista - Música) chega como título quando o player lê a rádio direto.
+                    if (gravador == null) novoTitulo(listOfNotNull(m.title?.toString(), m.artist?.toString()))
                 }
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     if (isPlaying) tentativas = 0
@@ -335,15 +622,32 @@ class OuvirServico : Service() {
         }
     }
 
+    /** Texto de espera não vale (Radios.musicaUtil). Mudou: anota em "Já tocou" e mostra. */
+    private fun novoTitulo(partes: List<String>) {
+        val r = radio ?: return
+        val t = partes.filter { Radios.musicaUtil(it, r.nome) }.distinct().joinToString(" · ")
+        if (t != musica) {
+            musica = t
+            tocadas[r.id] = Radios.comTocada(tocadas[r.id].orEmpty(), t, System.currentTimeMillis())
+            publicar()
+        }
+    }
+
     /** A rádio caiu: com o som pedido, tenta de novo [RETENTATIVAS] vezes; depois avisa e para. Pausada, espera o continuar. */
     private fun caiu(p: ExoPlayer, motivo: String) {
         val nome = radio?.nome ?: episodio?.ep?.titulo ?: return
         Log.w(TAG, "$nome: $motivo (tentativa ${tentativas + 1})")
+        // A gravação nem começou (servidor recusa a 2ª forma de pedir, formato estranho): esta rádio toca direto, sem fita.
+        val g = gravador
+        if (g != null && player === p && g.anel.escrito == 0L && usarFita) {
+            Log.w(TAG, "fita não começou: toca direto"); usarFita = false
+            pararGravador(); radio?.let { p.setMediaSource(direto(it)) }
+        }
         if (!p.playWhenReady) { publicar(); return }   // pausada: continuar() reconecta; não volta a tocar sozinha
         if (tentativas < RETENTATIVAS) {
             tentativas++
             // Rádio: reconecta no "agora". Episódio: o prepare retoma do ponto em que estava.
-            ui.postDelayed({ if (player === p && p.playWhenReady) { if (radio != null) p.stop(); p.prepare() } }, ESPERA_RETENTATIVA_MS)
+            ui.postDelayed({ if (player === p && p.playWhenReady) { reconectar(p); p.prepare() } }, ESPERA_RETENTATIVA_MS)
             return
         }
         AvisoTv.rapido(this, nome, getString(if (radio != null) R.string.ra_falhou else R.string.pod_falhou), 6)
@@ -358,8 +662,14 @@ class OuvirServico : Service() {
         if (episodio != null) {
             // Episódio: continua do ponto (caiu enquanto pausado: reconecta no mesmo ponto).
             if (p.playbackState == Player.STATE_IDLE) p.prepare()
-        } else if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || pausadoHa > VOLTAR_AO_VIVO_MS) {
-            // Rádio é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta), não para o áudio guardado.
+        } else if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || gravador?.falhou == true) {
+            reconectar(p); p.prepare()
+        } else if (gravador != null) {
+            // Com a fita, a pausa vira "pausar o ao vivo": continua de onde parou (a gravação seguiu). Pausa maior que a
+            // fita retoma do mais velho que ela ainda tem.
+            if (pausadoHa > 2_000) atrasado = true
+        } else if (pausadoHa > VOLTAR_AO_VIVO_MS) {
+            // Rádio direta é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta).
             p.stop(); p.prepare()
         }
         p.playWhenReady = true
@@ -376,16 +686,64 @@ class OuvirServico : Service() {
 
     fun irPara(ms: Long) { val p = player ?: return; if (episodio != null) { p.seekTo(ms.coerceAtLeast(0)); publicar() } }
 
+    /**
+     * Velocidade, pular silêncios e voz clara mudados no player: com o podcast tocando que tem ajuste próprio, muda o
+     * ajuste dele; senão, o geral do Ouvir (vale para todos os outros).
+     */
     fun definirVelocidade(v: Float) {
         if (v !in VELOCIDADES) return
-        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(CHAVE_VELOCIDADE, v).apply()
+        if (!mudarProprio { it.copy(velocidade = v) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(CHAVE_VELOCIDADE, v).apply()
         if (episodio != null) player?.setPlaybackSpeed(v)
         publicar()
     }
 
     fun definirPularSilencio(sim: Boolean) {
-        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_SILENCIO, sim).apply()
+        if (!mudarProprio { it.copy(pularSilencio = sim) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_SILENCIO, sim).apply()
         if (episodio != null) player?.skipSilenceEnabled = sim
+        publicar()
+    }
+
+    fun definirVozClara(sim: Boolean) {
+        if (!mudarProprio { it.copy(vozClara = sim) }) getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_VOZ, sim).apply()
+        aplicarEfeito()
+        publicar()
+    }
+
+    /** O podcast tocando tem ajuste próprio: aplica [f] nele e devolve true. Sem ajuste próprio (ou rádio): false. */
+    private fun mudarProprio(f: (AjustesPodcast.Ajuste) -> AjustesPodcast.Ajuste): Boolean {
+        val feed = episodio?.feed ?: return false
+        val a = ajuste(this, feed) ?: return false
+        gravarAjuste(this, feed, f(a)); return true
+    }
+
+    /**
+     * Liga ou desliga o ajuste próprio do podcast tocando. Ligar copia o que vale agora (o geral), para nada mudar de
+     * repente; desligar volta ao geral na hora.
+     */
+    fun definirProprio(sim: Boolean) {
+        val e = episodio ?: return
+        if (sim) {
+            if (ajuste(this, e.feed) != null) return
+            gravarAjuste(this, e.feed, AjustesPodcast.Ajuste(velocidade(this), vozClara(this), pularSilencio(this)))
+        } else gravarAjuste(this, e.feed, null)
+        reaplicar()
+    }
+
+    /** Muda abertura/fim do podcast tocando (cria o ajuste próprio se não houver). */
+    fun definirAberturaFim(aberturaS: Int? = null, fimS: Int? = null) {
+        val e = episodio ?: return
+        val a = ajuste(this, e.feed) ?: AjustesPodcast.Ajuste(velocidade(this), vozClara(this), pularSilencio(this))
+        gravarAjuste(this, e.feed, a.copy(aberturaS = aberturaS ?: a.aberturaS, fimS = fimS ?: a.fimS))
+        reaplicar()
+    }
+
+    /** Aplica de novo no player tudo o que vale para o podcast tocando. */
+    private fun reaplicar() {
+        val e = episodio ?: return
+        val ef = efetivo(this, e.feed)
+        player?.setPlaybackSpeed(ef.velocidade); player?.skipSilenceEnabled = ef.pularSilencio
+        aplicarEfeito()
+        ui.removeCallbacks(vigiaFim); ui.postDelayed(vigiaFim, 1_000)
         publicar()
     }
 
@@ -431,11 +789,14 @@ class OuvirServico : Service() {
         }
         salvarPosicao(fim = true)
         episodio = null   // já gravado como ouvido: o parar() não grava de novo no meio
+        // Meu jornal: acabou um, vem o próximo da fila (do começo).
+        fila.firstOrNull()?.let { prox -> fila = fila.drop(1); tocarEp(prox, 0L, daFila = true); return }
         parar()
     }
 
     /** Para de vez: solta o player e a conexão, some da HOME e do protetor, e o serviço acaba. */
     fun parar() {
+        fila = emptyList()
         pedidoEp++   // episódio pedido e ainda não começado não começa mais
         ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico); ui.removeCallbacks(dormir); dormirAte = 0L
         if (episodio != null) salvarPosicao()
@@ -450,7 +811,33 @@ class OuvirServico : Service() {
         stopSelf(ultimoInicio)
     }
 
-    private fun soltarPlayer() { player?.let { runCatching { it.release() } }; player = null }
+    private fun soltarPlayer() { pararGravador(); efeitos.soltar(); ui.removeCallbacks(vigiaFim); player?.let { runCatching { it.release() } }; player = null }
+
+    /** Liga ou solta a voz clara no player da vez, conforme o ajuste do podcast (ou o geral, na rádio). */
+    private fun aplicarEfeito() {
+        val p = player ?: return
+        val voz = episodio?.let { efetivo(this, it.feed).vozClara } ?: vozClara(this)
+        // Voz clara = equalizador da fala + compressor (como o Voice Boost do Overcast): a fala sobe, o grito não estoura.
+        efeitos.aplicar(p.audioSessionId, volumeIgual = voz, vozClara = voz)
+    }
+
+    /** Podcast com "pular o fim": confere a cada segundo se já chegou nele (aí conta como ouvido e para). */
+    private val vigiaFim = object : Runnable {
+        override fun run() {
+            val e = episodio ?: return
+            val fim = efetivo(this@OuvirServico, e.feed).fimS
+            val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
+            if (tocando && AjustesPodcast.noFim(posicaoMs, dur, fim)) { Log.i(TAG, "pulei o fim (${fim}s)"); terminouEpisodio(); return }
+            // Pular propaganda (texto da fala + Sofy): cada uma uma vez só; ◀ para voltar a ela não pula de novo.
+            if (tocando) TranscricaoNuvem.propagandaEm(propagandas, posicaoMs, puladas)?.let { ad ->
+                puladas += ad.first
+                Log.i(TAG, "pulei propaganda (${(ad.last - ad.first) / 1000}s)")
+                irPara(ad.last)
+                AvisoTv.rapido(this@OuvirServico, getString(R.string.tx_pulei), getString(R.string.tx_pulei_det, ((ad.last - ad.first) / 1000).toInt()), 3)
+            }
+            ui.postDelayed(this, 1_000)
+        }
+    }
 
     // ---------------------------------------------------------------- estado para fora
 
@@ -486,7 +873,8 @@ class OuvirServico : Service() {
     private fun estadoSessao(estado: Int): PlaybackState {
         val ep = episodio != null
         val acoes = PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or
-            (if (ep) PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_REWIND else 0L)
+            (if (ep) PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_REWIND else 0L) or
+            (if (ep && capitulos.isNotEmpty()) PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS else 0L)
         val vel = if (estado == PlaybackState.STATE_PLAYING) (if (ep) player?.playbackParameters?.speed ?: 1f else 1f) else 0f
         return PlaybackState.Builder().setActions(acoes)
             .setState(estado, if (ep) posicaoMs else PlaybackState.PLAYBACK_POSITION_UNKNOWN, vel).build()
@@ -512,6 +900,9 @@ class OuvirServico : Service() {
                 override fun onFastForward() = pular(AVANCAR_MS)
                 override fun onRewind() = pular(-VOLTAR_MS)
                 override fun onSeekTo(pos: Long) = irPara(pos)
+                // ⏭ ⏮ (controles que têm): próximo capítulo / começo do capítulo.
+                override fun onSkipToNext() = irCapitulo(1)
+                override fun onSkipToPrevious() = irCapitulo(-1)
             }, ui)
             sessao = nova
         }

@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QR-код откроет форму на телефоне с уже заполненными техническими данными</string>
     <string name="rel_texto">Наведите камеру телефона на код. Опишите, что случилось, и отправьте. Имя, аккаунт, сеть и город не передаются.</string>
     <string name="rel_vai_junto">Что отправляется</string>
+    <string name="rel_l_oque">Что случилось</string>
+    <string name="rel_l_versao">Версия</string>
+    <string name="rel_l_uso">Режим</string>
+    <string name="rel_l_quedas">Сбои / зависания (7 дней)</string>
+    <string name="rel_l_erro">Последняя ошибка</string>
 </resources>

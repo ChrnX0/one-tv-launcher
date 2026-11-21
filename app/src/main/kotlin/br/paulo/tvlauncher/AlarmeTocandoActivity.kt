@@ -2,7 +2,6 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Typeface
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.ToneGenerator
@@ -17,8 +16,23 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextClock
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.alarm.AcordarOuvindo
+import br.paulo.tvlauncher.alarm.AlarmeGarantia
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.alarm.SomAlarme
+import br.paulo.tvlauncher.family.CanalDespertar
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.LgNetcast
+import br.paulo.tvlauncher.network.TvWakeRetry
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.screensaver.RelogioTela
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * A tela que aparece quando um alarme toca: acende a tela (e, pelo HDMI-CEC, normalmente liga a TV), mostra a hora
@@ -70,11 +84,11 @@ class AlarmeTocandoActivity : Activity() {
             tentativasTv++
             val app = applicationContext
             val n = tentativasTv
-            Thread {
+            Fundo.rodar("alarme-cec") {
                 // Fila do nosso shell (uid 2000): o app sozinho não tem a permissão HDMI_CEC.
                 val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
                 Log.i("TvLauncher.Alarme", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
-            }.start()
+            }
             TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
         }
     }
@@ -198,6 +212,7 @@ class AlarmeTocandoActivity : Activity() {
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
         if (!timer) volume = AlarmeGarantia.subirVolume(this, segRampa)
         if (alarme?.som == SomAlarme.CANAL) { tocarCanal(); return }
+        if (alarme != null && SomAlarme.deFora(alarme.som)) { tocarOuvir(alarme.som); return }
         tocarArquivo(alarme?.som ?: 0)
     }
 
@@ -213,16 +228,11 @@ class AlarmeTocandoActivity : Activity() {
                 if (isDestroyed || isFinishing) return@runOnUiThread
                 if (c == null) { trocarParaSom(); return@runOnUiThread }
                 Log.i("TvLauncher.Alarme", "acordando com o canal ${c.numero}")
-                val http = androidx.media3.datasource.DefaultHttpDataSource.Factory()
-                    .setUserAgent(c.agenteUsuario.ifEmpty { "TvLauncher-Player/1.0" })
-                    .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(15_000)
-                val item = androidx.media3.common.MediaItem.Builder().setUri(c.url).apply {
-                    if (c.url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(androidx.media3.common.MimeTypes.APPLICATION_M3U8)
-                }.build()
-                canal = androidx.media3.exoplayer.ExoPlayer.Builder(this).build().also { p ->
-                    // USAGE_MEDIA como o som (sai pelo HDMI) e sem foco de áudio: nada para disputar às 6 da manhã.
-                    p.setAudioAttributes(androidx.media3.common.AudioAttributes.Builder().setUsage(androidx.media3.common.C.USAGE_MEDIA)
-                        .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC).build(), false)
+                // O mesmo motor e a mesma fonte do player de TV (o User-Agent do canal), sem foco de áudio: nada para
+                // disputar às 6 da manhã.
+                val http = PlayerEngine.data(this, userAgent = c.agenteUsuario, readTimeoutMs = 15_000)
+                val item = PlayerEngine.item(c.url).build()
+                canal = PlayerEngine.build(this, contentType = androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC, audioFocus = false).also { p ->
                     p.addListener(object : androidx.media3.common.Player.Listener {
                         override fun onPlaybackStateChanged(estado: Int) {
                             if (estado == androidx.media3.common.Player.STATE_READY) ui.removeCallbacks(canalNaoAbriu)
@@ -239,6 +249,42 @@ class AlarmeTocandoActivity : Activity() {
                 armarRampa()
             }
         }
+    }
+
+    /** Acordar com a rádio ou o podcast ([AcordarOuvindo]): o mesmo caminho do canal, com o endereço escolhido. */
+    private fun tocarOuvir(som: Int) {
+        val app = applicationContext
+        ui.postDelayed(canalNaoAbriu, 20_000)
+        Fundo.rodar("Alarme-ouvir") {
+            val u = AcordarOuvindo.fonte(app, som)
+            runOnUiThread {
+                if (isDestroyed || isFinishing) return@runOnUiThread
+                if (u == null) { trocarParaSom(); return@runOnUiThread }
+                Log.i("TvLauncher.Alarme", "acordando com ${if (som == SomAlarme.RADIO) "a rádio" else "o podcast"}")
+                tocarEndereco(u, Http.USER_AGENT)
+            }
+        }
+    }
+
+    /** Toca só o áudio de [url], sem foco de áudio (nada para disputar às 6 da manhã), na rampa do alarme. */
+    private fun tocarEndereco(url: String, agente: String) {
+        val http = PlayerEngine.data(this, userAgent = agente, readTimeoutMs = 15_000)
+        val item = PlayerEngine.item(url).build()
+        canal = PlayerEngine.build(this, contentType = androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC, audioFocus = false).also { p ->
+            p.addListener(object : androidx.media3.common.Player.Listener {
+                override fun onPlaybackStateChanged(estado: Int) {
+                    if (estado == androidx.media3.common.Player.STATE_READY) ui.removeCallbacks(canalNaoAbriu)
+                }
+                override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                    Log.i("TvLauncher.Alarme", "endereço falhou (${error.errorCodeName}): som suave"); trocarParaSom()
+                }
+            })
+            p.setMediaSource(androidx.media3.exoplayer.source.DefaultMediaSourceFactory(http).createMediaSource(item))
+            p.volume = volumeRampa()
+            p.prepare()
+            p.playWhenReady = true
+        }
+        armarRampa()
     }
 
     /** O canal não abriu (ou não existe): solta o canal e toca o som suave, sem perder a rampa nem o volume garantido. */

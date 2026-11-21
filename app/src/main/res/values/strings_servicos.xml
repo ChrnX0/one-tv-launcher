@@ -13,7 +13,6 @@
     <string name="sv_desligado">Sign in</string>
     <string name="sv_entrando">signing in…</string>
     <string name="sv_conectado">connected</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">on</string>
     <string name="sv_sem_chave">This build does not have the keys of these services yet. They show up after the next update.</string>
     <string name="sv_pedindo">Asking %1$s for a code…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">Password</string>
     <string name="sv_gravar">Save</string>
     <string name="sv_cancelar">Cancel</string>
-    <string name="sv_conferindo">Checking with %1$s…</string>
     <string name="sv_limite_dia">The daily subtitle limit is over. It renews in 24 h (with an OpenSubtitles account it is 20 a day).</string>
     <string name="sv_tmdb_atribuicao">This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
     <string name="ext_saga">%1$s · %2$d of %3$d in your list</string>

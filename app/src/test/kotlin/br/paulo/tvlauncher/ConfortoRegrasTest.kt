@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.ConfortoRegras
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.Idioma
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

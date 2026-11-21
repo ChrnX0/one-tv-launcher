@@ -1,7 +1,12 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.BibliotecaUnica.Fonte
-import br.paulo.tvlauncher.BibliotecaUnica.Origem
+import br.paulo.tvlauncher.home.BibliotecaIndice
+import br.paulo.tvlauncher.home.BibliotecaUnica
+import br.paulo.tvlauncher.home.BibliotecaUnica.Fonte
+import br.paulo.tvlauncher.home.BibliotecaUnica.Origem
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.input.LeitorNomes
+import br.paulo.tvlauncher.player.Idioma
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

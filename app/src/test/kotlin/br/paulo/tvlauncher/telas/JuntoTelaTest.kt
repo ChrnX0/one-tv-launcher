@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.ContinuarActivity
 import br.paulo.tvlauncher.ContinuarOutraTv
-import br.paulo.tvlauncher.JuntoRegras
+import br.paulo.tvlauncher.player.JuntoRegras
 import br.paulo.tvlauncher.SessaoJunto
 import br.paulo.tvlauncher.SessaoJuntoActivity
 import org.junit.Assert.assertTrue

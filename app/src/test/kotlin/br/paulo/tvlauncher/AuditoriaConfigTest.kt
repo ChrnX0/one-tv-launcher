@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.ModoLeve
+import br.paulo.tvlauncher.panel.PainelVizinhos
+import br.paulo.tvlauncher.screensaver.FotosProtetor
+import br.paulo.tvlauncher.settings.Extras
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

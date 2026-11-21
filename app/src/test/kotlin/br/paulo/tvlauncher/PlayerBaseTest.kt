@@ -1,5 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.player.Guia
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.Xmltv
+import br.paulo.tvlauncher.player.Xtream
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.util.zip.GZIPOutputStream
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -7,9 +15,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.kxml2.io.KXmlParser
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.util.zip.GZIPOutputStream
 
 /** Player universal, passo 1: M3U, Xtream e guia XMLTV. Só lógica, sem Android e sem rede (dados inventados). */
 class PlayerBaseTest {

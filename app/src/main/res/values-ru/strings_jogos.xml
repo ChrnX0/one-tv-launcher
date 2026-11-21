@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (ru) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">Игры</string>
-    <string name="home_destaque_jogos_vazio">Играйте в облаке, с ПК и в ретро-игры</string>
-    <string name="home_linha_continuar_jogos">СМОТРЕТЬ И ИГРАТЬ</string>
-    <string name="home_jogos_ultimo">Последняя: %1$s</string>
     <string name="extras_CARD_JOGOS">Карточка «Игры» на главном экране (игры уходят из ряда приложений)</string>
     <string name="extras_MODO_JOGO">Игровой режим: пока открыта игра, заставка, ночной фильтр и оповещения ждут</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">Включение геймпада открывает экран «Игры»</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">Ретро</string>
     <string name="jogos_grupo_tv">Игры на ТВ</string>
     <string name="jogos_para_comecar">Для начала</string>
-    <string name="jogos_vazio_dica">На этом ТВ пока нет игр. Выберите одну выше, чтобы открыть её страницу в Play Маркете.</string>
-    <string name="jogos_dica_segurar">Удерживайте OK на игре, чтобы перенести её в другую группу или убрать отсюда.</string>
     <string name="jogos_aviso_fraca_titulo">Слабая сеть для облачных игр</string>
     <string name="jogos_aviso_fraca">Игра может тормозить или отставать. Поможет сетевой кабель или ТВ ближе к роутеру.</string>
     <string name="jogos_jogar_assim">Всё равно играть</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">Каким приложением играть на ПК?</string>
     <string name="jogos_pc_acordando">Пробуждение ПК… %1$d с</string>
     <string name="jogos_pc_nao_respondeu">ПК не ответил. Всё равно открываю приложение.</string>
-    <string name="jogos_seus">Ваши игры</string>
     <string name="jogos_mais_jogos">Ещё игры</string>
     <string name="jogos_mais_opcoes">Ещё</string>
-    <string name="jogos_por_tipo">По типу</string>
-    <string name="jogos_jogar">Играть</string>
     <string name="jogos_ligar_pc_jogar">Включить ПК и играть</string>
-    <string name="jogos_desc_nuvem">Игра работает на компьютере в интернете, а ТВ получает изображение. Нужна хорошая сеть.</string>
     <string name="jogos_desc_pc">Играйте прямо на ТВ в игры с домашнего компьютера или консоли.</string>
-    <string name="jogos_desc_retro">Классические игры многих консолей.</string>
-    <string name="jogos_desc_tv">Игра, установленная на самом ТВ.</string>
-    <string name="jogos_jogado">Последний раз: %1$s.</string>
-    <string name="jogos_nenhum_titulo">Пока нет игр</string>
-    <string name="jogos_chip_sem_controle">Нет геймпада</string>
     <string name="jogos_chip_medindo">Проверка сети…</string>
     <string name="jogos_chip_boa">Хорошая сеть</string>
     <string name="jogos_chip_ok">Сеть в норме</string>
     <string name="jogos_chip_fraca">Слабая сеть</string>
     <string name="jogos_chip_sem">Нет интернета</string>
-    <string name="jogos_tecla_escolher">выбрать</string>
     <string name="jogos_tecla_jogar">играть</string>
-    <string name="jogos_tecla_mais">ещё</string>
     <string name="jogos_tecla_segurar">удерживайте OK</string>
     <string name="jogos_tecla_opcoes">сменить группу</string>
     <plurals name="jogos_qtd">

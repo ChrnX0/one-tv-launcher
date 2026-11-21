@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.BackupConfig
+import br.paulo.tvlauncher.player.FonteTv
+import br.paulo.tvlauncher.player.M3u
+import br.paulo.tvlauncher.player.PlayerDados
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">Message : %s. OK marque comme lu.</string>
     <string name="mu_apagar">Supprimer le message : %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Votre année de TV (en décembre, sur l’économiseur)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">Cartes d’applis transparentes quand elles ne sont pas sélectionnées</string>
     <string name="extras_ENTRADAS_TV">Entrées HDMI dans la rangée d’applis (seulement sur les téléviseurs avec entrées)</string>
     <string name="ra_titulo">Votre TV en %d</string>
     <string name="ra_canal">Chaîne préférée : %1$s (%2$s)</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">écouter</string>
     <string name="ra_dica_favoritar">favori</string>
     <string name="ra_carregando">Chargement des stations…</string>
-    <string name="ra_subtitulo">Stations du monde entier · 1–9 sur la télécommande jouent vos favorites</string>
     <string name="ra_sem_catalogo">Le catalogue de radios n’a pas répondu. Vos favorites fonctionnent toujours.</string>
     <string name="ra_nada">Aucune station trouvée.</string>
     <string name="ra_continuar">reprendre</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">Chercher par nom</string>
     <string name="ra_buscar_det">N’importe quelle station du monde</string>
     <string name="ra_generos">Genres</string>
-    <string name="ra_paises">Autre pays</string>
-    <string name="ra_paises_det">Les pays avec le plus de stations</string>
     <string name="ra_perto">À proximité</string>
-    <string name="ra_mais_ouvidas">Les plus écoutées : %s</string>
     <string name="ra_mundo">Les plus écoutées dans le monde</string>
     <string name="ra_resultado">Recherche : %s</string>
     <string name="ra_favoritada">Ajoutée aux favorites</string>

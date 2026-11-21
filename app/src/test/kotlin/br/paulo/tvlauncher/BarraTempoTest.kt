@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.BarraTempo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

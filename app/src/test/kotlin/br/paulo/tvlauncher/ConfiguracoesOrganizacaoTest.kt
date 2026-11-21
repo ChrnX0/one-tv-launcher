@@ -1,9 +1,9 @@
 package br.paulo.tvlauncher
 
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
-import java.io.File
 
 /** Reorganização das Configurações e o fim do card "Ocultos" na HOME (14/11/2026). Conferência no código-fonte. */
 class ConfiguracoesOrganizacaoTest {

@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.backup.MudarDeTv
+import br.paulo.tvlauncher.backup.MudarDeTvRegras
+import br.paulo.tvlauncher.panel.QrCodigo
 
 /**
  * Elevação 19.7: "Trazer de outra TV", na TV NOVA. Mostra o QR (e o mesmo código em letras grandes, para digitar) que o

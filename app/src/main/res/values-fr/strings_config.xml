@@ -4,19 +4,12 @@
     <string name="cl_aba_conta">TV et films</string>
     <string name="cl_aba_conta_det">Compte IPTV, services de films et séries, audio et sous-titres</string>
     <string name="cl_aba_parental">Contrôle parental</string>
-    <string name="cl_aba_parental_det">Verrouiller des chaînes avec le PIN : elles disparaissent de la liste et ne se lisent pas</string>
-    <string name="cl_aba_aparencia">Apparence</string>
-    <string name="cl_aba_aparencia_det">Thème, piles d’apps, météo et alertes à l’écran</string>
     <string name="cl_aba_energia">Écran et alimentation</string>
     <string name="cl_aba_energia_det">Économiseur d’écran et extinction automatique</string>
-    <string name="cl_aba_visitas">Invités et routines</string>
-    <string name="cl_aba_visitas_det">Mode invité et actions programmées</string>
     <string name="cl_aba_rede">Réseau</string>
-    <string name="cl_aba_rede_det">DNS, VPN et vitesse d’internet</string>
     <string name="cl_aba_remoto">Accès à distance</string>
     <string name="cl_aba_remoto_det">Panneau du navigateur, PIN et Claude via internet</string>
     <string name="cl_aba_sistema">Système</string>
-    <string name="cl_aba_sistema_det">Diagnostic, mises à jour, apps et autorisations</string>
     <string name="cl_dica_aba">choisir un onglet</string>
     <string name="cl_dica_entrar">ouvrir les options</string>
     <string name="cl_dica_sair">quitter</string>
@@ -116,7 +109,6 @@
     <string name="cl_acao_atualizacao">Mises à jour automatiques du launcher</string>
     <string name="cl_acao_atualizacao_det">Installe la nouvelle version seule, écran éteint. Bloqué = avertit seulement.</string>
     <string name="cl_tema">Thème</string>
-    <string name="cl_pilhas_det">Regroupe les apps isolées par catégorie ; vos propres piles restent</string>
     <string name="cl_clima">Météo</string>
     <string name="cl_end_nenhum">aucune · la TV se localise via le Wi-Fi ; l’adresse sert quand le Wi-Fi n’y arrive pas</string>
     <string name="cl_end_clima">Adresse pour la météo</string>
@@ -130,13 +122,11 @@
     <string name="cl_widget_cartoes">Cartes</string>
     <string name="cl_widget_solto">Sans cadre</string>
     <string name="cl_linha_baixo">Widgets de l’économiseur</string>
-    <string name="cl_linha_baixo_det">Bande vitrée, cartes ou sans cadre · OK change</string>
     <string name="cl_desligar">Éteindre si inutilisée</string>
     <string name="cl_desligar_det">Une vidéo en lecture compte comme utilisation ; prévient 60 s avant · OK change</string>
     <string name="cl_visita_det">Masque le profil, l’agenda et les apps cochées ci-dessous</string>
     <string name="cl_apps_visita">Apps masquées en mode invité</string>
     <string name="cl_carregando_apps">Chargement des apps…</string>
-    <string name="cl_some_visita">masquée en mode invité</string>
     <string name="cl_vpn_nao_fixa">le launcher n’impose aucun VPN</string>
     <string name="cl_vpn_adguard">app AdGuard VPN, toujours actif · OK ouvre l’app</string>
     <string name="cl_painel_navegador">Panneau du navigateur</string>

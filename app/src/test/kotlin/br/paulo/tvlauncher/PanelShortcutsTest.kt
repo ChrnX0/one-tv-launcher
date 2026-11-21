@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.PanelShortcuts
+import java.io.File
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * "Seus atalhos" e "Conversa com" do painel (estudo do painel 20/11/2026, PR 4): a lista que a TV aceita guardar, e

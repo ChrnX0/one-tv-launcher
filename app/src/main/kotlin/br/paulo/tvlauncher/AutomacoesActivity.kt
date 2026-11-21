@@ -12,6 +12,12 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.input.RemapTeclas
+import br.paulo.tvlauncher.network.Automacoes
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.player.salvar
 
 /**
  * Automações (14/11/2026, ideia 1): o editor único de "quando X, faça Y" ([Automacoes]). Aberta pelas Configurações

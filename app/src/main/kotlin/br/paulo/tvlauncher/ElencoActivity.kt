@@ -9,11 +9,18 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.view.Gravity
-import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.player.ElencoTmdb
+import br.paulo.tvlauncher.player.InfoExternaCache
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.VodFiltro
+import br.paulo.tvlauncher.search.BuscaUnica
 
 /**
  * Ideia 84 "Quem é esse ator?" (14/11/2026): o elenco do filme ou da série com foto e personagem (TMDB). Com o foco numa

@@ -4,6 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.input.AtalhosVoz
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.settings.Extras
 
 /**
  * Atalhos de voz (05/11/2026, bloco 5 do brainstorm). O Gemini da TV não conhece os comandos do launcher, mas sabe

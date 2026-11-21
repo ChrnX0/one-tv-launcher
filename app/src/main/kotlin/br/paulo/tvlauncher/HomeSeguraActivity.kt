@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.observer.QuedasSeguidas
 
 /**
  * A HOME mínima do modo de segurança (degrau 2, 16/11/2026). Abre no lugar da HOME quando ela caiu 3 vezes seguidas

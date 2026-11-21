@@ -13,7 +13,6 @@
     <string name="sv_desligado">Oturum aç</string>
     <string name="sv_entrando">oturum açılıyor…</string>
     <string name="sv_conectado">bağlı</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">açık</string>
     <string name="sv_sem_chave">Bu sürümde bu hizmetlerin anahtarları henüz yok. Sonraki güncellemeden sonra görünürler.</string>
     <string name="sv_pedindo">%1$s’den kod isteniyor…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">Şifre</string>
     <string name="sv_gravar">Kaydet</string>
     <string name="sv_cancelar">İptal</string>
-    <string name="sv_conferindo">%1$s ile denetleniyor…</string>
     <string name="sv_limite_dia">Günlük altyazı sınırı doldu. 24 saat içinde yenilenir (OpenSubtitles hesabıyla günde 20).</string>
     <string name="sv_tmdb_atribuicao">Bu ürün TMDB API’sini kullanır ancak TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır.</string>
     <string name="ext_saga">%1$s · listenizde %3$d filmden %2$d</string>

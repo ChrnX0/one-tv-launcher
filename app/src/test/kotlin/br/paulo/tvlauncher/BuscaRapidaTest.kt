@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.Lembretes
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.search.BuscaUnica
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

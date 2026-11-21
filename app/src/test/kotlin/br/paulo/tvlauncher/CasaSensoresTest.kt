@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.network.CasaHA
+import java.util.Locale
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Locale
 
 /** Ideia 51: sensores e ar-condicionado na tela Casa. */
 class CasaSensoresTest {

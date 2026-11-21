@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.MovimentoAdaptativo.Nivel
+import br.paulo.tvlauncher.home.IconeCruz
+import br.paulo.tvlauncher.home.MovimentoAdaptativo
+import br.paulo.tvlauncher.home.MovimentoAdaptativo.Nivel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

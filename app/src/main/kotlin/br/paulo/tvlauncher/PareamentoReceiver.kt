@@ -3,6 +3,8 @@ package br.paulo.tvlauncher
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.ServidorShizuku
 
 /**
  * Pareamento / teste do shell próprio por adb (só o adb e o sistema podem disparar: permission=DUMP no manifest).

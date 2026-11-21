@@ -1,12 +1,13 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import br.paulo.tvlauncher.alarm.Lembretes
+import br.paulo.tvlauncher.alarm.SonoSuave
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.observer.Desempenho
+import br.paulo.tvlauncher.panel.WebPush
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.search.BuscaUnica
+import br.paulo.tvlauncher.settings.Extras
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.KeyPair
@@ -17,6 +18,13 @@ import java.security.spec.ECGenParameterSpec
 import java.security.spec.ECPrivateKeySpec
 import java.util.Calendar
 import java.util.TimeZone
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /** Regras puras das ideias de 12/11/2026 (lembretes, Web Push, desempenho, sono suave, presença, mural, semana, busca, modo simples). */
 class IdeiasDozeTest {

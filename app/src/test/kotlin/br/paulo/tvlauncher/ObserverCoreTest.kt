@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverCore.Kind
-import br.paulo.tvlauncher.ObserverCore.Level
-import br.paulo.tvlauncher.ObserverCore.Reading
-import br.paulo.tvlauncher.ObserverCore.Severity
-import br.paulo.tvlauncher.ObserverCore.Signal
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.ObserverCore.Kind
+import br.paulo.tvlauncher.observer.ObserverCore.Level
+import br.paulo.tvlauncher.observer.ObserverCore.Reading
+import br.paulo.tvlauncher.observer.ObserverCore.Severity
+import br.paulo.tvlauncher.observer.ObserverCore.Signal
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -160,6 +161,16 @@ class ObserverCoreTest {
             ObserverCore.bootWhy("reboot,deviceowner", boot - 8 * 60_000L - 5_000L, boot))
         assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy("", 0L, boot))
         assertEquals("ligou de novo (motivo: desconhecido)", ObserverCore.bootWhy(null, boot + 1, boot))   // relógio torto: sem tempo fora
+    }
+    // 21/11/2026 (teste da Sala): a internet voltou e a faixa da Início do painel seguia dizendo "Sem internet".
+    @Test fun recado_de_estado_que_acabou_sai_da_fila() {
+        val agora = 1_000_000L
+        val sem = ObserverCore.Finding(ObserverCore.Kind.NO_INTERNET, ObserverCore.Severity.CRITICAL, "x")
+        var fila = ObserverCore.enqueue(null, ObserverCore.noteFor(sem, agora), agora)
+        fila = ObserverCore.enqueue(fila, ObserverCore.freezeUndoneNote(agora, "App", "a voz"), agora)
+        fila = ObserverCore.dropCleared(fila, listOf(ObserverCore.Kind.NO_INTERNET, ObserverCore.Kind.FREEZE_UNDONE), agora + 1)
+        val ficou = ObserverCore.readNotes(fila, agora + 1)
+        assertEquals(listOf(ObserverCore.Kind.FREEZE_UNDONE), ficou.map { it.kind })   // o que a Sofy FEZ continua
     }
 
     @Test fun reinicioDoReparoDoWifiSeExplica() {

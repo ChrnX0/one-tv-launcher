@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">Som</string>
+    <string name="som_titulo_pod">Som · %1$s</string>
+    <string name="som_voz_clara">Voz clara</string>
+    <string name="som_so_este">Só neste podcast</string>
+    <string name="som_abertura">Pular a abertura</string>
+    <string name="som_fim">Pular o fim</string>
+    <string name="som_segundos">%1$d s</string>
+    <string name="som_rodape_proprio">Estes ajustes valem só para %1$s.</string>
+    <string name="som_rodape_geral">Velocidade, silêncios e voz clara valem para todos os podcasts. Ligue \"Só neste podcast\" para guardar outros para %1$s.</string>
+    <string name="som_det">Velocidade, voz clara, timer</string>
+    <string name="som_det_radio">Voz clara e timer para dormir</string>
+    <string name="cap_titulo">Capítulos</string>
+    <string name="cap_de">Capítulo %1$d de %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ andam 10 s · OK: capítulos</string>
+    <string name="tx_titulo">Texto da fala</string>
+    <string name="tx_carregando">carregando</string>
+    <string name="tx_nao_tem">este episódio não tem</string>
+    <string name="tx_nao_tem_det">Este podcast não publica o texto do que é falado neste episódio.</string>
+    <string name="tx_pe_busca">Achado %1$d de %2$d · ◀ ▶ anterior / seguinte · ▼ nova busca · OK: fechar</string>
+    <string name="tx_buscar">Buscar no que foi falado</string>
+    <string name="tx_nada">Ninguém falou isso neste episódio.</string>
+    <string name="ra_ja_tocou">Já tocou</string>
+    <string name="ra_parecidas">Rádios parecidas</string>
+    <string name="som_radio">Última rádio que ouvi</string>
+    <string name="som_podcast">Episódio mais novo dos podcasts</string>
+    <string name="jor_titulo">Meu jornal</string>
+    <string name="jor_ouvir">Ouvir o jornal</string>
+    <string name="jor_min">%d min em sequência</string>
+    <string name="tx_pe">◀ ▶ frase anterior / seguinte · ▲ resumo · ▼ buscar · OK: fechar</string>
+    <string name="tx_gerando">gerando</string>
+    <string name="tx_gerando_det">Gerando o texto… a primeira parte leva cerca de 1 minuto.</string>
+    <string name="tx_gerar">OK gera (grátis)</string>
+    <string name="tx_cota">volta amanhã</string>
+    <string name="tx_cota_det">A cota grátis de texto de hoje acabou. Ela volta amanhã.</string>
+    <string name="tx_pulei">Pulei a propaganda</string>
+    <string name="tx_pulei_det">%d s · ◀ volta a ela</string>
+    <string name="tx_resumo">Resumo da Sofy</string>
+    <string name="tx_resumo_de">Resumo · %s</string>
+    <string name="tx_resumindo">Lendo o que foi falado… um instante.</string>
+    <string name="tx_resumo_falhou">O resumo não veio desta vez. Tente de novo daqui a pouco.</string>
+    <string name="ra_globo">Explorar no globo</string>
+    <string name="ra_globo_det">Gire o mundo e caia numa rádio de qualquer lugar</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ giram · OK: tocar · Voltar: fechar</string>
+    <string name="ra_globo_mar">Mar aberto… gire mais um pouco</string>
+    <string name="ra_voltar">Voltar 30 s</string>
+    <string name="ra_voltar_det">Perdeu algo? Ouça de novo (⏪ no controle)</string>
+    <string name="ra_ao_vivo">Voltar ao ao vivo</string>
+    <string name="ra_atras">%s atrás do ao vivo</string>
+</resources>

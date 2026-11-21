@@ -1,7 +1,13 @@
 package br.paulo.tvlauncher
 
-import org.junit.Assume
-import org.junit.Test
+import br.paulo.tvlauncher.panel.Mtp
+import br.paulo.tvlauncher.panel.MtpArmazem
+import br.paulo.tvlauncher.panel.MtpLoja
+import br.paulo.tvlauncher.panel.MtpServico
+import br.paulo.tvlauncher.panel.MtpSessao
+import br.paulo.tvlauncher.panel.PainelArquivos
+import br.paulo.tvlauncher.panel.PtpIp
+import br.paulo.tvlauncher.panel.Ssdp
 import java.io.File
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -10,6 +16,8 @@ import java.net.InetSocketAddress
 import java.net.MulticastSocket
 import java.net.NetworkInterface
 import java.net.ServerSocket
+import org.junit.Assume
+import org.junit.Test
 
 /**
  * Bancada para o Windows de verdade (16/11/2026): o servidor MTP + o anúncio UPnP rodando num PC, sem TV, para

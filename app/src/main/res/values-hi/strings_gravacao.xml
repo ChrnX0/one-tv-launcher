@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s, %2$s तक</string>
     <string name="grv_ate_hora">%1$s तक</string>
     <string name="grv_selo">%1$s तक रिकॉर्ड हो रहा</string>
-    <string name="grv_selo_home">%1$s रिकॉर्ड हो रहा</string>
     <string name="grv_sem_canal">चैनल सेव सूची में नहीं है। एक बार लाइव TV खोलें और फिर कोशिश करें।</string>
     <string name="grv_sem_destino">रिकॉर्ड करने की जगह नहीं: हब में USB ड्राइव लगाएँ, या TV › रिकॉर्डिंग में नेटवर्क फ़ोल्डर चुनें।</string>
     <string name="grv_pendrive_formato">USB ड्राइव “%1$s” ऐसा फ़ॉर्मैट इस्तेमाल करती है जो TV नहीं पढ़ सकता (NTFS)। exFAT या FAT32 ड्राइव इस्तेमाल करें, या इसे सेटिंग्स › सिस्टम › स्टोरेज में फ़ॉर्मैट करें (इससे उस पर का सब मिट जाएगा)।</string>

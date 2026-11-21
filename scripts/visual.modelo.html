@@ -6,7 +6,7 @@
 <style>
 /* Visuais (degrau 1 "tema por QR" + revisão 1b, 17/11/2026). GERADO por scripts/gerar-visual.py a partir de
    VisualCodigo.PRONTOS: não edite os cartões à mão (VisualCodigoTest confere que os códigos batem com o app).
-   Só ajustes entram num código: tema, texto, cartões. Nunca foto, nome, conta ou rede. */
+   Só ajustes entram num código: tema, texto, cor do fundo. Nunca foto, nome, conta ou rede. */
 :root{--marca:#CE3D00;--cartao:rgba(127,127,127,.08)}
 @media (prefers-color-scheme:dark){:root{--marca:#FF6A2B}}
 [hidden]{display:none!important}
@@ -23,16 +23,13 @@ button:focus-visible{outline:3px solid var(--texto);outline-offset:2px}
 #recebido{border:2px solid var(--marca);border-radius:.9rem;padding:1rem 1.2rem;margin-bottom:2rem}
 #recebido h2{margin-top:0}
 code.longo{display:block;word-break:break-all;font-size:.8rem;color:var(--suave);margin:.5rem 0 .8rem}
-/* miniatura da HOME: fundo do tema + 6 cartões em fileira ou em grade */
+/* miniatura da HOME: fundo do tema + 6 cartões (maiores com o texto grande) */
 .mini{aspect-ratio:16/9;border-radius:.5rem;background:#15161a;display:flex;flex-wrap:nowrap;align-items:flex-end;gap:5%;padding:8% 6%;box-sizing:border-box;overflow:hidden}
 .mini.galeria{background:linear-gradient(135deg,#3a5d78,#a9744f 60%,#2b2d35)}
 .mini i{flex:0 0 22%;height:28%;background:#3b3f4a;border-radius:3px}
 .mini i:first-child{outline:2px solid var(--marca)}
 .mini.grande i{flex-basis:27%;height:34%}
-.mini.transp i{background:rgba(255,255,255,.22)}
 .mini.cores{background:linear-gradient(160deg,#7a2a12,#15161a 70%)}
-.mini.grade{flex-wrap:wrap;align-content:center;align-items:center;row-gap:8%}
-.mini.grade i{height:30%}
 @media (max-width:34rem){.cartao{grid-template-columns:1fr 6rem}.mini{grid-column:1/-1;width:12rem}.qr{width:6rem;height:6rem}}
 </style></head>
 <body><main>
@@ -51,7 +48,7 @@ code.longo{display:block;word-break:break-all;font-size:.8rem;color:var(--suave)
 <h1 data-t="titulo">Ready-made looks</h1>
 <p data-t="intro">The same looks are on the TV, in <b>Settings › Appearance › Ready-made looks</b>: each OK switches to the
 next one. Here you can see them before choosing, or send one to someone. A look only changes settings (theme, text size,
-cards). No photo, name, account or network goes in it.</p>
+background color). No photo, name, account or network goes in it.</p>
 <div class="lista">
 <!--CARTOES-->
 </div>
@@ -61,17 +58,15 @@ cards). No photo, name, account or network goes in it.</p>
 "use strict";
 const T = {
   en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", MEU: "My background",
-       texto: "Text", t100: "normal", t110: "large", t120: "larger", cartoes: "App cards", c100: "normal", c115: "large",
-       grade: "Arrangement", gsim: "grid", gnao: "row", transp: "See-through cards", cor: "Background in the app's color",
-       sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", pilhas: "Automatic stacks", brilho: "Brightness", contraste: "Contrast"},
+       texto: "Text", t100: "normal", t110: "large", t120: "larger", cor: "Background in the app's color",
+       sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", brilho: "Brightness", contraste: "Contrast"},
   pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", MEU: "Meu fundo",
-       texto: "Texto", t100: "normal", t110: "grande", t120: "maior", cartoes: "Cartões dos apps", c100: "normal", c115: "grandes",
-       grade: "Arranjo", gsim: "grade", gnao: "fileira", transp: "Cartões transparentes", cor: "Fundo na cor do app",
-       sim: "ligado", nao: "desligado", icones: "Pacote de ícones", nenhum: "nenhum", pilhas: "Pilhas automáticas", brilho: "Brilho", contraste: "Contraste",
+       texto: "Texto", t100: "normal", t110: "grande", t120: "maior", cor: "Fundo na cor do app",
+       sim: "ligado", nao: "desligado", icones: "Pacote de ícones", nenhum: "nenhum", brilho: "Brilho", contraste: "Contraste",
        recebido_titulo: "A TV mandou este visual para você", titulo: "Visuais prontos",
        como_colar: "Para usar em outra TV: abra o painel da TV no celular, vá em <b>Tela inicial › Visual de outra TV</b> e cole.",
        invalido: "Este link não traz um visual válido. Peça o QR de novo na TV: Configurações › Aparência › Compartilhar visual.",
-       intro: "Os mesmos visuais estão na TV, em <b>Configurações › Aparência › Visuais prontos</b>: cada OK passa ao próximo. Aqui você vê antes de escolher, ou manda para alguém. Um visual só muda ajustes (tema, tamanho do texto, cartões). Nenhuma foto, nome, conta ou rede vai junto.",
+       intro: "Os mesmos visuais estão na TV, em <b>Configurações › Aparência › Visuais prontos</b>: cada OK passa ao próximo. Aqui você vê antes de escolher, ou manda para alguém. Um visual só muda ajustes (tema, tamanho do texto, cor do fundo). Nenhuma foto, nome, conta ou rede vai junto.",
        rodape: "Leia um QR com o celular para guardar aquele visual, ou copie o código."}
 };
 const ORIGINAL = {};
@@ -96,12 +91,8 @@ function linhas(j) {
   const r = [], liga = v => t(v ? "sim" : "nao");
   if (["ESCURO", "GALERIA", "MEU"].includes(j.t)) r.push(t("tema") + ": " + t(j.t));
   if ([100, 110, 120].includes(j.x)) r.push(t("texto") + ": " + t("t" + j.x));
-  if ([100, 115].includes(j.s)) r.push(t("cartoes") + ": " + t("c" + j.s));
-  if (typeof j.g === "boolean") r.push(t("grade") + ": " + t(j.g ? "gsim" : "gnao"));
-  if (typeof j.v === "boolean") r.push(t("transp") + ": " + liga(j.v));
   if (typeof j.c === "boolean") r.push(t("cor") + ": " + liga(j.c));
   if (typeof j.i === "string") r.push(t("icones") + ": " + (j.i || t("nenhum")));
-  if (typeof j.p === "boolean") r.push(t("pilhas") + ": " + liga(j.p));
   if (Number.isInteger(j.b)) r.push(t("brilho") + ": " + j.b);
   if (Number.isInteger(j.k)) r.push(t("contraste") + ": " + j.k);
   return r;

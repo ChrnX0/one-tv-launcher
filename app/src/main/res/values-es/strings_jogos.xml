@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (es) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">Juegos</string>
-    <string name="home_destaque_jogos_vazio">Juega en la nube, desde tu PC y juegos retro</string>
-    <string name="home_linha_continuar_jogos">VER Y JUGAR</string>
-    <string name="home_jogos_ultimo">Último: %1$s</string>
     <string name="extras_CARD_JOGOS">Tarjeta Juegos en el inicio (las apps de juegos salen de la fila de apps)</string>
     <string name="extras_MODO_JOGO">Modo juego: mientras un juego está abierto, el protector, el filtro nocturno y los avisos esperan</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">Encender un mando abre la pantalla Juegos</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">Retro</string>
     <string name="jogos_grupo_tv">Juegos en la TV</string>
     <string name="jogos_para_comecar">Para empezar</string>
-    <string name="jogos_vazio_dica">Aún no hay juegos en esta TV. Elige uno arriba para abrir su página en Play Store.</string>
-    <string name="jogos_dica_segurar">Mantén OK en un juego para moverlo a otro grupo o sacarlo de aquí.</string>
     <string name="jogos_aviso_fraca_titulo">Red débil para juegos en la nube</string>
     <string name="jogos_aviso_fraca">El juego puede trabarse o tener retraso. Un cable de red, o la TV más cerca del router, ayuda.</string>
     <string name="jogos_jogar_assim">Jugar igual</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">¿Qué app juega en la PC?</string>
     <string name="jogos_pc_acordando">Despertando la PC… %1$d s</string>
     <string name="jogos_pc_nao_respondeu">La PC no respondió. Abriendo la app igual.</string>
-    <string name="jogos_seus">Tus juegos</string>
     <string name="jogos_mais_jogos">Más juegos</string>
     <string name="jogos_mais_opcoes">Más</string>
-    <string name="jogos_por_tipo">Por tipo</string>
-    <string name="jogos_jogar">Jugar</string>
     <string name="jogos_ligar_pc_jogar">Encender la PC y jugar</string>
-    <string name="jogos_desc_nuvem">El juego corre en una computadora en internet y la TV recibe la imagen. Necesita una buena red.</string>
     <string name="jogos_desc_pc">Juega aquí en la TV los juegos de la computadora o la consola de casa.</string>
-    <string name="jogos_desc_retro">Juegos clásicos de muchas consolas.</string>
-    <string name="jogos_desc_tv">Un juego instalado en la propia TV.</string>
-    <string name="jogos_jogado">Jugado por última vez %1$s.</string>
-    <string name="jogos_nenhum_titulo">Aún no hay juegos</string>
-    <string name="jogos_chip_sem_controle">Sin mando</string>
     <string name="jogos_chip_medindo">Comprobando la red…</string>
     <string name="jogos_chip_boa">Buena red</string>
     <string name="jogos_chip_ok">Red aceptable</string>
     <string name="jogos_chip_fraca">Red débil</string>
     <string name="jogos_chip_sem">Sin internet</string>
-    <string name="jogos_tecla_escolher">elegir</string>
     <string name="jogos_tecla_jogar">jugar</string>
-    <string name="jogos_tecla_mais">más opciones</string>
     <string name="jogos_tecla_segurar">mantén OK</string>
     <string name="jogos_tecla_opcoes">cambiar de grupo</string>
     <plurals name="jogos_qtd">

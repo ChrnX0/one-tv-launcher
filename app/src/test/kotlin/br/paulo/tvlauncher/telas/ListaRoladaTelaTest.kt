@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import br.paulo.tvlauncher.Estilo
+import br.paulo.tvlauncher.R
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,7 +18,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /**
  * Lista do [Estilo.lista] (menu "Áudio e legenda" do player, painel da direita desde 18/11/2026) rolada até o fim: nenhuma linha pode ser desenhada por

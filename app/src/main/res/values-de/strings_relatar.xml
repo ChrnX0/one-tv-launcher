@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Ein QR-Code öffnet das Formular auf dem Handy, technische Daten schon ausgefüllt</string>
     <string name="rel_texto">Richte die Handykamera auf den Code. Beschreibe, was passiert ist, und sende es. Name, Konto, Netzwerk und Stadt werden nicht mitgeschickt.</string>
     <string name="rel_vai_junto">Was mitgeschickt wird</string>
+    <string name="rel_l_oque">Was ist passiert</string>
+    <string name="rel_l_versao">Version</string>
+    <string name="rel_l_uso">Modus</string>
+    <string name="rel_l_quedas">Abstürze / Hänger (7 Tage)</string>
+    <string name="rel_l_erro">Letzter Fehler</string>
 </resources>

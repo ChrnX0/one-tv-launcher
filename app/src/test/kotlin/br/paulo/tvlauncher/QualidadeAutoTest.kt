@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.VariantesCanal.Nivel
+import br.paulo.tvlauncher.player.QualidadeAuto
+import br.paulo.tvlauncher.player.VariantesCanal.Nivel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -1,12 +1,16 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.screensaver.SeriesTempo
+import br.paulo.tvlauncher.weather.MapaMundo
+import br.paulo.tvlauncher.weather.NuvensSatelite
+import br.paulo.tvlauncher.weather.VistaMapa
+import java.io.DataInputStream
+import java.io.File
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.DataInputStream
-import java.io.File
-import java.util.TimeZone
 
 class CeuDeVerdadeTest {
     @Test fun vistaPoeACidadeNoLugarCertoEVolta() {

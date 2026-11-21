@@ -1,11 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.CofreBackup
+import br.paulo.tvlauncher.backup.EnsaioRestauracao
+import java.util.Base64
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Base64
 
 class EnsaioRestauracaoTest {
     private val pacote = "br.paulo.tvlauncher"

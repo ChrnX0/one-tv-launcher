@@ -2,8 +2,6 @@
 <!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
 <resources>
     <string name="plg_titulo">プラグイン</string>
-    <string name="plg_cfg_det">「見る」の列に他のアプリのカード。それぞれに許可が必要です。</string>
-    <string name="plg_det">信頼できるアプリだけをオンにしてください。プラグインは短い文字を送るだけで、アプリやアカウントは見えません。</string>
     <string name="plg_nenhum">プラグインはありません。プラグインは他の開発者のアプリで、試合のスコアや価格などのカードをここに表示します。</string>
     <string name="plg_ligado">オン</string>
     <string name="plg_desligado">オフ</string>

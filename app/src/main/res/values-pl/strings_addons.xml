@@ -21,7 +21,6 @@
     <string name="ad_fontes_resumo">Wybierz źródło</string>
     <string name="ad_dica_voltar">wróć</string>
     <string name="ad_cfg_det">Zainstalowane dodatki. Wybierz, aby dodać lub usunąć.</string>
-    <string name="ad_cfg_remover_qual">Który dodatek usunąć?</string>
     <string name="ad_cfg_remover">%1$s zostanie usunięty z tego telewizora.</string>
     <string name="ad_cfg_remover_sim">Usuń</string>
     <string name="ad_add_titulo">Dodaj dodatek</string>

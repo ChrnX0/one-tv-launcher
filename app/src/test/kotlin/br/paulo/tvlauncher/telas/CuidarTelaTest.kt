@@ -9,10 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.CuidarDeLonge
 import br.paulo.tvlauncher.CuidarDeLongeActivity
 import br.paulo.tvlauncher.CuidarDeLongeTv
 import br.paulo.tvlauncher.CuidarTelaActivity
+import br.paulo.tvlauncher.family.CuidarDeLonge
+import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +23,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /**
  * Cuidar de longe (15/11/2026): foto da pergunta grande (consentimento, pedido de ajuda, lembrete) e da tela de

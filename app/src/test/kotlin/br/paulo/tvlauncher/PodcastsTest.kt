@@ -1,5 +1,9 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.Posicao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -106,7 +110,8 @@ class PodcastsTest {
     @Test
     fun copiaDoFeedIdaEVolta() {
         val feed = PodcastFeed.Feed("Café", "A", "d", "https://a.org/c.jpg", "https://a.org", "pt", false,
-            listOf(ep("1", 5).copy(transcricoes = listOf(PodcastFeed.Transcricao("https://a.org/1.vtt", "text/vtt", "pt")), capitulos = "https://a.org/c.json")))
+            listOf(ep("1", 5).copy(transcricoes = listOf(PodcastFeed.Transcricao("https://a.org/1.vtt", "text/vtt", "pt")), capitulos = "https://a.org/c.json")),
+            categorias = listOf("News", "Society & Culture"))
         assertEquals(feed, Podcasts.feedDeJson(Podcasts.feedParaJson(feed)))
     }
 }

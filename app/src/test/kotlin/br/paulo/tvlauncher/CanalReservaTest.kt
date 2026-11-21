@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.CanalReserva
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

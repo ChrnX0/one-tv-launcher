@@ -14,6 +14,12 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.home.Organizacao
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.settings.Extras
 import java.util.Locale
 
 /**
@@ -86,7 +92,10 @@ class ModoSimplesActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        if (!ModoSimples.ligado(this)) { finish(); return }
+        // Desligaram o modo simples (painel, celular, Configurações): a tela some e diz por quê.
+        if (!ModoSimples.ligado(this)) {
+            AvisoTv.rapido(this, getString(R.string.aviso_simples_titulo), getString(R.string.aviso_simples_texto)); finish(); return
+        }
         Fundo.rodar("simples") {
             val instalados = ModoSimples.instalados(this)
             val temTv = PlayerArmazem.fontes(this).isNotEmpty()

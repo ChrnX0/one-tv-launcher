@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">The screen dims slowly and the TV turns off</string>
     <string name="cruz_desliga_as">Turns off at %1$s</string>
     <string name="cruz_dormir_cancelar">OK to cancel</string>
-    <string name="cruz_linha">Line</string>
+    <string name="cruz_linha">Essential</string>
     <string name="cruz_mover">Move to…</string>
     <string name="cruz_mover_titulo">Move %1$s to</string>
     <string name="cruz_central">Game hub</string>
@@ -61,7 +61,6 @@
     <string name="jogos_semana">This week</string>
     <string name="jogos_semana_jogado">played in 7 days</string>
     <string name="jogos_semana_mais">most played</string>
-    <string name="jogos_semana_controles">controllers on</string>
     <string name="jogos_menos_de_1_min">under 1 min</string>
     <string name="jogos_min">%1$d min</string>
     <string name="jogos_h_min">%1$d h %2$d min</string>
@@ -85,10 +84,16 @@
     <string name="casa_fora_texto">Check that its server is on. The TV tries again by itself every few seconds.</string>
     <string name="cruz_barra_ilha">Island</string>
     <string name="cruz_canto_no_ar">On air</string>
-    <string name="cruz_canto_buscar">Search</string>
-    <string name="cruz_canto_buscar_txt">▲ opens the bar with search</string>
     <string name="cruz_canto_gravando">Recording</string>
     <string name="cruz_canto_tocando">Playing</string>
     <string name="cruz_canto_parou">Stopped at</string>
     <string name="cruz_canto_conectado">Connected</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Vintage</string>
+    <string name="cruz_joia">Jewel</string>
+    <string name="cruz_foto">Photoreal</string>
+    <string name="cruz_vintage2">Vintage 2.0</string>
+    <string name="cruz_icone_seguir">Follow the set (%1$s)</string>
+    <string name="cruz_icone_de">Icon: %1$s</string>
+    <string name="cruz_icone_categoria">Whole category: %1$s</string>
 </resources>

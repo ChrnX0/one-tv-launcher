@@ -8,6 +8,9 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.SofalyWordmark
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Novidades
 
 /**
  * "Sobre a Sofaly" (18/11/2026): a logo grande, o slogan, a versão e dois botões (o que mudou e as licenças). Aberta

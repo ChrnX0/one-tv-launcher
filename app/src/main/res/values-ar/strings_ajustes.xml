@@ -93,10 +93,6 @@
     <string name="vq_det">يعرض رمز QR بمظهر هذا التلفزيون: السمة وحجم النص والأيقونات.</string>
     <string name="vq_texto">امسحه بهاتفك للاحتفاظ به أو إرساله إلى شخص يستخدم Sofaly.</string>
     <string name="vq_fechar">إغلاق</string>
-    <string name="lh_titulo">حجم بطاقات التطبيقات</string>
-    <string name="lh_det">البطاقات الأكبر أسهل رؤيةً من الأريكة.</string>
-    <string name="lh_normal">عادي</string>
-    <string name="lh_grande">كبير</string>
     <string name="pl_titulo">الخطط</string>
     <string name="pl_texto">كل شيء مجاني ما دام البيع لم يبدأ. لاحقًا، يُشترى Pro وUltra من الهاتف.</string>
     <string name="pl_basico">الأساسية</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• كل ما في الأساسية\n• قوائم IPTV كثيرة، التسجيل\n• لوحة ويب كاملة\n• Claude والروتينات وHome Assistant\n• كل السمات، نسخ احتياطي سحابي</string>
     <string name="pl_ultra_itens">• كل ما في Pro\n• طقس أدق (3 نماذج)\n• صفحات أفلام غنية\n• ترجمات تلقائية\n• حتى 3 أجهزة تلفزيون</string>
     <string name="pl_qr">امسح بهاتفك لرؤية الأسعار والشراء.</string>
-    <string name="lh_arranjo">ترتيب التطبيقات</string>
-    <string name="lh_arranjo_det">صف يمرّ جانبيًا، أو شبكة تظهر فيها كل التطبيقات.</string>
-    <string name="lh_fileira">صف</string>
-    <string name="lh_grade">شبكة</string>
     <string name="pl_assinar">اشترك</string>
     <string name="pl_assinar_preco">اشترك · %1$s</string>
     <string name="pl_seu_plano">خطتك</string>

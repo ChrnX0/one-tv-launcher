@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.AjudaQr
+import br.paulo.tvlauncher.settings.Manual
+import java.io.File
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * Ajuda por QR (degrau 2, 16/11/2026): o site (site/ajuda/<idioma>.json) tem o mesmo manual do app. Falhou? Rode

@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.SofyMotion.Ease
-import br.paulo.tvlauncher.SofyMotion.Key
-import br.paulo.tvlauncher.SofyMotion.Part
-import br.paulo.tvlauncher.SofyPolicy.Expression
+import br.paulo.tvlauncher.observer.SofyMotion
+import br.paulo.tvlauncher.observer.SofyMotion.Ease
+import br.paulo.tvlauncher.observer.SofyMotion.Key
+import br.paulo.tvlauncher.observer.SofyMotion.Part
+import br.paulo.tvlauncher.observer.SofyPolicy.Expression
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher.telas
 
 import android.app.Activity
-import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -15,6 +14,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import br.paulo.tvlauncher.Estilo
+import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +24,6 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 
 /**
  * As listas do player (18/11/2026, Paulo: "Sabe a tela delas? Tem que ser bem feitinhas, coerentes, UI e UX

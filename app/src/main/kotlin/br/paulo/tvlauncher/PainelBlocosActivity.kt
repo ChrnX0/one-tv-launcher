@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.panel.PainelBlocos
+import br.paulo.tvlauncher.panel.PainelBlocosTv
 
 /**
  * Escolher os blocos do painel rápido (ideia 42). Uma linha por bloco: OK mostra ou esconde; ◀ ▶ trocam de lugar com

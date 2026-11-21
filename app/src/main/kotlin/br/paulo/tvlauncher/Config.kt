@@ -1,5 +1,8 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.weather.EclipseSolar
+
 /**
  * Tudo que você pode querer mudar fica neste arquivo.
  * Depois de editar, é só recompilar e reinstalar o APK.

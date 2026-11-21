@@ -3,14 +3,12 @@ package br.paulo.tvlauncher
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.SurfaceView
@@ -21,22 +19,100 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.text.CueGroup
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import br.paulo.tvlauncher.alarm.Cronometros
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.home.tocandoAgora
+import br.paulo.tvlauncher.input.AvancoSegurado
+import br.paulo.tvlauncher.input.EfeitosSom
+import br.paulo.tvlauncher.input.SpeechTap
+import br.paulo.tvlauncher.listen.SomNoFone
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.observer.MedidasTv
+import br.paulo.tvlauncher.observer.Placar
+import br.paulo.tvlauncher.player.AberturaProntaTv
+import br.paulo.tvlauncher.player.AberturaSerie
+import br.paulo.tvlauncher.player.AddonsProtocolo
+import br.paulo.tvlauncher.player.AssAjustes
+import br.paulo.tvlauncher.player.Capitulos
+import br.paulo.tvlauncher.player.Conforto
+import br.paulo.tvlauncher.player.ConfortoRegras
+import br.paulo.tvlauncher.player.CortinaVideo
+import br.paulo.tvlauncher.player.EpisodeSegments
+import br.paulo.tvlauncher.player.EstiloLegenda
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.FontesMidia
+import br.paulo.tvlauncher.player.FontesPlayer
+import br.paulo.tvlauncher.player.Idioma
+import br.paulo.tvlauncher.player.IdiomaPlayer
+import br.paulo.tvlauncher.player.InfoTecnica
+import br.paulo.tvlauncher.player.JuntoRegras
+import br.paulo.tvlauncher.player.LegendaAoLado
+import br.paulo.tvlauncher.player.LegendaBaixar
+import br.paulo.tvlauncher.player.LegendaExterna
+import br.paulo.tvlauncher.player.LegendaImagem
+import br.paulo.tvlauncher.player.LegendaTraduzida
+import br.paulo.tvlauncher.player.MemoriaSerie
+import br.paulo.tvlauncher.player.MemoriaSerieTv
+import br.paulo.tvlauncher.player.MixDialogo
+import br.paulo.tvlauncher.player.PlayerAcessivel
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerBar
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.PlayerEngine
+import br.paulo.tvlauncher.player.PlayerImagem
+import br.paulo.tvlauncher.player.PlayerMenu
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.RenderizadoresPlayer
+import br.paulo.tvlauncher.player.SegundaLegenda
+import br.paulo.tvlauncher.player.Series
+import br.paulo.tvlauncher.player.ServicosSync
+import br.paulo.tvlauncher.player.SessaoMidia
+import br.paulo.tvlauncher.player.SincronizarFilmes
+import br.paulo.tvlauncher.player.SondaMidia
+import br.paulo.tvlauncher.player.SubtitleSync
+import br.paulo.tvlauncher.player.TaxaQuadros
+import br.paulo.tvlauncher.player.TunnelGuard
+import br.paulo.tvlauncher.player.Vod
+import br.paulo.tvlauncher.player.acharAoLado
+import br.paulo.tvlauncher.player.alternarInfo
+import br.paulo.tvlauncher.player.alternarSom
+import br.paulo.tvlauncher.player.apagarAbertura
+import br.paulo.tvlauncher.player.aplicarMemoriaSerie
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.player.avisoBreve
+import br.paulo.tvlauncher.player.buscaLegenda
+import br.paulo.tvlauncher.player.buscarLegenda
+import br.paulo.tvlauncher.player.contarFora
+import br.paulo.tvlauncher.player.continuarDeFora
+import br.paulo.tvlauncher.player.escolherAtraso
+import br.paulo.tvlauncher.player.escolherImagem
+import br.paulo.tvlauncher.player.escolherTamanhoLegenda
+import br.paulo.tvlauncher.player.escolherVelocidade
+import br.paulo.tvlauncher.player.esconderPilula
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.player.lembrarSerie
+import br.paulo.tvlauncher.player.marcarAbertura
+import br.paulo.tvlauncher.player.mostrarProximo
+import br.paulo.tvlauncher.player.nomeEstiloLegenda
+import br.paulo.tvlauncher.player.pintarLegenda
+import br.paulo.tvlauncher.player.pintarProximo
+import br.paulo.tvlauncher.player.prepararProximo
+import br.paulo.tvlauncher.player.recarregarComLegenda
+import br.paulo.tvlauncher.player.rotuloAtraso
+import br.paulo.tvlauncher.player.rotuloTamanho
+import br.paulo.tvlauncher.player.salvar
+import br.paulo.tvlauncher.player.talvezLegendaAuto
+import br.paulo.tvlauncher.player.terminar
+import br.paulo.tvlauncher.player.vigiarAbertura
 import java.util.Locale
 
 /**
@@ -56,10 +132,10 @@ class VodActivity : Activity() {
     companion object {
         /** Códigos ISO 639-2 que não dizem idioma: indefinido, vários, sem fala, outros. */
         private val SEM_IDIOMA = setOf("und", "mul", "zxx", "mis")
-        private const val EXTRA_FONTE = "fonte"
+        internal const val EXTRA_FONTE = "fonte"
         private const val EXTRA_ID = "id"
         private const val EXTRA_EXT = "ext"
-        private const val EXTRA_TITULO = "titulo"
+        internal const val EXTRA_TITULO = "titulo"
         private const val EXTRA_TIPO = "tipo"
         private const val EXTRA_URL = "url"
         private const val EXTRA_CHAVE_POS = "chave_pos"     // addons: a posição guardada por esta chave, não pelo endereço
@@ -67,15 +143,15 @@ class VodActivity : Activity() {
         // De quem é a escolha de áudio (Idioma): o filme, ou a SÉRIE inteira (o próximo episódio segue a mesma escolha).
         private const val EXTRA_IDIOMA = "idioma"
         // O que procurar no OpenSubtitles (LegendaExterna): nome limpo, ano, e temporada/episódio nas séries.
-        private const val EXTRA_LEG_NOME = "leg_nome"
-        private const val EXTRA_LEG_ANO = "leg_ano"
-        private const val EXTRA_LEG_TEMP = "leg_temp"
-        private const val EXTRA_LEG_EP = "leg_ep"
-        private const val EXTRA_LEG_VERSAO = "leg_versao"
-        private const val EXTRA_TMDB = "tmdb"
-        private const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
-        private const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
-        private val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
+        internal const val EXTRA_LEG_NOME = "leg_nome"
+        internal const val EXTRA_LEG_ANO = "leg_ano"
+        internal const val EXTRA_LEG_TEMP = "leg_temp"
+        internal const val EXTRA_LEG_EP = "leg_ep"
+        internal const val EXTRA_LEG_VERSAO = "leg_versao"
+        internal const val EXTRA_TMDB = "tmdb"
+        internal const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
+        internal const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
+        internal val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
 
         // A mesma obra na outra versão (dublada/legendada), que na lista de IPTV é OUTRO arquivo (18/11/2026).
         private const val EXTRA_ALT_FONTE = "alt_fonte"
@@ -194,69 +270,69 @@ class VodActivity : Activity() {
         fun chave(tipo: String, fonteId: String, id: String) = if (tipo == TIPO_EPISODIO) "$fonteId:e$id" else "$fonteId:f$id"
     }
 
-    private val tela = Handler(Looper.getMainLooper())
-    private var player: ExoPlayer? = null
-    private var url: String? = null
-    private var chave = ""
-    private var retomarEm = 0L
+    internal val tela = Handler(Looper.getMainLooper())
+    internal var player: ExoPlayer? = null
+    internal var url: String? = null
+    internal var chave = ""
+    internal var retomarEm = 0L
     private var visivel = false
-    private var legendaDecidida = false
+    internal var legendaDecidida = false
     private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
-    @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
+    @Volatile internal var prefIdioma = Idioma.Pref.DUBLADO
     /** 16.2: audiodescrição e legenda para surdos (lidas com a preferência de idioma). */
-    @Volatile private var prefAcesso = Idioma.Prefs()
+    @Volatile internal var prefAcesso = Idioma.Prefs()
     /** Segundo idioma de áudio/legenda (Conforto, 16/11/2026), já sem o idioma da TV; null = nenhum. */
     @Volatile private var segundoIdioma: String? = null
-    private var chaveIdioma = ""
+    internal var chaveIdioma = ""
     // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
-    private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
+    internal val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
     // Legenda baixada da internet para este vídeo (LegendaBaixar), se houver, e o atraso aplicado nela.
-    private var legendaArquivo: java.io.File? = null
-    private var legendaTraduzida = false   // ideia 90: a legenda baixada é tradução feita na TV (rótulo da faixa)
-    private val pararTraducao = java.util.concurrent.atomic.AtomicBoolean(false)
+    internal var legendaArquivo: java.io.File? = null
+    internal var legendaTraduzida = false   // ideia 90: a legenda baixada é tradução feita na TV (rótulo da faixa)
+    internal val pararTraducao = java.util.concurrent.atomic.AtomicBoolean(false)
     // Legendas na mesma pasta do vídeo ("Filme.srt", "Filme.pt-BR.ass"): endereço + o que o nome diz (LegendaAoLado).
-    private var legendasAoLado: List<Pair<String, LegendaAoLado.Achada>> = emptyList()
-    private var atrasoLegenda = 0L
+    internal var legendasAoLado: List<Pair<String, LegendaAoLado.Achada>> = emptyList()
+    internal var atrasoLegenda = 0L
     // Legenda que se acerta sozinha (SubtitleSync + SpeechTap, 20/11/2026): para quando a pessoa escolhe o atraso à mão,
     // depois de 2 acertos ou quando a conta diz que a legenda já está no lugar.
-    private var atrasoManual = false
-    private var acertosAuto = 0
+    internal var atrasoManual = false
+    internal var acertosAuto = 0
     private var acertando = false
     private var tiquesLegenda = 0
     private val vigiaLegenda = object : Runnable {
         override fun run() { vigiarLegenda(); tela.postDelayed(this, 5_000) }
     }
-    private lateinit var legenda: TextView
+    internal lateinit var legenda: TextView
     private lateinit var legendaImg: LegendaImagem.Vista   // PGS, VobSub, DVB e ASS (libass): legenda que chega como imagem
     // Jellyfin, Emby ou Plex: a quem contar onde parou (é assim que o "Continuar assistindo" deles anda).
-    private var relato: FontesMidia.Relato? = null
-    private var avisouInicio = false
+    internal var relato: FontesMidia.Relato? = null
+    internal var avisouInicio = false
     // Cabeçalhos extras do pedido (WebDAV: a senha vai no cabeçalho, nunca no endereço).
     private var cabecalhos: Map<String, String> = emptyMap()
     private lateinit var capaAudio: TextView
     private var cortina: View? = null
     // Ideia 19: tecla apertada neste vídeo, e "desligar quando este acabar" (vale só para este vídeo, nada fica salvo).
-    private var apertouTecla = false
-    private var desligarAoFim = false
+    internal var apertouTecla = false
+    internal var desligarAoFim = false
     // Ideia 20: novas tentativas depois de erro de rede (zera quando o vídeo volta a tocar).
-    private var tentativas = 0
-    private var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
-    private val efeitos = EfeitosSom()                      // volume parecido e voz mais clara (PlayerAcessivel)
-    private val assAjustes = AssAjustes()                   // legenda ASS (libass): área do vídeo, tamanho, fontes do MKV
+    internal var tentativas = 0
+    internal var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
+    internal val efeitos = EfeitosSom()                      // volume parecido e voz mais clara (PlayerAcessivel)
+    internal val assAjustes = AssAjustes()                   // legenda ASS (libass): área do vídeo, tamanho, fontes do MKV
     // Player sem NextLib (15/11/2026): segunda legenda (ideia 6), capítulos (5), miniatura no avanço (3), quadro técnico (8).
     private val segunda = SegundaLegenda()
     private var seletor: SegundaLegenda.Seletor? = null
-    private lateinit var legenda2: TextView
+    internal lateinit var legenda2: TextView
     private var podeSondar = false         // a sonda abre o arquivo de novo: só fora do IPTV (lá o limite é 1 conexão)
     private var sonda: SondaMidia? = null
     private var sondaUrl: String? = null
     private var capitulos: List<Capitulos.Capitulo> = emptyList()
-    private var aberturaDoArquivo = false  // a abertura veio de um capítulo do arquivo (não da marca da série)
+    internal var aberturaDoArquivo = false  // a abertura veio de um capítulo do arquivo (não da marca da série)
     private lateinit var miniatura: ImageView
     private var tamMiniatura = Capitulos.tamanhoMiniatura(0, 0)
     private var miniaturaPedida = Long.MIN_VALUE
-    private lateinit var infoTec: TextView
+    internal lateinit var infoTec: TextView
     private var decodVideo: String? = null
     private var decodAudio: String? = null
     private var perdidos = 0
@@ -264,27 +340,27 @@ class VodActivity : Activity() {
     private val medida = Cronometros.SessaoVod()
     private var perdidosMedidos = 0
     // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
-    private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
+    internal var serie = false              // episódio aberto pela tela de séries (com a chave da série)
     /** Elevação 6.4: o que a pessoa escolheu para esta série (legenda, velocidade, atraso da legenda). */
-    private var memSerie: MemoriaSerie.Escolha? = null
-    private var abertura: AberturaSerie.Marca? = null
-    private var avisouPulo = false         // a pílula já apareceu neste trecho (some depois de 8 s e não volta até sair dele)
-    private lateinit var pilulaPular: TextView
+    internal var memSerie: MemoriaSerie.Escolha? = null
+    internal var abertura: AberturaSerie.Marca? = null
+    internal var avisouPulo = false         // a pílula já apareceu neste trecho (some depois de 8 s e não volta até sair dele)
+    internal val pilulaPularPronta get() = ::pilulaPular.isInitialized
+    internal lateinit var pilulaPular: TextView
     // Proposta C, etapa 1 (20/11/2026): resumo e créditos (EpisodeSegments). A mesma pílula serve aos três avisos.
-    private var resumo: AberturaSerie.Marca? = null
+    internal var resumo: AberturaSerie.Marca? = null
     private var creditosBanco: Long? = null            // início dos créditos segundo o IntroDB
-    private var pularPara = -1L                        // OK com a pílula de pular: para onde vai
-    private var avisadoTrecho = -1L                    // fim do trecho cuja pílula já apareceu (não repete a cada 8 s)
-    private var pilulaProximo = false                  // a pílula na tela é "Próximo episódio"
+    internal var pularPara = -1L                        // OK com a pílula de pular: para onde vai
+    internal var avisadoTrecho = -1L                    // fim do trecho cuja pílula já apareceu (não repete a cada 8 s)
+    internal var pilulaProximo = false                  // a pílula na tela é "Próximo episódio"
     private var proximoDispensado = false              // a pessoa mexeu durante os créditos: deixa os créditos correrem
-    private var proximoResta = -1                      // segundos da contagem na pílula (-1 = sem contagem)
-    private var proximoContagem = -1                   // do intent: -1 = sem próximo episódio
+    internal var proximoResta = -1                      // segundos da contagem na pílula (-1 = sem contagem)
+    internal var proximoContagem = -1                   // do intent: -1 = sem próximo episódio
     private var repetindoAte = -1L                     // "O que ele disse?": até onde a legenda fica ligada
     private var paramsAntesRepetir: androidx.media3.common.TrackSelectionParameters? = null
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
-    private val suave = Estilo.TEXTO_2
-    private val coral = Estilo.ACENTO   // era 0xFF5A4E, um vermelho-rosado fora da marca (B9, 20/11/2026)
+    internal val coral = Estilo.ACENTO   // era 0xFF5A4E, um vermelho-rosado fora da marca (B9, 20/11/2026)
 
     private lateinit var video: SurfaceView
     /**
@@ -295,14 +371,14 @@ class VodActivity : Activity() {
      */
     private var textura: android.view.TextureView? = null
     /** A vista que mostra o vídeo agora (a TextureView quando o vídeo é girado). */
-    private fun areaVideo(): View = textura ?: video
+    internal fun areaVideo(): View = textura ?: video
     private lateinit var barra: LinearLayout
     private lateinit var titulo: TextView
-    private val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
+    internal val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
     private lateinit var tempo: TextView
     private lateinit var estadoBarra: TextView
     private lateinit var progresso: ProgressBar
-    private lateinit var aviso: TextView
+    internal lateinit var aviso: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -417,21 +493,21 @@ class VodActivity : Activity() {
             val leg = LegendaBaixar.guardada(this, chave)
             val trad = leg != null && LegendaTraduzida.ehTraducao(this, chave)
             val aoLado = direto?.let { runCatching { acharAoLado(it) }.getOrNull() }.orEmpty()
-            var atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
+            var atraso = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getLong("atraso:$chave", 0L)
             val mem = if (serie) MemoriaSerieTv.ler(this, chaveIdioma) else null
             // Elevação 6.4: episódio novo da série, com legenda baixada e sem atraso próprio: vale o atraso da série.
             var legFinal = leg
             if (leg != null && atraso == 0L) mem?.atrasoLegendaMs?.takeIf { it != 0L }?.let { ms ->
                 LegendaBaixar.ajustar(this, chave, ms)?.let { f ->
                     legFinal = f; atraso = ms
-                    getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$chave", ms).apply()
+                    getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putLong("atraso:$chave", ms).apply()
                 }
             }
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
-            val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
+            val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
             val pos = intent.getLongExtra("inicio_ms", -1L).takeIf { it >= 0 }
                 ?: if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
-            val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
+            val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
                 .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
                 if (isDestroyed) return@post
@@ -505,7 +581,7 @@ class VodActivity : Activity() {
 
     // ---------------------------------------------------------------- vídeo
 
-    private fun tocar() {
+    internal fun tocar() {
         val u = url ?: return
         if (!visivel) return
         // Motor único (PlayerEngine): o mesmo da TV ao vivo. Fontes (FontesPlayer): ASS crua para o libass; PGS/VobSub/DVB
@@ -722,7 +798,7 @@ class VodActivity : Activity() {
 
     // ---------------------------------------------------------------- ideia 8: quadro técnico
 
-    private val analise = object : androidx.media3.exoplayer.analytics.AnalyticsListener {
+    internal val analise = object : androidx.media3.exoplayer.analytics.AnalyticsListener {
         override fun onVideoDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodVideo = nome }
         override fun onAudioDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodAudio = nome }
         override fun onDroppedVideoFrames(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, n: Int, ms: Long) { perdidos += n }
@@ -732,7 +808,7 @@ class VodActivity : Activity() {
         }
     }
 
-    private val tiqueInfo: Runnable = object : Runnable {
+    internal val tiqueInfo: Runnable = object : Runnable {
         override fun run() {
             val p = player
             if (p == null || !EfeitosSom.ligado(this@VodActivity, InfoTecnica.PREF)) { infoTec.visibility = View.GONE; return }
@@ -751,71 +827,18 @@ class VodActivity : Activity() {
         }
     }
 
-    private val rotulosInfo by lazy {
+    internal val rotulosInfo by lazy {
         InfoTecnica.Rotulos(getString(R.string.info_video), getString(R.string.info_audio), getString(R.string.info_perdidos),
             getString(R.string.info_taxa), getString(R.string.info_buffer), getString(R.string.info_atraso),
             getString(R.string.info_dialogo), getString(R.string.info_chip), "FFmpeg", getString(R.string.info_qps),
             getString(R.string.info_mono), getString(R.string.info_estereo))
     }
 
-    private fun alternarInfo() {
-        val ligou = EfeitosSom.alternar(this, InfoTecnica.PREF)
-        tela.removeCallbacks(tiqueInfo)
-        if (ligou) tela.post(tiqueInfo) else { infoTec.visibility = View.GONE; legenda2.translationY = 0f }
-    }
 
-    /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
-    private fun item(u: String): MediaItem {
-        val b = MediaItem.Builder().setUri(u)
-            .setMediaMetadata(MediaMetadata.Builder().setTitle(intent.getStringExtra(EXTRA_TITULO).orEmpty()).build())
-        val legendas = ArrayList<MediaItem.SubtitleConfiguration>()
-        legendaArquivo?.let { f ->
-            legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
-                .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage(Idioma.tagLegendaBaixada(idiomaTv)).setId(IdiomaPlayer.ID_EXTERNA)
-                .apply { if (legendaTraduzida) setLabel(getString(R.string.legenda_trad_rotulo)) }
-                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()
-        }
-        // As da pasta entram como faixas comuns: o ▼ mostra todas, e a escolha automática (IdiomaPlayer) vale para elas.
-        legendasAoLado.forEachIndexed { i, (endereco, a) ->
-            legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.parse(endereco)).setMimeType(a.mime)
-                .setLanguage(a.idioma).setLabel(a.nome).setId("aolado:$i").build()
-        }
-        if (legendas.isNotEmpty()) b.setSubtitleConfigurations(legendas)
-        return b.build()
-    }
 
-    /**
-     * Legendas na mesma pasta do vídeo (pastas da rede, nuvem e pendrive). Fora da thread da tela: lista a pasta uma vez.
-     * O endereço volta no mesmo formato do vídeo (arq://, smb:// ou file://), que a FontePastas já sabe abrir.
-     */
-    private fun acharAoLado(u: String): List<Pair<String, LegendaAoLado.Achada>> {
-        Pastas.lerUri(u)?.let { (id, caminho) ->
-            val conta = MidiaArmazem.conta(this, id) ?: return emptyList()
-            val pasta = caminho.substringBeforeLast('/', "")
-            val nomes = Pastas.abrir(conta).use { p -> p.listar(pasta).filter { !it.pasta }.map { it.nome } }
-            return LegendaAoLado.achar(caminho.substringAfterLast('/'), nomes).map { a -> Pastas.uri(conta, MidiaContas.juntar(pasta, a.nome)) to a }
-        }
-        if (Pastas.arquivoLocalPermitido(u)) {
-            val f = java.io.File(android.net.Uri.parse(u).path ?: return emptyList())
-            val dir = f.parentFile ?: return emptyList()
-            val nomes = dir.listFiles()?.filter { it.isFile }?.map { it.name }.orEmpty()
-            return LegendaAoLado.achar(f.name, nomes).map { a -> android.net.Uri.fromFile(java.io.File(dir, a.nome)).toString() to a }
-        }
-        return emptyList()
-    }
 
-    /** Troca a legenda com o vídeo andando: refaz o item no mesmo ponto (o Media3 não aceita faixa nova no meio). */
-    private fun recarregarComLegenda() {
-        val p = player ?: return
-        val u = url ?: return
-        val pos = p.currentPosition
-        legendaDecidida = false
-        SpeechTap.proximaPosicao(pos)
-        p.setMediaItem(item(u), pos)
-        p.prepare()
-    }
 
-    private val ouvinte = object : Player.Listener {
+    internal val ouvinte = object : Player.Listener {
         override fun onPositionDiscontinuity(velha: Player.PositionInfo, nova: Player.PositionInfo, motivo: Int) {
             if (motivo == Player.DISCONTINUITY_REASON_SEEK) { medida.pulou(); SpeechTap.proximaPosicao(nova.positionMs); player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) } }
         }
@@ -899,29 +922,9 @@ class VodActivity : Activity() {
         }
     }
 
-    /** Elevação 6.4: a velocidade e a legenda que a pessoa escolheu nesta série voltam sozinhas no episódio seguinte. */
-    private fun aplicarMemoriaSerie(p: ExoPlayer, faixas: Tracks) {
-        val m = memSerie ?: return
-        MemoriaSerie.velocidadeValida(m.velocidade, PlayerImagem.VELOCIDADES.toList())?.let { if (it != p.playbackParameters.speed) p.setPlaybackSpeed(it) }
-        if (legendaArquivo != null) return   // legenda baixada para este episódio: ela manda
-        val textos = faixas.groups.filter { it.type == C.TRACK_TYPE_TEXT }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
-        when (val i = MemoriaSerie.legenda(m, textos.map { (g, j) -> g.getTrackFormat(j).language })) {
-            null -> {}
-            -1 -> p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
-            else -> { val (g, j) = textos[i]
-                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
-                    .setOverrideForType(TrackSelectionOverride(g.mediaTrackGroup, j)).build() }
-        }
-    }
 
-    private fun lembrarSerie(f: (MemoriaSerie.Escolha) -> MemoriaSerie.Escolha) {
-        if (!serie) return
-        val k = chaveIdioma
-        memSerie = f(memSerie ?: MemoriaSerie.Escolha())
-        Fundo.rodar("memoria-serie") { MemoriaSerieTv.lembrar(this, k, f) }
-    }
 
-    private val salvarDepois: Runnable = object : Runnable {
+    internal val salvarDepois: Runnable = object : Runnable {
         override fun run() { salvar(); prepararProximo(); tela.postDelayed(this, SALVAR_MS) }
     }
 
@@ -933,52 +936,15 @@ class VodActivity : Activity() {
      *    do arquivo (ler pedaços do vídeo seguinte seria a segunda conexão). A legenda que se acerta pela fala e o
      *    atraso da série cuidam do resto. Gasta um download do OpenSubtitles só nesse caso.
      */
-    private var preparouProximo = false
+    internal var preparouProximo = false
 
-    private fun prepararProximo() {
-        if (preparouProximo || !serie) return
-        val p = player ?: return
-        if (!FimDoVideo.horaDePreparar(p.currentPosition, p.duration)) return
-        preparouProximo = true
-        val (id, t, e) = FimDoVideo.lerProximo(intent.getStringExtra(EXTRA_PROXIMO_EP)) ?: return
-        val fonte = intent.getStringExtra(EXTRA_FONTE).orEmpty()
-        val b = runCatching { buscaLegenda() }.getOrNull() ?: return
-        val k = chave(TIPO_EPISODIO, fonte, id)
-        val legenda = legendaArquivo != null && !legendaTraduzida
-        Fundo.rodar("proximo-ep") {
-            b.tmdb?.let { runCatching { AberturaProntaTv.buscar(this, it, t, e) } }
-            if (legenda && LegendaBaixar.guardada(this, k) == null && !LegendaBaixar.tentouAuto(this, k) && LegendaBaixar.contaEmUso(this) != null) {
-                val r = LegendaBaixar.automatica(this, k, null, b.copy(temporada = t, episodio = e))
-                android.util.Log.i("TvLauncher.Vod", "próximo episódio T${t}E$e: legenda ${if (r.isSuccess) "pronta" else "não achada"}")
-            }
-        }
-    }
 
     /** Grava onde parou. Terminou = posição igual à duração (sai do "continuar assistindo"). */
     /** Saiu pela troca de versão: a posição MUDOU de arquivo (ver [trocarVersao]); o onStop não grava de volta. */
-    private var saiuPelaTroca = false
-    private var concluido = false   // terminar() já gravou o fim: o onStop não grava a posição dos créditos por cima
+    internal var saiuPelaTroca = false
+    internal var concluido = false   // terminar() já gravou o fim: o onStop não grava a posição dos créditos por cima
 
-    private fun salvar(terminou: Boolean = false) {
-        if (saiuPelaTroca || (concluido && !terminou)) return
-        val p = player ?: return
-        val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
-        val ms = if (terminou) dur else p.currentPosition
-        if (ms <= 0 && !terminou) return
-        if (!terminou) avisar(FontesMidia.Momento.TOCANDO, ms, pausado = !p.isPlaying)
-        val agora = System.currentTimeMillis()
-        // definirPosicao é @Synchronized: o salvar(terminou) do fim do vídeo e o do onStop logo depois correm em threads
-        // diferentes do Fundo; ler-trocar-gravar sem trava deixava um apagar o outro.
-        Fundo.rodar { PlayerArmazem.definirPosicao(this, chave, Posicao(ms, dur, agora)) }
-    }
 
-    /** Conta ao servidor (Jellyfin, Emby, Plex), se o vídeo é de lá, onde está. Fora da thread da tela; erro é ignorado. */
-    private fun avisar(momento: FontesMidia.Momento, ms: Long, pausado: Boolean = false) {
-        if (momento == FontesMidia.Momento.PAROU && !avisouInicio) return
-        val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
-        FontesMidia.informar(this, relato, momento, ms, dur, pausado)
-        if (momento == FontesMidia.Momento.PAROU) contarFora(ServicosSync.Momento.PAROU, ms)
-    }
 
     // ---------------------------------------------------------------- controle
 
@@ -1185,7 +1151,7 @@ class VodActivity : Activity() {
         val voltar = { menuAjustesLegenda() }
         PlayerMenu.abrir(this, getString(R.string.pm_leg_ajustes), voltar = { menuLegenda() }) {
             val p = player
-            val prefs = getSharedPreferences("player", MODE_PRIVATE)
+            val prefs = getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE)
             val itens = ArrayList<PlayerMenu.Item>()
             itens += PlayerMenu.abre(getString(R.string.pm_leg_tamanho), rotuloTamanho(tamLegendaSp)) { escolherTamanhoLegenda(voltar) }
             // Elevação 6.5: três estilos prontos (as mesmas duas chaves de antes); cada OK passa para o próximo.
@@ -1344,73 +1310,12 @@ class VodActivity : Activity() {
 
     // ---------------------------------------------------------------- ideia 24: pular abertura
 
-    /** Marca o início ou o fim da abertura na posição atual e guarda na série (prefs "player", "abertura:<série>"). */
-    private fun marcarAbertura(inicio: Boolean) {
-        val pos = player?.currentPosition ?: return
-        val nova = if (inicio) AberturaSerie.marcarInicio(abertura, pos) else AberturaSerie.marcarFim(abertura, pos)
-        if (nova == null) { avisoBreve(getString(R.string.abertura_falta_inicio)); return }
-        if (!inicio && !AberturaSerie.valida(nova)) { avisoBreve(getString(R.string.abertura_invalida)); return }
-        abertura = nova; aberturaDoArquivo = false
-        gravarAbertura(nova)
-        avisouPulo = true; avisadoTrecho = nova.fim   // quem acabou de marcar está no trecho: não oferece pular agora
-        avisoBreve(if (AberturaSerie.valida(nova)) getString(R.string.abertura_salva, relogio(nova.ini), relogio(nova.fim))
-            else getString(R.string.abertura_inicio_marcado, relogio(nova.ini)))
-        vigiarAbertura()
-    }
 
-    private fun apagarAbertura() {
-        abertura = null
-        gravarAbertura(null)
-        tela.removeCallbacks(vigiaAbertura); esconderPilula()
-        avisoBreve(getString(R.string.abertura_apagada))
-    }
 
-    private fun gravarAbertura(m: AberturaSerie.Marca?) {
-        val k = AberturaSerie.chave(chaveIdioma)
-        Fundo.rodar {
-            val e = getSharedPreferences("player", MODE_PRIVATE).edit()
-            if (m == null) e.remove(k) else e.putString(k, AberturaSerie.paraTexto(m))
-            e.apply()
-        }
-    }
 
-    /**
-     * O vídeo acabou, ou a pessoa escolheu "Próximo episódio" nos créditos ([proximoJa]: a tela de séries começa o
-     * próximo sem contar de novo). Nos dois casos o episódio conta como visto.
-     */
-    private fun terminar(proximoJa: Boolean) {
-        if (isFinishing) return
-        esconderPilula()
-        salvar(terminou = true)
-        concluido = true
-        Gatilhos.avisarDoPlayer(this@VodActivity, false, acabou = true)   // elevação 10.6: filme acabou
-        // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
-        player?.let { p -> avisar(FontesMidia.Momento.PAROU, p.duration.takeIf { it > 0 } ?: p.currentPosition) }
-        avisouInicio = false   // o fim já foi avisado; o onStop não repete
-        // A tela de séries usa isto para decidir o próximo episódio (FimDoVideo.depois).
-        setResult(RESULT_OK, Intent().putExtra(RESULTADO_TERMINOU, true).putExtra(RESULTADO_TECLA, apertouTecla)
-            .putExtra(RESULTADO_DESLIGOU, desligarAoFim).putExtra(RESULTADO_PROXIMO_JA, proximoJa))
-        // Ideia 19: "desligar quando este acabar". Este processo (:player) não tem o serviço de acessibilidade;
-        // o apagarTela cai no lockNow do Device Owner, que só apaga a tela (nada se perde).
-        if (desligarAoFim) Desligamento.apagarTela(applicationContext)
-        player?.pause()
-        finish()
-        // Próximo episódio já escolhido: sai sem animação, para a ficha da série não aparecer entre os dois (a série
-        // cobre a tela com o mesmo fundo até o próximo player abrir).
-        @Suppress("DEPRECATION") if (proximoJa) overridePendingTransition(0, 0)
-    }
 
-    /**
-     * Confere a posição duas vezes por segundo enquanto há algo a oferecer: pular o resumo ou a abertura, ou, nos
-     * créditos de um episódio com próximo, "Próximo episódio" (proposta C, etapa 1, 20/11/2026).
-     */
-    private fun vigiarAbertura() {
-        tela.removeCallbacks(vigiaAbertura)
-        val pular = (serie || aberturaDoArquivo) && (AberturaSerie.valida(abertura) || AberturaSerie.valida(resumo))
-        if (pular || proximoContagem >= 0) tela.post(vigiaAbertura)
-    }
 
-    private val vigiaAbertura: Runnable = object : Runnable {
+    internal val vigiaAbertura: Runnable = object : Runnable {
         override fun run() {
             val p = player ?: return
             val pos = p.currentPosition
@@ -1435,21 +1340,9 @@ class VodActivity : Activity() {
         }
     }
 
-    /** "Próximo episódio" nos créditos, com a contagem das Configurações (0 = só oferece). */
-    private fun mostrarProximo() {
-        pilulaProximo = true; pularPara = -1L
-        tela.removeCallbacks(esconderPilulaDepois)
-        proximoResta = if (proximoContagem > 0) proximoContagem else -1
-        pintarProximo()
-        pilulaPular.visibility = View.VISIBLE
-        if (proximoResta > 0) tela.postDelayed(contaProximo, 1_000)
-    }
 
-    private fun pintarProximo() {
-        pilulaPular.text = if (proximoResta > 0) getString(R.string.seg_proximo_em, proximoResta) else getString(R.string.seg_proximo)
-    }
 
-    private val contaProximo: Runnable = object : Runnable {
+    internal val contaProximo: Runnable = object : Runnable {
         override fun run() {
             if (!pilulaProximo || proximoResta <= 0) return
             if (player?.isPlaying != true) { tela.postDelayed(this, 1_000); return }   // pausado: a contagem espera
@@ -1460,27 +1353,14 @@ class VodActivity : Activity() {
         }
     }
 
-    private val esconderPilulaDepois = Runnable { esconderPilula() }
+    internal val esconderPilulaDepois = Runnable { esconderPilula() }
 
-    private fun esconderPilula() {
-        tela.removeCallbacks(esconderPilulaDepois); tela.removeCallbacks(contaProximo)
-        pilulaProximo = false; pularPara = -1L
-        if (::pilulaPular.isInitialized) pilulaPular.visibility = View.GONE
-    }
 
-    private fun buscaLegenda(): LegendaExterna.Busca {
-        val nome = intent.getStringExtra(EXTRA_LEG_NOME)?.takeIf { it.isNotBlank() }
-            ?: LegendaExterna.nomeDeBusca(intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
-        fun n(k: String) = intent.getIntExtra(k, 0).takeIf { it > 0 }
-        val versao = intent.getStringExtra(EXTRA_LEG_VERSAO)?.let { v -> Idioma.Versao.entries.firstOrNull { it.name == v } }
-            ?: Idioma.Versao.DESCONHECIDA
-        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB), versao = versao)
-    }
 
     // ---------------------------------------------------------------- Trakt/Simkl (fatia 3)
 
     /** O que contar ao Trakt/Simkl: o filme ou a série + episódio, pelo id TMDB. Null = sem id (nada vai). */
-    private val alvoFora: Pair<SincronizarFilmes.Item, SincronizarFilmes.Ep?>? by lazy {
+    internal val alvoFora: Pair<SincronizarFilmes.Item, SincronizarFilmes.Ep?>? by lazy {
         val b = buscaLegenda()
         val id = b.tmdb ?: return@lazy null
         val ep = if (b.eEpisodio) SincronizarFilmes.Ep(b.temporada!!, b.episodio!!) else null
@@ -1489,239 +1369,30 @@ class VodActivity : Activity() {
     }
 
     /** "Vendo agora", pausa e fim, fora da tela. ServicosSync decide se pode (opção ligada, sem visita nem infantil). */
-    private var paradoFora = false   // já contou o fim: a pausa que o Android manda ao soltar o player não vale
+    internal var paradoFora = false   // já contou o fim: a pausa que o Android manda ao soltar o player não vale
 
-    private fun contarFora(m: ServicosSync.Momento, ms: Long) {
-        val (item, ep) = alvoFora ?: return
-        when (m) {
-            ServicosSync.Momento.PAROU -> { if (paradoFora) return; paradoFora = true }
-            ServicosSync.Momento.PAUSOU -> if (paradoFora) return
-            ServicosSync.Momento.COMECOU -> paradoFora = false
-        }
-        val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
-        val concluido = Vod.finalizado(Posicao(ms, dur, 0), episodio = ep != null)
-        val app = applicationContext
-        Fundo.rodar("contar-fora") { ServicosSync.assistindo(app, item, ep, m, ms, dur, concluido) }
-    }
 
-    /** Começou do zero aqui, mas parou no meio no celular: pula para lá (uma vez, no começo). */
-    private fun continuarDeFora() {
-        val (item, ep) = alvoFora ?: return
-        if (retomarEm > 0) return
-        val app = applicationContext; val ch = chave
-        Fundo.rodar("pausa-fora") {
-            val prog = ServicosSync.pausaDeFora(app, item.ids.tmdb ?: return@rodar, ep, PlayerArmazem.posicoes(app)[ch]) ?: return@rodar
-            tela.post {
-                val p = player ?: return@post
-                val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: return@post
-                if (p.currentPosition > 30_000) return@post   // a pessoa já andou: não mexe
-                p.seekTo(SincronizarFilmes.posicaoDaPausa(prog, dur))
-                avisoBreve(getString(R.string.sync_continuando))
-            }
-        }
-    }
 
-    private val esconderAvisoDepois = Runnable { esconderAviso() }
+    internal val esconderAvisoDepois = Runnable { esconderAviso() }
 
-    private fun avisoBreve(t: String) {
-        mostrarAviso(t); tela.removeCallbacks(esconderAvisoDepois); tela.postDelayed(esconderAvisoDepois, 4_000)
-    }
 
-    private var autoTentada = false
+    internal var autoTentada = false
 
-    /**
-     * Ideia 89: áudio que não é do idioma da TV e nenhuma legenda nele -> baixa sozinha a do OpenSubtitles (a que bate com
-     * o arquivo, pelo hash, quando o servidor deixa ler pedaços) e liga, com um aviso. Uma tentativa por vídeo a cada 7
-     * dias; desliga no menu ▼. Sem conta/chave, ou com legenda já guardada ou ao lado do vídeo, não faz nada.
-     */
-    private fun talvezLegendaAuto(t: Tracks) {
-        if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
-        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
-        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao, prefAcesso.audiodescricao)) return
-        autoTentada = true
-        val k = chave; val u = url; val b = buscaLegenda()
-        if (b.nome.isBlank()) return
-        val pos = player?.currentPosition ?: 0L
-        Fundo.rodar("legenda-auto") {
-            if (LegendaBaixar.contaEmUso(this) == null) return@rodar
-            // Tradução pela metade da última vez: vai direto para a tradução (a busca já foi feita e não achou).
-            if (!LegendaTraduzida.pelaMetade(this, k)) {
-                if (LegendaBaixar.tentouAuto(this, k)) return@rodar
-                val r = LegendaBaixar.automatica(this, k, u, b)
-                if (r.isSuccess) {
-                    tela.post {
-                        if (isDestroyed || chave != k || legendaArquivo != null) return@post
-                        r.onSuccess { (f, bate) ->
-                            legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0
-                            LegendaTraduzida.esquecer(this, k)
-                            avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome) + " · " + LegendaExterna.CREDITO)
-                            recarregarComLegenda()
-                        }
-                    }
-                    return@rodar
-                }
-            }
-            traduzirLegenda(k, u, b, pos)
-        }
-    }
 
-    /**
-     * Ideia 90: nenhuma legenda no idioma da TV. Baixa a inglesa e traduz aqui mesmo: os 10 min a partir de [pos]
-     * primeiro (a legenda aparece em uns 20 s), o resto à frente da cena. Bloqueia: chamar fora da thread da tela.
-     */
-    private fun traduzirLegenda(k: String, u: String?, b: LegendaExterna.Busca, pos: Long) {
-        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)) return
-        if (!LegendaTraduzida.suporta(idiomaTv) || pararTraducao.get()) return
-        val origem = LegendaTraduzida.origem(this, k, u, b).getOrElse { return }
-        tela.post { if (!isDestroyed && chave == k && legendaArquivo == null) avisoBreve(getString(R.string.legenda_trad_traduzindo)) }
-        fun usar(f: java.io.File, aviso: Int) = tela.post {
-            if (isDestroyed || chave != k || pararTraducao.get()) return@post
-            if (legendaArquivo != null && !legendaTraduzida) return@post   // a pessoa já escolheu outra
-            legendaArquivo = f; legendaTraduzida = true; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0
-            avisoBreve(getString(aviso) + " · " + LegendaExterna.CREDITO)   // a original veio do OpenSubtitles
-            recarregarComLegenda()
-        }
-        LegendaTraduzida.traduzir(this, k, origem, idiomaTv, pos, pararTraducao,
-            aoPrimeiro = { f -> usar(f, R.string.legenda_trad_parcial) },
-            aoFim = { f -> usar(f, R.string.legenda_trad_pronta) })
-            .onFailure { android.util.Log.w("TvLauncher.Traducao", "não traduzi: ${it.javaClass.simpleName}") }
-    }
 
-    /** Procura no OpenSubtitles e mostra a lista (a pessoa escolhe: cada download gasta do limite diário da conta). */
-    private fun buscarLegenda() {
-        val b = buscaLegenda()
-        mostrarAviso(getString(R.string.legenda_procurando))
-        Fundo.rodar {
-            val r = LegendaBaixar.buscar(this, b)
-            tela.post {
-                if (isDestroyed) return@post
-                esconderAviso()
-                r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
-                r.onSuccess { lista ->
-                    if (lista.isEmpty()) { avisoBreve(getString(R.string.legenda_nenhuma)); return@onSuccess }
-                    // Nome do lançamento em cima; idioma, downloads e "feita para este arquivo" na linha de baixo (como a cruz)
-                    val mil = android.icu.text.CompactDecimalFormat.getInstance(java.util.Locale.getDefault(),
-                        android.icu.text.CompactDecimalFormat.CompactStyle.SHORT)
-                    val rotulos = lista.map { c ->
-                        Estilo.comInfo(LegendaExterna.nomeLegivel(c.nome), listOfNotNull(
-                            if (c.bateHash) "✓ " + getString(R.string.legenda_bate) else null,
-                            LegendaExterna.nomeIdioma(c.idioma), "↓ " + mil.format(c.baixadas.toLong()),
-                            if (c.surdos) getString(R.string.legenda_surdos) else null).joinToString(" · "))
-                    }
-                    val nome = intent.getStringExtra(EXTRA_TITULO)?.substringBefore(" · ")?.takeIf { it.isNotBlank() } ?: b.nome
-                    Estilo.lista(this, getString(R.string.legenda_escolher, nome), rotulos, rodape = LegendaExterna.CREDITO) { i -> baixarLegenda(lista[i]) }
-                }
-            }
-        }
-    }
 
-    private fun baixarLegenda(c: LegendaExterna.Candidata) {
-        mostrarAviso(getString(R.string.legenda_baixando))
-        val k = chave
-        Fundo.rodar {
-            val r = LegendaBaixar.baixar(this, k, c)
-            getSharedPreferences("player", MODE_PRIVATE).edit().remove("atraso:$k").apply()
-            tela.post {
-                if (isDestroyed) return@post
-                r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
-                r.onSuccess { f ->
-                    pararTraducao.set(true); LegendaTraduzida.esquecer(this, k)   // a escolhida pela pessoa vale mais que a tradução
-                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; atrasoManual = false; acertosAuto = 0; avisoBreve(getString(R.string.legenda_pronta) + " · " + LegendaExterna.CREDITO); recarregarComLegenda()
-                }
-            }
-        }
-    }
 
-    private fun rotuloAtraso(ms: Long): String = when {
-        ms == 0L -> getString(R.string.legenda_atraso_zero)
-        else -> (if (ms > 0) "+" else "−") + "%.1f s".format(Locale.getDefault(), kotlin.math.abs(ms) / 1000.0)
-    }
 
-    /** "Atraso" positivo: a fala aparece depois (para legenda adiantada em relação à voz). */
-    private fun escolherAtraso(voltar: (() -> Unit)? = null) {
-        val atual = ATRASOS.indexOfFirst { it == atrasoLegenda }
-        Estilo.lista(this, getString(R.string.legenda_atraso_titulo), ATRASOS.map { rotuloAtraso(it) }, listOf(atual), aoVoltar = voltar) { i ->
-            val ms = ATRASOS[i]; val k = chave
-            atrasoManual = true   // a pessoa escolheu: o acerto automático não mexe mais neste vídeo
-            Fundo.rodar {
-                val f = LegendaBaixar.ajustar(this, k, ms)
-                getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", ms).apply()
-                tela.post { lembrarSerie { it.copy(atrasoLegendaMs = ms) } }
-                tela.post { if (!isDestroyed && f != null) { legendaArquivo = f; atrasoLegenda = ms; recarregarComLegenda() } }
-            }
-        }
-    }
 
-    private fun escolherVelocidade(voltar: (() -> Unit)? = null) {
-        val p = player ?: return
-        val v = PlayerImagem.VELOCIDADES
-        Estilo.lista(this, getString(R.string.velocidade_titulo), v.map { PlayerImagem.rotuloVelocidade(it) },
-            listOf(v.indexOfFirst { it == p.playbackParameters.speed }), aoVoltar = voltar) { i -> p.setPlaybackSpeed(v[i]); lembrarSerie { it.copy(velocidade = v[i]) } }
-    }
 
-    /** Cores da legenda conforme as chaves (PlayerAcessivel.legenda): padrão = branca com fundo leve, como antes. */
-    private fun pintarLegenda() {
-        val c = PlayerAcessivel.legenda(EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA))
-        legenda.setTextColor(c.texto)
-        (legenda.background as? GradientDrawable)?.setColor(c.fundo)
-        if (c.sombra) legenda.setShadowLayer(8f, 0f, 2f, Color.BLACK) else legenda.setShadowLayer(0f, 0f, 0f, 0)
-        // Elevação 6.5: em cima ou embaixo (a legenda em imagem, PGS/ASS, segue a posição que o próprio arquivo manda).
-        val alto = EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_ALTO)
-        (legenda.layoutParams as? FrameLayout.LayoutParams)?.let { lp ->
-            lp.gravity = (if (alto) Gravity.TOP else Gravity.BOTTOM) or Gravity.CENTER_HORIZONTAL
-            lp.setMargins(dp(96), if (alto) dp(56) else 0, dp(96), if (alto) 0 else dp(56))
-            legenda.layoutParams = lp
-        }
-    }
 
-    private fun nomeEstiloLegenda(e: EstiloLegenda.Estilo) = getString(when (e) {
-        EstiloLegenda.Estilo.PADRAO -> R.string.elv_leg_padrao
-        EstiloLegenda.Estilo.ALTO_CONTRASTE -> R.string.elv_leg_contraste
-        EstiloLegenda.Estilo.AMARELA -> R.string.elv_leg_amarela
-    })
 
-    /**
-     * Liga/desliga volume parecido ou voz mais clara. Se mudar entre "som direto para a TV" e "som decodificado aqui"
-     * (EfeitosSom.fabrica), o player é refeito no mesmo ponto; senão, só o efeito é trocado.
-     */
-    private fun alternarSom(chave: String) {
-        val antes = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
-        val ligou = EfeitosSom.alternar(this, chave)
-        val depois = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
-        avisoBreve(getString(when (chave) {
-            PlayerAcessivel.VOLUME_IGUAL -> if (ligou) R.string.acess_volume_ligado else R.string.acess_volume_desligado
-            else -> if (ligou) R.string.acess_voz_ligado else R.string.acess_voz_desligado
-        }))
-        val p = player ?: return
-        if (antes != depois) {
-            efeitos.soltar()
-            sessao.soltar(); retomarEm = p.currentPosition; p.release(); player = null
-            tocar()
-        } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
-    }
 
-    private fun rotuloTamanho(sp: Int): String {
-        val i = FimDoVideo.TAMANHOS_LEGENDA.indexOf(sp).takeIf { it >= 0 } ?: 1
-        return resources.getStringArray(R.array.vod_legenda_tamanhos)[i]
-    }
 
-    private fun escolherTamanhoLegenda(voltar: (() -> Unit)? = null) {
-        val t = FimDoVideo.TAMANHOS_LEGENDA
-        val atual = t.indexOf(tamLegendaSp)
-        Estilo.lista(this, getString(R.string.vod_legenda_tamanho_titulo), resources.getStringArray(R.array.vod_legenda_tamanhos).toList(),
-            listOf(atual), aoVoltar = voltar) { i ->
-            tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat(); legenda2.textSize = t[i].toFloat(); assAjustes.escala(FimDoVideo.escalaAss(t[i]))
-            getSharedPreferences("player", MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
-        }
-    }
 
-    private fun escolherImagem(voltar: (() -> Unit)? = null) = PlayerImagem.escolher(this, modoImagem, voltar) { m ->
-        modoImagem = m
-        tamanhoVideo?.let { t -> PlayerImagem.aplicar(areaVideo(), modoImagem, t.width, t.height, t.pixelWidthHeightRatio) }
-    }
 
-    private var modoImagem = PlayerImagem.Modo.AJUSTAR
-    private var tamanhoVideo: androidx.media3.common.VideoSize? = null
+    internal var modoImagem = PlayerImagem.Modo.AJUSTAR
+    internal var tamanhoVideo: androidx.media3.common.VideoSize? = null
 
     // ---------------------------------------------------------------- barra de baixo
 
@@ -1798,7 +1469,7 @@ class VodActivity : Activity() {
             }.getOrNull()
             val total = atual + (r?.atrasoMs ?: 0L)
             val f = if (SubtitleSync.aplicar(r)) LegendaBaixar.ajustar(this, k, total) else null
-            if (f != null) getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", total).apply()
+            if (f != null) getSharedPreferences(Prefs.PLAYER, MODE_PRIVATE).edit().putLong("atraso:$k", total).apply()
             tela.post {
                 acertando = false
                 if (isDestroyed || atrasoManual || legendaArquivo?.path != arq.path || atrasoLegenda != atual) return@post
@@ -1822,19 +1493,19 @@ class VodActivity : Activity() {
         MedidasTv.anotar(this, Placar.Chave.VOD_PERDIDOS, r.perdidosPorMin)
     }
 
-    private fun relogio(ms: Long): String {
+    internal fun relogio(ms: Long): String {
         val s = (ms / 1000).coerceAtLeast(0)
         return if (s >= 3600) String.format(Locale.ROOT, "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60)
         else String.format(Locale.ROOT, "%d:%02d", s / 60, s % 60)
     }
 
-    private fun mostrarAviso(t: String) { aviso.text = t; aviso.visibility = View.VISIBLE }
+    internal fun mostrarAviso(t: String) { aviso.text = t; aviso.visibility = View.VISIBLE }
     private fun tirarCortina() { cortina?.let { CortinaVideo.tirar(it) }; cortina = null }
-    private fun esconderAviso() { aviso.visibility = View.GONE }
+    internal fun esconderAviso() { aviso.visibility = View.GONE }
 
-    private fun vidro(raio: Int) = GradientDrawable().apply {
+    internal fun vidro(raio: Int) = GradientDrawable().apply {
         cornerRadius = dp(raio).toFloat(); setColor(0xD9121528.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
     }
 
-    private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
+    internal fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }

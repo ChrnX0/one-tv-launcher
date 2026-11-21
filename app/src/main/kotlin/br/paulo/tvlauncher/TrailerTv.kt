@@ -12,6 +12,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.JanelaNaFrente
 
 /**
  * Trailer no YouTube (18/11/2026, Paulo: "trailers que abrem errado no YouTube ou não abrem, e se abrem, ao sair fica

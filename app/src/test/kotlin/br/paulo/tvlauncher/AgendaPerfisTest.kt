@@ -1,11 +1,12 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.AgendaPerfis.Entrada
+import br.paulo.tvlauncher.alarm.AgendaPerfis
+import br.paulo.tvlauncher.alarm.AgendaPerfis.Entrada
+import java.util.Calendar
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.Calendar
-import java.util.TimeZone
 
 /** Agenda da família (degrau 2, 16/11/2026). 16/11/2026 é uma segunda-feira. */
 class AgendaPerfisTest {

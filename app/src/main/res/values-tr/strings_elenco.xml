@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">Altyazılar TV’de çevrildi (otomatik çeviri). Gerisi çevrilmeye devam ediyor.</string>
     <string name="legenda_trad_pronta">Altyazı çevirisi bitti</string>
     <string name="series_sinopse_mais">Tam özet</string>
-    <string name="series_sinopse_menos">Kısa özet</string>
     <string name="series_continuar_curto">▶  %1$s devam et</string>
     <string name="series_episodios">Bölümler</string>
     <string name="series_trocar_temporada">Sezon değiştir</string>

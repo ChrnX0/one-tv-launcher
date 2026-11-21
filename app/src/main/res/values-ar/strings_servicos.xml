@@ -13,7 +13,6 @@
     <string name="sv_desligado">تسجيل الدخول</string>
     <string name="sv_entrando">جارٍ تسجيل الدخول…</string>
     <string name="sv_conectado">متصل</string>
-    <string name="sv_conectado_como">%1$s</string>
     <string name="sv_ativo">مفعّل</string>
     <string name="sv_sem_chave">هذا الإصدار لا يحتوي مفاتيح هذه الخدمات بعد. ستظهر بعد التحديث التالي.</string>
     <string name="sv_pedindo">جارٍ طلب رمز من %1$s…</string>
@@ -38,7 +37,6 @@
     <string name="sv_os_senha">كلمة المرور</string>
     <string name="sv_gravar">حفظ</string>
     <string name="sv_cancelar">إلغاء</string>
-    <string name="sv_conferindo">جارٍ التحقق مع %1$s…</string>
     <string name="sv_limite_dia">انتهى الحد اليومي للترجمات. يتجدد خلال 24 ساعة (مع حساب OpenSubtitles يصبح 20 يوميًا).</string>
     <string name="sv_tmdb_atribuicao">يستخدم هذا المنتج واجهة TMDB البرمجية لكنه غير معتمد أو موثّق من TMDB.</string>
     <string name="ext_saga">%1$s · %2$d من %3$d في قائمتك</string>

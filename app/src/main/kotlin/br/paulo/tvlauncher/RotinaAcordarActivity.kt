@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.home.abrir
 
 /**
  * Tela invisível das rotinas (Rotinas.kt): acende a tela do Chromecast (o que liga a TV pelo HDMI-CEC, como o

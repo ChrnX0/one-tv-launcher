@@ -1,6 +1,23 @@
 package br.paulo.tvlauncher
 
 import android.app.Application
+import br.paulo.tvlauncher.family.UsoLocal
+import br.paulo.tvlauncher.home.IdeiasInicio
+import br.paulo.tvlauncher.home.Moldura
+import br.paulo.tvlauncher.home.SugestoesTv
+import br.paulo.tvlauncher.input.VozFoco
+import br.paulo.tvlauncher.mcp.BuildInfo
+import br.paulo.tvlauncher.mcp.PedidoIa
+import br.paulo.tvlauncher.observer.LeakWatch
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.ObserverTv
+import br.paulo.tvlauncher.observer.RegistroErros
+import br.paulo.tvlauncher.observer.VitaisTv
+import br.paulo.tvlauncher.player.PlayerLogos
+import br.paulo.tvlauncher.privilege.CompilarAot
+import br.paulo.tvlauncher.settings.AltoContraste
+import br.paulo.tvlauncher.settings.CobrancaPlay
+import br.paulo.tvlauncher.settings.TamanhoTexto
 
 /**
  * Classe do app (05/11/2026). Roda uma vez em cada processo do launcher, antes de qualquer tela ou receiver.
@@ -23,6 +40,7 @@ class LauncherApp : Application() {
         ObserverTv.publish(ObserverCore.Signal.MEMORY_PRESSURE, level.toLong())   // o Observador anota o aperto (só no processo principal)
         if (Memoria.soltarCaches(level)) {
             PlayerLogos.soltarMemoria()
+            br.paulo.tvlauncher.home.IconSetArt.soltar()   // arte dos conjuntos de ícones: volta do disco no próximo desenho
             android.util.Log.i("TvLauncher.Memoria", "onTrimMemory($level): caches soltos")
         }
     }

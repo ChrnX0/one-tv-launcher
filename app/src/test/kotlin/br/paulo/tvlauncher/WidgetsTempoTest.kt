@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.screensaver.Protetor
+import br.paulo.tvlauncher.screensaver.WidgetsTempo
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.TimeZone
 
 class WidgetsTempoTest {
     private val fuso = TimeZone.getTimeZone("GMT-3")

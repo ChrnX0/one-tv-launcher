@@ -15,6 +15,16 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.home.FundoEscuroPronto
+import br.paulo.tvlauncher.home.HomeCruz
+import br.paulo.tvlauncher.home.IconeApp
+import br.paulo.tvlauncher.home.IconeLinha
+import br.paulo.tvlauncher.home.SofalySymbol
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.World
+import br.paulo.tvlauncher.panel.entrar
+import br.paulo.tvlauncher.player.JanelaIcones
+import br.paulo.tvlauncher.settings.Fontes
 
 /**
  * O sistema de design do launcher (10/11/2026, dono: "todo o launcher precisa ser conciso e coerente").
@@ -607,6 +617,19 @@ object Estilo {
     const val VEU = 0xB3000000.toInt()
     /** Cartão de diálogo: quase opaco (lê-se por cima de qualquer coisa), com o fio do vidro. */
     const val CARTAO = 0xF5191C30.toInt()
+
+    /**
+     * Põe [tela] (um [dialogo], já com o véu) numa janela [d] de tela cheia, sem título e sem o fundo do tema. As
+     * cópias destas 5 linhas em cada diálogo viraram esta função (refatoração 21/11/2026).
+     */
+    fun vestir(d: android.app.Dialog, tela: View) {
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(tela)
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+    }
 
     /**
      * Diálogo único (perguntas por cima de qualquer tela: confirmar, permitir, aviso parado). Cartão opaco no padrão

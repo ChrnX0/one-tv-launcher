@@ -8,6 +8,26 @@ import android.view.KeyEvent
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import br.paulo.tvlauncher.home.CruzLogica
+import br.paulo.tvlauncher.home.SonsCruz
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.listen.CapaOuvir
+import br.paulo.tvlauncher.listen.CruzOuvir
+import br.paulo.tvlauncher.listen.IconeOuvir
+import br.paulo.tvlauncher.listen.MeuJornal
+import br.paulo.tvlauncher.listen.MenuSom
+import br.paulo.tvlauncher.listen.PodcastAssuntos
+import br.paulo.tvlauncher.listen.PodcastBusca
+import br.paulo.tvlauncher.listen.PodcastFeed
+import br.paulo.tvlauncher.listen.PodcastStarter
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.listen.Radios
+import br.paulo.tvlauncher.player.BarraTempo
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.escolherVelocidade
+import br.paulo.tvlauncher.settings.Fontes
+import br.paulo.tvlauncher.settings.Planos
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,6 +55,8 @@ class PodcastsActivity : Activity() {
     private var leu = false
     /** Resultado da busca (título da prateleira, lista), só com a busca ligada ([PodcastBusca]). */
     private var resultados: Pair<String, List<PodcastBusca.Resultado>>? = null
+    /** O assunto que encheu o [resultados] (Voltar nele leva de volta à prateleira Assuntos), ou null. */
+    private var deAssunto: PodcastAssuntos.Assunto? = null
     /** Os podcasts que vêm no app, do idioma da TV ([PodcastStarter]). */
     private var sugestoes: List<PodcastStarter.Sugestao> = emptyList()
     /** O podcast aberto (episódios dele), ou null = a tela principal. */
@@ -89,6 +111,9 @@ class PodcastsActivity : Activity() {
     override fun onBackPressed() {
         val a = aberto
         if (a != null) { aberto = null; focarDepois = "meus" to "pod:$a"; montar(); return }
+        // Dentro da lista de um assunto: Voltar leva de volta ao assunto, como sair de um podcast aberto.
+        val ass = deAssunto
+        if (ass != null && cruz.prateleiraAtual()?.id == "res" && cruz.ir("assuntos", "ass:${ass.id}")) return
         @Suppress("DEPRECATION") super.onBackPressed()
     }
 
@@ -181,8 +206,8 @@ class PodcastsActivity : Activity() {
     private fun prateleiraTocando(): CruzOuvir.Prateleira? {
         val s = OuvirServico.instancia ?: return null
         val e = s.episodio ?: return null
-        val v = OuvirServico.velocidade(this)
-        val sil = OuvirServico.pularSilencio(this)
+        val ef = OuvirServico.efetivo(this, e.feed)
+        val v = ef.velocidade
         return CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
             // O player em tela cheia (capa grande, barra de tempo, timer para dormir, "A seguir").
             CruzOuvir.Item("abrir", getString(R.string.pl_abrir), CruzLogica.linhas(e.ep.titulo, getString(R.string.pl_abrir_det)),
@@ -197,17 +222,19 @@ class PodcastsActivity : Activity() {
                 abrir = { OuvirServico.instancia?.pular(OuvirServico.AVANCAR_MS); atualizarTempo() }),
             CruzOuvir.Item("velocidade", getString(R.string.pod_velocidade), getString(R.string.ouv_velocidade_det, rotuloVelocidade(v)),
                 IconeOuvir.Tipo.VELOCIDADE, abrir = { escolherVelocidade() }),
-            CruzOuvir.Item("silencio", getString(R.string.pod_silencio),
-                CruzLogica.linhas(getString(if (sil) R.string.pod_ligado else R.string.pod_desligado).replaceFirstChar { it.titlecase(Locale.getDefault()) },
-                    getString(R.string.pod_silencio_det)),
-                IconeOuvir.Tipo.SILENCIO, abrir = { OuvirServico.instancia?.definirPularSilencio(!sil); montar() }),
+            // Som (21/11/2026): silêncios, voz clara, timer e os ajustes deste podcast num menu só ([MenuSom]).
+            CruzOuvir.Item("som", getString(R.string.som_titulo),
+                CruzLogica.linhas(listOfNotNull(getString(R.string.som_voz_clara).takeIf { ef.vozClara },
+                    getString(R.string.pod_silencio).takeIf { ef.pularSilencio }).joinToString(" · ").ifEmpty { getString(R.string.som_det) },
+                    getString(R.string.som_det)),
+                IconeOuvir.Tipo.OPCOES, abrir = { MenuSom.abrir(this) { montar() } }),
             CruzOuvir.Item("parar", getString(R.string.ra_parar), getString(R.string.ouv_parar_pod_det), IconeOuvir.Tipo.PARAR,
                 abrir = { OuvirServico.instancia?.parar() }),
         ))
     }
 
     private fun escolherVelocidade() {
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, OuvirServico.instancia?.episodio?.feed).velocidade
         Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { rotuloVelocidade(it) },
             listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); montar() }
     }
@@ -223,7 +250,7 @@ class PodcastsActivity : Activity() {
     /** (0..1 ou null, "12:30 de 58:00 · faltam 45 min · 1,2x"). */
     private fun progressoTempo(s: OuvirServico): Pair<Float?, String> {
         val dur = s.duracaoMs; val pos = s.posicaoMs
-        val v = OuvirServico.velocidade(this)
+        val v = OuvirServico.efetivo(this, s.episodio?.feed).velocidade
         val texto = listOfNotNull(
             if (dur > 0) getString(R.string.pod_de, tempo(pos), tempo(dur)) else tempo(pos),
             if (dur > pos && dur > 0) BarraTempo.faltam(this, duracaoCurta(((dur - pos) / v).toLong())) else null,
@@ -243,7 +270,7 @@ class PodcastsActivity : Activity() {
     private fun aoMudarSom() {
         if (isDestroyed || !::cruz.isInitialized) return
         val s = OuvirServico.instancia
-        val agora = listOf(s?.episodio?.ep?.guid, s?.pausado, OuvirServico.velocidade(this), OuvirServico.pularSilencio(this))
+        val agora = listOf(s?.episodio?.ep?.guid, s?.pausado, OuvirServico.efetivo(this, s?.episodio?.feed))
         if (agora != visto) {
             // Parou ou trocou de episódio: a posição do anterior foi mandada gravar; relê (na fila, depois da gravação)
             // para "Continuar", "faltam" e "ouvido" saírem certos.
@@ -289,6 +316,17 @@ class PodcastsActivity : Activity() {
     }
 
     private fun montarPrincipal(l: MutableList<CruzOuvir.Prateleira>) {
+        // Meu jornal (21/11/2026): o episódio mais novo de cada podcast de notícias seguido, tocados em sequência.
+        val jornal = MeuJornal.montar(feeds, posicoes, System.currentTimeMillis(), protegido)
+        if (jornal.isNotEmpty()) {
+            val min = jornal.sumOf { it.second.duracaoS } / 60
+            l += CruzOuvir.Prateleira("jornal", getString(R.string.jor_titulo), IconeOuvir.Tipo.EM_ALTA,
+                listOf(CruzOuvir.Item("jor:tudo", getString(R.string.jor_ouvir),
+                    CruzLogica.linhas(jornal.joinToString(" · ") { nomeDe(it.first) },
+                        if (min > 0) getString(R.string.jor_min, min) else null),
+                    IconeOuvir.Tipo.CONTINUAR, abrir = { tocarJornal(jornal) })) +
+                    jornal.map { (feed, ep) -> itemEp("jor:", feed, ep, comPodcast = true) })
+        }
         val cont = continuarLista()
         if (cont.isNotEmpty()) l += CruzOuvir.Prateleira("continuar", getString(R.string.pod_continuar), IconeOuvir.Tipo.CONTINUAR,
             cont.map { (feed, ep, _) -> itemEp("cont:", feed, ep, comPodcast = true) })
@@ -297,13 +335,16 @@ class PodcastsActivity : Activity() {
             novos.map { (feed, ep) -> itemEp("novo:", feed, ep, comPodcast = true) })
         resultados?.let { (titulo, lista) ->
             val visiveis = lista.filter { !(protegido && it.explicito) }
-            l += CruzOuvir.Prateleira("res", titulo, IconeOuvir.Tipo.BUSCAR,
+            l += CruzOuvir.Prateleira("res", titulo, if (deAssunto != null) IconeOuvir.Tipo.GENEROS else IconeOuvir.Tipo.BUSCAR,
                 if (visiveis.isEmpty()) listOf(CruzOuvir.Item("res:nada", getString(R.string.ra_nada), "", IconeOuvir.Tipo.BUSCAR))
                 else visiveis.map { r ->
                     val seguido = assinaturas.any { it.url == r.url }
-                    CruzOuvir.Item("busca:${r.url}", r.titulo, CruzLogica.linhas(r.autor, if (seguido) "✓ " + getString(R.string.ouv_seguindo) else null),
+                    val temas = PodcastAssuntos.de(r.categorias.ifEmpty { feeds[r.url]?.categorias.orEmpty() })
+                    CruzOuvir.Item("busca:${r.url}", r.titulo,
+                        CruzLogica.linhas(linhaAssuntos(temas), CruzLogica.juntar(r.autor.ifEmpty { null }, if (seguido) "✓ " + getString(R.string.ouv_seguindo) else null)),
                         capa = r.capa, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST), monograma = CapaOuvir.iniciais(r.titulo), cobrir = true,
-                        abrir = { if (seguido) abrir(r.url) else adicionar(r.url) })
+                        abrir = { if (seguido) abrir(r.url) else adicionar(r.url) },
+                        opcoes = temas.takeIf { it.isNotEmpty() }?.let { { menuParecidos(r.titulo, temas, seguido, r.url) } })
                 })
         }
         // Com o modo infantil ou o controle dos pais, podcast marcado como explícito nem aparece.
@@ -315,8 +356,10 @@ class PodcastsActivity : Activity() {
                 val f = feeds[a.url]
                 val ultimo = f?.episodios?.firstOrNull()?.let { quando(it.dataMs) }?.let { getString(R.string.pod_ultimo, it) }
                 val n = f?.episodios?.count { Podcasts.visivel(it, protegido) } ?: 0
+                // O assunto vem primeiro, na linha de cima (opção C do Paulo, 21/11/2026): "Humor · Cultura".
                 CruzOuvir.Item("pod:${a.url}", a.titulo,
-                    CruzLogica.linhas(a.autor.ifEmpty { f?.autor }, CruzLogica.juntar(ultimo, if (n > 0) getString(R.string.ouv_n_episodios, n) else null)),
+                    CruzLogica.linhas(linhaAssuntos(PodcastAssuntos.de(f?.categorias.orEmpty())), a.autor.ifEmpty { f?.autor },
+                        CruzLogica.juntar(ultimo, if (n > 0) getString(R.string.ouv_n_episodios, n) else null)),
                     capa = a.capa.ifEmpty { f?.capa.orEmpty() }, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST), monograma = CapaOuvir.iniciais(a.titulo),
                     cobrir = true, abrir = { abrir(a.url) }, opcoes = { menuPodcast(a) })
             })
@@ -328,6 +371,7 @@ class PodcastsActivity : Activity() {
                     capa = s.capa, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST), monograma = CapaOuvir.iniciais(s.titulo), cobrir = true,
                     abrir = { adicionar(s.url) })
             })
+        prateleiraAssuntos()?.let { l += it }
         // Buscar é do Pro (Paulo, 17/11/2026); seguir pelo endereço ou pelo OPML é do Básico.
         if (PodcastBusca.disponivel() && Planos.permite(this, Planos.Recurso.PODCAST_BUSCA)) {
             // Busca pelo servidor nosso (Podcast Index). A atribuição vai na explicação, como os termos pedem.
@@ -404,6 +448,13 @@ class PodcastsActivity : Activity() {
         PodcastPlayerActivity.abrir(this, e)
     }
 
+    /** Toca o Meu jornal inteiro, do começo de cada episódio, e abre o player no primeiro. */
+    private fun tocarJornal(l: List<Pair<String, PodcastFeed.Episodio>>) {
+        val fila = l.map { (feed, ep) -> OuvirServico.EpisodioTocando(feed, nomeDe(feed), capaDe(feed), ep) }
+        OuvirServico.tocarFila(this, fila)
+        PodcastPlayerActivity.abrir(this, fila.first())
+    }
+
     private fun menuEpisodio(feed: String, ep: PodcastFeed.Episodio) {
         val p = posicoes[Podcasts.chave(feed, ep.guid)]
         val ouvido = p?.ouvido == true
@@ -429,8 +480,105 @@ class PodcastsActivity : Activity() {
     }
 
     private fun menuPodcast(a: Podcasts.Assinatura) {
-        Estilo.lista(this, a.titulo, listOf(getString(R.string.pod_abrir), getString(R.string.pod_remover))) { i ->
-            if (i == 0) abrir(a.url) else remover(a)
+        // "Parecidos: Humor" abre a lista daquele assunto (opção C, 21/11/2026): descobrir a partir do que já gosta.
+        val temas = PodcastAssuntos.de(feeds[a.url]?.categorias.orEmpty()).take(2)
+        val opcoes = listOf(getString(R.string.pod_abrir)) + temas.map { getString(R.string.pod_parecidos, nomeAssunto(it)) } +
+            getString(R.string.pod_remover)
+        Estilo.lista(this, a.titulo, opcoes) { i ->
+            when {
+                i == 0 -> abrir(a.url)
+                i <= temas.size -> abrirAssunto(temas[i - 1])
+                else -> remover(a)
+            }
+        }
+    }
+
+    /** Segurar OK num resultado: abrir (ou seguir) e os parecidos pelos assuntos dele. */
+    private fun menuParecidos(titulo: String, temas: List<PodcastAssuntos.Assunto>, seguido: Boolean, url: String) {
+        val t = temas.take(2)
+        Estilo.lista(this, titulo, listOf(getString(if (seguido) R.string.pod_abrir else R.string.pod_sugestao_seguir)) +
+            t.map { getString(R.string.pod_parecidos, nomeAssunto(it)) }) { i ->
+            if (i == 0) { if (seguido) abrir(url) else adicionar(url) } else abrirAssunto(t[i - 1])
+        }
+    }
+
+    // ---------------------------------------------------------------- assuntos (21/11/2026)
+
+    /** "Humor · Cultura" (no máximo dois), ou null. */
+    private fun linhaAssuntos(temas: List<PodcastAssuntos.Assunto>): String? =
+        temas.take(2).takeIf { it.isNotEmpty() }?.joinToString(" · ") { nomeAssunto(it) }
+
+    private fun nomeAssunto(a: PodcastAssuntos.Assunto): String = getString(when (a) {
+        PodcastAssuntos.Assunto.NOTICIAS -> R.string.pod_ass_noticias
+        PodcastAssuntos.Assunto.HUMOR -> R.string.pod_ass_humor
+        PodcastAssuntos.Assunto.CIENCIA -> R.string.pod_ass_ciencia
+        PodcastAssuntos.Assunto.TECNOLOGIA -> R.string.pod_ass_tecnologia
+        PodcastAssuntos.Assunto.HISTORIA -> R.string.pod_ass_historia
+        PodcastAssuntos.Assunto.NEGOCIOS -> R.string.pod_ass_negocios
+        PodcastAssuntos.Assunto.SAUDE -> R.string.pod_ass_saude
+        PodcastAssuntos.Assunto.ESPORTES -> R.string.pod_ass_esportes
+        PodcastAssuntos.Assunto.CULTURA -> R.string.pod_ass_cultura
+        PodcastAssuntos.Assunto.CRIMES -> R.string.pod_ass_crimes
+        PodcastAssuntos.Assunto.TV_FILMES -> R.string.pod_ass_tv_filmes
+        PodcastAssuntos.Assunto.MUSICA -> R.string.pod_ass_musica
+        PodcastAssuntos.Assunto.EDUCACAO -> R.string.pod_ass_educacao
+        PodcastAssuntos.Assunto.INFANTIL -> R.string.pod_ass_infantil
+        PodcastAssuntos.Assunto.FE -> R.string.pod_ass_fe
+        PodcastAssuntos.Assunto.LAZER -> R.string.pod_ass_lazer
+    })
+
+    private fun emAltaPermitido() = PodcastBusca.disponivel() && Planos.permite(this, Planos.Recurso.PODCAST_BUSCA)
+
+    /** Os seus podcasts de cada assunto (pelo que o feed declara). */
+    private fun seguidosPorAssunto(): Map<PodcastAssuntos.Assunto, List<Podcasts.Assinatura>> =
+        assinaturas.filter { !(protegido && it.explicito) }
+            .flatMap { a -> PodcastAssuntos.de(feeds[a.url]?.categorias.orEmpty()).map { it to a } }
+            .groupBy({ it.first }, { it.second })
+
+    /**
+     * Prateleira "Assuntos": com o Em alta (Pro) aparecem todos; sem ele, só os assuntos dos podcasts que você segue
+     * (não abre lista vazia). Os que você mais segue vêm primeiro; o resto na ordem fixa. Mesmo jeito dos Gêneros da
+     * Rádio: quadrado na cor do assunto com as iniciais.
+     */
+    private fun prateleiraAssuntos(): CruzOuvir.Prateleira? {
+        val seus = seguidosPorAssunto()
+        val emAlta = emAltaPermitido()
+        val lista = PodcastAssuntos.Assunto.entries.filter { emAlta || (seus[it]?.isNotEmpty() == true) }
+            .sortedByDescending { seus[it]?.size ?: 0 }
+        if (lista.isEmpty()) return null
+        return CruzOuvir.Prateleira("assuntos", getString(R.string.pod_assuntos), IconeOuvir.Tipo.GENEROS, lista.map { a ->
+            val nome = nomeAssunto(a)
+            val n = seus[a]?.size ?: 0
+            CruzOuvir.Item("ass:${a.id}", nome,
+                CruzLogica.linhas(if (n > 0) getString(R.string.pod_ass_seus, n) else null, if (emAlta) getString(R.string.pod_ass_em_alta) else null),
+                cor = corAssunto(a), monograma = CapaOuvir.iniciais(nome), abrir = { abrirAssunto(a) })
+        })
+    }
+
+    /** Uma cor por assunto, da mesma família das capas (estável: vem do id). */
+    private fun corAssunto(a: PodcastAssuntos.Assunto): Int {
+        val cores = intArrayOf(0xFF7FB2FF.toInt(), 0xFF45C2B1.toInt(), 0xFF8E92FA.toInt(), 0xFFE6C46A.toInt(), 0xFF9CD27E.toInt(), 0xFF8FB4F0.toInt())
+        return cores[a.ordinal % cores.size]
+    }
+
+    /**
+     * Abre a lista de um assunto na prateleira de resultados: primeiro os seus daquele tema (✓), depois o Em alta do
+     * tema no Podcast Index (Pro). Voltar retorna à prateleira Assuntos.
+     */
+    private fun abrirAssunto(a: PodcastAssuntos.Assunto) {
+        val seus = (seguidosPorAssunto()[a] ?: emptyList()).map { s ->
+            PodcastBusca.Resultado(s.url, s.titulo, s.autor, s.capa.ifEmpty { feeds[s.url]?.capa.orEmpty() }, s.explicito, feeds[s.url]?.categorias.orEmpty())
+        }
+        val emAlta = emAltaPermitido()
+        val titulo = nomeAssunto(a)
+        deAssunto = a
+        if (!emAlta) { resultados = titulo to seus; focarDepois = "res" to null; montar(); return }
+        procurar(titulo, deAssunto = a) {
+            // Só entra o que o próprio podcast declara desse assunto: um servidor antigo (sem cat=) devolveria o
+            // Em alta geral, e ele apareceria com o nome do assunto. Sem tema conhecido, fica de fora.
+            val fora = PodcastBusca.emAlta(Locale.getDefault().language, a)
+                .filter { a in PodcastAssuntos.de(it.categorias) }
+            (seus + fora).distinctBy { Podcasts.normalizar(it.url) }
         }
     }
 
@@ -471,7 +619,8 @@ class PodcastsActivity : Activity() {
         d.show()
     }
 
-    private fun procurar(titulo: String, buscar: () -> List<PodcastBusca.Resultado>) {
+    private fun procurar(titulo: String, deAssunto: PodcastAssuntos.Assunto? = null, buscar: () -> List<PodcastBusca.Resultado>) {
+        this.deAssunto = deAssunto
         val app = applicationContext
         Fundo.rodar("podcast") {
             val r = runCatching(buscar).getOrDefault(emptyList())

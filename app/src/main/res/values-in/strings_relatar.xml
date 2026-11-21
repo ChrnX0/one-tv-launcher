@@ -5,4 +5,9 @@
     <string name="rel_linha_det">QR membuka formulir di ponsel, data teknis sudah terisi</string>
     <string name="rel_texto">Arahkan kamera ponsel ke kode. Tulis apa yang terjadi lalu kirim. Nama, akun, jaringan, dan kota Anda tidak ikut terkirim.</string>
     <string name="rel_vai_junto">Yang ikut terkirim</string>
+    <string name="rel_l_oque">Apa yang terjadi</string>
+    <string name="rel_l_versao">Versi</string>
+    <string name="rel_l_uso">Mode</string>
+    <string name="rel_l_quedas">Crash / macet (7 hari)</string>
+    <string name="rel_l_erro">Error terakhir</string>
 </resources>

@@ -1,17 +1,20 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.mcp.McpServidor
+import br.paulo.tvlauncher.mcp.TunelTailscale
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.panel.QrCodigo
+import br.paulo.tvlauncher.privilege.Confirmacoes
 
 /**
  * "Claude pela internet": a tela que guia o passo a passo com QR codes (05/11/2026, pedido do dono: sem chave, sem console).
@@ -104,6 +107,4 @@ class ConectarClaudeActivity : Activity() {
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
-    /** Superfície padrão do sistema de design (Estilo.superficie); o foco é aplicado por Estilo.focarLinha. */
-    private fun vidro(focado: Boolean): GradientDrawable = Estilo.superficie(this, focado)
 }

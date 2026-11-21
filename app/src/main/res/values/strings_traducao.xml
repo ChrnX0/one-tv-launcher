@@ -58,7 +58,6 @@
     <string name="dl_atalho_voz">Voice shortcut</string>
     <string name="mcp_olhou_tela">Claude looked at the screen</string>
     <string name="pg_max_min">high %1$d° · low %2$d°</string>
-    <string name="pg_por_do_sol">sunset %1$s</string>
     <string name="pg_compras">Shopping list</string>
     <string name="cf_negar">Deny</string>
     <string name="cf_permitir">Allow</string>
@@ -250,7 +249,6 @@
     <string name="pn_apagar">Delete</string>
     <string name="pn_parear">Pair</string>
     <string name="pn_titulo">Pair the launcher (no PC)</string>
-    <string name="pn_lido">code read from the screen</string>
     <string name="pn_nao_achei">haven\'t found the pairing screen yet</string>
     <string name="pn_6">the code has 6 digits</string>
     <string name="pn_pareado">paired! checking the shell…</string>

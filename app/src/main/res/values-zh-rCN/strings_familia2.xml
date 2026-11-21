@@ -16,7 +16,6 @@
     <string name="mu_nao_lido_desc">留言：%s。按 OK 标为已读。</string>
     <string name="mu_apagar">删除留言：%s</string>
     <string name="extras_RETROSPECTIVA_ANO">你的电视年度回顾（12 月在屏保上显示）</string>
-    <string name="extras_CARTOES_TRANSPARENTES">未选中时应用卡片半透明</string>
     <string name="extras_ENTRADAS_TV">在应用行中显示 HDMI 输入(仅限有输入接口的电视)</string>
     <string name="ra_titulo">你的电视 %d 年度回顾</string>
     <string name="ra_canal">最爱的频道：%1$s（%2$s）</string>
@@ -24,7 +23,6 @@
     <string name="ra_dica_ouvir">收听</string>
     <string name="ra_dica_favoritar">收藏</string>
     <string name="ra_carregando">正在加载电台…</string>
-    <string name="ra_subtitulo">来自世界各地的电台 · 遥控器上的 1–9 播放你的收藏</string>
     <string name="ra_sem_catalogo">电台目录无响应。你的收藏仍可使用。</string>
     <string name="ra_nada">未找到电台。</string>
     <string name="ra_continuar">继续</string>
@@ -34,10 +32,7 @@
     <string name="ra_buscar">按名称搜索</string>
     <string name="ra_buscar_det">世界上的任何电台</string>
     <string name="ra_generos">类型</string>
-    <string name="ra_paises">其他国家/地区</string>
-    <string name="ra_paises_det">电台最多的国家/地区</string>
     <string name="ra_perto">附近</string>
-    <string name="ra_mais_ouvidas">%s 最受欢迎</string>
     <string name="ra_mundo">全球最受欢迎</string>
     <string name="ra_resultado">搜索：%s</string>
     <string name="ra_favoritada">已加入收藏</string>

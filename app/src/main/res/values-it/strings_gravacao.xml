@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s fino alle %2$s</string>
     <string name="grv_ate_hora">fino alle %1$s</string>
     <string name="grv_selo">REGISTRAZIONE fino alle %1$s</string>
-    <string name="grv_selo_home">Registrazione di %1$s</string>
     <string name="grv_sem_canal">Il canale non è nella lista salvata. Apri una volta la TV in diretta e riprova.</string>
     <string name="grv_sem_destino">Nessun posto dove registrare: collega una chiavetta USB all’hub, o scegli una cartella di rete in TV › Registrazioni.</string>
     <string name="grv_pendrive_formato">La chiavetta USB “%1$s” usa un formato che la TV non legge (NTFS). Usa una chiavetta exFAT o FAT32, o formatta questa in Impostazioni › Sistema › Memoria (cancella ciò che contiene).</string>

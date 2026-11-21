@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s，至 %2$s</string>
     <string name="grv_ate_hora">至 %1$s</string>
     <string name="grv_selo">录制中，至 %1$s</string>
-    <string name="grv_selo_home">正在录制 %1$s</string>
     <string name="grv_sem_canal">该频道不在已保存的列表中。请先打开一次电视直播再试。</string>
     <string name="grv_sem_destino">没有录制位置：请将 U 盘插入集线器，或在 电视 › 录制 中选择网络文件夹。</string>
     <string name="grv_pendrive_formato">U 盘“%1$s”使用电视无法读取的格式（NTFS）。请使用 exFAT 或 FAT32 格式的 U 盘，或在 设置 › 系统 › 存储 中格式化此 U 盘（会清除其中内容）。</string>

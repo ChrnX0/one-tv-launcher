@@ -1,11 +1,11 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.LegendaImagem.ANCORA_FIM
-import br.paulo.tvlauncher.LegendaImagem.ANCORA_INICIO
-import br.paulo.tvlauncher.LegendaImagem.ANCORA_MEIO
-import br.paulo.tvlauncher.LegendaImagem.Lugar
-import br.paulo.tvlauncher.LegendaImagem.SEM_VALOR
-import br.paulo.tvlauncher.LegendaImagem.lugar
+import br.paulo.tvlauncher.player.LegendaImagem.ANCORA_FIM
+import br.paulo.tvlauncher.player.LegendaImagem.ANCORA_INICIO
+import br.paulo.tvlauncher.player.LegendaImagem.ANCORA_MEIO
+import br.paulo.tvlauncher.player.LegendaImagem.Lugar
+import br.paulo.tvlauncher.player.LegendaImagem.SEM_VALOR
+import br.paulo.tvlauncher.player.LegendaImagem.lugar
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

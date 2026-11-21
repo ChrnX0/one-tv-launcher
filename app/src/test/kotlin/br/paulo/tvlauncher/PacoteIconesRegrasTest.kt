@@ -1,10 +1,11 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.PacoteIconesRegras
+import java.io.StringReader
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.kxml2.io.KXmlParser
-import java.io.StringReader
 
 class PacoteIconesRegrasTest {
     private fun ler(xml: String) = PacoteIconesRegras.ler(KXmlParser().apply { setInput(StringReader(xml)) })

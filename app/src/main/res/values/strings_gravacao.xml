@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s until %2$s</string>
     <string name="grv_ate_hora">until %1$s</string>
     <string name="grv_selo">RECORDING until %1$s</string>
-    <string name="grv_selo_home">Recording %1$s</string>
     <string name="grv_sem_canal">The channel is not in the saved list. Open live TV once and try again.</string>
     <string name="grv_sem_destino">Nowhere to record: plug a USB drive into the hub, or pick a network folder in TV › Recordings.</string>
     <string name="grv_pendrive_formato">The USB drive “%1$s” uses a format the TV can’t read (NTFS). Use an exFAT or FAT32 drive, or format this one in Settings › System › Storage (this erases what’s on it).</string>

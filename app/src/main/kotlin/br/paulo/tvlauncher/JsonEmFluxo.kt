@@ -1,8 +1,8 @@
 package br.paulo.tvlauncher
 
-import org.json.JSONObject
 import java.io.IOException
 import java.io.Reader
+import org.json.JSONObject
 
 /**
  * Lê um array JSON de objetos (`[{...},{...}]`) um objeto por vez, sem montar o texto inteiro nem a árvore inteira na

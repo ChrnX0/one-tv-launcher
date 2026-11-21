@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher.telas
 
-import br.paulo.tvlauncher.Estilo
 import android.view.KeyEvent
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.AlarmesActivity
-import br.paulo.tvlauncher.Despertador
+import br.paulo.tvlauncher.Estilo
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.player.salvar
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,7 +18,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowLooper
-import java.util.concurrent.TimeUnit
 
 /**
  * Tela do despertador no jeito da cruz (18/11/2026): lista com 3 alarmes e o editor, andando com as teclas como o

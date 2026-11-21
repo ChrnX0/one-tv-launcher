@@ -5,4 +5,9 @@
     <string name="rel_linha_det">Un QR ouvre le formulaire sur le téléphone, avec les données techniques déjà remplies</string>
     <string name="rel_texto">Visez le code avec l’appareil photo du téléphone. Écrivez ce qui s’est passé et envoyez. Votre nom, compte, réseau et ville ne sont pas inclus.</string>
     <string name="rel_vai_junto">Ce qui est inclus</string>
+    <string name="rel_l_oque">Ce qui s\'est passé</string>
+    <string name="rel_l_versao">Version</string>
+    <string name="rel_l_uso">Mode</string>
+    <string name="rel_l_quedas">Plantages / blocages (7 jours)</string>
+    <string name="rel_l_erro">Dernière erreur</string>
 </resources>

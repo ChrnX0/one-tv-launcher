@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.observer.EsperaCrescente
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

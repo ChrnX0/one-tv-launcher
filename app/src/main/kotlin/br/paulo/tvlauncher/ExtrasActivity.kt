@@ -2,15 +2,25 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
+import br.paulo.tvlauncher.alarm.HoraDormir
+import br.paulo.tvlauncher.alarm.HoraDormirTv
+import br.paulo.tvlauncher.family.PinTv
+import br.paulo.tvlauncher.family.TempoTela
+import br.paulo.tvlauncher.family.TempoTelaTv
+import br.paulo.tvlauncher.network.AcordarPc
+import br.paulo.tvlauncher.network.ConsumoRedeTv
+import br.paulo.tvlauncher.network.DiarioDns
+import br.paulo.tvlauncher.observer.Caches
+import br.paulo.tvlauncher.panel.PainelArmazem
+import br.paulo.tvlauncher.privilege.ExtrasDO
+import br.paulo.tvlauncher.settings.ComandosExtras
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.ExtrasAbas
+import br.paulo.tvlauncher.settings.FiltroNoturno
 
 /**
  * Ajustes finos e ferramentas das ideias de 10/11/2026 ([Extras]). As chaves liga/desliga foram para as abas das
@@ -33,8 +43,6 @@ class ExtrasActivity : Activity() {
     }
 
     override fun onResume() { super.onResume(); atualizarTextos() }
-
-    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 
     private val linhas = mutableListOf<Pair<TextView, () -> String>>()
 

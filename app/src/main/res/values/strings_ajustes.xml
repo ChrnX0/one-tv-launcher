@@ -99,10 +99,6 @@
     <string name="vq_det">Show a QR code with this TV\'s look: theme, text size, icons.</string>
     <string name="vq_texto">Scan it with your phone to keep it or send it to someone with Sofaly.</string>
     <string name="vq_fechar">Close</string>
-    <string name="lh_titulo">App card size</string>
-    <string name="lh_det">Bigger cards are easier to see from the couch.</string>
-    <string name="lh_normal">Normal</string>
-    <string name="lh_grande">Large</string>
     <string name="pl_titulo">Plans</string>
     <string name="pl_texto">Everything is free while sales are not open. Later, Pro and Ultra are bought on your phone.</string>
     <string name="pl_basico">Basic</string>
@@ -112,10 +108,6 @@
     <string name="pl_pro_itens">• Everything in Basic\n• Many IPTV lists, recording\n• Full web panel\n• Claude, routines, Home Assistant\n• All themes, cloud backup</string>
     <string name="pl_ultra_itens">• Everything in Pro\n• Better weather (3 models)\n• Rich movie pages\n• Automatic subtitles\n• Up to 3 TVs</string>
     <string name="pl_qr">Scan with your phone to see prices and buy.</string>
-    <string name="lh_arranjo">App layout</string>
-    <string name="lh_arranjo_det">A row that scrolls sideways, or a grid with all apps in view.</string>
-    <string name="lh_fileira">Row</string>
-    <string name="lh_grade">Grid</string>
     <string name="pl_assinar">Subscribe</string>
     <string name="pl_assinar_preco">Subscribe · %1$s</string>
     <string name="pl_seu_plano">Your plan</string>

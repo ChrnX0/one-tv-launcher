@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.MemoriaSerie.Escolha
+import br.paulo.tvlauncher.player.EstiloLegenda
+import br.paulo.tvlauncher.player.MemoriaSerie
+import br.paulo.tvlauncher.player.MemoriaSerie.Escolha
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

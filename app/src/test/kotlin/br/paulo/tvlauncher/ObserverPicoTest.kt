@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.ObserverPico.Answer
-import br.paulo.tvlauncher.ObserverPico.Task
+import br.paulo.tvlauncher.observer.ObserverCore
+import br.paulo.tvlauncher.observer.ObserverPico
+import br.paulo.tvlauncher.observer.ObserverPico.Answer
+import br.paulo.tvlauncher.observer.ObserverPico.Task
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

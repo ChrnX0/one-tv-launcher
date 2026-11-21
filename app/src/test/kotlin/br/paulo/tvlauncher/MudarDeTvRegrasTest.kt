@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.MudarDeTvRegras.App
-import br.paulo.tvlauncher.MudarDeTvRegras.Conferencia
+import br.paulo.tvlauncher.backup.MudarDeTvRegras
+import br.paulo.tvlauncher.backup.MudarDeTvRegras.App
+import br.paulo.tvlauncher.backup.MudarDeTvRegras.Conferencia
+import br.paulo.tvlauncher.home.abrir
 import org.json.JSONArray
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals

@@ -1,10 +1,12 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.panel.PaginaCertificado
+import br.paulo.tvlauncher.panel.PainelHttp
+import java.io.File
 import org.json.JSONObject
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 class PaginaCertificadoTest {
     private val modelo: String = listOf("src/main/assets/painel/certificado.html", "app/src/main/assets/painel/certificado.html")

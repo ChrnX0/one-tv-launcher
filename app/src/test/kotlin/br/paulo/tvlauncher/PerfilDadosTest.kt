@@ -1,11 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.backup.EnsaioRestauracao
+import br.paulo.tvlauncher.family.PerfilDados
+import java.util.Base64
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Base64
 
 /** Perfis de verdade (ideia 11): nomes por perfil, leitura com fallback para o compartilhado e o backup. */
 class PerfilDadosTest {

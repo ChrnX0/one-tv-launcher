@@ -2,14 +2,11 @@
 <!-- Visuais prontos (revisão dos degraus, 1b, 17/11/2026): VisualCodigo.PRONTOS. -->
 <resources>
     <string name="vpr_titulo">Fertige Looks</string>
-    <string name="vpr_det">Jedes OK wechselt zum nächsten Look: Design, Text und Kartengröße zusammen</string>
+    <string name="vpr_det">Jedes OK wechselt zum nächsten Look: Design, Text und Hintergrundfarbe zusammen</string>
     <string name="vpr_meu">Eigene Einstellung</string>
     <string name="vpr_classico">Klassisch</string>
     <string name="vpr_leitura">Leicht lesbar</string>
     <string name="vpr_galeria">Galerie</string>
     <string name="vpr_galeria_grande">Große Galerie</string>
-    <string name="vpr_grade">Raster</string>
-    <string name="vpr_grade_grande">Großes Raster</string>
     <string name="vpr_cores">App-Farben</string>
-    <string name="vpr_cinema">Kino</string>
 </resources>

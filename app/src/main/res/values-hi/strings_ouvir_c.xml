@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado: Ouvir proposta C (21/11/2026). -->
+<resources>
+    <string name="som_titulo">ध्वनि</string>
+    <string name="som_titulo_pod">ध्वनि · %1$s</string>
+    <string name="som_voz_clara">साफ़ आवाज़</string>
+    <string name="som_so_este">सिर्फ़ इस पॉडकास्ट के लिए</string>
+    <string name="som_abertura">शुरुआत छोड़ें</string>
+    <string name="som_fim">आख़िरी हिस्सा छोड़ें</string>
+    <string name="som_segundos">%1$d से</string>
+    <string name="som_rodape_proprio">ये सेटिंग सिर्फ़ %1$s के लिए हैं।</string>
+    <string name="som_rodape_geral">गति, चुप्पी और साफ़ आवाज़ सभी पॉडकास्ट पर लागू हैं। %1$s के लिए अलग रखने को \"सिर्फ़ इस पॉडकास्ट के लिए\" चालू करें।</string>
+    <string name="som_det">गति, साफ़ आवाज़, टाइमर</string>
+    <string name="som_det_radio">साफ़ आवाज़ और स्लीप टाइमर</string>
+    <string name="cap_titulo">अध्याय</string>
+    <string name="cap_de">अध्याय %1$d / %2$d</string>
+    <string name="cap_barra_dica">◀ ▶ 10 से आगे-पीछे · OK: अध्याय</string>
+    <string name="tx_titulo">बोले गए शब्द</string>
+    <string name="tx_carregando">लोड हो रहा है</string>
+    <string name="tx_nao_tem">इस एपिसोड में नहीं</string>
+    <string name="tx_nao_tem_det">यह पॉडकास्ट इस एपिसोड का टेक्स्ट प्रकाशित नहीं करता।</string>
+    <string name="tx_pe_busca">परिणाम %1$d / %2$d · ◀ ▶ पिछला / अगला · ▼ नई खोज · OK: बंद</string>
+    <string name="tx_buscar">कही गई बातों में खोजें</string>
+    <string name="tx_nada">इस एपिसोड में यह नहीं कहा गया।</string>
+    <string name="ra_ja_tocou">पहले बजे गाने</string>
+    <string name="ra_parecidas">मिलते-जुलते रेडियो</string>
+    <string name="som_radio">पिछला सुना रेडियो</string>
+    <string name="som_podcast">सबसे नया पॉडकास्ट एपिसोड</string>
+    <string name="jor_titulo">मेरी खबरें</string>
+    <string name="jor_ouvir">खबरें सुनें</string>
+    <string name="jor_min">लगातार %d मिनट</string>
+    <string name="tx_pe">◀ ▶ पिछला / अगला वाक्य · ▲ सारांश · ▼ खोजें · OK: बंद</string>
+    <string name="tx_gerando">बन रहा है</string>
+    <string name="tx_gerando_det">टेक्स्ट बन रहा है… पहला हिस्सा लगभग 1 मिनट लेता है।</string>
+    <string name="tx_gerar">OK से बनाएँ (मुफ़्त)</string>
+    <string name="tx_cota">कल फिर</string>
+    <string name="tx_cota_det">आज का मुफ़्त टेक्स्ट कोटा ख़त्म हो गया। कल फिर मिलेगा।</string>
+    <string name="tx_pulei">विज्ञापन छोड़ा</string>
+    <string name="tx_pulei_det">%d से · ◀ वापस जाएँ</string>
+    <string name="tx_resumo">Sofy का सारांश</string>
+    <string name="tx_resumo_de">सारांश · %s</string>
+    <string name="tx_resumindo">कही गई बातें पढ़ रही हूँ… एक पल।</string>
+    <string name="tx_resumo_falhou">इस बार सारांश नहीं आया। थोड़ी देर बाद फिर कोशिश करें।</string>
+    <string name="ra_globo">ग्लोब पर खोजें</string>
+    <string name="ra_globo_det">दुनिया घुमाएँ और कहीं का भी रेडियो सुनें</string>
+    <string name="ra_globo_dica">◀ ▶ ▲ ▼ घुमाएँ · OK: चलाएँ · वापस: बंद</string>
+    <string name="ra_globo_mar">खुला समुद्र… थोड़ा और घुमाएँ</string>
+    <string name="ra_voltar">30 से पीछे</string>
+    <string name="ra_voltar_det">कुछ छूट गया? फिर से सुनें (रिमोट पर ⏪)</string>
+    <string name="ra_ao_vivo">लाइव पर लौटें</string>
+    <string name="ra_atras">लाइव से %s पीछे</string>
+</resources>

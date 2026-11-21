@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.Recado
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

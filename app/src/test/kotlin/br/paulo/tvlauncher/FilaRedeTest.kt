@@ -1,7 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.FilaRede.Passo
-import br.paulo.tvlauncher.Upnp.Tipo
+import br.paulo.tvlauncher.network.FilaRede
+import br.paulo.tvlauncher.network.FilaRede.Passo
+import br.paulo.tvlauncher.panel.Upnp.Tipo
+import br.paulo.tvlauncher.player.FimDoVideo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

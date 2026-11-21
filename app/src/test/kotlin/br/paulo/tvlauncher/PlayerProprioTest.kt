@@ -1,9 +1,16 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.player.AssLogica
+import br.paulo.tvlauncher.player.FfCodecs
+import br.paulo.tvlauncher.player.FfExtratores
+import br.paulo.tvlauncher.player.FfFormatos
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.LeitoresLegendaSemAss
+import br.paulo.tvlauncher.player.MixDialogo
+import br.paulo.tvlauncher.player.RenderizadoresPlayer
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (ar) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">ألعاب</string>
-    <string name="home_destaque_jogos_vazio">العب في السحابة ومن الكمبيوتر والألعاب القديمة</string>
-    <string name="home_linha_continuar_jogos">شاهد والعب</string>
-    <string name="home_jogos_ultimo">الأخيرة: %1$s</string>
     <string name="extras_CARD_JOGOS">بطاقة الألعاب في الشاشة الرئيسية (تطبيقات الألعاب تخرج من صف التطبيقات)</string>
     <string name="extras_MODO_JOGO">وضع الألعاب: أثناء فتح لعبة، تنتظر شاشة التوقف والفلتر الليلي والتنبيهات</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">تشغيل وحدة تحكم ألعاب يفتح شاشة الألعاب</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">ألعاب قديمة</string>
     <string name="jogos_grupo_tv">ألعاب على التلفزيون</string>
     <string name="jogos_para_comecar">للبدء</string>
-    <string name="jogos_vazio_dica">لا ألعاب على هذا التلفزيون بعد. اختر واحدة أعلاه لفتح صفحتها في Play Store.</string>
-    <string name="jogos_dica_segurar">اضغط مطولًا على OK على لعبة لنقلها إلى مجموعة أخرى أو إخراجها من هنا.</string>
     <string name="jogos_aviso_fraca_titulo">شبكة ضعيفة للألعاب السحابية</string>
     <string name="jogos_aviso_fraca">قد تتقطع اللعبة أو تتأخر. كابل شبكة، أو تقريب التلفزيون من الراوتر، يساعد.</string>
     <string name="jogos_jogar_assim">العب على أي حال</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">أي تطبيق يلعب من الكمبيوتر؟</string>
     <string name="jogos_pc_acordando">جارٍ إيقاظ الكمبيوتر… %1$d ث</string>
     <string name="jogos_pc_nao_respondeu">الكمبيوتر لم يستجب. جارٍ فتح التطبيق على أي حال.</string>
-    <string name="jogos_seus">ألعابك</string>
     <string name="jogos_mais_jogos">ألعاب أخرى</string>
     <string name="jogos_mais_opcoes">المزيد</string>
-    <string name="jogos_por_tipo">حسب النوع</string>
-    <string name="jogos_jogar">العب</string>
     <string name="jogos_ligar_pc_jogar">شغّل الكمبيوتر والعب</string>
-    <string name="jogos_desc_nuvem">تعمل اللعبة على كمبيوتر في الإنترنت ويستقبل التلفزيون الصورة. تحتاج شبكة جيدة.</string>
     <string name="jogos_desc_pc">العب ألعاب الكمبيوتر أو الجهاز المنزلي هنا على التلفزيون.</string>
-    <string name="jogos_desc_retro">ألعاب كلاسيكية من أجهزة كثيرة.</string>
-    <string name="jogos_desc_tv">لعبة مثبتة على التلفزيون نفسه.</string>
-    <string name="jogos_jogado">آخر لعب %1$s.</string>
-    <string name="jogos_nenhum_titulo">لا ألعاب بعد</string>
-    <string name="jogos_chip_sem_controle">لا وحدة تحكم</string>
     <string name="jogos_chip_medindo">جارٍ فحص الشبكة…</string>
     <string name="jogos_chip_boa">شبكة جيدة</string>
     <string name="jogos_chip_ok">الشبكة مقبولة</string>
     <string name="jogos_chip_fraca">شبكة ضعيفة</string>
     <string name="jogos_chip_sem">لا إنترنت</string>
-    <string name="jogos_tecla_escolher">اختيار</string>
     <string name="jogos_tecla_jogar">لعب</string>
-    <string name="jogos_tecla_mais">خيارات أخرى</string>
     <string name="jogos_tecla_segurar">اضغط مطولًا على OK</string>
     <string name="jogos_tecla_opcoes">تغيير المجموعة</string>
     <plurals name="jogos_qtd">

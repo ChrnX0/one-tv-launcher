@@ -1,9 +1,10 @@
 package br.paulo.tvlauncher
 
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.family.Perfil
 import java.util.Calendar
 import java.util.TimeZone
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * "Só se" das automações por evento (elevação 10.5, onda 1, 17/11/2026): a regra, pura (SoSeTest). A automação só roda

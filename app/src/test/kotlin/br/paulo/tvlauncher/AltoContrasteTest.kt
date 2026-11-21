@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.settings.AltoContraste
+import br.paulo.tvlauncher.settings.CorSegura
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Test

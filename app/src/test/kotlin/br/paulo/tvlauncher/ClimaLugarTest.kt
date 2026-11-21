@@ -1,11 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.alarm.FaixaDias
+import br.paulo.tvlauncher.network.Endereco
+import br.paulo.tvlauncher.weather.LocalClima
+import java.util.Locale
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.Locale
 
 /** Testes do endereço do clima (Endereco/LocalClima) e da faixa de 9 dias (FaixaDias): só a lógica, sem Android. */
 class ClimaLugarTest {

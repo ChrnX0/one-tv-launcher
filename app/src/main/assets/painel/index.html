@@ -346,6 +346,13 @@
           <button type="button" class="botao-secundario" data-tocando="proxima" aria-label="Próxima">⏭</button>
           <button type="button" class="botao-secundario" id="btnTocando">Atualizar</button>
         </div>
+        <h3>Ouvir no celular</h3>
+        <p id="ouvirCelular" class="aviso">Continua aqui a rádio ou o podcast que a TV tocou por último, do mesmo ponto.</p>
+        <p id="ouvirCelularNome" hidden><span id="ouvirCelularTipo"></span> <strong id="ouvirCelularTitulo" translate="no"></strong></p>
+        <audio id="audioCelular" controls preload="none" hidden></audio>
+        <div class="barra-acoes">
+          <button type="button" class="botao-primario" id="btnOuvirCelular">Ouvir aqui</button>
+        </div>
       </div>
       <div class="acoes-perigo">
         <button id="btnReiniciarTv" type="button" class="botao-perigo">Reiniciar TV</button>
@@ -486,9 +493,15 @@
         <p class="aviso">Tamanho do texto: <select id="cfgTamanho" aria-label="Tamanho do texto">
           <option value="100">Normal</option><option value="110">Grande</option><option value="120">Maior</option></select></p>
         <label data-atalho="config:altoContraste"><input id="cfgAltoContraste" type="checkbox"> Alto contraste (letras e bordas mais fortes, na TV e aqui)</label>
-        <label data-atalho="config:pilhas"><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
         <label data-atalho="config:avisoChuva"><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
         <label data-atalho="config:avisoTemperatura"><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>
+      </div>
+      <div id="cartaoIcones" class="cartao">
+        <h2>Ícones da cruz</h2>
+        <p class="aviso">O conjunto vale para todos os ícones do Sofaly. Embaixo, troque um por um: a troca vence o conjunto.</p>
+        <p class="aviso">Conjunto: <select id="cfgConjuntoIcones" aria-label="Conjunto"></select></p>
+        <div id="listaIcones" class="lista-icones"></div>
+        <p id="statusIcones" class="aviso" hidden></p>
       </div>
       <div id="cartaoClima" class="cartao">
         <h2>Previsão do tempo</h2>

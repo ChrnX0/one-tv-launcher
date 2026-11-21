@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.FimDoVideo.Passo
+import br.paulo.tvlauncher.player.FimDoVideo
+import br.paulo.tvlauncher.player.FimDoVideo.Passo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

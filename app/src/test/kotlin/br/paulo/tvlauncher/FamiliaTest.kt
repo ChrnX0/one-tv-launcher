@@ -1,5 +1,10 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.family.CanalDespertar
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.family.PinFamilia
+import br.paulo.tvlauncher.family.TempoTela
+import br.paulo.tvlauncher.player.Canal
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

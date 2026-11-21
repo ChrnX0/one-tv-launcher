@@ -32,7 +32,6 @@
     <string name="legenda_trad_parcial">Субтитры переведены на ТВ (автоперевод). Остальное ещё переводится.</string>
     <string name="legenda_trad_pronta">Перевод субтитров завершён</string>
     <string name="series_sinopse_mais">Полное описание</string>
-    <string name="series_sinopse_menos">Краткое описание</string>
     <string name="series_continuar_curto">▶  Продолжить %1$s</string>
     <string name="series_episodios">Серии</string>
     <string name="series_trocar_temporada">Сменить сезон</string>

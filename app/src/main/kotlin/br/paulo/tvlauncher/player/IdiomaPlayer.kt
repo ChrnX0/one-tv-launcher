@@ -1,0 +1,96 @@
+package br.paulo.tvlauncher.player
+
+import android.content.Context
+import androidx.media3.common.C
+import androidx.media3.common.Format
+import androidx.media3.common.TrackSelectionOverride
+import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.common.Tracks
+import br.paulo.tvlauncher.Prefs
+import br.paulo.tvlauncher.R
+import java.io.File
+
+/**
+ * A parte Android do Idioma (11/11/2026): onde a preferência mora e como ela vira escolha de faixa no Media3.
+ * A decisão em si (qual faixa, qual versão) é do Idioma, puro e testado.
+ */
+object IdiomaPlayer {
+    private const val ARQUIVO = "idioma.json"
+    /** Id da faixa de legenda baixada (LegendaBaixar), para reconhecê-la entre as faixas do vídeo. */
+    const val ID_EXTERNA = "legenda-baixada"
+
+    // Arquivo (e não SharedPreferences): as Configurações gravam no processo da HOME e o player lê no ":player".
+    // SharedPreferences guarda cópia em memória por processo e não veria a troca.
+    fun prefs(ctx: Context): Idioma.Prefs =
+        Idioma.deJson(runCatching { File(PlayerArmazem.pasta(ctx), ARQUIVO).readText() }.getOrNull())
+
+    @Synchronized
+    fun gravar(ctx: Context, p: Idioma.Prefs) {
+        runCatching {
+            val tmp = File(PlayerArmazem.pasta(ctx), "$ARQUIVO.tmp")
+            tmp.writeText(Idioma.paraJson(p))
+            tmp.renameTo(File(PlayerArmazem.pasta(ctx), ARQUIVO))
+        }
+    }
+
+    /** Ideia 25: o idioma do sistema da TV, 2 letras ("pt", "en", "es"). É o que "dublado" e a legenda seguem. */
+    fun idiomaDaTv(): String = Idioma.idiomaDaTv(java.util.Locale.getDefault().language)
+
+    fun definirPadrao(ctx: Context, pref: Idioma.Pref) = gravar(ctx, prefs(ctx).copy(padrao = pref))
+
+    fun lembrar(ctx: Context, chave: String, pref: Idioma.Pref) = gravar(ctx, Idioma.lembrar(prefs(ctx), chave, pref))
+
+    fun rotulo(ctx: Context, p: Idioma.Pref): String =
+        ctx.getString(if (p == Idioma.Pref.ORIGINAL) R.string.idioma_original else R.string.idioma_dublado)
+
+    fun faixa(f: Format) = Idioma.Faixa(f.language, padrao = f.selectionFlags and C.SELECTION_FLAG_DEFAULT != 0,
+        forcada = f.selectionFlags and C.SELECTION_FLAG_FORCED != 0, rotulo = f.label, externa = f.id?.contains(ID_EXTERNA) == true,
+        marcaDescreve = f.roleFlags and C.ROLE_FLAG_DESCRIBES_VIDEO != 0,
+        marcaSurdos = f.roleFlags and (C.ROLE_FLAG_DESCRIBES_MUSIC_AND_SOUND or C.ROLE_FLAG_CAPTION) != 0)
+
+    /** 16.2: as duas preferências de acessibilidade (Configurações › TV e filmes). */
+    fun definirAudiodescricao(ctx: Context, sim: Boolean) = gravar(ctx, prefs(ctx).copy(audiodescricao = sim))
+    fun definirSurdos(ctx: Context, sim: Boolean) = gravar(ctx, prefs(ctx).copy(surdos = sim))
+
+    /** Faixas de um tipo, achatadas (grupo + índice dentro do grupo), só as que o aparelho toca. */
+    private fun faixas(t: Tracks, tipo: Int): List<Pair<Tracks.Group, Int>> =
+        t.groups.filter { it.type == tipo }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
+
+    /** Ideia 89: o áudio que vai tocar não é do idioma da TV e não há legenda nele (Idioma.faltaLegenda). */
+    fun faltaLegenda(t: Tracks, pref: Idioma.Pref, idioma: String = idiomaDaTv(), versao: Idioma.Versao = Idioma.Versao.DESCONHECIDA,
+                     audiodescricao: Boolean = false): Boolean {
+        val audios = faixas(t, C.TRACK_TYPE_AUDIO)
+        // O mesmo áudio que [aplicar] escolhe (a troca ainda não chegou às faixas quando isto roda).
+        val audio = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma, audiodescricao = audiodescricao)?.let { audios[it] }
+            ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) } ?: return false
+        return Idioma.faltaLegenda(faixa(audio.first.getTrackFormat(audio.second)), faixas(t, C.TRACK_TYPE_TEXT).map { (g, i) -> faixa(g.getTrackFormat(i)) }, idioma, versao)
+    }
+
+    /**
+     * Aplica a preferência quando as faixas chegam: escolhe o áudio e liga (ou não) a legenda no idioma da TV
+     * ([idioma], 2 letras; ideia 25). Devolve os parâmetros novos, ou null se não há o que mudar.
+     */
+    fun aplicar(t: Tracks, atual: TrackSelectionParameters, pref: Idioma.Pref, idioma: String = idiomaDaTv(),
+                segundo: String? = null, acesso: Idioma.Prefs = Idioma.Prefs()): TrackSelectionParameters? {
+        val audios = faixas(t, C.TRACK_TYPE_AUDIO)
+        val b = atual.buildUpon()
+        var mudou = false
+        val escolhido = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma, segundo, acesso.audiodescricao)?.let { audios[it] }
+        if (escolhido != null && !escolhido.first.isTrackSelected(escolhido.second)) {
+            b.setOverrideForType(TrackSelectionOverride(escolhido.first.mediaTrackGroup, escolhido.second)); mudou = true
+        }
+        val audio = escolhido ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) }
+        // Sem faixa de áudio identificada (ainda), não mexe na legenda: decidir às cegas ligaria legenda em filme dublado.
+        if (audio == null) return if (mudou) b.build() else null
+        val fAudio = faixa(audio.first.getTrackFormat(audio.second))
+        val audioDaTv = Idioma.eDoIdioma(fAudio, idioma)
+        val noSegundo = segundo != null && Idioma.eDoIdioma(fAudio, segundo)
+        val textos = faixas(t, C.TRACK_TYPE_TEXT)
+        val leg = Idioma.escolherLegenda(textos.map { (g, i) -> faixa(g.getTrackFormat(i)) }, audioDaTv, idioma, segundo, noSegundo, acesso.surdos)?.let { textos[it] }
+        if (leg != null) {
+            b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false).setOverrideForType(TrackSelectionOverride(leg.first.mediaTrackGroup, leg.second))
+            mudou = true
+        }
+        return if (mudou) b.build() else null
+    }
+}

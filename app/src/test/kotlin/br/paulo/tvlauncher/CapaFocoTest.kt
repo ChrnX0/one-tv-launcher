@@ -1,5 +1,7 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.home.CapaFoco
+import br.paulo.tvlauncher.player.Series
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

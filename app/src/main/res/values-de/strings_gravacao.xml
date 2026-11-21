@@ -10,7 +10,6 @@
     <string name="grv_ate">%1$s bis %2$s</string>
     <string name="grv_ate_hora">bis %1$s</string>
     <string name="grv_selo">AUFNAHME bis %1$s</string>
-    <string name="grv_selo_home">%1$s wird aufgenommen</string>
     <string name="grv_sem_canal">Der Sender ist nicht in der gespeicherten Liste. Öffne einmal Live-TV und versuch es erneut.</string>
     <string name="grv_sem_destino">Kein Speicherort: stecke einen USB-Stick in den Hub oder wähle einen Netzwerkordner unter TV › Aufnahmen.</string>
     <string name="grv_pendrive_formato">Der USB-Stick „%1$s“ nutzt ein Format, das der Fernseher nicht lesen kann (NTFS). Nutze einen Stick mit exFAT oder FAT32 oder formatiere diesen unter Einstellungen › System › Speicher (das löscht seinen Inhalt).</string>

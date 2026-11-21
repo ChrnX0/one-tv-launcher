@@ -51,7 +51,7 @@
     <string name="cruz_dormir_sub">Ekran yavaşça kararır ve TV kapanır</string>
     <string name="cruz_desliga_as">%1$s’te kapanır</string>
     <string name="cruz_dormir_cancelar">İptal için OK</string>
-    <string name="cruz_linha">Çizgi</string>
+    <string name="cruz_linha">Temel</string>
     <string name="cruz_mover">Taşı…</string>
     <string name="cruz_mover_titulo">%1$s uygulamasını taşı</string>
     <string name="cruz_central">Oyun merkezi</string>
@@ -61,7 +61,6 @@
     <string name="jogos_semana">Bu hafta</string>
     <string name="jogos_semana_jogado">7 günde oynandı</string>
     <string name="jogos_semana_mais">en çok oynanan</string>
-    <string name="jogos_semana_controles">açık kumanda</string>
     <string name="jogos_menos_de_1_min">1 dk’dan az</string>
     <string name="jogos_min">%1$d dk</string>
     <string name="jogos_h_min">%1$d sa %2$d dk</string>
@@ -85,10 +84,16 @@
     <string name="casa_fora_texto">Sunucusunun açık olduğunu kontrol edin. TV birkaç saniyede bir kendisi yeniden dener.</string>
     <string name="cruz_barra_ilha">Ada</string>
     <string name="cruz_canto_no_ar">Yayında</string>
-    <string name="cruz_canto_buscar">Ara</string>
-    <string name="cruz_canto_buscar_txt">▲ arama çubuğunu açar</string>
     <string name="cruz_canto_gravando">Kaydediliyor</string>
     <string name="cruz_canto_tocando">Çalıyor</string>
     <string name="cruz_canto_parou">Kaldığı yer</string>
     <string name="cruz_canto_conectado">Bağlı</string>
+    <!-- Conjuntos de ícones com arte pronta e Trocar ícone item a item (21/11/2026) -->
+    <string name="cruz_vintage">Vintage</string>
+    <string name="cruz_joia">Mücevher</string>
+    <string name="cruz_foto">Fotogerçekçi</string>
+    <string name="cruz_vintage2">Vintage 2.0</string>
+    <string name="cruz_icone_seguir">Setle aynı (%1$s)</string>
+    <string name="cruz_icone_de">Simge: %1$s</string>
+    <string name="cruz_icone_categoria">Tüm kategori: %1$s</string>
 </resources>

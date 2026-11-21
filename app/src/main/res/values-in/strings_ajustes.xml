@@ -93,10 +93,6 @@
     <string name="vq_det">Menampilkan kode QR berisi tampilan TV ini: tema, ukuran teks, ikon.</string>
     <string name="vq_texto">Pindai dengan ponsel untuk menyimpannya atau mengirimnya ke orang lain yang memakai Sofaly.</string>
     <string name="vq_fechar">Tutup</string>
-    <string name="lh_titulo">Ukuran kartu aplikasi</string>
-    <string name="lh_det">Kartu yang lebih besar lebih mudah dilihat dari sofa.</string>
-    <string name="lh_normal">Normal</string>
-    <string name="lh_grande">Besar</string>
     <string name="pl_titulo">Paket</string>
     <string name="pl_texto">Semuanya gratis selama penjualan belum dibuka. Nanti, Pro dan Ultra dibeli di ponsel.</string>
     <string name="pl_basico">Dasar</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• Semua di Dasar\n• Banyak daftar IPTV, perekaman\n• Panel web lengkap\n• Claude, rutinitas, Home Assistant\n• Semua tema, cadangan cloud</string>
     <string name="pl_ultra_itens">• Semua di Pro\n• Cuaca lebih akurat (3 model)\n• Halaman film lengkap\n• Subtitle otomatis\n• Hingga 3 TV</string>
     <string name="pl_qr">Pindai dengan ponsel untuk melihat harga dan membeli.</string>
-    <string name="lh_arranjo">Tata letak aplikasi</string>
-    <string name="lh_arranjo_det">Satu baris yang bergulir ke samping, atau kisi dengan semua aplikasi terlihat.</string>
-    <string name="lh_fileira">Baris</string>
-    <string name="lh_grade">Kisi</string>
     <string name="pl_assinar">Berlangganan</string>
     <string name="pl_assinar_preco">Berlangganan · %1$s</string>
     <string name="pl_seu_plano">Paket Anda</string>

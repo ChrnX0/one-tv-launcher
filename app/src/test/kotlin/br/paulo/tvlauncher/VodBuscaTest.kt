@@ -1,5 +1,13 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.player.Episodio
+import br.paulo.tvlauncher.player.FichaSerie
+import br.paulo.tvlauncher.player.Filme
+import br.paulo.tvlauncher.player.Posicao
+import br.paulo.tvlauncher.player.Serie
+import br.paulo.tvlauncher.player.UltimoEpisodio
+import br.paulo.tvlauncher.player.VodBusca
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

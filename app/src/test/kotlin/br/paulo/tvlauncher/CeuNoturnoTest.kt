@@ -1,12 +1,14 @@
 package br.paulo.tvlauncher
 
+import br.paulo.tvlauncher.weather.CeuNoturno
+import br.paulo.tvlauncher.weather.Sgp4
+import java.util.TimeZone
+import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.TimeZone
-import kotlin.math.abs
 
 /**
  * O céu calculado na TV contra as bibliotecas de referência, rodadas em 17/11/2026 com os mesmos dados:

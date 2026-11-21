@@ -8,7 +8,6 @@ import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,6 +28,26 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.family.Mural
+import br.paulo.tvlauncher.family.Perfil
+import br.paulo.tvlauncher.family.PerfilCriancaTv
+import br.paulo.tvlauncher.home.IconeCard
+import br.paulo.tvlauncher.home.abrir
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.network.Dns
+import br.paulo.tvlauncher.network.Rede
+import br.paulo.tvlauncher.network.WifiVisita
+import br.paulo.tvlauncher.panel.PainelBlocos
+import br.paulo.tvlauncher.panel.PainelBlocosTv
+import br.paulo.tvlauncher.player.item
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.settings.Extras
+import br.paulo.tvlauncher.settings.ExtrasTv
+import br.paulo.tvlauncher.settings.FiltroNoturno
+import br.paulo.tvlauncher.weather.Astronomia
+import br.paulo.tvlauncher.weather.IconesClima
 import java.util.Date
 import java.util.concurrent.Executors
 
@@ -354,7 +373,7 @@ class PainelRapidoActivity : Activity() {
 
     /** O clima que a HOME guardou (prefs "clima"): ícone, temperatura e condição. Velho (> 3 h) some. */
     private fun mostrarClima() {
-        val c = getSharedPreferences("clima", MODE_PRIVATE)
+        val c = getSharedPreferences(Prefs.CLIMA, MODE_PRIVATE)
         val codigo = c.getInt("codigo", -1)
         if (codigo < 0 || System.currentTimeMillis() - c.getLong("em", 0) > 3 * 3600_000L) {
             sepClima.visibility = View.GONE; imgClima.visibility = View.GONE; txtClima.visibility = View.GONE; return

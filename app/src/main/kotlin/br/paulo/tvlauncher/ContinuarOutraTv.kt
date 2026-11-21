@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import br.paulo.tvlauncher.network.EntreTvs
+import br.paulo.tvlauncher.player.JuntoRegras
 import org.json.JSONObject
 
 /**
@@ -68,7 +70,10 @@ class ContinuarActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return
-        val c = ContinuarOutraTv.pendente() ?: run { finish(); return }
+        // Sem convite valendo (venceu enquanto a pessoa chegava aqui): diz o motivo em vez de piscar e sumir.
+        val c = ContinuarOutraTv.pendente() ?: run {
+            AvisoTv.rapido(this, getString(R.string.aviso_continuar_titulo), getString(R.string.aviso_continuar_texto)); finish(); return
+        }
         val tipo = JuntoRegras.tipoDaChave(c.chave)
         val podeAbrir = c.url != null || tipo == JuntoRegras.Tipo.CANAL
         val depois = Estilo.botao(this, getString(R.string.junto_agora_nao), primario = false).apply {

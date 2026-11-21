@@ -5,6 +5,11 @@ Code comments and identifiers are in Brazilian Portuguese (the Android app); **n
 (domains, services, Workers, API routes and fields, new folders and files; Paulo's rule, 18/11/2026), e.g. `server/api` at
 `api.sofaly.tv` (publish it ONLY with `npm run deploy` inside `server/api`, see `server/README.md`); user-facing strings exist in `values/` (English, the default)
 and `values-pt/` (Portuguese); the app follows the TV's system language. Read `README.md` first for the feature list.
+Code layout (21/11/2026 refactor): sources live in subpackages by area under `br/paulo/tvlauncher/` (home, player,
+listen, panel, mcp, weather, alarm, screensaver, privilege, network, backup, observer, family, games, settings, input,
+search); manifest components, JNI classes and the core (Fundo, Estilo, Prefs, Http...) stay in the root package. Tests
+that read sources find files with `CodeSource.file(name)`. Background work goes through `Fundo.rodar`/`Fundo.juntos`
+(coroutines); only endless loops (servers, watchers) keep their own Thread.
 
 ## Rules that protect installed TVs (do not break)
 

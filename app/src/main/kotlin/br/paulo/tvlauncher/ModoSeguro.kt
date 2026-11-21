@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import br.paulo.tvlauncher.observer.QuedasSeguidas
 import java.io.File
 
 /**

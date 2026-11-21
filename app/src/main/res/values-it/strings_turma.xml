@@ -2,11 +2,9 @@
 <!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
 <resources>
     <string name="jogos_no_sofa">Sul divano</string>
-    <string name="jogos_continuar">Continua</string>
     <string name="jogos_controle_pronto">pronto</string>
     <string name="jogos_controle_carregar">da ricaricare</string>
     <string name="jogos_parear_um">Associa un controller</string>
-    <string name="jogos_todos">Tutti</string>
     <string name="turma_titulo">La tua compagnia</string>
     <string name="turma_online">%1$d online</string>
     <string name="turma_mais_online">+ %1$d online</string>
@@ -22,7 +20,6 @@
     <string name="turma_desligado_titulo">Il widget del server è disattivato</string>
     <string name="turma_desligado_texto">In Discord: Impostazioni server, Widget, attiva Abilita widget del server.</string>
     <string name="turma_qr_dica">Inquadra con il telefono per entrare in vocale. Si parla dal telefono.</string>
-    <string name="turma_aqui">%1$d della compagnia qui</string>
     <string name="turma_jogando">%1$s gioca a %2$s</string>
     <string name="turma_dois">%1$s e %2$s</string>
     <string name="turma_e_mais">%1$s e altri %2$d</string>
@@ -40,7 +37,6 @@
     <string name="turma_config_guardar">Salva</string>
     <string name="turma_config_tirar">Togli la compagnia</string>
     <string name="turma_id_invalido">Questo non è un ID di server Discord (da 17 a 20 cifre).</string>
-    <string name="cruz_sofa">Divano</string>
     <string name="cruz_sofa_sub">Controller e la tua compagnia di Discord</string>
     <string name="cruz_sofa_voz">%1$d in vocale · %2$s</string>
 </resources>

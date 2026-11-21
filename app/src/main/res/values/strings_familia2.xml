@@ -20,7 +20,6 @@
     <string name="mu_nao_lido_desc">Message: %s. OK marks as read.</string>
     <string name="mu_apagar">Delete message: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Your TV this year (in December, on the screensaver)</string>
-    <string name="extras_CARTOES_TRANSPARENTES">See-through app cards when not selected</string>
     <string name="extras_ENTRADAS_TV">HDMI inputs in the app row (only on TVs with inputs)</string>
     <string name="ra_titulo">Your TV in %d</string>
     <string name="ra_canal">Favorite channel: %1$s (%2$s)</string>
@@ -28,7 +27,6 @@
     <string name="ra_dica_ouvir">listen</string>
     <string name="ra_dica_favoritar">favorite</string>
     <string name="ra_carregando">Loading stations…</string>
-    <string name="ra_subtitulo">Stations from all over the world · 1–9 on the remote play your favorites</string>
     <string name="ra_sem_catalogo">The radio catalog didn\'t answer. Your favorites still work.</string>
     <string name="ra_nada">No station found.</string>
     <string name="ra_continuar">continue</string>
@@ -38,10 +36,7 @@
     <string name="ra_buscar">Search by name</string>
     <string name="ra_buscar_det">Any station in the world</string>
     <string name="ra_generos">Genres</string>
-    <string name="ra_paises">Other country</string>
-    <string name="ra_paises_det">The countries with the most stations</string>
     <string name="ra_perto">Nearby</string>
-    <string name="ra_mais_ouvidas">Most listened in %s</string>
     <string name="ra_mundo">Most listened in the world</string>
     <string name="ra_resultado">Search: %s</string>
     <string name="ra_favoritada">Added to favorites</string>

@@ -11,6 +11,22 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.util.Log
+import br.paulo.tvlauncher.alarm.AcenderTela
+import br.paulo.tvlauncher.alarm.Lembretes
+import br.paulo.tvlauncher.family.ControleParental
+import br.paulo.tvlauncher.family.ModoVisita
+import br.paulo.tvlauncher.games.MeuTimeAdiante
+import br.paulo.tvlauncher.games.ProximoJogo
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.network.TvWakeRetry
+import br.paulo.tvlauncher.player.Canal
+import br.paulo.tvlauncher.player.CanalTv
+import br.paulo.tvlauncher.player.PlayerArmazem
+import br.paulo.tvlauncher.player.PlayerCarga
+import br.paulo.tvlauncher.player.Programa
+import br.paulo.tvlauncher.player.avisar
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.settings.Extras
 import java.io.File
 import java.io.RandomAccessFile
 import java.text.SimpleDateFormat
@@ -263,10 +279,10 @@ class LembreteActivity : Activity() {
             tentativasTv++
             val app = applicationContext
             val n = tentativasTv
-            Thread {
+            Fundo.rodar("lembrete-cec") {
                 val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
                 Log.i("TvLauncher.Lembrete", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
-            }.start()
+            }
             TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
         }
     }

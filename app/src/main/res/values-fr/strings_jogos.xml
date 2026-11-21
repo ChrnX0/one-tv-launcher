@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Tradução (fr) de values/strings_jogos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
-    <string name="home_card_jogos">Jeux</string>
-    <string name="home_destaque_jogos_vazio">Jouez dans le cloud, depuis votre PC et en rétro</string>
-    <string name="home_linha_continuar_jogos">REGARDER ET JOUER</string>
-    <string name="home_jogos_ultimo">Dernier : %1$s</string>
     <string name="extras_CARD_JOGOS">Carte Jeux sur l’accueil (les apps de jeu quittent la rangée d’apps)</string>
     <string name="extras_MODO_JOGO">Mode jeu : tant qu’un jeu est ouvert, l’économiseur, le filtre de nuit et les avis attendent</string>
     <string name="extras_CONTROLE_ABRE_JOGOS">Allumer une manette ouvre l’écran Jeux</string>
@@ -29,8 +25,6 @@
     <string name="jogos_grupo_retro">Rétro</string>
     <string name="jogos_grupo_tv">Jeux sur la TV</string>
     <string name="jogos_para_comecar">Pour commencer</string>
-    <string name="jogos_vazio_dica">Pas encore de jeux sur cette TV. Choisissez-en un ci-dessus pour ouvrir sa page sur le Play Store.</string>
-    <string name="jogos_dica_segurar">Maintenez OK sur un jeu pour le déplacer vers un autre groupe ou le retirer d’ici.</string>
     <string name="jogos_aviso_fraca_titulo">Réseau faible pour le jeu en cloud</string>
     <string name="jogos_aviso_fraca">Le jeu peut saccader ou avoir du retard. Un câble réseau, ou la TV plus près du routeur, aide.</string>
     <string name="jogos_jogar_assim">Jouer quand même</string>
@@ -45,27 +39,16 @@
     <string name="jogos_pc_qual_app">Quelle app joue sur le PC ?</string>
     <string name="jogos_pc_acordando">Réveil du PC… %1$d s</string>
     <string name="jogos_pc_nao_respondeu">Le PC n’a pas répondu. Ouverture de l’app quand même.</string>
-    <string name="jogos_seus">Vos jeux</string>
     <string name="jogos_mais_jogos">Plus de jeux</string>
     <string name="jogos_mais_opcoes">Plus</string>
-    <string name="jogos_por_tipo">Par type</string>
-    <string name="jogos_jogar">Jouer</string>
     <string name="jogos_ligar_pc_jogar">Allumer le PC et jouer</string>
-    <string name="jogos_desc_nuvem">Le jeu tourne sur un ordinateur sur internet et la TV reçoit l’image. Il faut un bon réseau.</string>
     <string name="jogos_desc_pc">Jouez ici sur la TV aux jeux de l’ordinateur ou de la console de la maison.</string>
-    <string name="jogos_desc_retro">Jeux classiques de nombreuses consoles.</string>
-    <string name="jogos_desc_tv">Un jeu installé sur la TV elle-même.</string>
-    <string name="jogos_jogado">Joué pour la dernière fois %1$s.</string>
-    <string name="jogos_nenhum_titulo">Pas encore de jeux</string>
-    <string name="jogos_chip_sem_controle">Pas de manette</string>
     <string name="jogos_chip_medindo">Vérification du réseau…</string>
     <string name="jogos_chip_boa">Bon réseau</string>
     <string name="jogos_chip_ok">Réseau ok</string>
     <string name="jogos_chip_fraca">Réseau faible</string>
     <string name="jogos_chip_sem">Pas d’internet</string>
-    <string name="jogos_tecla_escolher">choisir</string>
     <string name="jogos_tecla_jogar">jouer</string>
-    <string name="jogos_tecla_mais">plus d’options</string>
     <string name="jogos_tecla_segurar">maintenir OK</string>
     <string name="jogos_tecla_opcoes">changer de groupe</string>
     <plurals name="jogos_qtd">

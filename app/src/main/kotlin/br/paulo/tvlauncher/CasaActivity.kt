@@ -15,6 +15,10 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import br.paulo.tvlauncher.home.Home
+import br.paulo.tvlauncher.home.IconeCard
+import br.paulo.tvlauncher.network.CasaHA
+import br.paulo.tvlauncher.panel.entrar
 
 /**
  * Tela "Casa" (ideia grande 1): os aparelhos do Home Assistant com o controle. OK liga/desliga (cena e script: roda).

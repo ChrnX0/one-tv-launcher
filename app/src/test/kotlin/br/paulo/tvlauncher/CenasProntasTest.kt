@@ -1,6 +1,9 @@
 package br.paulo.tvlauncher
 
-import br.paulo.tvlauncher.CenasProntas.Modelo
+import br.paulo.tvlauncher.mcp.ComandosIa
+import br.paulo.tvlauncher.network.Cenas
+import br.paulo.tvlauncher.network.CenasProntas
+import br.paulo.tvlauncher.network.CenasProntas.Modelo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

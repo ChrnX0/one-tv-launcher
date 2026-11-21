@@ -93,10 +93,6 @@
     <string name="vq_det">显示一个包含这台电视外观的二维码:主题、文字大小、图标。</string>
     <string name="vq_texto">用手机扫描即可保存,或发送给使用 Sofaly 的人。</string>
     <string name="vq_fechar">关闭</string>
-    <string name="lh_titulo">应用卡片大小</string>
-    <string name="lh_det">卡片更大,坐在沙发上也更容易看清。</string>
-    <string name="lh_normal">标准</string>
-    <string name="lh_grande">大</string>
     <string name="pl_titulo">套餐</string>
     <string name="pl_texto">在开始销售之前,所有功能都免费。之后,Pro 和 Ultra 需要在手机上购买。</string>
     <string name="pl_basico">基础版</string>
@@ -106,10 +102,6 @@
     <string name="pl_pro_itens">• 基础版的全部功能\n• 多个 IPTV 列表、录制\n• 完整网页面板\n• Claude、日常任务、Home Assistant\n• 全部主题、云备份</string>
     <string name="pl_ultra_itens">• Pro 的全部功能\n• 更准的天气(3 个模型)\n• 丰富的影片页面\n• 自动字幕\n• 最多 3 台电视</string>
     <string name="pl_qr">用手机扫描,查看价格并购买。</string>
-    <string name="lh_arranjo">应用排列</string>
-    <string name="lh_arranjo_det">横向滚动的一行,或显示所有应用的网格。</string>
-    <string name="lh_fileira">单行</string>
-    <string name="lh_grade">网格</string>
     <string name="pl_assinar">订阅</string>
     <string name="pl_assinar_preco">订阅 · %1$s</string>
     <string name="pl_seu_plano">你的方案</string>

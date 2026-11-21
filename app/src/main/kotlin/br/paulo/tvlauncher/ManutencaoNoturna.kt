@@ -13,11 +13,23 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.StatFs
 import android.util.Log
-import org.json.JSONArray
-import org.json.JSONObject
+import br.paulo.tvlauncher.alarm.ConsumoRede
+import br.paulo.tvlauncher.alarm.Despertador
+import br.paulo.tvlauncher.listen.Podcasts
+import br.paulo.tvlauncher.observer.Caches
+import br.paulo.tvlauncher.observer.ObserverTv
+import br.paulo.tvlauncher.player.IdadesTmdb
+import br.paulo.tvlauncher.player.InfoExternaCache
+import br.paulo.tvlauncher.player.ServicosContas
+import br.paulo.tvlauncher.privilege.GuardiaoShizuku
+import br.paulo.tvlauncher.privilege.PrivilegioDO
+import br.paulo.tvlauncher.privilege.SaudeAcesso
+import br.paulo.tvlauncher.settings.temTexto
 import java.io.File
 import java.util.Calendar
 import java.util.TimeZone
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Manutenção noturna (10/11/2026). De madrugada, com a TV parada, o launcher roda sozinho as checagens e consertos
