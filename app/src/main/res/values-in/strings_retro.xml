@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">Game kamu</string>
+    <string name="retro_vazio">Tidak ada game di flashdisk. Taruh game milikmu di folder bernama konsolnya (mis. SNES).</string>
+    <string name="retro_portugues">dalam bahasa Portugis</string>
+    <string name="retro_abrindo">Membuka di RetroArch…</string>
+    <string name="retro_nao_abriu">RetroArch tidak membuka game ini. Buka RetroArch sekali dan unduh core %1$s.</string>
+    <string name="retro_sem_retroarch">Pasang RetroArch (gratis di Play Store) untuk memainkan game ini.</string>
+    <string name="retro_aviso_legal">Sofaly tidak menyertakan game. Gunakan milikmu sendiri.</string>
+    <string name="retro_procurando">Mencari game di flashdisk…</string>
+</resources>

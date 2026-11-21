@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Testar o controle</string>
+    <string name="teste_controle_sub">Ele é rápido para jogar?</string>
+    <string name="teste_controle_mexa">Gire o analógico esquerdo em círculos por 10 segundos.</string>
+    <string name="teste_controle_bom">Ótimo para jogar: um sinal a cada %1$d ms.</string>
+    <string name="teste_controle_ok">Dá para jogar: um sinal a cada %1$d ms. Jogos rápidos podem parecer um pouco atrasados.</string>
+    <string name="teste_controle_ruim">Lento: um sinal a cada %1$d ms e %2$d pausas. Um controle com fio, ou o controle mais perto da TV, ajuda.</string>
+    <string name="teste_controle_parado">O controle não se mexeu. Tente de novo e continue girando o analógico.</string>
+</resources>

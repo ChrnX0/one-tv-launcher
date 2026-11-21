@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">컨트롤러 테스트</string>
+    <string name="teste_controle_sub">게임하기에 충분히 빠른가요?</string>
+    <string name="teste_controle_mexa">왼쪽 스틱을 10초 동안 원을 그리며 돌리세요.</string>
+    <string name="teste_controle_bom">게임에 최적: %1$dms마다 신호.</string>
+    <string name="teste_controle_ok">플레이 가능: %1$dms마다 신호. 빠른 게임은 약간 늦게 느껴질 수 있어요.</string>
+    <string name="teste_controle_ruim">느림: %1$dms마다 신호, 끊김 %2$d번. 유선 컨트롤러나 TV에 더 가까이 두면 좋아져요.</string>
+    <string name="teste_controle_parado">컨트롤러가 움직이지 않았어요. 스틱을 계속 돌리면서 다시 시도하세요.</string>
+</resources>

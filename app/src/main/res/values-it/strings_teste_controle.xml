@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Prova il controller</string>
+    <string name="teste_controle_sub">È abbastanza veloce per giocare?</string>
+    <string name="teste_controle_mexa">Ruota la levetta sinistra in cerchio per 10 secondi.</string>
+    <string name="teste_controle_bom">Ottimo per giocare: un segnale ogni %1$d ms.</string>
+    <string name="teste_controle_ok">Si può giocare: un segnale ogni %1$d ms. I giochi veloci possono sembrare un po’ in ritardo.</string>
+    <string name="teste_controle_ruim">Lento: un segnale ogni %1$d ms e %2$d pause. Un controller con cavo, o il controller più vicino alla TV, aiuta.</string>
+    <string name="teste_controle_parado">Il controller non si è mosso. Riprova continuando a ruotare la levetta.</string>
+</resources>

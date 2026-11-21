@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Przetestuj kontroler</string>
+    <string name="teste_controle_sub">Czy jest dość szybki do gry?</string>
+    <string name="teste_controle_mexa">Kręć lewą gałką w kółko przez 10 sekund.</string>
+    <string name="teste_controle_bom">Świetny do gier: sygnał co %1$d ms.</string>
+    <string name="teste_controle_ok">Da się grać: sygnał co %1$d ms. Szybkie gry mogą wydawać się nieco opóźnione.</string>
+    <string name="teste_controle_ruim">Wolny: sygnał co %1$d ms i %2$d przerw. Pomoże kontroler na kabel albo kontroler bliżej telewizora.</string>
+    <string name="teste_controle_parado">Kontroler się nie poruszył. Spróbuj ponownie i kręć gałką bez przerwy.</string>
+</resources>

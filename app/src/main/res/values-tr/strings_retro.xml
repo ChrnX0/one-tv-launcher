@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">Oyunların</string>
+    <string name="retro_vazio">USB bellekte oyun yok. Oyunlarını konsolun adını taşıyan bir klasöre koy (ör. SNES).</string>
+    <string name="retro_portugues">Portekizce</string>
+    <string name="retro_abrindo">RetroArch’ta açılıyor…</string>
+    <string name="retro_nao_abriu">RetroArch bu oyunu açmadı. RetroArch’ı bir kez açıp %1$s çekirdeğini indir.</string>
+    <string name="retro_sem_retroarch">Bu oyunları oynamak için RetroArch’ı yükle (Play Store’da ücretsiz).</string>
+    <string name="retro_aviso_legal">Sofaly oyun içermez. Kendi oyunlarını kullan.</string>
+    <string name="retro_procurando">USB bellekte oyun aranıyor…</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">내 게임</string>
+    <string name="retro_vazio">USB 드라이브에 게임이 없습니다. 내 게임을 콘솔 이름의 폴더(예: SNES)에 넣으세요.</string>
+    <string name="retro_portugues">포르투갈어</string>
+    <string name="retro_abrindo">RetroArch에서 여는 중…</string>
+    <string name="retro_nao_abriu">RetroArch가 이 게임을 열지 못했습니다. RetroArch를 한 번 열고 %1$s 코어를 다운로드하세요.</string>
+    <string name="retro_sem_retroarch">이 게임을 하려면 RetroArch(Play 스토어 무료)를 설치하세요.</string>
+    <string name="retro_aviso_legal">Sofaly에는 게임이 포함되어 있지 않습니다. 본인 게임을 사용하세요.</string>
+    <string name="retro_procurando">USB 드라이브에서 게임을 찾는 중…</string>
+</resources>

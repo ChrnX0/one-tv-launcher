@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">Ваши игры</string>
+    <string name="retro_vazio">На флешке нет игр. Положите свои игры в папку с названием консоли (например, SNES).</string>
+    <string name="retro_portugues">на португальском</string>
+    <string name="retro_abrindo">Открытие в RetroArch…</string>
+    <string name="retro_nao_abriu">RetroArch не открыл эту игру. Откройте RetroArch один раз и загрузите ядро %1$s.</string>
+    <string name="retro_sem_retroarch">Установите RetroArch (бесплатно в Play Маркете), чтобы играть в эти игры.</string>
+    <string name="retro_aviso_legal">Sofaly не содержит игр. Используйте свои.</string>
+    <string name="retro_procurando">Поиск игр на флешке…</string>
+</resources>

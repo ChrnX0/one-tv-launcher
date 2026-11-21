@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">あなたのゲーム</string>
+    <string name="retro_vazio">USBメモリにゲームがありません。ご自身のゲームをゲーム機名のフォルダ（例: SNES）に入れてください。</string>
+    <string name="retro_portugues">ポルトガル語</string>
+    <string name="retro_abrindo">RetroArchで開いています…</string>
+    <string name="retro_nao_abriu">RetroArchでこのゲームを開けませんでした。RetroArchを一度開き、%1$sのコアをダウンロードしてください。</string>
+    <string name="retro_sem_retroarch">これらのゲームを遊ぶにはRetroArch（Playストアで無料）をインストールしてください。</string>
+    <string name="retro_aviso_legal">Sofalyにゲームは含まれていません。お持ちのゲームをお使いください。</string>
+    <string name="retro_procurando">USBメモリのゲームを探しています…</string>
+</resources>

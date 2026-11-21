@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Test the controller</string>
+    <string name="teste_controle_sub">Is it fast enough to play?</string>
+    <string name="teste_controle_mexa">Turn the left stick in circles for 10 seconds.</string>
+    <string name="teste_controle_bom">Great for games: a signal every %1$d ms.</string>
+    <string name="teste_controle_ok">Playable: a signal every %1$d ms. Fast games may feel a little late.</string>
+    <string name="teste_controle_ruim">Slow: a signal every %1$d ms and %2$d pauses. A wired controller, or the controller closer to the TV, helps.</string>
+    <string name="teste_controle_parado">The controller did not move. Try again and keep turning the stick.</string>
+</resources>

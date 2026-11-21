@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">ألعابك</string>
+    <string name="retro_vazio">لا توجد ألعاب على وحدة USB. ضع ألعابك في مجلد باسم الجهاز (مثل SNES).</string>
+    <string name="retro_portugues">بالبرتغالية</string>
+    <string name="retro_abrindo">جارٍ الفتح في RetroArch…</string>
+    <string name="retro_nao_abriu">لم يفتح RetroArch هذه اللعبة. افتح RetroArch مرة واحدة ونزّل نواة %1$s.</string>
+    <string name="retro_sem_retroarch">ثبّت RetroArch (مجانًا على متجر Play) لتلعب هذه الألعاب.</string>
+    <string name="retro_aviso_legal">لا يتضمن Sofaly أي ألعاب. استخدم ألعابك.</string>
+    <string name="retro_procurando">جارٍ البحث عن ألعاب على وحدة USB…</string>
+</resources>

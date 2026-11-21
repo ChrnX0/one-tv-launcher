@@ -12,6 +12,8 @@ import android.text.InputType
 import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.KeyEvent
+import android.view.InputDevice
+import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -42,6 +44,9 @@ import br.paulo.tvlauncher.settings.Fontes
  * É uma [CruzOuvir]: ◀ ▶ trocam a prateleira, ▲ ▼ andam na coluna, OK abre e segurar OK (ou Y no controle) num jogo
  * troca o grupo dele ou tira ele daqui. Prateleiras, na ordem:
  *  - Jogados por último: os jogos (o ícone do app), o jogado por último primeiro, e "Mais jogos" (Play Store);
+ *  - Uma prateleira por console com os jogos que a pessoa tem no pen drive (biblioteca retrô, 21/11/2026,
+ *    [RetroLibrary]): os jogados por último primeiro, depois A a Z; OK abre no RetroArch. Só aparece quando há jogos;
+ *    o Sofaly não traz, não baixa e não indica jogo nenhum (regra da Play e da lei);
  *  - No sofá: os controles ligados, com o número do jogador e a bateria, e "Parear um controle";
  *  - Sua turma: a sala de voz do Discord (OK = QR grande para o celular entrar), quem está online e jogando o quê,
  *    "Chamar a turma" (com webhook) e a configuração;
@@ -59,6 +64,9 @@ class JogosActivity : Activity() {
     private class Semana(val ms: Long, val topo: String?)
     private var semana: Semana? = null
     private var turma: TurmaDiscordTv.Estado? = null
+    /** Jogos do pen drive (biblioteca retrô) e a última vez de cada um. Vazio = nenhuma prateleira de console. */
+    private var retro: List<RetroLibrary.Jogo> = emptyList()
+    private var retroUltima: Map<String, Long> = emptyMap()
     private var esperandoPc = false
     private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: começa na turma
     private var focoPacote: String? = null   // voltou de mudar o grupo: o foco volta no mesmo jogo
@@ -111,6 +119,7 @@ class JogosActivity : Activity() {
         })
         getSystemService(InputManager::class.java)?.registerInputDeviceListener(ouvinteControles, ui)
         turma = TurmaDiscordTv.guardado(this)
+        retro = RetroLibraryTv.guardada(this); retroUltima = RetroLibraryTv.ultimaVez(this)   // a leitura de antes, já
         montar()
         if (abrirNoSofa) cruz.ir(P_TURMA, animar = false)
         cruz.requestFocus()
@@ -155,6 +164,14 @@ class JogosActivity : Activity() {
                 if (escolhido == null) escolhido = ordenada.firstOrNull()   // a 1ª prateleira abre no jogado por último
                 montar()
             }
+            // O pen drive pode ter mudado (trocado, jogo novo pelo painel): relê pelo shell (~1 s na Sala com 308 jogos).
+            val lidos = RetroLibraryTv.ler(ctx) ?: return@rodar   // sem shell: fica a leitura guardada
+            val ultima = RetroLibraryTv.ultimaVez(ctx)
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                retroUltima = ultima
+                if (lidos.map { it.caminho } != retro.map { it.caminho }) { retro = lidos; montar() } else retro = lidos
+            }
         }
     }
 
@@ -169,7 +186,7 @@ class JogosActivity : Activity() {
     /** Refaz as prateleiras e o cartão (a cruz guarda o item escolhido de cada uma e só redesenha o que mudou). */
     private fun montar() {
         if (!::cruz.isInitialized || isDestroyed) return
-        val prats = listOf(prateleiraJogos(), prateleiraSofa(), prateleiraTurma(), prateleiraOpcoes())
+        val prats = listOf(prateleiraJogos()) + prateleirasRetro() + listOf(prateleiraSofa(), prateleiraTurma(), prateleiraOpcoes())
         val foco = focoPacote?.let { P_JOGOS to it }
         focoPacote = null
         cruz.definir(prats, foco)
@@ -208,6 +225,50 @@ class JogosActivity : Activity() {
         return CruzOuvir.Prateleira(P_JOGOS, nome, IconeOuvir.Tipo.CONTROLE, itens)
     }
 
+    /**
+     * Uma prateleira por console da biblioteca retrô. Capa desenhada pelo Sofaly (cor do console + iniciais): não
+     * baixamos capa de caixa (sem licença). O último item lembra que o Sofaly não traz jogos (Play: "use os seus").
+     */
+    private fun prateleirasRetro(): List<CruzOuvir.Prateleira> {
+        if (retro.isEmpty()) return emptyList()
+        val recentes = RetroLibrary.continuar(retro, retroUltima, max = 5).map { it.caminho }.toSet()
+        return RetroLibrary.porConsole(retro).map { (console, qtd) ->
+            val doConsole = retro.filter { it.console == console }
+            val ordem = doConsole.filter { it.caminho in recentes }.sortedByDescending { retroUltima[it.caminho] } +
+                doConsole.filter { it.caminho !in recentes }
+            val cor = CORES_CONSOLE[console.ordinal % CORES_CONSOLE.size]
+            val itens = ordem.map { j ->
+                val sub = listOfNotNull(
+                    retroUltima[j.caminho]?.let { DateUtils.getRelativeTimeSpanString(it, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString() },
+                    getString(R.string.retro_portugues).takeIf { j.portugues },
+                ).joinToString(" · ")
+                CruzOuvir.Item("retro:" + j.caminho, j.nome, sub, cor = cor, monograma = CapaOuvir.iniciais(j.nome),
+                    abrir = { abrirRetro(j) })
+            } + CruzOuvir.Item("retro_aviso:" + console.name, getString(R.string.retro_aviso_legal), "", icone = IconeOuvir.Tipo.OPCOES)
+            CruzOuvir.Prateleira("retro:" + console.name,
+                console.nome + "\n" + resources.getQuantityString(R.plurals.jogos_qtd, qtd, qtd), IconeOuvir.Tipo.CONTROLE, itens)
+        }
+    }
+
+    /** OK num jogo do pen drive: sem RetroArch, a página dele na Play; com, prepara e abre (fora da thread da tela). */
+    private fun abrirRetro(j: RetroLibrary.Jogo) {
+        if (!JogosTv.instalado(this, RetroLibrary.RETROARCH)) {
+            AvisoTv.rapido(this, getString(R.string.retro_titulo), getString(R.string.retro_sem_retroarch))
+            abrirNaLoja(RetroLibrary.RETROARCH); return
+        }
+        AvisoTv.rapido(this, j.nome, getString(R.string.retro_abrindo), segundos = 3)
+        val app = applicationContext
+        Fundo.rodar("jogos-retro") {
+            val r = RetroLibraryTv.abrir(app, j)
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                if (r == RetroLibraryTv.Resultado.ABRIU) { retroUltima = RetroLibraryTv.ultimaVez(app); montar() }
+                // Sem núcleo o RetroArch já abriu: o aviso diz o que baixar lá (vai para a frente dele).
+                else AvisoTv.rapido(app, j.nome, getString(R.string.retro_nao_abriu, j.console.nome), segundos = 8)
+            }
+        }
+    }
+
     /** Um item por controle ligado (número do jogador na cor dele, bateria) e "Parear um controle". */
     private fun prateleiraSofa(): CruzOuvir.Prateleira {
         val itens = ArrayList<CruzOuvir.Item>()
@@ -220,6 +281,8 @@ class JogosActivity : Activity() {
         }
         itens += CruzOuvir.Item("parear", getString(R.string.jogos_parear_um),
             if (c.isEmpty()) getString(R.string.jogos_sem_controle) else "", icone = IconeOuvir.Tipo.ADICIONAR, abrir = { parear() })
+        if (c.isNotEmpty()) itens += CruzOuvir.Item("teste-controle", getString(R.string.teste_controle),
+            getString(R.string.teste_controle_sub), icone = IconeOuvir.Tipo.CONTROLE, cor = COR_JOGAR, abrir = { testarControle() })
         return CruzOuvir.Prateleira(P_SOFA, getString(R.string.jogos_no_sofa), IconeOuvir.Tipo.SOFA, itens)
     }
 
@@ -588,6 +651,40 @@ class JogosActivity : Activity() {
         }
     }
 
+    /** Hora (ms) de cada sinal do analógico durante o "teste do controle"; null = teste desligado. */
+    private var sinaisTeste: ArrayList<Long>? = null
+
+    /** Teste do controle: 10 s girando o analógico, depois o veredito ([ControleLatencia]). */
+    private fun testarControle() {
+        if (sinaisTeste != null) return
+        sinaisTeste = ArrayList()
+        AvisoTv.rapido(this, getString(R.string.teste_controle), getString(R.string.teste_controle_mexa), segundos = 10)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val t = sinaisTeste ?: return@postDelayed
+            sinaisTeste = null
+            if (isDestroyed) return@postDelayed
+            val r = ControleLatencia.resumo(t)
+            val texto = when (r.veredito) {
+                ControleLatencia.Veredito.BOM -> getString(R.string.teste_controle_bom, r.media)
+                ControleLatencia.Veredito.JOGAVEL -> getString(R.string.teste_controle_ok, r.media)
+                ControleLatencia.Veredito.LENTO -> getString(R.string.teste_controle_ruim, r.media, r.pausas)
+                ControleLatencia.Veredito.PARADO -> getString(R.string.teste_controle_parado)
+            }
+            AvisoTv.rapido(this, getString(R.string.teste_controle), texto, segundos = 12)
+        }, 10_000)
+    }
+
+    override fun dispatchGenericMotionEvent(ev: MotionEvent): Boolean {
+        // O Android junta vários sinais num MotionEvent: o histórico guarda a hora de cada um.
+        sinaisTeste?.let { t ->
+            if (ev.isFromSource(InputDevice.SOURCE_JOYSTICK)) {
+                for (h in 0 until ev.historySize) t += ev.getHistoricalEventTime(h)
+                t += ev.eventTime
+            }
+        }
+        return super.dispatchGenericMotionEvent(ev)
+    }
+
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Botão Y/△ do controle de videogame em cima de um jogo = o mesmo que segurar OK (escolher o grupo).
         if (event.keyCode == KeyEvent.KEYCODE_BUTTON_Y && event.action == KeyEvent.ACTION_UP) {
@@ -608,6 +705,9 @@ class JogosActivity : Activity() {
         /** O violeta do Jogar na cruz ([IconeCruz.corLinha]). */
         private const val COR_JOGAR = 0xFF8E92FA.toInt()
         private val CORES_JOGADOR = intArrayOf(DesignTokens.WORLD_PLAY, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
+        /** Cor da capa desenhada de cada console (nenhum rosa). */
+        private val CORES_CONSOLE = intArrayOf(0xFFE04A3A.toInt(), 0xFF7C6CF2.toInt(), 0xFF2FA866.toInt(), 0xFF8FB82B.toInt(),
+            0xFF3D7BFF.toInt(), 0xFF5B4BC4.toInt(), 0xFFC98A12.toInt(), 0xFF1F6FD1.toInt())
         // Avatares: tons claros, nenhum rosado (o dono detesta rosa).
         private val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
     }

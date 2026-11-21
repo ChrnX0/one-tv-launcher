@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">Twoje gry</string>
+    <string name="retro_vazio">Brak gier na pendrivie. Umieść swoje gry w folderze z nazwą konsoli (np. SNES).</string>
+    <string name="retro_portugues">po portugalsku</string>
+    <string name="retro_abrindo">Otwieranie w RetroArch…</string>
+    <string name="retro_nao_abriu">RetroArch nie otworzył tej gry. Otwórz RetroArch raz i pobierz rdzeń %1$s.</string>
+    <string name="retro_sem_retroarch">Zainstaluj RetroArch (bezpłatnie w Sklepie Play), aby grać w te gry.</string>
+    <string name="retro_aviso_legal">Sofaly nie zawiera gier. Używaj własnych.</string>
+    <string name="retro_procurando">Szukanie gier na pendrivie…</string>
+</resources>

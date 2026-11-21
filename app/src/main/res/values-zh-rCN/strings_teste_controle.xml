@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">测试手柄</string>
+    <string name="teste_controle_sub">速度够玩游戏吗？</string>
+    <string name="teste_controle_mexa">将左摇杆画圈转动 10 秒。</string>
+    <string name="teste_controle_bom">非常适合游戏：每 %1$d 毫秒一个信号。</string>
+    <string name="teste_controle_ok">可以玩：每 %1$d 毫秒一个信号。快节奏游戏可能稍有延迟。</string>
+    <string name="teste_controle_ruim">较慢：每 %1$d 毫秒一个信号，中断 %2$d 次。使用有线手柄或让手柄靠近电视会有帮助。</string>
+    <string name="teste_controle_parado">手柄没有动。请重试并持续转动摇杆。</string>
+</resources>

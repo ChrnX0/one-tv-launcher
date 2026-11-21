@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">आपके गेम</string>
+    <string name="retro_vazio">USB ड्राइव पर कोई गेम नहीं है। अपने गेम कंसोल के नाम वाले फ़ोल्डर में रखें (जैसे SNES)।</string>
+    <string name="retro_portugues">पुर्तगाली में</string>
+    <string name="retro_abrindo">RetroArch में खुल रहा है…</string>
+    <string name="retro_nao_abriu">RetroArch ने यह गेम नहीं खोला। RetroArch एक बार खोलें और %1$s कोर डाउनलोड करें।</string>
+    <string name="retro_sem_retroarch">ये गेम खेलने के लिए RetroArch इंस्टॉल करें (Play Store पर मुफ़्त)।</string>
+    <string name="retro_aviso_legal">Sofaly में कोई गेम शामिल नहीं है। अपने गेम इस्तेमाल करें।</string>
+    <string name="retro_procurando">USB ड्राइव पर गेम खोजे जा रहे हैं…</string>
+</resources>

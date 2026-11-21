@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teste do controle da tela Jogos (21/11/2026, ControleLatencia). -->
+<resources>
+    <string name="teste_controle">Kumandayı test et</string>
+    <string name="teste_controle_sub">Oyun için yeterince hızlı mı?</string>
+    <string name="teste_controle_mexa">Sol çubuğu 10 saniye boyunca daireler çizerek çevir.</string>
+    <string name="teste_controle_bom">Oyun için harika: her %1$d ms’de bir sinyal.</string>
+    <string name="teste_controle_ok">Oynanabilir: her %1$d ms’de bir sinyal. Hızlı oyunlar biraz gecikmeli gelebilir.</string>
+    <string name="teste_controle_ruim">Yavaş: her %1$d ms’de bir sinyal ve %2$d duraklama. Kablolu kumanda ya da TV’ye daha yakın kumanda yardımcı olur.</string>
+    <string name="teste_controle_parado">Kumanda hareket etmedi. Tekrar dene ve çubuğu çevirmeye devam et.</string>
+</resources>

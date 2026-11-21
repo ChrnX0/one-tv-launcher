@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biblioteca retrô da tela Jogos (21/11/2026): RetroLibrary, RetroLibraryTv, JogosActivity. -->
+<resources>
+    <string name="retro_titulo">Tus juegos</string>
+    <string name="retro_vazio">No hay juegos en el USB. Pon tus juegos en una carpeta con el nombre de la consola (ej.: SNES).</string>
+    <string name="retro_portugues">en portugués</string>
+    <string name="retro_abrindo">Abriendo en RetroArch…</string>
+    <string name="retro_nao_abriu">RetroArch no abrió este juego. Abre RetroArch una vez y descarga el núcleo de %1$s.</string>
+    <string name="retro_sem_retroarch">Instala RetroArch (gratis en Play Store) para jugar estos juegos.</string>
+    <string name="retro_aviso_legal">Sofaly no incluye juegos. Usa los tuyos.</string>
+    <string name="retro_procurando">Buscando juegos en el USB…</string>
+</resources>
