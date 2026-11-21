@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">폴더 선택</string>
+    <string name="dp_titulo_arquivo">파일 선택</string>
+    <string name="dp_titulo_salvar">저장할 위치 선택</string>
+    <string name="dp_para">%1$s용</string>
+    <string name="dp_usar_pasta">이 폴더 사용</string>
+    <string name="dp_salvar_aqui">여기에 저장</string>
+    <string name="dp_memoria">TV 저장공간</string>
+    <string name="dp_rede">네트워크 폴더</string>
+    <string name="dp_livre">%1$s 남음</string>
+    <string name="dp_vazia">여기에는 선택할 항목이 없습니다</string>
+    <string name="dp_abrindo">여는 중…</string>
+    <string name="dp_erro">이 위치를 열 수 없습니다. 연결되어 있는지 확인하고 다시 시도하세요.</string>
+    <string name="dp_arquivos">이 폴더의 파일: %1$d</string>
+    <string name="dp_dicas">OK: 열기 · 뒤로: 돌아가기</string>
+    <string name="dp_diario">%1$s이(가) 선택기에서 %2$s을(를) 받음</string>
+    <string name="dp_sem_nome">이름 없음</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">Bir klasör seçin</string>
+    <string name="dp_titulo_arquivo">Bir dosya seçin</string>
+    <string name="dp_titulo_salvar">Kaydedilecek yeri seçin</string>
+    <string name="dp_para">%1$s için</string>
+    <string name="dp_usar_pasta">Bu klasörü kullan</string>
+    <string name="dp_salvar_aqui">Buraya kaydet</string>
+    <string name="dp_memoria">TV depolama alanı</string>
+    <string name="dp_rede">Ağ klasörü</string>
+    <string name="dp_livre">%1$s boş</string>
+    <string name="dp_vazia">Burada seçilecek bir şey yok</string>
+    <string name="dp_abrindo">Açılıyor…</string>
+    <string name="dp_erro">Bu konum açılamadı. Bağlı olduğunu kontrol edip tekrar deneyin.</string>
+    <string name="dp_arquivos">Bu klasördeki dosyalar: %1$d</string>
+    <string name="dp_dicas">OK: aç · GERİ: geri dön</string>
+    <string name="dp_diario">%1$s seçiciden %2$s aldı</string>
+    <string name="dp_sem_nome">adsız</string>
+</resources>

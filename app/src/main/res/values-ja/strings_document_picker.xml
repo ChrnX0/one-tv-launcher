@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">フォルダを選択</string>
+    <string name="dp_titulo_arquivo">ファイルを選択</string>
+    <string name="dp_titulo_salvar">保存先を選択</string>
+    <string name="dp_para">%1$s 用</string>
+    <string name="dp_usar_pasta">このフォルダを使用</string>
+    <string name="dp_salvar_aqui">ここに保存</string>
+    <string name="dp_memoria">TV のストレージ</string>
+    <string name="dp_rede">ネットワーク フォルダ</string>
+    <string name="dp_livre">空き %1$s</string>
+    <string name="dp_vazia">ここには選べるものがありません</string>
+    <string name="dp_abrindo">開いています…</string>
+    <string name="dp_erro">この場所を開けませんでした。接続を確認して、もう一度お試しください。</string>
+    <string name="dp_arquivos">このフォルダのファイル: %1$d</string>
+    <string name="dp_dicas">OK: 開く · 戻る: 戻る</string>
+    <string name="dp_diario">%1$s が選択画面から %2$s を受け取りました</string>
+    <string name="dp_sem_nome">名前なし</string>
+</resources>

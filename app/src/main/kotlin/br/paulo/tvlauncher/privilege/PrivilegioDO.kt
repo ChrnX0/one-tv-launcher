@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.util.Log
 import br.paulo.tvlauncher.AdminReceiver
 import br.paulo.tvlauncher.Config
+import br.paulo.tvlauncher.DocumentPickerActivity
 import br.paulo.tvlauncher.MainActivity
 import br.paulo.tvlauncher.ProtetorTela
 import br.paulo.tvlauncher.alarm.AutoDesligar
@@ -40,6 +41,7 @@ object PrivilegioDO {
                 // nao consegue revogar. E o "nunca perder privilegios", pelo caminho permanente — nao depende de adb nem Shizuku.
                 Config.PERMISSOES_FIXAS.forEach { conceder(ctx, ctx.packageName, it) }
                 fixarHome(ctx)
+                fixarSeletor(ctx)
                 if (Config.OTIMIZAR_MEMORIA) Config.APPS_OCULTAR.forEach { ocultar(ctx, it, true) }
                 // VPN sempre ativa = app AdGuard VPN (04/11/2026). Vazio = o launcher não mexe na VPN.
                 if (Config.VPN_FIXA.isNotEmpty()) vpnSempreAtiva(ctx, Config.VPN_FIXA)
@@ -69,6 +71,32 @@ object PrivilegioDO {
             Log.i(TAG, "HOME persistente => ${nossa.flattenToShortString()} (resolve hoje para ${resolvida?.packageName}/${resolvida?.name})")
         } catch (e: Exception) {
             Log.w(TAG, "fixarHome falhou: $e")
+        }
+    }
+
+    /**
+     * O seletor de pastas e arquivos do Sofaly como padrão (21/11/2026, DocumentPickerActivity). No Google TV esses
+     * pedidos caem num "stub" do sistema que só diz "nenhum app compatível"; sem isto, o Android ainda mostraria a
+     * escolha entre o stub e o nosso a cada vez. Pedidos com e sem tipo (o filtro com tipo não casa pedido sem tipo).
+     * Para desfazer: clearPackagePersistentPreferredActivities(admin, nosso pacote), que também solta a HOME.
+     */
+    private fun fixarSeletor(ctx: Context) {
+        try {
+            val nossa = ComponentName(ctx, DocumentPickerActivity::class.java)
+            val acoes = listOf(android.content.Intent.ACTION_OPEN_DOCUMENT_TREE, android.content.Intent.ACTION_OPEN_DOCUMENT,
+                android.content.Intent.ACTION_CREATE_DOCUMENT, android.content.Intent.ACTION_GET_CONTENT)
+            for (acao in acoes) for (comTipo in listOf(false, true)) {
+                if (acao == android.content.Intent.ACTION_OPEN_DOCUMENT_TREE && comTipo) continue
+                val filtro = android.content.IntentFilter(acao).apply {
+                    addCategory(android.content.Intent.CATEGORY_DEFAULT)
+                    if (acao != android.content.Intent.ACTION_OPEN_DOCUMENT_TREE) addCategory(android.content.Intent.CATEGORY_OPENABLE)
+                    if (comTipo) addDataType("*/*")
+                }
+                dpm(ctx).addPersistentPreferredActivity(admin(ctx), filtro, nossa)
+            }
+            Log.i(TAG, "seletor de documentos persistente => ${nossa.flattenToShortString()}")
+        } catch (e: Exception) {
+            Log.w(TAG, "fixarSeletor falhou: $e")
         }
     }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seletor de pastas e arquivos (DocumentPickerActivity, 21/11/2026). -->
+<resources>
+    <string name="dp_titulo_pasta">फ़ोल्डर चुनें</string>
+    <string name="dp_titulo_arquivo">फ़ाइल चुनें</string>
+    <string name="dp_titulo_salvar">सेव करने की जगह चुनें</string>
+    <string name="dp_para">%1$s के लिए</string>
+    <string name="dp_usar_pasta">यह फ़ोल्डर इस्तेमाल करें</string>
+    <string name="dp_salvar_aqui">यहाँ सेव करें</string>
+    <string name="dp_memoria">TV स्टोरेज</string>
+    <string name="dp_rede">नेटवर्क फ़ोल्डर</string>
+    <string name="dp_livre">%1$s खाली</string>
+    <string name="dp_vazia">यहाँ चुनने के लिए कुछ नहीं है</string>
+    <string name="dp_abrindo">खुल रहा है…</string>
+    <string name="dp_erro">यह जगह नहीं खुल सकी। जाँचें कि यह जुड़ी है और फिर कोशिश करें।</string>
+    <string name="dp_arquivos">इस फ़ोल्डर में फ़ाइलें: %1$d</string>
+    <string name="dp_dicas">OK: खोलें · BACK: वापस</string>
+    <string name="dp_diario">%1$s को चुनने वाले से %2$s मिला</string>
+    <string name="dp_sem_nome">बिना नाम</string>
+</resources>
