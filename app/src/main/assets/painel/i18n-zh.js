@@ -51,7 +51,7 @@ traduzirPainelCom({T:{
 "Dono do aparelho":"设备所有者",
 "A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.":"电视的无障碍服务已关闭。没有它，遥控器的 HOME 键和应用上方的提示将停止工作。",
 "O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.":"电视自带的 Shell 已断开。没有它，冻结应用和高级命令将停止工作。",
-"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"电视不是设备所有者。隐藏应用和固定 HOME 使用简易模式。",
+"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"电视不是设备所有者。隐藏应用和固定 HOME 使用受限模式。",
 "Mundos da cruz":"十字的世界",
 "Assistir":"观看",
 "Ouvir":"收听",

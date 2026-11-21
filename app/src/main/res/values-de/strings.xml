@@ -858,7 +858,7 @@ AS\\Filme).</string>
     <string name="home_arquivos_falhou">%1$s konnte nicht freigegeben werden: %2$s</string>
     <string name="aviso_continuar_titulo">Nichts fortzusetzen</string>
     <string name="aviso_continuar_texto">Die Einladung zum Fortsetzen vom anderen Fernseher ist abgelaufen.</string>
-    <string name="aviso_simples_titulo">Einfacher Modus aus</string>
+    <string name="aviso_simples_titulo">Einfache Ansicht aus</string>
     <string name="aviso_simples_texto">Der Fernseher zeigt wieder den vollen Startbildschirm.</string>
     <string name="aviso_sync_titulo">Kein Konto verbunden</string>
     <string name="aviso_sync_texto">Auf diesem Fernseher gibt es kein %1$s-Konto. Verbinde es unter Einstellungen › TV und Filme.</string>

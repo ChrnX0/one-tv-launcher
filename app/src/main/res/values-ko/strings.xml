@@ -855,7 +855,7 @@ AS\\Movies).</string>
     <string name="home_arquivos_falhou">%1$s 허용 실패: %2$s</string>
     <string name="aviso_continuar_titulo">이어 볼 것이 없음</string>
     <string name="aviso_continuar_texto">다른 TV에서 이어 보기 초대가 만료되었습니다.</string>
-    <string name="aviso_simples_titulo">간단 모드 꺼짐</string>
+    <string name="aviso_simples_titulo">쉬운 화면 꺼짐</string>
     <string name="aviso_simples_texto">TV가 전체 홈 화면으로 돌아왔습니다.</string>
     <string name="aviso_sync_titulo">연결된 계정 없음</string>
     <string name="aviso_sync_texto">이 TV에 %1$s 계정이 없습니다. 설정 › TV 및 영화에서 연결하세요.</string>

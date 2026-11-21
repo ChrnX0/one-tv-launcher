@@ -51,7 +51,7 @@ traduzirPainelCom({T:{
 "Dono do aparelho":"デバイスオーナー",
 "A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.":"テレビのユーザー補助がオフです。オフのままだと、リモコンのHOMEボタンとアプリ上のお知らせが動きません。",
 "O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.":"テレビ専用のシェルが停止しました。停止中はアプリのフリーズと高度なコマンドが動きません。",
-"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"テレビはデバイスオーナーではありません。アプリの非表示と固定HOMEはシンプルモードで動きます。",
+"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"テレビはデバイスオーナーではありません。アプリの非表示と固定HOMEは制限モードで動きます。",
 "Mundos da cruz":"クロスの世界",
 "Assistir":"観る",
 "Ouvir":"聴く",

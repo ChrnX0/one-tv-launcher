@@ -896,7 +896,7 @@
     <string name="home_arquivos_falhou">Couldn\'t allow %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Nothing to continue</string>
     <string name="aviso_continuar_texto">The invitation to continue from the other TV has expired.</string>
-    <string name="aviso_simples_titulo">Simple mode is off</string>
+    <string name="aviso_simples_titulo">Easy screen is off</string>
     <string name="aviso_simples_texto">The TV is back to the full home screen.</string>
     <string name="aviso_sync_titulo">No account connected</string>
     <string name="aviso_sync_texto">There is no %1$s account on this TV. Connect it in Settings › TV and movies.</string>

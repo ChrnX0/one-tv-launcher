@@ -858,7 +858,7 @@ AS\\Films).</string>
     <string name="home_arquivos_falhou">Impossible d\'autoriser %1$s : %2$s</string>
     <string name="aviso_continuar_titulo">Rien à reprendre</string>
     <string name="aviso_continuar_texto">L\'invitation à reprendre depuis l\'autre TV a expiré.</string>
-    <string name="aviso_simples_titulo">Mode simple désactivé</string>
+    <string name="aviso_simples_titulo">Écran facile désactivé</string>
     <string name="aviso_simples_texto">La TV est revenue à l\'écran d\'accueil complet.</string>
     <string name="aviso_sync_titulo">Aucun compte connecté</string>
     <string name="aviso_sync_texto">Aucun compte %1$s sur cette TV. Connectez-le dans Réglages › TV et films.</string>

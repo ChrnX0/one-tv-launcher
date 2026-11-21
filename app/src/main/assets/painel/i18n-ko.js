@@ -51,7 +51,7 @@ traduzirPainelCom({T:{
 "Dono do aparelho":"기기 소유자",
 "A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.":"TV의 접근성이 꺼져 있습니다. 접근성이 없으면 리모컨의 HOME 버튼과 앱 위의 알림이 작동하지 않습니다.",
 "O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.":"TV 자체 셸이 중단되었습니다. 셸이 없으면 앱 정지와 고급 명령이 작동하지 않습니다.",
-"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"TV가 기기 소유자가 아닙니다. 앱 숨기기와 고정 HOME은 간단 모드로 작동합니다.",
+"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"TV가 기기 소유자가 아닙니다. 앱 숨기기와 고정 HOME은 제한 모드로 작동합니다.",
 "Mundos da cruz":"크로스의 세계",
 "Assistir":"보기",
 "Ouvir":"듣기",

@@ -51,7 +51,7 @@ traduzirPainelCom({T:{
 "Dono do aparelho":"डिवाइस मालिक",
 "A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.":"टीवी की सुलभता बंद है। इसके बिना रिमोट का HOME बटन और ऐप्स के ऊपर सूचनाएं काम करना बंद कर देती हैं।",
 "O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.":"टीवी का अपना शेल बंद हो गया। इसके बिना ऐप्स फ़्रीज़ करना और उन्नत कमांड काम नहीं करते।",
-"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"टीवी डिवाइस का मालिक नहीं है। ऐप्स छिपाना और स्थिर HOME सरल मोड में चलते हैं।",
+"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"टीवी डिवाइस का मालिक नहीं है। ऐप्स छिपाना और स्थिर HOME सीमित मोड में चलते हैं।",
 "Mundos da cruz":"क्रॉस की दुनियाएं",
 "Assistir":"देखें",
 "Ouvir":"सुनें",

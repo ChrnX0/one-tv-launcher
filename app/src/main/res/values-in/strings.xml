@@ -855,7 +855,7 @@ AS\\Film).</string>
     <string name="home_arquivos_falhou">Tidak dapat mengizinkan %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Tidak ada yang dilanjutkan</string>
     <string name="aviso_continuar_texto">Undangan untuk melanjutkan dari TV lain sudah kedaluwarsa.</string>
-    <string name="aviso_simples_titulo">Mode sederhana mati</string>
+    <string name="aviso_simples_titulo">Layar mudah mati</string>
     <string name="aviso_simples_texto">TV kembali ke layar utama lengkap.</string>
     <string name="aviso_sync_titulo">Tidak ada akun terhubung</string>
     <string name="aviso_sync_texto">Tidak ada akun %1$s di TV ini. Hubungkan di Setelan › TV dan film.</string>

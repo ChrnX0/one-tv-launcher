@@ -858,7 +858,7 @@ AS\\Movies)।</string>
     <string name="home_arquivos_falhou">%1$s को अनुमति नहीं दी जा सकी: %2$s</string>
     <string name="aviso_continuar_titulo">जारी रखने को कुछ नहीं</string>
     <string name="aviso_continuar_texto">दूसरे टीवी से जारी रखने का निमंत्रण समाप्त हो गया है।</string>
-    <string name="aviso_simples_titulo">सरल मोड बंद है</string>
+    <string name="aviso_simples_titulo">आसान स्क्रीन बंद है</string>
     <string name="aviso_simples_texto">टीवी पूरी होम स्क्रीन पर लौट आया।</string>
     <string name="aviso_sync_titulo">कोई खाता जुड़ा नहीं</string>
     <string name="aviso_sync_texto">इस टीवी पर %1$s का कोई खाता नहीं है। सेटिंग्स › टीवी और फ़िल्में में जोड़ें।</string>

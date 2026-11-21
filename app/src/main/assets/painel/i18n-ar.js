@@ -51,7 +51,7 @@ traduzirPainelCom({T:{
 "Dono do aparelho":"مالك الجهاز",
 "A acessibilidade da TV está desligada. Sem ela, o botão HOME do controle e os recados por cima dos apps param.":"تسهيل الاستخدام في التلفاز متوقف. بدونه يتوقف زر HOME في جهاز التحكم والتنبيهات فوق التطبيقات.",
 "O shell próprio da TV caiu. Sem ele, congelar apps e os comandos avançados param.":"توقفت واجهة الأوامر (shell) الخاصة بالتلفاز. بدونها يتوقف تجميد التطبيقات والأوامر المتقدمة.",
-"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"التلفاز ليس مالك الجهاز. إخفاء التطبيقات وHOME الثابت يعملان بالوضع البسيط.",
+"A TV não é dona do aparelho. Esconder apps e o HOME fixo usam o modo simples.":"التلفاز ليس مالك الجهاز. إخفاء التطبيقات وHOME الثابت يعملان بالوضع المحدود.",
 "Mundos da cruz":"عوالم الصليب",
 "Assistir":"شاهد",
 "Ouvir":"استمع",

@@ -898,7 +898,7 @@
     <string name="home_arquivos_falhou">Não deu para liberar %1$s: %2$s</string>
     <string name="aviso_continuar_titulo">Nada para continuar</string>
     <string name="aviso_continuar_texto">O convite para continuar da outra TV já venceu.</string>
-    <string name="aviso_simples_titulo">Modo simples desligado</string>
+    <string name="aviso_simples_titulo">Tela fácil desligada</string>
     <string name="aviso_simples_texto">A TV voltou para a tela inicial completa.</string>
     <string name="aviso_sync_titulo">Nenhuma conta conectada</string>
     <string name="aviso_sync_texto">Não há conta do %1$s nesta TV. Conecte em Configurações › TV e filmes.</string>
