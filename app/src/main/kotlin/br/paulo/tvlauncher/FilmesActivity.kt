@@ -294,7 +294,10 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
-    private class SemPares(val v: List<Filme>, val idx: Map<String, List<Filme>>, val pos: Map<String, Posicao>,
+    // A conta dos pares só depende de QUAIS filmes têm posição (não do minuto): guarda as chaves e compara por valor.
+    // Antes comparava o mapa (===), e voltar do vídeo (mapa novo) refazia tudo: ~3 s de "Carregando os filmes…"
+    // na Sala (21/11/2026), porque a lista nova também derrubava os caches de grupos, ordem e busca.
+    private class SemPares(val v: List<Filme>, val idx: Map<String, List<Filme>>, val comPos: Set<String>,
                            val ints: Set<String>, val res: List<Filme>)
     @Volatile private var cacheSemPares: SemPares? = null
     @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
@@ -340,10 +343,10 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
                     // Um item por filme: dublado e legendado do mesmo título viram um (a ficha tem as duas versões).
                     // Fica o que tem algo guardado (posição, visto ou Interesses); com algo nos dois, os dois ficam.
                     // A conta refaz quando posições ou Interesses mudam (voltar do vídeo troca o mapa).
-                    .let { v -> cacheSemPares?.takeIf { it.v === v && it.idx === idxS && it.pos === posS && it.ints === intS }?.res
+                    .let { v -> cacheSemPares?.takeIf { it.v === v && it.idx === idxS && it.comPos == posS.keys && it.ints == intS }?.res
                         ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }, { posS.containsKey(it.chave) || it.chave in intS })
                             { android.util.Log.i("TvLauncher.Filmes", "versoes: $it") }
-                            .also { cacheSemPares = SemPares(v, idxS, posS, intS, it) } }
+                            .also { cacheSemPares = SemPares(v, idxS, HashSet(posS.keys), intS, it) } }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Vod.continuar(vis, posS)
@@ -813,7 +816,9 @@ class FilmesActivity : CatalogActivity<Filme>("filmes", isSeries = false) {
         val dados = listOfNotNull(
             (f.ano?.toString() ?: info?.lancamento?.take(4)?.takeIf { it.isNotEmpty() }),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${it % 60} min" else "$it min" },
-            (ext?.let { InfoExterna.notasDe(it).media } ?: f.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
+            // Mesma nota da faixa da grade (notaRapida, do cache do Trakt/Simkl) quando a ficha de fora não veio agora:
+            // antes a grade dizia ★ 8,1 e a ficha do mesmo filme ★ 7,8 (Sala, 21/11/2026).
+            (ext?.let { InfoExterna.notasDe(it).media } ?: notaRapida[f.chave] ?: f.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
             // Gêneros do TMDB primeiro (no idioma da TV); os do servidor costumam vir em inglês.
             ext?.detalhe?.generos?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),

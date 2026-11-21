@@ -873,7 +873,7 @@ class SeriesActivity : CatalogActivity<Serie>("series", isSeries = true) {
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         texto.addView(TextView(this).apply { text = Vod.nomeTela(s.nome, s.ano); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = if (verEpisodios) 1 else 2; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
-            (ext?.let { InfoExterna.notasDe(it).media } ?: s.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
+            (ext?.let { InfoExterna.notasDe(it).media } ?: notaRapida[s.chave] ?: s.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },   // a mesma da grade (21/11)
             // Gêneros do TMDB primeiro: vêm no idioma da TV; os do servidor vinham em inglês ("Action & Adventure", Sala 16/11).
             ext?.detalhe?.generos?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
