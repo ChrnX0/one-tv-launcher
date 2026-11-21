@@ -234,7 +234,7 @@
   "semNome": []
  },
  "ar\/previsao": {
-  "menorSp": 18,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -504,7 +504,7 @@
   "semNome": []
  },
  "en\/previsao": {
-  "menorSp": 18,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -774,7 +774,7 @@
   "semNome": []
  },
  "pt\/previsao": {
-  "menorSp": 18,
+  "menorSp": 17,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
