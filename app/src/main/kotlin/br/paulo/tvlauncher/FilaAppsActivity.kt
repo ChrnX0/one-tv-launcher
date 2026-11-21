@@ -56,6 +56,9 @@ class FilaAppsActivity : Activity() {
     private fun mostrar() {
         val prox = MudarDeTv.proximo(this)
         val total = MudarDeTv.fila(this).size
+        // Sem fila nenhuma (esta TV não recebeu apps de outra), "Seus apps voltaram" seria mentira: a tela não tem
+        // porquê aqui e fecha (teste de 21/11/2026, regra da inteligência global).
+        if (total == 0) { finish(); return }
         if (prox == null) {
             // Um estado só no fim (crítica de design 19/11/2026): o título dizia "voltando" e o texto "todos estão aqui".
             titulo.text = getString(R.string.mtv_fila_pronto)

@@ -155,13 +155,20 @@ internal fun MainActivity.itemDormir(): HomeCruz.Item? {
 
 /**
  * O que a grade de "Todos os apps" mostra e quantos ficaram escondidos (Paulo, 19/11/2026: "3 apps na grade · 5 ocultos").
- * Jogos não contam como ocultos: com o cartão Jogos ligado eles moram lá.
+ * Mesma conta da própria grade ([contagemGrade]): antes a HOME tirava os jogos e contava os apps da visita como
+ * escondidos, e a Sala mostrava "8 apps" na HOME e "13 apps" ao abrir a grade (teste de 21/11/2026).
  */
 internal fun MainActivity.contaApps(): String {
-    val ocultos = Organizacao.ocultos(this) + (if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet())
-    val semJogos = JogosTv.cardLigado(this)
-    val apps = instalados.filter { !it.pacote.startsWith("entrada:") && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
-    val escondidos = apps.count { it.pacote in ocultos }
-    val naGrade = apps.size - escondidos
+    val (naGrade, escondidos) = contagemGrade()
     return if (escondidos == 0) getString(R.string.cruz_apps_n, naGrade) else getString(R.string.cruz_apps_ocultos, naGrade, escondidos)
+}
+
+/** Apps que a grade de "Todos os apps" mostra e quantos estão escondidos atrás do PIN. Fonte única das duas telas. */
+internal fun MainActivity.contagemGrade(): Pair<Int, Int> {
+    val visita = ModoVisita.ativo(this)
+    val daVisita = if (visita) ModoVisita.apps(this) else emptySet()
+    val ocultos = Organizacao.ocultos(this)
+    val apps = instalados.filter { it.pacote !in daVisita }
+    val escondidos = if (visita) 0 else apps.count { it.pacote in ocultos }
+    return apps.count { it.pacote !in ocultos } to escondidos
 }
