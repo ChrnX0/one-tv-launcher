@@ -549,7 +549,7 @@ class PodcastPlayerActivity : Activity() {
                     listOf(OuvirServico.VELOCIDADES.indexOf(v))) { i -> OuvirServico.instancia?.definirVelocidade(OuvirServico.VELOCIDADES[i]); atualizar() }
             }
             Acao.SOM -> MenuSom.abrir(this) { atualizar() }
-            Acao.TEXTO -> if (s?.texto?.isNotEmpty() == true || s?.textoGerando == true) {
+            Acao.TEXTO -> if (s != null && (s.texto.isNotEmpty() || s.textoGerando)) {
                 // Já tem texto mas a parte de agora ainda não foi gerada: continua gerando (do ponto em que está).
                 if (s.textoGerado && !s.textoGerando) s.gerarTexto()
                 abrirPalco()
