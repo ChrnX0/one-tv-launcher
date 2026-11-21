@@ -19,7 +19,8 @@ TABLE = {
         'play': ('pulse', ['<circle cx="82" cy="60"', '<circle cx="97" cy="54"']),
         'apps': ('bob', ['<rect x="64" y="10" width="36" height="36" rx="8" fill="#E2A93B"']),
         'series': ('nudge', ['<path d="M66 78 h40', '<path d="M74 86 H96"']),
-        'movies': ('spin', ['<path d="M40 20 V44 M28 32 H52 M76 18 V38 M66 28 H86"']),
+        # only the big reel turns (one centre: two reels would orbit around the middle)
+        'movies': ('spin', ['<path d="M40 20 V44 M28 32 H52"']),
         'podcasts': ('wiggle', ['<rect x="44" y="8" width="32" height="50" rx="16" fill="#E2A93B"', '<path d="M48 22 H72']),
         'radio': ('nudge', ['<path d="M82 46 V58"']),
         'network': ('twinkle', ['<path d="M86 52 a16 16']),
