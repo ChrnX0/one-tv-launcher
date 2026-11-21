@@ -128,7 +128,33 @@ class FineTuneActivity : Activity() {
         Ajuste(R.string.bg_novo, { "OK" }) { _ ->
             getString(if (BackgroundStyle.proximoFundo?.invoke() == true) R.string.bg_trocado else R.string.bg_nao_troca)
         },
-    )
+    ) + (if (br.paulo.tvlauncher.network.CasaHA.configurado(this)) listOf(
+        // Câmera da casa (Home Assistant) no fundo, e a da campainha quando ela toca (CameraBackground).
+        Ajuste(R.string.bg_camera, { nomeCamera }) { _ -> escolherCamera(); nomeCamera },
+        Ajuste(R.string.bg_campainha, { getString(if (BackgroundStyle.doorbell(this)) R.string.bg_ligado else R.string.cs_sem) }) { _ ->
+            BackgroundStyle.setDoorbell(this, !BackgroundStyle.doorbell(this))
+            getString(if (BackgroundStyle.doorbell(this)) R.string.bg_ligado else R.string.cs_sem)
+        },
+    ) else emptyList())
+
+    /** Nome da câmera escolhida (o id do HA, sem o "camera."), ou "Nenhuma". */
+    private val nomeCamera: String get() = BackgroundStyle.camera(this).removePrefix("camera.").ifEmpty { getString(R.string.bg_nenhuma) }
+
+    /** Busca as câmeras no Home Assistant (fora da tela) e abre a lista; a escolha refaz a HOME atrás e este painel. */
+    private fun escolherCamera() {
+        Fundo.rodar("camera-fundo") {
+            val cams = runCatching { br.paulo.tvlauncher.network.CasaHA.listar(applicationContext).filter { it.camera } }.getOrDefault(emptyList())
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                val ids = listOf("") + cams.map { it.id }
+                val nomes = listOf(getString(R.string.bg_nenhuma)) + cams.map { it.nome }
+                Estilo.lista(this, getString(R.string.bg_camera), nomes, marcadas = listOf(ids.indexOf(BackgroundStyle.camera(this)).coerceAtLeast(0))) { i ->
+                    BackgroundStyle.setCamera(this, ids[i])
+                    recreate()
+                }
+            }
+        }
+    }
 
     private fun nomeTintura(k: BackgroundStyle.Tint) = getString(when (k) {
         BackgroundStyle.Tint.OFF -> R.string.cs_sem

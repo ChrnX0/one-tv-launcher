@@ -33,4 +33,8 @@
     <string name="bg_lenta">Lenta</string>
     <string name="bg_trocado">Trocado</string>
     <string name="bg_nao_troca">Este fundo não troca</string>
+    <string name="bg_camera">Câmera da casa no fundo</string>
+    <string name="bg_campainha">Câmera da campainha no fundo</string>
+    <string name="bg_nenhuma">Nenhuma</string>
+    <string name="bg_ligado">Ligado</string>
 </resources>

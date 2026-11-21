@@ -33,4 +33,8 @@
     <string name="bg_lenta">Langsam</string>
     <string name="bg_trocado">Gewechselt</string>
     <string name="bg_nao_troca">Dieser Hintergrund wechselt nicht</string>
+    <string name="bg_camera">Hauskamera als Hintergrund</string>
+    <string name="bg_campainha">Türklingel-Kamera als Hintergrund</string>
+    <string name="bg_nenhuma">Keine</string>
+    <string name="bg_ligado">An</string>
 </resources>

@@ -33,4 +33,8 @@
     <string name="bg_lenta">Медленно</string>
     <string name="bg_trocado">Сменён</string>
     <string name="bg_nao_troca">Этот фон не меняется</string>
+    <string name="bg_camera">Домашняя камера на фоне</string>
+    <string name="bg_campainha">Камера звонка на фоне</string>
+    <string name="bg_nenhuma">Нет</string>
+    <string name="bg_ligado">Вкл.</string>
 </resources>

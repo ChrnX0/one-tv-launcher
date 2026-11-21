@@ -33,4 +33,8 @@
     <string name="bg_lenta">بطيء</string>
     <string name="bg_trocado">تم التغيير</string>
     <string name="bg_nao_troca">هذه الخلفية لا تتغير</string>
+    <string name="bg_camera">كاميرا المنزل كخلفية</string>
+    <string name="bg_campainha">كاميرا الجرس كخلفية</string>
+    <string name="bg_nenhuma">لا شيء</string>
+    <string name="bg_ligado">مفعّل</string>
 </resources>

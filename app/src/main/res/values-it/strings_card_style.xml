@@ -33,4 +33,8 @@
     <string name="bg_lenta">Lenta</string>
     <string name="bg_trocado">Cambiato</string>
     <string name="bg_nao_troca">Questo sfondo non cambia</string>
+    <string name="bg_camera">Videocamera di casa come sfondo</string>
+    <string name="bg_campainha">Videocamera del campanello come sfondo</string>
+    <string name="bg_nenhuma">Nessuna</string>
+    <string name="bg_ligado">Attivo</string>
 </resources>

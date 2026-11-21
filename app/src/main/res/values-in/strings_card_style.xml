@@ -33,4 +33,8 @@
     <string name="bg_lenta">Lambat</string>
     <string name="bg_trocado">Diganti</string>
     <string name="bg_nao_troca">Latar ini tidak berganti</string>
+    <string name="bg_camera">Kamera rumah sebagai latar</string>
+    <string name="bg_campainha">Kamera bel pintu sebagai latar</string>
+    <string name="bg_nenhuma">Tidak ada</string>
+    <string name="bg_ligado">Aktif</string>
 </resources>

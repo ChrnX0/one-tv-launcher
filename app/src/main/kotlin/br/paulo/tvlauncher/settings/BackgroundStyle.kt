@@ -24,6 +24,10 @@ object BackgroundStyle {
     const val KEY_BLUR = "bg_blur"
     const val KEY_FADE = "bg_fade"
     const val KEY_GALLERY_SKIP = "bg_gallery_skip"
+    /** Câmera do Home Assistant como fundo ("camera.x"; vazio = nenhuma). CameraBackground. */
+    const val KEY_CAMERA = "bg_camera"
+    /** 1 = quando a campainha toca, a câmera dela vira o fundo por 2 min (MainActivity.fundoDaCampainha). */
+    const val KEY_DOORBELL = "bg_doorbell"
 
     enum class Tint(val alpha: Float) { OFF(0f), SOFT(0.22f), STRONG(0.45f), SOLID(1f) }
     /** null = a cor de destaque escolhida (CardStyle). As outras são escuras de propósito: o texto é claro. Nunca rosa. */
@@ -38,6 +42,10 @@ object BackgroundStyle {
     fun blur(ctx: Context) = Blur.entries.getOrElse(Extras.numero(ctx, KEY_BLUR, 0)) { Blur.OFF }
     fun fade(ctx: Context) = Fade.entries.getOrElse(Extras.numero(ctx, KEY_FADE, 1)) { Fade.SOFT }
     fun fadeMs(ctx: Context) = fade(ctx).ms
+    fun camera(ctx: Context) = Extras.texto(ctx, KEY_CAMERA, "").takeIf { it.startsWith("camera.") } ?: ""
+    fun setCamera(ctx: Context, id: String) = Extras.definirTexto(ctx, KEY_CAMERA, id)
+    fun doorbell(ctx: Context) = Extras.numero(ctx, KEY_DOORBELL, 0) == 1
+    fun setDoorbell(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, KEY_DOORBELL, if (sim) 1 else 0)
     fun gallerySkip(ctx: Context) = Extras.numero(ctx, KEY_GALLERY_SKIP, 0)
 
     /** O desfoque só existe no Android 12+ (RenderEffect). */
@@ -46,7 +54,7 @@ object BackgroundStyle {
     fun next(ctx: Context, key: String, atual: Enum<*>, total: Int, passo: Int): Int =
         Math.floorMod(atual.ordinal + passo, total).also { Extras.definirNumero(ctx, key, it) }
 
-    fun assinatura(ctx: Context) = "${tint(ctx)}|${tintColor(ctx)}|${blur(ctx)}"
+    fun assinatura(ctx: Context) = "${tint(ctx)}|${tintColor(ctx)}|${blur(ctx)}|${camera(ctx)}"
 
     /** A cor da tintura, opaca. Destaque escurecido (a 35%) para o texto claro continuar legível. Puro com [destaque]. */
     fun cor(c: TintColor, destaque: Int): Int = c.argb ?: escurecer(destaque, 0.35f)

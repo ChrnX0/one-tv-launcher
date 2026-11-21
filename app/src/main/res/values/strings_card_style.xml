@@ -33,4 +33,8 @@
     <string name="bg_lenta">Slow</string>
     <string name="bg_trocado">Changed</string>
     <string name="bg_nao_troca">This background doesn\'t change</string>
+    <string name="bg_camera">Home camera as background</string>
+    <string name="bg_campainha">Doorbell camera as background</string>
+    <string name="bg_nenhuma">None</string>
+    <string name="bg_ligado">On</string>
 </resources>

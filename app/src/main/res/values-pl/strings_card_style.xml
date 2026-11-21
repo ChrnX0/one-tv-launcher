@@ -33,4 +33,8 @@
     <string name="bg_lenta">Wolne</string>
     <string name="bg_trocado">Zmieniono</string>
     <string name="bg_nao_troca">To tło się nie zmienia</string>
+    <string name="bg_camera">Kamera domowa jako tło</string>
+    <string name="bg_campainha">Kamera dzwonka jako tło</string>
+    <string name="bg_nenhuma">Brak</string>
+    <string name="bg_ligado">Włączone</string>
 </resources>

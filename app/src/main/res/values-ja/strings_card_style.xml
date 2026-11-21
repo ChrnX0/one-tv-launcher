@@ -33,4 +33,8 @@
     <string name="bg_lenta">ゆっくり</string>
     <string name="bg_trocado">変更しました</string>
     <string name="bg_nao_troca">この背景は変わりません</string>
+    <string name="bg_camera">家のカメラを背景に</string>
+    <string name="bg_campainha">ドアベルのカメラを背景に</string>
+    <string name="bg_nenhuma">なし</string>
+    <string name="bg_ligado">オン</string>
 </resources>

@@ -33,4 +33,8 @@
     <string name="bg_lenta">धीमा</string>
     <string name="bg_trocado">बदल गया</string>
     <string name="bg_nao_troca">यह बैकग्राउंड नहीं बदलता</string>
+    <string name="bg_camera">घर का कैमरा बैकग्राउंड में</string>
+    <string name="bg_campainha">डोरबेल कैमरा बैकग्राउंड में</string>
+    <string name="bg_nenhuma">कोई नहीं</string>
+    <string name="bg_ligado">चालू</string>
 </resources>

@@ -33,4 +33,8 @@
     <string name="bg_lenta">Lente</string>
     <string name="bg_trocado">Changé</string>
     <string name="bg_nao_troca">Ce fond ne change pas</string>
+    <string name="bg_camera">Caméra de la maison en fond</string>
+    <string name="bg_campainha">Caméra de la sonnette en fond</string>
+    <string name="bg_nenhuma">Aucune</string>
+    <string name="bg_ligado">Activé</string>
 </resources>

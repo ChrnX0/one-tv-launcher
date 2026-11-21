@@ -33,4 +33,8 @@
     <string name="bg_lenta">Yavaş</string>
     <string name="bg_trocado">Değişti</string>
     <string name="bg_nao_troca">Bu arka plan değişmez</string>
+    <string name="bg_camera">Ev kamerası arka planda</string>
+    <string name="bg_campainha">Kapı zili kamerası arka planda</string>
+    <string name="bg_nenhuma">Yok</string>
+    <string name="bg_ligado">Açık</string>
 </resources>

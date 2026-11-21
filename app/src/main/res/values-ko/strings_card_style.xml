@@ -33,4 +33,8 @@
     <string name="bg_lenta">느리게</string>
     <string name="bg_trocado">바뀜</string>
     <string name="bg_nao_troca">이 배경은 바뀌지 않음</string>
+    <string name="bg_camera">집 카메라를 배경으로</string>
+    <string name="bg_campainha">초인종 카메라를 배경으로</string>
+    <string name="bg_nenhuma">없음</string>
+    <string name="bg_ligado">켜짐</string>
 </resources>
